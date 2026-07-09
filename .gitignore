@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Builds
+.next/
+.turbo/
+dist/
+*.tsbuildinfo
+
+# Entornos (secretos por entorno en Vercel/Supabase/GitHub Actions, nunca en el repo)
+.env
+.env.*
+!.env.example
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# Cobertura y logs
+coverage/
+*.log
+
+# SO / editor
+.DS_Store
+Thumbs.db
