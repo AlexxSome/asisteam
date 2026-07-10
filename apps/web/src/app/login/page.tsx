@@ -10,14 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { RegisterForm } from "./register-form";
+import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
-  title: "Crear cuenta",
+  title: "Iniciar sesión",
 };
 
-// Pantalla AUT-02 (docs/05-pantallas.md).
-export default async function RegisterPage() {
+// Pantalla AUT-01 (docs/05-pantallas.md).
+export default async function LoginPage() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -28,18 +28,17 @@ export default async function RegisterPage() {
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Crear cuenta</CardTitle>
+          <CardTitle>Iniciar sesión</CardTitle>
           <CardDescription>
-            Regístrate con tu email para administrar o participar en tus grupos
-            deportivos.
+            Ingresa con tu email y contraseña para acceder a tus grupos.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <RegisterForm />
+          <LoginForm />
           <p className="text-center text-sm text-muted-foreground">
-            ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="underline underline-offset-4">
-              Inicia sesión
+            ¿No tienes cuenta?{" "}
+            <Link href="/register" className="underline underline-offset-4">
+              Crea una
             </Link>
           </p>
         </CardContent>

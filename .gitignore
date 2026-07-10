@@ -23,3 +23,6 @@ coverage/
 # SO / editor
 .DS_Store
 Thumbs.db
+
+# graphify (grafo de conocimiento local, regenerable con /graphify .)
+graphify-out/
