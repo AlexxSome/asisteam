@@ -221,9 +221,23 @@ Consideraciones importantes:
 - Asociación controlada entre apoderados y menores de edad.
 - Registro de acciones relevantes realizadas por administradores.
 
+## Documentación
+
+La documentación canónica del producto vive en [`docs/`](docs/) (11 documentos: visión, roles y permisos, módulos y flujos, modelo de datos, pantallas, arquitectura y stack, API y backend, reportes, roadmap, historias de usuario y marco legal). Los issues de este repositorio referencian esos documentos.
+
+La guía para agentes de IA (Claude Code, Cursor, Copilot, etc.) está en [`AGENTS.md`](AGENTS.md): sintetiza stack, convenciones, conceptos canónicos y reglas de oro del proyecto.
+
+| Decisión | Resumen |
+|---|---|
+| Web [P0] | Next.js 16 (React 19, TypeScript 5) + Tailwind CSS 4 + shadcn/ui |
+| Móvil [P1] | Expo / React Native (mismo monorepo) |
+| Backend | Supabase: PostgREST + RLS (lecturas); Edge Functions y RPC PL/pgSQL (escrituras con reglas de negocio) |
+| Base de datos | PostgreSQL 17 multi-tenant por `group_id` |
+| Monorepo | pnpm + Turborepo: `apps/web`, `packages/core`, `supabase/` |
+
 ## Estado del proyecto
 
-Proyecto en etapa inicial de definición y planificación.
+Documentación completa (ver `docs/09-roadmap.md`); implementación de la Fase 1 — MVP Web [P0] en curso.
 
 ## Nombre del proyecto
 
