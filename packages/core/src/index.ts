@@ -7,3 +7,4 @@ export * from "./schemas/invitation";
 export * from "./schemas/activity";
 export * from "./schemas/attendance";
 export * from "./schemas/group";
+export * from "./schemas/managed-member";

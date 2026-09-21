@@ -83,11 +83,18 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 | Método | Ruta lógica | Rol | Descripción | Implementación | Prioridad |
 |---|---|---|---|---|---|
 | GET | /api/v1/groups/{id}/memberships | ADMIN (lista completa) / miembro (nómina reducida: nombre + rol) | Lista integrantes con filtros `role`, `status` | Vistas `v_group_members_admin` / `v_group_members_basic` | [P0] |
-| POST | /api/v1/groups/{id}/memberships | ADMIN | Crea integrante con cuenta gestionada (MANAGED) + membership ACTIVE; si es menor exige apoderado en el mismo flujo | RPC `rpc/create_managed_member` | [P0] |
+| POST | /api/v1/groups/{id}/memberships | ADMIN | Crea MANAGED sin credenciales; adulto ATHLETE ACTIVE, menor PENDING con apoderado y declaración ADMIN hasta consentimiento | RPC `rpc/create_managed_member` | [P0] |
 | PATCH | /api/v1/memberships/{id}/approve | ADMIN | Aprueba membership PENDING → ACTIVE (valida invariante de menor) | RPC `rpc/approve_membership` | [P0] |
 | PATCH | /api/v1/memberships/{id}/role | ADMIN | Agrega/quita rol vía filas de membership por rol (nunca edita `role` in place) | RPC `rpc/set_member_roles` | [P0] |
 | PATCH | /api/v1/memberships/{id}/deactivate | ADMIN, o el propio usuario (salir del grupo) | Marca INACTIVE; bloquea si es el último ADMIN ACTIVE (§5). La auto-desactivación se rechaza con 422 `minor_cannot_leave` si la membership es ATHLETE y el usuario es menor según `users.birthdate` (la baja de menores la ejecuta solo el ADMIN, nota C8 de 02-roles-y-permisos.md), y con 422 `guardian_has_active_wards` si es GUARDIAN con un pupilo ATHLETE ACTIVE o PENDING en el grupo (preserva la regla V2) | RPC `rpc/deactivate_membership` | [P0] |
 | PATCH | /api/v1/memberships/{id}/reactivate | ADMIN | Reactiva INACTIVE → ACTIVE (revalida invariante de menor) | RPC `rpc/reactivate_membership` | [P0] |
+
+#### Alta MANAGED y consentimiento (HU-ADM-05)
+
+- `/groups/:groupId/members/new` llama a `create_managed_member(p_group_id,p_full_name,p_birthdate,p_email,p_guardian)`. Para menores, `p_guardian` contiene nombre, email, vínculo y `authorized: true`; la declaración ADMIN queda en `app_private.managed_member_enrollments`, sin crear consentimiento ni credenciales. No se sobrescriben perfiles existentes encontrados por email.
+- El envío reutiliza `send-invitation` con rol GUARDIAN. El apoderado obtiene membership al aceptar la invitación; vincularlo al perfil no abre por sí solo el grupo. Si falla el correo, el alta queda PENDING y la web dirige a las invitaciones para reenviar o emitir la que falte sin repetir el alta.
+- `list_managed_member_consents(p_group_id,p_offset)` devuelve solo nombre, vínculo y membership de los pupilos pendientes del solicitante, en páginas de 50; exige membership ACTIVE en ese grupo. `/groups/:groupId/members/consent` solicita aceptación explícita de la versión `2026-09-21`.
+- `consent_managed_member(p_membership_id,p_accepted)` solo permite al apoderado vinculado registrar `DATA_PROCESSING_MINOR` (`IN_APP`, sin foto). Activa ATHLETE y fija `joined_at` en la misma transacción, revalidando permisos y capacidad; repetir la confirmación no duplica evidencia. La cuenta del deportista sigue MANAGED. No aprueba solicitudes PENDING originadas por código ni habilita credenciales del menor.
 
 ### 2.5 Invitations y join por código
 
