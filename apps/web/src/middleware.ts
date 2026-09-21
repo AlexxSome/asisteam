@@ -52,6 +52,14 @@ export async function middleware(request: NextRequest) {
       response.cookies.getAll().forEach((cookie) => missing.cookies.set(cookie));
       return missing;
     }
+    const attendanceRoute = segments[3] === "activities" && !!segments[4] && segments[5] === "attendance";
+    if (attendanceRoute && !group.roles?.includes("ADMIN")) {
+      const denied = new NextResponse('<!doctype html><html lang="es"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sin permisos · Asisteam</title><body><main><h1>No tienes permisos</h1><p>Solo un administrador del grupo puede tomar asistencia.</p><a href="/groups">Volver a mis grupos</a></main></body></html>', {
+        status: 403, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store" },
+      });
+      response.cookies.getAll().forEach((cookie) => denied.cookies.set(cookie));
+      return denied;
+    }
     response.headers.set("Cache-Control", "private, no-store");
   }
 
