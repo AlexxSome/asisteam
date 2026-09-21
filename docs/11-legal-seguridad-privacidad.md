@@ -66,6 +66,8 @@ Aunque `athletes_can_view_group_stats` o `guardians_can_view_group_stats` estén
 | Activación de cuenta del menor (MANAGED → ACTIVE con email y contraseña propios) | El apoderado confirma la activación antes de que el menor cree su contraseña | `ACCOUNT_ACTIVATION_MINOR` |
 | Carga de foto de perfil del menor | Aceptación incluida en `DATA_PROCESSING_MINOR`; si el apoderado la excluye, `avatar_url` permanece NULL | (cláusula dentro de `DATA_PROCESSING_MINOR`) |
 
+La cláusula se persiste como `consents.allows_avatar` (default `false`). El apoderado puede autorizarla o retirarla desde «Fotos de mis pupilos» en su perfil cuando ya existe consentimiento general vigente. La decisión crea nueva evidencia y revoca la anterior. Si no queda otra autorización de imagen vigente, se limpia `avatar_url` y Storage deniega también la lectura de objetos históricos; el consentimiento general y la membresía del menor se mantienen. Las URLs de foto son privadas y cada lectura revalida permisos.
+
 Un menor que ingresa por código de grupo queda con `memberships.status = PENDING` y **no aparece en listas de asistencia ni reportes** hasta que exista apoderado vinculado con consentimiento otorgado **y** el ADMIN confirme la membresía.
 
 ### 3.2 Cómo se registra [P0]

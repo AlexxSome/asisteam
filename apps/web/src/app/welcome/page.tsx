@@ -85,6 +85,10 @@ export default async function WelcomePage() {
           </CardContent>
         </Card>
       </div>
+
+      <Link href="/profile" className={buttonVariants({ variant: "outline" })}>
+        Mi perfil
+      </Link>
     </main>
   );
 }

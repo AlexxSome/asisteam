@@ -20,8 +20,8 @@ select ok(
 );
 select policies_are(
     'public', 'users',
-    array['users_select_own'],
-    'solo existe la política users_select_own'
+    array['users_select_own', 'users_update_own'],
+    'lectura y edición limitadas al perfil propio'
 );
 
 -- Trigger de perfil: registrar en auth.users crea el perfil ACTIVE.
