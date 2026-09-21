@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getGroup } from "@/lib/groups";
+import { JoinAsAthlete } from "./join-as-athlete";
 
 export const metadata = { title: "Inicio del grupo" };
 
@@ -11,8 +12,11 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
       {group.description && <p className="mt-3 whitespace-pre-wrap">{group.description}</p>}</header>
     {group.roles.includes("ADMIN") && <section className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Administración del grupo</h2>
+      <p>Código de invitación: <span className="font-mono tracking-widest">{group.invite_code}</span></p>
       <Link href={`/groups/${group.id}/settings`} className="underline">Ver configuración y código de invitación</Link>
+      <Link href={`/groups/${group.id}/activities/new`} className="block underline">Crear actividad</Link>
     </section>}
+    {group.roles.includes("ADMIN") && !group.roles.includes("ATHLETE") && <JoinAsAthlete groupId={group.id} />}
     {group.roles.includes("ATHLETE") && <section id="my-attendance" className="space-y-2 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Mi asistencia</h2>
       <p className="text-muted-foreground">Tu asistencia e historial corresponden a este grupo.</p>

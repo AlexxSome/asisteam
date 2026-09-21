@@ -3,12 +3,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import { GroupForm } from "./group-form";
 
 export const metadata: Metadata = {
   title: "Crear grupo",
 };
 
-// Pantalla ONB-04: se implementa en HU-ADM-01 (issue #20).
 export default async function NewGroupPage() {
   const supabase = await createClient();
   const {
@@ -17,13 +17,11 @@ export default async function NewGroupPage() {
   if (!user) redirect("/register");
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-4 text-center">
+    <main className="mx-auto max-w-xl space-y-6 p-4 py-10">
       <h1 className="text-2xl font-semibold">Crear un grupo</h1>
-      <p className="max-w-md text-muted-foreground">
-        Esta funcionalidad está en construcción (HU-ADM-01).
-      </p>
-      <Link href="/welcome" className="text-sm underline underline-offset-4">
-        Volver al inicio
+      <GroupForm />
+      <Link href="/groups" className="inline-block text-sm underline underline-offset-4">
+        Volver a Mis grupos
       </Link>
     </main>
   );

@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn(), eq: vi.fn(), maybeSingle: vi.fn(), cookie: vi.fn() }));
 vi.mock("react", async (original) => ({ ...await original<typeof import("react")>(), cache: (fn: unknown) => fn }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
-vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
+vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, useRouter: () => ({ refresh: vi.fn() }) }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from }) }));
 import { getGroup, getMyGroups, groupHomePath } from "./groups";
 import GroupPage from "@/app/groups/[groupId]/page";
@@ -69,6 +69,14 @@ describe("contexto de grupos", () => {
     const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
     expect(html).toContain("Administración del grupo");
     expect(html).toContain("Mi asistencia");
+    expect(html).not.toContain("Agregarme como deportista");
+  });
+  it("ADMIN sin ATHLETE puede agregarse desde el panel y ve su código", async () => {
+    mock.maybeSingle.mockResolvedValue({ data: { ...groups[0], roles: ["ADMIN"], invite_code: "CODE0001" }, error: null });
+    const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(html).toContain("Agregarme como deportista");
+    expect(html).toContain("CODE0001");
+    expect(html).toContain(`/groups/${a}/activities/new`);
   });
   it("al cambiar a ATHLETE desaparece administración y no accede a settings", async () => {
     mock.maybeSingle.mockResolvedValue({ data: { ...groups[1], description: null, settings: null, invite_code: null }, error: null });
@@ -76,6 +84,7 @@ describe("contexto de grupos", () => {
     expect(html).toContain("Mi asistencia");
     expect(html).not.toContain("Administración del grupo");
     expect(html).not.toContain("CODE0001");
+    expect(html).not.toContain("Agregarme como deportista");
     await expect(GroupSettingsPage({ params: Promise.resolve({ groupId: b }) })).rejects.toThrow("404");
   });
 });

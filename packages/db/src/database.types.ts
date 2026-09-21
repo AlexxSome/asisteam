@@ -957,10 +957,20 @@ export type Database = {
         }
         Returns: string
       }
+      create_group: {
+        Args: {
+          p_description?: string
+          p_logo_url?: string
+          p_name: string
+          p_sport: string
+        }
+        Returns: string
+      }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
       is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
       is_member: { Args: { p_group_id: string }; Returns: boolean }
+      join_group_as_athlete: { Args: { p_group_id: string }; Returns: string }
       list_avatar_permissions: {
         Args: never
         Returns: {
