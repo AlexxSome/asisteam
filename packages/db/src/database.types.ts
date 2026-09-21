@@ -970,6 +970,16 @@ export type Database = {
         }
         Returns: string
       }
+      create_guardianship: {
+        Args: {
+          p_athlete_user_id: string
+          p_email: string
+          p_full_name: string
+          p_group_id: string
+          p_relationship: string
+        }
+        Returns: string
+      }
       create_managed_member: {
         Args: {
           p_birthdate: string
@@ -1015,6 +1025,14 @@ export type Database = {
           old_birthdate: string
           request_id: string
           requested_birthdate: string
+        }[]
+      }
+      list_guardianship_athletes: {
+        Args: { p_group_id: string; p_offset?: number; p_search?: string }
+        Returns: {
+          full_name: string
+          total_count: number
+          user_id: string
         }[]
       }
       list_managed_member_consents: {
