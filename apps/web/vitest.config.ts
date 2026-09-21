@@ -8,6 +8,6 @@ export default defineConfig({
     environment: "node",
     include: process.env.RUN_SUPABASE_INTEGRATION === "1"
       ? ["tests/**/*.integration.ts"]
-      : ["src/**/*.test.ts"],
+      : ["src/**/*.test.{ts,tsx}"],
   },
 });

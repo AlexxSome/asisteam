@@ -165,6 +165,72 @@ export type Database = {
           },
         ]
       }
+      attendance_records: {
+        Row: {
+          activity_id: string
+          id: string
+          membership_id: string
+          note: string | null
+          recorded_at: string
+          recorded_by: string
+          status: string
+        }
+        Insert: {
+          activity_id: string
+          id?: string
+          membership_id: string
+          note?: string | null
+          recorded_at?: string
+          recorded_by: string
+          status: string
+        }
+        Update: {
+          activity_id?: string
+          id?: string
+          membership_id?: string
+          note?: string | null
+          recorded_at?: string
+          recorded_by?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "memberships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_attendance_roster"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       birthdate_change_approvals: {
         Row: {
           approved_at: string
@@ -623,6 +689,169 @@ export type Database = {
           },
         ]
       }
+      v_attendance_admin: {
+        Row: {
+          activity_id: string | null
+          group_id: string | null
+          id: string | null
+          membership_id: string | null
+          note: string | null
+          recorded_at: string | null
+          recorded_by: string | null
+          status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "memberships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_attendance_roster"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_attendance_own: {
+        Row: {
+          activity_id: string | null
+          group_id: string | null
+          id: string | null
+          membership_id: string | null
+          note: string | null
+          recorded_at: string | null
+          status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "memberships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_attendance_roster"
+            referencedColumns: ["membership_id"]
+          },
+        ]
+      }
+      v_attendance_roster: {
+        Row: {
+          avatar_url: string | null
+          full_name: string | null
+          group_id: string | null
+          membership_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_group_activities: {
         Row: {
           activity_type_color: string | null
@@ -711,6 +940,10 @@ export type Database = {
         Args: { p_nonce_hash: string }
         Returns: undefined
       }
+      clear_attendance_record: {
+        Args: { p_activity_id: string; p_membership_id: string }
+        Returns: undefined
+      }
       consume_invitation_attempt: { Args: { p_key: string }; Returns: boolean }
       create_activity: {
         Args: {
@@ -756,6 +989,14 @@ export type Database = {
           p_token_hash: string
         }
         Returns: undefined
+      }
+      record_attendance_bulk: {
+        Args: {
+          p_activity_id: string
+          p_only_unmarked?: boolean
+          p_records: Json
+        }
+        Returns: Json
       }
       request_birthdate_change: {
         Args: { p_birthdate: string }
