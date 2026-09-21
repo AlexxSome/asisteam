@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { forbidden } from "next/navigation";
-import { GROUP_ERROR_MESSAGES, groupFormSchema } from "@asisteam/core";
+import { forbidden, redirect } from "next/navigation";
+import { GROUP_ERROR_MESSAGES, groupFormSchema, joinCodeResponseSchema, joinCodeSchema } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 
@@ -61,4 +61,29 @@ export async function joinAsAthlete(groupId: string): Promise<JoinAthleteResult>
   }
   revalidatePath("/groups", "layout");
   return { success: true };
+}
+
+export async function joinByCode(formData: FormData): Promise<void> {
+  const parsedCode = joinCodeSchema.safeParse(formData.get("code"));
+  if (!parsedCode.success) redirect("/join?error=invalid_invite_code");
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect(`/login?invite_code=${parsedCode.data}`);
+  const { data, error } = await supabase.rpc("join_group_by_code", { p_invite_code: parsedCode.data });
+  if (error) {
+    const code = Object.hasOwn(GROUP_ERROR_MESSAGES, error.message) ? error.message : "join_failed";
+    redirect(`/join?error=${code}`);
+  }
+  if (data && typeof data === "object" && !Array.isArray(data) && "error" in data) {
+    const failure = data.error;
+    const code = failure && typeof failure === "object" && !Array.isArray(failure) && "code" in failure
+      && typeof failure.code === "string" && Object.hasOwn(GROUP_ERROR_MESSAGES, failure.code)
+      ? failure.code : "join_failed";
+    redirect(`/join?error=${code}`);
+  }
+  const membership = joinCodeResponseSchema.safeParse(data);
+  if (!membership.success) redirect("/join?error=join_failed");
+  revalidatePath("/groups", "layout");
+  if (membership.data.membership.status === "PENDING") redirect("/join?pending=1");
+  redirect(`/groups/${membership.data.membership.group_id}`);
 }

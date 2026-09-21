@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mock = vi.hoisted(() => ({ rpc: vi.fn(), getUser: vi.fn(), revalidate: vi.fn(), from: vi.fn(), update: vi.fn(), read: vi.fn(), write: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ rpc: mock.rpc, from: mock.from, auth: { getUser: mock.getUser } }) }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
-vi.mock("next/navigation", () => ({ forbidden: () => { throw new Error("403"); } }));
-import { joinAsAthlete, rotateInviteCode, updateGroup } from "./actions";
+vi.mock("next/navigation", () => ({ forbidden: () => { throw new Error("403"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
+import { joinAsAthlete, joinByCode, rotateInviteCode, updateGroup } from "./actions";
 
 const groupId = "20000000-0000-4000-8000-000000000201";
 beforeEach(() => {
@@ -79,5 +79,36 @@ describe("ADMIN que también entrena", () => {
   it("oculta detalles internos", async () => {
     mock.rpc.mockResolvedValue({ data: null, error: { message: "private detail" } });
     expect(await joinAsAthlete(groupId)).toMatchObject({ error: { code: "membership_create_failed", message: "No pudimos agregarte como deportista. Vuelve a intentarlo." } });
+  });
+});
+
+describe("incorporación por código", () => {
+  const form = (code: string) => {
+    const data = new FormData();
+    data.set("code", code);
+    return data;
+  };
+  it("adulto entra como ATHLETE y navega al grupo", async () => {
+    mock.rpc.mockResolvedValue({ data: { membership: { group_id: groupId, status: "ACTIVE" } }, error: null });
+    await expect(joinByCode(form("CODE0001"))).rejects.toThrow(`redirect:/groups/${groupId}`);
+    expect(mock.rpc).toHaveBeenCalledWith("join_group_by_code", { p_invite_code: "CODE0001" });
+    expect(mock.revalidate).toHaveBeenCalledWith("/groups", "layout");
+  });
+  it("menor queda pendiente, sin navegar a un grupo aún invisible", async () => {
+    mock.rpc.mockResolvedValue({ data: { membership: { group_id: groupId, status: "PENDING" } }, error: null });
+    await expect(joinByCode(form("CODE0001"))).rejects.toThrow("redirect:/join?pending=1");
+    expect(mock.rpc).toHaveBeenCalledWith("join_group_by_code", { p_invite_code: "CODE0001" });
+  });
+  it("código inválido se detiene antes de la RPC y código rotado no revela grupo", async () => {
+    await expect(joinByCode(form("mal"))).rejects.toThrow("redirect:/join?error=invalid_invite_code");
+    expect(mock.rpc).not.toHaveBeenCalled();
+    mock.rpc.mockResolvedValue({ data: { error: { code: "invalid_invite_code" } }, error: null });
+    await expect(joinByCode(form("CODE0001"))).rejects.toThrow("redirect:/join?error=invalid_invite_code");
+  });
+  it("no incorpora sin sesión ni confía en errores internos", async () => {
+    mock.getUser.mockResolvedValueOnce({ data: { user: null } });
+    await expect(joinByCode(form("CODE0001"))).rejects.toThrow("redirect:/login?invite_code=CODE0001");
+    mock.rpc.mockResolvedValue({ data: null, error: { message: "private SQL detail" } });
+    await expect(joinByCode(form("CODE0001"))).rejects.toThrow("redirect:/join?error=join_failed");
   });
 });
