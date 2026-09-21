@@ -1,18 +1,10 @@
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/server";
+import { groupHomePath } from "@/lib/groups";
 
 /**
- * Punto de entrada: enruta según sesión.
- * Cuando exista `memberships` (HU-GEN-05 / HU-ADM-01), los usuarios con
- * grupos irán a su dashboard; sin membresías, a la bienvenida (ONB-01).
+ * Restaura solo una preferencia que aún corresponde a una membresía ACTIVE.
  */
 export default async function HomePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) redirect("/welcome");
-  redirect("/login");
+  redirect(await groupHomePath());
 }

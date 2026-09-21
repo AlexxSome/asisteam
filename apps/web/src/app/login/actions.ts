@@ -39,7 +39,5 @@ export async function loginUser(input: LoginInput): Promise<LoginResult> {
     return { error: INVALID_CREDENTIALS_ERROR };
   }
 
-  // Aterriza en la bienvenida (ONB-01) hasta que existan memberships:
-  // HU-GEN-05 (#17) enrutará al último grupo activo o al selector de grupos.
-  redirect("/welcome");
+  redirect("/");
 }

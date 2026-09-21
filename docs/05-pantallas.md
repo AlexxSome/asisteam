@@ -196,7 +196,7 @@ Navegación móvil [P1]: barra inferior de 4-5 pestañas — Inicio, Agenda (ACT
 
 - **Web [P0]:** dropdown permanente en la barra superior con nombre + logo del grupo activo; al cambiar, se navega a la ruta equivalente del nuevo `groupId`. Opción "Ver todos mis grupos" abre GRP-01.
 - **Móvil [P1]:** el encabezado de la pestaña Inicio muestra el grupo activo; al tocarlo se abre un bottom sheet con la lista de grupos (nombre, logo, rol) y la opción "Unirme con código" (ONB-02).
-- El último grupo activo se persiste por dispositivo (localStorage / preferencias de la app) y se restaura al iniciar sesión.
+- El último grupo activo se persiste por cuenta y dispositivo (cookie de preferencia en web / preferencias de la app) y se restaura al iniciar sesión solo si la membership sigue ACTIVE. Esta preferencia no contiene tokens ni concede permisos.
 - El rol se resuelve **por grupo**: al cambiar de grupo puede cambiar la navegación completa (ej.: ADMIN en grupo A, ATHLETE en grupo B).
 - GUARDIAN puro (sin otra membership propia) no usa selector de grupo sino selector de **pupilo** en APO-03; los grupos se derivan de las memberships del pupilo.
 - Los deep links y notificaciones push [P1] siempre incluyen `groupId` y fijan el grupo activo al abrirse.

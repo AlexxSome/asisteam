@@ -44,6 +44,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "birthdate_change_approvals_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "birthdate_change_approvals_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "birthdate_change_approvals_request_id_fkey"
             columns: ["request_id"]
             isOneToOne: false
@@ -263,6 +277,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "memberships_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -312,7 +340,29 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_group_detail: {
+        Row: {
+          description: string | null
+          id: string | null
+          invite_code: string | null
+          logo_url: string | null
+          name: string | null
+          roles: string[] | null
+          settings: Json | null
+          sport: string | null
+        }
+        Relationships: []
+      }
+      v_my_groups: {
+        Row: {
+          id: string | null
+          logo_url: string | null
+          name: string | null
+          roles: string[] | null
+          sport: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       auth_user_id: { Args: never; Returns: string }
