@@ -21,6 +21,7 @@ export default async function GroupLayout({ children, params }: {
       <nav aria-label="Navegación del grupo" className="flex flex-wrap gap-4 text-sm underline underline-offset-4">
         <Link href={`/groups/${group.id}`}>Inicio</Link>
         <Link href={`/groups/${group.id}/activities`}>Actividades</Link>
+        {group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/invitations/new`}>Invitaciones</Link>}
         {group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/settings`}>Configuración del grupo</Link>}
         {group.roles.includes("ATHLETE") && <Link href={`/groups/${group.id}#my-attendance`}>Mi asistencia</Link>}
         {group.roles.includes("GUARDIAN") && <Link href={`/groups/${group.id}#my-wards`}>Mis pupilos</Link>}

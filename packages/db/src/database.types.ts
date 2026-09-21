@@ -970,6 +970,17 @@ export type Database = {
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
       is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
       is_member: { Args: { p_group_id: string }; Returns: boolean }
+      issue_invitation: {
+        Args: {
+          p_auth_user_id: string
+          p_email?: string
+          p_group_id: string
+          p_invitation_id?: string
+          p_role?: string
+          p_token_hash: string
+        }
+        Returns: Json
+      }
       join_group_as_athlete: { Args: { p_group_id: string }; Returns: string }
       join_group_by_code: { Args: { p_invite_code: string }; Returns: Json }
       list_avatar_permissions: {
