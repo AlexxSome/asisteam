@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       birthdate_change_approvals: {
@@ -237,6 +262,87 @@ export type Database = {
           },
         ]
       }
+      invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          created_by: string
+          email: string | null
+          expires_at: string
+          group_id: string
+          id: string
+          invited_user_id: string | null
+          role: string
+          status: string
+          terms_version: string | null
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          created_by: string
+          email?: string | null
+          expires_at?: string
+          group_id: string
+          id?: string
+          invited_user_id?: string | null
+          role: string
+          status?: string
+          terms_version?: string | null
+          token: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          created_by?: string
+          email?: string | null
+          expires_at?: string
+          group_id?: string
+          id?: string
+          invited_user_id?: string | null
+          role?: string
+          status?: string
+          terms_version?: string | null
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invitations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invitations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invitations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invitations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invitations_invited_user_id_fkey"
+            columns: ["invited_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           created_at: string
@@ -365,9 +471,19 @@ export type Database = {
       }
     }
     Functions: {
+      accept_invitation: {
+        Args: { p_auth_user_id: string; p_token_hash: string }
+        Returns: Json
+      }
       auth_user_id: { Args: never; Returns: string }
       can_read_avatar: { Args: { p_name: string }; Returns: boolean }
       can_upload_avatar: { Args: never; Returns: boolean }
+      cancel_invitation_registration: {
+        Args: { p_nonce_hash: string }
+        Returns: undefined
+      }
+      consume_invitation_attempt: { Args: { p_key: string }; Returns: boolean }
+      invitation_context: { Args: { p_token_hash: string }; Returns: Json }
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
       is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
       is_member: { Args: { p_group_id: string }; Returns: boolean }
@@ -390,6 +506,15 @@ export type Database = {
           request_id: string
           requested_birthdate: string
         }[]
+      }
+      prepare_invitation_registration: {
+        Args: {
+          p_email: string
+          p_nonce_hash: string
+          p_registration: Json
+          p_token_hash: string
+        }
+        Returns: undefined
       }
       request_birthdate_change: {
         Args: { p_birthdate: string }
@@ -531,6 +656,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
