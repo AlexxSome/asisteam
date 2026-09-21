@@ -1,0 +1,487 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  public: {
+    Tables: {
+      birthdate_change_approvals: {
+        Row: {
+          approved_at: string
+          approved_by: string
+          group_id: string
+          request_id: string
+        }
+        Insert: {
+          approved_at?: string
+          approved_by: string
+          group_id: string
+          request_id: string
+        }
+        Update: {
+          approved_at?: string
+          approved_by?: string
+          group_id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "birthdate_change_approvals_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "birthdate_change_approvals_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "birthdate_change_approvals_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "birthdate_change_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      birthdate_change_requests: {
+        Row: {
+          created_at: string
+          id: string
+          old_birthdate: string
+          requested_birthdate: string
+          resolved_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          old_birthdate: string
+          requested_birthdate: string
+          resolved_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          old_birthdate?: string
+          requested_birthdate?: string
+          resolved_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "birthdate_change_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consents: {
+        Row: {
+          allows_avatar: boolean
+          channel: string | null
+          consent_type: string
+          granted_at: string
+          guardianship_id: string
+          id: string
+          revoked_at: string | null
+          terms_version: string
+        }
+        Insert: {
+          allows_avatar?: boolean
+          channel?: string | null
+          consent_type: string
+          granted_at?: string
+          guardianship_id: string
+          id?: string
+          revoked_at?: string | null
+          terms_version: string
+        }
+        Update: {
+          allows_avatar?: boolean
+          channel?: string | null
+          consent_type?: string
+          granted_at?: string
+          guardianship_id?: string
+          id?: string
+          revoked_at?: string | null
+          terms_version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consents_guardianship_id_fkey"
+            columns: ["guardianship_id"]
+            isOneToOne: false
+            referencedRelation: "guardianships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          invite_code: string
+          logo_url: string | null
+          name: string
+          settings: Json
+          sport: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          invite_code: string
+          logo_url?: string | null
+          name: string
+          settings?: Json
+          sport?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          invite_code?: string
+          logo_url?: string | null
+          name?: string
+          settings?: Json
+          sport?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "groups_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guardianships: {
+        Row: {
+          athlete_user_id: string
+          created_at: string
+          deactivated_at: string | null
+          guardian_user_id: string
+          id: string
+          relationship: string
+          status: string
+        }
+        Insert: {
+          athlete_user_id: string
+          created_at?: string
+          deactivated_at?: string | null
+          guardian_user_id: string
+          id?: string
+          relationship: string
+          status?: string
+        }
+        Update: {
+          athlete_user_id?: string
+          created_at?: string
+          deactivated_at?: string | null
+          guardian_user_id?: string
+          id?: string
+          relationship?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guardianships_athlete_user_id_fkey"
+            columns: ["athlete_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guardianships_guardian_user_id_fkey"
+            columns: ["guardian_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      memberships: {
+        Row: {
+          created_at: string
+          group_id: string
+          id: string
+          joined_at: string | null
+          role: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          group_id: string
+          id?: string
+          joined_at?: string | null
+          role: string
+          status: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string
+          id?: string
+          joined_at?: string | null
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          account_status: string
+          auth_user_id: string | null
+          avatar_url: string | null
+          birthdate: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_status?: string
+          auth_user_id?: string | null
+          avatar_url?: string | null
+          birthdate?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_status?: string
+          auth_user_id?: string | null
+          avatar_url?: string | null
+          birthdate?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      auth_user_id: { Args: never; Returns: string }
+      can_read_avatar: { Args: { p_name: string }; Returns: boolean }
+      can_upload_avatar: { Args: never; Returns: boolean }
+      is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
+      is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
+      is_member: { Args: { p_group_id: string }; Returns: boolean }
+      list_avatar_permissions: {
+        Args: never
+        Returns: {
+          allows_avatar: boolean
+          full_name: string
+          guardianship_id: string
+        }[]
+      }
+      list_birthdate_reviews: {
+        Args: never
+        Returns: {
+          approved: boolean
+          full_name: string
+          group_id: string
+          group_name: string
+          old_birthdate: string
+          request_id: string
+          requested_birthdate: string
+        }[]
+      }
+      request_birthdate_change: {
+        Args: { p_birthdate: string }
+        Returns: string
+      }
+      review_birthdate_change: {
+        Args: { p_approve: boolean; p_group_id: string; p_request_id: string }
+        Returns: string
+      }
+      set_avatar_permission: {
+        Args: { p_allow: boolean; p_guardianship_id: string }
+        Returns: undefined
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

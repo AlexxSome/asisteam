@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@asisteam/core"],
+  experimental: { serverActions: { bodySizeLimit: "3mb" } },
   async headers() {
     return [{
       source: "/reset-password",

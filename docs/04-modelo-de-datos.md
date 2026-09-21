@@ -161,8 +161,15 @@ Consentimientos del apoderado sobre el tratamiento de datos de su pupilo menor d
 | granted_at | timestamptz | Sí | now() | Momento del otorgamiento. |
 | revoked_at | timestamptz | No | — | Momento de revocación; NULL = vigente. |
 | channel | text | No | — | `EMAIL_LINK` \| `IN_APP`. |
+| allows_avatar | boolean | Sí | false | Cláusula explícita de autorización de imagen dentro de `DATA_PROCESSING_MINOR`; sin aceptación no se habilita la foto del menor. |
 
 Los consentimientos se conservan como evidencia aunque el vínculo se desactive (`ON DELETE RESTRICT` desde `guardianship_id`); la revocación es un `UPDATE` de `revoked_at`, nunca un `DELETE` (ver 11-legal-seguridad-privacidad.md §3.4).
+
+### 2.10 Correcciones de fecha de nacimiento (HU-GEN-04)
+
+`birthdate_change_requests` conserva `user_id`, `old_birthdate`, `requested_birthdate`, `status`, `created_at` y `resolved_at`. Solo una solicitud `PENDING`/`APPROVED` por usuario; `APPROVED` es un estado transaccional que el trigger consume al aplicar la fecha. Los estados finales son `APPLIED`, `REJECTED` o `CANCELLED`.
+
+`birthdate_change_approvals` registra `(request_id, group_id)` como PK, `approved_by` y `approved_at`. Se requiere un ADMIN vigente por cada grupo ATHLETE `ACTIVE`/`PENDING`, sin autoaprobación. Las tablas son evidencia del flujo de corrección, no un audit log genérico. Solo se escriben mediante RPC; los ADMIN acceden a proyecciones de su grupo, mientras el titular ve sus propias solicitudes.
 
 ## 3. Relaciones y cardinalidades
 
