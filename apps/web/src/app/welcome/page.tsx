@@ -12,15 +12,14 @@ import {
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+import { groupHomePath } from "@/lib/groups";
 
 export const metadata: Metadata = {
   title: "Bienvenida",
 };
 
 /**
- * Pantalla ONB-01 (docs/05-pantallas.md): usuario autenticado sin
- * membresías. Cuando exista `memberships` (HU-GEN-05), quienes ya
- * tengan grupos serán redirigidos a su dashboard en vez de ver esto.
+ * Pantalla ONB-01: bienvenida para usuarios sin membresías ACTIVE.
  */
 export default async function WelcomePage() {
   const supabase = await createClient();
@@ -28,6 +27,9 @@ export default async function WelcomePage() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/register");
+
+  const home = await groupHomePath();
+  if (home !== "/welcome") redirect(home);
 
   const { data: profile } = await supabase
     .from("users")
