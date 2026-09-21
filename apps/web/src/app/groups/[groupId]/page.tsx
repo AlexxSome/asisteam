@@ -25,6 +25,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
       <Link href={`/groups/${group.id}/settings#invite`} className="block underline">Invitar con código o enlace</Link>
       <Link href={`/groups/${group.id}/activities/new`} className="block underline">Crear actividad</Link>
       <Link href={`/groups/${group.id}/members/new`} className="block underline">Crear cuenta gestionada</Link>
+      <Link href={`/groups/${group.id}/guardians`} className="block underline">Registrar y vincular apoderado</Link>
     </section>}
     {group.roles.includes("ADMIN") && <section className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Aprobaciones pendientes</h2>

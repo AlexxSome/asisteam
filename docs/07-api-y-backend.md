@@ -117,6 +117,13 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 | DELETE | /api/v1/guardianships/{id} | ADMIN | Desvincula; bloquea si dejaría a un menor ACTIVE sin apoderado (§5) | RPC `rpc/remove_guardianship` | [P0] |
 | — | (job diario) | Sistema | Al cumplir 18 el pupilo: vínculo pasa a inactivo, notifica a las partes | `pg_cron` → Edge Function `functions/v1/guardianship-majority` | [P0] |
 
+#### Registro y vínculo de apoderados (HU-ADM-06)
+
+- `/groups/:groupId/guardians` permite al ADMIN elegir un ATHLETE menor `ACTIVE` o `PENDING` de su grupo, indicar nombre/email del apoderado y `relationship`. `list_guardianship_athletes(p_group_id,p_search,p_offset)` ofrece búsqueda por nombre, páginas de 50 y solo ID/nombre/conteo; exige ADMIN del grupo.
+- `create_guardianship(p_group_id,p_athlete_user_id,p_full_name,p_email,p_relationship)` registra el vínculo global y las memberships GUARDIAN `ACTIVE` en una transacción. Es el **registro directo del ADMIN**: incluye el grupo solicitado y los demás grupos donde el pupilo tenga ATHLETE `ACTIVE` (CB-02). Verifica autorización, edad según Chile y límites de 500 membresías activas/grupo y 30 grupos/apoderado bajo bloqueo.
+- El email identifica al apoderado sin búsqueda global de usuarios. Un perfil nuevo queda `INVITED`, sin credenciales; un perfil existente se conserva. La web reutiliza `send-invitation` para que el destinatario complete su registro o acceda con su cuenta. Un fallo del correo conserva el vínculo y permite recuperar el envío desde Invitaciones.
+- Respuestas: 404 `athlete_not_found` para pupilo inexistente o ajeno, 422 `guardian_only_for_minor` para adulto, 409 `guardianship_already_exists` si el par ya tiene vínculo, incluido su historial inactivo. No duplica ni reactiva vínculos históricos. Registrar el vínculo no crea consentimiento ni cambia la membership del deportista; los flujos pendientes conservan sus requisitos propios.
+
 ### 2.7 Activity types
 
 | Método | Ruta lógica | Rol | Descripción | Implementación | Prioridad |
