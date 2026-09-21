@@ -48,3 +48,7 @@ content_path = "./supabase/templates/recovery.html"
 [functions.accept-invitation]
 # Preview y registro usan el token de invitación; accept valida getUser en Edge.
 verify_jwt = false
+
+[functions.send-invitation]
+# Edge valida getUser(JWT) y SQL repite la autorización ADMIN por grupo.
+verify_jwt = false
