@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn(), eq: vi.fn(), maybeSingle: vi.fn(), cookie: vi.fn() }));
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn(), eq: vi.fn(), maybeSingle: vi.fn(), cookie: vi.fn(), rpc: vi.fn() }));
 vi.mock("react", async (original) => ({ ...await original<typeof import("react")>(), cache: (fn: unknown) => fn }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, forbidden: () => { throw new Error("403"); }, useRouter: () => ({ refresh: vi.fn() }) }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from }) }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
 import { getGroup, getMyGroups, groupHomePath } from "./groups";
 import GroupPage from "@/app/groups/[groupId]/page";
 import GroupSettingsPage from "@/app/groups/[groupId]/settings/page";
@@ -23,6 +23,7 @@ beforeEach(() => {
   mock.eq.mockReturnValue({ maybeSingle: mock.maybeSingle });
   mock.from.mockReturnValue({ select: () => ({ order: mock.order, eq: mock.eq }) });
   mock.maybeSingle.mockResolvedValue({ data: { ...groups[0], description: null, settings: null, invite_code: "CODE0001" }, error: null });
+  mock.rpc.mockResolvedValue({ data: [], error: null });
 });
 
 describe("contexto de grupos", () => {
@@ -76,6 +77,8 @@ describe("contexto de grupos", () => {
     const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
     expect(html).toContain("Agregarme como deportista");
     expect(html).toContain("CODE0001");
+    expect(html).toContain(`/groups/${a}/settings#invite`);
+    expect(html).toContain("Aprobaciones pendientes");
     expect(html).toContain(`/groups/${a}/activities/new`);
   });
   it("al cambiar a ATHLETE desaparece administración y settings responde 403", async () => {
@@ -85,7 +88,16 @@ describe("contexto de grupos", () => {
     expect(html).not.toContain("Administración del grupo");
     expect(html).not.toContain("CODE0001");
     expect(html).not.toContain("Agregarme como deportista");
+    expect(html).not.toContain("Aprobaciones pendientes");
+    expect(mock.rpc).not.toHaveBeenCalled();
     await expect(GroupSettingsPage({ params: Promise.resolve({ groupId: b }) })).rejects.toThrow("403");
+  });
+  it("ADMIN ve menores pendientes con estado de apoderado", async () => {
+    mock.rpc.mockResolvedValue({ data: [{ membership_id: "pending-id", full_name: "Ana Soto", is_minor: true, guardian_ready: false, total_count: 1 }], error: null });
+    const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(mock.rpc).toHaveBeenCalledWith("list_pending_athletes", { p_group_id: a });
+    expect(html).toContain("Ana Soto");
+    expect(html).toContain("Requiere apoderado vinculado");
   });
   it("grupo ajeno conserva 404 antes de entrar a settings", async () => {
     await expect(GroupSettingsPage({ params: Promise.resolve({ groupId: "17000000-0000-4000-8000-000000000999" }) })).rejects.toThrow("404");

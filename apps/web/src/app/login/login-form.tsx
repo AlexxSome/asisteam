@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginUser } from "./actions";
 
-export function LoginForm() {
+export function LoginForm({ inviteCode }: { inviteCode?: string } = {}) {
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -23,7 +23,7 @@ export function LoginForm() {
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);
-    const result = await loginUser(values);
+    const result = await loginUser(values, inviteCode);
     if (result?.error) setServerError(result.error);
   });
 

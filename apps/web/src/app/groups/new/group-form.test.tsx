@@ -73,7 +73,18 @@ describe("configuración de grupo", () => {
     await user.click(screen.getByRole("button", { name: "Regenerar código" }));
     await waitFor(() => expect(mock.rotate).toHaveBeenCalledWith(groupId));
     expect(screen.getByLabelText("Código de invitación").textContent).toBe("CODE0002");
+    expect(screen.getByRole<HTMLInputElement>("textbox", { name: "Enlace para unirse" }).value)
+      .toBe(`${window.location.origin}/join?code=CODE0002`);
     expect(mock.refresh).toHaveBeenCalledOnce();
+  });
+  it("comparte un enlace que contiene el código vigente", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    render(<GroupForm groupId={groupId} initialValues={initialValues} inviteCode="CODE0001" />);
+    await user.click(screen.getByRole("button", { name: "Copiar enlace" }));
+    expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/join?code=CODE0001`);
+    expect(screen.getByText("Enlace copiado.")).toBeTruthy();
   });
   it("conserva el código vigente si falla la rotación", async () => {
     mock.rotate.mockResolvedValue({ error: { code: "invite_code_rotate_failed", message: "No pudimos regenerar el código.", details: {} } });

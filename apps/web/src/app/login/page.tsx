@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
+import { joinCodeSchema } from "@asisteam/core";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
@@ -17,12 +18,16 @@ export const metadata: Metadata = {
 };
 
 // Pantalla AUT-01 (docs/05-pantallas.md).
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: {
+  searchParams: Promise<{ invite_code?: string }>;
+}) {
+  const parsedCode = joinCodeSchema.safeParse((await searchParams).invite_code);
+  const inviteCode = parsedCode.success ? parsedCode.data : undefined;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) redirect("/welcome");
+  if (user) redirect(inviteCode ? `/join?code=${inviteCode}` : "/welcome");
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
@@ -34,7 +39,7 @@ export default async function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <LoginForm />
+          <LoginForm inviteCode={inviteCode} />
           <p className="text-center text-sm text-muted-foreground">
             <Link href="/forgot-password" className="underline underline-offset-4">
               ¿Olvidaste tu contraseña?

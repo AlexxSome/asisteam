@@ -11,6 +11,11 @@ export const groupFormSchema = z.object({
 });
 export type GroupFormInput = z.infer<typeof groupFormSchema>;
 
+export const joinCodeSchema = z.string().trim().regex(/^[A-Za-z0-9]{8}$/, "Código no válido");
+export const joinCodeResponseSchema = z.object({
+  membership: z.object({ group_id: z.string().uuid(), status: z.enum(["ACTIVE", "PENDING"]) }),
+});
+
 export const GROUP_ERROR_MESSAGES: Record<string, string> = {
   authentication_required: "Inicia sesión para continuar.",
   active_account_required: "Necesitas una cuenta activa para realizar esta acción.",
@@ -24,6 +29,9 @@ export const GROUP_ERROR_MESSAGES: Record<string, string> = {
   admin_required: "Solo un administrador del grupo puede agregarse como deportista desde aquí.",
   athlete_birthdate_required: "Completa tu fecha de nacimiento en Mi perfil antes de agregarte como deportista.",
   minor_requires_guardian_consent: "Para participar como deportista siendo menor necesitas un apoderado vinculado con consentimiento vigente.",
-  membership_already_exists: "Ya tienes una membresía de deportista pendiente o inactiva. Debe aprobarse o reactivarse.",
+  membership_already_exists: "Ya tienes una membresía de deportista en este grupo. Si está pendiente o inactiva, solicita su aprobación o reactivación.",
   group_member_limit: "Este grupo alcanzó el límite de 500 membresías activas.",
+  invalid_invite_code: "Código no válido.",
+  join_rate_limited: "Demasiados intentos. Vuelve a intentarlo en 15 minutos.",
+  join_failed: "No pudimos unirte al grupo. Vuelve a intentarlo.",
 };

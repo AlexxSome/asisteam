@@ -18,6 +18,10 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
   const [saved, setSaved] = useState(false);
   const [code, setCode] = useState(inviteCode);
   const [rotating, setRotating] = useState(false);
+  const [origin, setOrigin] = useState("");
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const joinPath = code ? `/join?code=${encodeURIComponent(code)}` : "";
+  const joinLink = origin && joinPath ? `${origin}${joinPath}` : joinPath;
   const { register, handleSubmit, setError, reset, formState: { errors, isSubmitting } } = useForm<GroupFormInput>({
     resolver: zodResolver(groupFormSchema),
     defaultValues: initialValues ?? { name: "", sport: "", description: "", logo_url: "" },
@@ -26,6 +30,7 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
     if (initialValues) reset(initialValues);
   }, [initialValues?.name, initialValues?.sport, initialValues?.description, initialValues?.logo_url, reset]);
   useEffect(() => { setCode(inviteCode); }, [inviteCode]);
+  useEffect(() => { setOrigin(window.location.origin); }, []);
   const submit = handleSubmit(async (values) => {
     setServerError(null);
     setSaved(false);
@@ -60,12 +65,23 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
       if ("error" in result) setServerError(result.error.message);
       else {
         setCode(result.code);
+        setShareMessage(null);
         router.refresh();
       }
     } catch {
       setServerError("No pudimos confirmar el nuevo código. Actualiza la página antes de volver a intentarlo.");
     } finally {
       setRotating(false);
+    }
+  }
+
+  async function copyLink() {
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${joinPath}`);
+      setShareMessage("Enlace copiado.");
+    } catch {
+      setShareMessage("No pudimos copiar el enlace. Selecciónalo para copiarlo manualmente.");
     }
   }
 
@@ -94,10 +110,16 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
       {isSubmitting ? groupId ? "Guardando…" : "Creando grupo…" : groupId ? "Guardar cambios" : "Crear grupo"}
     </button>
   </form>
-    {groupId && <section className="space-y-3 rounded-lg border p-5">
+    {groupId && <section id="invite" className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Código de invitación</h2>
       <p>Comparte este código con quienes quieras incorporar como deportistas.</p>
       <p className="font-mono text-xl tracking-widest" aria-label="Código de invitación">{code}</p>
+      {code && <div className="space-y-2">
+        <label htmlFor="invite-link" className="block">Enlace para unirse</label>
+        <input id="invite-link" readOnly value={joinLink} className={fieldClass} onFocus={(event) => event.currentTarget.select()} />
+        <button type="button" onClick={copyLink} className="min-h-11 rounded-md border px-5 py-2">Copiar enlace</button>
+        {shareMessage && <p role="status" className="text-sm">{shareMessage}</p>}
+      </div>}
       <button type="button" disabled={rotating} onClick={rotate} className="min-h-11 rounded-md border px-5 py-2 disabled:opacity-50">
         {rotating ? "Regenerando…" : "Regenerar código"}
       </button>

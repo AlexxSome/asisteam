@@ -971,6 +971,7 @@ export type Database = {
       is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
       is_member: { Args: { p_group_id: string }; Returns: boolean }
       join_group_as_athlete: { Args: { p_group_id: string }; Returns: string }
+      join_group_by_code: { Args: { p_invite_code: string }; Returns: Json }
       list_avatar_permissions: {
         Args: never
         Returns: {
@@ -989,6 +990,16 @@ export type Database = {
           old_birthdate: string
           request_id: string
           requested_birthdate: string
+        }[]
+      }
+      list_pending_athletes: {
+        Args: { p_group_id: string }
+        Returns: {
+          full_name: string
+          guardian_ready: boolean
+          is_minor: boolean
+          membership_id: string
+          total_count: number
         }[]
       }
       prepare_invitation_registration: {
