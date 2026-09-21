@@ -44,3 +44,7 @@ otp_expiry = 3600
 [auth.email.template.recovery]
 subject = "Restablece tu contraseña de Asisteam"
 content_path = "./supabase/templates/recovery.html"
+
+[functions.accept-invitation]
+# Preview y registro usan el token de invitación; accept valida getUser en Edge.
+verify_jwt = false

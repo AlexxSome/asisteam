@@ -69,3 +69,9 @@ export const registerSchema = z.object({
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
+
+export const invitationRegistrationSchema = registerSchema.extend({
+  phone: registerSchema.shape.phone.refine((value) => !value || /^\+[1-9][0-9]{7,14}$/.test(value), "Teléfono inválido (ej. +56912345678)"),
+  terms_accepted: z.literal(true, { errorMap: () => ({ message: "Debes aceptar las condiciones de uso y privacidad" }) }),
+});
+export type InvitationRegistrationInput = z.infer<typeof invitationRegistrationSchema>;
