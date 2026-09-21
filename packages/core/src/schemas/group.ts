@@ -19,6 +19,8 @@ export const GROUP_ERROR_MESSAGES: Record<string, string> = {
   guardian_group_limit: "Un apoderado vinculado alcanzó el límite de 30 grupos y no puede incorporarse a este grupo.",
   invite_code_unavailable: "No pudimos generar el código del grupo. Vuelve a intentarlo.",
   group_not_found: "El grupo no existe o no tienes acceso.",
+  group_update_failed: "No pudimos guardar los cambios del grupo. Vuelve a intentarlo.",
+  invite_code_rotate_failed: "No pudimos regenerar el código. Vuelve a intentarlo.",
   admin_required: "Solo un administrador del grupo puede agregarse como deportista desde aquí.",
   athlete_birthdate_required: "Completa tu fecha de nacimiento en Mi perfil antes de agregarte como deportista.",
   minor_requires_guardian_consent: "Para participar como deportista siendo menor necesitas un apoderado vinculado con consentimiento vigente.",
