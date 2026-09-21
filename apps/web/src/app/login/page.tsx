@@ -36,6 +36,11 @@ export default async function LoginPage() {
         <CardContent className="space-y-4">
           <LoginForm />
           <p className="text-center text-sm text-muted-foreground">
+            <Link href="/forgot-password" className="underline underline-offset-4">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </p>
+          <p className="text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{" "}
             <Link href="/register" className="underline underline-offset-4">
               Crea una

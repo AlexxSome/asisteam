@@ -38,3 +38,9 @@ double_confirm_changes = true
 # MVP [P0]: sin confirmación de email — HU-GEN-01 exige quedar autenticado
 # al registrarse. Se reevalúa al configurar Resend en staging/producción.
 enable_confirmations = false
+# HU-GEN-03: enlace de recuperación de un solo uso, válido por 60 minutos.
+otp_expiry = 3600
+
+[auth.email.template.recovery]
+subject = "Restablece tu contraseña de Asisteam"
+content_path = "./supabase/templates/recovery.html"
