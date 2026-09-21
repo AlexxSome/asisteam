@@ -1016,6 +1016,7 @@ export type Database = {
         Args: { p_approve: boolean; p_group_id: string; p_request_id: string }
         Returns: string
       }
+      rotate_invite_code: { Args: { p_group_id: string }; Returns: string }
       set_avatar_permission: {
         Args: { p_allow: boolean; p_guardianship_id: string }
         Returns: undefined

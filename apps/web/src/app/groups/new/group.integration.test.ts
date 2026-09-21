@@ -79,6 +79,33 @@ suite("Auth + PostgREST + Postgres: crear grupo", () => {
     expect(memberships.data).toEqual([{ role: "ADMIN" }]);
   });
 
+  it("edita por PostgREST y rota por RPC con permisos reales", async () => {
+    const owner = clients.adult!;
+    const original = (await owner.from("v_group_detail").select("invite_code").eq("id", groupId).single()).data!.invite_code!;
+    const edit = await owner.from("groups").update({ name: "Club actualizado", sport: "Natación", description: "Nueva descripción", logo_url: "https://example.test/logo.png" })
+      .eq("id", groupId).select("id").maybeSingle();
+    expect(edit.error).toBeNull();
+    expect(edit.data?.id).toBe(groupId);
+    const detail = await owner.from("v_group_detail").select("name, sport, description, logo_url").eq("id", groupId).single();
+    expect(detail.data).toMatchObject({ name: "Club actualizado", sport: "Natación", description: "Nueva descripción", logo_url: "https://example.test/logo.png" });
+
+    sql(`insert into public.memberships(user_id,group_id,role,status)
+      select id,'${groupId}','ATHLETE','ACTIVE' from public.users where email='${email("outsider")}';`);
+    const athlete = clients.outsider!;
+    const deniedEdit = await athlete.from("groups").update({ name: "Ataque" }).eq("id", groupId).select("id");
+    expect(deniedEdit.status).toBe(403);
+    expect((await athlete.rpc("rotate_invite_code", { p_group_id: groupId })).status).toBe(403);
+    expect((await athlete.from("v_group_detail").select("name, invite_code").eq("id", groupId).single()).data)
+      .toMatchObject({ name: "Club actualizado", invite_code: null });
+
+    const rotated = await owner.rpc("rotate_invite_code", { p_group_id: groupId });
+    expect(rotated.error).toBeNull();
+    expect(rotated.data).toMatch(/^[A-Za-z0-9]{8}$/);
+    expect(rotated.data).not.toBe(original);
+    expect(sql(`select count(*) from public.groups where invite_code='${original}';`)).toBe("0");
+    expect(sql(`select id from public.groups where invite_code='${rotated.data}';`)).toBe(groupId);
+  });
+
   it("creaciones simultáneas no superan 30 grupos ni duplican códigos", async () => {
     const results = await Promise.all(Array.from({ length: 31 }, (_, n) => clients.adult!.rpc("create_group", {
       p_name: `Club concurrente ${n}`, p_sport: "Tenis",
