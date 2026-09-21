@@ -944,6 +944,10 @@ export type Database = {
         Args: { p_activity_id: string; p_membership_id: string }
         Returns: undefined
       }
+      consent_managed_member: {
+        Args: { p_accepted: boolean; p_membership_id: string }
+        Returns: undefined
+      }
       consume_invitation_attempt: { Args: { p_key: string }; Returns: boolean }
       create_activity: {
         Args: {
@@ -965,6 +969,16 @@ export type Database = {
           p_sport: string
         }
         Returns: string
+      }
+      create_managed_member: {
+        Args: {
+          p_birthdate: string
+          p_email?: string
+          p_full_name: string
+          p_group_id: string
+          p_guardian?: Json
+        }
+        Returns: Json
       }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
@@ -1001,6 +1015,15 @@ export type Database = {
           old_birthdate: string
           request_id: string
           requested_birthdate: string
+        }[]
+      }
+      list_managed_member_consents: {
+        Args: { p_group_id: string; p_offset?: number }
+        Returns: {
+          full_name: string
+          membership_id: string
+          relationship: string
+          total_count: number
         }[]
       }
       list_pending_athletes: {

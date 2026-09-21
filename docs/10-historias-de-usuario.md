@@ -84,9 +84,10 @@
 
 #### HU-ADM-05 — Crear cuenta gestionada (MANAGED) [P0]
 **Como** administrador **quiero** crear perfiles sin credenciales **para** registrar deportistas (típicamente menores) que no operan su propia cuenta.
-1. **Dado** que soy ADMIN, **cuando** creo un perfil con `full_name` y `birthdate` (email opcional), **entonces** se crea `users` con `account_status = MANAGED` y su membership `ATHLETE` queda `ACTIVE` de inmediato.
+1. **Dado** que soy ADMIN, **cuando** creo un perfil con `full_name` y `birthdate` (email opcional), **entonces** se crea `users` con `account_status = MANAGED`, sin credenciales; su membership `ATHLETE` queda `ACTIVE` de inmediato si es adulto y `PENDING` si es menor hasta el consentimiento del apoderado.
 2. **Dado** que el perfil creado es menor de 18 años según `birthdate`, **cuando** intento guardar sin vincular al menos un apoderado, **entonces** el sistema bloquea el cierre del flujo hasta completar el vínculo (HU-ADM-06).
 3. **Dado** un perfil MANAGED creado, **cuando** tomo asistencia, **entonces** el deportista aparece en la lista igual que cualquier miembro ACTIVE.
+4. **Dado** un menor MANAGED con apoderado vinculado y declaración ADMIN, **cuando** ese apoderado acepta la invitación GUARDIAN y consiente expresamente en la app, **entonces** se registra `DATA_PROCESSING_MINOR` y se activa ATHLETE atómicamente; el ADMIN ni otro apoderado pueden consentir en su nombre. Hasta entonces no aparece en asistencia.
 
 #### HU-ADM-06 — Registrar apoderado y vincularlo a un deportista [P0]
 **Como** administrador **quiero** registrar apoderados y vincularlos con sus pupilos **para** cumplir la regla de que todo menor tenga apoderado.

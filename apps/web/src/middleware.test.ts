@@ -53,6 +53,12 @@ describe("HTTP 404 de recursos por grupo", () => {
     expect(response.status).toBe(404);
     expect(await response.text()).not.toContain("internal detail");
   });
+  it.each(["ATHLETE", "GUARDIAN"])("%s no accede al alta MANAGED por URL directa", async role => {
+    mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: [role] } });
+    expect((await middleware(request(`/groups/${groupId}/members/new`))).status).toBe(404);
+    mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: [role, "ADMIN"] } });
+    expect((await middleware(request(`/groups/${groupId}/members/new`))).status).toBe(200);
+  });
 });
 
 describe("HTTP 403 acotado a la toma de asistencia", () => {

@@ -48,6 +48,7 @@ Este documento define cómo Asisteam trata los datos personales de sus usuarios 
 - `users.account_status = MANAGED`: perfil creado por un ADMIN **sin credenciales de acceso**; `email` puede ser NULL. Es el mecanismo por defecto para menores sin correo propio.
 - Una cuenta MANAGED **no puede iniciar sesión**: no tiene contraseña, no genera tokens, no recibe notificaciones directas (las recibe su apoderado en [P1] push).
 - Al crear un deportista menor como MANAGED, el sistema **exige en el mismo flujo** vincular al menos un apoderado (`guardianships`); sin apoderado no se completa el alta (regla canónica de incorporación).
+- El perfil menor se guarda con membership `PENDING` hasta el consentimiento autenticado del apoderado. La declaración de autorización del ADMIN se conserva por separado y no satisface R1. Tras aceptar la invitación GUARDIAN, el apoderado ratifica en «Consentimientos de mis pupilos»; recién entonces pasa a asistencia como `ACTIVE`.
 - Conversión MANAGED → ACTIVE: mediante invitación por email y creación de contraseña; si el titular sigue siendo menor, requiere consentimiento vigente del apoderado (ver sección 3).
 
 ### 2.4 Prohibición en vistas agregadas (regla canónica 5) [P0]

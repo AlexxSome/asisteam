@@ -24,6 +24,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
       <p>Código de invitación: <span className="font-mono tracking-widest">{group.invite_code}</span></p>
       <Link href={`/groups/${group.id}/settings#invite`} className="block underline">Invitar con código o enlace</Link>
       <Link href={`/groups/${group.id}/activities/new`} className="block underline">Crear actividad</Link>
+      <Link href={`/groups/${group.id}/members/new`} className="block underline">Crear cuenta gestionada</Link>
     </section>}
     {group.roles.includes("ADMIN") && <section className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Aprobaciones pendientes</h2>
@@ -43,6 +44,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
     </section>}
     {group.roles.includes("GUARDIAN") && <section id="my-wards" className="space-y-2 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Mis pupilos</h2>
+      <Link className="block underline" href={`/groups/${group.id}/members/consent`}>Consentimientos de mis pupilos</Link>
       <p className="text-muted-foreground">Tu acceso como apoderado corresponde a tus pupilos vigentes de este grupo.</p>
     </section>}
   </>;

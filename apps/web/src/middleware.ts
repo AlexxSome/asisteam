@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
     const { data: group } = user && isGroupId(groupId)
       ? await supabase.from("v_my_groups").select("id, roles").eq("id", groupId).maybeSingle()
       : { data: null };
-    const adminRoute = segments[3] === "settings";
+    const adminRoute = segments[3] === "settings" || (segments[3] === "members" && segments[4] === "new");
     if (!group || (adminRoute && !group.roles?.includes("ADMIN"))) {
       // Antes de que Next empiece streaming: notFound() en un layout puede
       // responder 200 después de enviar encabezados. Aquí el HTTP siempre es 404.

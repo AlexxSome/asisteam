@@ -88,7 +88,7 @@ Menor de edad = menos de 18 años, calculado desde `users.birthdate` en zona hor
 - Todo ATHLETE menor de edad **debe** tener al menos un `guardianship` activo antes de que su membresía pase a `ACTIVE`. El sistema lo exige en los tres flujos de incorporación:
   1. **Por código/enlace:** el menor queda `PENDING`; la app le pide los datos de su apoderado (o el ADMIN los registra). Solo cuando existe el vínculo y el ADMIN confirma (acción #9), pasa a `ACTIVE`.
   2. **Por invitación dirigida:** el formulario de invitación a un menor exige indicar apoderado (existente en el grupo o nuevo, que recibe su propia invitación dirigida con rol GUARDIAN).
-  3. **Cuenta gestionada:** el formulario de creación MANAGED exige vincular apoderado en el mismo flujo; la membresía queda `ACTIVE` de inmediato.
+  3. **Cuenta gestionada:** el formulario exige vincular apoderado y declarar su autorización en el mismo flujo. El menor queda `PENDING`, fuera de asistencia, hasta que el apoderado acepte su invitación y otorgue `DATA_PROCESSING_MINOR` en la app; esa confirmación activa la membresía. El alta del ADMIN constituye su aprobación, sin un segundo paso de aprobación. Los adultos quedan `ACTIVE` de inmediato.
 - Restricción verificable: la API rechaza toda transición de `membership` ATHLETE a `ACTIVE` si el usuario es menor y no existe al menos un `guardianship` activo **con consentimiento `DATA_PROCESSING_MINOR` vigente** en la tabla `consents` (fila con `revoked_at IS NULL`; ver 07-api-y-backend.md regla R1 y 11-legal-seguridad-privacidad.md §3.1-3.2 y checklist C-03).
 - El GUARDIAN solo puede estar a cargo de menores de edad: no se puede crear un `guardianship` hacia un usuario con 18 años o más.
 
@@ -104,7 +104,7 @@ Menor de edad = menos de 18 años, calculado desde `users.birthdate` en zona hor
 |---|---|---|
 | Adulto se registra (cualquier rol) | El propio usuario acepta términos y política de privacidad | Timestamp + versión aceptada |
 | Menor activa cuenta por invitación | El menor acepta las condiciones de uso **y** un apoderado vinculado otorga consentimiento para el tratamiento de sus datos antes de habilitar credenciales | Consentimiento del apoderado con timestamp, en la app |
-| ADMIN crea cuenta MANAGED de un menor | El ADMIN declara contar con autorización del apoderado (checkbox obligatorio); el apoderado **ratifica** al aceptar su propia invitación dirigida | Declaración del ADMIN + ratificación del apoderado |
+| ADMIN crea cuenta MANAGED de un menor | El ADMIN declara contar con autorización del apoderado (checkbox obligatorio); el apoderado **ratifica** en «Consentimientos de mis pupilos» tras aceptar su invitación dirigida | Declaración del ADMIN separada del consentimiento versionado del apoderado; hasta ratificar, ATHLETE permanece PENDING |
 
 Marco: Ley 19.628 y Ley 21.719 (vigencia diciembre 2026), con estándar tipo GDPR para datos de menores. Detalle en 11-legal-seguridad-privacidad.md.
 
