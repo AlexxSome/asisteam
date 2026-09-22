@@ -161,6 +161,8 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 | POST | /api/v1/attendance-records/{id}/excuse-requests | ATHLETE / GUARDIAN | Solicitud de justificación con flujo de aprobación | Post-MVP | [P2] |
 | POST | /api/v1/activities/{id}/self-checkin | ATHLETE | Autoregistro por QR o geocerca | Post-MVP | [P2] |
 
+`update_attendance_record(p_record_id, p_changes)` corrige un registro existente, incluso de una actividad pasada. `p_changes` admite solo `status` y/o `note`: omitir un campo conserva su valor actual en la base; `note: null` o una nota vacía la borra. La RPC comparte el bloqueo de la actividad con `record_attendance_bulk` y `clear_attendance_record`, por lo que guardar una nota no repone un estado desactualizado del navegador. Reutiliza la validación y auditoría del upsert (`recorded_by` del editor autenticado y `recorded_at` del guardado), conserva el ID y responde con el mismo formato del lote. Un registro inexistente o de un grupo ajeno devuelve 404 `attendance_record_not_found`; un miembro del grupo sin ADMIN recibe 403 `admin_required`. Las altas retroactivas sin registro siguen usando `record_attendance_bulk`; las consultas posteriores leen los estados corregidos sin cache de métricas.
+
 ### 2.10 Reports
 
 | Método | Ruta lógica | Rol | Descripción | Implementación | Prioridad |

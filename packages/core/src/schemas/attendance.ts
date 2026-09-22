@@ -17,6 +17,9 @@ export const attendanceBatchSchema = z.array(attendanceRecordSchema).min(1, "Sel
     });
   });
 export const attendanceSavedRecordsSchema = z.array(attendanceRecordSchema);
+export const attendanceChangesSchema = attendanceRecordSchema.pick({ status: true, note: true }).partial()
+  .refine((changes) => changes.status !== undefined || changes.note !== undefined, "Indica un estado o una nota para corregir");
+export type AttendanceChanges = z.infer<typeof attendanceChangesSchema>;
 export type AttendanceInput = z.infer<typeof attendanceRecordSchema>;
 export type AttendanceRosterRow = {
   membership_id: string; full_name: string; avatar_url: string | null;
@@ -32,7 +35,9 @@ export function attendanceCounts(rows: Pick<AttendanceRosterRow, "status">[]) {
 export const ATTENDANCE_ERROR_MESSAGES: Record<string, string> = {
   authentication_required: "Inicia sesión para registrar asistencia.",
   activity_not_found: "La actividad no existe o no tienes acceso.",
+  attendance_record_not_found: "El registro ya no existe o no tienes acceso. Recarga la asistencia.",
   admin_required: "Solo un administrador del grupo puede registrar asistencia.",
+  invalid_attendance_changes: "Indica un estado o una nota válida para corregir.",
   invalid_attendance_batch: "Revisa los estados y las notas (máximo 500 caracteres).",
   duplicate_membership: "Un deportista no puede aparecer dos veces en el lote.",
   membership_not_athlete_in_group: "El integrante ya no es deportista activo de este grupo. Recarga la lista.",

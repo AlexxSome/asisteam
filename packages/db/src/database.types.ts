@@ -1164,6 +1164,10 @@ export type Database = {
         }
         Returns: number
       }
+      update_attendance_record: {
+        Args: { p_changes: Json; p_record_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
