@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { activityFormSchema, activityTypeLabel, chileDateTimeToUtc, formatActivityDateTime } from "./activity";
+import { ACTIVITY_WEEKDAYS, activityDateTimeInput, activityFormSchema, activityTypeLabel, chileDateTimeToUtc, formatActivityDateTime } from "./activity";
 
 const activity = {
   title: "Entrenamiento adultos", activity_type_id: "b2c3d4e5-0001-4b3c-8d4e-111111111111",
@@ -32,5 +32,31 @@ describe("actividad puntual en hora chilena", () => {
   it("traduce tipos de sistema sin renombrar tipos personalizados", () => {
     expect(activityTypeLabel("TRAINING", true)).toBe("Entrenamiento");
     expect(activityTypeLabel("TRAINING", false)).toBe("TRAINING");
+  });
+});
+
+describe("recurrencia semanal", () => {
+  const recurring = { ...activity, recurrence_rule: { freq: "WEEKLY", by_weekday: ["TU", "TH"], until: "2026-09-30" } };
+  it("acepta martes y jueves y convierte UTC para editar en hora chilena", () => {
+    expect(activityFormSchema.safeParse(recurring).success).toBe(true);
+    expect(activityDateTimeInput("2026-07-07T22:30:00Z")).toBe(activity.starts_at);
+  });
+  it.each([
+    { freq: "MONTHLY", by_weekday: ["TU"], until: "2026-08-01" },
+    { freq: "WEEKLY", by_weekday: [], until: "2026-08-01" },
+    { freq: "WEEKLY", by_weekday: ["TU", "TU"], until: "2026-08-01" },
+    { freq: "WEEKLY", by_weekday: ["XX"], until: "2026-08-01" },
+    { freq: "WEEKLY", by_weekday: ["TU"], until: "2026-02-30" },
+    { freq: "WEEKLY", by_weekday: ["TU"], until: "2026-07-06" },
+    { freq: "WEEKLY", by_weekday: ["TH"], until: "2026-07-07" },
+    { freq: "WEEKLY", by_weekday: ["TU"], until: "2027-01-06" },
+  ])("rechaza regla inválida %j", (recurrence_rule) => {
+    expect(activityFormSchema.safeParse({ ...activity, recurrence_rule }).success).toBe(false);
+  });
+  it("acepta exactamente 26 semanas y exactamente 150 instancias", () => {
+    expect(activityFormSchema.safeParse({ ...recurring, recurrence_rule: { ...recurring.recurrence_rule, until: "2027-01-05" } }).success).toBe(true);
+    const daily = { ...activity, starts_at: "2027-01-04T18:30", ends_at: "2027-01-04T20:00", recurrence_rule: { freq: "WEEKLY", by_weekday: [...ACTIVITY_WEEKDAYS], until: "2027-06-02" } };
+    expect(activityFormSchema.safeParse(daily).success).toBe(true);
+    expect(activityFormSchema.safeParse({ ...daily, recurrence_rule: { ...daily.recurrence_rule, until: "2027-06-03" } }).success).toBe(false);
   });
 });

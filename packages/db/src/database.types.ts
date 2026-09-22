@@ -44,6 +44,8 @@ export type Database = {
           group_id: string
           id: string
           location: string | null
+          recurrence_rule: Json | null
+          recurrence_source_id: string | null
           starts_at: string
           title: string
           updated_at: string
@@ -57,6 +59,8 @@ export type Database = {
           group_id: string
           id?: string
           location?: string | null
+          recurrence_rule?: Json | null
+          recurrence_source_id?: string | null
           starts_at: string
           title: string
           updated_at?: string
@@ -70,6 +74,8 @@ export type Database = {
           group_id?: string
           id?: string
           location?: string | null
+          recurrence_rule?: Json | null
+          recurrence_source_id?: string | null
           starts_at?: string
           title?: string
           updated_at?: string
@@ -115,6 +121,20 @@ export type Database = {
             columns: ["group_id"]
             isOneToOne: false
             referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_recurrence_source_id_fkey"
+            columns: ["recurrence_source_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_recurrence_source_id_fkey"
+            columns: ["recurrence_source_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_activities"
             referencedColumns: ["id"]
           },
         ]
@@ -863,6 +883,8 @@ export type Database = {
           id: string | null
           is_system_type: boolean | null
           location: string | null
+          recurrence_rule: Json | null
+          recurrence_source_id: string | null
           starts_at: string | null
           title: string | null
         }
@@ -900,6 +922,20 @@ export type Database = {
             columns: ["group_id"]
             isOneToOne: false
             referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_recurrence_source_id_fkey"
+            columns: ["recurrence_source_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_recurrence_source_id_fkey"
+            columns: ["recurrence_source_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_activities"
             referencedColumns: ["id"]
           },
         ]
@@ -960,6 +996,7 @@ export type Database = {
           p_ends_at: string
           p_group_id: string
           p_location?: string
+          p_recurrence_rule?: Json
           p_starts_at: string
           p_title: string
         }
@@ -993,6 +1030,15 @@ export type Database = {
           p_guardian?: Json
         }
         Returns: Json
+      }
+      delete_activity: {
+        Args: {
+          p_activity_id: string
+          p_confirm_attendance?: boolean
+          p_group_id: string
+          p_scope?: string
+        }
+        Returns: number
       }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
@@ -1103,6 +1149,20 @@ export type Database = {
       set_avatar_permission: {
         Args: { p_allow: boolean; p_guardianship_id: string }
         Returns: undefined
+      }
+      update_activity: {
+        Args: {
+          p_activity_id: string
+          p_activity_type_id: string
+          p_description?: string
+          p_ends_at: string
+          p_group_id: string
+          p_location?: string
+          p_scope?: string
+          p_starts_at: string
+          p_title: string
+        }
+        Returns: number
       }
     }
     Enums: {

@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getGroup } from "@/lib/groups";
 import { isGroupId } from "@/lib/group-routing";
 
-const activityColumns = "id, group_id, activity_type_id, title, description, location, starts_at, ends_at, activity_type_name, activity_type_color, is_system_type" as const;
+const activityColumns = "id, group_id, activity_type_id, title, description, location, starts_at, ends_at, activity_type_name, activity_type_color, is_system_type, recurrence_rule, recurrence_source_id" as const;
 export const ACTIVITY_PAGE_SIZE = 50;
 
 export async function getActivityTypes(groupId: string) {
