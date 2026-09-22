@@ -5,6 +5,7 @@ export * from "./schemas/password-recovery";
 export * from "./schemas/profile";
 export * from "./schemas/invitation";
 export * from "./schemas/activity";
+export * from "./schemas/activity-type";
 export * from "./schemas/attendance";
 export * from "./schemas/group";
 export * from "./schemas/managed-member";

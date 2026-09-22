@@ -13,6 +13,7 @@ export default async function NewActivityPage({ params }: { params: Promise<{ gr
   return <>
     <Link href={`/groups/${groupId}/activities`} className="underline">Volver a actividades</Link>
     <h1 className="text-2xl font-semibold">Crear actividad</h1>
+    <Link href={`/groups/${groupId}/activity-types`} className="inline-block underline">Gestionar tipos de actividad</Link>
     <ActivityForm groupId={groupId} types={types} />
   </>;
 }

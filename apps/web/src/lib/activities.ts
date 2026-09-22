@@ -6,13 +6,15 @@ import { isGroupId } from "@/lib/group-routing";
 const activityColumns = "id, group_id, activity_type_id, title, description, location, starts_at, ends_at, activity_type_name, activity_type_color, is_system_type, recurrence_rule, recurrence_source_id" as const;
 export const ACTIVITY_PAGE_SIZE = 50;
 
-export async function getActivityTypes(groupId: string) {
+export async function getActivityTypes(groupId: string, includeInactive = false) {
   await getGroup(groupId);
   const supabase = await createClient();
   const types: { id: string; name: string; group_id: string | null; color: string | null; is_active: boolean | null }[] = [];
   for (let offset = 0; ; offset += 100) {
-    const { data, error } = await supabase.from("v_activity_types")
-      .select("id, group_id, name, color, is_active").eq("is_active", true)
+    let query = supabase.from("v_activity_types")
+      .select("id, group_id, name, color, is_active");
+    if (!includeInactive) query = query.eq("is_active", true);
+    const { data, error } = await query
       .or(`group_id.is.null,group_id.eq.${groupId}`).order("name").order("id").range(offset, offset + 99);
     if (error) throw new Error("No pudimos cargar los tipos de actividad. Vuelve a intentarlo.");
     types.push(...(data ?? []).flatMap((type) => type.id && type.name ? [{ ...type, id: type.id, name: type.name }] : []));
