@@ -14,7 +14,10 @@ export default async function ActivitiesPage({ params, searchParams }: {
   return <>
     <div className="flex flex-wrap items-center justify-between gap-4">
       <h1 className="text-2xl font-semibold">Actividades</h1>
-      {group.roles.includes("ADMIN") && <Link href={`/groups/${groupId}/activities/new`} className="rounded-md bg-primary px-4 py-3 text-primary-foreground">Crear actividad</Link>}
+      {group.roles.includes("ADMIN") && <div className="flex flex-wrap items-center gap-4">
+        <Link href={`/groups/${groupId}/activity-types`} className="underline">Tipos de actividad</Link>
+        <Link href={`/groups/${groupId}/activities/new`} className="rounded-md bg-primary px-4 py-3 text-primary-foreground">Crear actividad</Link>
+      </div>}
     </div>
     <p className="text-sm text-muted-foreground">Horarios de Chile · America/Santiago</p>
     {activities.length === 0 ? <p>Aún no hay actividades en esta página.</p> : <ul className="space-y-3">

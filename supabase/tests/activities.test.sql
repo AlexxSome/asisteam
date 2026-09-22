@@ -67,7 +67,7 @@ select throws_ok($$select public.create_activity('27000000-0000-4000-8000-000000
 select throws_ok($$select id from public.activities$$,'42501',null,'cliente no salta vista de actividades');
 select throws_ok($$insert into public.activities(title) values('Ataque')$$,'42501',null,'inserción directa bloqueada');
 select throws_ok($$update public.activities set title='Ataque'$$,'42501',null,'edición directa bloqueada');
-select throws_ok($$update public.activity_types set name='Ataque'$$,'42501',null,'tipos no se modifican directamente');
+select throws_ok($$update public.activity_types set group_id=null$$,'42501',null,'cliente no convierte tipos propios en tipos de sistema');
 select ok(not has_table_privilege('authenticated','public.v_group_activities','INSERT'),'vista no habilita escrituras');
 select is((select count(*) from public.users),1::bigint,'la nueva API no expone perfiles de terceros');
 
