@@ -218,20 +218,16 @@ Errores en formato uniforme: `{ "error": { "code": "string_estable", "message": 
   "recurrence_rule": { "freq": "WEEKLY", "by_weekday": ["TU", "TH"], "until": "2026-09-30" }
 }
 
-// Response 201 — la recurrencia se expandió a instancias materializadas
-{
-  "series_id": "c3d4e5f6-0003-4c4d-9e5f-333333333333",
-  "instances_created": 26,
-  "first_activity": {
-    "id": "d4e5f6a7-0004-4d5e-8f6a-444444444444",
-    "group_id": "e5f6a7b8-0005-4e6f-9a7b-555555555555",
-    "title": "Entrenamiento adultos",
-    "starts_at": "2026-07-07T22:30:00Z",
-    "ends_at": "2026-07-08T00:00:00Z"
-  }
-}
+// Respuesta de rpc/create_activity — UUID de la primera ocurrencia materializada
+"d4e5f6a7-0004-4d5e-8f6a-444444444444"
 // 422 { "error": { "code": "invalid_date_range", "message": "ends_at debe ser posterior a starts_at" } }
 ```
+
+La RPC conserva el retorno UUID de la creación puntual (HU-ADM-08) y agrega `p_recurrence_rule` opcional. La primera ocurrencia tiene `recurrence_source_id = NULL`; las demás la referencian, y todas copian la regla. `v_group_activities` proyecta ambos campos. La expansión usa días y horas de `America/Santiago`, incluye la fecha de término y rechaza toda la transacción si supera 26 semanas/150 ocurrencias o si un horario es inexistente o ambiguo por cambio de hora.
+
+`update_activity` y `delete_activity` reciben `p_group_id`, `p_activity_id` y `p_scope` (`single` por defecto, o `series`), y devuelven la cantidad de filas afectadas. Desde el detalle, `/groups/:groupId/activities/:activityId/edit` permite elegir «solo esta» o «esta y las siguientes». El alcance de serie toma las ocurrencias desde la seleccionada, futuras y sin asistencia: la edición actualiza datos y horarios, conservando fechas y días de cada ocurrencia. Mover una fecha se hace con edición puntual. No reexpande ni cambia los días/fecha final de la regla original.
+
+Eliminar una ocurrencia con asistencia devuelve 409 `attendance_confirmation_required` hasta recibir `p_confirm_attendance = true` tras una confirmación adicional de la UI. El alcance de serie siempre conserva las que tienen asistencia, aunque se envíe esa bandera. Si se elimina la raíz, la primera sobreviviente pasa a ser raíz para que las demás sigan agrupadas. Las escrituras bloquean las actividades antes de evaluar asistencia, compartiendo la serialización con `record_attendance_bulk`.
 
 ### 3.3 Tomar asistencia en lote — `PUT /api/v1/activities/{id}/attendance` → `rpc/record_attendance_bulk` [P0]
 
