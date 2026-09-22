@@ -29,6 +29,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
     </section>}
     {group.roles.includes("ADMIN") && <section className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Aprobaciones pendientes</h2>
+      <Link href={`/groups/${group.id}/members/pending`} className="block underline">Revisar aprobaciones</Link>
       {pending.length ? <>
         <ul className="space-y-2">{pending.map((item) => <li key={item.membership_id} className="rounded-md border p-3">
           <span className="font-medium">{item.full_name}</span>

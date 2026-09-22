@@ -85,9 +85,17 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 | GET | /api/v1/groups/{id}/memberships | ADMIN (lista completa) / miembro (nómina reducida: nombre + rol) | Lista integrantes con filtros `role`, `status` | Vistas `v_group_members_admin` / `v_group_members_basic` | [P0] |
 | POST | /api/v1/groups/{id}/memberships | ADMIN | Crea MANAGED sin credenciales; adulto ATHLETE ACTIVE, menor PENDING con apoderado y declaración ADMIN hasta consentimiento | RPC `rpc/create_managed_member` | [P0] |
 | PATCH | /api/v1/memberships/{id}/approve | ADMIN | Aprueba membership PENDING → ACTIVE (valida invariante de menor) | RPC `rpc/approve_membership` | [P0] |
+| PATCH | /api/v1/memberships/{id}/reject | ADMIN | Rechaza membership PENDING → INACTIVE conservando su fila e historial | RPC `rpc/reject_pending_membership` | [P0] |
 | PATCH | /api/v1/memberships/{id}/role | ADMIN | Agrega/quita rol vía filas de membership por rol (nunca edita `role` in place) | RPC `rpc/set_member_roles` | [P0] |
 | PATCH | /api/v1/memberships/{id}/deactivate | ADMIN, o el propio usuario (salir del grupo) | Marca INACTIVE; bloquea si es el último ADMIN ACTIVE (§5). La auto-desactivación se rechaza con 422 `minor_cannot_leave` si la membership es ATHLETE y el usuario es menor según `users.birthdate` (la baja de menores la ejecuta solo el ADMIN, nota C8 de 02-roles-y-permisos.md), y con 422 `guardian_has_active_wards` si es GUARDIAN con un pupilo ATHLETE ACTIVE o PENDING en el grupo (preserva la regla V2) | RPC `rpc/deactivate_membership` | [P0] |
 | PATCH | /api/v1/memberships/{id}/reactivate | ADMIN | Reactiva INACTIVE → ACTIVE (revalida invariante de menor) | RPC `rpc/reactivate_membership` | [P0] |
+
+#### Aprobaciones pendientes (HU-ADM-07)
+
+- INT-06, `/groups/:groupId/members/pending`, usa `list_pending_memberships(p_group_id,p_offset)` con páginas de 50. Proyecta ID, nombre, mayoría/minoría de edad en Chile, vínculo activo, consentimiento vigente y si corresponde ratificación MANAGED; solo ADMIN del grupo. `list_pending_athletes` conserva el resumen existente de inicio.
+- `approve_membership(p_group_id,p_membership_id)` y `reject_pending_membership(p_group_id,p_membership_id)` revalidan ADMIN y estado `PENDING` bajo bloqueo. La aprobación fija `joined_at` al momento de activar, verifica R1 y capacidad incluyendo apoderados auto-incorporados (CB-02). El rechazo conserva ID, perfil, vínculos, consentimientos y fecha de ingreso previa; `updated_at` registra la transición. No admite reactivaciones ni cambios de otros roles.
+- Un menor requiere vínculo activo **y** `DATA_PROCESSING_MINOR` vigente. Las altas MANAGED pendientes conservan la ratificación del apoderado designado mediante `consent_managed_member`; el ADMIN no puede sustituirla desde Aprobaciones. Si el pendiente ya cumplió 18, deja de exigirse vínculo/consentimiento y puede ser aprobado por ADMIN.
+- Respuestas: 404 `membership_not_found` para membership ajena, inexistente o de otro rol; 409 `membership_not_pending` si otra decisión ya la resolvió; 422 para vínculo/consentimiento faltante o límites de capacidad. No crea asistencia retroactiva.
 
 #### Alta MANAGED y consentimiento (HU-ADM-05)
 

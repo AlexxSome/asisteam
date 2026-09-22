@@ -933,6 +933,10 @@ export type Database = {
         Args: { p_auth_user_id: string; p_token_hash: string }
         Returns: Json
       }
+      approve_membership: {
+        Args: { p_group_id: string; p_membership_id: string }
+        Returns: undefined
+      }
       auth_user_id: { Args: never; Returns: string }
       can_read_avatar: { Args: { p_name: string }; Returns: boolean }
       can_upload_avatar: { Args: never; Returns: boolean }
@@ -1054,6 +1058,18 @@ export type Database = {
           total_count: number
         }[]
       }
+      list_pending_memberships: {
+        Args: { p_group_id: string; p_offset?: number }
+        Returns: {
+          full_name: string
+          guardian_linked: boolean
+          guardian_ready: boolean
+          is_minor: boolean
+          membership_id: string
+          requires_managed_consent: boolean
+          total_count: number
+        }[]
+      }
       prepare_invitation_registration: {
         Args: {
           p_email: string
@@ -1070,6 +1086,10 @@ export type Database = {
           p_records: Json
         }
         Returns: Json
+      }
+      reject_pending_membership: {
+        Args: { p_group_id: string; p_membership_id: string }
+        Returns: undefined
       }
       request_birthdate_change: {
         Args: { p_birthdate: string }

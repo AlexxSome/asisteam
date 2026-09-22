@@ -9,3 +9,4 @@ export * from "./schemas/attendance";
 export * from "./schemas/group";
 export * from "./schemas/managed-member";
 export * from "./schemas/guardianship";
+export * from "./schemas/membership-review";
