@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { AttendanceRosterRow } from "@asisteam/core";
-const actions = vi.hoisted(() => ({ saveAttendance: vi.fn(), clearAttendance: vi.fn() }));
+const actions = vi.hoisted(() => ({ saveAttendance: vi.fn(), clearAttendance: vi.fn(), updateAttendance: vi.fn() }));
 vi.mock("./actions", () => actions);
 import { AttendanceSheet } from "./attendance-sheet";
 const group = "30000000-0000-4000-8000-000000000201";
@@ -47,17 +47,31 @@ describe("toma de asistencia", () => {
   });
   it("cambiar estado conserva nota; editar nota envía texto explícito", async () => {
     const user = userEvent.setup();
-    actions.saveAttendance.mockResolvedValueOnce({ records: [{ membership_id: ben.membership_id, status: "LATE", note: ben.note }] });
+    actions.updateAttendance.mockResolvedValueOnce({ records: [{ membership_id: ben.membership_id, status: "LATE", note: ben.note }] });
     render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ben]} />);
     await user.click(controls("Ben").getByRole("button", { name: "Atrasado" }));
-    expect(actions.saveAttendance).toHaveBeenCalledWith(group, activity, [{ membership_id: ben.membership_id, status: "LATE" }], false);
+    expect(actions.updateAttendance).toHaveBeenCalledWith(group, activity, ben.membership_id, { status: "LATE" });
     await user.click(screen.getByText("Nota (registrada)"));
     const note = screen.getByRole("textbox", { name: "Nota de Ben" });
     expect((note as HTMLTextAreaElement).value).toBe("Nota existente");
     await user.clear(note);
     await user.type(note, "Llegó después");
+    actions.updateAttendance.mockResolvedValueOnce({ records: [{ membership_id: ben.membership_id, status: "EXCUSED", note: "Llegó después" }] });
     await user.click(screen.getByRole("button", { name: "Guardar nota" }));
-    expect(actions.saveAttendance).toHaveBeenLastCalledWith(group, activity, [{ membership_id: ben.membership_id, status: "LATE", note: "Llegó después" }], false);
+    expect(actions.updateAttendance).toHaveBeenLastCalledWith(group, activity, ben.membership_id, { note: "Llegó después" });
+    expect(actions.saveAttendance).not.toHaveBeenCalled();
+    expect(controls("Ben").getByRole("button", { name: "Justificado" }).getAttribute("aria-pressed")).toBe("true");
+  });
+  it("una corrección fallida revierte el estado y conserva la nota", async () => {
+    const user = userEvent.setup();
+    actions.updateAttendance.mockResolvedValue(error);
+    render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ben]} />);
+    await user.click(controls("Ben").getByRole("button", { name: "Justificado" }));
+    expect(actions.updateAttendance).toHaveBeenCalledWith(group, activity, ben.membership_id, { status: "EXCUSED" });
+    expect(controls("Ben").getByRole("button", { name: "Ausente" }).getAttribute("aria-pressed")).toBe("true");
+    await user.click(screen.getByText("Nota (registrada)"));
+    expect((screen.getByRole("textbox", { name: "Nota de Ben" }) as HTMLTextAreaElement).value).toBe(ben.note);
+    expect(screen.getByRole("alert").textContent).toBe("Falló el guardado");
   });
   it("todos presentes requiere confirmación, ignora filtro y conserva marcas del servidor", async () => {
     const user = userEvent.setup();

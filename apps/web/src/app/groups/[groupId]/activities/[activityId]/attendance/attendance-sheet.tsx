@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ATTENDANCE_STATUSES, ATTENDANCE_STATUS_LABELS, attendanceCounts,
-  type AttendanceInput, type AttendanceRosterRow, type AttendanceStatus } from "@asisteam/core";
-import { clearAttendance, saveAttendance } from "./actions";
+  type AttendanceChanges, type AttendanceInput, type AttendanceRosterRow, type AttendanceStatus } from "@asisteam/core";
+import { clearAttendance, saveAttendance, updateAttendance } from "./actions";
 
 const stateColors: Record<AttendanceStatus, string> = {
   PRESENT: "border-green-600 bg-green-100 text-green-950",
@@ -63,7 +63,7 @@ export function AttendanceSheet({ groupId, activityId, initialRows }: {
     setRows(rowsRef.current);
   }
 
-  async function persist(records: AttendanceInput[], onlyUnmarked = false, clear = false) {
+  async function persist(records: AttendanceInput[], onlyUnmarked = false, clear = false, changes?: AttendanceChanges) {
     const ids = records.map((record) => record.membership_id);
     if (ids.some((id) => busyRef.current.has(id))) return;
     const previous = rowsRef.current.filter((row) => ids.includes(row.membership_id));
@@ -78,6 +78,7 @@ export function AttendanceSheet({ groupId, activityId, initialRows }: {
     try {
       const result = clear
         ? await clearAttendance(groupId, activityId, ids[0]!)
+        : changes ? await updateAttendance(groupId, activityId, ids[0]!, changes)
         : await saveAttendance(groupId, activityId, records, onlyUnmarked);
       if ("error" in result) {
         patch(previous); setError(result.error.message);
@@ -117,8 +118,8 @@ export function AttendanceSheet({ groupId, activityId, initialRows }: {
     <p role="status" className="text-sm text-muted-foreground">{busy.size ? "Guardando cambios…" : feedback}</p>
     <p className="text-xs text-muted-foreground">Cada toque guarda el cambio. Repite el estado seleccionado para volver a “sin marcar”.</p>
     <ul className="space-y-3">{visibleRows.map((row) => <AthleteRow key={row.membership_id} row={row} busy={busy.has(row.membership_id)}
-      onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, row.status === status)}
-      onNote={(note) => row.status ? persist([{ membership_id: row.membership_id, status: row.status, note }]) : Promise.resolve()} />)}</ul>
+      onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, row.status === status, row.status ? { status } : undefined)}
+      onNote={(note) => row.status ? persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }) : Promise.resolve()} />)}</ul>
     {visibleRows.length === 0 && <p>No se encontraron deportistas con ese nombre.</p>}
   </section>;
 }

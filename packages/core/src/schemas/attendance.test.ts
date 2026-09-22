@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { attendanceBatchSchema, attendanceCounts, attendanceRecordSchema } from "./attendance";
+import { attendanceBatchSchema, attendanceChangesSchema, attendanceCounts, attendanceRecordSchema } from "./attendance";
 
 const record = { membership_id: "a0000000-0000-4000-8000-000000000001", status: "PRESENT" };
 describe("contrato de asistencia", () => {
@@ -22,5 +22,16 @@ describe("contrato de asistencia", () => {
   });
   it("separa sin marcar y justificados de los cuatro contadores", () => {
     expect(attendanceCounts([{ status: "PRESENT" }, { status: "LATE" }, { status: "ABSENT" }, { status: "EXCUSED" }, { status: null }, { status: null }])).toEqual({ PRESENT: 1, LATE: 1, ABSENT: 1, EXCUSED: 1, unmarked: 2 });
+  });
+  it("edición parcial conserva la diferencia entre campo omitido y nota eliminada", () => {
+    expect(attendanceChangesSchema.parse({ status: "EXCUSED" })).toEqual({ status: "EXCUSED" });
+    expect(attendanceChangesSchema.parse({ note: "Corregida" })).toEqual({ note: "Corregida" });
+    expect(attendanceChangesSchema.parse({ note: null })).toEqual({ note: null });
+    expect(attendanceChangesSchema.parse({ note: "" })).toEqual({ note: "" });
+    for (const changes of [{}, { status: undefined }, { note: undefined }, { status: null }, { status: "UNKNOWN" },
+      { note: 1 }, { note: "a".repeat(501) }, { note: "x", membership_id: record.membership_id },
+      { note: "x", recorded_by: record.membership_id }, { note: "x", recorded_at: "2026-01-01" }]) {
+      expect(attendanceChangesSchema.safeParse(changes).success).toBe(false);
+    }
   });
 });

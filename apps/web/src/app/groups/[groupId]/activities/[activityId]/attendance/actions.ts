@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { ATTENDANCE_ERROR_MESSAGES, attendanceBatchSchema, attendanceSavedRecordsSchema, type AttendanceInput } from "@asisteam/core";
+import { ATTENDANCE_ERROR_MESSAGES, attendanceBatchSchema, attendanceChangesSchema, attendanceSavedRecordsSchema, type AttendanceInput } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 
@@ -41,4 +41,25 @@ export async function clearAttendance(groupId: string, activityId: string, membe
   if (error) return failure(error.message);
   revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
   return { cleared: true };
+}
+
+export async function updateAttendance(groupId: string, activityId: string, membershipId: string, input: unknown): Promise<AttendanceResult> {
+  if (![groupId, activityId, membershipId].every(isGroupId)) return failure("attendance_record_not_found");
+  const parsed = attendanceChangesSchema.safeParse(input);
+  if (!parsed.success) return failure("invalid_attendance_changes");
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return failure("authentication_required");
+  // Resuelve la identidad desde una proyección solo-ADMIN, acotada a la ruta.
+  // La RPC repite autorización y lee los campos omitidos bajo bloqueo.
+  const { data: record, error: lookupError } = await supabase.from("v_attendance_admin").select("id")
+    .eq("group_id", groupId).eq("activity_id", activityId).eq("membership_id", membershipId).maybeSingle();
+  if (lookupError) return failure("attendance_save_failed");
+  if (!record?.id) return failure("attendance_record_not_found");
+  const { data, error } = await supabase.rpc("update_attendance_record", { p_record_id: record.id, p_changes: parsed.data });
+  if (error) return failure(error.message);
+  const saved = attendanceSavedRecordsSchema.safeParse(data && typeof data === "object" && !Array.isArray(data) ? data.records : null);
+  if (!saved.success) return failure("attendance_save_failed");
+  revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
+  return { records: saved.data };
 }
