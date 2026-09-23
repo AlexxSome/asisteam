@@ -22,6 +22,7 @@ export default async function GroupLayout({ children, params }: {
         <Link href={`/groups/${group.id}`}>Inicio</Link>
         <Link href={`/groups/${group.id}/activities`}>Actividades</Link>
         <Link href={`/groups/${group.id}/reports`} prefetch={false}>Reportes</Link>
+        {group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/members`}>Integrantes</Link>}
         {group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/invitations/new`}>Invitaciones</Link>}
         {group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/guardians`}>Vincular apoderado</Link>}
         {group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/members/pending`}>Aprobaciones</Link>}
