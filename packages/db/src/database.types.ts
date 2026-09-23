@@ -243,6 +243,13 @@ export type Database = {
             referencedColumns: ["membership_id"]
           },
           {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_attendance_report"
+            referencedColumns: ["membership_id"]
+          },
+          {
             foreignKeyName: "attendance_records_recorded_by_fkey"
             columns: ["recorded_by"]
             isOneToOne: false
@@ -771,6 +778,13 @@ export type Database = {
             referencedColumns: ["membership_id"]
           },
           {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_attendance_report"
+            referencedColumns: ["membership_id"]
+          },
+          {
             foreignKeyName: "attendance_records_recorded_by_fkey"
             columns: ["recorded_by"]
             isOneToOne: false
@@ -837,6 +851,13 @@ export type Database = {
             columns: ["membership_id"]
             isOneToOne: false
             referencedRelation: "v_attendance_roster"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_attendance_report"
             referencedColumns: ["membership_id"]
           },
         ]
@@ -940,6 +961,58 @@ export type Database = {
           },
         ]
       }
+      v_group_attendance_report: {
+        Row: {
+          absent: number | null
+          activity_date: string | null
+          activity_type_id: string | null
+          attendance_pct: number | null
+          convened: number | null
+          excused: number | null
+          group_id: string | null
+          late: number | null
+          late_rate: number | null
+          membership_id: string | null
+          present: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_activity_type_id_fkey"
+            columns: ["activity_type_id"]
+            isOneToOne: false
+            referencedRelation: "activity_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_activity_type_id_fkey"
+            columns: ["activity_type_id"]
+            isOneToOne: false
+            referencedRelation: "v_activity_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_group_detail: {
         Row: {
           description: string | null
@@ -1039,6 +1112,20 @@ export type Database = {
           p_scope?: string
         }
         Returns: number
+      }
+      get_group_attendance_report: {
+        Args: {
+          p_activity_type_ids?: string[]
+          p_from?: string
+          p_group_id: string
+          p_include_inactive?: boolean
+          p_page?: number
+          p_page_size?: number
+          p_period?: string
+          p_sort?: string
+          p_to?: string
+        }
+        Returns: Json
       }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
