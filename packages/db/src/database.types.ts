@@ -250,6 +250,13 @@ export type Database = {
             referencedColumns: ["membership_id"]
           },
           {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_stats_members"
+            referencedColumns: ["membership_id"]
+          },
+          {
             foreignKeyName: "attendance_records_recorded_by_fkey"
             columns: ["recorded_by"]
             isOneToOne: false
@@ -404,6 +411,8 @@ export type Database = {
           logo_url: string | null
           name: string
           settings: Json
+          settings_updated_at: string | null
+          settings_updated_by: string | null
           sport: string | null
           updated_at: string
         }
@@ -416,6 +425,8 @@ export type Database = {
           logo_url?: string | null
           name: string
           settings?: Json
+          settings_updated_at?: string | null
+          settings_updated_by?: string | null
           sport?: string | null
           updated_at?: string
         }
@@ -428,6 +439,8 @@ export type Database = {
           logo_url?: string | null
           name?: string
           settings?: Json
+          settings_updated_at?: string | null
+          settings_updated_by?: string | null
           sport?: string | null
           updated_at?: string
         }
@@ -435,6 +448,13 @@ export type Database = {
           {
             foreignKeyName: "groups_created_by_fkey"
             columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groups_settings_updated_by_fkey"
+            columns: ["settings_updated_by"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -785,6 +805,13 @@ export type Database = {
             referencedColumns: ["membership_id"]
           },
           {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_stats_members"
+            referencedColumns: ["membership_id"]
+          },
+          {
             foreignKeyName: "attendance_records_recorded_by_fkey"
             columns: ["recorded_by"]
             isOneToOne: false
@@ -858,6 +885,13 @@ export type Database = {
             columns: ["membership_id"]
             isOneToOne: false
             referencedRelation: "v_group_attendance_report"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_stats_members"
             referencedColumns: ["membership_id"]
           },
         ]
@@ -1015,6 +1049,7 @@ export type Database = {
       }
       v_group_detail: {
         Row: {
+          can_view_group_stats: boolean | null
           description: string | null
           id: string | null
           invite_code: string | null
@@ -1022,9 +1057,49 @@ export type Database = {
           name: string | null
           roles: string[] | null
           settings: Json | null
+          settings_updated_at: string | null
+          settings_updated_by_name: string | null
           sport: string | null
         }
         Relationships: []
+      }
+      v_group_stats_members: {
+        Row: {
+          absent: number | null
+          attendance_pct: number | null
+          avatar_url: string | null
+          convened: number | null
+          excused: number | null
+          full_name: string | null
+          group_id: string | null
+          late: number | null
+          late_rate: number | null
+          membership_id: string | null
+          present: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       v_my_groups: {
         Row: {
@@ -1125,6 +1200,10 @@ export type Database = {
           p_sort?: string
           p_to?: string
         }
+        Returns: Json
+      }
+      get_group_stats: {
+        Args: { p_group_id: string; p_page?: number; p_page_size?: number }
         Returns: Json
       }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
@@ -1253,6 +1332,10 @@ export type Database = {
       }
       update_attendance_record: {
         Args: { p_changes: Json; p_record_id: string }
+        Returns: Json
+      }
+      update_group_settings: {
+        Args: { p_changes: Json; p_group_id: string }
         Returns: Json
       }
     }

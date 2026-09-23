@@ -35,7 +35,7 @@ export const getGroup = cache(async (groupId: string) => {
   if (!membership) notFound();
   const supabase = await createClient();
   const { data, error } = await supabase.from("v_group_detail")
-    .select("id, name, sport, description, logo_url, roles, invite_code, settings")
+    .select("id, name, sport, description, logo_url, roles, invite_code, settings, can_view_group_stats, settings_updated_at, settings_updated_by_name")
     .eq("id", groupId).maybeSingle();
   if (error) throw new Error("No pudimos cargar el grupo. Vuelve a intentarlo.");
   if (!data) notFound();

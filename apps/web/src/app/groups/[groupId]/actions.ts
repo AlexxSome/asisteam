@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { forbidden, redirect } from "next/navigation";
-import { GROUP_ERROR_MESSAGES, groupFormSchema, joinCodeResponseSchema, joinCodeSchema } from "@asisteam/core";
+import { GROUP_ERROR_MESSAGES, groupFormSchema, groupSettingsChangeSchema, groupSettingsSchema, joinCodeResponseSchema, joinCodeSchema, type GroupSettings } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 
@@ -47,6 +47,25 @@ export async function rotateInviteCode(groupId: string): Promise<{ code: string 
   }
   revalidatePath(`/groups/${groupId}`, "layout");
   return { code: data };
+}
+
+export async function updateGroupSettings(groupId: string, input: unknown): Promise<{ settings: GroupSettings } | GroupActionError> {
+  if (!isGroupId(groupId)) return groupError("group_not_found");
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return groupError("authentication_required");
+  const parsed = groupSettingsChangeSchema.safeParse(input);
+  if (!parsed.success) return groupError("invalid_group_settings");
+  const { data, error } = await supabase.rpc("update_group_settings", { p_group_id: groupId, p_changes: parsed.data });
+  if (error) {
+    const code = ["admin_required", "group_not_found", "invalid_group_settings"].includes(error.message)
+      ? error.message : "group_settings_update_failed";
+    return groupError(code, code === "admin_required" ? "Solo un administrador activo puede cambiar la visibilidad." : undefined);
+  }
+  const settings = groupSettingsSchema.safeParse(data);
+  if (!settings.success) return groupError("group_settings_update_failed");
+  revalidatePath(`/groups/${groupId}`, "layout");
+  return { settings: settings.data };
 }
 
 export async function joinAsAthlete(groupId: string): Promise<JoinAthleteResult> {

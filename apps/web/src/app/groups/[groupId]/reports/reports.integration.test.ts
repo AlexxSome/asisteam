@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { groupAttendanceReportSchema } from "@asisteam/core";
+import { groupAttendanceReportSchema, groupStatsSchema } from "@asisteam/core";
 
 const suite = describe.skipIf(process.env.RUN_REPORT_INTEGRATION !== "1");
 const run = randomUUID().replaceAll("-", "");
@@ -71,4 +71,30 @@ suite("reportes con Auth y PostgREST real", () => {
     expect((await clients.athlete!.from("v_group_attendance_report").select("group_id").eq("group_id", groupId)).data).toEqual([]);
     expect((await clients.owner!.rpc("get_group_attendance_report", { p_group_id: groupId, p_period: "custom" })).status).toBe(400);
   });
+  it("toggle habilita y revoca agregados con el mismo JWT, sin revelar campos privados", async () => {
+    const athlete = clients.athlete!;
+    const originalToken = (await athlete.auth.getSession()).data.session!.access_token;
+    expect((await athlete.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(403);
+    expect((await athlete.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } })).status).toBe(403);
+    expect((await clients.outsider!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } })).status).toBe(404);
+    expect((await clients.owner!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: "true" } })).status).toBe(400);
+    const update = await clients.owner!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } });
+    expect(update.error).toBeNull();
+    expect(update.data).toEqual({ athletes_can_view_group_stats: true, guardians_can_view_group_stats: false });
+    const response = await athlete.rpc("get_group_stats", { p_group_id: groupId });
+    expect(response.error).toBeNull();
+    const report = groupStatsSchema.parse(response.data);
+    expect(report.members[0]).toMatchObject({ membership_id: membershipId, convened: 8 });
+    expect(Object.keys(response.data.members[0]).sort()).toEqual(["membership_id", "full_name", "avatar_url", "convened", "present", "late", "absent", "excused", "attendance_pct", "late_rate"].sort());
+    const direct = await athlete.from("v_group_stats_members").select("*").eq("group_id", groupId);
+    expect(direct.error).toBeNull(); expect(direct.data).toHaveLength(1);
+    expect(Object.keys(direct.data![0]).sort()).toEqual([...Object.keys(response.data.members[0]), "group_id"].sort());
+    expect((await athlete.rpc("get_group_attendance_report", { p_group_id: groupId })).status).toBe(403);
+    expect((await clients.outsider!.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(404);
+    expect((await clients.owner!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: false } })).error).toBeNull();
+    expect((await athlete.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(403);
+    expect((await athlete.from("v_group_stats_members").select("full_name").eq("group_id", groupId)).data).toEqual([]);
+    expect((await athlete.auth.getSession()).data.session!.access_token).toBe(originalToken);
+  });
+
 });

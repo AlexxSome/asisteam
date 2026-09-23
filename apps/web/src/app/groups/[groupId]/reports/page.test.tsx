@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen, within } from "@testing-library/react";
 import { reportFixture } from "@/lib/reports.test-fixture";
-const mock = vi.hoisted(() => ({ group: vi.fn(), types: vi.fn(), report: vi.fn() }));
+const mock = vi.hoisted(() => ({ group: vi.fn(), types: vi.fn(), report: vi.fn(), stats: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
 vi.mock("@/lib/activities", () => ({ getActivityTypes: mock.types }));
-vi.mock("@/lib/reports", async (original) => ({ ...await original<typeof import("@/lib/reports")>(), getGroupAttendanceReport: mock.report }));
+vi.mock("@/lib/reports", async (original) => ({ ...await original<typeof import("@/lib/reports")>(), getGroupAttendanceReport: mock.report, getGroupStats: mock.stats }));
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); } }));
 import GroupReportsPage from "./page";
 const params = Promise.resolve({ groupId: reportFixture.group_id });
@@ -29,9 +29,12 @@ it("muestra tabla accesible, 85.7 %, atraso separado y controles de filtro", asy
   expect(screen.getByRole("button", { name: "Aplicar filtros" })).toBeTruthy();
   expect(screen.queryByText(/Exportar CSV/)).toBeNull();
 });
-it("rechaza no-ADMIN antes de consultar datos o tipos", async () => {
+it("no-ADMIN con toggle apagado conserva el acceso a sus pupilos", async () => {
   mock.group.mockResolvedValue({ id: reportFixture.group_id, roles: ["GUARDIAN"] });
-  await expect(GroupReportsPage({ params, searchParams: Promise.resolve({}) })).rejects.toThrow("404");
+  mock.stats.mockResolvedValue({ report: null, error: null });
+  render(await GroupReportsPage({ params, searchParams: Promise.resolve({}) }));
+  expect(screen.getByText(/no ha habilitado/)).toBeTruthy();
+  expect(screen.getByRole("link", { name: "Mis pupilos" })).toBeTruthy();
   expect(mock.report).not.toHaveBeenCalled(); expect(mock.types).not.toHaveBeenCalled();
 });
 it("filtro inválido muestra error, sin presentar un reporte del mes por defecto", async () => {
@@ -51,4 +54,21 @@ it("sin actividades muestra CTA y Sin datos; inactivos quedan identificados", as
   expect(screen.getByText("Inactivo")).toBeTruthy();
   expect(screen.getAllByText("Sin datos").length).toBeGreaterThan(0);
   expect(screen.queryByText("0.0 %")).toBeNull();
+});
+
+
+it("no-ADMIN ve solo la tabla agregada y su navegación personal", async () => {
+  mock.group.mockResolvedValue({ id: reportFixture.group_id, name: "Club", roles: ["ATHLETE", "GUARDIAN"] });
+  const { membership_status: _status, ...member } = reportFixture.by_athlete[0]!;
+  mock.stats.mockResolvedValue({ report: {
+    group_id: reportFixture.group_id, page: 1, page_size: 50, members: [{ ...member, avatar_url: null }],
+    totals: { athletes: 1, convened: 8, present: 5, late: 1, absent: 1, excused: 1, attendance_pct: 85.7, late_rate: 16.7 },
+  }, error: null });
+  render(await GroupReportsPage({ params, searchParams: Promise.resolve({}) }));
+  expect(screen.getByRole("region", { name: "Estadísticas agregadas" })).toBeTruthy();
+  expect(screen.getAllByText("85.7 %").length).toBe(2);
+  expect(screen.getByRole("link", { name: "Mi asistencia" })).toBeTruthy();
+  expect(screen.getByRole("link", { name: "Mis pupilos" })).toBeTruthy();
+  expect(screen.queryByRole("checkbox", { name: "Incluir deportistas inactivos" })).toBeNull();
+  expect(mock.report).not.toHaveBeenCalled();
 });

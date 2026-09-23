@@ -5,7 +5,7 @@ const mock = vi.hoisted(() => ({ group: vi.fn(), rpc: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ rpc: mock.rpc }) }));
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); } }));
-import { getGroupAttendanceReport, parseReportFilters, reportPageHref } from "./reports";
+import { getGroupAttendanceReport, getGroupStats, parseReportFilters, reportPageHref } from "./reports";
 const groupId = reportFixture.group_id;
 beforeEach(() => {
   vi.resetAllMocks(); mock.group.mockResolvedValue({ id: groupId, roles: ["ADMIN"] });
@@ -41,4 +41,21 @@ it("URL de paginación mantiene fechas, tipos, inactivos y orden", () => {
   expect(query.get("from")).toBe(input.from); expect(query.get("to")).toBe(input.to); expect(query.get("page")).toBe("3");
   expect(parseReportFilters({ from: "", to: "" }).success).toBe(true);
   expect(parseReportFilters({ period: ["month", "week"] }).success).toBe(false);
+});
+
+
+it("estadísticas consulta autorización actual y muestra revocación sin usar datos previos", async () => {
+  const member = reportFixture.by_athlete[0]!;
+  const { membership_status: _status, ...metrics } = member;
+  const stats = { group_id: groupId, members: [{ ...metrics, avatar_url: null }], page: 1, page_size: 50,
+    totals: { athletes: 1, convened: 8, present: 5, late: 1, absent: 1, excused: 1, attendance_pct: 85.7, late_rate: 16.7 } };
+  mock.group.mockResolvedValue({ id: groupId, roles: ["ATHLETE"] });
+  mock.rpc.mockResolvedValueOnce({ data: stats, error: null }).mockResolvedValueOnce({ data: null, error: { code: "PT403" } });
+  expect((await getGroupStats(groupId)).report).toEqual(stats);
+  expect(await getGroupStats(groupId)).toEqual({ report: null, error: null });
+  expect(mock.rpc).toHaveBeenCalledTimes(2);
+  mock.rpc.mockResolvedValueOnce({ data: { ...stats, members: [{ ...stats.members[0], email: "private@example.test" }] }, error: null });
+  await expect(getGroupStats(groupId)).rejects.toThrow("leer las estadísticas");
+  mock.rpc.mockResolvedValueOnce({ data: null, error: { code: "PT404" } });
+  await expect(getGroupStats(groupId)).rejects.toThrow("404");
 });

@@ -11,6 +11,20 @@ export const groupFormSchema = z.object({
 });
 export type GroupFormInput = z.infer<typeof groupFormSchema>;
 
+export const groupSettingsSchema = z.object({
+  athletes_can_view_group_stats: z.boolean(),
+  guardians_can_view_group_stats: z.boolean(),
+}).strict();
+export type GroupSettings = z.infer<typeof groupSettingsSchema>;
+export const groupSettingsChangeSchema = groupSettingsSchema.partial().refine(
+  (changes) => Object.keys(changes).length > 0, "Selecciona una opción de visibilidad.",
+);
+export const GROUP_VISIBILITY_LABELS: Record<keyof GroupSettings, string> = {
+  athletes_can_view_group_stats: "Los deportistas pueden ver las estadísticas del grupo (nombre y % de asistencia de cada integrante)",
+  guardians_can_view_group_stats: "Los apoderados pueden ver las estadísticas del grupo",
+};
+export const GROUP_STATS_PRIVACY_NOTICE = "Aunque actives estas opciones, nunca se muestran datos de contacto, fechas de nacimiento, notas de asistencia individuales ni datos de apoderados de otros integrantes. Solo nombre y métricas agregadas.";
+
 export const joinCodeSchema = z.string().trim().regex(/^[A-Za-z0-9]{8}$/, "Código no válido");
 export const joinCodeResponseSchema = z.object({
   membership: z.object({ group_id: z.string().uuid(), status: z.enum(["ACTIVE", "PENDING"]) }),
@@ -25,6 +39,8 @@ export const GROUP_ERROR_MESSAGES: Record<string, string> = {
   invite_code_unavailable: "No pudimos generar el código del grupo. Vuelve a intentarlo.",
   group_not_found: "El grupo no existe o no tienes acceso.",
   group_update_failed: "No pudimos guardar los cambios del grupo. Vuelve a intentarlo.",
+  invalid_group_settings: "Revisa las opciones de visibilidad del grupo.",
+  group_settings_update_failed: "No pudimos guardar la visibilidad. Vuelve a intentarlo.",
   invite_code_rotate_failed: "No pudimos regenerar el código. Vuelve a intentarlo.",
   admin_required: "Solo un administrador del grupo puede agregarse como deportista desde aquí.",
   athlete_birthdate_required: "Completa tu fecha de nacimiento en Mi perfil antes de agregarte como deportista.",

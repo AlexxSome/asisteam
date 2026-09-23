@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { activityTypeLabel, reportFilterSchema, reportPercentage } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { getActivityTypes } from "@/lib/activities";
 import { getGroupAttendanceReport, parseReportFilters, reportPageHref, type ReportSearchParams } from "@/lib/reports";
 import { ReportFilters } from "./report-filters";
 import { ReportTable } from "./report-table";
+import { GroupStatsContent } from "./group-stats";
 
 export const metadata = { title: "Reportes del grupo" };
 
@@ -13,7 +13,7 @@ export default async function GroupReportsPage({ params, searchParams }: {
   params: Promise<{ groupId: string }>; searchParams: Promise<ReportSearchParams>;
 }) {
   const group = await getGroup((await params).groupId);
-  if (!group.roles.includes("ADMIN")) notFound();
+  if (!group.roles.includes("ADMIN")) return GroupStatsContent({ group, query: await searchParams });
   const parsed = parseReportFilters(await searchParams);
   const filter = parsed.success ? parsed.data : reportFilterSchema.parse({});
   const [types, result] = await Promise.all([
