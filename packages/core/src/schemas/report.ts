@@ -32,6 +32,14 @@ export const groupAttendanceReportSchema = z.object({
 });
 export type GroupAttendanceReport = z.infer<typeof groupAttendanceReportSchema>;
 
+export const groupStatsSchema = z.object({
+  group_id: z.string().uuid(),
+  members: z.array(metric.extend({ membership_id: z.string().uuid(), full_name: z.string(), avatar_url: z.string().nullable() }).strict()),
+  totals: metric.extend({ athletes: count }).strict(),
+  page: z.number().int().positive(), page_size: z.number().int().min(1).max(100),
+}).strict();
+export type GroupStats = z.infer<typeof groupStatsSchema>;
+
 /** Misma batería canónica que SQL; half-up exacto sobre contadores enteros. */
 export function attendanceMetrics(counts: { present: number; late: number; absent: number; excused: number }) {
   const { present, late, absent, excused } = counts;

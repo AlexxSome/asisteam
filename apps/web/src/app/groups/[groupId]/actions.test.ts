@@ -4,7 +4,7 @@ const mock = vi.hoisted(() => ({ rpc: vi.fn(), getUser: vi.fn(), revalidate: vi.
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ rpc: mock.rpc, from: mock.from, auth: { getUser: mock.getUser } }) }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
 vi.mock("next/navigation", () => ({ forbidden: () => { throw new Error("403"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
-import { joinAsAthlete, joinByCode, rotateInviteCode, updateGroup } from "./actions";
+import { joinAsAthlete, joinByCode, rotateInviteCode, updateGroup, updateGroupSettings } from "./actions";
 
 const groupId = "20000000-0000-4000-8000-000000000201";
 beforeEach(() => {
@@ -110,5 +110,33 @@ describe("incorporación por código", () => {
     await expect(joinByCode(form("CODE0001"))).rejects.toThrow("redirect:/login?invite_code=CODE0001");
     mock.rpc.mockResolvedValue({ data: null, error: { message: "private SQL detail" } });
     await expect(joinByCode(form("CODE0001"))).rejects.toThrow("redirect:/join?error=join_failed");
+  });
+});
+
+
+describe("visibilidad de estadísticas", () => {
+  const settings = { athletes_can_view_group_stats: true, guardians_can_view_group_stats: false };
+  it("manda solo el toggle modificado y refresca todo el grupo al guardar", async () => {
+    mock.rpc.mockResolvedValue({ data: settings, error: null });
+    expect(await updateGroupSettings(groupId, { athletes_can_view_group_stats: true })).toEqual({ settings });
+    expect(mock.rpc).toHaveBeenCalledWith("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } });
+    expect(mock.revalidate).toHaveBeenCalledWith(`/groups/${groupId}`, "layout");
+  });
+  it.each([{}, { athletes_can_view_group_stats: "true" }, { guardians_can_view_group_stats: null }, { invite_code: "ATTACK01" }])("rechaza payload inválido %j", async (input) => {
+    expect(await updateGroupSettings(groupId, input)).toMatchObject({ error: { code: "invalid_group_settings" } });
+    expect(mock.rpc).not.toHaveBeenCalled();
+  });
+  it("exige grupo válido y sesión", async () => {
+    expect(await updateGroupSettings("invalid", settings)).toMatchObject({ error: { code: "group_not_found" } });
+    mock.getUser.mockResolvedValue({ data: { user: null } });
+    expect(await updateGroupSettings(groupId, settings)).toMatchObject({ error: { code: "authentication_required" } });
+    expect(mock.rpc).not.toHaveBeenCalled();
+  });
+  it.each(["admin_required", "group_not_found", "invalid_group_settings", "private SQL error"])("traduce %s sin confirmar ni revalidar", async (message) => {
+    mock.rpc.mockResolvedValue({ data: null, error: { message } });
+    const result = await updateGroupSettings(groupId, settings);
+    expect(result).toHaveProperty("error");
+    expect(JSON.stringify(result)).not.toContain("private SQL error");
+    expect(mock.revalidate).not.toHaveBeenCalled();
   });
 });

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { groupAttendanceReportSchema, reportFilterSchema, type ReportFilter } from "@asisteam/core";
+import { groupAttendanceReportSchema, groupStatsSchema, reportFilterSchema, type ReportFilter } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
 
@@ -36,5 +36,20 @@ export async function getGroupAttendanceReport(groupId: string, filter: ReportFi
   if (error) throw new Error("No pudimos cargar el reporte. Vuelve a intentarlo.");
   const parsed = groupAttendanceReportSchema.safeParse(data);
   if (!parsed.success) throw new Error("No pudimos leer el reporte. Vuelve a intentarlo.");
+  return { report: parsed.data, error: null };
+}
+
+export async function getGroupStats(groupId: string, page = 1, pageSize = 50) {
+  await getGroup(groupId);
+  const supabase = await createClient();
+  // La RPC reevalúa el permiso en cada consulta, incluida una revocación
+  // posterior a la lectura del layout. No se cachean reportes entre peticiones.
+  const { data, error } = await supabase.rpc("get_group_stats", { p_group_id: groupId, p_page: page, p_page_size: pageSize });
+  if (error?.code === "PT404" || error?.code === "PT401") notFound();
+  if (error?.code === "PT403") return { report: null, error: null };
+  if (error?.code === "PT400") return { report: null, error: "Revisa la página seleccionada." };
+  if (error) throw new Error("No pudimos cargar las estadísticas. Vuelve a intentarlo.");
+  const parsed = groupStatsSchema.safeParse(data);
+  if (!parsed.success) throw new Error("No pudimos leer las estadísticas. Vuelve a intentarlo.");
   return { report: parsed.data, error: null };
 }
