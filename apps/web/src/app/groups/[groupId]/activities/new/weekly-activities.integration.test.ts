@@ -12,6 +12,7 @@ let owner: SupabaseClient;
 let outsider: SupabaseClient;
 let admin: SupabaseClient;
 const authIds: string[] = [];
+const agendaGroupIds: string[] = [];
 let groupId: string;
 let membershipId: string;
 let startsAt: string;
@@ -54,8 +55,8 @@ suite("recurrencia: HTTP y concurrencia en Supabase local", () => {
   }, 30_000);
 
   afterAll(async () => {
-    if (groupId) sql(`delete from public.attendance_records where activity_id in (select id from public.activities where group_id='${groupId}');
-      delete from public.activities where group_id='${groupId}'; delete from public.memberships where group_id='${groupId}'; delete from public.groups where id='${groupId}';`);
+    for (const id of [groupId, ...agendaGroupIds].filter(Boolean)) sql(`delete from public.attendance_records where activity_id in (select id from public.activities where group_id='${id}');
+      delete from public.activities where group_id='${id}'; delete from public.memberships where group_id='${id}'; delete from public.groups where id='${id}';`);
     for (const id of authIds) {
       sql(`delete from public.users where auth_user_id='${id}';`);
       await admin.auth.admin.deleteUser(id);
@@ -108,4 +109,37 @@ suite("recurrencia: HTTP y concurrencia en Supabase local", () => {
       if (edit) await edit;
     }
   }, 20_000);
+
+  it("agenda ATHLETE consolida grupos activos una sola vez y RLS excluye membresías no activas", async () => {
+    const activityIds: string[] = [];
+    for (const name of ["Agenda A", "Agenda B", "Agenda ajena"]) {
+      const created = await owner.rpc("create_group", { p_name: `${name} ${run}`, p_sport: "Tenis" });
+      expect(created.error).toBeNull();
+      const id = created.data as string;
+      agendaGroupIds.push(id);
+      const result = await owner.rpc("create_activity", { p_group_id: id, p_activity_type_id: activityType, p_title: name,
+        p_starts_at: startsAt, p_ends_at: endsAt, p_location: "Cancha sintética" });
+      expect(result.error).toBeNull();
+      activityIds.push(result.data as string);
+    }
+    for (const id of agendaGroupIds.slice(0, 2)) sql(`insert into public.memberships (user_id, group_id, role, status)
+      select id, '${id}', 'ATHLETE', 'ACTIVE' from public.users where auth_user_id='${authIds[1]}';`);
+    const getAgenda = () => outsider.from("v_group_activities")
+      .select("id, group_id, title, location, starts_at, ends_at, activity_type_name, activity_type_color")
+      .in("group_id", agendaGroupIds).gte("starts_at", new Date().toISOString()).order("starts_at").order("id").range(0, 50);
+    const result = await getAgenda();
+    expect(result.error).toBeNull();
+    expect(result.data?.map((row) => row.id).sort()).toEqual(activityIds.slice(0, 2).sort());
+    expect(result.data?.every((row) => row.location === "Cancha sintética" && row.activity_type_name === "TRAINING" && row.activity_type_color)).toBe(true);
+    sql(`insert into public.memberships (user_id, group_id, role, status)
+      select id, '${agendaGroupIds[0]}', 'ADMIN', 'ACTIVE' from public.users where auth_user_id='${authIds[1]}';`);
+    expect((await getAgenda()).data).toHaveLength(2);
+    for (const status of ["INACTIVE", "PENDING", "INVITED"]) {
+      sql(`update public.memberships set status='${status}' where group_id='${agendaGroupIds[1]}'
+        and user_id=(select id from public.users where auth_user_id='${authIds[1]}');`);
+      const revoked = await getAgenda();
+      expect(revoked.error).toBeNull();
+      expect(revoked.data?.map((row) => row.id)).toEqual([activityIds[0]]);
+    }
+  });
 });
