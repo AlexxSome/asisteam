@@ -52,6 +52,17 @@ describe("handler send-invitation", () => {
     }
     expect(mock.mail).not.toHaveBeenCalled();
   });
+  it("activación resuelve destinatario en SQL y bloquea correo sin consentimiento", async () => {
+    const body = { action: "activate", group_id: groupId, membership_id: "35000000-0000-4000-8000-000000000312" };
+    expect((await createSendInvitationHandler(options)(request(body))).status).toBe(200);
+    expect(mock.rpc).toHaveBeenCalledWith("issue_managed_activation", expect.objectContaining({
+      p_auth_user_id: "verified-user", p_membership_id: body.membership_id, p_group_id: groupId,
+    }));
+    mock.mail.mockClear();
+    mock.rpc.mockResolvedValue({ data: null, error: { message: "guardian_consent_required" } });
+    expect((await createSendInvitationHandler(options)(request(body))).status).toBe(422);
+    expect(mock.mail).not.toHaveBeenCalled();
+  });
   it("fallo o respuesta incierta del proveedor no se anuncian como envío exitoso", async () => {
     for (const result of [new Response("private provider error", { status: 500 }), new Response("{}")]) {
       mock.mail.mockResolvedValue(result);

@@ -1,13 +1,31 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { MEMBER_MANAGEMENT_ERRORS, managedMemberUpdateSchema, memberStatusSchema } from "@asisteam/core";
+import { MEMBER_MANAGEMENT_ERRORS, managedActivationSchema, managedMemberUpdateSchema, memberStatusSchema } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
+import { sendInvitation } from "../invitations/new/actions";
 
-export type MemberResult = { success: true; birthdatePending?: boolean } | { error: { code: string; message: string; details: Record<string, never> } };
+export type MemberResult = { success: true; birthdatePending?: boolean; consentPending?: boolean } | { error: { code: string; message: string; details: Record<string, never> } };
 const fail = (code: string): MemberResult => ({ error: { code,
   message: MEMBER_MANAGEMENT_ERRORS[code] ?? MEMBER_MANAGEMENT_ERRORS.unavailable!, details: {},
 } });
+
+export async function requestManagedActivation(input: unknown): Promise<MemberResult> {
+  const parsed = managedActivationSchema.safeParse(input);
+  if (!parsed.success) return fail("invalid_activation_request");
+  try {
+    const client = await createClient();
+    if (!(await client.auth.getUser()).data.user) return fail("authentication_required");
+    const { group_id, membership_id } = parsed.data;
+    const { data, error } = await client.rpc("request_managed_activation", { p_group_id: group_id, p_membership_id: membership_id });
+    if (error) return fail(Object.hasOwn(MEMBER_MANAGEMENT_ERRORS, error.message) ? error.message : "unavailable");
+    revalidatePath(`/groups/${group_id}/members/consent`);
+    if (data === "CONSENT_PENDING") return { success: true, consentPending: true };
+    if (data !== "READY") return fail("unavailable");
+    const sent = await sendInvitation({ action: "activate", group_id, membership_id });
+    return "error" in sent ? sent : { success: true };
+  } catch { return fail("unavailable"); }
+}
 
 export async function updateManagedMember(input: unknown): Promise<MemberResult> {
   const parsed = managedMemberUpdateSchema.safeParse(input);

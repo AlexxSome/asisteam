@@ -3,9 +3,9 @@ import { MEMBERSHIP_ROLE_LABELS } from "../../../packages/core/src/enums.ts";
 
 type InvitationClient = {
   auth: { getUser(jwt: string): Promise<{ data: { user: { id: string } | null }; error: unknown }> };
-  rpc(name: "issue_invitation", args: {
+  rpc(name: "issue_invitation" | "issue_managed_activation", args: {
     p_auth_user_id: string; p_group_id: string; p_token_hash: string;
-    p_email?: string; p_role?: string; p_invitation_id?: string;
+    p_email?: string; p_role?: string; p_invitation_id?: string; p_membership_id?: string;
   }): PromiseLike<{ data: unknown; error: { message: string } | null }>;
 };
 type Options = {
@@ -21,6 +21,8 @@ const statuses: Record<string, number> = {
   authentication_required: 401, group_not_found: 404, admin_required: 403,
   invalid_invitation: 400, invitation_not_available: 404, invitation_send_rate_limited: 429,
   email_delivery_failed: 503, unavailable: 503,
+  managed_account_required: 409, managed_email_required: 422, membership_not_found: 404,
+  guardian_consent_required: 422, activation_request_changed: 409, activation_sender_required: 403,
 };
 
 export function createSendInvitationHandler(options: Options) {
@@ -69,9 +71,10 @@ export function createSendInvitationHandler(options: Options) {
       const token = Array.from(crypto.getRandomValues(new Uint8Array(32)), byte => byte.toString(16).padStart(2, "0")).join("");
       const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
       const tokenHash = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
-      const { data, error } = await options.client.rpc("issue_invitation", {
+      const { data, error } = await options.client.rpc(input.action === "activate" ? "issue_managed_activation" : "issue_invitation", {
         p_auth_user_id: user.id, p_group_id: input.group_id, p_token_hash: tokenHash,
-        ...(input.action === "send" ? { p_email: input.email, p_role: input.role } : { p_invitation_id: input.invitation_id }),
+        ...(input.action === "send" ? { p_email: input.email, p_role: input.role }
+          : input.action === "activate" ? { p_membership_id: input.membership_id } : { p_invitation_id: input.invitation_id }),
       });
       if (error || !data) {
         const code = error && Object.hasOwn(SEND_INVITATION_ERROR_MESSAGES, error.message) ? error.message : "unavailable";

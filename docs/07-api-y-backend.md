@@ -115,6 +115,14 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 
 ### 2.5 Invitations y join por código
 
+#### Activación de cuenta gestionada (HU-ADM-16, #35)
+
+- «Activar cuenta propia» en `/groups/:groupId/members` llama a `request_managed_activation`. El ADMIN debe registrar primero un email único mediante la edición del perfil. Para adultos devuelve `READY`; para menores exige `DATA_PROCESSING_MINOR` vigente y registra una solicitud privada si falta `ACCOUNT_ACTIVATION_MINOR`.
+- El apoderado vigente decide en `/groups/:groupId/members/consent` mediante `review_managed_activation`. Aprobar registra evidencia `ACCOUNT_ACTIVATION_MINOR`, versión `2026-09-21`, canal `IN_APP`; rechazar conserva la cuenta MANAGED. Un reintento de aprobación no duplica consentimiento. La lista solo proyecta nombre, vínculo, estado e identificadores necesarios del pupilo propio.
+- La web envía `action: activate` a `send-invitation`, con grupo y membership; el destinatario siempre se obtiene en SQL. `issue_managed_activation`, reservada a Edge, autoriza al ADMIN o al apoderado que aprobó una solicitud de un ADMIN todavía activo. Reutiliza la cuota de 50 envíos diarios por grupo y el transporte de correo existentes. Un fallo del correo conserva el consentimiento y permite reintentar.
+- `invitations.activation_membership_id` distingue el claim de una incorporación al grupo. El token aleatorio solo viaja por email, persiste como SHA-256, vence a los siete días y un nuevo envío de activación invalida los anteriores. Tanto la emisión genérica como el reenvío verifican el consentimiento específico del menor.
+- El INSERT de Auth y su trigger vuelven a comprobar email, nacimiento y consentimientos. Actualizan el perfil existente a ACTIVE y consumen la invitación en una transacción; conservan `users.id` y todas las filas, estados y fechas de memberships, guardianships y asistencia. El consentimiento revocado antes del registro impide crear credenciales. `invitation_registration_result`, reservada a Edge, devuelve el estado real conservado para evitar redirigir a una membresía sin acceso.
+
 | Método | Ruta lógica | Rol | Descripción | Implementación | Prioridad |
 |---|---|---|---|---|---|
 | POST | /api/v1/groups/{id}/invitations | ADMIN | Invitación dirigida por email con rol ATHLETE o GUARDIAN; crea `users` INVITED si no existe; envía email | Edge Function `functions/v1/send-invitation` (Resend) | [P0] |

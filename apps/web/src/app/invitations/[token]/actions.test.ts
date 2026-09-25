@@ -63,4 +63,8 @@ describe("aceptar invitación", () => {
     mock.fetch.mockResolvedValue(new Response(JSON.stringify({ group_id: "group-id", membership_status: "PENDING" })));
     expect(await acceptInvitation(token, "session")).toEqual({ pending: true });
   });
+  it("claim de membership INACTIVE no redirige a un grupo sin acceso", async () => {
+    mock.fetch.mockResolvedValue(new Response(JSON.stringify({ group_id: "group-id", membership_status: "INACTIVE" })));
+    await expect(acceptInvitation(token, "register", registration)).rejects.toThrow("redirect:/groups");
+  });
 });
