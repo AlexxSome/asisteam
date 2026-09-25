@@ -1179,6 +1179,10 @@ export type Database = {
         }
         Returns: Json
       }
+      deactivate_membership: {
+        Args: { p_group_id: string; p_membership_id: string }
+        Returns: undefined
+      }
       delete_activity: {
         Args: {
           p_activity_id: string
@@ -1243,6 +1247,25 @@ export type Database = {
           requested_birthdate: string
         }[]
       }
+      list_group_members: {
+        Args: {
+          p_group_id: string
+          p_offset?: number
+          p_role?: string
+          p_status?: string
+        }
+        Returns: {
+          account_status: string
+          birthdate: string
+          email: string
+          full_name: string
+          membership_id: string
+          phone: string
+          role: string
+          status: string
+          total_count: number
+        }[]
+      }
       list_guardianship_athletes: {
         Args: { p_group_id: string; p_offset?: number; p_search?: string }
         Returns: {
@@ -1291,6 +1314,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      reactivate_membership: {
+        Args: { p_group_id: string; p_membership_id: string }
+        Returns: undefined
+      }
       record_attendance_bulk: {
         Args: {
           p_activity_id: string
@@ -1337,6 +1364,17 @@ export type Database = {
       update_group_settings: {
         Args: { p_changes: Json; p_group_id: string }
         Returns: Json
+      }
+      update_managed_member: {
+        Args: {
+          p_birthdate: string
+          p_email?: string
+          p_full_name: string
+          p_group_id: string
+          p_membership_id: string
+          p_phone?: string
+        }
+        Returns: string
       }
     }
     Enums: {
