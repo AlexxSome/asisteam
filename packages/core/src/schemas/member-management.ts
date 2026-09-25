@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ACCOUNT_STATUSES, MEMBERSHIP_ROLES, MEMBERSHIP_STATUSES } from "../enums";
 import { managedMemberProfileSchema } from "./managed-member";
 import { profileSchema } from "./profile";
+import { MANAGED_ACTIVATION_ERRORS } from "./invitation";
 
 export const MEMBERSHIP_STATUS_LABELS = { ACTIVE: "Activo", INACTIVE: "Inactivo", PENDING: "Pendiente", INVITED: "Invitado" } as const;
 export const ACCOUNT_STATUS_LABELS = { ACTIVE: "Cuenta propia", MANAGED: "Cuenta gestionada", INVITED: "Cuenta invitada" } as const;
@@ -10,6 +11,8 @@ export const memberFilterSchema = z.object({
   page: z.coerce.number().int().min(1).max(100001).default(1),
 });
 export const memberIdentitySchema = z.object({ group_id: z.string().uuid(), membership_id: z.string().uuid() });
+export const managedActivationSchema = memberIdentitySchema.strict();
+export const activationReviewSchema = z.object({ request_id: z.string().uuid(), accepted: z.boolean() }).strict();
 export const memberStatusSchema = memberIdentitySchema.extend({ action: z.enum(["deactivate", "reactivate"]) }).strict();
 export const managedMemberEditSchema = managedMemberProfileSchema.extend({ phone: profileSchema.shape.phone });
 export const managedMemberUpdateSchema = memberIdentitySchema.extend({ profile: managedMemberEditSchema }).strict();
@@ -21,6 +24,7 @@ export const groupMemberSchema = z.object({
 });
 export type GroupMember = z.infer<typeof groupMemberSchema>;
 export const MEMBER_MANAGEMENT_ERRORS: Record<string, string> = {
+  ...MANAGED_ACTIVATION_ERRORS,
   authentication_required: "Inicia sesión para gestionar integrantes.",
   admin_required: "Solo un administrador activo del grupo puede gestionar integrantes.",
   group_not_found: "El grupo no existe o no tienes acceso.",

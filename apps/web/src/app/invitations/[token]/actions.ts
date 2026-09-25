@@ -66,5 +66,6 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
   }
   if (!accepted.data) return { error: invitationErrorMessages.unavailable! };
   if (accepted.data.membership_status === "PENDING") return { pending: true };
+  if (accepted.data.membership_status !== "ACTIVE") redirect("/groups");
   redirect(`/groups/${accepted.data.group_id}`);
 }

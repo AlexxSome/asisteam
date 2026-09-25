@@ -143,6 +143,7 @@ Invitaciones dirigidas por email y su ciclo de vida.
 | role | text | Sí | — | `ATHLETE` \| `GUARDIAN` (por código de grupo solo se incorpora ATHLETE; los co-administradores se suman promoviendo a un miembro existente, ver acción #17 de 02-roles-y-permisos.md y `rpc/set_member_roles` en 07-api-y-backend.md, nunca por invitación). |
 | token | text | Sí | — | Token único, aleatorio, de un solo uso. |
 | invited_user_id | uuid | No (FK users) | — | Usuario creado/asociado (con `account_status = INVITED` si no existía). |
+| activation_membership_id | uuid | No (FK memberships) | — | Cuenta MANAGED que se reclama desde una membership existente; la aceptación conserva todas sus membresías y su historial. NULL en invitaciones de incorporación. |
 | status | text | Sí | 'PENDING' | `PENDING` \| `ACCEPTED` \| `EXPIRED`. |
 | expires_at | timestamptz | Sí | — | Vencimiento; la aplicación fija now() + 7 días. |
 | created_by | uuid | Sí (FK users) | — | ADMIN emisor. |

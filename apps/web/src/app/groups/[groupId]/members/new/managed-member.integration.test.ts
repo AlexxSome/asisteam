@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
+import { createSendInvitationHandler } from "../../../../../../../../supabase/functions/send-invitation/handler";
 
 // Solo datos sintéticos en el stack Docker local.
 const suite = describe.skipIf(process.env.RUN_MANAGED_MEMBER_INTEGRATION !== "1");
@@ -52,11 +53,14 @@ suite("MANAGED: Auth + invitación + consentimiento + asistencia", () => {
     const authIds = sql(`select auth_user_id from public.users where email like 'issue24-${run}-%@example.test' and auth_user_id is not null;`).split("\n").filter(Boolean);
     // La eliminación física es exclusiva de fixtures sintéticos en Docker.
     sql(`begin; set local session_replication_role=replica;
+      delete from app_private.managed_activation_requests where membership_id in (select id from public.memberships where group_id in (${groups}));
       delete from app_private.managed_member_enrollments where membership_id in (select id from public.memberships where group_id in (${groups}));
       delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id in (${users}));
       delete from public.guardianships where athlete_user_id in (${users});
       delete from public.invitations where group_id in (${groups});
       delete from app_private.invitation_send_limits where group_id in (${groups});
+      delete from public.attendance_records where activity_id in (select id from public.activities where group_id in (${groups}));
+      delete from public.activities where group_id in (${groups});
       delete from public.memberships where group_id in (${groups});
       delete from public.groups where id in (${groups});
       delete from public.users where id in (${users}); commit;`);
@@ -107,6 +111,56 @@ suite("MANAGED: Auth + invitación + consentimiento + asistencia", () => {
     expect((await outsider.rpc("list_managed_member_consents", { p_group_id: groupId })).data).toEqual([]);
     expect((await outsider.rpc("consent_managed_member", { p_membership_id: membershipId, p_accepted: true })).status).toBe(404);
     expect((await outsider.rpc("create_managed_member", { p_group_id: groupId, p_full_name: "No autorizado", p_birthdate: "1990-01-01" })).status).toBe(403);
+  });
+
+  it("ADMIN solicita y apoderado autoriza envío; GoTrue activa sin alterar historial", async () => {
+    const requested = await owner.rpc("request_managed_activation", { p_group_id: groupId, p_membership_id: membershipId });
+    expect(requested.data).toBe("CONSENT_PENDING");
+    const ownerJwt = (await owner.auth.getSession()).data.session!.access_token;
+    const guardianJwt = (await guardian.auth.getSession()).data.session!.access_token;
+    let mailText = "";
+    const handler = createSendInvitationHandler({ client: service, webUrl: "https://app.example.test", resendApiKey: "synthetic",
+      emailFrom: "synthetic@example.test", allowedOrigins: [], sendEmail: async (_url, init) => {
+        const message = JSON.parse(init!.body as string);
+        expect(message.to).toEqual([email("minor")]); mailText = message.text;
+        return new Response(JSON.stringify({ id: "synthetic-receipt" }));
+      } });
+    const send = (jwt: string) => handler(new Request("http://edge.test/send-invitation", { method: "POST",
+      headers: { Authorization: `Bearer ${jwt}` }, body: JSON.stringify({ action: "activate", group_id: groupId, membership_id: membershipId }) }));
+    expect((await send(ownerJwt)).status).toBe(422);
+    expect(mailText).toBe("");
+    const requests = await guardian.rpc("list_managed_activation_requests", { p_group_id: groupId });
+    expect(requests.error).toBeNull();
+    const requestId = requests.data[0].request_id;
+    expect((await owner.rpc("review_managed_activation", { p_request_id: requestId, p_accepted: true })).status).toBe(404);
+    const decisions = await Promise.all([1, 2].map(() => guardian.rpc("review_managed_activation", { p_request_id: requestId, p_accepted: true })));
+    expect(decisions.map(result => result.error)).toEqual([null, null]);
+    expect((await send(guardianJwt)).status).toBe(200);
+    const token = mailText.match(/\/invitations\/([a-f0-9]{64})/)![1]!;
+    const activityId = randomUUID();
+    sql(`insert into public.activities(id,group_id,activity_type_id,title,starts_at,ends_at,created_by)
+      values('${activityId}','${groupId}','b2c3d4e5-0001-4b3c-8d4e-111111111111','Entrenamiento sintético',now()-interval '2 hours',now()-interval '1 hour',(select created_by from public.groups where id='${groupId}'));
+      insert into public.attendance_records(activity_id,membership_id,status,recorded_by)
+      values('${activityId}','${membershipId}','LATE',(select created_by from public.groups where id='${groupId}'));`);
+    const athleteId = sql(`select user_id from public.memberships where id='${membershipId}';`);
+    const before = sql(`select jsonb_build_object('memberships',(select jsonb_agg(to_jsonb(m) order by id) from public.memberships m where user_id='${athleteId}'),
+      'guardianships',(select jsonb_agg(to_jsonb(g) order by id) from public.guardianships g where athlete_user_id='${athleteId}'),
+      'attendance',(select jsonb_agg(to_jsonb(a) order by id) from public.attendance_records a where membership_id='${membershipId}'));`);
+    const nonce = randomUUID(); const password = `Synthetic-${randomUUID()}!`;
+    expect((await service.rpc("prepare_invitation_registration", { p_token_hash: hash(token), p_nonce_hash: hash(nonce), p_email: email("minor"),
+      p_registration: { full_name: "Menor integración", birthdate: "2020-01-01", terms_version: "2026-09-21" } })).error).toBeNull();
+    const registered = await service.auth.admin.createUser({ email: email("minor"), password, email_confirm: true,
+      user_metadata: { invitation_registration_nonce: nonce } });
+    expect(registered.error).toBeNull();
+    expect(sql(`select id||':'||account_status from public.users where email='${email("minor")}';`)).toBe(`${athleteId}:ACTIVE`);
+    expect(sql(`select jsonb_build_object('memberships',(select jsonb_agg(to_jsonb(m) order by id) from public.memberships m where user_id='${athleteId}'),
+      'guardianships',(select jsonb_agg(to_jsonb(g) order by id) from public.guardianships g where athlete_user_id='${athleteId}'),
+      'attendance',(select jsonb_agg(to_jsonb(a) order by id) from public.attendance_records a where membership_id='${membershipId}'));`)).toBe(before);
+    const athlete = createClient(config.API_URL, config.ANON_KEY, options);
+    expect((await athlete.auth.signInWithPassword({ email: email("minor"), password })).error).toBeNull();
+    expect((await athlete.from("v_attendance_own").select("status").eq("membership_id", membershipId)).data).toEqual([{ status: "LATE" }]);
+    expect((await guardian.from("v_attendance_own").select("status").eq("membership_id", membershipId)).data).toEqual([{ status: "LATE" }]);
+    expect((await service.rpc("invitation_registration_result", { p_token_hash: hash(token), p_auth_user_id: registered.data.user!.id })).data).toEqual({ group_id: groupId, membership_status: "ACTIVE" });
   });
 
   it("altas simultáneas no superan 500 membresías ACTIVE", async () => {

@@ -31,4 +31,11 @@ describe("invitaciones", () => {
     expect(sentInvitationSchema.parse({ ...invitation, email: "private@example.test", invited_user_id: "private", token: "private" })).toEqual(invitation);
     expect(sentInvitationSchema.safeParse({ ...invitation, expires_at: "invalid" }).success).toBe(false);
   });
+  it("activación solo recibe la membership del grupo y no permite sustituir destinatario", () => {
+    const input = { action: "activate", group_id: "35000000-0000-4000-8000-000000000201", membership_id: "35000000-0000-4000-8000-000000000311" };
+    expect(sendInvitationRequestSchema.safeParse(input).success).toBe(true);
+    for (const extra of [{ email: "other@example.test" }, { role: "ADMIN" }, { user_id: "victim" }]) {
+      expect(sendInvitationRequestSchema.safeParse({ ...input, ...extra }).success).toBe(false);
+    }
+  });
 });

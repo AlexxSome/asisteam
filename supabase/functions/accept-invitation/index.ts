@@ -74,7 +74,7 @@ Deno.serve(async (request: Request) => {
         p_registration: { full_name, birthdate, phone: phone ?? null, terms_version: INVITATION_TERMS_VERSION },
       });
       if (prepareError) return fail("unavailable");
-      const { error } = await admin.auth.admin.createUser({
+      const { data: created, error } = await admin.auth.admin.createUser({
         email, password, email_confirm: true,
         user_metadata: { full_name, birthdate, phone: phone ?? null, invitation_registration_nonce: nonce },
       });
@@ -85,7 +85,11 @@ Deno.serve(async (request: Request) => {
         const { data: current } = await admin.rpc("invitation_context", { p_token_hash: tokenHash });
         return fail(current?.error ?? "registration_failed");
       }
-      return json({ group_id: context.group_id, membership_status: "ACTIVE" });
+      const { data: result, error: resultError } = await admin.rpc("invitation_registration_result", {
+        p_token_hash: tokenHash, p_auth_user_id: created.user!.id,
+      });
+      if (resultError || !result) return fail("unavailable");
+      return json(result);
     }
 
     const bearer = request.headers.get("authorization")?.replace(/^Bearer /i, "");

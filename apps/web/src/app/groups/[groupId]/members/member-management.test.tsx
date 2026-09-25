@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-const mock = vi.hoisted(() => ({ status: vi.fn(), update: vi.fn(), refresh: vi.fn() }));
-vi.mock("./actions", () => ({ changeMemberStatus: mock.status, updateManagedMember: mock.update }));
+const mock = vi.hoisted(() => ({ status: vi.fn(), update: vi.fn(), activate: vi.fn(), refresh: vi.fn() }));
+vi.mock("./actions", () => ({ changeMemberStatus: mock.status, updateManagedMember: mock.update, requestManagedActivation: mock.activate }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mock.refresh }) }));
 import { MemberManagement } from "./member-management";
 import type { GroupMember } from "@asisteam/core";
@@ -52,4 +52,18 @@ it("deshabilita controles mientras guarda y no publica éxito antes de respuesta
   await userEvent.click(screen.getByRole("button", { name: "Reactivar" }));
   for (const button of screen.getAllByRole("button")) expect((button as HTMLButtonElement).disabled).toBe(true);
   expect(mock.refresh).not.toHaveBeenCalled();
+});
+it("solicita email antes de activar y abre edición sin enviar", async () => {
+  render(<MemberManagement groupId={groupId} member={member} />);
+  await userEvent.click(screen.getByRole("button", { name: "Activar cuenta propia" }));
+  expect(screen.getByLabelText("Email (opcional)")).toBeTruthy();
+  expect(screen.getByRole("alert").textContent).toContain("email único");
+  expect(mock.activate).not.toHaveBeenCalled();
+});
+it.each([true, false])("distingue consentimiento pendiente (%s) de correo enviado", async consentPending => {
+  mock.activate.mockResolvedValue({ success: true, consentPending });
+  render(<MemberManagement groupId={groupId} member={{ ...member, email: "managed@example.test" }} />);
+  await userEvent.click(screen.getByRole("button", { name: "Activar cuenta propia" }));
+  expect(mock.activate).toHaveBeenCalledWith({ group_id: groupId, membership_id: member.membership_id });
+  expect((await screen.findByRole("status")).textContent).toContain(consentPending ? "apoderado debe autorizarla" : "Invitación de activación enviada");
 });

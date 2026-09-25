@@ -509,6 +509,7 @@ export type Database = {
       invitations: {
         Row: {
           accepted_at: string | null
+          activation_membership_id: string | null
           created_at: string
           created_by: string
           email: string | null
@@ -523,6 +524,7 @@ export type Database = {
         }
         Insert: {
           accepted_at?: string | null
+          activation_membership_id?: string | null
           created_at?: string
           created_by: string
           email?: string | null
@@ -537,6 +539,7 @@ export type Database = {
         }
         Update: {
           accepted_at?: string | null
+          activation_membership_id?: string | null
           created_at?: string
           created_by?: string
           email?: string | null
@@ -550,6 +553,34 @@ export type Database = {
           token?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "invitations_activation_membership_id_fkey"
+            columns: ["activation_membership_id"]
+            isOneToOne: false
+            referencedRelation: "memberships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invitations_activation_membership_id_fkey"
+            columns: ["activation_membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_attendance_roster"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "invitations_activation_membership_id_fkey"
+            columns: ["activation_membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_attendance_report"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "invitations_activation_membership_id_fkey"
+            columns: ["activation_membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_stats_members"
+            referencedColumns: ["membership_id"]
+          },
           {
             foreignKeyName: "invitations_created_by_fkey"
             columns: ["created_by"]
@@ -1211,6 +1242,10 @@ export type Database = {
         Returns: Json
       }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
+      invitation_registration_result: {
+        Args: { p_auth_user_id: string; p_token_hash: string }
+        Returns: Json
+      }
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
       is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
       is_member: { Args: { p_group_id: string }; Returns: boolean }
@@ -1221,6 +1256,15 @@ export type Database = {
           p_group_id: string
           p_invitation_id?: string
           p_role?: string
+          p_token_hash: string
+        }
+        Returns: Json
+      }
+      issue_managed_activation: {
+        Args: {
+          p_auth_user_id: string
+          p_group_id: string
+          p_membership_id: string
           p_token_hash: string
         }
         Returns: Json
@@ -1272,6 +1316,17 @@ export type Database = {
           full_name: string
           total_count: number
           user_id: string
+        }[]
+      }
+      list_managed_activation_requests: {
+        Args: { p_group_id: string; p_offset?: number }
+        Returns: {
+          full_name: string
+          membership_id: string
+          relationship: string
+          request_id: string
+          status: string
+          total_count: number
         }[]
       }
       list_managed_member_consents: {
@@ -1334,9 +1389,17 @@ export type Database = {
         Args: { p_birthdate: string }
         Returns: string
       }
+      request_managed_activation: {
+        Args: { p_group_id: string; p_membership_id: string }
+        Returns: string
+      }
       review_birthdate_change: {
         Args: { p_approve: boolean; p_group_id: string; p_request_id: string }
         Returns: string
+      }
+      review_managed_activation: {
+        Args: { p_accepted: boolean; p_request_id: string }
+        Returns: Json
       }
       rotate_invite_code: { Args: { p_group_id: string }; Returns: string }
       set_avatar_permission: {

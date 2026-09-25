@@ -1,8 +1,9 @@
 import { beforeEach, expect, it, vi } from "vitest";
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), rpc: vi.fn(), revalidate: vi.fn() }));
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), rpc: vi.fn(), revalidate: vi.fn(), send: vi.fn() }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, rpc: mock.rpc }) }));
-import { changeMemberStatus, updateManagedMember } from "./actions";
+vi.mock("../invitations/new/actions", () => ({ sendInvitation: mock.send }));
+import { changeMemberStatus, requestManagedActivation, updateManagedMember } from "./actions";
 const identity = { group_id: "34000000-0000-4000-8000-000000000201", membership_id: "34000000-0000-4000-8000-000000000301" };
 const profile = { full_name: "Persona gestionada", birthdate: "1990-01-01", email: "", phone: null };
 beforeEach(() => {
@@ -37,4 +38,20 @@ it("oculta errores internos y de red", async () => {
   expect(await updateManagedMember({ ...identity, profile })).toHaveProperty("error.code", "unavailable");
   mock.rpc.mockRejectedValue(new Error("network"));
   expect(await changeMemberStatus({ ...identity, action: "reactivate" })).toHaveProperty("error.code", "unavailable");
+});
+it("no envía enlace hasta que la RPC autoriza la activación", async () => {
+  mock.rpc.mockResolvedValue({ data: "CONSENT_PENDING", error: null });
+  expect(await requestManagedActivation(identity)).toEqual({ success: true, consentPending: true });
+  expect(mock.send).not.toHaveBeenCalled();
+  mock.rpc.mockResolvedValue({ data: "READY", error: null });
+  mock.send.mockResolvedValue({ invitation: {} });
+  expect(await requestManagedActivation(identity)).toEqual({ success: true });
+  expect(mock.send).toHaveBeenCalledWith({ action: "activate", ...identity });
+});
+it("no permite reemplazar email/rol y conserva fallos de envío", async () => {
+  expect(await requestManagedActivation({ ...identity, email: "other@example.test" })).toHaveProperty("error.code", "invalid_activation_request");
+  expect(mock.rpc).not.toHaveBeenCalled();
+  mock.rpc.mockResolvedValue({ data: "READY", error: null });
+  mock.send.mockResolvedValue({ error: { code: "email_delivery_failed", message: "Puedes reenviar", details: {} } });
+  expect(await requestManagedActivation(identity)).toHaveProperty("error.code", "email_delivery_failed");
 });

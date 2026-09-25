@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ACCOUNT_STATUS_LABELS, MEMBERSHIP_ROLE_LABELS, MEMBERSHIP_STATUS_LABELS, MEMBER_MANAGEMENT_ERRORS, managedMemberEditSchema, type GroupMember, type ManagedMemberEdit } from "@asisteam/core";
-import { changeMemberStatus, updateManagedMember } from "./actions";
+import { changeMemberStatus, requestManagedActivation, updateManagedMember } from "./actions";
 
 export function MemberManagement({ groupId, member }: { groupId: string; member: GroupMember }) {
   const router = useRouter();
@@ -47,6 +47,24 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
     finally { setSaving(false); }
   });
   const prefix = `member-${member.membership_id}`;
+  async function activateAccount() {
+    setError(undefined); setMessage(undefined);
+    if (!member.email) {
+      setEditing(true); setError(MEMBER_MANAGEMENT_ERRORS.managed_email_required); return;
+    }
+    setSaving(true);
+    try {
+      const result = await requestManagedActivation({ group_id: groupId, membership_id: member.membership_id });
+      if ("error" in result) setError(result.error.message);
+      else {
+        setMessage(result.consentPending
+          ? "Solicitud registrada. El apoderado debe autorizarla en Consentimientos de mis pupilos; después se enviará el enlace para crear contraseña."
+          : "Invitación de activación enviada. La cuenta seguirá gestionada hasta que el deportista cree su contraseña y acepte las condiciones.");
+        router.refresh();
+      }
+    } catch { setError(MEMBER_MANAGEMENT_ERRORS.unavailable); }
+    finally { setSaving(false); }
+  }
   const fieldClass = "min-h-11 w-full rounded border bg-background px-3 py-2";
   return <section aria-label={member.full_name} className="space-y-3 rounded-lg border p-4">
     <h2 className="text-lg font-semibold">{member.full_name}</h2>
@@ -58,6 +76,7 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
     </dl>
     {!editing && <div className="flex flex-wrap gap-3">
       {member.account_status === "MANAGED" ? <button disabled={saving || confirming} className="min-h-11 rounded border px-4" onClick={() => setEditing(true)}>Editar perfil</button> : <p>El perfil lo edita su titular.</p>}
+      {member.account_status === "MANAGED" && member.role === "ATHLETE" && <button disabled={saving || confirming} className="min-h-11 rounded border px-4" onClick={activateAccount}>Activar cuenta propia</button>}
       {member.status === "ACTIVE" && !confirming && <button disabled={saving} className="min-h-11 rounded border px-4" onClick={() => setConfirming(true)}>Desactivar</button>}
       {member.status === "INACTIVE" && <button disabled={saving} className="min-h-11 rounded border px-4" onClick={changeStatus}>Reactivar</button>}
     </div>}

@@ -23,7 +23,7 @@ export const invitationErrorMessages: Record<string, string> = {
   unavailable: "No pudimos procesar la invitación. Inténtalo nuevamente en unos minutos.",
 };
 export type InvitationPreview = { group_name: string; role: "ATHLETE" | "GUARDIAN" };
-export type InvitationAcceptance = { group_id: string; membership_status: "ACTIVE" | "PENDING" };
+export type InvitationAcceptance = { group_id: string; membership_status: "ACTIVE" | "PENDING" | "INACTIVE" | "INVITED" };
 
 export const invitationFormSchema = z.object({
   email: z.string().trim().email("Ingresa un email válido").max(254, "El email admite hasta 254 caracteres").toLowerCase(),
@@ -33,6 +33,7 @@ export type InvitationFormInput = z.infer<typeof invitationFormSchema>;
 export const sendInvitationRequestSchema = z.discriminatedUnion("action", [
   invitationFormSchema.extend({ action: z.literal("send"), group_id: z.string().uuid() }).strict(),
   z.object({ action: z.literal("resend"), group_id: z.string().uuid(), invitation_id: z.string().uuid() }).strict(),
+  z.object({ action: z.literal("activate"), group_id: z.string().uuid(), membership_id: z.string().uuid() }).strict(),
 ]);
 export const sentInvitationSchema = z.object({
   id: z.string().uuid(), status: z.literal("PENDING"), expires_at: z.string().datetime({ offset: true }),
@@ -41,7 +42,19 @@ export type SentInvitation = z.infer<typeof sentInvitationSchema>;
 export const INVITATION_STATUS_LABELS: Record<string, string> = {
   PENDING: "Pendiente", ACCEPTED: "Aceptada", EXPIRED: "Expirada",
 };
+export const MANAGED_ACTIVATION_ERRORS: Record<string, string> = {
+  managed_account_required: "La cuenta ya no está gestionada. Actualiza la lista de integrantes.",
+  managed_email_required: "Registra primero un email único para este deportista desde Editar perfil.",
+  membership_not_found: "El deportista no existe o no pertenece a este grupo.",
+  guardian_consent_required: "El apoderado debe autorizar la activación desde Consentimientos de mis pupilos.",
+  minor_requires_guardian_consent: "Primero se requiere el consentimiento vigente para tratar los datos del menor.",
+  invalid_activation_request: "Revisa los datos de la solicitud de activación.",
+  activation_request_not_found: "La solicitud no está disponible para tu cuenta.",
+  activation_request_changed: "La solicitud cambió o ya fue resuelta. Actualiza la página.",
+  activation_sender_required: "Solo el administrador o el apoderado que autorizó esta solicitud puede enviar la activación.",
+};
 export const SEND_INVITATION_ERROR_MESSAGES: Record<string, string> = {
+  ...MANAGED_ACTIVATION_ERRORS,
   authentication_required: "Inicia sesión para enviar invitaciones.",
   group_not_found: "El grupo no existe o no tienes acceso.",
   admin_required: "Solo un administrador del grupo puede enviar invitaciones.",
