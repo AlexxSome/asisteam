@@ -2,19 +2,22 @@ import { z } from "zod";
 
 export const REPORT_PERIOD_LABELS = { week: "Semana", month: "Mes", custom: "Rango personalizado", season: "Temporada" } as const;
 const date = z.string().date("Ingresa una fecha válida").optional();
-export const reportFilterSchema = z.object({
+export const attendancePeriodFilterSchema = z.object({
   period: z.enum(["week", "month", "custom", "season"]).default("month"),
   from: date,
   to: date,
   activity_type_ids: z.array(z.string().uuid("Selecciona un tipo de actividad válido")).max(100).default([]),
-  include_inactive: z.boolean().default(false),
   page: z.coerce.number().int().min(1).max(1000000).default(1),
-  sort: z.enum(["attendance", "name"]).default("attendance"),
 }).superRefine((filter, ctx) => {
   if (filter.period === "custom" && (!filter.from || !filter.to || filter.to < filter.from)) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["from"], message: "Indica el inicio y el término del rango, en ese orden." });
   }
 });
+export const reportFilterSchema = attendancePeriodFilterSchema.and(z.object({
+  include_inactive: z.boolean().default(false),
+  sort: z.enum(["attendance", "name"]).default("attendance"),
+}));
+export type AttendancePeriodFilter = z.infer<typeof attendancePeriodFilterSchema>;
 export type ReportFilter = z.infer<typeof reportFilterSchema>;
 
 const count = z.number().int().nonnegative().safe();

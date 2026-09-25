@@ -96,6 +96,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "activities_activity_type_id_fkey"
+            columns: ["activity_type_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_type_id"]
+          },
+          {
             foreignKeyName: "activities_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -129,6 +136,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "activities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_recurrence_source_id_fkey"
+            columns: ["recurrence_source_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_id"]
           },
           {
             foreignKeyName: "activities_recurrence_source_id_fkey"
@@ -225,6 +239,13 @@ export type Database = {
             foreignKeyName: "attendance_records_activity_id_fkey"
             columns: ["activity_id"]
             isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
             referencedRelation: "v_group_activities"
             referencedColumns: ["id"]
           },
@@ -234,6 +255,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "memberships"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["membership_id"]
           },
           {
             foreignKeyName: "attendance_records_membership_id_fkey"
@@ -564,6 +592,13 @@ export type Database = {
             foreignKeyName: "invitations_activation_membership_id_fkey"
             columns: ["activation_membership_id"]
             isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["membership_id"]
+          },
+          {
+            foreignKeyName: "invitations_activation_membership_id_fkey"
+            columns: ["activation_membership_id"]
+            isOneToOne: false
             referencedRelation: "v_attendance_roster"
             referencedColumns: ["membership_id"]
           },
@@ -767,6 +802,45 @@ export type Database = {
           },
         ]
       }
+      v_athlete_attendance_history: {
+        Row: {
+          activity_id: string | null
+          activity_type_color: string | null
+          activity_type_id: string | null
+          activity_type_name: string | null
+          group_id: string | null
+          id: string | null
+          is_system_type: boolean | null
+          membership_id: string | null
+          note: string | null
+          starts_at: string | null
+          status: string | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_attendance_admin: {
         Row: {
           activity_id: string | null
@@ -811,6 +885,13 @@ export type Database = {
             foreignKeyName: "attendance_records_activity_id_fkey"
             columns: ["activity_id"]
             isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
             referencedRelation: "v_group_activities"
             referencedColumns: ["id"]
           },
@@ -820,6 +901,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "memberships"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["membership_id"]
           },
           {
             foreignKeyName: "attendance_records_membership_id_fkey"
@@ -894,6 +982,13 @@ export type Database = {
             foreignKeyName: "attendance_records_activity_id_fkey"
             columns: ["activity_id"]
             isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "attendance_records_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
             referencedRelation: "v_group_activities"
             referencedColumns: ["id"]
           },
@@ -903,6 +998,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "memberships"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_membership_id_fkey"
+            columns: ["membership_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["membership_id"]
           },
           {
             foreignKeyName: "attendance_records_membership_id_fkey"
@@ -990,6 +1092,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "activities_activity_type_id_fkey"
+            columns: ["activity_type_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_type_id"]
+          },
+          {
             foreignKeyName: "activities_group_id_fkey"
             columns: ["group_id"]
             isOneToOne: false
@@ -1016,6 +1125,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "activities"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_recurrence_source_id_fkey"
+            columns: ["recurrence_source_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_id"]
           },
           {
             foreignKeyName: "activities_recurrence_source_id_fkey"
@@ -1054,6 +1170,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_activity_types"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_activity_type_id_fkey"
+            columns: ["activity_type_id"]
+            isOneToOne: false
+            referencedRelation: "v_athlete_attendance_history"
+            referencedColumns: ["activity_type_id"]
           },
           {
             foreignKeyName: "memberships_group_id_fkey"
@@ -1239,6 +1362,18 @@ export type Database = {
       }
       get_group_stats: {
         Args: { p_group_id: string; p_page?: number; p_page_size?: number }
+        Returns: Json
+      }
+      get_my_attendance_history: {
+        Args: {
+          p_activity_type_ids?: string[]
+          p_from?: string
+          p_group_id: string
+          p_page?: number
+          p_page_size?: number
+          p_period?: string
+          p_to?: string
+        }
         Returns: Json
       }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }

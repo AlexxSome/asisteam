@@ -1,0 +1,88 @@
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { execFileSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
+import { attendanceHistorySchema } from "@asisteam/core";
+
+const suite = describe.skipIf(process.env.RUN_HISTORY_INTEGRATION !== "1");
+const run = randomUUID().replaceAll("-", "");
+const email = (name: string) => `issue39-${run}-${name}@example.test`;
+const clients: Record<string, SupabaseClient> = {};
+const authIds: string[] = [];
+let service: SupabaseClient;
+let groupId: string;
+let membershipId: string;
+function sql(query: string) {
+  return execFileSync("docker", ["exec", "-i", "supabase_db_asisteam", "psql", "-U", "postgres", "-d", "postgres", "-At", "-v", "ON_ERROR_STOP=1"], { input: query, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }).trim();
+}
+suite("historial propio con Auth y PostgREST reales", () => {
+  beforeAll(async () => {
+    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
+    const options = { auth: { persistSession: false, autoRefreshToken: false } };
+    service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
+    for (const name of ["owner", "athlete", "other", "outsider"]) {
+      const password = `Synthetic-${randomUUID()}!`;
+      const created = await service.auth.admin.createUser({ email: email(name), password, email_confirm: true, user_metadata: { full_name: "Persona sintética", birthdate: "1990-01-01" } });
+      if (created.error) throw new Error("No se pudo preparar cuenta sintética");
+      authIds.push(created.data.user.id);
+      const client = createClient(config.API_URL, config.ANON_KEY, options);
+      if ((await client.auth.signInWithPassword({ email: email(name), password })).error) throw new Error("No se pudo iniciar sesión sintética");
+      clients[name] = client;
+    }
+    const group = await clients.owner!.rpc("create_group", { p_name: "Historial integración", p_sport: "Tenis" });
+    expect(group.error).toBeNull(); groupId = group.data;
+    membershipId = sql(`insert into public.memberships(user_id,group_id,role,status,joined_at) select id,'${groupId}','ATHLETE','ACTIVE','2026-01-01' from public.users where email='${email("athlete")}' returning id;`).split("\n")[0]!;
+    sql(`update public.groups set created_at='2026-01-01' where id='${groupId}';
+      insert into public.memberships(user_id,group_id,role,status,joined_at) select id,'${groupId}','ATHLETE','ACTIVE','2026-01-01' from public.users where email='${email("other")}';
+      insert into public.activities(group_id,activity_type_id,title,starts_at,ends_at,created_by)
+      select '${groupId}','b2c3d4e5-0001-4b3c-8d4e-111111111111','Historial '||n,
+      timestamptz '2026-03-01T12:00Z'+n*interval '1 day',timestamptz '2026-03-01T13:00Z'+n*interval '1 day',u.id
+      from generate_series(1,4)n cross join public.users u where u.email='${email("owner")}';
+      insert into public.attendance_records(activity_id,membership_id,status,note,recorded_by)
+      select a.id,m.id,case when a.title='Historial 1' then 'LATE' when a.title='Historial 2' then 'ABSENT' when a.title='Historial 3' then 'EXCUSED' else 'PRESENT' end,
+      case when m.id='${membershipId}' then 'Nota propia' else 'Nota privada de tercero' end,g.created_by
+      from public.activities a join public.groups g on g.id=a.group_id join public.memberships m on m.group_id=g.id and m.role='ATHLETE'
+      where a.group_id='${groupId}';`);
+  }, 30000);
+  afterAll(async () => {
+    if (!service) return;
+    const users = `select id from public.users where email like 'issue39-${run}-%@example.test'`;
+    const groups = `select id from public.groups where created_by in (${users})`;
+    sql(`delete from public.attendance_records where activity_id in (select id from public.activities where group_id in (${groups}));
+      delete from public.activities where group_id in (${groups}); delete from public.memberships where group_id in (${groups});
+      delete from public.groups where id in (${groups}); delete from public.users where id in (${users});`);
+    for (const id of authIds) await service.auth.admin.deleteUser(id);
+  });
+  it("consulta propia pagina, filtra y serializa notas/métricas sin terceros", async () => {
+    const response = await clients.athlete!.rpc("get_my_attendance_history", { p_group_id: groupId, p_period: "month", p_from: "2026-03-01", p_page_size: 2, p_page: 2 });
+    expect(response.error).toBeNull();
+    const history = attendanceHistorySchema.parse(response.data);
+    expect(history.membership_id).toBe(membershipId); expect(history.records).toHaveLength(2);
+    expect(history.records.map((record) => record.title)).toEqual(["Historial 2", "Historial 1"]);
+    expect(history.totals).toMatchObject({ convened: 4, attendance_pct: 66.7, present: 1, absent: 1, late: 1, excused: 1 });
+    expect(history.records.every((record) => record.note === "Nota propia")).toBe(true);
+    const filtered = await clients.athlete!.rpc("get_my_attendance_history", { p_group_id: groupId, p_period: "custom", p_from: "2026-03-04", p_to: "2026-03-04" });
+    expect(filtered.error).toBeNull();
+    expect(attendanceHistorySchema.parse(filtered.data).totals).toMatchObject({ convened: 1, excused: 1, attendance_pct: null });
+    const direct = await clients.athlete!.from("v_athlete_attendance_history").select("membership_id, note").eq("group_id", groupId);
+    expect(direct.error).toBeNull(); expect(direct.data).toHaveLength(4);
+    expect(direct.data!.every((row) => row.membership_id === membershipId && row.note === "Nota propia")).toBe(true);
+  });
+  it("HTTP aplica aislamiento y valida filtros; correcciones se reflejan en la misma sesión", async () => {
+    const args = { p_group_id: groupId, p_period: "month", p_from: "2026-03-01" };
+    expect((await clients.outsider!.rpc("get_my_attendance_history", args)).status).toBe(404);
+    expect((await clients.owner!.rpc("get_my_attendance_history", args)).status).toBe(404);
+    expect((await clients.athlete!.rpc("get_my_attendance_history", { ...args, p_period: "custom" })).status).toBe(400);
+    const row = await clients.owner!.from("v_attendance_admin").select("id").eq("membership_id", membershipId).eq("status", "ABSENT").single();
+    expect(row.error).toBeNull();
+    expect((await clients.owner!.rpc("update_attendance_record", { p_record_id: row.data!.id, p_changes: { status: "PRESENT", note: "Corregida" } })).error).toBeNull();
+    const result = await clients.athlete!.rpc("get_my_attendance_history", args);
+    expect(result.error).toBeNull(); const history = attendanceHistorySchema.parse(result.data);
+    expect(history.totals.attendance_pct).toBe(100);
+    expect(history.records.find((record) => record.id === row.data!.id)?.note).toBe("Corregida");
+    sql(`update public.memberships set status='INACTIVE' where id='${membershipId}';`);
+    expect((await clients.athlete!.rpc("get_my_attendance_history", args)).status).toBe(404);
+    expect((await clients.athlete!.from("v_athlete_attendance_history").select("note").eq("group_id", groupId)).data).toEqual([]);
+  });
+});

@@ -44,6 +44,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
     {group.roles.includes("ATHLETE") && <section id="my-attendance" className="space-y-2 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Mi asistencia</h2>
       <p className="text-muted-foreground">Tu asistencia e historial corresponden a este grupo.</p>
+      <Link href={`/groups/${group.id}/me/history`} className="block underline">Ver mi historial de asistencia</Link>
     </section>}
     {group.roles.includes("GUARDIAN") && <section id="my-wards" className="space-y-2 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Mis pupilos</h2>

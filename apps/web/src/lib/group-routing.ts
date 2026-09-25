@@ -16,5 +16,8 @@ export function switchedGroupPath(pathname: string, groupId: string, roles: Memb
   if (roles.includes("ADMIN") && suffix === "/settings") {
     return `${base}${suffix}`;
   }
+  if (roles.includes("ATHLETE") && suffix === "/me/history") {
+    return `${base}${suffix}`;
+  }
   return base;
 }
