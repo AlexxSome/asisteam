@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
+import { attendanceHistorySchema } from "@asisteam/core";
 
 // Solo fixtures sintéticos contra Supabase local y Edge servido con el mismo
 // INVITATION_PROXY_SECRET. Nunca acepta endpoints remotos.
@@ -9,6 +10,7 @@ const enabled = process.env.RUN_INVITATION_INTEGRATION === "1";
 const suite = describe.skipIf(!enabled);
 const run = randomUUID().replaceAll("-", "");
 const groupId = randomUUID();
+const fixtureGroupIds = [groupId];
 const invitedId = randomUUID();
 const minorId = randomUUID();
 const tokens = { invited: randomUUID(), existing: randomUUID(), expired: randomUUID(), minor: randomUUID(), race: randomUUID() };
@@ -36,6 +38,43 @@ async function invoke(body: unknown, token?: string, ip = ips[0]!, proxy = secre
       "x-asisteam-client-ip": ip, ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify(body),
   });
   return { status: response.status, body: await response.json() };
+}
+
+function historySnapshot(userId: string) {
+  return sql(`select jsonb_build_object(
+    'memberships',(select jsonb_agg(to_jsonb(m) order by id) from public.memberships m where user_id='${userId}'),
+    'guardianships',(select jsonb_agg(to_jsonb(g) order by id) from public.guardianships g where athlete_user_id='${userId}'),
+    'attendance',(select jsonb_agg(to_jsonb(a) order by a.id) from public.attendance_records a
+      join public.memberships m on m.id=a.membership_id where m.user_id='${userId}'));`);
+}
+
+async function managedFixture(minor: boolean) {
+  const id = randomUUID(); const membershipId = randomUUID(); const token = randomUUID();
+  const guardianId = minor ? randomUUID() : undefined;
+  const address = email(minor ? "managed-minor" : "managed-adult");
+  const ip = minor ? "192.0.2.201" : "192.0.2.200";
+  ips.push(ip);
+  sql(`insert into public.users(id,full_name,email,phone,birthdate,account_status)
+    values('${id}','Perfil gestionado conservado','${address}','+56912345678',${minor ? "(current_date-interval '15 years')::date" : "date '1990-01-01'"},'MANAGED');
+    insert into public.memberships(id,user_id,group_id,role,status,joined_at)
+    values('${membershipId}','${id}','${groupId}','ATHLETE','${minor ? "PENDING" : "ACTIVE"}',now()-interval '90 days');`);
+  if (guardianId) sql(`insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship)
+    values('${guardianId}','${existingProfileId}','${id}','Tutor');
+    insert into public.consents(guardianship_id,consent_type,terms_version,channel) values
+    ('${guardianId}','DATA_PROCESSING_MINOR','2026-09-21','IN_APP'),
+    ('${guardianId}','ACCOUNT_ACTIVATION_MINOR','2026-09-21','IN_APP');
+    update public.memberships set status='ACTIVE' where id='${membershipId}';`);
+  const activityId = randomUUID();
+  sql(`insert into public.activities(id,group_id,activity_type_id,title,starts_at,ends_at,created_by)
+    values('${activityId}','${groupId}','b2c3d4e5-0001-4b3c-8d4e-111111111111','Entrenamiento antes del reclamo',
+    now()-interval '2 days',now()-interval '47 hours','${existingProfileId}');
+    insert into public.attendance_records(activity_id,membership_id,status,note,recorded_by)
+    values('${activityId}','${membershipId}','LATE','Historial registrado por ADMIN','${existingProfileId}');`);
+  const issued = await admin.rpc("issue_managed_activation", { p_auth_user_id: existingAuthId, p_group_id: groupId,
+    p_membership_id: membershipId, p_token_hash: digest(token) });
+  expect(issued.error).toBeNull();
+  return { id, membershipId, token, guardianId, address, ip,
+    request: { action: "claim", token, registration: { email: address, password, terms_accepted: true } } };
 }
 
 suite("Edge + Auth + Postgres: invitaciones", () => {
@@ -73,11 +112,20 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
   afterAll(async () => {
     if (!admin) return;
     const authIds = sql(`select auth_user_id from public.users where email like 'issue18-${run}-%@example.test' and auth_user_id is not null;`).split("\n").filter(Boolean);
-    sql(`delete from public.invitations where group_id='${groupId}';
-      delete from public.memberships where group_id='${groupId}';
-      delete from public.groups where id='${groupId}';
+    const groups = fixtureGroupIds.map(id => `'${id}'`).join(",");
+    const users = `select id from public.users where email like 'issue18-${run}-%@example.test'`;
+    sql(`begin; set local session_replication_role=replica;
+      delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id in (${users}));
+      delete from public.guardianships where athlete_user_id in (${users});
+      delete from public.attendance_records where membership_id in (select id from public.memberships where group_id in (${groups}));
+      delete from public.activities where group_id in (${groups});
+      delete from app_private.invitation_registrations where token_hash in (select token from public.invitations where group_id in (${groups}));
+      delete from public.invitations where group_id in (${groups});
+      delete from app_private.invitation_send_limits where group_id in (${groups});
+      delete from public.memberships where group_id in (${groups});
+      delete from public.groups where id in (${groups});
       delete from app_private.invitation_attempts where key in (${ips.flatMap(ip => ["preview", "accept"].map(action => `'${digest(`${secret}:${action}:${ip}`)}'`)).join(",")});
-      delete from public.users where email like 'issue18-${run}-%@example.test';`);
+      delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await admin.auth.admin.deleteUser(id);
   });
 
@@ -85,6 +133,13 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     const result = await invoke({ action: "preview", token: tokens.invited });
     expect(result.status).toBe(200);
     expect(result.body).toEqual({ group_name: "Grupo sintético #18", role: "ATHLETE" });
+  });
+  it("el reclamo no convierte una invitación de registro normal en activación gestionada", async () => {
+    const result = await invoke({ action: "claim", token: tokens.invited,
+      registration: { email: email("new"), password, terms_accepted: true } });
+    expect(result.status).toBe(404);
+    expect(sql(`select count(*) from auth.users where email='${email("new")}';`)).toBe("0");
+    expect(sql(`select status from public.invitations where token='${digest(tokens.invited)}';`)).toBe("PENDING");
   });
   it("rechaza proxy falso y sesión de otra persona sin consumir invitación", async () => {
     expect((await invoke({ action: "accept", token: tokens.existing }, jwt, ips[0], "wrong")).status).toBe(401);
@@ -150,5 +205,61 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
   it("limita intentos a 10 por hora e IP entre peticiones Edge", async () => {
     for (let n = 0; n < 10; n++) expect((await invoke({ action: "accept", token: tokens.existing }, jwt, ips[2])).status).toBe(404);
     expect((await invoke({ action: "accept", token: tokens.existing }, jwt, ips[2])).status).toBe(429);
+  });
+  it("HU-DEP-07: adulto reclama por Edge, conserva todos sus grupos y consulta su historial al iniciar sesión", async () => {
+    const fixture = await managedFixture(false);
+    const secondGroup = randomUUID(); fixtureGroupIds.push(secondGroup);
+    sql(`insert into public.groups(id,name,invite_code,created_by)
+      values('${secondGroup}','Otro grupo previo','${randomUUID().replaceAll("-", "").slice(0,8)}','${existingProfileId}');
+      insert into public.memberships(user_id,group_id,role,status,joined_at)
+      values('${fixture.id}','${secondGroup}','ATHLETE','ACTIVE',now()-interval '60 days');`);
+    const before = historySnapshot(fixture.id);
+    const preview = await invoke({ action: "preview", token: fixture.token }, undefined, fixture.ip);
+    expect(preview).toEqual({ status: 200, body: { group_name: "Grupo sintético #18", role: "ATHLETE", managed_activation: true } });
+    const wrong = { ...fixture.request, registration: { ...fixture.request.registration, email: email("outsider") } };
+    expect((await invoke(wrong, undefined, fixture.ip)).status).toBe(422);
+    expect((await invoke({ ...fixture.request, registration: { ...fixture.request.registration, birthdate: "1990-01-01" } }, undefined, fixture.ip)).status).toBe(400);
+    expect((await invoke({ ...fixture.request, registration: { ...fixture.request.registration, terms_accepted: false } }, undefined, fixture.ip)).status).toBe(400);
+    expect(sql(`select count(*) from auth.users where email='${fixture.address}';`)).toBe("0");
+    const claims = await Promise.all([1, 2].map(() => invoke(fixture.request, undefined, fixture.ip)));
+    expect(claims.map(result => result.status).sort()).toEqual([200,404]);
+    expect(claims.find(result => result.status === 200)?.body).toEqual({ group_id: groupId, membership_status: "ACTIVE" });
+    expect(historySnapshot(fixture.id)).toBe(before);
+    expect(sql(`select id||':'||account_status||':'||full_name||':'||phone from public.users where email='${fixture.address}';`))
+      .toBe(`${fixture.id}:ACTIVE:Perfil gestionado conservado:+56912345678`);
+    const client = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+    expect((await client.auth.signInWithPassword({ email: fixture.address, password })).error).toBeNull();
+    expect((await client.from("v_my_groups").select("id")).data).toEqual(expect.arrayContaining([{ id: groupId }, { id: secondGroup }]));
+    const history = await client.rpc("get_my_attendance_history", { p_group_id: groupId, p_period: "custom",
+      p_from: sql("select (current_date-7)::text"), p_to: sql("select current_date::text") });
+    expect(history.error).toBeNull();
+    expect(attendanceHistorySchema.parse(history.data)).toMatchObject({ membership_id: fixture.membershipId,
+      totals: { late: 1, attendance_pct: 100 }, records: [{ note: "Historial registrado por ADMIN", status: "LATE" }] });
+    expect((await invoke(fixture.request, undefined, fixture.ip)).status).toBe(404);
+    expect(sql(`select count(*) from auth.users where email='${fixture.address}';`)).toBe("1");
+  });
+  it("HU-DEP-07: menor queda bloqueado por consentimiento revocado y puede reclamar tras nueva autorización", async () => {
+    const fixture = await managedFixture(true);
+    const before = historySnapshot(fixture.id);
+    sql(`update public.consents set revoked_at=now() where guardianship_id='${fixture.guardianId}' and consent_type='ACCOUNT_ACTIVATION_MINOR';`);
+    const blocked = await invoke(fixture.request, undefined, fixture.ip);
+    expect(blocked.status).toBe(422);
+    expect(blocked.body.error.code).toBe("guardian_consent_required");
+    expect(sql(`select count(*) from auth.users where email='${fixture.address}';`)).toBe("0");
+    expect(sql(`select account_status from public.users where id='${fixture.id}';`)).toBe("MANAGED");
+    expect(sql(`select status from public.invitations where token='${digest(fixture.token)}';`)).toBe("PENDING");
+    expect(sql(`select count(*) from app_private.invitation_registrations where token_hash='${digest(fixture.token)}';`)).toBe("0");
+    expect(historySnapshot(fixture.id)).toBe(before);
+    sql(`insert into public.consents(guardianship_id,consent_type,terms_version,channel)
+      values('${fixture.guardianId}','ACCOUNT_ACTIVATION_MINOR','2026-09-21','IN_APP');`);
+    expect(await invoke(fixture.request, undefined, fixture.ip)).toEqual({ status: 200, body: { group_id: groupId, membership_status: "ACTIVE" } });
+    expect(historySnapshot(fixture.id)).toBe(before);
+    const client = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+    expect((await client.auth.signInWithPassword({ email: fixture.address, password })).error).toBeNull();
+    expect((await client.from("v_attendance_own").select("status,note").eq("membership_id", fixture.membershipId)).data)
+      .toEqual([{ status: "LATE", note: "Historial registrado por ADMIN" }]);
+    const guardian = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+    expect((await guardian.auth.signInWithPassword({ email: email("existing"), password })).error).toBeNull();
+    expect((await guardian.from("v_attendance_own").select("status").eq("membership_id", fixture.membershipId)).data).toEqual([{ status: "LATE" }]);
   });
 });

@@ -6,13 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { acceptInvitation } from "./actions";
 
-export function InvitationForm({ token, signedInEmail }: { token: string; signedInEmail?: string }) {
-  const [mode, setMode] = useState<"session" | "login" | "register">(signedInEmail ? "session" : "login");
+export function InvitationForm({ token, signedInEmail, managedActivation = false }: { token: string; signedInEmail?: string; managedActivation?: boolean }) {
+  const [mode, setMode] = useState<"session" | "login" | "register" | "claim">(managedActivation ? "claim" : signedInEmail ? "session" : "login");
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
   const [pending, setPending] = useState(false);
-  if (pending) return <p role="status">Tu incorporación está pendiente. Tu apoderado debe estar vinculado y otorgar su consentimiento; después, el ADMIN podrá confirmar tu ingreso.</p>;
+  const creatingCredentials = mode === "register" || mode === "claim";
+  if (pending) return <p role="status">{managedActivation
+    ? "Tu cuenta está activada y tu historial se conserva. Tu ingreso a este grupo sigue pendiente de la confirmación del ADMIN."
+    : "Tu incorporación está pendiente. Tu apoderado debe estar vinculado y otorgar su consentimiento; después, el ADMIN podrá confirmar tu ingreso."}</p>;
   return <div className="space-y-5">
+    {managedActivation ? <p className="text-sm">Crea tu contraseña para acceder al perfil que gestiona tu ADMIN. Si eres menor de edad, tu apoderado debe mantener vigente su autorización para activar la cuenta.</p> :
     <div className="flex flex-wrap gap-2" aria-label="Cómo aceptar la invitación">
       {signedInEmail && <Button type="button" variant={mode === "session" ? "default" : "outline"} disabled={busy}
         onClick={() => { setMode("session"); setError(undefined); }}>Usar mi sesión</Button>}
@@ -20,15 +24,16 @@ export function InvitationForm({ token, signedInEmail }: { token: string; signed
         onClick={() => { setMode("login"); setError(undefined); }}>Ya tengo cuenta</Button>
       <Button type="button" variant={mode === "register" ? "default" : "outline"} disabled={busy}
         onClick={() => { setMode("register"); setError(undefined); }}>Crear mi cuenta</Button>
-    </div>
+    </div>}
     <form className="space-y-4" onSubmit={async (event) => {
       event.preventDefault(); setError(undefined); setBusy(true);
       const form = new FormData(event.currentTarget);
       try {
         const result = await acceptInvitation(token, mode, {
-          email: form.get("email"), password: form.get("password"), full_name: form.get("full_name"),
-          birthdate: form.get("birthdate"), phone: form.get("phone") || undefined,
+          email: form.get("email"), password: form.get("password"),
           terms_accepted: form.get("terms_accepted") === "on",
+          ...(mode === "claim" ? {} : { full_name: form.get("full_name"),
+            birthdate: form.get("birthdate"), phone: form.get("phone") || undefined }),
         });
         if (result && "error" in result) setError(result.error);
         if (result && "pending" in result) setPending(true);
@@ -46,10 +51,10 @@ export function InvitationForm({ token, signedInEmail }: { token: string; signed
             <Input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+56912345678" /></div>
         </>}
         <div className="space-y-2"><Label htmlFor="password">Contraseña</Label>
-          <Input id="password" name="password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"}
-            minLength={mode === "register" ? 10 : undefined} maxLength={128} required />
-          {mode === "register" && <p className="text-sm text-muted-foreground">Mínimo 10 caracteres.</p>}</div>
-        {mode === "register" && <>
+          <Input id="password" name="password" type="password" autoComplete={creatingCredentials ? "new-password" : "current-password"}
+            minLength={creatingCredentials ? 10 : undefined} maxLength={128} required />
+          {creatingCredentials && <p className="text-sm text-muted-foreground">Mínimo 10 caracteres.</p>}</div>
+        {creatingCredentials && <>
           <details className="text-sm"><summary className="cursor-pointer underline">Uso y privacidad de tus datos</summary>
             <p className="mt-2">Asisteam usa tus datos de perfil y asistencia para gestionar tu participación en los grupos deportivos.
               Los administradores del grupo gestionan tus registros. Tus datos de contacto y fecha de nacimiento no se muestran a otros integrantes.</p>
@@ -61,7 +66,7 @@ export function InvitationForm({ token, signedInEmail }: { token: string; signed
         </>}
       </>}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <Button className="w-full" type="submit" disabled={busy}>{busy ? "Procesando…" : mode === "register" ? "Activar cuenta y aceptar" : mode === "login" ? "Iniciar sesión y aceptar" : "Aceptar invitación"}</Button>
+      <Button className="w-full" type="submit" disabled={busy}>{busy ? "Procesando…" : mode === "claim" ? "Activar mi cuenta y ver mi historial" : mode === "register" ? "Activar cuenta y aceptar" : mode === "login" ? "Iniciar sesión y aceptar" : "Aceptar invitación"}</Button>
     </form>
   </div>;
 }

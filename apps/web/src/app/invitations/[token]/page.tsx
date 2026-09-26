@@ -17,12 +17,14 @@ export default async function InvitationPage({ params }: {
   const { data: { user } } = await supabase.auth.getUser();
   return <main className="flex min-h-screen items-center justify-center p-4">
     <Card className="w-full max-w-lg">
-      <CardHeader><CardTitle>Aceptar invitación</CardTitle>
-        {preview?.data && <CardDescription>Te invitaron a {preview.data.group_name} como {MEMBERSHIP_ROLE_LABELS[preview.data.role]}.</CardDescription>}
+      <CardHeader><CardTitle>{preview.data?.managed_activation ? "Activar mi cuenta" : "Aceptar invitación"}</CardTitle>
+        {preview?.data && <CardDescription>{preview.data.managed_activation
+          ? `Activa tu acceso personal a ${preview.data.group_name}. Conservarás tus grupos y tu historial de asistencia.`
+          : `Te invitaron a ${preview.data.group_name} como ${MEMBERSHIP_ROLE_LABELS[preview.data.role]}.`}</CardDescription>}
       </CardHeader>
       <CardContent className="space-y-5">
         {preview.error ? <p role="alert">{preview.error}</p>
-          : <InvitationForm token={token} signedInEmail={user?.email} />}
+          : <InvitationForm token={token} signedInEmail={user?.email} managedActivation={preview.data?.managed_activation} />}
         <p className="text-sm"><Link href={user ? "/" : "/login"} className="underline">{user ? "Volver al inicio" : "Ir a iniciar sesión"}</Link></p>
       </CardContent>
     </Card>
