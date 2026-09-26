@@ -4,11 +4,12 @@ import { renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn(), eq: vi.fn(), maybeSingle: vi.fn(), cookie: vi.fn(), rpc: vi.fn() }));
 vi.mock("react", async (original) => ({ ...await original<typeof import("react")>(), cache: (fn: unknown) => fn }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
-vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, forbidden: () => { throw new Error("403"); }, useRouter: () => ({ refresh: vi.fn() }) }));
+vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, forbidden: () => { throw new Error("403"); }, useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/groups" }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
 import { getGroup, getMyGroups, groupHomePath } from "./groups";
 import GroupPage from "@/app/groups/[groupId]/page";
 import GroupSettingsPage from "@/app/groups/[groupId]/settings/page";
+import GroupLayout from "@/app/groups/[groupId]/layout";
 
 const a = "17000000-0000-4000-8000-000000000201";
 const b = "17000000-0000-4000-8000-000000000202";
@@ -91,6 +92,20 @@ describe("contexto de grupos", () => {
     expect(html).not.toContain("Aprobaciones pendientes");
     expect(mock.rpc).not.toHaveBeenCalled();
     await expect(GroupSettingsPage({ params: Promise.resolve({ groupId: b }) })).rejects.toThrow("403");
+  });
+  it("la navegación A → B → A muestra exclusivamente los permisos del grupo solicitado", async () => {
+    for (const group of [groups[0]!, groups[1]!, groups[0]!]) {
+      mock.maybeSingle.mockResolvedValue({ data: { ...group, invite_code: group.id === a ? "CODE0001" : null }, error: null });
+      const html = renderToStaticMarkup(await GroupLayout({ children: null, params: Promise.resolve({ groupId: group.id }) }));
+      expect(mock.eq).toHaveBeenLastCalledWith("id", group.id);
+      expect(html).toContain(`href="/groups/${group.id}/me/history"`);
+      expect(html).toContain(`href="/groups/${group.id}/activities"`);
+      for (const section of ["members", "invitations/new", "guardians", "members/pending", "settings"]) {
+        if (group.roles.includes("ADMIN")) expect(html).toContain(`href="/groups/${group.id}/${section}"`);
+        else expect(html).not.toContain(`href="/groups/${group.id}/${section}"`);
+      }
+      expect(html).not.toContain(`href="/groups/${group.id === a ? b : a}/settings"`);
+    }
   });
   it("ADMIN ve menores pendientes con estado de apoderado", async () => {
     mock.rpc.mockResolvedValue({ data: [{ membership_id: "pending-id", full_name: "Ana Soto", is_minor: true, guardian_ready: false, total_count: 1 }], error: null });

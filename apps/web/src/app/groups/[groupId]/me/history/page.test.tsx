@@ -81,3 +81,30 @@ it("solo ATHLETE accede, incluido multirol; ADMIN puro no lista terceros", async
   await expect(MyHistoryPage({ params, searchParams: Promise.resolve({}) })).rejects.toThrow("404");
   expect(mock.history).not.toHaveBeenCalled();
 });
+it("al navegar A → B → A reemplaza historial, porcentaje y enlaces por los del grupo activo", async () => {
+  const groupB = "42000000-0000-4000-8000-000000000202";
+  const otherHistory = structuredClone(historyFixture);
+  otherHistory.group_id = groupB;
+  otherHistory.membership_id = "42000000-0000-4000-8000-000000000302";
+  otherHistory.totals = { convened: 2, present: 1, late: 0, absent: 1, excused: 0, attendance_pct: 50, late_rate: 0 };
+  otherHistory.records = [{ ...otherHistory.records[0]!, id: "42000000-0000-4000-8000-000000000702", activity_id: "42000000-0000-4000-8000-000000000502", title: "Partido del equipo B", note: "Nota del equipo B" }];
+  mock.group.mockImplementation(async (id: string) => ({ id, name: id === groupB ? "Equipo B" : "Equipo A", roles: ["ATHLETE"] }));
+  mock.history.mockImplementation(async (id: string) => ({ history: id === groupB ? otherHistory : historyFixture, error: null }));
+  const view = render(<></>);
+  for (const history of [historyFixture, otherHistory, historyFixture]) {
+    view.rerender(await MyHistoryPage({ params: Promise.resolve({ groupId: history.group_id }), searchParams: Promise.resolve({}) }));
+    const other = history === historyFixture ? otherHistory : historyFixture;
+    expect(mock.history).toHaveBeenLastCalledWith(history.group_id, expect.any(Object));
+    expect(mock.types).toHaveBeenLastCalledWith(history.group_id, true);
+    const summary = within(screen.getByRole("region", { name: "Resumen de mi asistencia" }));
+    expect(summary.getByText(`${history.totals.attendance_pct!.toFixed(1)} %`)).toBeTruthy();
+    expect(summary.queryByText(`${other.totals.attendance_pct!.toFixed(1)} %`)).toBeNull();
+    expect(screen.getByText(history.records[0]!.note!)).toBeTruthy();
+    expect(screen.queryByText(other.records[0]!.title)).toBeNull();
+    expect(screen.queryByText(other.records[0]!.note!)).toBeNull();
+    expect(screen.getByRole("link", { name: history.records[0]!.title }).getAttribute("href"))
+      .toBe(`/groups/${history.group_id}/activities/${history.records[0]!.activity_id}`);
+    expect(screen.getByRole("button", { name: "Aplicar filtros" }).closest("form")?.getAttribute("action"))
+      .toBe(`/groups/${history.group_id}/me/history`);
+  }
+});
