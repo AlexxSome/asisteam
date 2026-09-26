@@ -37,7 +37,9 @@ export default async function MyHistoryPage({ params, searchParams }: {
       <p className="text-sm">Período: <time dateTime={history.period.from}>{history.period.from}</time> al <time dateTime={history.period.to}>{history.period.to}</time> · America/Santiago</p>
       <section aria-label="Resumen de mi asistencia" className="space-y-4 rounded-lg border p-4">
         <h2 className="text-lg font-semibold">Mi asistencia del período</h2>
-        <p className={`text-3xl font-semibold ${reportAttendanceTone(history.totals.attendance_pct)}`}>{reportPercentage(history.totals.attendance_pct)}</p>
+        {history.totals.convened === 0
+          ? <p className="text-lg font-semibold text-muted-foreground">Sin actividades en el período</p>
+          : <p className={`text-3xl font-semibold ${reportAttendanceTone(history.totals.attendance_pct)}`}>{reportPercentage(history.totals.attendance_pct)}</p>}
         <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {[["Convocadas", history.totals.convened], ["Presente", history.totals.present], ["Atrasado", history.totals.late], ["Ausente", history.totals.absent], ["Justificado", history.totals.excused], ["Tasa de atrasos", reportPercentage(history.totals.late_rate)]].map(([label, value]) => <div key={label}><dt className="text-sm text-muted-foreground">{label}</dt><dd className="font-semibold tabular-nums">{value}</dd></div>)}
         </dl>
