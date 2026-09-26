@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { groupAttendanceReportSchema, groupStatsSchema } from "@asisteam/core";
+import { attendanceHistorySchema, groupAttendanceReportSchema, groupStatsSchema } from "@asisteam/core";
 
 const suite = describe.skipIf(process.env.RUN_REPORT_INTEGRATION !== "1");
 const run = randomUUID().replaceAll("-", "");
@@ -12,6 +12,7 @@ const authIds: string[] = [];
 let service: SupabaseClient;
 let groupId: string;
 let membershipId: string;
+let teammateMembershipId: string;
 function sql(query: string) {
   return execFileSync("docker", ["exec", "-i", "supabase_db_asisteam", "psql", "-U", "postgres", "-d", "postgres", "-At", "-v", "ON_ERROR_STOP=1"], { input: query, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }).trim();
 }
@@ -21,9 +22,9 @@ suite("reportes con Auth y PostgREST real", () => {
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
     const options = { auth: { persistSession: false, autoRefreshToken: false } };
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
-    for (const name of ["owner", "athlete", "outsider"]) {
+    for (const name of ["owner", "athlete", "teammate", "outsider"]) {
       const password = `Synthetic-${randomUUID()}!`;
-      const created = await service.auth.admin.createUser({ email: email(name), password, email_confirm: true, user_metadata: { full_name: "Persona sintética", birthdate: "1990-01-01" } });
+      const created = await service.auth.admin.createUser({ email: email(name), password, email_confirm: true, user_metadata: { full_name: name === "teammate" ? "Tercero sintético" : "Persona sintética", birthdate: "1990-01-01" } });
       if (created.error) throw new Error("No se pudo preparar cuenta sintética");
       authIds.push(created.data.user.id);
       const client = createClient(config.API_URL, config.ANON_KEY, options);
@@ -33,6 +34,7 @@ suite("reportes con Auth y PostgREST real", () => {
     const group = await clients.owner!.rpc("create_group", { p_name: "Reportes integración", p_sport: "Tenis" });
     expect(group.error).toBeNull(); groupId = group.data;
     membershipId = sql(`insert into public.memberships(user_id,group_id,role,status,joined_at) select id,'${groupId}','ATHLETE','ACTIVE','2026-01-01' from public.users where email='${email("athlete")}' returning id;`).split("\n")[0]!;
+    teammateMembershipId = sql(`insert into public.memberships(user_id,group_id,role,status,joined_at) select id,'${groupId}','ATHLETE','ACTIVE','2026-01-01' from public.users where email='${email("teammate")}' returning id;`).split("\n")[0]!;
     sql(`update public.groups set created_at='2026-01-01' where id='${groupId}';
       insert into public.activities(group_id,activity_type_id,title,starts_at,ends_at,created_by)
       select '${groupId}','b2c3d4e5-0003-4b3c-8d4e-333333333333','Actividad sintética '||n,
@@ -41,7 +43,10 @@ suite("reportes con Auth y PostgREST real", () => {
     const activities = await clients.owner!.from("v_group_activities").select("id").eq("group_id", groupId).order("starts_at");
     expect(activities.error).toBeNull();
     for (const [index, activity] of activities.data!.entries()) {
-      expect((await clients.owner!.rpc("record_attendance_bulk", { p_activity_id: activity.id, p_records: [{ membership_id: membershipId, status: index < 5 ? "PRESENT" : index === 5 ? "LATE" : index === 6 ? "ABSENT" : "EXCUSED" }] })).error).toBeNull();
+      expect((await clients.owner!.rpc("record_attendance_bulk", { p_activity_id: activity.id, p_records: [
+        { membership_id: membershipId, status: index < 5 ? "PRESENT" : index === 5 ? "LATE" : index === 6 ? "ABSENT" : "EXCUSED" },
+        { membership_id: teammateMembershipId, status: "ABSENT", note: "Nota privada de tercero" },
+      ] })).error).toBeNull();
     }
   }, 30000);
   afterAll(async () => {
@@ -75,6 +80,11 @@ suite("reportes con Auth y PostgREST real", () => {
     const athlete = clients.athlete!;
     const originalToken = (await athlete.auth.getSession()).data.session!.access_token;
     expect((await athlete.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(403);
+    const ownBefore = await athlete.rpc("get_my_attendance_history", { p_group_id: groupId, p_period: "season" });
+    expect(ownBefore.error).toBeNull();
+    const own = attendanceHistorySchema.parse(ownBefore.data);
+    expect(own).toMatchObject({ membership_id: membershipId, totals: { convened: 8, present: 5, late: 1 } });
+    expect(JSON.stringify(own)).not.toContain("Nota privada de tercero");
     expect((await athlete.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } })).status).toBe(403);
     expect((await clients.outsider!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } })).status).toBe(404);
     expect((await clients.owner!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: "true" } })).status).toBe(400);
@@ -85,15 +95,28 @@ suite("reportes con Auth y PostgREST real", () => {
     expect(response.error).toBeNull();
     const report = groupStatsSchema.parse(response.data);
     expect(report.members[0]).toMatchObject({ membership_id: membershipId, convened: 8 });
+    expect(report.members[1]).toMatchObject({ membership_id: teammateMembershipId, full_name: "Tercero sintético", absent: 8, attendance_pct: 0 });
+    expect(report.totals).toMatchObject({ athletes: 2, convened: 16 });
+    expect(JSON.stringify(response.data)).not.toContain("Nota privada de tercero");
+    expect(JSON.stringify(response.data)).not.toContain(email("teammate"));
     expect(Object.keys(response.data.members[0]).sort()).toEqual(["membership_id", "full_name", "avatar_url", "convened", "present", "late", "absent", "excused", "attendance_pct", "late_rate"].sort());
+    expect(Object.keys(response.data.members[1]).sort()).toEqual(Object.keys(response.data.members[0]).sort());
+    const secondPage = await athlete.rpc("get_group_stats", { p_group_id: groupId, p_page: 2, p_page_size: 1 });
+    expect(secondPage.error).toBeNull();
+    expect(secondPage.data.members).toHaveLength(1);
+    expect(secondPage.data.members[0].membership_id).toBe(teammateMembershipId);
+    expect(secondPage.data.totals).toEqual(report.totals);
     const direct = await athlete.from("v_group_stats_members").select("*").eq("group_id", groupId);
-    expect(direct.error).toBeNull(); expect(direct.data).toHaveLength(1);
+    expect(direct.error).toBeNull(); expect(direct.data).toHaveLength(2);
     expect(Object.keys(direct.data![0]).sort()).toEqual([...Object.keys(response.data.members[0]), "group_id"].sort());
     expect((await athlete.rpc("get_group_attendance_report", { p_group_id: groupId })).status).toBe(403);
     expect((await clients.outsider!.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(404);
     expect((await clients.owner!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: false } })).error).toBeNull();
     expect((await athlete.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(403);
     expect((await athlete.from("v_group_stats_members").select("full_name").eq("group_id", groupId)).data).toEqual([]);
+    const ownAfter = await athlete.rpc("get_my_attendance_history", { p_group_id: groupId, p_period: "season" });
+    expect(ownAfter.error).toBeNull();
+    expect(ownAfter.data).toEqual(ownBefore.data);
     expect((await athlete.auth.getSession()).data.session!.access_token).toBe(originalToken);
   });
 
