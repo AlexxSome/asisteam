@@ -6,6 +6,7 @@ export const invitationRequestSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("preview"), token: invitationTokenSchema }).strict(),
   z.object({ action: z.literal("accept"), token: invitationTokenSchema }).strict(),
   z.object({ action: z.literal("register"), token: invitationTokenSchema, registration: z.unknown() }).strict(),
+  z.object({ action: z.literal("claim"), token: invitationTokenSchema, registration: z.unknown() }).strict(),
 ]);
 export const INVITATION_TERMS_VERSION = "2026-09-21";
 export const invitationErrorMessages: Record<string, string> = {
@@ -22,7 +23,7 @@ export const invitationErrorMessages: Record<string, string> = {
   rate_limit: "Demasiados intentos. Inténtalo de nuevo en una hora.",
   unavailable: "No pudimos procesar la invitación. Inténtalo nuevamente en unos minutos.",
 };
-export type InvitationPreview = { group_name: string; role: "ATHLETE" | "GUARDIAN" };
+export type InvitationPreview = { group_name: string; role: "ATHLETE" | "GUARDIAN"; managed_activation?: true };
 export type InvitationAcceptance = { group_id: string; membership_status: "ACTIVE" | "PENDING" | "INACTIVE" | "INVITED" };
 
 export const invitationFormSchema = z.object({

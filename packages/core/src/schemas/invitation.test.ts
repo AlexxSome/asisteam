@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { invitationFormSchema, invitationRequestSchema, invitationTokenSchema, sendInvitationRequestSchema, sentInvitationSchema } from "./invitation";
+import { managedClaimSchema } from "./register";
 describe("invitaciones", () => {
   it("solo admite tokens URL-safe con tamaño acotado", () => {
     expect(invitationTokenSchema.safeParse("a".repeat(32)).success).toBe(true);
@@ -10,6 +11,14 @@ describe("invitaciones", () => {
   it("el cliente no puede elegir rol, grupo ni destinatario", () => {
     expect(invitationRequestSchema.safeParse({ action: "accept", token: "a".repeat(32), role: "ADMIN" }).success).toBe(false);
     expect(invitationRequestSchema.safeParse({ action: "accept", token: "a".repeat(32), user_id: "victim" }).success).toBe(false);
+  });
+  it("el reclamo solo acepta credenciales y condiciones, sin reemplazar el perfil gestionado", () => {
+    const registration = { email: "managed@example.test", password: "Synthetic-password-43!", terms_accepted: true };
+    expect(managedClaimSchema.parse(registration)).toEqual(registration);
+    expect(invitationRequestSchema.safeParse({ action: "claim", token: "a".repeat(32), registration }).success).toBe(true);
+    for (const extra of [{ full_name: "Otra persona" }, { birthdate: "1990-01-01" }, { user_id: "victim" }, { terms_accepted: false }, { password: "short" }]) {
+      expect(managedClaimSchema.safeParse({ ...registration, ...extra }).success).toBe(false);
+    }
   });
   it("emisión normaliza email y admite únicamente los dos roles dirigidos", () => {
     expect(invitationFormSchema.parse({ email: "  Invitado@Example.test  ", role: "ATHLETE" })).toEqual({ email: "invitado@example.test", role: "ATHLETE" });

@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { invitationErrorMessages, invitationRegistrationSchema, invitationTokenSchema, loginSchema,
+import { invitationErrorMessages, invitationRegistrationSchema, invitationTokenSchema, loginSchema, managedClaimSchema,
   type InvitationAcceptance, type InvitationPreview } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 
@@ -37,16 +37,16 @@ export async function previewInvitation(token: string): Promise<Result<Invitatio
   return invoke({ action: "preview", token });
 }
 
-export async function acceptInvitation(token: string, mode: "session" | "login" | "register", input?: unknown): Promise<{ error: string } | { pending: true } | undefined> {
-  if (!invitationTokenSchema.safeParse(token).success || !["session", "login", "register"].includes(mode)) {
+export async function acceptInvitation(token: string, mode: "session" | "login" | "register" | "claim", input?: unknown): Promise<{ error: string } | { pending: true } | undefined> {
+  if (!invitationTokenSchema.safeParse(token).success || !["session", "login", "register", "claim"].includes(mode)) {
     return { error: invitationErrorMessages.invitation_not_available! };
   }
   const supabase = await createClient();
   let accepted: Result<InvitationAcceptance>;
-  if (mode === "register") {
-    const parsed = invitationRegistrationSchema.safeParse(input);
+  if (mode === "register" || mode === "claim") {
+    const parsed = (mode === "claim" ? managedClaimSchema : invitationRegistrationSchema).safeParse(input);
     if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? invitationErrorMessages.invalid_registration! };
-    accepted = await invoke({ action: "register", token, registration: parsed.data });
+    accepted = await invoke({ action: mode, token, registration: parsed.data });
     if (accepted.error) return { error: accepted.error };
     const { error } = await supabase.auth.signInWithPassword({ email: parsed.data.email, password: parsed.data.password });
     if (error) return { error: "Tu cuenta quedó activada. Inicia sesión desde el acceso habitual para entrar a tu grupo." };
@@ -67,5 +67,6 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
   if (!accepted.data) return { error: invitationErrorMessages.unavailable! };
   if (accepted.data.membership_status === "PENDING") return { pending: true };
   if (accepted.data.membership_status !== "ACTIVE") redirect("/groups");
+  if (mode === "claim") redirect(`/groups/${accepted.data.group_id}/me/history`);
   redirect(`/groups/${accepted.data.group_id}`);
 }

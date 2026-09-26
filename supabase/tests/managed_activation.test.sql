@@ -92,6 +92,27 @@ select throws_ok($$select public.issue_managed_activation('35000000-0000-4000-80
 select lives_ok($$select public.issue_managed_activation('35000000-0000-4000-8000-000000000002','35000000-0000-4000-8000-000000000201','35000000-0000-4000-8000-000000000312',repeat('a',64))$$,'apoderado autorizado despacha enlace solicitado por ADMIN');
 select lives_ok($$select public.issue_managed_activation('35000000-0000-4000-8000-000000000001','35000000-0000-4000-8000-000000000201','35000000-0000-4000-8000-000000000311',repeat('b',64))$$,'ADMIN envía adulto');
 select is((select activation_membership_id from public.invitations where token=repeat('a',64)),'35000000-0000-4000-8000-000000000312'::uuid,'activación ligada al historial existente');
+select is(public.invitation_context(repeat('a',64))->>'managed_activation','true','preview identifica el propósito de activación del enlace');
+
+-- HU-DEP-07: el titular solo aporta credenciales y condiciones. Ni el perfil
+-- ni la autorización se toman de metadatos enviados por el navegador.
+create function pg_temp.prepare_claim(n integer, token text, nonce text) returns void language sql as $$
+ select public.prepare_invitation_registration(token,encode(extensions.digest(nonce,'sha256'),'hex'),
+  'activation-'||n||'@example.test','{"managed_claim":true,"terms_version":"2026-09-21"}'::jsonb)
+$$;
+create function pg_temp.finish_claim(n integer, nonce text) returns void language sql as $$
+ insert into auth.users(id,email,raw_user_meta_data)
+ values(('35000000-0000-4000-8000-'||lpad((n+100)::text,12,'0'))::uuid,
+  'activation-'||n||'@example.test',jsonb_build_object('invitation_registration_nonce',nonce,
+    'full_name','Perfil suplantado','birthdate','1990-01-01'))
+$$;
+select throws_ok($$select pg_temp.prepare_claim(11,repeat('a',64),'claim-wrong-email')$$,
+ 'PT404','invitation_not_available','no permite reclamar una cuenta de otro destinatario');
+select throws_ok($$select pg_temp.prepare_claim(11,repeat('c',64),'claim-unknown')$$,
+ 'PT404','invitation_not_available','un token desconocido no prepara credenciales');
+select throws_ok($$select public.prepare_invitation_registration(repeat('b',64),repeat('d',64),
+ 'activation-11@example.test','{"managed_claim":true}'::jsonb)$$,
+ 'PT400','invalid_registration','reclamo requiere aceptar la versión de condiciones');
 
 create function pg_temp.register_managed(n integer, token text) returns void language plpgsql as $$
 declare nonce text := 'activation-test-'||n;
@@ -102,9 +123,19 @@ begin
   'activation-'||n||'@example.test',jsonb_build_object('invitation_registration_nonce',nonce));
 end $$;
 update public.consents set revoked_at=now() where consent_type='ACCOUNT_ACTIVATION_MINOR';
+select throws_ok($$select pg_temp.prepare_claim(12,repeat('a',64),'claim-missing-consent')$$,
+ 'PT422','guardian_consent_required','informa consentimiento faltante antes de crear Auth');
 select throws_ok($$select pg_temp.register_managed(12,repeat('a',64))$$,'P0001','guardian_consent_required','revocar después del envío bloquea credenciales');
 select is((select count(*) from auth.users where email='activation-12@example.test'),0::bigint,'Auth revierte ante consentimiento revocado');
 select is((select status from public.invitations where token=repeat('a',64)),'PENDING','rechazo no consume token');
+insert into public.consents(guardianship_id,consent_type,terms_version,channel)
+ values('35000000-0000-4000-8000-000000000401','ACCOUNT_ACTIVATION_MINOR','2026-09-21','IN_APP');
+select lives_ok($$select pg_temp.prepare_claim(12,repeat('a',64),'claim-revoked-race')$$,'prepara prueba con autorización vigente');
+update public.consents set revoked_at=now() where consent_type='ACCOUNT_ACTIVATION_MINOR' and revoked_at is null;
+select throws_ok($$select pg_temp.finish_claim(12,'claim-revoked-race')$$,
+ 'P0001','guardian_consent_required','la revocación entre preparación y Auth también bloquea credenciales');
+select is((select count(*) from auth.users where email='activation-12@example.test'),0::bigint,'la carrera revierte Auth completo');
+select public.cancel_invitation_registration(encode(extensions.digest('claim-revoked-race','sha256'),'hex'));
 insert into public.consents(guardianship_id,consent_type,terms_version,channel)
  values('35000000-0000-4000-8000-000000000401','ACCOUNT_ACTIVATION_MINOR','2026-09-21','IN_APP');
 -- La cuenta puede activarse sin aprobar/reactivar memberships por accidente.
@@ -112,8 +143,16 @@ update public.memberships set status='PENDING' where id='35000000-0000-4000-8000
 update public.memberships set status='INACTIVE' where id='35000000-0000-4000-8000-000000000311';
 truncate original_memberships;
 insert into original_memberships select to_jsonb(m) from public.memberships m;
-select lives_ok($$select pg_temp.register_managed(12,repeat('a',64))$$,'menor consentido activa cuenta existente');
-select lives_ok($$select pg_temp.register_managed(11,repeat('b',64))$$,'adulto activa sin apoderado');
+select pg_temp.prepare_claim(12,repeat('a',64),'claim-minor');
+select pg_temp.prepare_claim(11,repeat('b',64),'claim-adult');
+update public.users set full_name='Perfil vigente del menor',phone='+56912345678'
+ where id='35000000-0000-4000-8000-000000000012';
+select lives_ok($$select pg_temp.finish_claim(12,'claim-minor')$$,'menor consentido activa cuenta existente');
+select lives_ok($$select pg_temp.finish_claim(11,'claim-adult')$$,'adulto activa sin apoderado');
+select is((select full_name||':'||phone from public.users where id='35000000-0000-4000-8000-000000000012'),
+ 'Perfil vigente del menor:+56912345678','conserva perfil vigente aunque ADMIN lo editó después de preparar el reclamo');
+select is((select count(*) from app_private.invitation_registrations where token_hash in (repeat('a',64),repeat('b',64))),
+ 0::bigint,'la aceptación limpia las pruebas efímeras');
 select is((select count(*) from public.users where id in ('35000000-0000-4000-8000-000000000011','35000000-0000-4000-8000-000000000012') and account_status='ACTIVE'),2::bigint,'mantiene IDs y activa ambas cuentas');
 select results_eq('select to_jsonb(m) from public.memberships m order by m.id','select row from original_memberships order by row->>''id''','todas las memberships, estados y fechas quedan intactos');
 select results_eq('select to_jsonb(g) from public.guardianships g order by g.id','select row from original_guardianships order by row->>''id''','guardian conserva vínculo y visibilidad');

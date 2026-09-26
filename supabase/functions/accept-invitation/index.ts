@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { timingSafeEqual } from "node:crypto";
-import { invitationRegistrationSchema } from "../../../packages/core/src/schemas/register.ts";
+import { invitationRegistrationSchema, managedClaimSchema } from "../../../packages/core/src/schemas/register.ts";
 import { INVITATION_TERMS_VERSION, invitationErrorMessages, invitationRequestSchema } from "../../../packages/core/src/schemas/invitation.ts";
 
 const encoder = new TextEncoder();
@@ -59,24 +59,33 @@ Deno.serve(async (request: Request) => {
     const { data: context, error: contextError } = await admin.rpc("invitation_context", { p_token_hash: tokenHash });
     if (contextError || !context) return fail("unavailable");
     if (context.error) return fail(context.error);
-    if (input.action === "preview") return json({ group_name: context.group_name, role: context.role });
+    if (input.action === "preview") return json({ group_name: context.group_name, role: context.role,
+      ...(context.managed_activation ? { managed_activation: true } : {}) });
 
-    if (input.action === "register") {
-      const registration = invitationRegistrationSchema.safeParse(input.registration);
+    if (input.action === "register" || input.action === "claim") {
+      const registration = (input.action === "claim" ? managedClaimSchema : invitationRegistrationSchema).safeParse(input.registration);
       if (!registration.success) return fail("invalid_registration");
       if (!context.email || registration.data.email.toLowerCase() !== context.email.toLowerCase()
         || !["INVITED", "MANAGED"].includes(context.account_status)) return fail("registration_failed");
-      const { full_name, email, password, birthdate, phone } = registration.data;
+      const { email, password } = registration.data;
+      // El perfil gestionado se obtiene bajo bloqueo en Postgres. No viaja
+      // por el formulario ni puede reemplazarse al elegir una contraseña.
+      const profile = input.action === "claim" ? { managed_claim: true, terms_version: INVITATION_TERMS_VERSION }
+        : (() => {
+          const { full_name, birthdate, phone } = invitationRegistrationSchema.parse(registration.data);
+          return { full_name, birthdate, phone: phone ?? null, terms_version: INVITATION_TERMS_VERSION };
+        })();
       const nonce = Array.from(crypto.getRandomValues(new Uint8Array(32)), byte => byte.toString(16).padStart(2, "0")).join("");
       const nonceHash = await hash(nonce);
       const { error: prepareError } = await admin.rpc("prepare_invitation_registration", {
         p_token_hash: tokenHash, p_nonce_hash: nonceHash, p_email: email,
-        p_registration: { full_name, birthdate, phone: phone ?? null, terms_version: INVITATION_TERMS_VERSION },
+        p_registration: profile,
       });
-      if (prepareError) return fail("unavailable");
+      if (prepareError) return fail(["invitation_not_available", "guardian_consent_required", "invalid_registration"].includes(prepareError.message)
+        ? prepareError.message : "unavailable");
       const { data: created, error } = await admin.auth.admin.createUser({
         email, password, email_confirm: true,
-        user_metadata: { full_name, birthdate, phone: phone ?? null, invitation_registration_nonce: nonce },
+        user_metadata: { invitation_registration_nonce: nonce },
       });
       await admin.rpc("cancel_invitation_registration", { p_nonce_hash: nonceHash });
       if (error) {

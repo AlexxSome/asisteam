@@ -75,3 +75,8 @@ export const invitationRegistrationSchema = registerSchema.extend({
   terms_accepted: z.literal(true, { errorMap: () => ({ message: "Debes aceptar las condiciones de uso y privacidad" }) }),
 });
 export type InvitationRegistrationInput = z.infer<typeof invitationRegistrationSchema>;
+
+// Reclamar un perfil existente no permite reemplazar sus datos de identidad.
+export const managedClaimSchema = invitationRegistrationSchema.pick({
+  email: true, password: true, terms_accepted: true,
+}).strict();
