@@ -13,6 +13,11 @@ describe("cambio de grupo", () => {
     expect(switchedGroupPath(`/groups/${a}/settings`, b, ["ATHLETE"])).toBe(`/groups/${b}`);
     expect(switchedGroupPath(`/groups/${a}/settings/visibility`, b, ["GUARDIAN"])).toBe(`/groups/${b}`);
   });
+  it("conserva historial propio solo cuando el nuevo grupo tiene rol ATHLETE", () => {
+    expect(switchedGroupPath(`/groups/${a}/me/history`, b, ["ATHLETE", "ADMIN"])).toBe(`/groups/${b}/me/history`);
+    expect(switchedGroupPath(`/groups/${a}/me/history`, b, ["GUARDIAN"])).toBe(`/groups/${b}`);
+    expect(switchedGroupPath(`/groups/${a}/me/history`, b, ["ADMIN"])).toBe(`/groups/${b}`);
+  });
   it("nunca arrastra IDs de recursos, querystrings o rutas arbitrarias", () => {
     for (const path of [`/groups/${a}/activities/private-id`, `/groups/${a}/members/private-id`, "/groups", `/groups/${a}/settings?private=id`]) {
       expect(switchedGroupPath(path, b, ["ADMIN"])).toBe(`/groups/${b}`);
