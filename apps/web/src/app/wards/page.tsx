@@ -12,7 +12,7 @@ export default async function WardsPage({ searchParams }: {
   return <main className="mx-auto max-w-3xl space-y-6 p-4 py-10">
     <header className="space-y-2">
       <h1 className="text-2xl font-semibold">Mis pupilos</h1>
-      <p className="text-muted-foreground">Elige un deportista para ver su perfil deportivo y sus grupos.</p>
+      <p className="text-muted-foreground">Elige un deportista para ver su perfil deportivo, sus actividades y sus grupos.</p>
     </header>
     {wards.length === 0 ? <p>{page === 1
       ? "Aún no tienes deportistas a tu cargo; pide al administrador del grupo que te vincule."
@@ -23,6 +23,7 @@ export default async function WardsPage({ searchParams }: {
           <h2 className="break-words text-lg font-semibold">{ward.full_name}</h2>
         </Link>
         <p className="text-sm text-muted-foreground">{ward.age} años</p>
+        <Link href={`/wards/${ward.athlete_user_id}#agenda`} prefetch={false} className="inline-block min-h-11 py-2 underline">Ver actividades</Link>
         <ul className="space-y-1 text-sm" aria-label={`Grupos de ${ward.full_name}`}>
           {ward.groups.map((group) => <li key={group.group_id} className="break-words">{group.name}
             {group.membership_status === "PENDING" && <span className="text-muted-foreground"> · Pendiente de activación</span>}
