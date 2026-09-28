@@ -21,6 +21,7 @@ export default async function WardPage({ params }: { params: Promise<{ athleteUs
         <Link href={`/groups/${group.group_id}`} prefetch={false} className="block break-words py-2 text-lg font-semibold underline">{group.name}</Link>
         {group.sport && <p>{group.sport}</p>}
         <p className="text-sm text-muted-foreground">{group.membership_status === "PENDING" ? "Pendiente de activación" : "Membresía activa"}</p>
+        {group.membership_status === "ACTIVE" && <Link href={`/groups/${group.group_id}/wards/${ward.athlete_user_id}/history`} prefetch={false} className="inline-block min-h-11 py-2 underline">Ver historial de asistencia</Link>}
       </li>)}</ul>
     </section>
   </main>;

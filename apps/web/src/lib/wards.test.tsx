@@ -55,6 +55,8 @@ describe("Mis pupilos y perfil deportivo", () => {
     expect(html).toContain("Pupilo sintético");
     expect(html).toContain("17 años");
     expect(html).toContain(`href="/groups/${groups[0]!.group_id}"`);
+    expect(html).toContain(`href="/groups/${groups[0]!.group_id}/wards/${id}/history"`);
+    expect(html).not.toContain(`/groups/${groups[1]!.group_id}/wards/${id}/history`);
     expect(html).toContain('href="/wards"');
   });
   it("sin vínculos presenta el estado vacío canónico", async () => {

@@ -1,11 +1,11 @@
 import { REPORT_PERIOD_LABELS, activityTypeLabel, type ReportFilter, type AttendancePeriodFilter } from "@asisteam/core";
 
-export function ReportFilters({ groupId, filter, types, personal = false }: {
+export function ReportFilters({ groupId, filter, types, personal = false, athleteUserId }: {
   groupId: string; filter: AttendancePeriodFilter & Partial<Pick<ReportFilter, "sort" | "include_inactive">>; personal?: boolean;
-  types: { id: string; name: string; group_id: string | null; is_active: boolean | null }[];
+  types: { id: string; name: string; group_id: string | null; is_active: boolean | null }[]; athleteUserId?: string;
 }) {
   const input = "mt-1 w-full rounded-md border bg-background p-2";
-  const action = `/groups/${groupId}/${personal ? "me/history" : "reports"}`;
+  const action = `/groups/${groupId}/${athleteUserId ? `wards/${athleteUserId}/history` : personal ? "me/history" : "reports"}`;
   return <form action={action} method="get" className="space-y-4 rounded-lg border p-4">
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <label>Período<select name="period" defaultValue={filter.period} className={input}>
