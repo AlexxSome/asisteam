@@ -79,3 +79,41 @@ describe("HTTP 403 acotado a la toma de asistencia", () => {
     expect((await middleware(request(path))).status).toBe(404);
   });
 });
+
+describe("HTTP 404 del perfil de pupilos", () => {
+  it("lista sin cache y verifica el vínculo antes de servir un perfil", async () => {
+    expect((await middleware(request("/wards"))).headers.get("Cache-Control")).toContain("no-store");
+    expect(mock.from).not.toHaveBeenCalled();
+    mock.maybeSingle.mockResolvedValue({ data: { athlete_user_id: groupId }, error: null });
+    const response = await middleware(request(`/wards/${groupId}`));
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toContain("no-store");
+    expect(mock.from).toHaveBeenCalledWith("v_my_wards");
+  });
+  it("ajeno, inexistente, vínculo inactivo y error conservan el mismo 404 sin PII", async () => {
+    const bodies = [];
+    for (const error of [null, { message: "secret" }]) {
+      mock.maybeSingle.mockResolvedValue({ data: null, error });
+      for (const id of [groupId, "46000000-0000-4000-8000-000000000999", "invalid", "private.png"]) {
+        const response = await middleware(request(`/wards/${id}`));
+        expect(response.status).toBe(404);
+        expect(response.headers.get("Cache-Control")).toContain("no-store");
+        expect(response.cookies.get("refreshed-session")?.httpOnly).toBe(true);
+        bodies.push(await response.text());
+      }
+    }
+    expect(new Set(bodies).size).toBe(1);
+    expect(bodies[0]).not.toContain("secret");
+    expect(bodies[0]).not.toContain(groupId);
+  });
+  it("sin sesión no consulta ni revela el pupilo", async () => {
+    mock.getUser.mockResolvedValue({ data: { user: null } });
+    expect((await middleware(request(`/wards/${groupId}`))).status).toBe(404);
+    expect(mock.from).not.toHaveBeenCalled();
+  });
+  it("pierde el acceso en la siguiente petición tras cumplir 18 o revocar vínculo", async () => {
+    mock.maybeSingle.mockResolvedValueOnce({ data: { athlete_user_id: groupId } }).mockResolvedValueOnce({ data: null });
+    expect((await middleware(request(`/wards/${groupId}`))).status).toBe(200);
+    expect((await middleware(request(`/wards/${groupId}`))).status).toBe(404);
+  });
+});

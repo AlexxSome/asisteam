@@ -36,7 +36,26 @@ export async function middleware(request: NextRequest) {
   // No quitar: dispara la validación/refresco del token.
   const { data: { user } } = await supabase.auth.getUser();
 
+  const missingResource = () => {
+    const missing = new NextResponse('<!doctype html><html lang="es"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><title>No encontrado · Asisteam</title><body><main><h1>No encontrado</h1><p>La página solicitada no está disponible.</p><a href="/">Volver al inicio</a></main></body></html>', {
+      status: 404, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store" },
+    });
+    response.cookies.getAll().forEach((cookie) => missing.cookies.set(cookie));
+    return missing;
+  };
+
   const segments = request.nextUrl.pathname.split("/");
+  if (segments[1] === "wards") {
+    response.headers.set("Cache-Control", "private, no-store");
+    const athleteUserId = segments[2];
+    if (athleteUserId) {
+      const { data: ward, error } = user && isGroupId(athleteUserId)
+        ? await supabase.from("v_my_wards").select("athlete_user_id").eq("athlete_user_id", athleteUserId).maybeSingle()
+        : { data: null, error: null };
+      // Revalidar antes de streaming: mismo HTTP 404 para ajeno, adulto o inexistente.
+      if (error || !ward) return missingResource();
+    }
+  }
   if (segments[1] === "groups" && segments[2] && segments[2] !== "new") {
     const groupId = segments[2];
     const { data: group } = user && isGroupId(groupId)
@@ -46,11 +65,7 @@ export async function middleware(request: NextRequest) {
     if (!group || (adminRoute && !group.roles?.includes("ADMIN"))) {
       // Antes de que Next empiece streaming: notFound() en un layout puede
       // responder 200 después de enviar encabezados. Aquí el HTTP siempre es 404.
-      const missing = new NextResponse('<!doctype html><html lang="es"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><title>No encontrado · Asisteam</title><body><main><h1>No encontrado</h1><p>La página solicitada no está disponible.</p><a href="/">Volver al inicio</a></main></body></html>', {
-        status: 404, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store" },
-      });
-      response.cookies.getAll().forEach((cookie) => missing.cookies.set(cookie));
-      return missing;
+      return missingResource();
     }
     const attendanceRoute = segments[3] === "activities" && !!segments[4] && segments[5] === "attendance";
     if (attendanceRoute && !group.roles?.includes("ADMIN")) {
@@ -67,5 +82,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/groups/:path*", "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  matcher: ["/groups/:path*", "/wards/:path*", "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };
