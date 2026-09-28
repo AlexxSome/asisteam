@@ -13,11 +13,16 @@ export function AccountActivationConsent({ requestId, fullName, relationship, ap
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>();
   const [done, setDone] = useState<string>();
+  const [approvalRecorded, setApprovalRecorded] = useState(false);
+  const isApproved = approved || approvalRecorded;
   async function review(approve: boolean) {
     setPending(true); setError(undefined);
     try {
       const result = await reviewManagedActivation({ request_id: requestId, accepted: approve });
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) {
+        if (result.approvalRecorded) setApprovalRecorded(true);
+        setError(result.error.message);
+      }
       else {
         setDone(approve ? "Consentimiento registrado e invitación enviada. Tu pupilo debe crear su contraseña y aceptar las condiciones para activar su cuenta."
           : "Solicitud rechazada. La cuenta de tu pupilo sigue gestionada.");
@@ -31,12 +36,12 @@ export function AccountActivationConsent({ requestId, fullName, relationship, ap
     {done ? <p role="status">{done}</p> : <>
       <p>El administrador solicita que tu pupilo use una cuenta con email y contraseña propios. Al autorizar, se enviará un enlace a su email registrado. Su historial y tu acceso como apoderado se conservan hasta que cumpla 18 años.</p>
       <p className="text-sm text-muted-foreground">Esta autorización es específica para activar la cuenta. Versión: {INVITATION_TERMS_VERSION}.</p>
-      {approved ? <p>Ya autorizaste la activación. Puedes volver a enviar la invitación si tu pupilo aún no la recibió.</p> :
+      {isApproved ? <p>Ya autorizaste la activación. Puedes volver a enviar la invitación si tu pupilo aún no la recibió.</p> :
         <label className="flex min-h-11 items-start gap-3"><input type="checkbox" className="mt-1 size-5 shrink-0" disabled={pending} checked={accepted} onChange={event => setAccepted(event.target.checked)} />Autorizo que {fullName} active su cuenta con credenciales propias.</label>}
       {error && <p role="alert" className="text-destructive">{error}</p>}
       <div className="flex flex-wrap gap-3">
-        <button disabled={pending || (!accepted && !approved)} onClick={() => review(true)} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">{pending ? "Procesando…" : approved ? "Enviar de nuevo la activación" : "Autorizar y enviar activación"}</button>
-        {!approved && <button disabled={pending} onClick={() => review(false)} className="min-h-11 rounded-md border px-4 py-2">Rechazar solicitud</button>}
+        <button disabled={pending || (!accepted && !isApproved)} onClick={() => review(true)} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">{pending ? "Procesando…" : isApproved ? "Enviar de nuevo la activación" : "Autorizar y enviar activación"}</button>
+        {!isApproved && <button disabled={pending} onClick={() => review(false)} className="min-h-11 rounded-md border px-4 py-2">Rechazar solicitud</button>}
       </div>
     </>}
   </section>;

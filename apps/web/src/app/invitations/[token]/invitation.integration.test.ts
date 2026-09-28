@@ -3,6 +3,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { attendanceHistorySchema } from "@asisteam/core";
+import { createSendInvitationHandler } from "../../../../../../supabase/functions/send-invitation/handler";
 
 // Solo fixtures sintéticos contra Supabase local y Edge servido con el mismo
 // INVITATION_PROXY_SECRET. Nunca acepta endpoints remotos.
@@ -51,21 +52,23 @@ function historySnapshot(userId: string) {
       join public.memberships m on m.id=a.membership_id where m.user_id='${userId}'));`);
 }
 
-async function managedFixture(minor: boolean) {
+async function managedFixture(minor: boolean, needsReview = false) {
   const id = randomUUID(); const membershipId = randomUUID(); const token = randomUUID();
   const guardianId = minor ? randomUUID() : undefined;
-  const address = email(minor ? "managed-minor" : "managed-adult");
-  const ip = minor ? "192.0.2.201" : "192.0.2.200";
+  const address = email(`${minor ? "managed-minor" : "managed-adult"}-${id}`);
+  const ip = `192.0.2.${200 + ips.length}`;
   ips.push(ip);
   sql(`insert into public.users(id,full_name,email,phone,birthdate,account_status)
     values('${id}','Perfil gestionado conservado','${address}','+56912345678',${minor ? "(current_date-interval '15 years')::date" : "date '1990-01-01'"},'MANAGED');
     insert into public.memberships(id,user_id,group_id,role,status,joined_at)
     values('${membershipId}','${id}','${groupId}','ATHLETE','${minor ? "PENDING" : "ACTIVE"}',now()-interval '90 days');`);
+  const guardianUserId = needsReview ? sql(`select id from public.users where email='${email("guardian")}';`) : existingProfileId;
   if (guardianId) sql(`insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship)
-    values('${guardianId}','${existingProfileId}','${id}','Tutor');
+    values('${guardianId}','${guardianUserId}','${id}','Tutor');
     insert into public.consents(guardianship_id,consent_type,terms_version,channel) values
-    ('${guardianId}','DATA_PROCESSING_MINOR','2026-09-21','IN_APP'),
-    ('${guardianId}','ACCOUNT_ACTIVATION_MINOR','2026-09-21','IN_APP');
+    ('${guardianId}','DATA_PROCESSING_MINOR','2026-09-21','IN_APP');
+    ${needsReview ? "" : `insert into public.consents(guardianship_id,consent_type,terms_version,channel)
+      values('${guardianId}','ACCOUNT_ACTIVATION_MINOR','2026-09-21','IN_APP');`}
     update public.memberships set status='ACTIVE' where id='${membershipId}';`);
   const activityId = randomUUID();
   sql(`insert into public.activities(id,group_id,activity_type_id,title,starts_at,ends_at,created_by)
@@ -73,9 +76,11 @@ async function managedFixture(minor: boolean) {
     now()-interval '2 days',now()-interval '47 hours','${existingProfileId}');
     insert into public.attendance_records(activity_id,membership_id,status,note,recorded_by)
     values('${activityId}','${membershipId}','LATE','Historial registrado por ADMIN','${existingProfileId}');`);
-  const issued = await admin.rpc("issue_managed_activation", { p_auth_user_id: existingAuthId, p_group_id: groupId,
-    p_membership_id: membershipId, p_token_hash: digest(token) });
-  expect(issued.error).toBeNull();
+  if (!needsReview) {
+    const issued = await admin.rpc("issue_managed_activation", { p_auth_user_id: existingAuthId, p_group_id: groupId,
+      p_membership_id: membershipId, p_token_hash: digest(token) });
+    expect(issued.error).toBeNull();
+  }
   return { id, membershipId, token, guardianId, address, ip,
     request: { action: "claim", token, registration: { email: address, password, terms_accepted: true } } };
 }
@@ -142,6 +147,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     const groups = fixtureGroupIds.map(id => `'${id}'`).join(",");
     const users = `select id from public.users where email like 'issue18-${run}-%@example.test'`;
     sql(`begin; set local session_replication_role=replica;
+      delete from app_private.managed_activation_requests where membership_id in (select id from public.memberships where group_id in (${groups}));
       delete from app_private.managed_member_enrollments where membership_id in (select id from public.memberships where group_id in (${groups}));
       delete from app_private.join_code_attempts where user_id in (${users});
       delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id in (${users}));
@@ -356,5 +362,70 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     const guardian = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
     expect((await guardian.auth.signInWithPassword({ email: email("existing"), password })).error).toBeNull();
     expect((await guardian.from("v_attendance_own").select("status").eq("membership_id", fixture.membershipId)).data).toEqual([{ status: "LATE" }]);
+  });
+  it("HU-APO-07: rechazo autenticado registra timestamp y bloquea un enlace previo sin alterar historial", async () => {
+    const fixture = await managedFixture(true, true);
+    const before = historySnapshot(fixture.id);
+    expect((await owner.rpc("request_managed_activation", { p_group_id: groupId, p_membership_id: fixture.membershipId })).data).toBe("CONSENT_PENDING");
+    const listed = await existingGuardian.rpc("list_managed_activation_requests", { p_group_id: groupId });
+    expect(listed.error).toBeNull();
+    const request = listed.data.find((row: { membership_id: string }) => row.membership_id === fixture.membershipId);
+    expect(request.status).toBe("PENDING");
+    expect((await owner.rpc("review_managed_activation", { p_request_id: request.request_id, p_accepted: true })).status).toBe(404);
+    expect((await existingGuardian.rpc("review_managed_activation", { p_request_id: request.request_id, p_accepted: false })).error).toBeNull();
+    expect(sql(`select status||':'||(resolved_at is not null and resolved_at >= requested_at) from app_private.managed_activation_requests where id='${request.request_id}';`)).toBe("REJECTED:true");
+    expect((await existingGuardian.rpc("review_managed_activation", { p_request_id: request.request_id, p_accepted: true })).status).toBe(409);
+    expect((await admin.rpc("issue_managed_activation", { p_auth_user_id: existingAuthId, p_group_id: groupId,
+      p_membership_id: fixture.membershipId, p_token_hash: digest(fixture.token) })).error?.message).toBe("guardian_consent_required");
+    // Enlace heredado: abrirlo no equivale a permiso para crear credenciales.
+    sql(`insert into public.invitations(group_id,email,invited_user_id,role,token,created_by,activation_membership_id)
+      values('${groupId}','${fixture.address}','${fixture.id}','ATHLETE','${digest(fixture.token)}','${existingProfileId}','${fixture.membershipId}');`);
+    const blocked = await invoke(fixture.request, undefined, fixture.ip);
+    expect(blocked.status).toBe(422);
+    expect(blocked.body.error.code).toBe("guardian_consent_required");
+    expect(sql(`select account_status||':'||(auth_user_id is null) from public.users where id='${fixture.id}';`)).toBe("MANAGED:true");
+    expect(sql(`select count(*) from auth.users where email='${fixture.address}';`)).toBe("0");
+    expect(sql(`select count(*) from public.consents where guardianship_id='${fixture.guardianId}' and consent_type='ACCOUNT_ACTIVATION_MINOR';`)).toBe("0");
+    expect(historySnapshot(fixture.id)).toBe(before);
+  });
+  it("HU-APO-07: apoderado aprueba, recibe confirmación de envío y el menor activa conservando historial y vínculo", async () => {
+    const fixture = await managedFixture(true, true);
+    const before = historySnapshot(fixture.id);
+    expect((await owner.rpc("request_managed_activation", { p_group_id: groupId, p_membership_id: fixture.membershipId })).data).toBe("CONSENT_PENDING");
+    const listed = await existingGuardian.rpc("list_managed_activation_requests", { p_group_id: groupId });
+    expect(listed.error).toBeNull();
+    const request = listed.data.find((row: { membership_id: string }) => row.membership_id === fixture.membershipId);
+    const review = { p_request_id: request.request_id, p_accepted: true };
+    expect((await existingGuardian.rpc("review_managed_activation", review)).data).toEqual({ group_id: groupId, membership_id: fixture.membershipId });
+    const evidence = () => sql(`select jsonb_build_object('status',r.status,'resolved_at',r.resolved_at,'consent',to_jsonb(c))
+      from app_private.managed_activation_requests r join public.consents c on c.id=r.consent_id where r.id='${request.request_id}';`);
+    const approved = evidence();
+    expect(JSON.parse(approved)).toMatchObject({ status: "APPROVED", resolved_at: expect.any(String),
+      consent: { guardianship_id: fixture.guardianId, consent_type: "ACCOUNT_ACTIVATION_MINOR", channel: "IN_APP", terms_version: "2026-09-21", revoked_at: null } });
+    expect((await existingGuardian.rpc("review_managed_activation", review)).error).toBeNull();
+    expect(evidence()).toBe(approved);
+    expect(sql(`select account_status from public.users where id='${fixture.id}';`)).toBe("MANAGED");
+    let sentToken: string | undefined;
+    const handler = createSendInvitationHandler({ client: admin, resendApiKey: "synthetic", emailFrom: "Asisteam <invitations@example.test>",
+      webUrl: "http://localhost:3000", allowedOrigins: [], sendEmail: async (_url, init) => {
+        const message = JSON.parse(init!.body as string);
+        expect(message.to).toEqual([fixture.address]);
+        sentToken = message.text.match(/\/invitations\/([a-f0-9]{64})/)?.[1];
+        return new Response(JSON.stringify({ id: randomUUID() }));
+      } });
+    const sent = await handler(new Request("http://local.test/send-invitation", { method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${guardianJwt}` },
+      body: JSON.stringify({ action: "activate", group_id: groupId, membership_id: fixture.membershipId }) }));
+    expect(sent.status).toBe(200);
+    expect(sentToken).toMatch(/^[a-f0-9]{64}$/);
+    expect(await invoke({ ...fixture.request, token: sentToken }, undefined, fixture.ip))
+      .toEqual({ status: 200, body: { group_id: groupId, membership_status: "ACTIVE" } });
+    expect(sql(`select id||':'||account_status from public.users where email='${fixture.address}';`)).toBe(`${fixture.id}:ACTIVE`);
+    expect(historySnapshot(fixture.id)).toBe(before);
+    expect(evidence()).toBe(approved);
+    const athlete = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+    expect((await athlete.auth.signInWithPassword({ email: fixture.address, password })).error).toBeNull();
+    expect((await existingGuardian.from("v_attendance_own").select("status").eq("membership_id", fixture.membershipId)).data).toEqual([{ status: "LATE" }]);
+    expect((await invoke({ ...fixture.request, token: sentToken }, undefined, fixture.ip)).status).toBe(404);
   });
 });
