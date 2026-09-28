@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getGroup, getMyGroups } from "@/lib/groups";
 import { isGroupId } from "@/lib/group-routing";
+import { getWard } from "@/lib/wards";
 
 const activityColumns = "id, group_id, activity_type_id, title, description, location, starts_at, ends_at, activity_type_name, activity_type_color, is_system_type, recurrence_rule, recurrence_source_id" as const;
 export const ACTIVITY_PAGE_SIZE = 50;
@@ -42,6 +43,21 @@ export async function getMyActivities(page = 1, period: ActivityPeriod = "upcomi
   const names = new Map(groups.map((group) => [group.id, group.name]));
   return {
     ...result,
+    activities: result.activities.map((activity) => ({ ...activity, group_name: names.get(activity.group_id ?? "") ?? "" })),
+  };
+}
+
+export async function getWardActivities(athleteUserId: string, page = 1, period: ActivityPeriod = "upcoming") {
+  const ward = await getWard(athleteUserId);
+  // C10: la agenda depende de las membresías activas de este pupilo,
+  // no de todos los grupos a los que pertenece su apoderado.
+  const groups = ward.groups.flatMap((group) => group.membership_status === "ACTIVE" && group.group_id
+    ? [{ id: group.group_id, name: group.name }] : []);
+  const result = await loadActivities(groups.map((group) => group.id), page, period);
+  const names = new Map(groups.map((group) => [group.id, group.name]));
+  return {
+    ...result,
+    ward,
     activities: result.activities.map((activity) => ({ ...activity, group_name: names.get(activity.group_id ?? "") ?? "" })),
   };
 }
