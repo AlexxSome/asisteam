@@ -192,6 +192,8 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 
 La web ofrece `/groups/:groupId/me/history` desde «Mi asistencia» y `/me/history` como acceso directo con selección entre los grupos donde el usuario es ATHLETE. Lista y totales se consultan juntos con el mismo filtro; la paginación conserva período, fechas y tipos.
 
+**Historial del pupilo (HU-APO-03, #47).** `rpc/get_ward_attendance_history(p_group_id, p_athlete_user_id, p_period = 'month', p_from, p_to, p_activity_type_ids = '{}', p_page = 1, p_page_size = 50)` devuelve el mismo contrato estricto de historial individual que la consulta propia. Resuelve la membership ATHLETE ACTIVE del pupilo y exige membership GUARDIAN ACTIVE del solicitante en ese grupo, vínculo ACTIVE y minoría de edad vigente en Chile. Reevalúa los permisos en cada lectura, incluso antes del job de mayoría de edad y con multirol ADMIN; los toggles no modifican este acceso. `v_ward_attendance_history` proyecta únicamente los registros autorizados del pupilo (incluidas sus notas), excluyendo futuras, preingreso y actividades sin registro. Reutiliza límites de período y métrica canónica SQL, con totales completos independientes de la página. No amplía `v_athlete_attendance_history`, que sigue siendo exclusivamente propia. Sin sesión devuelve 401; pupilo no vinculado, inactivo, PENDING, adulto, grupo no compartido o identidad inexistente devuelven el mismo 404 `attendance_history_not_found`; filtros inválidos, 400. La web accede desde el perfil del pupilo a `/groups/:groupId/wards/:athleteUserId/history`; todos los filtros y enlaces conservan pupilo y grupo.
+
 ### 2.10 Reports
 
 | Método | Ruta lógica | Rol | Descripción | Implementación | Prioridad |

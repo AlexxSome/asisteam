@@ -5,7 +5,7 @@ const mock = vi.hoisted(() => ({ group: vi.fn(), rpc: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ rpc: mock.rpc }) }));
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); } }));
-import { getMyAttendanceHistory, historyPageHref, parseHistoryFilters } from "./attendance-history";
+import { getMyAttendanceHistory, getWardAttendanceHistory, historyPageHref, parseHistoryFilters } from "./attendance-history";
 const groupId = historyFixture.group_id;
 beforeEach(() => {
   vi.resetAllMocks(); mock.group.mockResolvedValue({ id: groupId, roles: ["ATHLETE", "ADMIN"] });
@@ -47,4 +47,36 @@ it("paginación conserva rango y multiselección; validación comparte contrato 
   expect(url.searchParams.get("page")).toBe("3"); expect(url.searchParams.get("from")).toBe(filter.from); expect(url.searchParams.get("to")).toBe(filter.to);
   expect(parseHistoryFilters({ from: "", to: "" }).success).toBe(true);
   for (const query of [{ period: ["month", "week"] }, { period: "custom" }, { from: "2026-02-30" }, { page: "0" }, { activity_type_id: "invalid" }, { period: "custom", from: "2026-03-31", to: "2026-03-01" }]) expect(parseHistoryFilters(query).success).toBe(false);
+});
+
+it("consulta pupilo con grupo e identidad explícitos y revalida revocaciones en RPC", async () => {
+  const athleteUserId = "47000000-0000-4000-8000-000000000111";
+  const filter = attendancePeriodFilterSchema.parse({ period: "season" });
+  mock.group.mockResolvedValue({ id: groupId, roles: ["GUARDIAN", "ADMIN"] });
+  expect((await getWardAttendanceHistory(groupId, athleteUserId, filter)).history).toEqual(historyFixture);
+  expect(mock.rpc).toHaveBeenCalledWith("get_ward_attendance_history", expect.objectContaining({ p_group_id: groupId, p_athlete_user_id: athleteUserId, p_period: "season", p_page_size: 50 }));
+  for (const code of ["PT401", "PT403", "PT404"]) {
+    mock.rpc.mockResolvedValue({ data: null, error: { code } });
+    await expect(getWardAttendanceHistory(groupId, athleteUserId, filter)).rejects.toThrow("404");
+  }
+  mock.rpc.mockClear();
+  await expect(getWardAttendanceHistory(groupId, "invalid", filter)).rejects.toThrow("404");
+  mock.group.mockResolvedValue({ id: groupId, roles: ["ADMIN", "ATHLETE"] });
+  await expect(getWardAttendanceHistory(groupId, athleteUserId, filter)).rejects.toThrow("404");
+  expect(mock.rpc).not.toHaveBeenCalled();
+});
+
+it("pupilo conserva identidad y filtros en enlaces y rechaza contrato con datos privados", async () => {
+  const athleteUserId = "47000000-0000-4000-8000-000000000111";
+  const filter = attendancePeriodFilterSchema.parse({ period: "custom", from: "2026-03-01", to: "2026-03-31", activity_type_ids: [historyFixture.records[0]!.activity_type_id] });
+  const url = new URL(historyPageHref(groupId, filter, 2, athleteUserId), "https://example.test");
+  expect(url.pathname).toBe(`/groups/${groupId}/wards/${athleteUserId}/history`);
+  expect(url.searchParams.get("page")).toBe("2");
+  expect(url.searchParams.get("from")).toBe(filter.from);
+  expect(url.searchParams.getAll("activity_type_id")).toEqual(filter.activity_type_ids);
+  mock.group.mockResolvedValue({ id: groupId, roles: ["GUARDIAN"] });
+  mock.rpc.mockResolvedValue({ data: { ...historyFixture, phone: "secret" }, error: null });
+  await expect(getWardAttendanceHistory(groupId, athleteUserId, filter)).rejects.toThrow("leer el historial");
+  mock.rpc.mockResolvedValue({ data: null, error: { code: "PT400" } });
+  expect((await getWardAttendanceHistory(groupId, athleteUserId, filter)).error).toContain("Revisa");
 });
