@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), getSession: vi.fn(), fetch: vi.fn(), revalidate: vi.fn() }));
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), getSession: vi.fn(), rpc: vi.fn(), fetch: vi.fn(), revalidate: vi.fn() }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser, getSession: mock.getSession } }) }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser, getSession: mock.getSession }, rpc: mock.rpc }) }));
 import { sendInvitation } from "./actions";
+import { reviewManagedActivation } from "../../members/consent/actions";
 const groupId = "23000000-0000-4000-8000-000000000201";
 const invitation = { id: "23000000-0000-4000-8000-000000000301", status: "PENDING", expires_at: "2026-09-29T12:00:00Z" };
 beforeEach(() => {
@@ -11,6 +12,34 @@ beforeEach(() => {
   mock.getUser.mockResolvedValue({ data: { user: { id: "verified-actor" } } });
   mock.getSession.mockResolvedValue({ data: { session: { access_token: "verified-jwt" } } });
   mock.fetch.mockResolvedValue(new Response(JSON.stringify({ invitation })));
+});
+describe("HU-APO-07: decisión registrada antes del envío", () => {
+  const requestId = "51000000-0000-4000-8000-000000000001";
+  const identity = { group_id: groupId, membership_id: "51000000-0000-4000-8000-000000000002" };
+  beforeEach(() => { mock.rpc.mockResolvedValue({ data: identity, error: null }); });
+  it("rechaza sin enviar y usa solo la identidad devuelta por el servidor al aprobar", async () => {
+    expect(await reviewManagedActivation({ request_id: requestId, accepted: false })).toEqual({ success: true });
+    expect(mock.fetch).not.toHaveBeenCalled();
+    expect(await reviewManagedActivation({ request_id: requestId, accepted: true })).toEqual({ success: true });
+    expect(mock.rpc).toHaveBeenLastCalledWith("review_managed_activation", { p_request_id: requestId, p_accepted: true });
+    expect(JSON.parse(mock.fetch.mock.calls[0]![1].body)).toEqual({ action: "activate", ...identity });
+  });
+  it("distingue el fallo de email de un fallo al registrar la decisión", async () => {
+    mock.fetch.mockResolvedValue(new Response(JSON.stringify({ error: { code: "email_delivery_failed" } }), { status: 503 }));
+    expect(await reviewManagedActivation({ request_id: requestId, accepted: true })).toMatchObject({ approvalRecorded: true, error: { code: "email_delivery_failed" } });
+    mock.rpc.mockResolvedValue({ error: { message: "activation_request_changed" } });
+    const rejected = await reviewManagedActivation({ request_id: requestId, accepted: true });
+    expect(rejected).toHaveProperty("error.code", "activation_request_changed");
+    expect(rejected).not.toHaveProperty("approvalRecorded");
+    expect(mock.fetch).toHaveBeenCalledTimes(1);
+  });
+  it("conserva aprobación aunque la sesión falle al preparar el envío", async () => {
+    mock.getSession.mockRejectedValue(new Error("private-auth-error"));
+    const result = await reviewManagedActivation({ request_id: requestId, accepted: true });
+    expect(result).toMatchObject({ approvalRecorded: true, error: { code: "unavailable", message: expect.stringContaining("El consentimiento quedó registrado.") } });
+    expect(JSON.stringify(result)).not.toContain("private-auth-error");
+    expect(mock.fetch).not.toHaveBeenCalled();
+  });
 });
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 describe("emisión desde Server Action", () => {

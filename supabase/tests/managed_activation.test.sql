@@ -71,9 +71,26 @@ select is((select count(*) from public.list_managed_activation_requests('3500000
 select ok((select to_jsonb(r) - array['request_id','membership_id','full_name','relationship','status','total_count']='{}'::jsonb
  from public.list_managed_activation_requests('35000000-0000-4000-8000-000000000201') r),'proyección no expone PII');
 select lives_ok($$select public.review_managed_activation((select id from request_id),false)$$,'puede rechazar');
+select throws_ok($$select public.review_managed_activation((select id from request_id),true)$$,
+ 'PT409','activation_request_changed','una solicitud rechazada no se puede aprobar después');
+select is((select count(*) from public.list_managed_activation_requests('35000000-0000-4000-8000-000000000201')),
+ 0::bigint,'la decisión rechazada no vuelve a ofrecerse como pendiente');
 reset role;
+select ok((select status='REJECTED' and resolved_at is not null and resolved_at >= requested_at and consent_id is null
+ from app_private.managed_activation_requests where id=(select id from request_id)),
+ 'HU-APO-07: rechazo conserva evidencia con timestamp sin otorgar consentimiento');
 select is((select count(*) from public.consents where consent_type='ACCOUNT_ACTIVATION_MINOR'),0::bigint,'rechazo no concede consentimiento');
 select is((select account_status from public.users where id='35000000-0000-4000-8000-000000000012'),'MANAGED','rechazo conserva MANAGED');
+-- Un enlace previo no debe habilitar credenciales después del rechazo.
+insert into public.invitations(group_id,email,invited_user_id,role,token,created_by,activation_membership_id)
+ values('35000000-0000-4000-8000-000000000201','activation-12@example.test','35000000-0000-4000-8000-000000000012',
+ 'ATHLETE',repeat('e',64),'35000000-0000-4000-8000-000000000001','35000000-0000-4000-8000-000000000312');
+select throws_ok($$select public.prepare_invitation_registration(repeat('e',64),repeat('f',64),'activation-12@example.test',
+ '{"managed_claim":true,"terms_version":"2026-09-21"}'::jsonb)$$,
+ 'PT422','guardian_consent_required','HU-APO-07: el enlace no permite crear contraseña tras el rechazo');
+select is((select count(*) from app_private.invitation_registrations where token_hash=repeat('e',64)),0::bigint,
+ 'rechazo no prepara credenciales');
+select is((select count(*) from auth.users where email='activation-12@example.test'),0::bigint,'rechazo conserva ausencia de Auth');
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"35000000-0000-4000-8000-000000000001"}',true);
 select public.request_managed_activation('35000000-0000-4000-8000-000000000201','35000000-0000-4000-8000-000000000312');
@@ -87,6 +104,13 @@ select lives_ok($$select public.review_managed_activation((select id from reques
 reset role;
 select is((select count(*) from public.consents where consent_type='ACCOUNT_ACTIVATION_MINOR'),1::bigint,'no duplica evidencia');
 select is((select channel from public.consents where consent_type='ACCOUNT_ACTIVATION_MINOR'),'IN_APP','evidencia identifica canal autenticado');
+select ok((select r.status='APPROVED' and r.resolved_at is not null and r.resolved_at >= r.requested_at
+ and c.granted_at=r.resolved_at and c.terms_version='2026-09-21'
+ and c.guardianship_id='35000000-0000-4000-8000-000000000401'::uuid
+ from app_private.managed_activation_requests r join public.consents c on c.id=r.consent_id
+ where r.id=(select id from request_id)), 'HU-APO-07: aprobación vincula timestamp, condiciones y apoderado');
+select is((select count(*) from app_private.managed_activation_requests where status='REJECTED' and resolved_at is not null),
+ 1::bigint,'nueva aprobación conserva el rechazo anterior como histórico');
 select is((select auth_user_id from public.users where id='35000000-0000-4000-8000-000000000012'),null::uuid,'consentir no crea credenciales');
 select throws_ok($$select public.issue_managed_activation('35000000-0000-4000-8000-000000000004','35000000-0000-4000-8000-000000000201','35000000-0000-4000-8000-000000000312',repeat('a',64))$$,'PT403','activation_sender_required','solo el apoderado autor original despacha solicitud');
 select lives_ok($$select public.issue_managed_activation('35000000-0000-4000-8000-000000000002','35000000-0000-4000-8000-000000000201','35000000-0000-4000-8000-000000000312',repeat('a',64))$$,'apoderado autorizado despacha enlace solicitado por ADMIN');
