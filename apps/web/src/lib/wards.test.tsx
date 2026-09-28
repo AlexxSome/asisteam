@@ -5,7 +5,7 @@ const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), wardsRange: vi
   activitiesRange: vi.fn(), activitySelect: vi.fn(), activityGroups: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
-import { getMyWards, getWard, parseWardsPage } from "./wards";
+import { getGroupWards, getMyWards, getWard, parseWardsPage } from "./wards";
 import { getWardActivities } from "./activities";
 import WardsPage from "@/app/wards/page";
 import WardPage from "@/app/wards/[athleteUserId]/page";
@@ -110,6 +110,39 @@ describe("Mis pupilos y perfil deportivo", () => {
   });
   it.each([undefined, ["2"], "0", "-1", "bad", "1.5", "99999999999999999999"])("normaliza página inválida %s", (value) => {
     expect(parseWardsPage(value)).toBe(1);
+  });
+});
+
+describe("pupilos en reportes del grupo", () => {
+  it("filtra grupo y membresía activa antes de paginar y solo proyecta identificador y nombre", async () => {
+    const ids = Array.from({ length: 51 }, (_, i) => ({ athlete_user_id: `${id}-${i}` }));
+    const groupQuery = { select: vi.fn(), eq: vi.fn(), order: vi.fn(), range: vi.fn().mockResolvedValue({ data: ids, error: null }) };
+    for (const method of [groupQuery.select, groupQuery.eq, groupQuery.order]) method.mockReturnValue(groupQuery);
+    const wardQuery = { select: vi.fn(), in: vi.fn(), order: vi.fn() };
+    wardQuery.select.mockReturnValue(wardQuery); wardQuery.in.mockReturnValue(wardQuery);
+    wardQuery.order.mockReturnValueOnce(wardQuery).mockResolvedValueOnce({ data: [{ athlete_user_id: ids[0]!.athlete_user_id, full_name: ward.full_name }], error: null });
+    mock.from.mockImplementation((table: string) => table === "v_my_ward_groups" ? groupQuery : wardQuery);
+    expect(await getGroupWards(groups[0]!.group_id, 2)).toEqual({ wards: [{ athlete_user_id: ids[0]!.athlete_user_id, full_name: ward.full_name }], hasNext: true });
+    expect(groupQuery.select).toHaveBeenCalledWith("athlete_user_id");
+    expect(groupQuery.eq.mock.calls).toEqual([["group_id", groups[0]!.group_id], ["membership_status", "ACTIVE"]]);
+    expect(groupQuery.range).toHaveBeenCalledWith(50, 100);
+    expect(wardQuery.in).toHaveBeenCalledWith("athlete_user_id", ids.slice(0, 50).map((row) => row.athlete_user_id));
+    expect(wardQuery.select).toHaveBeenCalledWith("athlete_user_id, full_name");
+  });
+
+  it("sin pupilos activos en el grupo no carga perfiles de otros grupos", async () => {
+    mock.groupsRange.mockResolvedValue({ data: [], error: null });
+    expect(await getGroupWards(groups[0]!.group_id)).toEqual({ wards: [], hasNext: false });
+    expect(mock.from.mock.calls).toEqual([["v_my_ward_groups"]]);
+  });
+
+  it("requiere sesión y grupo válido, y no convierte errores de lectura en lista vacía", async () => {
+    await expect(getGroupWards("invalid")).rejects.toThrow("404");
+    mock.getUser.mockResolvedValueOnce({ data: { user: null } });
+    await expect(getGroupWards(groups[0]!.group_id)).rejects.toThrow("redirect:/login");
+    expect(mock.from).not.toHaveBeenCalled();
+    mock.groupsRange.mockResolvedValue({ data: null, error: { message: "private" } });
+    await expect(getGroupWards(groups[0]!.group_id)).rejects.toThrow("No pudimos cargar tus pupilos");
   });
 });
 

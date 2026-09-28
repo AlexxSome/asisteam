@@ -45,6 +45,27 @@ export async function getMyWards(page = 1) {
   return { wards: await withGroups(client, (data ?? []).slice(0, 50)), hasNext: (data?.length ?? 0) > 50 };
 }
 
+export async function getGroupWards(groupId: string, page = 1) {
+  if (!isGroupId(groupId)) notFound();
+  const client = await createClient();
+  const { data: { user } } = await client.auth.getUser();
+  if (!user) redirect("/login");
+  // Filtrar en la vista antes de paginar: otros grupos no desplazan a estos pupilos.
+  const { data: memberships, error } = await client.from("v_my_ward_groups")
+    .select("athlete_user_id").eq("group_id", groupId).eq("membership_status", "ACTIVE")
+    .order("athlete_user_id").range((page - 1) * 50, page * 50);
+  if (error) throw loadError();
+  const ids = (memberships ?? []).slice(0, 50).flatMap((row) => row.athlete_user_id ? [row.athlete_user_id] : []);
+  const hasNext = (memberships?.length ?? 0) > 50;
+  if (!ids.length) return { wards: [], hasNext };
+  const { data, error: profileError } = await client.from("v_my_wards")
+    .select("athlete_user_id, full_name").in("athlete_user_id", ids).order("full_name").order("athlete_user_id");
+  if (profileError) throw loadError();
+  const wards = (data ?? []).flatMap((row) => row.athlete_user_id && row.full_name
+    ? [{ athlete_user_id: row.athlete_user_id, full_name: row.full_name }] : []);
+  return { wards, hasNext };
+}
+
 export async function getWard(athleteUserId: string) {
   if (!isGroupId(athleteUserId)) notFound();
   const client = await createClient();
