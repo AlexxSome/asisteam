@@ -131,6 +131,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
+          {
             foreignKeyName: "activities_recurrence_source_id_fkey"
             columns: ["recurrence_source_id"]
             isOneToOne: false
@@ -196,6 +203,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_types_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
           },
         ]
       }
@@ -340,6 +354,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "birthdate_change_approvals_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
           },
           {
             foreignKeyName: "birthdate_change_approvals_request_id_fkey"
@@ -645,6 +666,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "invitations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
+          {
             foreignKeyName: "invitations_invited_user_id_fkey"
             columns: ["invited_user_id"]
             isOneToOne: false
@@ -652,6 +680,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      job_runs: {
+        Row: {
+          affected_count: number
+          completed_at: string
+          id: string
+          job_name: string
+          run_date: string
+        }
+        Insert: {
+          affected_count: number
+          completed_at?: string
+          id?: string
+          job_name: string
+          run_date: string
+        }
+        Update: {
+          affected_count?: number
+          completed_at?: string
+          id?: string
+          job_name?: string
+          run_date?: string
+        }
+        Relationships: []
       }
       memberships: {
         Row: {
@@ -705,6 +757,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
           },
           {
             foreignKeyName: "memberships_user_id_fkey"
@@ -800,6 +859,13 @@ export type Database = {
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "activity_types_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
         ]
       }
       v_athlete_attendance_history: {
@@ -839,6 +905,13 @@ export type Database = {
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
         ]
       }
       v_attendance_admin: {
@@ -873,6 +946,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
           },
           {
             foreignKeyName: "attendance_records_activity_id_fkey"
@@ -972,6 +1052,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
+          {
             foreignKeyName: "attendance_records_activity_id_fkey"
             columns: ["activity_id"]
             isOneToOne: false
@@ -1058,6 +1145,13 @@ export type Database = {
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
         ]
       }
       v_group_activities: {
@@ -1118,6 +1212,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
           },
           {
             foreignKeyName: "activities_recurrence_source_id_fkey"
@@ -1199,6 +1300,13 @@ export type Database = {
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
         ]
       }
       v_group_detail: {
@@ -1253,6 +1361,13 @@ export type Database = {
             referencedRelation: "v_my_groups"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "memberships_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
         ]
       }
       v_my_groups: {
@@ -1262,6 +1377,34 @@ export type Database = {
           name: string | null
           roles: string[] | null
           sport: string | null
+        }
+        Relationships: []
+      }
+      v_my_ward_groups: {
+        Row: {
+          athlete_user_id: string | null
+          group_id: string | null
+          membership_status: string | null
+          name: string | null
+          sport: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guardianships_athlete_user_id_fkey"
+            columns: ["athlete_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_my_wards: {
+        Row: {
+          age: number | null
+          athlete_user_id: string | null
+          avatar_url: string | null
+          days_until_majority: number | null
+          full_name: string | null
         }
         Relationships: []
       }
@@ -1282,8 +1425,22 @@ export type Database = {
         Args: { p_nonce_hash: string }
         Returns: undefined
       }
+      claim_guardianship_majority_emails: {
+        Args: never
+        Returns: {
+          audience: string
+          claim_token: string
+          delivery_id: string
+          email: string
+          full_name: string
+        }[]
+      }
       clear_attendance_record: {
         Args: { p_activity_id: string; p_membership_id: string }
+        Returns: undefined
+      }
+      complete_guardianship_majority_email: {
+        Args: { p_claim_token: string; p_delivery_id: string }
         Returns: undefined
       }
       consent_managed_member: {
@@ -1473,6 +1630,16 @@ export type Database = {
           total_count: number
         }[]
       }
+      list_my_wards: {
+        Args: never
+        Returns: {
+          age: number
+          athlete_user_id: string
+          avatar_url: string
+          days_until_majority: number
+          full_name: string
+        }[]
+      }
       list_pending_athletes: {
         Args: { p_group_id: string }
         Returns: {
@@ -1537,6 +1704,7 @@ export type Database = {
         Returns: Json
       }
       rotate_invite_code: { Args: { p_group_id: string }; Returns: string }
+      run_guardianship_majority: { Args: never; Returns: number }
       set_avatar_permission: {
         Args: { p_allow: boolean; p_guardianship_id: string }
         Returns: undefined

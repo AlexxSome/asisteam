@@ -46,6 +46,7 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
       </nav>
     </section>
     <nav aria-label="Cuenta" className="flex flex-wrap gap-5 text-sm underline underline-offset-4">
+      {groups.some((group) => group.roles.includes("GUARDIAN")) && <Link href="/wards" prefetch={false}>Mis pupilos</Link>}
       <Link href="/groups/new">Crear un grupo</Link><Link href="/join">Unirme con código</Link><Link href="/profile">Mi perfil</Link>
     </nav>
   </main>;
