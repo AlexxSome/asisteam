@@ -1,0 +1,7 @@
+interface:
+  display_name: "issue gpt6 astra max"
+  short_description: "Implementa issues Spendium con GPT-6 Astra xhigh"
+  default_prompt: "Usa $issue-gpt6-astra-max para implementar el issue #<n> de Spendium."
+
+policy:
+  allow_implicit_invocation: true
