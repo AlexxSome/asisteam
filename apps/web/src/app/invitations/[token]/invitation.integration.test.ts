@@ -18,6 +18,9 @@ const password = "Synthetic-password-18!";
 const email = (name: string) => `issue18-${run}-${name}@example.test`;
 const digest = (value: string) => createHash("sha256").update(value).digest("hex");
 let admin: SupabaseClient;
+let owner: SupabaseClient;
+let existingGuardian: SupabaseClient;
+let guardianJwt: string;
 let apiUrl: string;
 let anonKey: string;
 let existingAuthId: string;
@@ -77,6 +80,28 @@ async function managedFixture(minor: boolean) {
     request: { action: "claim", token, registration: { email: address, password, terms_accepted: true } } };
 }
 
+async function guardianFixture(name: string, address = email(name)) {
+  const token = randomUUID();
+  const ip = `192.0.2.${210 + ips.length}`;
+  ips.push(ip);
+  // El ADMIN vincula al pupilo antes del correo; aceptar no equivale a consentir.
+  const created = await owner.rpc("create_managed_member", {
+    p_group_id: groupId, p_full_name: "Pupilo de invitación", p_email: email(`${name}-ward`),
+    p_birthdate: sql("select (app_private.chile_today()-interval '15 years')::date::text"),
+    p_guardian: { full_name: "Apoderado invitado", email: address, relationship: "Tutor", authorized: true },
+  });
+  expect(created.error).toBeNull();
+  expect(created.data.membership_status).toBe("PENDING");
+  const guardianId = sql(`select id from public.users where email='${address}';`);
+  const athleteId = sql(`select user_id from public.memberships where id='${created.data.membership_id}';`);
+  const guardianship = sql(`select to_jsonb(g) from public.guardianships g where guardian_user_id='${guardianId}' and athlete_user_id='${athleteId}';`);
+  const issued = await admin.rpc("issue_invitation", {
+    p_auth_user_id: existingAuthId, p_group_id: groupId, p_token_hash: digest(token), p_email: address, p_role: "GUARDIAN",
+  });
+  expect(issued.error).toBeNull();
+  return { token, ip, address, guardianId, athleteId, guardianship, membershipId: created.data.membership_id };
+}
+
 suite("Edge + Auth + Postgres: invitaciones", () => {
   beforeAll(async () => {
     if (!secret) throw new Error("Falta INVITATION_PROXY_SECRET para el runtime Edge local");
@@ -84,7 +109,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     apiUrl = config.API_URL; anonKey = config.ANON_KEY;
     if (!["127.0.0.1", "localhost"].includes(new URL(apiUrl).hostname)) throw new Error("Las pruebas solo admiten Supabase local");
     admin = createClient(apiUrl, config.SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-    for (const name of ["existing", "outsider"]) {
+    for (const name of ["existing", "outsider", "guardian"]) {
       const { data, error } = await admin.auth.admin.createUser({ email: email(name), password, email_confirm: true,
         user_metadata: { full_name: "Fixture adulto", birthdate: "1990-01-01" } });
       if (error || !data.user) throw new Error("No se pudo preparar cuenta sintética");
@@ -92,7 +117,9 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
       const client = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
       const result = await client.auth.signInWithPassword({ email: email(name), password });
       if (!result.data.session) throw new Error("No se pudo iniciar sesión sintética");
-      if (name === "existing") jwt = result.data.session.access_token; else wrongJwt = result.data.session.access_token;
+      if (name === "existing") { jwt = result.data.session.access_token; owner = client; }
+      else if (name === "guardian") { guardianJwt = result.data.session.access_token; existingGuardian = client; }
+      else wrongJwt = result.data.session.access_token;
     }
     existingProfileId = sql(`select id from public.users where auth_user_id='${existingAuthId}';`);
     sql(`insert into public.groups(id,name,invite_code,created_by) values('${groupId}','Grupo sintético #18','${run.slice(0,8)}','${existingProfileId}');
@@ -115,6 +142,8 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     const groups = fixtureGroupIds.map(id => `'${id}'`).join(",");
     const users = `select id from public.users where email like 'issue18-${run}-%@example.test'`;
     sql(`begin; set local session_replication_role=replica;
+      delete from app_private.managed_member_enrollments where membership_id in (select id from public.memberships where group_id in (${groups}));
+      delete from app_private.join_code_attempts where user_id in (${users});
       delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id in (${users}));
       delete from public.guardianships where athlete_user_id in (${users});
       delete from public.attendance_records where membership_id in (select id from public.memberships where group_id in (${groups}));
@@ -201,6 +230,72 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     expect(results.filter(r => [404,422].includes(r.status))).toHaveLength(1);
     expect(sql(`select count(*) from auth.users where email='${email("race")}';`)).toBe("1");
     expect(sql(`select count(*) from app_private.invitation_registrations where token_hash='${digest(token)}';`)).toBe("0");
+  });
+  it("HU-APO-01: apoderado nuevo acepta por Edge y conserva el vínculo sin consentir por el menor", async () => {
+    const fixture = await guardianFixture("guardian-new");
+    expect(sql(`select count(*) from public.memberships where user_id='${fixture.guardianId}';`)).toBe("0");
+    expect(await invoke({ action: "preview", token: fixture.token }, undefined, fixture.ip))
+      .toEqual({ status: 200, body: { group_name: "Grupo sintético #18", role: "GUARDIAN" } });
+    const request = { action: "register", token: fixture.token, registration: {
+      full_name: "Apoderado registrado", email: fixture.address, password, birthdate: "1990-01-01", terms_accepted: true,
+    } };
+    expect(await invoke(request, undefined, fixture.ip))
+      .toEqual({ status: 200, body: { group_id: groupId, membership_status: "ACTIVE" } });
+    expect(sql(`select id||':'||account_status from public.users where email='${fixture.address}';`))
+      .toBe(`${fixture.guardianId}:ACTIVE`);
+    expect(sql(`select count(*) from auth.users where email='${fixture.address}';`)).toBe("1");
+    expect(sql(`select role||':'||status from public.memberships where user_id='${fixture.guardianId}' and group_id='${groupId}';`))
+      .toBe("GUARDIAN:ACTIVE");
+    expect(sql(`select to_jsonb(g) from public.guardianships g where guardian_user_id='${fixture.guardianId}' and athlete_user_id='${fixture.athleteId}';`))
+      .toBe(fixture.guardianship);
+    expect(sql(`select status from public.memberships where id='${fixture.membershipId}';`)).toBe("PENDING");
+    expect(sql(`select count(*) from public.consents where guardianship_id='${JSON.parse(fixture.guardianship).id}';`)).toBe("0");
+    const guardian = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+    expect((await guardian.auth.signInWithPassword({ email: fixture.address, password })).error).toBeNull();
+    expect((await guardian.from("v_my_groups").select("id")).data).toEqual([{ id: groupId }]);
+    expect((await guardian.rpc("is_guardian_of", { p_athlete_user_id: fixture.athleteId })).data).toBe(true);
+    const consents = await guardian.rpc("list_managed_member_consents", { p_group_id: groupId });
+    expect(consents.error).toBeNull();
+    expect(consents.data).toEqual([{ membership_id: fixture.membershipId, full_name: "Pupilo de invitación", relationship: "Tutor", total_count: 1 }]);
+    expect((await invoke(request, undefined, fixture.ip)).status).toBe(404);
+  });
+  it("HU-APO-01: cuenta de otro grupo acepta como GUARDIAN sin duplicar identidad ni perder sus roles", async () => {
+    const previousGroup = await existingGuardian.rpc("create_group", { p_name: "Grupo previo del apoderado", p_sport: "Tenis" });
+    expect(previousGroup.error).toBeNull();
+    fixtureGroupIds.push(previousGroup.data);
+    const guardianId = sql(`select id from public.users where email='${email("guardian")}';`);
+    const before = sql(`select to_jsonb(u) from public.users u where id='${guardianId}';`);
+    const previousMembership = sql(`select to_jsonb(m) from public.memberships m where user_id='${guardianId}' and group_id='${previousGroup.data}';`);
+    const fixture = await guardianFixture("guardian-existing", email("guardian"));
+    expect(fixture.guardianId).toBe(guardianId);
+    expect((await existingGuardian.from("v_my_groups").select("id").eq("id", groupId)).data).toEqual([]);
+    expect((await invoke({ action: "accept", token: fixture.token }, wrongJwt, fixture.ip)).status).toBe(404);
+    expect(sql(`select status from public.invitations where token='${digest(fixture.token)}';`)).toBe("PENDING");
+    expect(await invoke({ action: "accept", token: fixture.token }, guardianJwt, fixture.ip))
+      .toEqual({ status: 200, body: { group_id: groupId, membership_status: "ACTIVE" } });
+    expect(sql(`select to_jsonb(u) from public.users u where id='${guardianId}';`)).toBe(before);
+    expect(sql(`select count(*) from public.users where email='${fixture.address}';`)).toBe("1");
+    expect(sql(`select to_jsonb(m) from public.memberships m where user_id='${guardianId}' and group_id='${previousGroup.data}';`))
+      .toBe(previousMembership);
+    expect(sql(`select role||':'||status from public.memberships where user_id='${guardianId}' and group_id='${groupId}';`)).toBe("GUARDIAN:ACTIVE");
+    expect(sql(`select to_jsonb(g) from public.guardianships g where guardian_user_id='${guardianId}' and athlete_user_id='${fixture.athleteId}';`))
+      .toBe(fixture.guardianship);
+    expect((await existingGuardian.rpc("is_guardian_of", { p_athlete_user_id: fixture.athleteId })).data).toBe(true);
+    expect((await existingGuardian.from("v_my_groups").select("id")).data)
+      .toEqual(expect.arrayContaining([{ id: groupId }, { id: previousGroup.data }]));
+    expect((await invoke({ action: "accept", token: fixture.token }, guardianJwt, fixture.ip)).status).toBe(404);
+    expect(sql(`select count(*) from public.memberships where user_id='${guardianId}' and group_id='${groupId}' and role='GUARDIAN';`)).toBe("1");
+
+    // El rol de otro grupo no se hereda al incorporarse mediante código.
+    const codeGroup = await owner.rpc("create_group", { p_name: "Ingreso por código del apoderado", p_sport: "Tenis" });
+    expect(codeGroup.error).toBeNull();
+    fixtureGroupIds.push(codeGroup.data);
+    const code = sql(`select invite_code from public.groups where id='${codeGroup.data}';`);
+    const joined = await existingGuardian.rpc("join_group_by_code", { p_invite_code: code });
+    expect(joined.error).toBeNull();
+    expect(joined.data.membership).toMatchObject({ group_id: codeGroup.data, role: "ATHLETE", status: "ACTIVE" });
+    expect(sql(`select role from public.memberships where user_id='${guardianId}' and group_id='${codeGroup.data}';`)).toBe("ATHLETE");
+    expect(sql(`select count(*) from public.guardianships where guardian_user_id='${guardianId}';`)).toBe("1");
   });
   it("limita intentos a 10 por hora e IP entre peticiones Edge", async () => {
     for (let n = 0; n < 10; n++) expect((await invoke({ action: "accept", token: tokens.existing }, jwt, ips[2])).status).toBe(404);
