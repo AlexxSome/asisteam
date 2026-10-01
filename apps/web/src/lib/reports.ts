@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { groupAttendanceReportSchema, groupStatsSchema, reportFilterSchema, type ReportFilter } from "@asisteam/core";
+import { canManageAttendance, groupAttendanceReportSchema, groupStatsSchema, reportFilterSchema, type ReportFilter } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
 
@@ -24,7 +24,7 @@ export function reportPageHref(groupId: string, filter: ReportFilter, page: numb
 
 export async function getGroupAttendanceReport(groupId: string, filter: ReportFilter) {
   const group = await getGroup(groupId);
-  if (!group.roles.includes("ADMIN")) notFound();
+  if (!canManageAttendance(group.roles)) notFound();
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_group_attendance_report", {
     p_group_id: group.id, p_period: filter.period, p_from: filter.from, p_to: filter.to,

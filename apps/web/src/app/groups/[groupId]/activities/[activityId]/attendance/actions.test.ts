@@ -53,7 +53,7 @@ describe("acciones de asistencia", () => {
   });
   it("corrige solo la nota mediante RPC con identidad resuelta en el grupo y actividad", async () => {
     expect(await updateAttendance(group, activity, record.membership_id, { note: "Corregida" })).toEqual({ records: [{ ...record, note: "guardada" }] });
-    expect(mock.from).toHaveBeenCalledWith("v_attendance_admin");
+    expect(mock.from).toHaveBeenCalledWith("v_attendance_operator");
     expect(mock.select).toHaveBeenCalledWith("id");
     expect(mock.eq.mock.calls).toEqual([["group_id", group], ["activity_id", activity], ["membership_id", record.membership_id]]);
     expect(mock.rpc).toHaveBeenCalledWith("update_attendance_record", { p_record_id: recordId, p_changes: { note: "Corregida" } });

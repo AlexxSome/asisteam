@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { MEMBER_MANAGEMENT_ERRORS, managedActivationSchema, managedMemberUpdateSchema, memberStatusSchema } from "@asisteam/core";
+import { MEMBER_MANAGEMENT_ERRORS, coachAssignmentSchema, managedActivationSchema, managedMemberUpdateSchema, memberStatusSchema } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { sendInvitation } from "../invitations/new/actions";
 
@@ -54,6 +54,22 @@ export async function changeMemberStatus(input: unknown): Promise<MemberResult> 
     if (!(await client.auth.getUser()).data.user) return fail("authentication_required");
     const { group_id, membership_id, action } = parsed.data;
     const { error } = await client.rpc(action === "deactivate" ? "deactivate_membership" : "reactivate_membership", {
+      p_group_id: group_id, p_membership_id: membership_id,
+    });
+    if (error) return fail(Object.hasOwn(MEMBER_MANAGEMENT_ERRORS, error.message) ? error.message : "unavailable");
+    revalidatePath("/groups", "layout");
+    return { success: true };
+  } catch { return fail("unavailable"); }
+}
+
+export async function assignMemberCoach(input: unknown): Promise<MemberResult> {
+  const parsed = coachAssignmentSchema.safeParse(input);
+  if (!parsed.success) return fail("invalid_member_request");
+  try {
+    const client = await createClient();
+    if (!(await client.auth.getUser()).data.user) return fail("authentication_required");
+    const { group_id, membership_id } = parsed.data;
+    const { error } = await client.rpc("assign_member_coach", {
       p_group_id: group_id, p_membership_id: membership_id,
     });
     if (error) return fail(Object.hasOwn(MEMBER_MANAGEMENT_ERRORS, error.message) ? error.message : "unavailable");

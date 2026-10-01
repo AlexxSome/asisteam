@@ -11,7 +11,7 @@ const groupId = "34000000-0000-4000-8000-000000000201";
 const params = Promise.resolve({ groupId });
 beforeEach(() => { mock.group.mockResolvedValue({ id: groupId, name: "Club", roles: ["ADMIN"] }); mock.rpc.mockResolvedValue({ data: [], error: null }); });
 afterEach(() => { cleanup(); vi.resetAllMocks(); });
-it.each(["ATHLETE", "GUARDIAN"])("%s no consulta nómina privada", async role => {
+it.each(["ATHLETE", "GUARDIAN", "COACH"])("%s no consulta nómina privada", async role => {
   mock.group.mockResolvedValue({ id: groupId, roles: [role] });
   await expect(MembersPage({ params, searchParams: Promise.resolve({}) })).rejects.toThrow("not-found");
   expect(mock.rpc).not.toHaveBeenCalled();
@@ -24,7 +24,7 @@ it("conserva filtros al paginar y enlaza histórico con inactivos", async () => 
   expect(screen.getByRole("link", { name: "Reportes con inactivos" }).getAttribute("href")).toContain("include_inactive=true");
 });
 it("rechaza filtros inválidos y distingue vacío de error del servidor", async () => {
-  render(await MembersPage({ params, searchParams: Promise.resolve({ role: "COACH" }) }));
+  render(await MembersPage({ params, searchParams: Promise.resolve({ role: "OWNER" }) }));
   expect(screen.getByRole("alert")).toBeTruthy(); expect(mock.rpc).not.toHaveBeenCalled();
   cleanup();
   render(await MembersPage({ params, searchParams: Promise.resolve({}) }));

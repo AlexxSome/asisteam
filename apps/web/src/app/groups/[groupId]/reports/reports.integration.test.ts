@@ -119,5 +119,37 @@ suite("reportes con Auth y PostgREST real", () => {
     expect(ownAfter.data).toEqual(ownBefore.data);
     expect((await athlete.auth.getSession()).data.session!.access_token).toBe(originalToken);
   });
+  it("COACH opera por HTTP sin notas ni administración y pierde permisos con el mismo JWT", async () => {
+    const coach = clients.athlete!;
+    const owner = clients.owner!;
+    const token = (await coach.auth.getSession()).data.session!.access_token;
+    const assigned = await owner.rpc("assign_member_coach", { p_group_id: groupId, p_membership_id: membershipId });
+    expect(assigned.error).toBeNull();
+    expect((await owner.rpc("assign_member_coach", { p_group_id: groupId, p_membership_id: membershipId })).data).toBe(assigned.data);
+    expect((await coach.from("v_my_groups").select("roles").eq("id", groupId).single()).data!.roles).toEqual(["ATHLETE", "COACH"]);
+    const record = await coach.from("v_attendance_operator").select("id, activity_id, membership_id, status, note")
+      .eq("group_id", groupId).eq("membership_id", teammateMembershipId).limit(1).single();
+    expect(record.error).toBeNull(); expect(record.data!.note).toBeNull();
+    const corrected = await coach.rpc("update_attendance_record", { p_record_id: record.data!.id, p_changes: { status: "LATE" } });
+    expect(corrected.error).toBeNull();
+    expect(corrected.data.records[0]).toMatchObject({ status: "LATE", note: null });
+    expect((await owner.from("v_attendance_admin").select("note").eq("id", record.data!.id).single()).data!.note).toBe("Nota privada de tercero");
+    expect((await coach.rpc("update_attendance_record", { p_record_id: record.data!.id, p_changes: { note: null } })).status).toBe(403);
+    expect((await coach.rpc("clear_attendance_record", { p_activity_id: record.data!.activity_id, p_membership_id: teammateMembershipId })).status).toBe(403);
+    const report = await coach.rpc("get_group_attendance_report", { p_group_id: groupId, p_period: "season" });
+    expect(report.error).toBeNull();
+    expect(groupAttendanceReportSchema.parse(report.data).by_athlete.find(row => row.membership_id === teammateMembershipId)).toMatchObject({ late: 1, absent: 7, attendance_pct: 12.5 });
+    expect(JSON.stringify(report.data)).not.toContain("Nota privada de tercero");
+    expect((await coach.from("v_group_attendance_report").select("membership_id").eq("group_id", groupId)).data).toEqual([]);
+    expect((await coach.from("v_attendance_admin").select("id").eq("group_id", groupId)).data).toEqual([]);
+    expect((await coach.rpc("list_group_members", { p_group_id: groupId })).status).toBe(403);
+    expect((await coach.rpc("update_group_settings", { p_group_id: groupId, p_changes: { athletes_can_view_group_stats: true } })).status).toBe(403);
+    expect((await coach.rpc("assign_member_coach", { p_group_id: groupId, p_membership_id: teammateMembershipId })).status).toBe(403);
+    expect((await owner.rpc("deactivate_membership", { p_group_id: groupId, p_membership_id: assigned.data })).error).toBeNull();
+    expect((await coach.rpc("get_group_attendance_report", { p_group_id: groupId })).status).toBe(403);
+    expect((await coach.rpc("update_attendance_record", { p_record_id: record.data!.id, p_changes: { status: "PRESENT" } })).status).toBe(403);
+    expect((await coach.from("v_attendance_operator").select("id").eq("group_id", groupId)).data).toEqual([]);
+    expect((await coach.auth.getSession()).data.session!.access_token).toBe(token);
+  });
 
 });

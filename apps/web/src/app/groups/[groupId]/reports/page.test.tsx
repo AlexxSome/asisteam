@@ -200,3 +200,15 @@ it("un vínculo revocado por la RPC no renderiza métricas del pupilo", async ()
   mock.wardHistory.mockRejectedValue(new Error("404"));
   await expect(GroupReportsPage({ params, searchParams: Promise.resolve({}) })).rejects.toThrow("404");
 });
+
+it("COACH ve reportes filtrados aun sin toggles y no recibe CTA de gestión", async () => {
+  mock.group.mockResolvedValue({ id: reportFixture.group_id, name: "Equipo", roles: ["COACH"], can_view_group_stats: true });
+  const report = structuredClone(reportFixture);
+  report.has_activities = false; report.totals.convened = 0;
+  mock.report.mockResolvedValue({ report, error: null });
+  render(await GroupReportsPage({ params, searchParams: Promise.resolve({ period: "season" }) }));
+  expect(mock.report).toHaveBeenCalledWith(reportFixture.group_id, expect.objectContaining({ period: "season" }));
+  expect(screen.getByRole("region", { name: "Resumen por deportista" })).toBeTruthy();
+  expect(screen.queryByRole("link", { name: "Crear primera actividad" })).toBeNull();
+  expect(mock.stats).not.toHaveBeenCalled();
+});

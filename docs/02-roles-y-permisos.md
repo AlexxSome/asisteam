@@ -13,7 +13,15 @@ Los roles se asignan **por membresía en cada grupo (club/equipo)**, nunca de fo
 | `ADMIN` | Administrador | Gestiona el grupo: configuración, integrantes, apoderados, actividades, asistencia y reportes. En el MVP es el único rol que toma y edita asistencia. | [P0] |
 | `ATHLETE` | Deportista/Integrante | Es convocado a actividades; consulta sus grupos, actividades, historial y porcentaje propio. | [P0] |
 | `GUARDIAN` | Apoderado | Adulto responsable de uno o más deportistas menores de edad (`guardianships`); consulta perfil, actividades e historial de sus pupilos. | [P0] |
-| `COACH` | Entrenador | Rol con permisos limitados (tomar asistencia sin administrar el grupo). **No existe en el MVP.** | [P2] |
+| `COACH` | Entrenador | Toma y corrige estados de asistencia y consulta reportes agregados; no administra el grupo (HU-ADM-20). | [P2] |
+
+### Delegación COACH [P2] — HU-ADM-20 (#55)
+
+El ADMIN asigna Entrenador a un integrante ACTIVE desde Integrantes. Se agrega una membership COACH independiente; no sustituye sus otros roles ni su historial. Repetir la asignación es idempotente; desactivar/reactivar ese rol usa las transiciones existentes y conserva su fila.
+
+COACH ACTIVE puede consultar actividades, registrar/corregir estados de asistencia y ver reportes agregados por deportista, tipo y período, sin depender de los toggles ATHLETE/GUARDIAN. No puede crear/editar actividades, configurar el grupo, invitar ni gestionar integrantes: esas rutas de gestión responden 403; un grupo ajeno conserva 404. En un usuario ADMIN+COACH sigue aplicando la unión de permisos.
+
+V5 sigue vigente: COACH no obtiene contactos, fechas de nacimiento, apoderados ni notas de terceros. La proyección operativa de una actividad permite editar estados y devuelve notas nulas; las RPC conservan las notas al corregir estados y rechazan intentos de escribirlas. Volver a «sin marcar» elimina también la nota y permanece reservado a ADMIN. El desglose diario de reportes ADMIN no se abre a COACH; el backend entrega únicamente agregados. Los derechos propios ATHLETE y de pupilos GUARDIAN se mantienen en sus respectivas pantallas.
 
 Estados de cuenta (`users.account_status`): `ACTIVE` (credenciales propias), `INVITED` (creada por invitación por email, pendiente de completar registro), `MANAGED` (gestionada por un ADMIN, sin credenciales; típica para menores).
 
