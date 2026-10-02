@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-const mock = vi.hoisted(() => ({ status: vi.fn(), update: vi.fn(), activate: vi.fn(), refresh: vi.fn() }));
-vi.mock("./actions", () => ({ changeMemberStatus: mock.status, updateManagedMember: mock.update, requestManagedActivation: mock.activate }));
+const mock = vi.hoisted(() => ({ coach: vi.fn(), status: vi.fn(), update: vi.fn(), activate: vi.fn(), refresh: vi.fn() }));
+vi.mock("./actions", () => ({ assignMemberCoach: mock.coach, changeMemberStatus: mock.status, updateManagedMember: mock.update, requestManagedActivation: mock.activate }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mock.refresh }) }));
 import { MemberManagement } from "./member-management";
 import type { GroupMember } from "@asisteam/core";
@@ -66,4 +66,19 @@ it.each([true, false])("distingue consentimiento pendiente (%s) de correo enviad
   await userEvent.click(screen.getByRole("button", { name: "Activar cuenta propia" }));
   expect(mock.activate).toHaveBeenCalledWith({ group_id: groupId, membership_id: member.membership_id });
   expect((await screen.findByRole("status")).textContent).toContain(consentPending ? "apoderado debe autorizarla" : "Invitación de activación enviada");
+});
+
+it("asigna entrenador sin reemplazar el rol actual y refresca la nómina", async () => {
+  mock.coach.mockResolvedValue({ success: true });
+  render(<MemberManagement groupId={groupId} member={member} />);
+  await userEvent.click(screen.getByRole("button", { name: "Asignar rol Entrenador" }));
+  expect(mock.coach).toHaveBeenCalledWith({ group_id: groupId, membership_id: member.membership_id });
+  expect((await screen.findByRole("status")).textContent).toContain("otros roles e historial se conservan");
+  expect(mock.status).not.toHaveBeenCalled();
+  expect(mock.refresh).toHaveBeenCalled();
+});
+it("COACH se puede desactivar y no ofrece volver a asignar el mismo rol", () => {
+  render(<MemberManagement groupId={groupId} member={{ ...member, role: "COACH" }} />);
+  expect(screen.queryByRole("button", { name: "Asignar rol Entrenador" })).toBeNull();
+  expect(screen.getByRole("button", { name: "Desactivar" })).toBeTruthy();
 });

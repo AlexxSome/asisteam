@@ -117,3 +117,30 @@ describe("HTTP 404 del perfil de pupilos", () => {
     expect((await middleware(request(`/wards/${groupId}`))).status).toBe(404);
   });
 });
+
+describe("COACH: permisos limitados por grupo", () => {
+  it.each(["settings", "settings/visibility", "members", "members/new", "members/pending", "invitations/new", "guardians", "activity-types", "activities/new", "activities/id/edit"])("%s responde 403 antes del streaming", async path => {
+    mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: ["ATHLETE", "COACH"] } });
+    const response = await middleware(request(`/groups/${groupId}/${path}`));
+    expect(response.status).toBe(403);
+    expect(response.headers.get("Cache-Control")).toContain("no-store");
+    expect(response.cookies.get("refreshed-session")?.httpOnly).toBe(true);
+  });
+  it("permite asistencia/reportes y respeta la unión con ADMIN/GUARDIAN", async () => {
+    mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: ["COACH"] } });
+    for (const path of ["activities/id/attendance", "reports"]) expect((await middleware(request(`/groups/${groupId}/${path}`))).status).toBe(200);
+    mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: ["COACH", "ADMIN"] } });
+    expect((await middleware(request(`/groups/${groupId}/members`))).status).toBe(200);
+    mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: ["COACH", "GUARDIAN"] } });
+    expect((await middleware(request(`/groups/${groupId}/members/consent`))).status).toBe(200);
+    mock.maybeSingle.mockResolvedValue({ data: null });
+    expect((await middleware(request(`/groups/${groupId}/members`))).status).toBe(404);
+  });
+  it("revocar COACH retira el acceso operativo en la petición siguiente", async () => {
+    mock.maybeSingle.mockResolvedValueOnce({ data: { id: groupId, roles: ["COACH", "ATHLETE"] } })
+      .mockResolvedValueOnce({ data: { id: groupId, roles: ["ATHLETE"] } });
+    const path = `/groups/${groupId}/activities/id/attendance`;
+    expect((await middleware(request(path))).status).toBe(200);
+    expect((await middleware(request(path))).status).toBe(403);
+  });
+});

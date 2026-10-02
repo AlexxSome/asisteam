@@ -97,3 +97,14 @@ describe("toma de asistencia", () => {
     expect(controls("Ana").getByRole("button", { name: "Presente" }).getAttribute("aria-pressed")).toBe("false");
   });
 });
+
+it("COACH corrige estados sin notas ni desmarcar la convocatoria", async () => {
+  actions.updateAttendance.mockResolvedValue({ records: [{ membership_id: ben.membership_id, status: "ABSENT", note: null }] });
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[{ ...ben, note: null }]} canEditNotes={false} />);
+  expect(screen.queryByText(/Nota \(/)).toBeNull();
+  expect(screen.queryByRole("textbox", { name: "Nota de Ben" })).toBeNull();
+  await userEvent.click(controls("Ben").getByRole("button", { name: "Ausente" }));
+  expect(actions.updateAttendance).toHaveBeenCalledWith(group, activity, ben.membership_id, { status: "ABSENT" });
+  expect(actions.clearAttendance).not.toHaveBeenCalled();
+  expect(screen.getByText(/Sin marcar 0/)).toBeTruthy();
+});

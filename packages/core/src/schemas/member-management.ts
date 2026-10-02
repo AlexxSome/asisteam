@@ -11,6 +11,7 @@ export const memberFilterSchema = z.object({
   page: z.coerce.number().int().min(1).max(100001).default(1),
 });
 export const memberIdentitySchema = z.object({ group_id: z.string().uuid(), membership_id: z.string().uuid() });
+export const coachAssignmentSchema = memberIdentitySchema.strict();
 export const managedActivationSchema = memberIdentitySchema.strict();
 export const activationReviewSchema = z.object({ request_id: z.string().uuid(), accepted: z.boolean() }).strict();
 export const memberStatusSchema = memberIdentitySchema.extend({ action: z.enum(["deactivate", "reactivate"]) }).strict();

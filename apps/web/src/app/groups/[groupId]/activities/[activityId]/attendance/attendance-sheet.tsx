@@ -12,8 +12,8 @@ const stateColors: Record<AttendanceStatus, string> = {
   EXCUSED: "border-gray-500 bg-gray-100 text-gray-950",
 };
 
-function AthleteRow({ row, busy, onStatus, onNote }: {
-  row: AttendanceRosterRow; busy: boolean;
+function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
+  row: AttendanceRosterRow; busy: boolean; canEditNotes: boolean;
   onStatus: (status: AttendanceStatus) => void; onNote: (note: string) => Promise<void>;
 }) {
   const [note, setNote] = useState(row.note ?? "");
@@ -32,7 +32,7 @@ function AthleteRow({ row, busy, onStatus, onNote }: {
         {ATTENDANCE_STATUS_LABELS[status]}
       </button>)}
     </div>
-    <details><summary className="min-h-11 cursor-pointer py-2 text-sm underline">Nota{row.note ? " (registrada)" : " (opcional)"}</summary>
+    {canEditNotes && <details><summary className="min-h-11 cursor-pointer py-2 text-sm underline">Nota{row.note ? " (registrada)" : " (opcional)"}</summary>
       {row.status ? <form onSubmit={(event) => { event.preventDefault(); void onNote(note); }} className="space-y-2">
         <label htmlFor={`note-${row.membership_id}`} className="text-sm">Nota de {row.full_name}</label>
         <textarea id={`note-${row.membership_id}`} value={note} onChange={(event) => setNote(event.target.value)}
@@ -40,12 +40,12 @@ function AthleteRow({ row, busy, onStatus, onNote }: {
         <p className="text-xs text-muted-foreground">{note.length}/500 caracteres</p>
         <button type="submit" disabled={busy || note === (row.note ?? "")} className="min-h-11 rounded-md border px-3 py-2 disabled:opacity-50">Guardar nota</button>
       </form> : <p className="text-sm text-muted-foreground">Marca un estado antes de añadir una nota.</p>}
-    </details>
+    </details>}
   </li>;
 }
 
-export function AttendanceSheet({ groupId, activityId, initialRows }: {
-  groupId: string; activityId: string; initialRows: AttendanceRosterRow[];
+export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes = true }: {
+  groupId: string; activityId: string; initialRows: AttendanceRosterRow[]; canEditNotes?: boolean;
 }) {
   const [rows, setRows] = useState(initialRows);
   const rowsRef = useRef(initialRows);
@@ -116,9 +116,9 @@ export function AttendanceSheet({ groupId, activityId, initialRows }: {
     </div>}
     {error && <p role="alert" className="rounded-md border border-destructive p-3 text-destructive">{error}</p>}
     <p role="status" className="text-sm text-muted-foreground">{busy.size ? "Guardando cambios…" : feedback}</p>
-    <p className="text-xs text-muted-foreground">Cada toque guarda el cambio. Repite el estado seleccionado para volver a “sin marcar”.</p>
-    <ul className="space-y-3">{visibleRows.map((row) => <AthleteRow key={row.membership_id} row={row} busy={busy.has(row.membership_id)}
-      onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, row.status === status, row.status ? { status } : undefined)}
+    <p className="text-xs text-muted-foreground">Cada toque guarda el cambio. {canEditNotes ? "Repite el estado seleccionado para volver a “sin marcar”." : "Puedes corregir estados. Las notas y volver a sin marcar están reservados al administrador."}</p>
+    <ul className="space-y-3">{visibleRows.map((row) => <AthleteRow key={row.membership_id} row={row} busy={busy.has(row.membership_id)} canEditNotes={canEditNotes}
+      onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, canEditNotes && row.status === status, row.status ? { status } : undefined)}
       onNote={(note) => row.status ? persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }) : Promise.resolve()} />)}</ul>
     {visibleRows.length === 0 && <p>No se encontraron deportistas con ese nombre.</p>}
   </section>;

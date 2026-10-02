@@ -6,7 +6,7 @@
 export const ACCOUNT_STATUSES = ["ACTIVE", "INVITED", "MANAGED"] as const;
 export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
 
-export const MEMBERSHIP_ROLES = ["ADMIN", "ATHLETE", "GUARDIAN"] as const;
+export const MEMBERSHIP_ROLES = ["ADMIN", "ATHLETE", "GUARDIAN", "COACH"] as const;
 export type MembershipRole = (typeof MEMBERSHIP_ROLES)[number];
 
 export const MEMBERSHIP_STATUSES = ["INVITED", "PENDING", "ACTIVE", "INACTIVE"] as const;
@@ -24,6 +24,7 @@ export const ATTENDANCE_STATUS_LABELS: Record<AttendanceStatus, string> = {
 
 export const MEMBERSHIP_ROLE_LABELS: Record<MembershipRole, string> = {
   ADMIN: "Administrador",
+  COACH: "Entrenador",
   ATHLETE: "Deportista",
   GUARDIAN: "Apoderado",
 };

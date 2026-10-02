@@ -50,9 +50,9 @@ export async function updateAttendance(groupId: string, activityId: string, memb
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");
-  // Resuelve la identidad desde una proyección solo-ADMIN, acotada a la ruta.
+  // Resuelve la identidad desde una proyección operativa sin notas para COACH, acotada a la ruta.
   // La RPC repite autorización y lee los campos omitidos bajo bloqueo.
-  const { data: record, error: lookupError } = await supabase.from("v_attendance_admin").select("id")
+  const { data: record, error: lookupError } = await supabase.from("v_attendance_operator").select("id")
     .eq("group_id", groupId).eq("activity_id", activityId).eq("membership_id", membershipId).maybeSingle();
   if (lookupError) return failure("attendance_save_failed");
   if (!record?.id) return failure("attendance_record_not_found");

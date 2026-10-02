@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { activityTypeLabel, reportFilterSchema, reportPercentage } from "@asisteam/core";
+import { canManageAttendance, activityTypeLabel, reportFilterSchema, reportPercentage } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { getActivityTypes } from "@/lib/activities";
 import { getGroupAttendanceReport, parseReportFilters, reportPageHref, type ReportSearchParams } from "@/lib/reports";
@@ -13,7 +13,7 @@ export default async function GroupReportsPage({ params, searchParams }: {
   params: Promise<{ groupId: string }>; searchParams: Promise<ReportSearchParams>;
 }) {
   const group = await getGroup((await params).groupId);
-  if (!group.roles.includes("ADMIN")) return GroupStatsContent({ group, query: await searchParams });
+  if (!canManageAttendance(group.roles)) return GroupStatsContent({ group, query: await searchParams });
   const parsed = parseReportFilters(await searchParams);
   const filter = parsed.success ? parsed.data : reportFilterSchema.parse({});
   const [types, result] = await Promise.all([
@@ -36,7 +36,7 @@ export default async function GroupReportsPage({ params, searchParams }: {
       {report.totals.convened === 0 && <section className="space-y-2 rounded-lg border p-4">
         <p>No hay asistencia registrada en este período.</p>
         <p className="text-sm text-muted-foreground">Cambia el período o los tipos de actividad y aplica los filtros.</p>
-        {!report.has_activities && <Link href={`/groups/${group.id}/activities/new`} className="block underline">Crear primera actividad</Link>}
+        {!report.has_activities && group.roles.includes("ADMIN") && <Link href={`/groups/${group.id}/activities/new`} className="block underline">Crear primera actividad</Link>}
       </section>}
       <ReportTable report={report} />
       {report.by_athlete.length === 0 && report.totals.athletes > 0 && <p>No hay deportistas en esta página. <Link href={reportPageHref(group.id, filter, 1)} className="underline">Volver a la primera página</Link></p>}

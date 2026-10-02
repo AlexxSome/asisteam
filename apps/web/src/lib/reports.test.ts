@@ -16,7 +16,7 @@ it("envía todos los filtros, sin calcular métricas en la página", async () =>
   expect((await getGroupAttendanceReport(groupId, filter)).report).toEqual(reportFixture);
   expect(mock.rpc).toHaveBeenCalledWith("get_group_attendance_report", { p_group_id: groupId, p_period: "custom", p_from: "2026-03-01", p_to: "2026-03-31", p_include_inactive: true, p_activity_type_ids: filter.activity_type_ids, p_page: 2, p_page_size: 50, p_sort: "name" });
 });
-it("no llama la RPC para no-ADMIN y revocación del permiso produce 404", async () => {
+it("no llama la RPC para roles sin permiso y revocación del permiso produce 404", async () => {
   mock.group.mockResolvedValue({ id: groupId, roles: ["ATHLETE"] });
   await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("404");
   expect(mock.rpc).not.toHaveBeenCalled();
@@ -58,4 +58,11 @@ it("estadísticas consulta autorización actual y muestra revocación sin usar d
   await expect(getGroupStats(groupId)).rejects.toThrow("leer las estadísticas");
   mock.rpc.mockResolvedValueOnce({ data: null, error: { code: "PT404" } });
   await expect(getGroupStats(groupId)).rejects.toThrow("404");
+});
+
+it("COACH consulta el reporte agregado y una revocación se vuelve a verificar", async () => {
+  mock.group.mockResolvedValue({ id: groupId, roles: ["COACH"] });
+  expect((await getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).report).toEqual(reportFixture);
+  mock.rpc.mockResolvedValue({ data: null, error: { code: "PT403" } });
+  await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("404");
 });

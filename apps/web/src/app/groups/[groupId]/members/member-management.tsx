@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ACCOUNT_STATUS_LABELS, MEMBERSHIP_ROLE_LABELS, MEMBERSHIP_STATUS_LABELS, MEMBER_MANAGEMENT_ERRORS, managedMemberEditSchema, type GroupMember, type ManagedMemberEdit } from "@asisteam/core";
-import { changeMemberStatus, requestManagedActivation, updateManagedMember } from "./actions";
+import { assignMemberCoach, changeMemberStatus, requestManagedActivation, updateManagedMember } from "./actions";
 
 export function MemberManagement({ groupId, member }: { groupId: string; member: GroupMember }) {
   const router = useRouter();
@@ -30,6 +30,15 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
         action: member.status === "ACTIVE" ? "deactivate" : "reactivate" });
       if ("error" in result) setError(result.error.message);
       else { setMessage(member.status === "ACTIVE" ? "Integrante desactivado. Su historial se conserva." : "Integrante reactivado. Su historial se conserva."); setConfirming(false); router.refresh(); }
+    } catch { setError(MEMBER_MANAGEMENT_ERRORS.unavailable); }
+    finally { setSaving(false); }
+  }
+  async function assignCoach() {
+    setSaving(true); setError(undefined); setMessage(undefined);
+    try {
+      const result = await assignMemberCoach({ group_id: groupId, membership_id: member.membership_id });
+      if ("error" in result) setError(result.error.message);
+      else { setMessage("Rol Entrenador asignado. Sus otros roles e historial se conservan."); router.refresh(); }
     } catch { setError(MEMBER_MANAGEMENT_ERRORS.unavailable); }
     finally { setSaving(false); }
   }
@@ -77,6 +86,8 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
     {!editing && <div className="flex flex-wrap gap-3">
       {member.account_status === "MANAGED" ? <button disabled={saving || confirming} className="min-h-11 rounded border px-4" onClick={() => setEditing(true)}>Editar perfil</button> : <p>El perfil lo edita su titular.</p>}
       {member.account_status === "MANAGED" && member.role === "ATHLETE" && <button disabled={saving || confirming} className="min-h-11 rounded border px-4" onClick={activateAccount}>Activar cuenta propia</button>}
+      {member.status === "ACTIVE" && member.role !== "COACH" && <button disabled={saving || confirming} className="min-h-11 rounded border px-4" onClick={assignCoach}>Asignar rol Entrenador</button>}
+      {member.role === "COACH" && <p className="text-sm">Puede tomar y corregir asistencia y ver reportes. No administra el grupo ni accede a notas privadas.</p>}
       {member.status === "ACTIVE" && !confirming && <button disabled={saving} className="min-h-11 rounded border px-4" onClick={() => setConfirming(true)}>Desactivar</button>}
       {member.status === "INACTIVE" && <button disabled={saving} className="min-h-11 rounded border px-4" onClick={changeStatus}>Reactivar</button>}
     </div>}

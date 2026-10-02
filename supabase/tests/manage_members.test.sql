@@ -72,7 +72,7 @@ select throws_ok($$select * from public.list_group_members(pg_temp.id(201))$$,'P
 select pg_temp.login(1);
 select is((select count(*) from public.list_group_members(pg_temp.id(201))),8::bigint,'lista solo grupo solicitado');
 select is((select count(*) from public.list_group_members(pg_temp.id(201),'ATHLETE','INACTIVE')),3::bigint,'filtra rol y estado');
-select throws_ok($$select * from public.list_group_members(pg_temp.id(201),'COACH')$$,'PT400','invalid_member_filters','no admite rol P2');
+select throws_ok($$select * from public.list_group_members(pg_temp.id(201),'OWNER')$$,'PT400','invalid_member_filters','no admite roles desconocidos');
 select throws_ok($$select * from public.list_group_members(pg_temp.id(201),null,null,-1)$$,'PT400','invalid_member_filters','offset inválido');
 select throws_ok($$select public.deactivate_membership(pg_temp.id(201),pg_temp.id(399))$$,'PT404','membership_not_found','membership de otro grupo responde 404');
 select throws_ok($$select public.deactivate_membership(pg_temp.id(201),pg_temp.id(999))$$,'PT404','membership_not_found','membership inexistente responde igual');

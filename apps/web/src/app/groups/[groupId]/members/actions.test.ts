@@ -3,7 +3,7 @@ const mock = vi.hoisted(() => ({ getUser: vi.fn(), rpc: vi.fn(), revalidate: vi.
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, rpc: mock.rpc }) }));
 vi.mock("../invitations/new/actions", () => ({ sendInvitation: mock.send }));
-import { changeMemberStatus, requestManagedActivation, updateManagedMember } from "./actions";
+import { assignMemberCoach, changeMemberStatus, requestManagedActivation, updateManagedMember } from "./actions";
 const identity = { group_id: "34000000-0000-4000-8000-000000000201", membership_id: "34000000-0000-4000-8000-000000000301" };
 const profile = { full_name: "Persona gestionada", birthdate: "1990-01-01", email: "", phone: null };
 beforeEach(() => {
@@ -54,4 +54,23 @@ it("no permite reemplazar email/rol y conserva fallos de envío", async () => {
   mock.rpc.mockResolvedValue({ data: "READY", error: null });
   mock.send.mockResolvedValue({ error: { code: "email_delivery_failed", message: "Puedes reenviar", details: {} } });
   expect(await requestManagedActivation(identity)).toHaveProperty("error.code", "email_delivery_failed");
+});
+
+it("asigna COACH vía RPC e invalida vistas; no acepta privilegios del cliente", async () => {
+  expect(await assignMemberCoach({ ...identity, role: "ADMIN" })).toHaveProperty("error.code", "invalid_member_request");
+  expect(mock.rpc).not.toHaveBeenCalled();
+  expect(await assignMemberCoach(identity)).toEqual({ success: true });
+  expect(mock.rpc).toHaveBeenCalledWith("assign_member_coach", { p_group_id: identity.group_id, p_membership_id: identity.membership_id });
+  expect(mock.revalidate).toHaveBeenCalledWith("/groups", "layout");
+});
+it("asignar COACH exige sesión y propaga denegación/capacidad", async () => {
+  mock.getUser.mockResolvedValue({ data: { user: null } });
+  expect(await assignMemberCoach(identity)).toHaveProperty("error.code", "authentication_required");
+  expect(mock.rpc).not.toHaveBeenCalled();
+  mock.getUser.mockResolvedValue({ data: { user: { id: "verified" } } });
+  for (const code of ["admin_required", "group_member_limit", "membership_status_changed"]) {
+    mock.rpc.mockResolvedValue({ error: { message: code } });
+    expect(await assignMemberCoach(identity)).toHaveProperty("error.code", code);
+  }
+  expect(mock.revalidate).not.toHaveBeenCalled();
 });
