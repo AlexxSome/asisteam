@@ -29,7 +29,7 @@ export default async function WardHistoryPage({ params, searchParams }: {
   ]);
   return <>
     <Link href={`/wards/${ward.athlete_user_id}`} prefetch={false} className="inline-block py-2 underline">Volver al perfil del pupilo</Link>
-    <header><h1 className="text-2xl font-semibold">Historial de asistencia del pupilo</h1>
+    <header><h1 className="text-h1">Historial de asistencia del pupilo</h1>
       <p className="mt-2 text-muted-foreground">{ward.full_name} · {group.name}</p></header>
     <ReportFilters key={JSON.stringify(filter)} groupId={group.id} filter={filter} types={types} personal athleteUserId={ward.athlete_user_id} />
     {result.error && <p role="alert" className="rounded-md border border-destructive p-4">{result.error}</p>}

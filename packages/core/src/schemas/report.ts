@@ -56,9 +56,10 @@ export function reportPercentage(value: number | null) {
   return value === null ? "Sin datos" : `${value.toFixed(1)} %`;
 }
 
-export function reportAttendanceTone(value: number | null) {
-  if (value === null) return "text-muted-foreground";
-  if (value >= 85) return "text-green-700 dark:text-green-400";
-  if (value >= 70) return "text-amber-700 dark:text-amber-400";
-  return "text-red-700 dark:text-red-400";
+/** Clasificación de dominio, independiente de la presentación de cada cliente. */
+export function reportAttendanceTone(value: number | null): "neutral" | "success" | "warning" | "error" {
+  if (value === null) return "neutral";
+  if (value >= 85) return "success";
+  if (value >= 70) return "warning";
+  return "error";
 }
