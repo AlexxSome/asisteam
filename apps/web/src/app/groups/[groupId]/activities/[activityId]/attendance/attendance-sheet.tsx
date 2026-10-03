@@ -15,10 +15,12 @@ import { clearAttendance, saveAttendance, updateAttendance } from "./actions";
 
 function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
   row: AttendanceRosterRow; busy: boolean; canEditNotes: boolean;
-  onStatus: (status: AttendanceStatus) => void; onNote: (note: string) => Promise<void>;
+  onStatus: (status: AttendanceStatus) => void; onNote: (note: string) => Promise<boolean>;
 }) {
   const [note, setNote] = useState(row.note ?? "");
-  useEffect(() => setNote(row.note ?? ""), [row.note]);
+  const [dirty, setDirty] = useState(false);
+  // Keep a draft through optimistic updates and rollback; sync confirmed server values.
+  useEffect(() => { if (!dirty) setNote(row.note ?? ""); }, [row.note, dirty]);
   return <li className="space-y-3 rounded-lg border border-border bg-surface p-3" aria-busy={busy}>
     <div className="flex items-center gap-3">
       {row.avatar_url && <img src={row.avatar_url} alt="" width={40} height={40} referrerPolicy="no-referrer" className="size-10 rounded-full object-cover" />}
@@ -35,9 +37,9 @@ function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
       </Button>)}
     </div>
     {canEditNotes && <details><summary className="min-h-11 cursor-pointer py-2 text-small underline">Nota{row.note ? " (registrada)" : " (opcional)"}</summary>
-      {row.status ? <form onSubmit={(event) => { event.preventDefault(); void onNote(note); }} className="space-y-2">
+      {row.status ? <form onSubmit={(event) => { event.preventDefault(); void onNote(note).then(saved => { if (saved) setDirty(false); }); }} className="space-y-2">
         <Field id={`note-${row.membership_id}`} label={`Nota de ${row.full_name}`} help={`${note.length}/500 caracteres`}>
-          <Textarea value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} rows={3} disabled={busy} />
+          <Textarea value={note} onChange={(event) => { setNote(event.target.value); setDirty(true); }} maxLength={500} rows={3} disabled={busy} />
         </Field>
         <Button type="submit" variant="secondary" loading={busy} disabled={note === (row.note ?? "")}>Guardar nota</Button>
       </form> : <p className="text-small text-muted-foreground">Marca un estado antes de añadir una nota.</p>}
@@ -136,9 +138,11 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
     <p className="text-small text-muted-foreground">Cada toque guarda el cambio. {canEditNotes ? "Repite el estado seleccionado para volver a “sin marcar”." : "Puedes corregir estados. Las notas y volver a sin marcar están reservados al administrador."}</p>
     <ul className="space-y-3">{visibleRows.slice((page - 1) * 50, page * 50).map((row) => <AthleteRow key={row.membership_id} row={row} busy={bulkBusy || busy.has(row.membership_id)} canEditNotes={canEditNotes}
       onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, canEditNotes && row.status === status, row.status ? { status } : undefined)}
-      onNote={async (note) => { if (row.status) await persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }); }} />)}</ul>
+      onNote={async (note) => row.status ? persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }) : false} />)}</ul>
     {visibleRows.length > 50 && <Pagination label="Páginas de deportistas" page={page}
       totalPages={Math.ceil(visibleRows.length / 50)} onPageChange={setPage} />}
-    {visibleRows.length === 0 && <EmptyState>No se encontraron deportistas con ese nombre.</EmptyState>}
+    {visibleRows.length === 0 && <EmptyState title="Sin resultados para esta búsqueda" action={<Button type="button" variant="secondary" onClick={() => { setQuery(""); setPage(1); document.getElementById("athlete-search")?.focus(); }}>Limpiar búsqueda</Button>}>
+      No se encontraron deportistas con ese nombre. Prueba con otro nombre o limpia la búsqueda.
+    </EmptyState>}
   </section>;
 }

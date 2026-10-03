@@ -1,0 +1,59 @@
+{
+  "baseline": {
+    "innerWidth": 1440,
+    "devicePixelRatio": 1,
+    "scale": 1
+  },
+  "zoom": "Native Chrome page zoom selected in chrome://settings/appearance",
+  "checks": [
+    {
+      "scenario": "error",
+      "innerWidth": 720,
+      "devicePixelRatio": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "overflow": false
+    },
+    {
+      "scenario": "attendance",
+      "innerWidth": 720,
+      "devicePixelRatio": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "overflow": false
+    },
+    {
+      "scenario": "members",
+      "innerWidth": 720,
+      "devicePixelRatio": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "overflow": false
+    },
+    {
+      "scenario": "loading",
+      "innerWidth": 720,
+      "devicePixelRatio": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "overflow": false
+    },
+    {
+      "scenario": "invitation",
+      "innerWidth": 720,
+      "devicePixelRatio": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "overflow": false
+    },
+    {
+      "scenario": "404",
+      "innerWidth": 720,
+      "devicePixelRatio": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "overflow": false
+    }
+  ],
+  "keyboard": "Tab + Enter retries"
+}

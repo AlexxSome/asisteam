@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import { LoadingState } from "@/components/ui/loading-state";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ActionLink } from "@/components/ui/button";
 import Link from "next/link";
 import { activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
@@ -10,7 +14,8 @@ export default async function ActivitiesPage({ params, searchParams }: {
 }) {
   const { groupId } = await params;
   const { page, period } = parseActivitySearch(await searchParams);
-  const [group, { activities, hasNext }] = await Promise.all([getGroup(groupId), getActivities(groupId, page, period)]);
+  // Resolve access and invalid query responses before opening a streaming boundary.
+  const group = await getGroup(groupId);
   return <>
     <div className="flex flex-wrap items-center justify-between gap-4">
       <h1 className="text-2xl font-semibold">Actividades</h1>
@@ -25,7 +30,17 @@ export default async function ActivitiesPage({ params, searchParams }: {
       <Link href="/groups#agenda">Mi agenda de todos los grupos</Link>
     </nav>
     <p className="text-sm text-muted-foreground">Horarios de Chile · America/Santiago</p>
-    {activities.length === 0 ? <p>Aún no hay actividades en esta página.</p> : <ul className="space-y-3">
+    <div className="min-h-80">
+    <Suspense key={`${groupId}:${period}:${page}`} fallback={<LoadingState label="Cargando actividades…" />}>
+    {getActivities(groupId, page, period).then(({ activities, hasNext }) => <>
+    {activities.length === 0 ? <EmptyState
+      title={page > 1 ? "No hay actividades en esta página" : period === "upcoming" ? "No hay próximas actividades" : "No hay actividades pasadas"}
+      action={page > 1 ? <ActionLink href={`/groups/${groupId}/activities?period=${period}`} variant="secondary">Volver a la primera página</ActionLink>
+        : <>{group.roles.includes("ADMIN") && <ActionLink href={`/groups/${groupId}/activities/new`} variant="primary">Crear actividad</ActionLink>}
+          <ActionLink href={`/groups/${groupId}/activities?period=${period === "upcoming" ? "past" : "upcoming"}`} variant="secondary">{period === "upcoming" ? "Ver actividades pasadas" : "Ver próximas actividades"}</ActionLink></>}>
+      {page > 1 ? "Vuelve al inicio de la lista conservando el período seleccionado."
+        : period === "upcoming" ? "Las actividades programadas del grupo aparecerán aquí." : "Las actividades ya realizadas aparecerán aquí. Puedes consultar las próximas actividades."}
+    </EmptyState> : <ul className="space-y-3">
       {activities.map((activity) => <li key={activity.id} className="space-y-2 rounded-lg border p-4">
         <Link href={`/groups/${groupId}/activities/${activity.id}`} className="break-words text-lg font-semibold underline">{activity.title}</Link>
         <p className="flex items-center gap-2"><span aria-hidden className="size-3 rounded-full" style={{ backgroundColor: activity.activity_type_color ?? undefined }} />{activityTypeLabel(activity.activity_type_name ?? "", !!activity.is_system_type)}</p>
@@ -37,5 +52,8 @@ export default async function ActivitiesPage({ params, searchParams }: {
       {page > 1 && <Link href={`/groups/${groupId}/activities?period=${period}&page=${page - 1}`} className="underline">Anterior</Link>}
       {hasNext && <Link href={`/groups/${groupId}/activities?period=${period}&page=${page + 1}`} className="underline">Siguiente</Link>}
     </nav>
+  </>)}
+    </Suspense>
+    </div>
   </>;
 }

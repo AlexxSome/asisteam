@@ -1,0 +1,615 @@
+{
+  "checks": [
+    {
+      "scenario": "attendance",
+      "width": 320,
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a la actividad",
+          "height": 44
+        },
+        {
+          "text": "Agregar deportista",
+          "height": 44
+        },
+        {
+          "text": "Invitar por email",
+          "height": 44
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "members",
+      "width": 320,
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Crear cuenta gestionada",
+          "height": 24
+        },
+        {
+          "text": "Invitar por email",
+          "height": 24
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 24
+        },
+        {
+          "text": "Reportes con inactivos",
+          "height": 24
+        },
+        {
+          "text": "Filtrar",
+          "height": 44
+        },
+        {
+          "text": "Limpiar filtros",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "loading",
+      "width": 320,
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": []
+    },
+    {
+      "scenario": "error",
+      "width": 320,
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a intentar",
+          "height": 44
+        },
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "404",
+      "width": 320,
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "invitation",
+      "width": 320,
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Enviar invitación",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "attendance",
+      "width": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a la actividad",
+          "height": 44
+        },
+        {
+          "text": "Agregar deportista",
+          "height": 44
+        },
+        {
+          "text": "Invitar por email",
+          "height": 44
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "members",
+      "width": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Crear cuenta gestionada",
+          "height": 24
+        },
+        {
+          "text": "Invitar por email",
+          "height": 24
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 24
+        },
+        {
+          "text": "Reportes con inactivos",
+          "height": 24
+        },
+        {
+          "text": "Filtrar",
+          "height": 44
+        },
+        {
+          "text": "Limpiar filtros",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "loading",
+      "width": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": []
+    },
+    {
+      "scenario": "error",
+      "width": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a intentar",
+          "height": 44
+        },
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "404",
+      "width": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "invitation",
+      "width": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Enviar invitación",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "attendance",
+      "width": 768,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a la actividad",
+          "height": 44
+        },
+        {
+          "text": "Agregar deportista",
+          "height": 44
+        },
+        {
+          "text": "Invitar por email",
+          "height": 44
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "members",
+      "width": 768,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Crear cuenta gestionada",
+          "height": 24
+        },
+        {
+          "text": "Invitar por email",
+          "height": 24
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 24
+        },
+        {
+          "text": "Reportes con inactivos",
+          "height": 24
+        },
+        {
+          "text": "Filtrar",
+          "height": 44
+        },
+        {
+          "text": "Limpiar filtros",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "loading",
+      "width": 768,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": []
+    },
+    {
+      "scenario": "error",
+      "width": 768,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a intentar",
+          "height": 44
+        },
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "404",
+      "width": 768,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "invitation",
+      "width": 768,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Enviar invitación",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "attendance",
+      "width": 1024,
+      "innerWidth": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a la actividad",
+          "height": 44
+        },
+        {
+          "text": "Agregar deportista",
+          "height": 44
+        },
+        {
+          "text": "Invitar por email",
+          "height": 44
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "members",
+      "width": 1024,
+      "innerWidth": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Crear cuenta gestionada",
+          "height": 24
+        },
+        {
+          "text": "Invitar por email",
+          "height": 24
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 24
+        },
+        {
+          "text": "Reportes con inactivos",
+          "height": 24
+        },
+        {
+          "text": "Filtrar",
+          "height": 44
+        },
+        {
+          "text": "Limpiar filtros",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "loading",
+      "width": 1024,
+      "innerWidth": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": []
+    },
+    {
+      "scenario": "error",
+      "width": 1024,
+      "innerWidth": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a intentar",
+          "height": 44
+        },
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "404",
+      "width": 1024,
+      "innerWidth": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "invitation",
+      "width": 1024,
+      "innerWidth": 1024,
+      "scrollWidth": 1024,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Enviar invitación",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "attendance",
+      "width": 1440,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a la actividad",
+          "height": 44
+        },
+        {
+          "text": "Agregar deportista",
+          "height": 44
+        },
+        {
+          "text": "Invitar por email",
+          "height": 44
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "members",
+      "width": 1440,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Crear cuenta gestionada",
+          "height": 24
+        },
+        {
+          "text": "Invitar por email",
+          "height": 24
+        },
+        {
+          "text": "Revisar pendientes",
+          "height": 24
+        },
+        {
+          "text": "Reportes con inactivos",
+          "height": 24
+        },
+        {
+          "text": "Filtrar",
+          "height": 44
+        },
+        {
+          "text": "Limpiar filtros",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "loading",
+      "width": 1440,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": []
+    },
+    {
+      "scenario": "error",
+      "width": 1440,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a intentar",
+          "height": 44
+        },
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "404",
+      "width": 1440,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Volver a mis grupos",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "invitation",
+      "width": 1440,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "mainCount": 1,
+      "buttons": [
+        {
+          "text": "Enviar invitación",
+          "height": 44
+        }
+      ]
+    },
+    {
+      "scenario": "members-page-9",
+      "recovery": "?page=1&role=ATHLETE&status=ACTIVE"
+    },
+    {
+      "scenario": "COACH",
+      "hasAdd": 0,
+      "hasInvite": 0
+    },
+    {
+      "scenario": "retry-keyboard",
+      "passed": true
+    },
+    {
+      "scenario": "offline-online",
+      "passed": true
+    },
+    {
+      "scenario": "failed-note",
+      "before": true,
+      "draft": "Nota anterior",
+      "focus": "AsisteamClub sintético · AdministradorTomar asistenciaPresentes 0 · Atrasados 0 · Ausentes 1 · Justificados 0 · Sin marcar 0Buscar deportistaMarcar todos como PresenteNo pudimos confirmar el guardado. Recarga la asistencia antes de reintentar.Cada toque guarda el cambio. Repite el estado seleccionado para volver a “sin marcar”.Deportista sintéticoAusentePresente✓AusenteAtrasadoJustificadoNota (registrada)Nota de Deportista sintéticoNota anterior13/500 caracteresGuardar nota"
+    },
+    {
+      "scenario": "failed-note",
+      "before": false,
+      "draft": "Borrador de nota que se conserva tras el fallo",
+      "focus": "AsisteamClub sintético · AdministradorTomar asistenciaPresentes 0 · Atrasados 0 · Ausentes 1 · Justificados 0 · Sin marcar 0Buscar deportistaMarcar todos como PresenteNo pudimos confirmar el guardado. Recarga la asistencia antes de reintentar.Cada toque guarda el cambio. Repite el estado seleccionado para volver a “sin marcar”.Deportista sintéticoAusentePresente✓AusenteAtrasadoJustificadoNota (registrada)Nota de Deportista sintéticoBorrador de nota que se conserva tras el fallo46/500 caracteresGuardar nota"
+    },
+    {
+      "scenario": "failed-invitation",
+      "email": "guardian@example.test",
+      "role": "GUARDIAN",
+      "focus": "Enviar invitación"
+    }
+  ],
+  "pageErrors": []
+}

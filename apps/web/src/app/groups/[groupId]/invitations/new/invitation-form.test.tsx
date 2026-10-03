@@ -41,3 +41,22 @@ describe("formulario ADMIN de invitaciones", () => {
     expect(mock.send).toHaveBeenCalledWith({ action: "resend", group_id: groupId, invitation_id: invitationId });
   });
 });
+
+it.each(["rejection", "business"])("conserva email, rol y foco al fallar (%s), sin refrescar la página", async mode => {
+  if (mode === "rejection") mock.send.mockRejectedValue(new Error("private detail"));
+  else mock.send.mockResolvedValue({ error: { message: "No pudimos enviar la invitación." } });
+  const user = userEvent.setup();
+  render(<InvitationFeedback><InvitationForm groupId={groupId} /></InvitationFeedback>);
+  const email = screen.getByLabelText("Email") as HTMLInputElement;
+  const role = screen.getByLabelText("Rol en el grupo") as HTMLSelectElement;
+  await user.type(email, "guardian@example.test");
+  await user.selectOptions(role, "GUARDIAN");
+  const submit = screen.getByRole("button", { name: "Enviar invitación" });
+  await user.click(submit);
+  await screen.findByRole("alert");
+  expect(email.value).toBe("guardian@example.test");
+  expect(role.value).toBe("GUARDIAN");
+  expect(document.activeElement).toBe(submit);
+  expect(mock.refresh).not.toHaveBeenCalled();
+  expect(document.body.textContent).not.toContain("private detail");
+});

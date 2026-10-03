@@ -18,6 +18,10 @@ export default async function AttendancePage({ params }: { params: Promise<{ gro
     {activity.starts_at && new Date(activity.starts_at).getTime() - Date.now() > 2 * 60 * 60 * 1000 &&
       <Alert tone="warning">Esta actividad aún no comienza; puedes registrar asistencia anticipada.</Alert>}
     {roster.length ? <AttendanceSheet key={activityId} groupId={groupId} activityId={activityId} initialRows={roster} canEditNotes={canEditNotes} /> :
-      <EmptyState>Este grupo aún no tiene deportistas activos.</EmptyState>}
+      <EmptyState title="Aún no hay deportistas para tomar asistencia" action={canEditNotes
+        ? <><ActionLink href={`/groups/${groupId}/members/new`} variant="primary">Agregar deportista</ActionLink><ActionLink href={`/groups/${groupId}/invitations/new`}>Invitar por email</ActionLink><ActionLink href={`/groups/${groupId}/members/pending`}>Revisar pendientes</ActionLink></>
+        : <ActionLink href={`/groups/${groupId}/activities/${activityId}`} variant="secondary">Volver a la actividad</ActionLink>}>
+        Este grupo aún no tiene deportistas activos. {canEditNotes ? "Agrega o invita deportistas, o revisa las membresías pendientes de activación." : "Pide a un administrador que revise la nómina del grupo."}
+      </EmptyState>}
   </>;
 }

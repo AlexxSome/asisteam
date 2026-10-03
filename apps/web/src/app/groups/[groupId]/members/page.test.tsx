@@ -28,7 +28,21 @@ it("rechaza filtros inválidos y distingue vacío de error del servidor", async 
   expect(screen.getByRole("alert")).toBeTruthy(); expect(mock.rpc).not.toHaveBeenCalled();
   cleanup();
   render(await MembersPage({ params, searchParams: Promise.resolve({}) }));
-  expect(screen.getByText("No hay integrantes para estos filtros en esta página.")).toBeTruthy();
+  expect(screen.getByText("Aún no hay integrantes en la nómina")).toBeTruthy();
   mock.rpc.mockResolvedValue({ error: { message: "private" } });
   await expect(MembersPage({ params, searchParams: Promise.resolve({}) })).rejects.toThrow("No pudimos cargar");
+});
+
+it("distingue filtros vacíos de una página fuera de rango y conserva filtros al recuperar", async () => {
+  render(await MembersPage({ params, searchParams: Promise.resolve({ role: "ATHLETE" }) }));
+  expect(screen.getByRole("heading", { name: "Sin resultados para estos filtros" })).toBeTruthy();
+  expect(screen.getByRole("link", { name: "Limpiar filtros" }).getAttribute("href")).toBe(`/groups/${groupId}/members`);
+  cleanup();
+  render(await MembersPage({ params, searchParams: Promise.resolve({ page: "99", role: "ATHLETE", status: "ACTIVE" }) }));
+  expect(screen.getByRole("heading", { name: "No hay integrantes en esta página" })).toBeTruthy();
+  expect(screen.getByRole("link", { name: "Volver a la primera página" }).getAttribute("href")).toBe("?page=1&role=ATHLETE&status=ACTIVE");
+});
+it.each(["PT403", "PT404"])("conserva notFound ante %s del servicio", async code => {
+  mock.rpc.mockResolvedValue({ error: { code, message: "private detail" } });
+  await expect(MembersPage({ params, searchParams: Promise.resolve({}) })).rejects.toThrow("not-found");
 });

@@ -8,6 +8,7 @@ import type { MyGroup } from "@/lib/groups";
 import { GroupSelector } from "@/app/groups/group-selector";
 import { AccountMenu } from "@/components/account-menu";
 import { Button } from "@/components/ui/button";
+import { NavigationProgress } from "@/components/ui/navigation-progress";
 
 type ShellProps = {
   children: React.ReactNode;
@@ -69,7 +70,7 @@ export function AppShell({ children, group, groups = [], userId, wards = false }
     className={`flex min-h-11 items-center rounded-md border-l-4 px-3 py-2 text-small break-words ${active
       ? "border-primary bg-info-subtle font-semibold text-info"
       : "border-transparent text-foreground hover:bg-muted"}`}>
-    {label}
+    <span className="min-w-0 flex-1">{label}</span><NavigationProgress />
   </Link>;
 
   const section = (label: string, items: NavigationItem[], active: boolean) => <details key={`${label}:${active}`} open={active}>
