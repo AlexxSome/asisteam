@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { canManageAttendance } from "@asisteam/core";
 import type { Database } from "@asisteam/db";
 import { isGroupId } from "@/lib/group-routing";
+import { authCookieOptions } from "@/lib/supabase/cookie-options";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
@@ -17,6 +18,7 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions: authCookieOptions(),
       cookies: {
         getAll() {
           return request.cookies.getAll();

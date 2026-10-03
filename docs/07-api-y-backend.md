@@ -45,7 +45,25 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 | POST | /api/v1/auth/password-recovery | Público | Envía email de recuperación (respuesta siempre 200, sin revelar existencia del email) | Supabase Auth `resetPasswordForEmail` | [P0] |
 | POST | /api/v1/auth/password-reset | Token de recuperación | Fija nueva contraseña | Supabase Auth `updateUser` | [P0] |
 | POST | /api/v1/auth/logout | Autenticado | Revoca el refresh token de la sesión | Supabase Auth `signOut` | [P0] |
-| POST | /api/v1/auth/social/{google,apple} | Público | Login social | Supabase Auth OAuth nativo | [P2] |
+| POST | /api/v1/auth/social/{google,apple} | Público | Login social | Supabase Auth OAuth nativo, PKCE con callback web `/auth/callback` | [P2 autorizado, #59] |
+
+#### Login Google/Apple (HU-GEN-08, #59)
+
+- Web: botones en `/login`, `/register` y el acceso desde QR. La Server Action valida el proveedor (`google`/`apple`) e inicia `signInWithOAuth` con PKCE. El callback intercambia el código mediante `exchangeCodeForSession`, comprueba perfil `ACTIVE` y redirige a `/welcome`; esta pantalla envía a su grupo/selector a quien ya tenga membresías.
+- La vinculación por el mismo email la realiza Supabase Auth. Se conserva `auth.users.id` y, por tanto, el perfil, roles e historial; no hay upsert de `public.users` por email en el cliente ni en el callback. Un email nuevo usa el trigger `handle_new_user` existente. Las colisiones con perfiles MANAGED/INVITED sin credenciales siguen exigiendo sus flujos de invitación y consentimiento.
+- Google/Apple no aportan fecha de nacimiento y Apple OAuth no entrega nombre completo: el trigger conserva su fallback de nombre y deja `birthdate` vacío. La bienvenida ofrece **Mi perfil** para completarlos; las RPC siguen rechazando incorporación ATHLETE sin fecha y mantienen las reglas de menores. Un correo privado de Apple distinto del email registrado representa otra identidad; no se fusionan cuentas con emails diferentes.
+- Sesión y verificador PKCE en cookies HttpOnly, SameSite=Lax y Secure en producción. El origen de retorno proviene de `ASISTEAM_SITE_URL`, nunca de cabeceras del navegador. Código de grupo/QR se conservan durante 10 minutos en una cookie HttpOnly limitada al callback; el token QR vuelve en fragmento. No se admiten URLs `next` arbitrarias. Cancelación, código vencido/reutilizado y errores responden con un mensaje genérico; el callback usa `private, no-store` y `no-referrer`.
+
+**Configuración de despliegue:**
+
+1. Definir `ASISTEAM_SITE_URL=https://dominio-del-entorno` en el servidor web (origen sin rutas). En desarrollo el valor predeterminado es `http://localhost:3000`. Configurar ese mismo Site URL en Supabase Auth y permitir exactamente `https://dominio-del-entorno/auth/callback` en Redirect URLs.
+2. Google: crear un cliente OAuth de tipo web y registrar `https://<proyecto>.supabase.co/auth/v1/callback` como redirect URI del proveedor. Habilitar Google en Supabase con client ID y client secret propios.
+3. Apple: configurar el App ID con Sign in with Apple, Services ID, dominio y retorno `https://<proyecto>.supabase.co/auth/v1/callback`. Habilitar Apple en Supabase con el Services ID y el secreto firmado con la clave `.p8`. Renovar el secreto antes de su vencimiento (máximo 6 meses). Apple web requiere el dominio/retorno HTTPS registrado.
+4. Local: `supabase/config.toml` declara ambos proveedores deshabilitados hasta contar con credenciales. Para probarlos, habilitar el proveedor y suministrar `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID`, `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET`, `SUPABASE_AUTH_EXTERNAL_APPLE_CLIENT_ID` y `SUPABASE_AUTH_EXTERNAL_APPLE_SECRET` al proceso Supabase. Los secretos no se exponen como `NEXT_PUBLIC_*` ni se guardan en Git. La configuración cloud se realiza en cada proyecto Supabase.
+
+**Validación:** Vitest cubre inicio/callback, PKCE real del SDK, cookies, errores y retorno desde código/QR; `supabase/tests/social_auth.test.sql` comprueba perfiles nuevos, incorporación de identidades al mismo UUID, unicidad, rechazo MANAGED/INVITED, RLS y fecha obligatoria. Antes de habilitar en producción, usar cuentas sintéticas de ambos proveedores para confirmar: email registrado conserva IDs e historial, email nuevo crea un único perfil ACTIVE y ve onboarding, cancelar/reutilizar callback no inicia sesión y Apple con correo privado conserva ese correo. Las pruebas locales no sustituyen el intercambio real con Google/Apple.
+
+Referencias: [vinculación de identidades](https://supabase.com/docs/guides/auth/auth-identity-linking), [Google](https://supabase.com/docs/guides/auth/social-login/auth-google), [Apple](https://supabase.com/docs/guides/auth/social-login/auth-apple), [PKCE y SSR](https://supabase.com/docs/guides/auth/server-side/advanced-guide).
 
 ### 2.2 Users / perfil
 

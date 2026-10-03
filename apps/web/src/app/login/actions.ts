@@ -1,9 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { checkinInputSchema, checkinPath, joinCodeSchema, loginSchema, type LoginInput, type CheckinInput } from "@asisteam/core";
+import { cookies } from "next/headers";
+import { checkinInputSchema, checkinPath, joinCodeSchema, loginSchema, socialLoginSchema, SOCIAL_AUTH_ERROR, type LoginInput, type CheckinInput, type SocialLoginInput } from "@asisteam/core";
 
 import { createClient } from "@/lib/supabase/server";
+import { authCookieOptions } from "@/lib/supabase/cookie-options";
+import { SOCIAL_CALLBACK_PATH, SOCIAL_CONTEXT_COOKIE, socialAuthOrigin } from "@/lib/social-auth";
 
 export type LoginResult = { error: string } | undefined;
 
@@ -43,4 +46,29 @@ export async function loginUser(input: LoginInput, inviteCode?: string, checkin?
   const parsedCheckin = checkinInputSchema.safeParse(checkin);
   if (parsedCheckin.success) redirect(checkinPath(parsedCheckin.data));
   redirect(parsedCode.success ? `/join?code=${parsedCode.data}` : "/");
+}
+
+export async function loginWithSocial(input: SocialLoginInput): Promise<LoginResult> {
+  const parsed = socialLoginSchema.safeParse(input);
+  const origin = socialAuthOrigin();
+  if (!parsed.success || !origin) return { error: SOCIAL_AUTH_ERROR };
+
+  let destination: string;
+  try {
+    const supabase = await createClient();
+    const { provider, ...context } = parsed.data;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: `${origin}${SOCIAL_CALLBACK_PATH}`, skipBrowserRedirect: true },
+    });
+    if (error || !data.url) return { error: SOCIAL_AUTH_ERROR };
+    // No incluir el token QR en redirectTo, en la URL de OAuth ni en el Referer.
+    (await cookies()).set(SOCIAL_CONTEXT_COOKIE, JSON.stringify(context), {
+      ...authCookieOptions(), path: SOCIAL_CALLBACK_PATH, maxAge: 600,
+    });
+    destination = data.url;
+  } catch {
+    return { error: SOCIAL_AUTH_ERROR };
+  }
+  redirect(destination);
 }
