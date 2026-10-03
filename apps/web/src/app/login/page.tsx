@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { joinCodeSchema } from "@asisteam/core";
+import { joinCodeSchema, SOCIAL_AUTH_ERROR } from "@asisteam/core";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
@@ -19,15 +19,16 @@ export const metadata: Metadata = {
 
 // Pantalla AUT-01 (docs/05-pantallas.md).
 export default async function LoginPage({ searchParams }: {
-  searchParams: Promise<{ invite_code?: string }>;
+  searchParams: Promise<{ invite_code?: string; social_error?: string }>;
 }) {
-  const parsedCode = joinCodeSchema.safeParse((await searchParams).invite_code);
+  const params = await searchParams;
+  const parsedCode = joinCodeSchema.safeParse(params.invite_code);
   const inviteCode = parsedCode.success ? parsedCode.data : undefined;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) redirect(inviteCode ? `/join?code=${inviteCode}` : "/welcome");
+  if (user && !params.social_error) redirect(inviteCode ? `/join?code=${inviteCode}` : "/welcome");
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
@@ -35,10 +36,11 @@ export default async function LoginPage({ searchParams }: {
         <CardHeader>
           <CardTitle>Iniciar sesión</CardTitle>
           <CardDescription>
-            Ingresa con tu email y contraseña para acceder a tus grupos.
+            Ingresa con Google, Apple o tu email para acceder a tus grupos.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {params.social_error && <p role="alert" className="text-sm text-destructive">{SOCIAL_AUTH_ERROR}</p>}
           <LoginForm inviteCode={inviteCode} />
           <p className="text-center text-sm text-muted-foreground">
             <Link href="/forgot-password" className="underline underline-offset-4">

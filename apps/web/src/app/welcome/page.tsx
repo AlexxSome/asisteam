@@ -33,9 +33,9 @@ export default async function WelcomePage() {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("full_name")
+    .select("full_name, birthdate")
     .eq("auth_user_id", user.id)
-    .single<{ full_name: string }>();
+    .single<{ full_name: string; birthdate: string | null }>();
 
   const firstName = profile?.full_name?.split(" ")[0] ?? "";
 
@@ -50,6 +50,14 @@ export default async function WelcomePage() {
           existente con un código de invitación.
         </p>
       </div>
+
+      {profile && !profile.birthdate && (
+        <p className="text-center text-sm text-muted-foreground">
+          Revisa tu nombre y completa tu fecha de nacimiento en{" "}
+          <Link href="/profile" className="underline underline-offset-4">Mi perfil</Link>{" "}
+          antes de unirte como deportista.
+        </p>
+      )}
 
       <div className="grid w-full gap-4 sm:grid-cols-2">
         <Card>

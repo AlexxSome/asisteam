@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { checkinInputSchema } from "./check-in";
+import { joinCodeSchema } from "./group";
 
 /**
  * Schema de inicio de sesión con email y contraseña (HU-GEN-02).
@@ -15,3 +17,18 @@ export const loginSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export const SOCIAL_PROVIDERS = ["google", "apple"] as const;
+export const SOCIAL_PROVIDER_LABELS = { google: "Google", apple: "Apple" } as const;
+export const SOCIAL_AUTH_ERROR = "No pudimos iniciar sesión. Inténtalo nuevamente o usa tu email y contraseña.";
+
+// Solo destinos de producto conocidos; nunca una URL de retorno arbitraria.
+export const socialLoginContextSchema = z.object({
+  invite_code: joinCodeSchema.optional(),
+  checkin: checkinInputSchema.optional(),
+}).strict();
+export const socialLoginSchema = socialLoginContextSchema.extend({
+  provider: z.enum(SOCIAL_PROVIDERS),
+});
+export type SocialLoginInput = z.infer<typeof socialLoginSchema>;
+export type SocialLoginContext = z.infer<typeof socialLoginContextSchema>;

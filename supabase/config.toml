@@ -20,7 +20,7 @@ port = 54323
 [auth]
 enabled = true
 site_url = "http://localhost:3000"
-additional_redirect_urls = ["https://localhost:3000"]
+additional_redirect_urls = ["https://localhost:3000", "http://localhost:3000/auth/callback", "https://localhost:3000/auth/callback"]
 # Access token 1 h + rotación de refresh tokens (docs/07-api-y-backend.md §6.1).
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
@@ -44,6 +44,19 @@ otp_expiry = 3600
 [auth.email.template.recovery]
 subject = "Restablece tu contraseña de Asisteam"
 content_path = "./supabase/templates/recovery.html"
+
+# HU-GEN-08 (#59): activar con credenciales propias; ver docs/07 §2.1.
+# Los secretos pertenecen al proceso Supabase, nunca al cliente web.
+[auth.external.google]
+enabled = false
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET)"
+skip_nonce_check = false
+
+[auth.external.apple]
+enabled = false
+client_id = "env(SUPABASE_AUTH_EXTERNAL_APPLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_APPLE_SECRET)"
 
 [functions.accept-invitation]
 # Preview y registro usan el token de invitación; accept valida getUser en Edge.

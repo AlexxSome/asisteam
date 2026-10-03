@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { RegisterForm } from "./register-form";
+import { SocialLoginButtons } from "@/components/social-login-buttons";
 
 export const metadata: Metadata = {
   title: "Crear cuenta",
@@ -30,11 +31,13 @@ export default async function RegisterPage() {
         <CardHeader>
           <CardTitle>Crear cuenta</CardTitle>
           <CardDescription>
-            Regístrate con tu email para administrar o participar en tus grupos
+            Regístrate con Google, Apple o tu email para administrar o participar en tus grupos
             deportivos.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <SocialLoginButtons />
+          <p className="text-center text-sm text-muted-foreground">O crea una cuenta con tu email</p>
           <RegisterForm />
           <p className="text-center text-sm text-muted-foreground">
             ¿Ya tienes cuenta?{" "}
