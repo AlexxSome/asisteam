@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 import { redirect } from "next/navigation";
 
 import {
@@ -40,18 +41,18 @@ export default async function LoginPage({ searchParams }: {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {params.social_error && <p role="alert" className="text-sm text-destructive">{SOCIAL_AUTH_ERROR}</p>}
+          {params.social_error && <Alert>{SOCIAL_AUTH_ERROR}</Alert>}
           <LoginForm inviteCode={inviteCode} />
           <p className="text-center text-sm text-muted-foreground">
-            <Link href="/forgot-password" className="underline underline-offset-4">
+            <ActionLink href="/forgot-password">
               ¿Olvidaste tu contraseña?
-            </Link>
+            </ActionLink>
           </p>
           <p className="text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{" "}
-            <Link href="/register" className="underline underline-offset-4">
+            <ActionLink href="/register">
               Crea una
-            </Link>
+            </ActionLink>
           </p>
         </CardContent>
       </Card>

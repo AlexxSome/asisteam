@@ -99,7 +99,8 @@ describe("toma de asistencia", () => {
     await user.type(screen.getByRole("searchbox"), "Ben");
     await user.click(screen.getByRole("button", { name: "Marcar todos como Presente" }));
     expect(actions.saveAttendance).not.toHaveBeenCalled();
-    expect(screen.getByRole("alertdialog")).toBeTruthy();
+    expect(screen.getByRole("group", { name: "Confirmar presentes" })).toBeTruthy();
+    expect(screen.queryByRole("alertdialog")).toBeNull();
     await user.click(screen.getByRole("button", { name: "Confirmar" }));
     expect(actions.saveAttendance).toHaveBeenCalledWith(group, activity, [{ membership_id: ana.membership_id, status: "PRESENT" }], true);
     await user.clear(screen.getByRole("searchbox"));
@@ -115,6 +116,40 @@ describe("toma de asistencia", () => {
     await waitFor(() => expect(screen.getByRole("alert").textContent).toContain("Recarga la asistencia"));
     expect(controls("Ana").getByRole("button", { name: "Presente" }).getAttribute("aria-pressed")).toBe("false");
   });
+});
+
+it("la confirmación inline recibe foco, permite Tab fuera y Escape devuelve al disparador", async () => {
+  const user = userEvent.setup();
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
+  const trigger = screen.getByRole("button", { name: "Marcar todos como Presente" });
+  await user.click(trigger);
+  const cancel = screen.getByRole("button", { name: "Cancelar" });
+  expect(document.activeElement).toBe(cancel);
+  await user.tab();
+  expect(document.activeElement).toBe(controls("Ana").getByRole("button", { name: "Presente" }));
+  await user.tab({ shift: true });
+  await user.keyboard("{Escape}");
+  expect(screen.queryByRole("group", { name: "Confirmar presentes" })).toBeNull();
+  expect(document.activeElement).toBe(trigger);
+  expect(actions.saveAttendance).not.toHaveBeenCalled();
+});
+
+it("bloquea la confirmación duplicada y devuelve foco al resultado cuando ya no quedan pendientes", async () => {
+  const user = userEvent.setup();
+  let finish!: (value: unknown) => void;
+  actions.saveAttendance.mockReturnValue(new Promise(resolve => { finish = resolve; }));
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
+  await user.click(screen.getByRole("button", { name: "Marcar todos como Presente" }));
+  const confirm = screen.getByRole("button", { name: "Confirmar" });
+  await user.dblClick(confirm);
+  expect(actions.saveAttendance).toHaveBeenCalledTimes(1);
+  expect(confirm.getAttribute("aria-busy")).toBe("true");
+  expect(confirm.textContent).toBe("Confirmar");
+  await user.keyboard("{Escape}");
+  expect(screen.getByRole("group", { name: "Confirmar presentes" })).toBeTruthy();
+  await act(async () => finish({ records: [{ membership_id: ana.membership_id, status: "PRESENT", note: null }] }));
+  expect(screen.queryByRole("group", { name: "Confirmar presentes" })).toBeNull();
+  expect(document.activeElement).toBe(screen.getByRole("status"));
 });
 
 it("COACH corrige estados sin notas ni desmarcar la convocatoria", async () => {

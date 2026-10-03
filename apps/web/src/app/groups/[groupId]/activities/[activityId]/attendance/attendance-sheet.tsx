@@ -3,6 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ATTENDANCE_STATUSES, ATTENDANCE_STATUS_LABELS, attendanceCounts,
   type AttendanceChanges, type AttendanceInput, type AttendanceRosterRow, type AttendanceStatus } from "@asisteam/core";
+import { Button } from "@/components/ui/button";
+import { Input, Textarea } from "@/components/ui/input";
+import { Field } from "@/components/ui/field";
+import { Alert } from "@/components/ui/alert";
+import { InlineConfirmation } from "@/components/ui/inline-confirmation";
+import { Pagination } from "@/components/ui/pagination";
+import { EmptyState } from "@/components/ui/empty-state";
 import { attendanceStatusClasses } from "@/lib/attendance-presentation";
 import { clearAttendance, saveAttendance, updateAttendance } from "./actions";
 
@@ -20,20 +27,19 @@ function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
       </div>
     </div>
     <div role="group" aria-label={`Asistencia de ${row.full_name}`} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-      {ATTENDANCE_STATUSES.map((status) => <button key={status} type="button" aria-pressed={row.status === status}
+      {ATTENDANCE_STATUSES.map((status) => <Button variant="secondary" key={status} type="button" aria-pressed={row.status === status}
         disabled={busy} onClick={() => onStatus(status)}
         className={`flex min-h-control items-center justify-center gap-1 rounded-md border px-2 py-2 text-label disabled:opacity-60 ${attendanceStatusClasses[status]} ${row.status === status ? "ring-2 ring-current font-bold" : ""}`}>
         <span aria-hidden="true" className="inline-block w-3 shrink-0">{row.status === status ? "✓" : ""}</span>
         {ATTENDANCE_STATUS_LABELS[status]}
-      </button>)}
+      </Button>)}
     </div>
     {canEditNotes && <details><summary className="min-h-11 cursor-pointer py-2 text-small underline">Nota{row.note ? " (registrada)" : " (opcional)"}</summary>
       {row.status ? <form onSubmit={(event) => { event.preventDefault(); void onNote(note); }} className="space-y-2">
-        <label htmlFor={`note-${row.membership_id}`} className="text-small">Nota de {row.full_name}</label>
-        <textarea id={`note-${row.membership_id}`} value={note} onChange={(event) => setNote(event.target.value)}
-          maxLength={500} rows={3} disabled={busy} className="w-full rounded-md border border-input bg-surface p-2" />
-        <p className="text-caption text-muted-foreground">{note.length}/500 caracteres</p>
-        <button type="submit" disabled={busy || note === (row.note ?? "")} className="min-h-11 rounded-md border border-input bg-surface px-3 py-2 disabled:opacity-50">Guardar nota</button>
+        <Field id={`note-${row.membership_id}`} label={`Nota de ${row.full_name}`} help={`${note.length}/500 caracteres`}>
+          <Textarea value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} rows={3} disabled={busy} />
+        </Field>
+        <Button type="submit" variant="secondary" loading={busy} disabled={note === (row.note ?? "")}>Guardar nota</Button>
       </form> : <p className="text-small text-muted-foreground">Marca un estado antes de añadir una nota.</p>}
     </details>}
   </li>;
@@ -42,6 +48,7 @@ function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
 export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes = true }: {
   groupId: string; activityId: string; initialRows: AttendanceRosterRow[]; canEditNotes?: boolean;
 }) {
+  const feedbackRef = useRef<HTMLParagraphElement>(null);
   const [rows, setRows] = useState(initialRows);
   const rowsRef = useRef(initialRows);
   const busyRef = useRef(new Set<string>());
@@ -98,7 +105,6 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
   async function markAllPresent() {
     if (bulkRef.current || busyRef.current.size) return;
     bulkRef.current = true; setBulkBusy(true);
-    setConfirmAll(false);
     const unmarked = rowsRef.current.filter((row) => !row.status).map((row) => ({ membership_id: row.membership_id, status: "PRESENT" as const }));
     let completed = 0;
     try {
@@ -110,33 +116,29 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
         }
         completed += batch.length;
       }
-    } finally { bulkRef.current = false; setBulkBusy(false); }
+    } finally { bulkRef.current = false; setBulkBusy(false); setConfirmAll(false); }
   }
 
   const visibleRows = rows.filter((row) => row.full_name.toLocaleLowerCase("es").includes(query.trim().toLocaleLowerCase("es")));
   return <section className="space-y-4" aria-label="Registro de asistencia">
     <p className="text-small" aria-live="polite">Presentes {counts.PRESENT} · Atrasados {counts.LATE} · Ausentes {counts.ABSENT} · Justificados {counts.EXCUSED} · Sin marcar {counts.unmarked}</p>
-    <div className="space-y-2"><label htmlFor="athlete-search" className="text-small font-medium">Buscar deportista</label>
-      <input id="athlete-search" type="search" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} className="min-h-11 w-full rounded-md border border-input bg-surface px-3 py-2" />
-    </div>
-    <button type="button" onClick={() => setConfirmAll(true)} disabled={bulkBusy || busy.size > 0 || counts.unmarked === 0}
-      className="min-h-11 rounded-md border border-input bg-surface px-4 py-2 disabled:opacity-50">Marcar todos como Presente</button>
-    {confirmAll && <div role="alertdialog" aria-label="Confirmar presentes" className="space-y-3 rounded-lg border border-border bg-surface p-4">
-      <p>Se marcarán como presentes los {counts.unmarked} deportistas sin registro. Las marcas existentes se conservan.</p>
-      <div className="flex gap-3"><button type="button" onClick={() => void markAllPresent()} disabled={bulkBusy || busy.size > 0} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground">Confirmar</button>
-        <button type="button" onClick={() => setConfirmAll(false)} className="min-h-11 rounded-md border border-input bg-surface px-4 py-2">Cancelar</button></div>
-    </div>}
-    {error && <p role="alert" className="rounded-md border border-destructive p-3 text-destructive">{error}</p>}
-    <p role="status" className="text-small text-muted-foreground">{bulkBusy || busy.size ? "Guardando cambios…" : feedback}</p>
+    <Field id="athlete-search" label="Buscar deportista">
+      <Input type="search" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+    </Field>
+    <Button type="button" variant="secondary" onClick={() => setConfirmAll(true)} loading={bulkBusy}
+      disabled={busy.size > 0 || counts.unmarked === 0}>Marcar todos como Presente</Button>
+    <InlineConfirmation open={confirmAll} title="Confirmar presentes" busy={bulkBusy} disabled={busy.size > 0}
+      onConfirm={() => void markAllPresent()} onCancel={() => setConfirmAll(false)} fallbackFocusRef={feedbackRef}>
+      Se marcarán como presentes los {counts.unmarked} deportistas sin registro. Las marcas existentes se conservan.
+    </InlineConfirmation>
+    {error && <Alert>{error}</Alert>}
+    <p ref={feedbackRef} tabIndex={-1} role="status" className="text-small text-muted-foreground">{bulkBusy || busy.size ? "Guardando cambios…" : feedback}</p>
     <p className="text-small text-muted-foreground">Cada toque guarda el cambio. {canEditNotes ? "Repite el estado seleccionado para volver a “sin marcar”." : "Puedes corregir estados. Las notas y volver a sin marcar están reservados al administrador."}</p>
     <ul className="space-y-3">{visibleRows.slice((page - 1) * 50, page * 50).map((row) => <AthleteRow key={row.membership_id} row={row} busy={bulkBusy || busy.has(row.membership_id)} canEditNotes={canEditNotes}
       onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, canEditNotes && row.status === status, row.status ? { status } : undefined)}
       onNote={async (note) => { if (row.status) await persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }); }} />)}</ul>
-    {visibleRows.length > 50 && <nav aria-label="Páginas de deportistas" className="flex items-center gap-3">
-      <button type="button" disabled={page === 1} onClick={() => setPage(page - 1)} className="min-h-11 rounded-md border border-input bg-surface px-3 disabled:opacity-50">Anterior</button>
-      <span>Página {page} de {Math.ceil(visibleRows.length / 50)}</span>
-      <button type="button" disabled={page * 50 >= visibleRows.length} onClick={() => setPage(page + 1)} className="min-h-11 rounded-md border border-input bg-surface px-3 disabled:opacity-50">Siguiente</button>
-    </nav>}
-    {visibleRows.length === 0 && <p>No se encontraron deportistas con ese nombre.</p>}
+    {visibleRows.length > 50 && <Pagination label="Páginas de deportistas" page={page}
+      totalPages={Math.ceil(visibleRows.length / 50)} onPageChange={setPage} />}
+    {visibleRows.length === 0 && <EmptyState>No se encontraron deportistas con ese nombre.</EmptyState>}
   </section>;
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { passwordRecoverySchema, type PasswordRecoveryInput } from "@asisteam/core";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/ui/field";
+import { Alert } from "@/components/ui/alert";
 import { requestPasswordRecovery } from "./actions";
 
 export function ForgotPasswordForm() {
@@ -16,7 +17,7 @@ export function ForgotPasswordForm() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } =
     useForm<PasswordRecoveryInput>({ resolver: zodResolver(passwordRecoverySchema) });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const submit = handleSubmit(async (values) => {
     setError(null);
     try {
       const result = await requestPasswordRecovery(values);
@@ -26,23 +27,30 @@ export function ForgotPasswordForm() {
     }
   });
 
+  const submittingRef = useRef(false);
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try { await submit(event); }
+    finally { submittingRef.current = false; }
+  }
+
   if (message) {
-    return <p role="status" className="text-sm">{message}</p>;
+    return <Alert tone="success">{message}</Alert>;
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4" noValidate>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="email"
-          aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined}
+    <form aria-busy={isSubmitting} onSubmit={onSubmit} className="space-y-4" noValidate>
+      <Field id="email" label="Email" error={errors.email?.message}>
+        <Input type="email" autoComplete="email"
           {...register("email")} />
-        {errors.email && <p id="email-error" className="text-sm text-destructive">{errors.email.message}</p>}
-      </div>
-      {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Enviando…" : "Enviar instrucciones"}
+      </Field>
+      {error && <Alert>{error}</Alert>}
+      <Button type="submit" className="w-full" loading={isSubmitting}>
+        Enviar instrucciones
       </Button>
+      <p role="status" className="text-small text-muted-foreground">{isSubmitting ? "Enviando…" : ""}</p>
     </form>
   );
 }

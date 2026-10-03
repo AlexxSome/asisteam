@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ForgotPasswordForm } from "./forgot-password-form";
 
@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
         <CardContent className="space-y-4">
           <ForgotPasswordForm />
           <p className="text-center text-sm text-muted-foreground">
-            <Link href="/login" className="underline underline-offset-4">Volver a iniciar sesión</Link>
+            <ActionLink href="/login">Volver a iniciar sesión</ActionLink>
           </p>
         </CardContent>
       </Card>
