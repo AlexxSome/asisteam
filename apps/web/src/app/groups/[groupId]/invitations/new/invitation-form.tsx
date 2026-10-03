@@ -35,11 +35,11 @@ export function InvitationForm({ groupId }: { groupId: string }) {
       else {
         setFeedback({ success: "Invitación enviada. El enlace vence en 7 días." });
         reset({ email: "", role: values.role });
+        router.refresh();
       }
     } catch { setFeedback({ error: SEND_INVITATION_ERROR_MESSAGES.unavailable }); }
-    router.refresh();
   });
-  return <form onSubmit={submit} className="max-w-xl space-y-4" noValidate>
+  return <form onSubmit={submit} aria-busy={isSubmitting} className="max-w-xl space-y-4" noValidate>
     <div className="space-y-2"><label htmlFor="invitation-email">Email</label>
       <input id="invitation-email" type="email" autoComplete="email" maxLength={254} className={fieldClass}
         aria-invalid={!!errors.email} aria-describedby="invitation-email-error" {...register("email")} />
@@ -64,9 +64,9 @@ export function ResendInvitationButton({ groupId, invitationId }: { groupId: str
     try {
       const result = await sendInvitation({ action: "resend", group_id: groupId, invitation_id: invitationId });
       if ("error" in result) setFeedback({ error: result.error.message });
-      else setFeedback({ success: "Invitación reenviada. El enlace anterior quedó invalidado." });
+      else { setFeedback({ success: "Invitación reenviada. El enlace anterior quedó invalidado." }); router.refresh(); }
     } catch { setFeedback({ error: SEND_INVITATION_ERROR_MESSAGES.unavailable }); }
-    finally { setPending(false); router.refresh(); }
+    finally { setPending(false); }
   };
   return <div className="space-y-2">
     <button type="button" disabled={pending} onClick={resend} className="min-h-11 rounded-md border px-4 py-2 disabled:opacity-50">

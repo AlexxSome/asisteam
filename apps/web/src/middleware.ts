@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { canManageAttendance } from "@asisteam/core";
 import type { Database } from "@asisteam/db";
 import { isGroupId } from "@/lib/group-routing";
+import { resourceResponseHtml } from "@/lib/resource-state";
 import { authCookieOptions } from "@/lib/supabase/cookie-options";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
@@ -42,7 +43,7 @@ export async function middleware(request: NextRequest) {
   if (user) response.headers.set("Cache-Control", "private, no-store");
 
   const missingResource = () => {
-    const missing = new NextResponse('<!doctype html><html lang="es"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><title>No encontrado · Asisteam</title><body><main><h1>No encontrado</h1><p>La página solicitada no está disponible.</p><a href="/">Volver al inicio</a></main></body></html>', {
+    const missing = new NextResponse(resourceResponseHtml(404), {
       status: 404, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store" },
     });
     response.cookies.getAll().forEach((cookie) => missing.cookies.set(cookie));
@@ -66,8 +67,8 @@ export async function middleware(request: NextRequest) {
     const { data: group } = user && isGroupId(groupId)
       ? await supabase.from("v_my_groups").select("id, roles").eq("id", groupId).maybeSingle()
       : { data: null };
-    const forbidden = (message: string) => {
-      const denied = new NextResponse(`<!doctype html><html lang="es"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sin permisos · Asisteam</title><body><main><h1>No tienes permisos</h1><p>${message}</p><a href="/groups">Volver a mis grupos</a></main></body></html>`, {
+    const forbidden = () => {
+      const denied = new NextResponse(resourceResponseHtml(403), {
         status: 403, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store" },
       });
       response.cookies.getAll().forEach(cookie => denied.cookies.set(cookie));
@@ -77,7 +78,7 @@ export async function middleware(request: NextRequest) {
       || (segments[3] === "members" && segments[4] !== "consent")
       || (segments[3] === "activities" && (segments[4] === "new" || segments[5] === "edit"));
     if (group?.roles?.includes("COACH") && !group.roles.includes("ADMIN") && managementRoute) {
-      return forbidden("Solo un administrador del grupo puede acceder a esta gestión.");
+      return forbidden();
     }
     const adminRoute = segments[3] === "settings" || (segments[3] === "members" && segments[4] === "new");
     if (!group || (adminRoute && !group.roles?.includes("ADMIN"))) {
@@ -86,11 +87,11 @@ export async function middleware(request: NextRequest) {
       return missingResource();
     }
     if (segments[3] === "billing" && !group.roles?.includes("ADMIN")) {
-      return forbidden("Solo un administrador del grupo puede gestionar su suscripción.");
+      return forbidden();
     }
     const attendanceRoute = segments[3] === "activities" && !!segments[4] && segments[5] === "attendance";
     if (attendanceRoute && !canManageAttendance(group.roles ?? [])) {
-      return forbidden("Solo un administrador o entrenador del grupo puede tomar asistencia.");
+      return forbidden();
     }
     response.headers.set("Cache-Control", "private, no-store");
   }

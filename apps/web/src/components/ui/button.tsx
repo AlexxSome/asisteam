@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { NavigationProgress } from "./navigation-progress";
 
 const buttonVariants = cva(
   "inline-flex min-w-11 max-w-full items-center justify-center gap-2 whitespace-normal rounded-md text-center text-label transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:opacity-50",
@@ -48,9 +49,9 @@ function Button({ className, variant, size, disabled, loading = false, children,
   );
 }
 
-function ActionLink({ className, variant = "tertiary", size, ...props }:
+function ActionLink({ className, variant = "tertiary", size, children, ...props }:
   React.ComponentProps<typeof Link> & VariantProps<typeof buttonVariants>) {
-  return <Link {...props} className={cn(buttonVariants({ variant, size, className }))} />;
+  return <Link {...props} className={cn(buttonVariants({ variant, size, className }))}>{children}<NavigationProgress /></Link>;
 }
 
 export { ActionLink, Button, buttonVariants };

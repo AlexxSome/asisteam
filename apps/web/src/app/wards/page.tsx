@@ -1,3 +1,5 @@
+import { EmptyState } from "@/components/ui/empty-state";
+import { ActionLink } from "@/components/ui/button";
 import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { getMyWards, parseWardsPage } from "@/lib/wards";
@@ -15,9 +17,10 @@ export default async function WardsPage({ searchParams }: {
       <h1 className="text-2xl font-semibold">Mis pupilos</h1>
       <p className="text-muted-foreground">Elige un deportista para ver su perfil deportivo, sus actividades y sus grupos.</p>
     </header>
-    {wards.length === 0 ? <p>{page === 1
-      ? "Aún no tienes deportistas a tu cargo; pide al administrador del grupo que te vincule."
-      : "No hay más pupilos en esta página."}</p> : <ul className="grid gap-4 sm:grid-cols-2">
+    {wards.length === 0 ? <EmptyState title={page > 1 ? "No hay pupilos en esta página" : "Aún no tienes pupilos vinculados"}
+      action={<ActionLink href={page > 1 ? "/wards" : "/groups"} variant="secondary">{page > 1 ? "Volver a la primera página" : "Volver a mis grupos"}</ActionLink>}>
+      {page === 1 ? "Aún no tienes deportistas a tu cargo; pide al administrador del grupo que te vincule." : "No hay más pupilos en esta página."}
+    </EmptyState> : <ul className="grid gap-4 sm:grid-cols-2">
       {wards.map((ward) => <li key={ward.athlete_user_id} className="space-y-3 rounded-lg border p-5">
         <Link href={`/wards/${ward.athlete_user_id}`} prefetch={false} className="flex min-h-11 items-center gap-3 underline underline-offset-4">
           {ward.avatar_url && <img src={ward.avatar_url} alt="" width={48} height={48} className="size-12 rounded-full object-cover" />}

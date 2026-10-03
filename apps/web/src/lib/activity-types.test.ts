@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { renderToStaticMarkup } from "react-dom/server";
+import { PassThrough } from "node:stream";
+import { createElement, type ReactNode } from "react";
+import { renderToPipeableStream, renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ group: vi.fn(), groups: vi.fn(), range: vi.fn(), eq: vi.fn(), or: vi.fn(), from: vi.fn(), select: vi.fn(), in: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group, getMyGroups: mock.groups }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/groups", notFound: () => { throw new Error("404"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
@@ -111,9 +113,59 @@ describe("agenda de actividades", () => {
     expect(agendaHtml).toContain('/groups?period=past&amp;page=1#agenda');
     expect(agendaHtml).toContain('/groups?period=past&amp;page=3#agenda');
     expect(agendaHtml).toContain('href="/groups?period=upcoming#agenda"');
-    const groupHtml = renderToStaticMarkup(await ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams }));
+    const groupHtml = await streamedHtml(await ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams }));
     expect(groupHtml).toContain(`/groups/${groupId}/activities?period=past&amp;page=3`);
     expect(groupHtml).toContain('href="/groups#agenda"');
     expect(groupHtml).not.toContain("Crear actividad");
   });
+});
+
+async function streamedHtml(node: ReactNode) {
+  return new Promise<string>((resolve, reject) => {
+    let html = "";
+    const output = new PassThrough();
+    output.on("data", chunk => { html += chunk.toString(); });
+    output.on("end", () => resolve(html));
+    const stream = renderToPipeableStream(node, { onAllReady() { stream.pipe(output); }, onError: reject });
+  });
+}
+it.each(["ATHLETE", "GUARDIAN", "COACH"])("vacío de actividades para %s no ofrece crear", async role => {
+  mock.group.mockResolvedValue({ ...groups[0], roles: [role] });
+  const html = await streamedHtml(await ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({ period: "past" }) }));
+  expect(html).toContain("No hay actividades pasadas");
+  expect(html).toContain("Ver próximas actividades");
+  expect(html).not.toContain("Crear actividad");
+});
+it("una página vacía conserva período y ofrece volver a la primera", async () => {
+  const html = await streamedHtml(await ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({ period: "past", page: "9" }) }));
+  expect(html).toContain("No hay actividades en esta página");
+  expect(html).toContain("Volver a la primera página");
+  expect(html).toContain(`/groups/${groupId}/activities?period=past`);
+});
+it("valida acceso y parámetros antes de crear el límite de carga", async () => {
+  await expect(ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({ period: "invalid" }) })).rejects.toThrow("404");
+  expect(mock.from).not.toHaveBeenCalled();
+  mock.group.mockRejectedValue(new Error("404"));
+  await expect(ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({}) })).rejects.toThrow("404");
+  expect(mock.from).not.toHaveBeenCalled();
+});
+it("streaming anuncia carga real y luego entrega la lista sin datos ficticios", async () => {
+  vi.useRealTimers();
+  let finish!: (value: unknown) => void;
+  mock.range.mockReturnValue(new Promise(resolve => { finish = resolve; }));
+  const node = await ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({}) });
+  const output = new PassThrough();
+  let html = "";
+  let shellReady!: () => void;
+  const ready = new Promise<void>(resolve => { shellReady = resolve; });
+  const complete = new Promise<void>((resolve, reject) => { output.on("end", resolve); output.on("error", reject); });
+  output.on("data", chunk => { html += chunk.toString(); shellReady(); });
+  const stream = renderToPipeableStream(createElement("main", null, node), { onShellReady() { stream.pipe(output); } });
+  await ready;
+  expect(html).toContain('aria-busy="true"');
+  expect(html).toContain("Cargando actividades…");
+  expect(html).not.toContain(activity.title);
+  finish({ data: [activity], error: null });
+  await complete;
+  expect(html).toContain(activity.title);
 });

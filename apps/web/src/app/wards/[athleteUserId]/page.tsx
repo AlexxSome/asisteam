@@ -1,3 +1,5 @@
+import { EmptyState } from "@/components/ui/empty-state";
+import { ActionLink } from "@/components/ui/button";
 import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
@@ -30,9 +32,13 @@ export default async function WardPage({ params, searchParams }: {
         <Link href={`${wardPath}?period=past#agenda`} prefetch={false} className="inline-block min-h-11 py-2" aria-current={period === "past" ? "page" : undefined}>Pasadas</Link>
       </nav>
       <p className="text-sm text-muted-foreground">Horarios de Chile · America/Santiago</p>
-      {activities.length === 0 ? <p>{!hasActiveGroups
-        ? "Su agenda estará disponible cuando tenga una membresía activa en un grupo."
-        : `No hay actividades ${period === "upcoming" ? "próximas" : "pasadas"} en esta página.`}</p> : <ul className="space-y-3">
+      {activities.length === 0 ? <EmptyState title={!hasActiveGroups ? "Agenda pendiente de activación" : page > 1 ? "No hay actividades en esta página" : "Sin actividades en este período"}
+        action={<ActionLink variant="secondary" href={!hasActiveGroups ? "/wards" : page > 1 ? `${wardPath}?period=${period}#agenda` : `${wardPath}?period=${period === "upcoming" ? "past" : "upcoming"}#agenda`}>
+          {!hasActiveGroups ? "Volver a mis pupilos" : page > 1 ? "Volver a la primera página" : period === "upcoming" ? "Ver actividades pasadas" : "Ver próximas actividades"}
+        </ActionLink>}>
+        {!hasActiveGroups ? "Su agenda estará disponible cuando tenga una membresía activa en un grupo."
+          : `No hay actividades ${period === "upcoming" ? "próximas" : "pasadas"} en esta página.`}
+      </EmptyState> : <ul className="space-y-3">
         {activities.map((activity) => <li key={activity.id} className="space-y-2 rounded-lg border p-4">
           <p className="break-words text-sm text-muted-foreground">{activity.group_name}</p>
           <Link href={`/groups/${activity.group_id}/activities/${activity.id}?from=wards&ward=${ward.athlete_user_id}&period=${period}&page=${page}`} prefetch={false} className="inline-block min-h-11 break-words py-2 text-lg font-semibold underline">{activity.title}</Link>

@@ -187,3 +187,31 @@ it("academia: lote parcial conserva 500 éxitos y reintenta solo los 500 restant
   expect(actions.saveAttendance.mock.calls[2]![2].map((row: AttendanceRosterRow) => row.membership_id)).toEqual(academyRows.slice(500).map(row => row.membership_id));
   expect(screen.getByText(/Presentes 1000 .* Sin marcar 0/)).toBeTruthy();
 });
+
+it("conserva el borrador de una nota si la red rechaza el guardado", async () => {
+  const user = userEvent.setup();
+  let rejectSave!: () => void;
+  actions.updateAttendance.mockImplementation(() => new Promise((_resolve, reject) => { rejectSave = () => reject(new Error("network")); }));
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ben]} />);
+  await user.click(screen.getByText("Nota (registrada)"));
+  const note = screen.getByRole("textbox", { name: "Nota de Ben" }) as HTMLTextAreaElement;
+  await user.clear(note); await user.type(note, "Borrador que quiero conservar");
+  const save = screen.getByRole("button", { name: "Guardar nota" });
+  await user.click(save);
+  expect(note.value).toBe("Borrador que quiero conservar");
+  await act(async () => rejectSave());
+  await screen.findByRole("alert");
+  expect(note.value).toBe("Borrador que quiero conservar");
+  expect((save as HTMLButtonElement).disabled).toBe(false);
+  expect(controls("Ben").getByRole("button", { name: "Ausente" }).getAttribute("aria-pressed")).toBe("true");
+});
+it("limpia una búsqueda vacía y devuelve el foco a la búsqueda", async () => {
+  const user = userEvent.setup();
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
+  const search = screen.getByRole("searchbox");
+  await user.type(search, "No existe");
+  await user.click(screen.getByRole("button", { name: "Limpiar búsqueda" }));
+  expect(document.activeElement).toBe(search);
+  expect((search as HTMLInputElement).value).toBe("");
+  expect(controls("Ana")).toBeTruthy();
+});

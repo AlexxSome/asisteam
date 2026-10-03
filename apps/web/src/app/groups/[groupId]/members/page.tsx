@@ -1,3 +1,5 @@
+import { EmptyState } from "@/components/ui/empty-state";
+import { ActionLink } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { groupMemberSchema, memberFilterSchema, MEMBERSHIP_ROLE_LABELS, MEMBERSHIP_ROLES, MEMBERSHIP_STATUSES, MEMBERSHIP_STATUS_LABELS } from "@asisteam/core";
@@ -40,7 +42,15 @@ export default async function MembersPage({ params, searchParams }: {
       <label className="grid gap-1">Estado<select name="status" defaultValue={status ?? ""} className="min-h-11 rounded border bg-background px-3"><option value="">Todos los estados</option>{MEMBERSHIP_STATUSES.map(value => <option key={value} value={value}>{MEMBERSHIP_STATUS_LABELS[value]}</option>)}</select></label>
       <button className="min-h-11 rounded border px-4">Filtrar</button>
     </form>
-    {!members.length && <p>No hay integrantes para estos filtros en esta página.</p>}
+    {!members.length && <EmptyState
+      title={page > 1 ? "No hay integrantes en esta página" : role || status ? "Sin resultados para estos filtros" : "Aún no hay integrantes en la nómina"}
+      action={page > 1 ? <ActionLink href={href(1)} variant="secondary">Volver a la primera página</ActionLink>
+        : role || status ? <ActionLink href={`/groups/${group.id}/members`} variant="secondary">Limpiar filtros</ActionLink>
+        : <><ActionLink href={`/groups/${group.id}/members/new`} variant="primary">Agregar integrante</ActionLink><ActionLink href={`/groups/${group.id}/invitations/new`}>Invitar por email</ActionLink></>}>
+      {page > 1 ? "Vuelve al inicio de la lista conservando los filtros seleccionados."
+        : role || status ? "Prueba con otro rol o estado, o elimina los filtros para ver la nómina."
+        : "Agrega una cuenta gestionada o envía una invitación para comenzar."}
+    </EmptyState>}
     {members.map(member => <MemberManagement key={member.membership_id} groupId={group.id} member={member} />)}
     <nav aria-label="Páginas de integrantes" className="flex gap-4 underline">
       {page > 1 && <Link href={href(page - 1)}>Anterior</Link>}

@@ -1,3 +1,5 @@
+import { EmptyState } from "@/components/ui/empty-state";
+import { ActionLink } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { INVITATION_STATUS_LABELS, MEMBERSHIP_ROLE_LABELS } from "@asisteam/core";
@@ -31,7 +33,11 @@ export default async function NewInvitationPage({ params, searchParams }: {
     <section aria-labelledby="invitations-heading" className="space-y-4 border-t pt-6">
       <h2 id="invitations-heading" className="text-xl font-semibold">Invitaciones del grupo</h2>
       <p className="text-sm text-muted-foreground">Reenviar invalida el enlace anterior y crea uno nuevo por 7 días. Horarios de Chile.</p>
-      {!data?.length ? <p>No hay invitaciones en esta página.</p> : <ul className="space-y-3">
+      {!data?.length ? <EmptyState title={page > 1 ? "No hay invitaciones en esta página" : "Aún no has enviado invitaciones"}
+        action={page > 1 ? <ActionLink href="?page=1" variant="secondary">Volver a la primera página</ActionLink>
+          : <ActionLink href="#invitation-email" variant="secondary">Preparar una invitación</ActionLink>}>
+        {page > 1 ? "Vuelve al inicio para consultar las invitaciones del grupo." : "Completa el email y el rol en el formulario para invitar a una persona."}
+      </EmptyState> : <ul className="space-y-3">
         {data.map(invitation => {
           const status = invitation.status === "PENDING" && new Date(invitation.expires_at).getTime() <= Date.now() ? "EXPIRED" : invitation.status;
           return <li key={invitation.id} className="flex flex-col gap-3 rounded-md border p-4 sm:flex-row sm:items-center sm:justify-between">

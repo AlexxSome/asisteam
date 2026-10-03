@@ -1,3 +1,5 @@
+import { EmptyState } from "@/components/ui/empty-state";
+import { ActionLink } from "@/components/ui/button";
 import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -32,7 +34,12 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
         <Link href="/groups?period=upcoming#agenda" aria-current={period === "upcoming" ? "page" : undefined}>Próximas</Link>
         <Link href="/groups?period=past#agenda" aria-current={period === "past" ? "page" : undefined}>Pasadas</Link>
       </nav>
-      {activities.length === 0 ? <p>No hay actividades {period === "upcoming" ? "próximas" : "pasadas"} en esta página.</p> : <ul className="space-y-3">
+      {activities.length === 0 ? <EmptyState title={page > 1 ? "No hay actividades en esta página" : period === "upcoming" ? "No tienes actividades próximas" : "No hay actividades pasadas"}
+        action={<ActionLink variant="secondary" href={page > 1 ? `/groups?period=${period}#agenda` : `/groups?period=${period === "upcoming" ? "past" : "upcoming"}#agenda`}>
+          {page > 1 ? "Volver a la primera página" : period === "upcoming" ? "Ver actividades pasadas" : "Ver próximas actividades"}
+        </ActionLink>}>
+        {page > 1 ? "Vuelve al inicio de la agenda conservando el período." : "Aquí aparecerán las actividades de tus grupos para el período seleccionado."}
+      </EmptyState> : <ul className="space-y-3">
         {activities.map((activity) => <li key={activity.id} className="space-y-2 rounded-lg border p-4">
           <Link href={`/groups/${activity.group_id}`} className="break-words text-sm underline">{activity.group_name}</Link>
           <Link href={`/groups/${activity.group_id}/activities/${activity.id}?from=agenda&period=${period}&page=${page}`} className="block break-words text-lg font-semibold underline">{activity.title}</Link>
