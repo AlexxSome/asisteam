@@ -16,3 +16,4 @@ export * from "./schemas/membership-review";
 export * from "./schemas/member-management";
 export * from "./schemas/subscription";
 export * from "./schemas/announcement";
+export * from "./schemas/check-in";

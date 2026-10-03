@@ -27,4 +27,9 @@ describe("continuar invitación por código tras iniciar sesión", () => {
     mock.signIn.mockResolvedValue({ error: { status: 400 } });
     expect(await loginUser(credentials, "CODE0001")).toEqual({ error: "Email o contraseña incorrectos" });
   });
+  it("retorna a la llegada QR con payload estricto en fragmento", async () => {
+    const checkin = { activity_id: "58000000-0000-4000-8000-000000000501", token: "a".repeat(64) };
+    await expect(loginUser(credentials, undefined, checkin)).rejects.toThrow(`redirect:/check-in#activity_id=${checkin.activity_id}&token=${checkin.token}`);
+    await expect(loginUser(credentials, undefined, { ...checkin, token: "//evil.test" })).rejects.toThrow("redirect:/");
+  });
 });
