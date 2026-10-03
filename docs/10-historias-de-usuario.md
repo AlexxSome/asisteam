@@ -283,10 +283,12 @@
 
 La decisión explícita del usuario sustituye aquí las antiguas cuotas deportista→club. Contrato, capacidad histórica, permisos y despliegue: [12-suscripciones-saas.md](12-suscripciones-saas.md).
 
-#### HU-ADM-22 — Publicar anuncios al grupo [P2]
+#### HU-ADM-22 — Publicar anuncios al grupo [P2 autorizado, #57]
 **Como** administrador **quiero** publicar anuncios internos **para** comunicar información al grupo sin salir de Asisteam.
 1. **Dado** que redacto un anuncio con título y cuerpo, **cuando** lo publico, **entonces** todos los miembros ACTIVE del grupo lo ven en su muro y reciben notificación push si la tienen habilitada.
 2. **Dado** un anuncio publicado, **cuando** lo edito o elimino, **entonces** los cambios se reflejan para todos los miembros.
+
+Alcance confirmado para #57: muro web e infraestructura de envío Expo; no se desarrolla la app móvil completa ni Web Push. El envío requiere un dispositivo Expo registrado con permisos y opt-in. El muro funciona sin dispositivos. Las ediciones/borrados se reflejan al actualizar; la web actualiza cada 30 segundos mientras está visible. Ver [13-anuncios.md](13-anuncios.md).
 
 #### HU-DEP-10 — Registrar mi asistencia con QR [P2]
 **Como** deportista **quiero** registrar mi llegada escaneando un QR de la actividad **para** agilizar la toma de asistencia.

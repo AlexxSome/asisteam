@@ -227,6 +227,29 @@ export type Database = {
           },
         ]
       }
+      announcement_push_preferences: {
+        Row: {
+          enabled: boolean
+          user_id: string
+        }
+        Insert: {
+          enabled?: boolean
+          user_id: string
+        }
+        Update: {
+          enabled?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_push_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attendance_records: {
         Row: {
           activity_id: string
@@ -499,6 +522,75 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "guardianships"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_announcements: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string
+          deleted_at: string | null
+          group_id: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by: string
+          deleted_at?: string | null
+          group_id: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string
+          deleted_at?: string | null
+          group_id?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_announcements_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_announcements_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_announcements_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_announcements_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_announcements_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
           },
         ]
       }
@@ -923,6 +1015,44 @@ export type Database = {
           },
           {
             foreignKeyName: "memberships_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      push_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          last_seen_at: string
+          platform: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_seen_at?: string
+          platform: string
+          token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_seen_at?: string
+          platform?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_tokens_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -1850,6 +1980,17 @@ export type Database = {
         Args: { p_nonce_hash: string }
         Returns: undefined
       }
+      claim_announcement_push: {
+        Args: { p_receipts?: boolean }
+        Returns: {
+          announcement_id: string
+          claim_token: string
+          delivery_id: string
+          group_id: string
+          ticket_id: string
+          token: string
+        }[]
+      }
       claim_guardianship_majority_emails: {
         Args: never
         Returns: {
@@ -1866,6 +2007,15 @@ export type Database = {
       }
       clear_attendance_record: {
         Args: { p_activity_id: string; p_membership_id: string }
+        Returns: undefined
+      }
+      complete_announcement_push: {
+        Args: {
+          p_claim_token: string
+          p_delivery_id: string
+          p_outcome: string
+          p_ticket_id?: string
+        }
         Returns: undefined
       }
       complete_guardianship_majority_email: {
@@ -1931,6 +2081,14 @@ export type Database = {
           p_scope?: string
         }
         Returns: number
+      }
+      delete_group_announcement: {
+        Args: {
+          p_announcement_id: string
+          p_group_id: string
+          p_updated_at: string
+        }
+        Returns: undefined
       }
       get_group_attendance_report: {
         Args: {
@@ -2033,6 +2191,18 @@ export type Database = {
           requested_birthdate: string
         }[]
       }
+      list_group_announcements: {
+        Args: { p_group_id: string; p_page?: number }
+        Returns: {
+          body: string
+          created_at: string
+          group_id: string
+          id: string
+          title: string
+          total_count: number
+          updated_at: string
+        }[]
+      }
       list_group_members: {
         Args: {
           p_group_id: string
@@ -2125,8 +2295,21 @@ export type Database = {
         }
         Returns: undefined
       }
+      publish_group_announcement: {
+        Args: {
+          p_body: string
+          p_group_id: string
+          p_request_id: string
+          p_title: string
+        }
+        Returns: string
+      }
       reactivate_membership: {
         Args: { p_group_id: string; p_membership_id: string }
+        Returns: undefined
+      }
+      record_announcement_push_run: {
+        Args: { p_processed: number }
         Returns: undefined
       }
       record_attendance_bulk: {
@@ -2136,6 +2319,10 @@ export type Database = {
           p_records: Json
         }
         Returns: Json
+      }
+      register_announcement_push_token: {
+        Args: { p_platform: string; p_token: string }
+        Returns: string
       }
       reject_pending_membership: {
         Args: { p_group_id: string; p_membership_id: string }
@@ -2163,6 +2350,10 @@ export type Database = {
       }
       rotate_invite_code: { Args: { p_group_id: string }; Returns: string }
       run_guardianship_majority: { Args: never; Returns: number }
+      set_announcement_push_enabled: {
+        Args: { p_enabled: boolean }
+        Returns: undefined
+      }
       set_avatar_permission: {
         Args: { p_allow: boolean; p_guardianship_id: string }
         Returns: undefined
@@ -2192,6 +2383,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      unregister_announcement_push_token: {
+        Args: { p_token: string }
+        Returns: undefined
+      }
       update_activity: {
         Args: {
           p_activity_id: string
@@ -2209,6 +2404,16 @@ export type Database = {
       update_attendance_record: {
         Args: { p_changes: Json; p_record_id: string }
         Returns: Json
+      }
+      update_group_announcement: {
+        Args: {
+          p_announcement_id: string
+          p_body: string
+          p_group_id: string
+          p_title: string
+          p_updated_at: string
+        }
+        Returns: undefined
       }
       update_group_settings: {
         Args: { p_changes: Json; p_group_id: string }

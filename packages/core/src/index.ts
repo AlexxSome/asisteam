@@ -15,3 +15,4 @@ export * from "./schemas/guardianship";
 export * from "./schemas/membership-review";
 export * from "./schemas/member-management";
 export * from "./schemas/subscription";
+export * from "./schemas/announcement";
