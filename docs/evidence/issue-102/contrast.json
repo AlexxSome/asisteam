@@ -1,0 +1,189 @@
+{
+  "failures": [],
+  "focusOnBackground": 4.939955162140827,
+  "focusOnSurface": 5.168555560022562,
+  "inputBoundary": 4.758842787868665,
+  "minText": 6.37,
+  "pairs": [
+    {
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "color": "rgb(15, 23, 42)",
+      "ratio": 17.06,
+      "required": 4.5,
+      "text": "Reportes"
+    },
+    {
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "color": "rgb(15, 23, 42)",
+      "ratio": 17.85,
+      "required": 4.5,
+      "text": "14.3 %"
+    },
+    {
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "color": "rgb(71, 85, 105)",
+      "ratio": 7.58,
+      "required": 4.5,
+      "text": "Sin datos"
+    },
+    {
+      "background": [
+        29,
+        78,
+        216
+      ],
+      "color": "rgb(255, 255, 255)",
+      "ratio": 6.7,
+      "required": 4.5,
+      "text": "Aplicar filtros"
+    },
+    {
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "color": "rgb(153, 27, 27)",
+      "ratio": 7.94,
+      "required": 4.5,
+      "text": "No pudimos guardar los cambios. Vuelve a intentarlo."
+    },
+    {
+      "background": [
+        219,
+        234,
+        254
+      ],
+      "color": "rgb(30, 64, 175)",
+      "ratio": 7.15,
+      "required": 4.5,
+      "text": "Información: datos disponibles para tu grupo."
+    },
+    {
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "color": "rgb(71, 85, 105)",
+      "ratio": 7.24,
+      "required": 4.5,
+      "text": "Cada toque guarda el cambio. Repite el estado seleccionado p"
+    },
+    {
+      "background": [
+        220,
+        252,
+        231
+      ],
+      "color": "rgb(22, 101, 52)",
+      "ratio": 6.49,
+      "required": 4.5,
+      "text": "Presente"
+    },
+    {
+      "background": [
+        254,
+        226,
+        226
+      ],
+      "color": "rgb(153, 27, 27)",
+      "ratio": 6.8,
+      "required": 4.5,
+      "text": "Ausente"
+    },
+    {
+      "background": [
+        254,
+        243,
+        199
+      ],
+      "color": "rgb(146, 64, 14)",
+      "ratio": 6.37,
+      "required": 4.5,
+      "text": "Atrasado"
+    },
+    {
+      "background": [
+        241,
+        245,
+        249
+      ],
+      "color": "rgb(71, 85, 105)",
+      "ratio": 6.92,
+      "required": 4.5,
+      "text": "Justificado"
+    },
+    {
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "color": "rgb(146, 64, 14)",
+      "ratio": 7.09,
+      "required": 4.5,
+      "text": "70.0 %"
+    },
+    {
+      "background": [
+        241,
+        245,
+        249
+      ],
+      "color": "rgb(15, 23, 42)",
+      "ratio": 16.3,
+      "required": 4.5,
+      "text": "14.3 %"
+    },
+    {
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "color": "rgb(22, 101, 52)",
+      "ratio": 7.13,
+      "required": 4.5,
+      "text": "85.0 %"
+    },
+    {
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "color": "rgb(153, 27, 27)",
+      "ratio": 8.31,
+      "required": 4.5,
+      "text": "69.9 %"
+    },
+    {
+      "background": [
+        241,
+        245,
+        249
+      ],
+      "color": "rgb(146, 64, 14)",
+      "ratio": 6.47,
+      "required": 4.5,
+      "text": "77.8 %"
+    }
+  ],
+  "inputBoundaryColors": {
+    "border": "rgb(100, 116, 139)",
+    "background": "rgb(255, 255, 255)"
+  }
+}

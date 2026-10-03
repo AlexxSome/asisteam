@@ -4,9 +4,9 @@ export function ReportFilters({ groupId, filter, types, personal = false, athlet
   groupId: string; filter: AttendancePeriodFilter & Partial<Pick<ReportFilter, "sort" | "include_inactive">>; personal?: boolean;
   types: { id: string; name: string; group_id: string | null; is_active: boolean | null }[]; athleteUserId?: string;
 }) {
-  const input = "mt-1 w-full rounded-md border bg-background p-2";
+  const input = "mt-1 min-h-control w-full min-w-0 rounded-md border border-input bg-surface p-2 text-body";
   const action = `/groups/${groupId}/${athleteUserId ? `wards/${athleteUserId}/history` : personal ? "me/history" : "reports"}`;
-  return <form action={action} method="get" className="space-y-4 rounded-lg border p-4">
+  return <form action={action} method="get" className="space-y-4 rounded-lg border border-border bg-surface p-4">
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <label>Período<select name="period" defaultValue={filter.period} className={input}>
         {Object.entries(REPORT_PERIOD_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
@@ -17,9 +17,9 @@ export function ReportFilters({ groupId, filter, types, personal = false, athlet
         <option value="attendance">Asistencia (mayor a menor)</option><option value="name">Nombre (A–Z)</option>
       </select></label>}
     </div>
-    <p id="date-help" className="text-sm text-muted-foreground">Semana: lunes a domingo. Mes: mes calendario de la fecha indicada (hoy si la dejas vacía). Para rango personalizado, completa ambas fechas; se incluyen ambos días. Temporada: todo el historial desde la creación del grupo. Zona horaria: America/Santiago.</p>
+    <p id="date-help" className="text-small text-muted-foreground">Semana: lunes a domingo. Mes: mes calendario de la fecha indicada (hoy si la dejas vacía). Para rango personalizado, completa ambas fechas; se incluyen ambos días. Temporada: todo el historial desde la creación del grupo. Zona horaria: America/Santiago.</p>
     <fieldset><legend className="font-medium">Tipos de actividad</legend>
-      <p className="mb-2 text-sm text-muted-foreground">Sin selección se incluyen todos. Puedes combinar varios tipos.</p>
+      <p className="mb-2 text-small text-muted-foreground">Sin selección se incluyen todos. Puedes combinar varios tipos.</p>
       <div className="flex flex-wrap gap-x-5 gap-y-2">{types.map((type) => <label key={type.id} className="flex min-h-11 items-center gap-2">
         <input type="checkbox" name="activity_type_id" value={type.id} defaultChecked={filter.activity_type_ids.includes(type.id)} />
         {activityTypeLabel(type.name, type.group_id === null)}{type.is_active === false && " (inactivo)"}

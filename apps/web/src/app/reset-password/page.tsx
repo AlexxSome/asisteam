@@ -22,7 +22,7 @@ export default async function ResetPasswordPage({
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Restablecer contraseña</CardTitle>
+          <CardTitle as="h1">Restablecer contraseña</CardTitle>
           <CardDescription>Define una nueva contraseña para recuperar tu acceso.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

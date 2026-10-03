@@ -3,14 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ATTENDANCE_STATUSES, ATTENDANCE_STATUS_LABELS, attendanceCounts,
   type AttendanceChanges, type AttendanceInput, type AttendanceRosterRow, type AttendanceStatus } from "@asisteam/core";
+import { attendanceStatusClasses } from "@/lib/attendance-presentation";
 import { clearAttendance, saveAttendance, updateAttendance } from "./actions";
-
-const stateColors: Record<AttendanceStatus, string> = {
-  PRESENT: "border-green-600 bg-green-100 text-green-950",
-  ABSENT: "border-red-600 bg-red-100 text-red-950",
-  LATE: "border-amber-600 bg-amber-100 text-amber-950",
-  EXCUSED: "border-gray-500 bg-gray-100 text-gray-950",
-};
 
 function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
   row: AttendanceRosterRow; busy: boolean; canEditNotes: boolean;
@@ -18,28 +12,29 @@ function AthleteRow({ row, busy, canEditNotes, onStatus, onNote }: {
 }) {
   const [note, setNote] = useState(row.note ?? "");
   useEffect(() => setNote(row.note ?? ""), [row.note]);
-  return <li className="space-y-3 rounded-lg border p-3" aria-busy={busy}>
+  return <li className="space-y-3 rounded-lg border border-border bg-surface p-3" aria-busy={busy}>
     <div className="flex items-center gap-3">
       {row.avatar_url && <img src={row.avatar_url} alt="" width={40} height={40} referrerPolicy="no-referrer" className="size-10 rounded-full object-cover" />}
       <div className="min-w-0"><p className="break-words font-semibold">{row.full_name}</p>
-        <p className="text-sm text-muted-foreground">{busy ? "Guardando…" : row.status ? ATTENDANCE_STATUS_LABELS[row.status] : "Sin marcar"}</p>
+        <p className="text-small text-muted-foreground">{busy ? "Guardando…" : row.status ? ATTENDANCE_STATUS_LABELS[row.status] : "Sin marcar"}</p>
       </div>
     </div>
     <div role="group" aria-label={`Asistencia de ${row.full_name}`} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
       {ATTENDANCE_STATUSES.map((status) => <button key={status} type="button" aria-pressed={row.status === status}
         disabled={busy} onClick={() => onStatus(status)}
-        className={`min-h-11 rounded-md border px-2 py-2 text-sm disabled:opacity-60 ${stateColors[status]} ${row.status === status ? "ring-2 ring-current font-bold" : "opacity-75"}`}>
+        className={`flex min-h-control items-center justify-center gap-1 rounded-md border px-2 py-2 text-label disabled:opacity-60 ${attendanceStatusClasses[status]} ${row.status === status ? "ring-2 ring-current font-bold" : ""}`}>
+        <span aria-hidden="true" className="inline-block w-3 shrink-0">{row.status === status ? "✓" : ""}</span>
         {ATTENDANCE_STATUS_LABELS[status]}
       </button>)}
     </div>
-    {canEditNotes && <details><summary className="min-h-11 cursor-pointer py-2 text-sm underline">Nota{row.note ? " (registrada)" : " (opcional)"}</summary>
+    {canEditNotes && <details><summary className="min-h-11 cursor-pointer py-2 text-small underline">Nota{row.note ? " (registrada)" : " (opcional)"}</summary>
       {row.status ? <form onSubmit={(event) => { event.preventDefault(); void onNote(note); }} className="space-y-2">
-        <label htmlFor={`note-${row.membership_id}`} className="text-sm">Nota de {row.full_name}</label>
+        <label htmlFor={`note-${row.membership_id}`} className="text-small">Nota de {row.full_name}</label>
         <textarea id={`note-${row.membership_id}`} value={note} onChange={(event) => setNote(event.target.value)}
-          maxLength={500} rows={3} disabled={busy} className="w-full rounded-md border bg-background p-2" />
-        <p className="text-xs text-muted-foreground">{note.length}/500 caracteres</p>
-        <button type="submit" disabled={busy || note === (row.note ?? "")} className="min-h-11 rounded-md border px-3 py-2 disabled:opacity-50">Guardar nota</button>
-      </form> : <p className="text-sm text-muted-foreground">Marca un estado antes de añadir una nota.</p>}
+          maxLength={500} rows={3} disabled={busy} className="w-full rounded-md border border-input bg-surface p-2" />
+        <p className="text-caption text-muted-foreground">{note.length}/500 caracteres</p>
+        <button type="submit" disabled={busy || note === (row.note ?? "")} className="min-h-11 rounded-md border border-input bg-surface px-3 py-2 disabled:opacity-50">Guardar nota</button>
+      </form> : <p className="text-small text-muted-foreground">Marca un estado antes de añadir una nota.</p>}
     </details>}
   </li>;
 }
@@ -120,27 +115,27 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
 
   const visibleRows = rows.filter((row) => row.full_name.toLocaleLowerCase("es").includes(query.trim().toLocaleLowerCase("es")));
   return <section className="space-y-4" aria-label="Registro de asistencia">
-    <p className="text-sm" aria-live="polite">Presentes {counts.PRESENT} · Atrasados {counts.LATE} · Ausentes {counts.ABSENT} · Justificados {counts.EXCUSED} · Sin marcar {counts.unmarked}</p>
-    <div className="space-y-2"><label htmlFor="athlete-search" className="text-sm font-medium">Buscar deportista</label>
-      <input id="athlete-search" type="search" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} className="min-h-11 w-full rounded-md border bg-background px-3 py-2" />
+    <p className="text-small" aria-live="polite">Presentes {counts.PRESENT} · Atrasados {counts.LATE} · Ausentes {counts.ABSENT} · Justificados {counts.EXCUSED} · Sin marcar {counts.unmarked}</p>
+    <div className="space-y-2"><label htmlFor="athlete-search" className="text-small font-medium">Buscar deportista</label>
+      <input id="athlete-search" type="search" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} className="min-h-11 w-full rounded-md border border-input bg-surface px-3 py-2" />
     </div>
     <button type="button" onClick={() => setConfirmAll(true)} disabled={bulkBusy || busy.size > 0 || counts.unmarked === 0}
-      className="min-h-11 rounded-md border px-4 py-2 disabled:opacity-50">Marcar todos como Presente</button>
-    {confirmAll && <div role="alertdialog" aria-label="Confirmar presentes" className="space-y-3 rounded-md border p-4">
+      className="min-h-11 rounded-md border border-input bg-surface px-4 py-2 disabled:opacity-50">Marcar todos como Presente</button>
+    {confirmAll && <div role="alertdialog" aria-label="Confirmar presentes" className="space-y-3 rounded-lg border border-border bg-surface p-4">
       <p>Se marcarán como presentes los {counts.unmarked} deportistas sin registro. Las marcas existentes se conservan.</p>
       <div className="flex gap-3"><button type="button" onClick={() => void markAllPresent()} disabled={bulkBusy || busy.size > 0} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground">Confirmar</button>
-        <button type="button" onClick={() => setConfirmAll(false)} className="min-h-11 rounded-md border px-4 py-2">Cancelar</button></div>
+        <button type="button" onClick={() => setConfirmAll(false)} className="min-h-11 rounded-md border border-input bg-surface px-4 py-2">Cancelar</button></div>
     </div>}
     {error && <p role="alert" className="rounded-md border border-destructive p-3 text-destructive">{error}</p>}
-    <p role="status" className="text-sm text-muted-foreground">{bulkBusy || busy.size ? "Guardando cambios…" : feedback}</p>
-    <p className="text-xs text-muted-foreground">Cada toque guarda el cambio. {canEditNotes ? "Repite el estado seleccionado para volver a “sin marcar”." : "Puedes corregir estados. Las notas y volver a sin marcar están reservados al administrador."}</p>
+    <p role="status" className="text-small text-muted-foreground">{bulkBusy || busy.size ? "Guardando cambios…" : feedback}</p>
+    <p className="text-small text-muted-foreground">Cada toque guarda el cambio. {canEditNotes ? "Repite el estado seleccionado para volver a “sin marcar”." : "Puedes corregir estados. Las notas y volver a sin marcar están reservados al administrador."}</p>
     <ul className="space-y-3">{visibleRows.slice((page - 1) * 50, page * 50).map((row) => <AthleteRow key={row.membership_id} row={row} busy={bulkBusy || busy.has(row.membership_id)} canEditNotes={canEditNotes}
       onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, canEditNotes && row.status === status, row.status ? { status } : undefined)}
       onNote={async (note) => { if (row.status) await persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }); }} />)}</ul>
     {visibleRows.length > 50 && <nav aria-label="Páginas de deportistas" className="flex items-center gap-3">
-      <button type="button" disabled={page === 1} onClick={() => setPage(page - 1)} className="min-h-11 rounded-md border px-3 disabled:opacity-50">Anterior</button>
+      <button type="button" disabled={page === 1} onClick={() => setPage(page - 1)} className="min-h-11 rounded-md border border-input bg-surface px-3 disabled:opacity-50">Anterior</button>
       <span>Página {page} de {Math.ceil(visibleRows.length / 50)}</span>
-      <button type="button" disabled={page * 50 >= visibleRows.length} onClick={() => setPage(page + 1)} className="min-h-11 rounded-md border px-3 disabled:opacity-50">Siguiente</button>
+      <button type="button" disabled={page * 50 >= visibleRows.length} onClick={() => setPage(page + 1)} className="min-h-11 rounded-md border border-input bg-surface px-3 disabled:opacity-50">Siguiente</button>
     </nav>}
     {visibleRows.length === 0 && <p>No se encontraron deportistas con ese nombre.</p>}
   </section>;

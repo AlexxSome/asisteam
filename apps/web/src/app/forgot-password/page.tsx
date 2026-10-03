@@ -11,7 +11,7 @@ export default function ForgotPasswordPage() {
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Recuperar contraseña</CardTitle>
+          <CardTitle as="h1">Recuperar contraseña</CardTitle>
           <CardDescription>Ingresa tu email para recibir un enlace válido por 60 minutos.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

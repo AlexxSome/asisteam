@@ -34,7 +34,7 @@ export default async function LoginPage({ searchParams }: {
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Iniciar sesión</CardTitle>
+          <CardTitle as="h1">Iniciar sesión</CardTitle>
           <CardDescription>
             Ingresa con Google, Apple o tu email para acceder a tus grupos.
           </CardDescription>

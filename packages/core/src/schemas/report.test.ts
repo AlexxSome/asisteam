@@ -19,7 +19,9 @@ describe("métrica compartida SQL y core", () => {
   it("presenta un decimal, Sin datos y umbrales canónicos", () => {
     expect(reportPercentage(0)).toBe("0.0 %"); expect(reportPercentage(85.7)).toBe("85.7 %");
     expect(reportPercentage(null)).toBe("Sin datos");
-    expect(reportAttendanceTone(85)).toContain("green"); expect(reportAttendanceTone(84.9)).toContain("amber");
-    expect(reportAttendanceTone(70)).toContain("amber"); expect(reportAttendanceTone(69.9)).toContain("red");
+    expect(reportAttendanceTone(null)).toBe("neutral"); expect(reportAttendanceTone(0)).toBe("error");
+    expect(reportAttendanceTone(85)).toBe("success"); expect(reportAttendanceTone(100)).toBe("success");
+    expect(reportAttendanceTone(84.9)).toBe("warning"); expect(reportAttendanceTone(70)).toBe("warning");
+    expect(reportAttendanceTone(69.9)).toBe("error");
   });
 });

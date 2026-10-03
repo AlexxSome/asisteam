@@ -27,14 +27,33 @@ describe("toma de asistencia", () => {
     const present = controls("Ana").getByRole("button", { name: "Presente" });
     await user.click(present);
     expect(present.getAttribute("aria-pressed")).toBe("true");
+    expect(present.querySelector('[aria-hidden="true"]')?.textContent).toBe("✓");
     expect((present as HTMLButtonElement).disabled).toBe(true);
     await user.click(present);
     expect(actions.saveAttendance).toHaveBeenCalledTimes(1);
     await act(async () => rejectSave(error));
     expect(present.getAttribute("aria-pressed")).toBe("false");
+    expect(present.querySelector('[aria-hidden="true"]')?.textContent).toBe("");
     expect((present as HTMLButtonElement).disabled).toBe(false);
     expect(screen.getByRole("alert").textContent).toBe("Falló el guardado");
     expect(screen.getByText(/Sin marcar 1/)).toBeTruthy();
+  });
+  it("selecciona y desmarca por teclado manteniendo nombre textual y marca visible", async () => {
+    const user = userEvent.setup();
+    render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
+    await user.tab(); // búsqueda
+    await user.tab(); // acción en lote
+    await user.tab(); // presente
+    const present = controls("Ana").getByRole("button", { name: "Presente" });
+    expect(document.activeElement).toBe(present);
+    await user.keyboard("{Enter}");
+    await waitFor(() => expect((present as HTMLButtonElement).disabled).toBe(false));
+    expect(present.getAttribute("aria-pressed")).toBe("true");
+    expect(present.querySelector('[aria-hidden="true"]')?.textContent).toBe("✓");
+    await user.keyboard(" ");
+    await waitFor(() => expect(present.getAttribute("aria-pressed")).toBe("false"));
+    expect(present.querySelector('[aria-hidden="true"]')?.textContent).toBe("");
+    expect(actions.clearAttendance).toHaveBeenCalledWith(group, activity, ana.membership_id);
   });
   it("repetir el estado desmarca mediante acción acotada", async () => {
     const user = userEvent.setup();

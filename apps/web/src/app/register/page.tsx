@@ -29,7 +29,7 @@ export default async function RegisterPage() {
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Crear cuenta</CardTitle>
+          <CardTitle as="h1">Crear cuenta</CardTitle>
           <CardDescription>
             Regístrate con Google, Apple o tu email para administrar o participar en tus grupos
             deportivos.
