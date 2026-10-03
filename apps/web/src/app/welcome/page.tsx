@@ -13,6 +13,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { groupHomePath } from "@/lib/groups";
+import { AccountMenu } from "@/components/account-menu";
 
 export const metadata: Metadata = {
   title: "Bienvenida",
@@ -41,6 +42,7 @@ export default async function WelcomePage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-8 p-4">
+      <AccountMenu />
       <div className="text-center">
         <h1 className="text-3xl font-semibold tracking-tight">
           {firstName ? `¡Hola, ${firstName}!` : "¡Bienvenido/a a Asisteam!"}

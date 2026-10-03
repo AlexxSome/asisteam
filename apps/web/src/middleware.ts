@@ -38,6 +38,8 @@ export async function middleware(request: NextRequest) {
 
   // No quitar: dispara la validación/refresco del token.
   const { data: { user } } = await supabase.auth.getUser();
+  // Perfil y bienvenida también contienen datos privados sin contexto de grupo.
+  if (user) response.headers.set("Cache-Control", "private, no-store");
 
   const missingResource = () => {
     const missing = new NextResponse('<!doctype html><html lang="es"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><title>No encontrado · Asisteam</title><body><main><h1>No encontrado</h1><p>La página solicitada no está disponible.</p><a href="/">Volver al inicio</a></main></body></html>', {

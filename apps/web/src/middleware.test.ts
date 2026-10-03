@@ -16,6 +16,14 @@ beforeEach(() => {
 });
 const request = (path: string) => new NextRequest(`http://localhost:3000${path}`);
 
+describe("cache de superficies autenticadas", () => {
+  it.each(["/profile", "/groups", "/wards", "/welcome"])("%s evita almacenar datos privados en el navegador", async path => {
+    const response = await middleware(request(path));
+    expect(response.headers.get("Cache-Control")).toBe("private, no-store");
+    expect(response.cookies.get("refreshed-session")?.value).toBe("synthetic");
+  });
+});
+
 describe("HTTP 404 de recursos por grupo", () => {
   it("permite rutas globales y conserva cookies de sesión refrescadas", async () => {
     const response = await middleware(request("/groups/new"));
