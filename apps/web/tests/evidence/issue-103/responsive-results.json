@@ -1,0 +1,113 @@
+{
+  "auth": [
+    {
+      "errorLink": "email-error",
+      "minControlHeight": 44,
+      "scrollWidth": 320,
+      "width": 320
+    },
+    {
+      "errorLink": "email-error",
+      "minControlHeight": 44,
+      "scrollWidth": 375,
+      "width": 375
+    },
+    {
+      "errorLink": "email-error",
+      "minControlHeight": 44,
+      "scrollWidth": 768,
+      "width": 768
+    },
+    {
+      "errorLink": "email-error",
+      "minControlHeight": 44,
+      "scrollWidth": 1024,
+      "width": 1024
+    },
+    {
+      "errorLink": "email-error",
+      "minControlHeight": 44,
+      "scrollWidth": 1440,
+      "width": 1440
+    }
+  ],
+  "attendance": [
+    {
+      "focus": "Cancelar",
+      "minButton": 44,
+      "scrollWidth": 320,
+      "width": 320
+    },
+    {
+      "focus": "Cancelar",
+      "minButton": 44,
+      "scrollWidth": 375,
+      "width": 375
+    },
+    {
+      "focus": "Cancelar",
+      "minButton": 44,
+      "scrollWidth": 768,
+      "width": 768
+    },
+    {
+      "focus": "Cancelar",
+      "minButton": 44,
+      "scrollWidth": 1024,
+      "width": 1024
+    },
+    {
+      "focus": "Cancelar",
+      "minButton": 44,
+      "scrollWidth": 1440,
+      "width": 1440
+    }
+  ],
+  "billing": [
+    {
+      "minButton": 44,
+      "scrollWidth": 320,
+      "width": 320
+    },
+    {
+      "minButton": 44,
+      "scrollWidth": 375,
+      "width": 375
+    },
+    {
+      "minButton": 44,
+      "scrollWidth": 768,
+      "width": 768
+    },
+    {
+      "minButton": 44,
+      "scrollWidth": 1024,
+      "width": 1024
+    },
+    {
+      "minButton": 44,
+      "scrollWidth": 1440,
+      "width": 1440
+    }
+  ],
+  "zoom200": [
+    {
+      "ratio": 2,
+      "screen": "billing",
+      "scrollWidth": 384,
+      "width": 384
+    },
+    {
+      "ratio": 2,
+      "screen": "attendance",
+      "scrollWidth": 384,
+      "width": 384
+    },
+    {
+      "ratio": 2,
+      "screen": "auth",
+      "scrollWidth": 384,
+      "width": 384
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 
 import {
@@ -41,9 +41,9 @@ export default async function RegisterPage() {
           <RegisterForm />
           <p className="text-center text-sm text-muted-foreground">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="underline underline-offset-4">
+            <ActionLink href="/login">
               Inicia sesión
-            </Link>
+            </ActionLink>
           </p>
         </CardContent>
       </Card>

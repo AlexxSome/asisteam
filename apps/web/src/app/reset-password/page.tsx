@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 import { recoveryTokenSchema } from "@asisteam/core";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResetPasswordForm } from "./reset-password-form";
@@ -27,10 +28,10 @@ export default async function ResetPasswordPage({
         </CardHeader>
         <CardContent className="space-y-4">
           {parsed.success ? <ResetPasswordForm token={parsed.data} /> : (
-            <p role="alert" className="text-sm text-destructive">El enlace es inválido o está incompleto. Solicita uno nuevo.</p>
+            <Alert>El enlace es inválido o está incompleto. Solicita uno nuevo.</Alert>
           )}
           <p className="text-center text-sm text-muted-foreground">
-            <Link href="/forgot-password" className="underline underline-offset-4">Solicitar un nuevo enlace</Link>
+            <ActionLink href="/forgot-password">Solicitar un nuevo enlace</ActionLink>
           </p>
         </CardContent>
       </Card>

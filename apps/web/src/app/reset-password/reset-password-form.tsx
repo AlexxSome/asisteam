@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useRef, useState, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { passwordResetSchema, type PasswordResetInput } from "@asisteam/core";
-import { Button } from "@/components/ui/button";
+import { ActionLink, Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/ui/field";
+import { Alert } from "@/components/ui/alert";
 import { resetPassword } from "./actions";
 
 export function ResetPasswordForm({ token }: { token: string }) {
@@ -16,7 +16,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } =
     useForm<PasswordResetInput>({ resolver: zodResolver(passwordResetSchema) });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const submit = handleSubmit(async (values) => {
     setError(null);
     try {
       const result = await resetPassword(token, values);
@@ -31,38 +31,39 @@ export function ResetPasswordForm({ token }: { token: string }) {
     }
   });
 
+  const submittingRef = useRef(false);
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try { await submit(event); }
+    finally { submittingRef.current = false; }
+  }
+
   if (success) {
     return (
       <div className="space-y-4">
-        <p role="status">Tu contraseña fue actualizada. Ya puedes iniciar sesión con ella.</p>
-        <Link href="/login" className="text-sm underline underline-offset-4">Iniciar sesión</Link>
+        <Alert tone="success">Tu contraseña fue actualizada. Ya puedes iniciar sesión con ella.</Alert>
+        <ActionLink href="/login">Iniciar sesión</ActionLink>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4" noValidate>
-      <div className="space-y-2">
-        <Label htmlFor="password">Nueva contraseña</Label>
-        <Input id="password" type="password" autoComplete="new-password"
-          aria-invalid={!!errors.password}
-          aria-describedby={errors.password ? "password-help password-error" : "password-help"}
+    <form aria-busy={isSubmitting} onSubmit={onSubmit} className="space-y-4" noValidate>
+      <Field id="password" label="Nueva contraseña" error={errors.password?.message} help="Entre 10 y 128 caracteres.">
+        <Input type="password" autoComplete="new-password"
           {...register("password")} />
-        <p id="password-help" className="text-sm text-muted-foreground">Entre 10 y 128 caracteres.</p>
-        {errors.password && <p id="password-error" className="text-sm text-destructive">{errors.password.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
-        <Input id="confirmPassword" type="password" autoComplete="new-password"
-          aria-invalid={!!errors.confirmPassword}
-          aria-describedby={errors.confirmPassword ? "confirmation-error" : undefined}
+      </Field>
+      <Field id="confirmPassword" label="Confirmar nueva contraseña" error={errors.confirmPassword?.message}>
+        <Input type="password" autoComplete="new-password"
           {...register("confirmPassword")} />
-        {errors.confirmPassword && <p id="confirmation-error" className="text-sm text-destructive">{errors.confirmPassword.message}</p>}
-      </div>
-      {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Guardando…" : "Guardar nueva contraseña"}
+      </Field>
+      {error && <Alert>{error}</Alert>}
+      <Button type="submit" className="w-full" loading={isSubmitting}>
+        Guardar nueva contraseña
       </Button>
+      <p role="status" className="text-small text-muted-foreground">{isSubmitting ? "Guardando…" : ""}</p>
     </form>
   );
 }

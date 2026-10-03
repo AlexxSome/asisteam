@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput, type CheckinInput } from "@asisteam/core";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/ui/field";
+import { Alert } from "@/components/ui/alert";
 import { loginUser } from "./actions";
 import { SocialLoginButtons } from "@/components/social-login-buttons";
 
@@ -22,54 +23,50 @@ export function LoginForm({ inviteCode, checkin }: { inviteCode?: string; checki
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const submit = handleSubmit(async (values) => {
     setServerError(null);
     const result = await loginUser(values, inviteCode, checkin);
     if (result?.error) setServerError(result.error);
   });
 
+  const submittingRef = useRef(false);
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try { await submit(event); }
+    finally { submittingRef.current = false; }
+  }
+
   return (
     <div className="space-y-4">
       <SocialLoginButtons context={{ invite_code: inviteCode, checkin }} disabled={isSubmitting} />
       <p className="text-center text-sm text-muted-foreground">O ingresa con tu email</p>
-      <form onSubmit={onSubmit} className="space-y-4" noValidate>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+      <form aria-busy={isSubmitting} onSubmit={onSubmit} className="space-y-4" noValidate>
+        <Field id="email" label="Email" error={errors.email?.message}>
           <Input
-            id="email"
             type="email"
             autoComplete="email"
-            aria-invalid={!!errors.email}
             {...register("email")}
           />
-          {errors.email && (
-            <p className="text-sm text-destructive">{errors.email.message}</p>
-          )}
-        </div>
+        </Field>
 
-        <div className="space-y-2">
-          <Label htmlFor="password">Contraseña</Label>
+        <Field id="password" label="Contraseña" error={errors.password?.message}>
           <Input
-            id="password"
             type="password"
             autoComplete="current-password"
-            aria-invalid={!!errors.password}
             {...register("password")}
           />
-          {errors.password && (
-            <p className="text-sm text-destructive">{errors.password.message}</p>
-          )}
-        </div>
+        </Field>
 
         {serverError && (
-          <p role="alert" className="text-sm font-medium text-destructive">
-            {serverError}
-          </p>
+          <Alert>{serverError}</Alert>
         )}
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Iniciando sesión…" : "Iniciar sesión"}
+        <Button type="submit" className="w-full" loading={isSubmitting}>
+          Iniciar sesión
         </Button>
+        <p role="status" className="text-small text-muted-foreground">{isSubmitting ? "Iniciando sesión…" : ""}</p>
       </form>
     </div>
   );
