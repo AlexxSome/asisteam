@@ -13,6 +13,7 @@ export default async function ActivityPage({ params }: { params: Promise<{ group
     <h1 className="break-words text-2xl font-semibold">{activity.title}</h1>
     {canManageAttendance(group.roles) && <Link href={`/groups/${groupId}/activities/${activityId}/attendance`} className="inline-block rounded-md bg-primary px-4 py-3 text-primary-foreground">Tomar asistencia</Link>}
     {group.roles.includes("ADMIN") && <Link href={`/groups/${groupId}/activities/${activityId}/edit`} className="inline-block rounded-md border px-4 py-3">Editar o eliminar actividad</Link>}
+    {group.roles.includes("ADMIN") && <Link href={`/groups/${groupId}/activities/${activityId}/qr`} className="inline-block rounded-md border px-4 py-3">Mostrar QR de asistencia</Link>}
     {activity.recurrence_rule && <p className="text-sm text-muted-foreground">Esta actividad pertenece a una serie semanal.</p>}
     <p className="flex items-center gap-2"><span aria-hidden className="size-3 rounded-full" style={{ backgroundColor: activity.activity_type_color ?? undefined }} />{activityTypeLabel(activity.activity_type_name ?? "", !!activity.is_system_type)}</p>
     <dl className="space-y-3">

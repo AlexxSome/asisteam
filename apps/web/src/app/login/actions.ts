@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { joinCodeSchema, loginSchema, type LoginInput } from "@asisteam/core";
+import { checkinInputSchema, checkinPath, joinCodeSchema, loginSchema, type LoginInput, type CheckinInput } from "@asisteam/core";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,7 +21,7 @@ const INVALID_CREDENTIALS_ERROR = "Email o contraseña incorrectos";
  * signInWithPassword siempre falla para su email y cae en el mismo mensaje
  * genérico de arriba — no requiere una verificación aparte.
  */
-export async function loginUser(input: LoginInput, inviteCode?: string): Promise<LoginResult> {
+export async function loginUser(input: LoginInput, inviteCode?: string, checkin?: CheckinInput): Promise<LoginResult> {
   const parsed = loginSchema.safeParse(input);
   if (!parsed.success) {
     return { error: INVALID_CREDENTIALS_ERROR };
@@ -40,5 +40,7 @@ export async function loginUser(input: LoginInput, inviteCode?: string): Promise
   }
 
   const parsedCode = joinCodeSchema.safeParse(inviteCode);
+  const parsedCheckin = checkinInputSchema.safeParse(checkin);
+  if (parsedCheckin.success) redirect(checkinPath(parsedCheckin.data));
   redirect(parsedCode.success ? `/join?code=${parsedCode.data}` : "/");
 }

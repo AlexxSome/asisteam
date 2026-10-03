@@ -290,10 +290,12 @@ La decisión explícita del usuario sustituye aquí las antiguas cuotas deportis
 
 Alcance confirmado para #57: muro web e infraestructura de envío Expo; no se desarrolla la app móvil completa ni Web Push. El envío requiere un dispositivo Expo registrado con permisos y opt-in. El muro funciona sin dispositivos. Las ediciones/borrados se reflejan al actualizar; la web actualiza cada 30 segundos mientras está visible. Ver [13-anuncios.md](13-anuncios.md).
 
-#### HU-DEP-10 — Registrar mi asistencia con QR [P2]
+#### HU-DEP-10 — Registrar mi asistencia con QR [P2 autorizado, #58]
 **Como** deportista **quiero** registrar mi llegada escaneando un QR de la actividad **para** agilizar la toma de asistencia.
 1. **Dado** un QR vigente mostrado por el ADMIN para la actividad, **cuando** lo escaneo dentro de la ventana horaria configurada, **entonces** mi registro queda PRESENT (o LATE si llegué después del umbral definido por el grupo).
 2. **Dado** un QR de una actividad de un grupo donde no soy ATHLETE ACTIVE, **cuando** lo escaneo, **entonces** el registro se rechaza.
+
+Alcance confirmado para #58: web, cámara del teléfono y apertura del enlace; horario configurable por ADMIN con valores iniciales −15/+60 minutos y LATE después de +10 minutos; QR que rota en tramos de 60 s; reescaneo idempotente y conservación de toda asistencia previa. Contrato y límites: [14-asistencia-qr.md](14-asistencia-qr.md).
 
 #### HU-GEN-08 — Iniciar sesión con Google/Apple [P2]
 **Como** usuario **quiero** autenticarme con mi cuenta Google o Apple **para** entrar sin recordar otra contraseña.

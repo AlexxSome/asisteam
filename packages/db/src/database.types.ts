@@ -2124,6 +2124,7 @@ export type Database = {
         }
         Returns: Json
       }
+      get_qr_checkin_settings: { Args: { p_group_id: string }; Returns: Json }
       get_subscription_context: {
         Args: { p_actor_auth_id: string; p_group_id: string }
         Returns: Json
@@ -2149,6 +2150,10 @@ export type Database = {
       is_group_admin: { Args: { p_group_id: string }; Returns: boolean }
       is_guardian_of: { Args: { p_athlete_user_id: string }; Returns: boolean }
       is_member: { Args: { p_group_id: string }; Returns: boolean }
+      issue_activity_checkin_qr: {
+        Args: { p_activity_id: string }
+        Returns: Json
+      }
       issue_invitation: {
         Args: {
           p_auth_user_id: string
@@ -2350,6 +2355,10 @@ export type Database = {
       }
       rotate_invite_code: { Args: { p_group_id: string }; Returns: string }
       run_guardianship_majority: { Args: never; Returns: number }
+      self_checkin: {
+        Args: { p_activity_id: string; p_token: string }
+        Returns: Json
+      }
       set_announcement_push_enabled: {
         Args: { p_enabled: boolean }
         Returns: undefined
@@ -2357,6 +2366,10 @@ export type Database = {
       set_avatar_permission: {
         Args: { p_allow: boolean; p_guardianship_id: string }
         Returns: undefined
+      }
+      set_qr_checkin_settings: {
+        Args: { p_group_id: string; p_settings: Json }
+        Returns: Json
       }
       sync_group_subscription: {
         Args: {

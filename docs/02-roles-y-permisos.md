@@ -67,9 +67,11 @@ Valores: **Sí** / **No** / **Cond. (Cn)** (condicional, ver notas al pie) / **N
 | 34 | Exportar reportes a CSV | Sí | No | No | [P1] |
 | 35 | Recibir notificaciones push (recordatorio de actividad; aviso de ausencia del pupilo al apoderado) | Sí | Sí | Sí | [P1] |
 | 36 | Justificación de inasistencias con flujo de solicitud/aprobación | Sí (aprueba) | Sí (solicita) | Sí (solicita por su pupilo) | [P2] |
-| 37 | Autoregistro de asistencia con QR o geocerca | No | Sí | No | [P2] |
+| 37 | Autoregistro propio de asistencia con QR vigente | No | Sí | No | [P2 autorizado, #58] |
 
 ### Notas de condiciones
+
+**QR (#58):** ADMIN ACTIVE configura el horario por grupo y muestra el QR de la actividad; COACH y GUARDIAN no lo emiten. ATHLETE ACTIVE registra solo su propia llegada. Multirol requiere una membership ATHLETE ACTIVE propia. No permite modificar registros anteriores mediante reescaneo, incluso ABSENT o EXCUSED; la edición manual conserva sus permisos. La geocerca queda fuera del alcance. Detalle: [14-asistencia-qr.md](14-asistencia-qr.md).
 
 - **C1** — Crear grupo es una acción global disponible para cualquier usuario con `account_status = ACTIVE` (no depende de rol previo). Cuentas `INVITED` y `MANAGED` no pueden crear grupos. El creador queda registrado en `groups.created_by` y recibe automáticamente `membership` con `role = ADMIN`, `status = ACTIVE`.
 - **C2** — Eliminar grupo exige confirmación escribiendo el nombre exacto del grupo. Es borrado lógico con retención de 30 días antes de la purga definitiva (ver 11-legal-seguridad-privacidad.md).

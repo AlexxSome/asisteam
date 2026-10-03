@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginInput } from "@asisteam/core";
+import { loginSchema, type LoginInput, type CheckinInput } from "@asisteam/core";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginUser } from "./actions";
 
-export function LoginForm({ inviteCode }: { inviteCode?: string } = {}) {
+export function LoginForm({ inviteCode, checkin }: { inviteCode?: string; checkin?: CheckinInput } = {}) {
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -23,7 +23,7 @@ export function LoginForm({ inviteCode }: { inviteCode?: string } = {}) {
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);
-    const result = await loginUser(values, inviteCode);
+    const result = await loginUser(values, inviteCode, checkin);
     if (result?.error) setServerError(result.error);
   });
 
