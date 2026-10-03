@@ -1,3 +1,4 @@
+import { AppShell } from "@/components/app-shell";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -13,7 +14,6 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { groupHomePath } from "@/lib/groups";
-import { AccountMenu } from "@/components/account-menu";
 
 export const metadata: Metadata = {
   title: "Bienvenida",
@@ -41,8 +41,7 @@ export default async function WelcomePage() {
   const firstName = profile?.full_name?.split(" ")[0] ?? "";
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-8 p-4">
-      <AccountMenu />
+    <AppShell><div className="mx-auto flex max-w-3xl flex-col items-center gap-8">
       <div className="text-center">
         <h1 className="text-3xl font-semibold tracking-tight">
           {firstName ? `¡Hola, ${firstName}!` : "¡Bienvenido/a a Asisteam!"}
@@ -101,6 +100,6 @@ export default async function WelcomePage() {
       <Link href="/profile" className={buttonVariants({ variant: "outline" })}>
         Mi perfil
       </Link>
-    </main>
+    </div></AppShell>
   );
 }

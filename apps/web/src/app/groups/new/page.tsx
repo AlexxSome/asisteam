@@ -1,3 +1,4 @@
+import { AppShell } from "@/components/app-shell";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -17,12 +18,12 @@ export default async function NewGroupPage() {
   if (!user) redirect("/register");
 
   return (
-    <main className="mx-auto max-w-xl space-y-6 p-4 py-10">
+    <AppShell><div className="mx-auto max-w-xl space-y-6">
       <h1 className="text-2xl font-semibold">Crear un grupo</h1>
       <GroupForm />
       <Link href="/groups" className="inline-block text-sm underline underline-offset-4">
         Volver a Mis grupos
       </Link>
-    </main>
+    </div></AppShell>
   );
 }

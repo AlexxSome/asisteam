@@ -1,0 +1,10 @@
+{
+  "innerWidth": 720,
+  "outerWidth": 1440,
+  "dpr": 2,
+  "scale": 1,
+  "overflow": false,
+  "menuHeight": 44,
+  "keyboard": "PASS",
+  "method": "Native Chrome default zoom in an isolated temporary profile; no CSS zoom or pinch scale"
+}

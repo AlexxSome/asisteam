@@ -3,9 +3,10 @@ import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 const mock = vi.hoisted(() => ({ groups: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getMyGroups: mock.groups }));
-vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(path); } }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/me/history", redirect: (path: string) => { throw new Error(path); } }));
 import MyHistoryGroupsPage from "./page";
 afterEach(cleanup);
+vi.stubGlobal("matchMedia", () => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
 it("acceso directo redirige a la única membership ATHLETE", async () => {
   mock.groups.mockResolvedValue({ groups: [{ id: "a", roles: ["ATHLETE", "ADMIN"] }, { id: "b", roles: ["ADMIN"] }] });
   await expect(MyHistoryGroupsPage()).rejects.toThrow("/groups/a/me/history");

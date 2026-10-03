@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "width": 320,
+      "mode": "before",
+      "header": 487,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 320,
+      "mode": "after",
+      "header": 101,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 375,
+      "mode": "before",
+      "header": 487,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 375,
+      "mode": "after",
+      "header": 101,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 768,
+      "mode": "before",
+      "header": 319,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 768,
+      "mode": "after",
+      "header": 101,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 1024,
+      "mode": "before",
+      "header": 319,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 1024,
+      "mode": "after",
+      "header": 101,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 1440,
+      "mode": "before",
+      "header": 283,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    },
+    {
+      "width": 1440,
+      "mode": "after",
+      "header": 101,
+      "overflow": false,
+      "h1": 1,
+      "main": 1
+    }
+  ],
+  "keyboard": {
+    "skip": true,
+    "initialFocus": "Cerrar",
+    "tabContained": true,
+    "escapeFocus": "Menú",
+    "accountEscapeFocus": "Mi cuenta"
+  },
+  "long": {
+    "overflow": false,
+    "name": "Club Deportivo Comunitario de Entrenamiento para Integrantes de la Región Metropolitana",
+    "header": 121
+  },
+  "roles": [
+    "GUARDIAN",
+    "COACH",
+    "ATHLETE"
+  ],
+  "errors": []
+}

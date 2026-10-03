@@ -2,14 +2,20 @@ import Link from "next/link";
 import { canManageAttendance, activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
 import { getActivity } from "@/lib/activities";
 import { getGroup } from "@/lib/groups";
+import { activityReturnLink, type ActivityReturnParams } from "@/lib/group-routing";
 
 export const metadata = { title: "Detalle de actividad" };
 
-export default async function ActivityPage({ params }: { params: Promise<{ groupId: string; activityId: string }> }) {
+export default async function ActivityPage({ params, searchParams }: {
+  params: Promise<{ groupId: string; activityId: string }>;
+  searchParams?: Promise<ActivityReturnParams>;
+}) {
   const { groupId, activityId } = await params;
   const [activity, group] = await Promise.all([getActivity(groupId, activityId), getGroup(groupId)]);
+  // Only fixed destinations: incoming query parameters never become redirect URLs.
+  const back = activityReturnLink(groupId, await searchParams);
   return <>
-    <Link href={`/groups/${groupId}/activities`} className="underline">Volver a actividades</Link>
+    <Link href={back.href} className="inline-flex min-h-11 items-center underline">{back.label}</Link>
     <h1 className="break-words text-2xl font-semibold">{activity.title}</h1>
     {canManageAttendance(group.roles) && <Link href={`/groups/${groupId}/activities/${activityId}/attendance`} className="inline-block rounded-md bg-primary px-4 py-3 text-primary-foreground">Tomar asistencia</Link>}
     {group.roles.includes("ADMIN") && <Link href={`/groups/${groupId}/activities/${activityId}/edit`} className="inline-block rounded-md border px-4 py-3">Editar o eliminar actividad</Link>}

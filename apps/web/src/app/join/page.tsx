@@ -1,3 +1,4 @@
+import { AppShell } from "@/components/app-shell";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -27,7 +28,7 @@ export default async function JoinPage({ searchParams }: {
     ? GROUP_ERROR_MESSAGES[error] : null;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-4 text-center">
+    <AppShell><div className="flex flex-col items-center gap-4 text-center">
       <h1 className="text-2xl font-semibold">Unirme con código</h1>
       <p className="max-w-md text-muted-foreground">Ingresa el código que compartió el administrador. Te incorporarás como deportista.</p>
       {pending === "1" && <p role="status" className="max-w-md rounded-md border p-3 text-left">
@@ -43,6 +44,6 @@ export default async function JoinPage({ searchParams }: {
       <Link href="/welcome" className="text-sm underline underline-offset-4">
         Volver al inicio
       </Link>
-    </main>
+    </div></AppShell>
   );
 }
