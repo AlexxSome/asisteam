@@ -1,6 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { checkinInputSchema, checkinPath, joinCodeSchema, loginSchema, socialLoginSchema, SOCIAL_AUTH_ERROR, type LoginInput, type CheckinInput, type SocialLoginInput } from "@asisteam/core";
 
@@ -11,6 +12,21 @@ import { SOCIAL_CALLBACK_PATH, SOCIAL_CONTEXT_COOKIE, socialAuthOrigin } from "@
 export type LoginResult = { error: string } | undefined;
 
 const INVALID_CREDENTIALS_ERROR = "Email o contraseña incorrectos";
+
+export async function signOutUser(): Promise<{ error: string }> {
+  const failure = { error: "No pudimos cerrar tu sesión. Vuelve a intentarlo." };
+  try {
+    const supabase = await createClient({ requireCookieWrites: true });
+    const { error } = await supabase.auth.signOut({ scope: "local" });
+    if (error) return failure;
+  } catch {
+    return failure;
+  }
+
+  // Invalida también las páginas privadas visitadas en el Router Cache.
+  revalidatePath("/", "layout");
+  redirect("/login", RedirectType.replace);
+}
 
 /**
  * Inicio de sesión con email y contraseña (HU-GEN-02, AUT-01).

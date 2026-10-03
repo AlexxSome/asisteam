@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core";
 import { getGroup, getMyGroups } from "@/lib/groups";
+import { AccountMenu } from "@/components/account-menu";
 import { GroupSelector } from "../group-selector";
 
 export default async function GroupLayout({ children, params }: {
@@ -12,7 +13,7 @@ export default async function GroupLayout({ children, params }: {
   const guardianOnly = groups.every((item) => item.roles.every((role) => role === "GUARDIAN"));
   return <div className="mx-auto max-w-5xl p-4">
     <header className="space-y-4 border-b pb-5">
-      <div className="flex items-center justify-between gap-4"><Link href="/groups" className="font-semibold">Asisteam</Link><Link href="/profile" className="text-sm underline">Mi perfil</Link></div>
+      <div className="flex flex-wrap items-start justify-between gap-4"><Link href="/groups" className="flex min-h-11 items-center font-semibold">Asisteam</Link><AccountMenu /></div>
       <GroupSelector groups={groups} activeId={group.id} userId={userId} guardianOnly={guardianOnly} />
       <div className="flex items-center gap-3">
         {group.logo_url && <img src={group.logo_url} alt="" width={40} height={40} referrerPolicy="no-referrer" className="size-10 rounded object-cover" />}

@@ -10,7 +10,7 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  * Sesión en cookies HttpOnly vía @supabase/ssr (nunca localStorage),
  * según docs/07-api-y-backend.md §6.1.
  */
-export async function createClient() {
+export async function createClient({ requireCookieWrites = false } = {}) {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
@@ -27,7 +27,8 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options),
             );
-          } catch {
+          } catch (error) {
+            if (requireCookieWrites) throw error;
             // Ignorado en Server Components: el refresco de sesión
             // que escribe cookies ocurre en el middleware.
           }

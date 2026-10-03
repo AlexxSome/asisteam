@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MEMBERSHIP_ROLE_LABELS, activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
 import { getMyGroups } from "@/lib/groups";
+import { AccountMenu } from "@/components/account-menu";
 import { getMyActivities, parseActivitySearch, type ActivitySearchParams } from "@/lib/activities";
 
 export const metadata = { title: "Mis grupos" };
@@ -12,6 +13,7 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
   const { page, period } = parseActivitySearch(await searchParams);
   const { activities, hasNext } = await getMyActivities(page, period);
   return <main className="mx-auto max-w-3xl space-y-6 p-4 py-10">
+    <AccountMenu />
     <header><h1 className="text-2xl font-semibold">Mis grupos</h1>
       <p className="mt-2 text-muted-foreground">Elige el grupo en el que quieres participar.</p></header>
     <ul className="grid gap-4 sm:grid-cols-2">

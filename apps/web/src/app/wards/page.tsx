@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getMyWards, parseWardsPage } from "@/lib/wards";
+import { AccountMenu } from "@/components/account-menu";
 
 export const metadata = { title: "Mis pupilos" };
 export const dynamic = "force-dynamic";
@@ -10,6 +11,7 @@ export default async function WardsPage({ searchParams }: {
   const page = parseWardsPage((await searchParams).page);
   const { wards, hasNext } = await getMyWards(page);
   return <main className="mx-auto max-w-3xl space-y-6 p-4 py-10">
+    <AccountMenu />
     <header className="space-y-2">
       <h1 className="text-2xl font-semibold">Mis pupilos</h1>
       <p className="text-muted-foreground">Elige un deportista para ver su perfil deportivo, sus actividades y sus grupos.</p>
