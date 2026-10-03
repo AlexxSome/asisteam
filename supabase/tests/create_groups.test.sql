@@ -34,6 +34,11 @@ select throws_ok($$select public.create_group('Club', 'Fútbol', null, 'javascri
 select is((select count(*) from public.v_my_groups), 0::bigint, 'validación no deja grupos parciales');
 
 select set_config('test.created_group', public.create_group('  Club Ñuñoa  ', ' Fútbol ', ' Equipo adulto ', 'https://example.test/logo.png')::text, true);
+-- El onboarding nuevo exige pago antes del segundo rol; el resto prueba un club histórico.
+select throws_ok($$select public.join_group_as_athlete(current_setting('test.created_group')::uuid)$$, 'PT422', 'subscription_athlete_limit', 'un club nuevo no activa deportistas sin pago');
+reset role;
+insert into app_private.billing_legacy_groups values(current_setting('test.created_group')::uuid);
+set local role authenticated;
 select is((select name from public.v_group_detail), 'Club Ñuñoa', 'nombre normalizado');
 select is((select sport from public.v_group_detail), 'Fútbol', 'deporte normalizado');
 select is((select description from public.v_group_detail), 'Equipo adulto', 'descripción guardada');
@@ -93,6 +98,8 @@ insert into public.groups(id, name, invite_code, created_by)
 select ('20000000-0000-4000-8000-' || lpad((n+800)::text,12,'0'))::uuid,
        'Equipo apoderado ' || n, 'GUARD' || lpad(n::text,3,'0'), '20000000-0000-4000-8000-000000000105'
 from generate_series(1,29) n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id, group_id, role, status)
 select '20000000-0000-4000-8000-000000000105', id, 'ADMIN', 'ACTIVE' from public.groups where name like 'Equipo apoderado %';
 set local role authenticated;
@@ -123,6 +130,8 @@ insert into public.groups(id, name, invite_code, created_by)
 select ('20000000-0000-4000-8000-' || lpad((n+700)::text,12,'0'))::uuid,
        'Equipo límite ' || n, 'LIMIT' || lpad(n::text,3,'0'), '20000000-0000-4000-8000-000000000106'
 from generate_series(1,29) n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id, group_id, role, status)
 select '20000000-0000-4000-8000-000000000106', id, role, 'ACTIVE'
 from public.groups cross join (values('ADMIN'),('ATHLETE')) roles(role) where name like 'Equipo límite %';

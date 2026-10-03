@@ -15,6 +15,8 @@ from generate_series(111,120) n;
 insert into public.groups(id,name,invite_code,created_by) values
 ('26000000-0000-4000-8000-000000000201','Club principal','REV26001','26000000-0000-4000-8000-000000000101'),
 ('26000000-0000-4000-8000-000000000202','Club ajeno','REV26002','26000000-0000-4000-8000-000000000104');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status,joined_at) values
 ('26000000-0000-4000-8000-000000000101','26000000-0000-4000-8000-000000000201','ADMIN','ACTIVE',now()),
 ('26000000-0000-4000-8000-000000000102','26000000-0000-4000-8000-000000000201','ATHLETE','ACTIVE',now()),
@@ -122,6 +124,8 @@ reset role;
 insert into public.groups(id,name,invite_code,created_by)
 select ('26000000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,'Grupo sintético '||n,'R26G'||lpad(n::text,4,'0'),'26000000-0000-4000-8000-000000000104'
 from generate_series(1,29) n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status)
 select '26000000-0000-4000-8000-000000000104',id,'ADMIN','ACTIVE' from public.groups where invite_code like 'R26G%';
 set local role authenticated;

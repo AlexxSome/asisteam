@@ -13,6 +13,8 @@ update public.users set id = ('22000000-0000-4000-8000-' || lpad((right(auth_use
 where email like 'join-code-%@example.test';
 insert into public.groups(id, name, sport, invite_code, created_by)
 values('22000000-0000-4000-8000-000000000201', 'Club invitador', 'Fútbol', 'CODE0001', '22000000-0000-4000-8000-000000000101');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id, group_id, role, status, joined_at)
 values('22000000-0000-4000-8000-000000000101', '22000000-0000-4000-8000-000000000201', 'ADMIN', 'ACTIVE', now());
 

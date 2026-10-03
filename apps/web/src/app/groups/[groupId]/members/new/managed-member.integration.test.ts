@@ -44,6 +44,8 @@ suite("MANAGED: Auth + invitación + consentimiento + asistencia", () => {
     const group = await owner.rpc("create_group", { p_name: "Club MANAGED integración", p_sport: "Tenis" });
     if (group.error) throw new Error("No se pudo preparar grupo sintético");
     groupId = group.data;
+    // Este flujo de regresión representa un club anterior al despliegue de facturación.
+    sql(`insert into app_private.billing_legacy_groups values('${groupId}');`);
   }, 30_000);
 
   afterAll(async () => {
@@ -62,6 +64,7 @@ suite("MANAGED: Auth + invitación + consentimiento + asistencia", () => {
       delete from public.attendance_records where activity_id in (select id from public.activities where group_id in (${groups}));
       delete from public.activities where group_id in (${groups});
       delete from public.memberships where group_id in (${groups});
+      delete from app_private.billing_legacy_groups where group_id in (${groups});
       delete from public.groups where id in (${groups});
       delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await service.auth.admin.deleteUser(id);

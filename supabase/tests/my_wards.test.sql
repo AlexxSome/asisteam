@@ -20,6 +20,8 @@ insert into public.groups(id,name,sport,invite_code,created_by) values
 (pg_temp.uid(201),'Club principal','Tenis','WRD46001',pg_temp.uid(103)),
 (pg_temp.uid(202),'Segundo club','Fútbol','WRD46002',pg_temp.uid(103)),
 (pg_temp.uid(203),'Grupo no compartido','Tenis','WRD46003',pg_temp.uid(103));
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status) values
 (pg_temp.uid(103),pg_temp.uid(201),'ADMIN','ACTIVE'),
 (pg_temp.uid(103),pg_temp.uid(202),'ADMIN','ACTIVE'),

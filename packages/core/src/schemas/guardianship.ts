@@ -22,6 +22,7 @@ export const GUARDIANSHIP_ERROR_MESSAGES: Record<string, string> = {
   guardian_only_for_minor: "Solo puedes vincular apoderados a deportistas menores de 18 años.",
   guardianship_already_exists: "Este apoderado ya tiene un vínculo registrado con el deportista. No se creó otro.",
   guardian_group_limit: "El apoderado superaría el límite de 30 grupos.",
-  group_member_limit: "Uno de los grupos del pupilo alcanzó el límite de 500 integrantes activos.",
+  subscription_athlete_limit: "El club no tiene cupos disponibles en su suscripción. Solicita al administrador revisar el plan y su primer pago.",
+  group_member_limit: "El grupo alcanzó su límite operativo de integrantes activos.",
   unavailable: "No pudimos confirmar el vínculo. Revisa el grupo antes de volver a intentarlo.",
 };

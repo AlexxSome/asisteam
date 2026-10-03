@@ -15,6 +15,8 @@ insert into public.groups(id, name, invite_code, created_by)
 select ('27000000-0000-4000-8000-' || lpad((n+200)::text,12,'0'))::uuid,
        'Equipo actividades ' || n, 'ACT0000' || n, '27000000-0000-4000-8000-000000000101'
 from generate_series(1,3) n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.guardianships(id, guardian_user_id, athlete_user_id, relationship)
 values('27000000-0000-4000-8000-000000000401', '27000000-0000-4000-8000-000000000104', '27000000-0000-4000-8000-000000000105', 'Madre');
 insert into public.consents(guardianship_id, consent_type, terms_version)

@@ -274,10 +274,14 @@
 1. **Dado** un miembro del grupo, **cuando** le asigno rol COACH, **entonces** puede tomar y editar asistencia y ver reportes del grupo, pero no puede editar la configuración, invitar ni gestionar integrantes.
 2. **Dado** un COACH, **cuando** intenta acceder a configuración del grupo o gestión de miembros, **entonces** recibe 403.
 
-#### HU-ADM-21 — Gestionar pagos y cuotas [P2]
-**Como** administrador **quiero** registrar cuotas y pagos de los integrantes **para** controlar la tesorería del grupo en la misma herramienta.
-1. **Dado** un plan de cuotas definido (monto y periodicidad), **cuando** registro un pago de un integrante, **entonces** su estado de pago del período queda al día y se refleja en el panel de morosidad.
-2. **Dado** integrantes con cuotas vencidas, **cuando** abro el reporte de pagos, **entonces** veo la lista de morosos con períodos adeudados y montos.
+#### HU-ADM-21 — Gestionar la suscripción del club a Asisteam [P2 autorizado, #56]
+**Como** administrador **quiero** contratar y consultar el plan mensual del club **para** pagar el servicio Asisteam y gestionar sus cupos.
+1. **Dado** un club, **cuando** elijo Equipo 4.990/50, Club 9.990/200 o Academia 15.990/1.000 (CLP/mes, ATHLETE ACTIVE), **entonces** autorizo el pago recurrente en Mercado Pago y los cupos se habilitan tras el primer pago aprobado verificado en servidor.
+2. **Dado** un cobro mensual, **cuando** consulto la suscripción, **entonces** veo importe, período/fecha prevista, estado e historial; los pendientes vencidos se informan desde el día siguiente en Chile sin suspender acceso ni borrar historia.
+3. **Dado** otro rol o tenant, **cuando** intenta consultar o modificar la facturación, **entonces** no obtiene acceso ni puede confirmar pagos.
+4. **Dado** un cambio de plan, mora o cancelación, **entonces** se conservan los integrantes existentes y solo se limita su alta/reactivación por los cupos contratados.
+
+La decisión explícita del usuario sustituye aquí las antiguas cuotas deportista→club. Contrato, capacidad histórica, permisos y despliegue: [12-suscripciones-saas.md](12-suscripciones-saas.md).
 
 #### HU-ADM-22 — Publicar anuncios al grupo [P2]
 **Como** administrador **quiero** publicar anuncios internos **para** comunicar información al grupo sin salir de Asisteam.

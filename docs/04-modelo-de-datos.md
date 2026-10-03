@@ -530,11 +530,16 @@ Flujo de solicitud/aprobación de justificaciones de inasistencia.
 
 - `justification_requests`: `id`, `activity_id` (FK activities), `membership_id` (FK memberships), `requested_by` (FK users; el ATHLETE o su GUARDIAN), `reason` (text), `attachment_url`, `status` (`PENDING` | `APPROVED` | `REJECTED`), `resolved_by` (FK users), `resolved_at`, `created_at`. Al aprobarse, el backend fija `attendance_records.status = EXCUSED`.
 
-### 7.3 payments [P2]
+### 7.3 Suscripciones SaaS [P2 autorizado, #56]
 
-Gestión de pagos/cuotas del grupo.
+La decisión del usuario reemplaza las cuotas por integrante por una suscripción **club→Asisteam**. No se crea `payments` con `membership_id`.
 
-- `payments`: `id`, `group_id` (FK groups), `membership_id` (FK memberships), `concept` (text), `amount` (numeric(12,2)), `currency` (default `'CLP'`), `due_date` (date), `paid_at`, `status` (`PENDING` | `PAID` | `OVERDUE` | `CANCELLED`), `created_at`.
+- `billing_plans`: catálogo mensual CLP y cupo ATHLETE ACTIVE del servidor.
+- `group_subscriptions`: historial por `group_id`, snapshot de precio/cupo, identidad de proveedor, estado y fechas; una sola abierta por grupo. Sin correo de pagador ni datos de tarjeta.
+- `subscription_invoices`: una fila por factura remota, importe, vencimiento, estado, ID de pago y fechas; sincronización idempotente/ordenada, sin borrado de historia.
+- `app_private.billing_legacy_groups`: snapshot de grupos existentes al despliegue, sin permisos de clientes; conserva el límite previo hasta primer pago.
+
+RLS deny-by-default, DTO ADMIN por RPC y escrituras solo Edge/service_role. Detalle de límites, DDL versionado y estados: [12-suscripciones-saas.md](12-suscripciones-saas.md).
 
 ### 7.4 audit_log [P2]
 

@@ -10,6 +10,8 @@ update public.users set id=('30000000-0000-4000-8000-'||lpad((right(auth_user_id
 insert into public.groups(id,name,invite_code,created_by) values
 ('30000000-0000-4000-8000-000000000201','Equipo asistencia','ASIST001','30000000-0000-4000-8000-000000000101'),
 ('30000000-0000-4000-8000-000000000202','Equipo ajeno','ASIST002','30000000-0000-4000-8000-000000000101');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship) values
 ('30000000-0000-4000-8000-000000000401','30000000-0000-4000-8000-000000000108','30000000-0000-4000-8000-000000000109','Padre');
 insert into public.consents(guardianship_id,consent_type,terms_version) values('30000000-0000-4000-8000-000000000401','DATA_PROCESSING_MINOR','v1');

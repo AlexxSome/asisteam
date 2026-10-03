@@ -144,3 +144,14 @@ describe("COACH: permisos limitados por grupo", () => {
     expect((await middleware(request(path))).status).toBe(403);
   });
 });
+
+ describe("facturación del club", () => {
+   it.each(["ATHLETE", "GUARDIAN", "COACH"])("%s no puede ver facturas ni checkout", async role => {
+     mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: [role] } });
+     expect((await middleware(request(`/groups/${groupId}/billing`))).status).toBe(403);
+     mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: [role, "ADMIN"] } });
+     expect((await middleware(request(`/groups/${groupId}/billing`))).status).toBe(200);
+     mock.maybeSingle.mockResolvedValue({ data: null });
+     expect((await middleware(request(`/groups/${groupId}/billing`))).status).toBe(404);
+   });
+ });

@@ -15,6 +15,8 @@ select ('18000000-0000-4000-8000-' || lpad(n::text,12,'0'))::uuid,
 from generate_series(10,15) n;
 insert into public.groups(id, name, invite_code, created_by)
 values ('18000000-0000-4000-8000-000000000201','Grupo de invitación','INVITE18','18000000-0000-4000-8000-000000000001');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status)
 values ('18000000-0000-4000-8000-000000000001','18000000-0000-4000-8000-000000000201','ADMIN','ACTIVE');
 insert into public.invitations(group_id,email,invited_user_id,role,token,created_by)

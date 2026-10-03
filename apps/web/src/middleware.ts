@@ -81,6 +81,9 @@ export async function middleware(request: NextRequest) {
       // responder 200 después de enviar encabezados. Aquí el HTTP siempre es 404.
       return missingResource();
     }
+    if (segments[3] === "billing" && !group.roles?.includes("ADMIN")) {
+      return forbidden("Solo un administrador del grupo puede gestionar su suscripción.");
+    }
     const attendanceRoute = segments[3] === "activities" && !!segments[4] && segments[5] === "attendance";
     if (attendanceRoute && !canManageAttendance(group.roles ?? [])) {
       return forbidden("Solo un administrador o entrenador del grupo puede tomar asistencia.");

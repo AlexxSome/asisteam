@@ -335,6 +335,30 @@ export type Database = {
           },
         ]
       }
+      billing_plans: {
+        Row: {
+          amount_clp: number
+          athlete_limit: number
+          code: string
+          currency: string
+          name: string
+        }
+        Insert: {
+          amount_clp: number
+          athlete_limit: number
+          code: string
+          currency?: string
+          name: string
+        }
+        Update: {
+          amount_clp?: number
+          athlete_limit?: number
+          code?: string
+          currency?: string
+          name?: string
+        }
+        Relationships: []
+      }
       birthdate_change_approvals: {
         Row: {
           approved_at: string
@@ -474,6 +498,103 @@ export type Database = {
             columns: ["guardianship_id"]
             isOneToOne: false
             referencedRelation: "guardianships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_subscriptions: {
+        Row: {
+          activated_at: string | null
+          amount_clp: number
+          athlete_limit: number
+          checkout_url: string | null
+          created_at: string
+          creation_attempted_at: string | null
+          group_id: string
+          id: string
+          next_payment_at: string | null
+          plan_code: string
+          provider_subscription_id: string | null
+          provider_updated_at: string | null
+          requested_by: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          amount_clp: number
+          athlete_limit: number
+          checkout_url?: string | null
+          created_at?: string
+          creation_attempted_at?: string | null
+          group_id: string
+          id?: string
+          next_payment_at?: string | null
+          plan_code: string
+          provider_subscription_id?: string | null
+          provider_updated_at?: string | null
+          requested_by: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          amount_clp?: number
+          athlete_limit?: number
+          checkout_url?: string | null
+          created_at?: string
+          creation_attempted_at?: string | null
+          group_id?: string
+          id?: string
+          next_payment_at?: string | null
+          plan_code?: string
+          provider_subscription_id?: string | null
+          provider_updated_at?: string | null
+          requested_by?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_subscriptions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_subscriptions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_group_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_subscriptions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_subscriptions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "v_my_ward_groups"
+            referencedColumns: ["group_id"]
+          },
+          {
+            foreignKeyName: "group_subscriptions_plan_code_fkey"
+            columns: ["plan_code"]
+            isOneToOne: false
+            referencedRelation: "billing_plans"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "group_subscriptions_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -805,6 +926,50 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_invoices: {
+        Row: {
+          amount_clp: number
+          created_at: string
+          due_at: string
+          paid_at: string | null
+          provider_invoice_id: string
+          provider_payment_id: string | null
+          provider_updated_at: string
+          status: string
+          subscription_id: string
+        }
+        Insert: {
+          amount_clp: number
+          created_at?: string
+          due_at: string
+          paid_at?: string | null
+          provider_invoice_id: string
+          provider_payment_id?: string | null
+          provider_updated_at: string
+          status: string
+          subscription_id: string
+        }
+        Update: {
+          amount_clp?: number
+          created_at?: string
+          due_at?: string
+          paid_at?: string | null
+          provider_invoice_id?: string
+          provider_payment_id?: string | null
+          provider_updated_at?: string
+          status?: string
+          subscription_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_invoices_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "group_subscriptions"
             referencedColumns: ["id"]
           },
         ]
@@ -1671,6 +1836,14 @@ export type Database = {
         Returns: string
       }
       auth_user_id: { Args: never; Returns: string }
+      begin_subscription_checkout: {
+        Args: {
+          p_actor_auth_id: string
+          p_group_id: string
+          p_plan_code: string
+        }
+        Returns: Json
+      }
       can_read_avatar: { Args: { p_name: string }; Returns: boolean }
       can_upload_avatar: { Args: never; Returns: boolean }
       cancel_invitation_registration: {
@@ -1686,6 +1859,10 @@ export type Database = {
           email: string
           full_name: string
         }[]
+      }
+      claim_subscription_creation: {
+        Args: { p_subscription_id: string }
+        Returns: boolean
       }
       clear_attendance_record: {
         Args: { p_activity_id: string; p_membership_id: string }
@@ -1769,6 +1946,10 @@ export type Database = {
         }
         Returns: Json
       }
+      get_group_billing: {
+        Args: { p_group_id: string; p_page?: number }
+        Returns: Json
+      }
       get_group_stats: {
         Args: { p_group_id: string; p_page?: number; p_page_size?: number }
         Returns: Json
@@ -1783,6 +1964,10 @@ export type Database = {
           p_period?: string
           p_to?: string
         }
+        Returns: Json
+      }
+      get_subscription_context: {
+        Args: { p_actor_auth_id: string; p_group_id: string }
         Returns: Json
       }
       get_ward_attendance_history: {
@@ -1927,6 +2112,10 @@ export type Database = {
           total_count: number
         }[]
       }
+      lookup_billing_subscription: {
+        Args: { p_subscription_id: string }
+        Returns: Json
+      }
       prepare_invitation_registration: {
         Args: {
           p_email: string
@@ -1952,6 +2141,10 @@ export type Database = {
         Args: { p_group_id: string; p_membership_id: string }
         Returns: undefined
       }
+      reject_subscription_creation: {
+        Args: { p_subscription_id: string }
+        Returns: undefined
+      }
       request_birthdate_change: {
         Args: { p_birthdate: string }
         Returns: string
@@ -1972,6 +2165,31 @@ export type Database = {
       run_guardianship_majority: { Args: never; Returns: number }
       set_avatar_permission: {
         Args: { p_allow: boolean; p_guardianship_id: string }
+        Returns: undefined
+      }
+      sync_group_subscription: {
+        Args: {
+          p_checkout_url: string
+          p_next_payment_at: string
+          p_provider_id: string
+          p_provider_updated_at: string
+          p_status: string
+          p_subscription_id: string
+        }
+        Returns: undefined
+      }
+      sync_subscription_invoice: {
+        Args: {
+          p_amount_clp: number
+          p_currency: string
+          p_due_at: string
+          p_invoice_id: string
+          p_paid_at: string
+          p_payment_id: string
+          p_provider_subscription_id: string
+          p_provider_updated_at: string
+          p_status: string
+        }
         Returns: undefined
       }
       update_activity: {

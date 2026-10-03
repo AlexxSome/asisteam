@@ -9,6 +9,8 @@ insert into public.groups(id,name,invite_code,created_by,created_at) values
 (pg_temp.uid(201),'Historial A','HIST0001',pg_temp.uid(101),'2026-01-01T12:00Z'),
 (pg_temp.uid(202),'Historial B','HIST0002',pg_temp.uid(105),'2026-01-01T12:00Z'),
 (pg_temp.uid(203),'Historial ajeno','HIST0003',pg_temp.uid(105),'2026-01-01T12:00Z');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(id,user_id,group_id,role,status,joined_at)
 select pg_temp.uid(mid),pg_temp.uid(uid),pg_temp.uid(gid),role,status,'2026-03-01T03:00Z'
 from (values (301,101,201,'ADMIN','ACTIVE'),(302,102,201,'ATHLETE','ACTIVE'),(303,103,201,'ATHLETE','ACTIVE'),
