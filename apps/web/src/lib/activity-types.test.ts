@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ group: vi.fn(), groups: vi.fn(), range: vi.fn(), eq: vi.fn(), or: vi.fn(), from: vi.fn(), select: vi.fn(), in: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group, getMyGroups: mock.groups }));
-vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/groups", notFound: () => { throw new Error("404"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ from: mock.from }) }));
 import { ACTIVITY_PAGE_SIZE, getActivities, getMyActivities, getActivityTypes, parseActivitySearch } from "./activities";
 import GroupsPage from "@/app/groups/page";

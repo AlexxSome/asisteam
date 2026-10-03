@@ -1,3 +1,4 @@
+import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
 import { getWardActivities, parseActivitySearch, type ActivitySearchParams } from "@/lib/activities";
@@ -13,7 +14,7 @@ export default async function WardPage({ params, searchParams }: {
   const { ward, activities, hasNext } = await getWardActivities((await params).athleteUserId, page, period);
   const wardPath = `/wards/${ward.athlete_user_id}`;
   const hasActiveGroups = ward.groups.some((group) => group.membership_status === "ACTIVE");
-  return <main className="mx-auto max-w-3xl space-y-6 p-4 py-10">
+  return <AppShell wards><div className="mx-auto max-w-3xl space-y-6">
     <Link href="/wards" prefetch={false} className="inline-block min-h-11 py-2 underline">Cambiar de pupilo · Mis pupilos</Link>
     <header className="flex items-center gap-4">
       {ward.avatar_url && <img src={ward.avatar_url} alt="" width={72} height={72} className="size-18 rounded-full object-cover" />}
@@ -34,7 +35,7 @@ export default async function WardPage({ params, searchParams }: {
         : `No hay actividades ${period === "upcoming" ? "próximas" : "pasadas"} en esta página.`}</p> : <ul className="space-y-3">
         {activities.map((activity) => <li key={activity.id} className="space-y-2 rounded-lg border p-4">
           <p className="break-words text-sm text-muted-foreground">{activity.group_name}</p>
-          <Link href={`/groups/${activity.group_id}/activities/${activity.id}`} prefetch={false} className="inline-block min-h-11 break-words py-2 text-lg font-semibold underline">{activity.title}</Link>
+          <Link href={`/groups/${activity.group_id}/activities/${activity.id}?from=wards&ward=${ward.athlete_user_id}&period=${period}&page=${page}`} prefetch={false} className="inline-block min-h-11 break-words py-2 text-lg font-semibold underline">{activity.title}</Link>
           <p className="flex items-center gap-2"><span aria-hidden className="size-3 shrink-0 rounded-full" style={{ backgroundColor: activity.activity_type_color ?? undefined }} />{activityTypeLabel(activity.activity_type_name ?? "", !!activity.is_system_type)}</p>
           <p>{activity.starts_at && formatActivityDateTime(activity.starts_at)} → {activity.ends_at && formatActivityDateTime(activity.ends_at)}</p>
           <p className="break-words text-muted-foreground">{activity.location || "Lugar por confirmar"}</p>
@@ -54,5 +55,5 @@ export default async function WardPage({ params, searchParams }: {
         {group.membership_status === "ACTIVE" && <Link href={`/groups/${group.group_id}/wards/${ward.athlete_user_id}/history`} prefetch={false} className="inline-block min-h-11 py-2 underline">Ver historial de asistencia</Link>}
       </li>)}</ul>
     </section>
-  </main>;
+  </div></AppShell>;
 }

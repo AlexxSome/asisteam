@@ -6,7 +6,7 @@ import { useActionState, useId } from "react";
 import { signOutUser } from "@/app/login/actions";
 import { Button } from "@/components/ui/button";
 
-export function AccountMenu() {
+export function AccountMenu({ compact = false }: { compact?: boolean }) {
   const descriptionId = useId();
   const [result, action, pending] = useActionState(async () => {
     try {
@@ -18,11 +18,19 @@ export function AccountMenu() {
     }
   }, undefined);
 
-  return <details className="w-full min-w-0 rounded-lg border p-3 sm:w-64">
+  return <details className={compact ? "relative min-w-0 shrink-0" : "w-full min-w-0 rounded-lg border p-3 sm:w-64"}
+    onKeyDown={event => {
+      if (event.key === "Escape") {
+        event.currentTarget.open = false;
+        event.currentTarget.querySelector("summary")?.focus();
+      }
+    }}>
     <summary className="min-h-11 cursor-pointer content-center rounded px-2 font-medium focus-visible:outline-2 focus-visible:outline-offset-2">
       Mi cuenta
     </summary>
-    <nav aria-label="Mi cuenta" className="mt-2 space-y-3">
+    <nav aria-label="Mi cuenta" className={compact
+      ? "absolute right-0 z-20 mt-2 w-64 max-w-[calc(100vw-2rem)] space-y-3 rounded-lg border border-border bg-surface p-4 shadow-overlay"
+      : "mt-2 space-y-3"}>
       <Link href="/profile" className="flex min-h-11 items-center rounded px-2 text-sm underline underline-offset-4 focus-visible:outline-2">Mi perfil</Link>
       <form action={action} aria-busy={pending} className="space-y-3">
         <p id={descriptionId} className="text-sm text-muted-foreground">Cierra tu sesión en este dispositivo. Tus otras sesiones seguirán abiertas.</p>

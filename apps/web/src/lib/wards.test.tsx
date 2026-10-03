@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), wardsRange: vi.fn(), groupsRange: vi.fn(), maybeSingle: vi.fn(),
   activitiesRange: vi.fn(), activitySelect: vi.fn(), activityGroups: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from }) }));
-vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/wards", redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
 import { getGroupWards, getMyWards, getWard, parseWardsPage } from "./wards";
 import { getWardActivities } from "./activities";
 import WardsPage from "@/app/wards/page";
@@ -207,7 +207,7 @@ describe("agenda del pupilo", () => {
     expect(html).toContain("America/Santiago");
     expect(html).toContain("19:00");
     expect(html).toContain("18:00");
-    expect(html).toContain(`href="/groups/${activity.group_id}/activities/${activity.id}"`);
+    expect(html).toContain(`href="/groups/${activity.group_id}/activities/${activity.id}?from=wards&amp;ward=${id}&amp;period=upcoming&amp;page=1"`);
     expect(html).not.toContain("Crear actividad");
   });
 

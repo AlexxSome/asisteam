@@ -1,8 +1,8 @@
+import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MEMBERSHIP_ROLE_LABELS, activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
 import { getMyGroups } from "@/lib/groups";
-import { AccountMenu } from "@/components/account-menu";
 import { getMyActivities, parseActivitySearch, type ActivitySearchParams } from "@/lib/activities";
 
 export const metadata = { title: "Mis grupos" };
@@ -12,8 +12,7 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
   if (!groups.length) redirect("/welcome");
   const { page, period } = parseActivitySearch(await searchParams);
   const { activities, hasNext } = await getMyActivities(page, period);
-  return <main className="mx-auto max-w-3xl space-y-6 p-4 py-10">
-    <AccountMenu />
+  return <AppShell groups={groups}><div className="mx-auto max-w-3xl space-y-6">
     <header><h1 className="text-2xl font-semibold">Mis grupos</h1>
       <p className="mt-2 text-muted-foreground">Elige el grupo en el que quieres participar.</p></header>
     <ul className="grid gap-4 sm:grid-cols-2">
@@ -27,7 +26,7 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
       </li>)}
     </ul>
     <section id="agenda" aria-labelledby="agenda-title" className="space-y-4">
-      <h2 id="agenda-title" className="text-xl font-semibold">Mi agenda</h2>
+      <h2 id="agenda-title" className="text-xl font-semibold">Mi agenda global</h2>
       <p className="text-sm text-muted-foreground">Actividades de todos tus grupos · Horarios de Chile · America/Santiago</p>
       <nav aria-label="Período de mi agenda" className="flex gap-5 underline">
         <Link href="/groups?period=upcoming#agenda" aria-current={period === "upcoming" ? "page" : undefined}>Próximas</Link>
@@ -36,7 +35,7 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
       {activities.length === 0 ? <p>No hay actividades {period === "upcoming" ? "próximas" : "pasadas"} en esta página.</p> : <ul className="space-y-3">
         {activities.map((activity) => <li key={activity.id} className="space-y-2 rounded-lg border p-4">
           <Link href={`/groups/${activity.group_id}`} className="break-words text-sm underline">{activity.group_name}</Link>
-          <Link href={`/groups/${activity.group_id}/activities/${activity.id}`} className="block break-words text-lg font-semibold underline">{activity.title}</Link>
+          <Link href={`/groups/${activity.group_id}/activities/${activity.id}?from=agenda&period=${period}&page=${page}`} className="block break-words text-lg font-semibold underline">{activity.title}</Link>
           <p className="flex items-center gap-2"><span aria-hidden className="size-3 shrink-0 rounded-full" style={{ backgroundColor: activity.activity_type_color ?? undefined }} />{activityTypeLabel(activity.activity_type_name ?? "", !!activity.is_system_type)}</p>
           <p>{activity.starts_at && formatActivityDateTime(activity.starts_at)} → {activity.ends_at && formatActivityDateTime(activity.ends_at)}</p>
           {activity.location && <p className="break-words text-muted-foreground">{activity.location}</p>}
@@ -51,5 +50,5 @@ export default async function GroupsPage({ searchParams }: { searchParams: Promi
       {groups.some((group) => group.roles.includes("GUARDIAN")) && <Link href="/wards" prefetch={false}>Mis pupilos</Link>}
       <Link href="/groups/new">Crear un grupo</Link><Link href="/join">Unirme con código</Link><Link href="/profile">Mi perfil</Link>
     </nav>
-  </main>;
+  </div></AppShell>;
 }
