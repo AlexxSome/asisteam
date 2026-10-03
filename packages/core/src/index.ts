@@ -14,3 +14,4 @@ export * from "./schemas/managed-member";
 export * from "./schemas/guardianship";
 export * from "./schemas/membership-review";
 export * from "./schemas/member-management";
+export * from "./schemas/subscription";

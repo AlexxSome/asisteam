@@ -12,6 +12,8 @@ where email like 'coach-%@example.test';
 insert into public.groups(id,name,invite_code,created_by,created_at) values
 (pg_temp.id(201),'Grupo entrenadores','COACH001',pg_temp.id(101),now()-interval '60 days'),
 (pg_temp.id(202),'Grupo ajeno','COACH002',pg_temp.id(104),now()-interval '60 days');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(id,user_id,group_id,role,status,joined_at) values
 (pg_temp.id(301),pg_temp.id(101),pg_temp.id(201),'ADMIN','ACTIVE',now()-interval '30 days'),
 (pg_temp.id(302),pg_temp.id(102),pg_temp.id(201),'ATHLETE','ACTIVE',now()-interval '30 days'),

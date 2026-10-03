@@ -208,3 +208,7 @@ Puntos verificables: (a) el `user.id` no cambia, por lo que todo el historial (`
 - Validación de permisos en la API (middleware por `group_id` + rol): 07-api-y-backend.md.
 - Métrica de asistencia y reportes condicionados por toggles: 08-reportes-y-estadisticas.md.
 - Consentimiento, datos de menores y derechos ARCO: 11-legal-seguridad-privacidad.md.
+
+## Suscripción del club a Asisteam [P2 autorizado, #56]
+
+Solo ADMIN ACTIVE del grupo puede consultar su facturación, iniciar checkout recurrente o cancelar renovación. ATHLETE, GUARDIAN y COACH reciben 403 en su grupo; otro tenant recibe 404. No hay rol global de usuario ni confirmación manual de pago por el ADMIN: únicamente Edge concilia evidencia consultada al proveedor con RPC service_role. Los toggles de estadísticas no afectan estos permisos. Ver [contrato SaaS](12-suscripciones-saas.md).

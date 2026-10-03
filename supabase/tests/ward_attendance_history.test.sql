@@ -12,6 +12,8 @@ insert into public.users(id,full_name,birthdate,account_status,email,phone)
 select pg_temp.uid(n),'Pupilo '||n,'2008-09-29','MANAGED',null,'+56911111111' from generate_series(111,115)n;
 insert into public.groups(id,name,invite_code,created_by,created_at)
 select pg_temp.uid(n),'Club '||n,'HST47'||(n-200)::text||'00',pg_temp.uid(101),'2026-01-01T12:00Z' from generate_series(201,203)n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status)
 select pg_temp.uid(101),pg_temp.uid(n),'ADMIN','ACTIVE' from generate_series(201,203)n;
 insert into public.memberships(id,user_id,group_id,role,status,joined_at)

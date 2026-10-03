@@ -10,6 +10,8 @@ insert into public.groups(id,name,invite_code,created_by,created_at) values
 ('32000000-0000-4000-8000-000000000201','Equipo reportes','REPORT01','32000000-0000-4000-8000-000000000101','2026-01-01T12:00Z'),
 ('32000000-0000-4000-8000-000000000202','Equipo ajeno','REPORT02','32000000-0000-4000-8000-000000000109','2026-01-01T12:00Z'),
 ('32000000-0000-4000-8000-000000000203','Equipo vacío','REPORT03','32000000-0000-4000-8000-000000000101','2026-01-01T12:00Z');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(id,user_id,group_id,role,status,joined_at)
 select ('32000000-0000-4000-8000-'||lpad(mid::text,12,'0'))::uuid,
 ('32000000-0000-4000-8000-'||lpad(uid::text,12,'0'))::uuid,

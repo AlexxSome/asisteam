@@ -11,6 +11,8 @@ insert into public.groups(id,name,invite_code,created_by)
 select ('23000000-0000-4000-8000-'||lpad((n+200)::text,12,'0'))::uuid,
   'Grupo emisión '||n, 'SEND230'||n, '23000000-0000-4000-8000-000000000001'
 from generate_series(1,3) n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status)
 values
 ('23000000-0000-4000-8000-000000000001','23000000-0000-4000-8000-000000000201','ADMIN','ACTIVE'),

@@ -51,6 +51,9 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
   const rowsRef = useRef(initialRows);
   const busyRef = useRef(new Set<string>());
   const [busy, setBusy] = useState(new Set<string>());
+  const bulkRef = useRef(false);
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [confirmAll, setConfirmAll] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +68,7 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
 
   async function persist(records: AttendanceInput[], onlyUnmarked = false, clear = false, changes?: AttendanceChanges) {
     const ids = records.map((record) => record.membership_id);
-    if (ids.some((id) => busyRef.current.has(id))) return;
+    if ((bulkRef.current && !onlyUnmarked) || ids.some((id) => busyRef.current.has(id))) return false;
     const previous = rowsRef.current.filter((row) => ids.includes(row.membership_id));
     ids.forEach((id) => busyRef.current.add(id));
     setBusy(new Set(busyRef.current));
@@ -81,14 +84,16 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
         : changes ? await updateAttendance(groupId, activityId, ids[0]!, changes)
         : await saveAttendance(groupId, activityId, records, onlyUnmarked);
       if ("error" in result) {
-        patch(previous); setError(result.error.message);
+        patch(previous); setError(result.error.message); return false;
       } else {
         if ("records" in result) patch(result.records.map((record) => ({ ...record, note: record.note ?? null })));
         setFeedback(clear ? "Registro desmarcado." : "Asistencia guardada.");
+        return true;
       }
     } catch {
       patch(previous);
       setError(navigator.onLine === false ? "Sin conexión: el cambio no se guardó." : "No pudimos confirmar el guardado. Recarga la asistencia antes de reintentar.");
+      return false;
     } finally {
       ids.forEach((id) => busyRef.current.delete(id));
       setBusy(new Set(busyRef.current));
@@ -96,30 +101,47 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
   }
 
   async function markAllPresent() {
+    if (bulkRef.current || busyRef.current.size) return;
+    bulkRef.current = true; setBulkBusy(true);
     setConfirmAll(false);
     const unmarked = rowsRef.current.filter((row) => !row.status).map((row) => ({ membership_id: row.membership_id, status: "PRESENT" as const }));
-    if (unmarked.length) await persist(unmarked, true);
+    let completed = 0;
+    try {
+      for (let offset = 0; offset < unmarked.length; offset += 500) {
+        const batch = unmarked.slice(offset, offset + 500);
+        if (!await persist(batch, true)) {
+          setFeedback(`Se confirmaron ${completed} registros. Los lotes anteriores se conservan; quedan deportistas sin marcar.`);
+          return;
+        }
+        completed += batch.length;
+      }
+    } finally { bulkRef.current = false; setBulkBusy(false); }
   }
 
   const visibleRows = rows.filter((row) => row.full_name.toLocaleLowerCase("es").includes(query.trim().toLocaleLowerCase("es")));
   return <section className="space-y-4" aria-label="Registro de asistencia">
     <p className="text-sm" aria-live="polite">Presentes {counts.PRESENT} · Atrasados {counts.LATE} · Ausentes {counts.ABSENT} · Justificados {counts.EXCUSED} · Sin marcar {counts.unmarked}</p>
     <div className="space-y-2"><label htmlFor="athlete-search" className="text-sm font-medium">Buscar deportista</label>
-      <input id="athlete-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} className="min-h-11 w-full rounded-md border bg-background px-3 py-2" />
+      <input id="athlete-search" type="search" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} className="min-h-11 w-full rounded-md border bg-background px-3 py-2" />
     </div>
-    <button type="button" onClick={() => setConfirmAll(true)} disabled={busy.size > 0 || counts.unmarked === 0}
+    <button type="button" onClick={() => setConfirmAll(true)} disabled={bulkBusy || busy.size > 0 || counts.unmarked === 0}
       className="min-h-11 rounded-md border px-4 py-2 disabled:opacity-50">Marcar todos como Presente</button>
     {confirmAll && <div role="alertdialog" aria-label="Confirmar presentes" className="space-y-3 rounded-md border p-4">
       <p>Se marcarán como presentes los {counts.unmarked} deportistas sin registro. Las marcas existentes se conservan.</p>
-      <div className="flex gap-3"><button type="button" onClick={() => void markAllPresent()} disabled={busy.size > 0} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground">Confirmar</button>
+      <div className="flex gap-3"><button type="button" onClick={() => void markAllPresent()} disabled={bulkBusy || busy.size > 0} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground">Confirmar</button>
         <button type="button" onClick={() => setConfirmAll(false)} className="min-h-11 rounded-md border px-4 py-2">Cancelar</button></div>
     </div>}
     {error && <p role="alert" className="rounded-md border border-destructive p-3 text-destructive">{error}</p>}
-    <p role="status" className="text-sm text-muted-foreground">{busy.size ? "Guardando cambios…" : feedback}</p>
+    <p role="status" className="text-sm text-muted-foreground">{bulkBusy || busy.size ? "Guardando cambios…" : feedback}</p>
     <p className="text-xs text-muted-foreground">Cada toque guarda el cambio. {canEditNotes ? "Repite el estado seleccionado para volver a “sin marcar”." : "Puedes corregir estados. Las notas y volver a sin marcar están reservados al administrador."}</p>
-    <ul className="space-y-3">{visibleRows.map((row) => <AthleteRow key={row.membership_id} row={row} busy={busy.has(row.membership_id)} canEditNotes={canEditNotes}
+    <ul className="space-y-3">{visibleRows.slice((page - 1) * 50, page * 50).map((row) => <AthleteRow key={row.membership_id} row={row} busy={bulkBusy || busy.has(row.membership_id)} canEditNotes={canEditNotes}
       onStatus={(status) => void persist([{ membership_id: row.membership_id, status }], false, canEditNotes && row.status === status, row.status ? { status } : undefined)}
-      onNote={(note) => row.status ? persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }) : Promise.resolve()} />)}</ul>
+      onNote={async (note) => { if (row.status) await persist([{ membership_id: row.membership_id, status: row.status, note }], false, false, { note }); }} />)}</ul>
+    {visibleRows.length > 50 && <nav aria-label="Páginas de deportistas" className="flex items-center gap-3">
+      <button type="button" disabled={page === 1} onClick={() => setPage(page - 1)} className="min-h-11 rounded-md border px-3 disabled:opacity-50">Anterior</button>
+      <span>Página {page} de {Math.ceil(visibleRows.length / 50)}</span>
+      <button type="button" disabled={page * 50 >= visibleRows.length} onClick={() => setPage(page + 1)} className="min-h-11 rounded-md border px-3 disabled:opacity-50">Siguiente</button>
+    </nav>}
     {visibleRows.length === 0 && <p>No se encontraron deportistas con ese nombre.</p>}
   </section>;
 }

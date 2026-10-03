@@ -36,6 +36,7 @@ export const MEMBERSHIP_REVIEW_ERROR_MESSAGES: Record<string, string> = {
   minor_requires_guardian_consent: "Requiere consentimiento vigente del apoderado",
   managed_consent_required: "El apoderado debe ratificar el consentimiento de la cuenta gestionada.",
   guardian_group_limit: "El apoderado superaría el límite de 30 grupos.",
-  group_member_limit: "La incorporación y sus apoderados superarían el límite de 500 membresías activas del grupo.",
+  subscription_athlete_limit: "El club no tiene cupos disponibles en su suscripción. Solicita al administrador revisar el plan y su primer pago.",
+  group_member_limit: "El grupo alcanzó su límite operativo de integrantes activos.",
   unavailable: "No pudimos confirmar la decisión. Actualiza la lista antes de volver a intentarlo.",
 };

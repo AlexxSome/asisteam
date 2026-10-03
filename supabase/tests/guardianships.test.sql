@@ -14,6 +14,8 @@ insert into public.users(id,full_name,birthdate,account_status,email) values
 insert into public.groups(id,name,invite_code,created_by) values
 ('25000000-0000-4000-8000-000000000201','Club principal','GRD25001','25000000-0000-4000-8000-000000000101'),
 ('25000000-0000-4000-8000-000000000202','Club ajeno','GRD25002','25000000-0000-4000-8000-000000000104');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status) values
 ('25000000-0000-4000-8000-000000000101','25000000-0000-4000-8000-000000000201','ADMIN','ACTIVE'),
 ('25000000-0000-4000-8000-000000000102','25000000-0000-4000-8000-000000000201','ATHLETE','ACTIVE'),

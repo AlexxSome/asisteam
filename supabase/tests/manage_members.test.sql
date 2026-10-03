@@ -18,6 +18,8 @@ insert into public.users(id,full_name,birthdate,account_status) values
 insert into public.groups(id,name,invite_code,created_by,created_at) values
 (pg_temp.id(201),'Club gestión','M3400001',pg_temp.id(101),now()-interval '1 year'),
 (pg_temp.id(202),'Club ajeno','M3400002',pg_temp.id(104),now()-interval '1 year');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(id,user_id,group_id,role,status,joined_at) values
 (pg_temp.id(301),pg_temp.id(101),pg_temp.id(201),'ADMIN','ACTIVE',now()-interval '1 year'),
 (pg_temp.id(302),pg_temp.id(102),pg_temp.id(201),'ATHLETE','ACTIVE',now()-interval '1 year'),
@@ -119,6 +121,8 @@ reset role;
 -- Límite de grupos revalidado al reactivar.
 insert into public.groups(id,name,invite_code,created_by)
 select ('34000000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,'Grupo sintético','M34G'||lpad(n::text,4,'0'),pg_temp.id(101) from generate_series(1,30) n;
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id,group_id,role,status)
 select pg_temp.id(113),id,'GUARDIAN','ACTIVE' from public.groups where invite_code like 'M34G%';
 set local role authenticated;

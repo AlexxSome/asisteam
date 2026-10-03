@@ -12,6 +12,8 @@ where email like 'configure-groups-%@example.test';
 insert into public.groups(id, name, sport, invite_code, created_by) values
 ('21000000-0000-4000-8000-000000000201','Equipo Uno','Tenis','CONFIG01','21000000-0000-4000-8000-000000000101'),
 ('21000000-0000-4000-8000-000000000202','Equipo Dos','Fútbol','CONFIG02','21000000-0000-4000-8000-000000000103');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(user_id, group_id, role, status) values
 ('21000000-0000-4000-8000-000000000101','21000000-0000-4000-8000-000000000201','ADMIN','ACTIVE'),
 ('21000000-0000-4000-8000-000000000102','21000000-0000-4000-8000-000000000201','ATHLETE','ACTIVE'),

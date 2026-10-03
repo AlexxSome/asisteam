@@ -15,6 +15,8 @@ from generate_series(11,14) n;
 insert into public.groups(id,name,invite_code,created_by) values
  ('35000000-0000-4000-8000-000000000201','Grupo activación','ACTIVA35','35000000-0000-4000-8000-000000000001'),
  ('35000000-0000-4000-8000-000000000202','Grupo externo','ACTIVB35','35000000-0000-4000-8000-000000000003');
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.memberships(id,user_id,group_id,role,status,joined_at) values
  ('35000000-0000-4000-8000-000000000301','35000000-0000-4000-8000-000000000001','35000000-0000-4000-8000-000000000201','ADMIN','ACTIVE',now()),
  ('35000000-0000-4000-8000-000000000303','35000000-0000-4000-8000-000000000003','35000000-0000-4000-8000-000000000202','ADMIN','ACTIVE',now()),

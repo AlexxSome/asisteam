@@ -108,3 +108,28 @@ it("COACH corrige estados sin notas ni desmarcar la convocatoria", async () => {
   expect(actions.clearAttendance).not.toHaveBeenCalled();
   expect(screen.getByText(/Sin marcar 0/)).toBeTruthy();
 });
+
+const academyRows = Array.from({ length: 1000 }, (_, index) => ({ ...ana,
+  membership_id: `30000000-0000-4000-8000-${String(index + 10000).padStart(12, "0")}`, full_name: `Deportista ${index + 1}` }));
+it("academia: busca en los 1000 deportistas y renderiza como máximo 50 por página", async () => {
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={academyRows} />);
+  expect(screen.getAllByRole("group", { name: /Asistencia de/ })).toHaveLength(50);
+  await userEvent.click(screen.getByRole("button", { name: "Siguiente" }));
+  expect(screen.getByText("Página 2 de 20")).toBeTruthy();
+  await userEvent.type(screen.getByRole("searchbox"), "Deportista 1000");
+  expect(screen.getAllByRole("group", { name: /Asistencia de/ })).toHaveLength(1);
+  expect(controls("Deportista 1000")).toBeTruthy();
+});
+it("academia: lote parcial conserva 500 éxitos y reintenta solo los 500 restantes", async () => {
+  actions.saveAttendance.mockImplementationOnce(async (_group, _activity, records) => ({ records })).mockResolvedValueOnce(error);
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={academyRows} />);
+  await userEvent.click(screen.getByRole("button", { name: "Marcar todos como Presente" }));
+  await userEvent.click(screen.getByRole("button", { name: "Confirmar" }));
+  await waitFor(() => expect(screen.getByRole("alert").textContent).toBe("Falló el guardado"));
+  expect(actions.saveAttendance.mock.calls.map(call => call[2].length)).toEqual([500, 500]);
+  expect(screen.getByText(/Presentes 500 .* Sin marcar 500/)).toBeTruthy();
+  await userEvent.click(screen.getByRole("button", { name: "Marcar todos como Presente" }));
+  await userEvent.click(screen.getByRole("button", { name: "Confirmar" }));
+  expect(actions.saveAttendance.mock.calls[2]![2].map((row: AttendanceRosterRow) => row.membership_id)).toEqual(academyRows.slice(500).map(row => row.membership_id));
+  expect(screen.getByText(/Presentes 1000 .* Sin marcar 0/)).toBeTruthy();
+});

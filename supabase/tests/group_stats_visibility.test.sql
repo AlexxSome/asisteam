@@ -17,6 +17,8 @@ update public.users set birthdate=(app_private.chile_today()-interval '12 years'
 insert into public.groups(id,name,invite_code,created_by) values
 (pg_temp.uid(201),'Visibilidad Uno','VISIB001',pg_temp.uid(101)),
 (pg_temp.uid(202),'Visibilidad Dos','VISIB002',pg_temp.uid(105));
+-- Fixture previo a suscripciones: conserva la capacidad histórica (sin alterar guards).
+insert into app_private.billing_legacy_groups(group_id) select id from public.groups on conflict do nothing;
 insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship) values
 (pg_temp.uid(401),pg_temp.uid(103),pg_temp.uid(108),'Madre'),
 (pg_temp.uid(402),pg_temp.uid(104),pg_temp.uid(108),'Padre');
