@@ -225,6 +225,20 @@ El permiso se reevalúa en la base en cada lectura, incluida la consulta directa
 | POST | /api/v1/users/me/push-tokens | Autenticado | Registra token de Expo Notifications del dispositivo | PostgREST `push_tokens` + RLS por owner | [P1] |
 | — | (jobs) | Sistema | Recordatorio de actividad a miembros; aviso de ausencia (ABSENT) al apoderado tras el registro | `pg_cron` + Edge Function `functions/v1/send-push` (idempotente) | [P1] |
 
+Para anuncios #57 se implementan las RPC `register_announcement_push_token(p_token,p_platform)`, `unregister_announcement_push_token(p_token)` y `set_announcement_push_enabled(p_enabled)` con identidad del JWT, no `user_id` aportado por el cliente. Registro Expo IOS/ANDROID, opt-in independiente y desregistro al cerrar sesión. El contrato P1 de recordatorios/ausencias anterior sigue pendiente en este checkout.
+
+### 2.12 Anuncios [P2 autorizado, #57]
+
+| RPC / Edge | Acceso | Contrato |
+|---|---|---|
+| `list_group_announcements(p_group_id,p_page=1)` | Miembro ACTIVE | 50 filas por página, recientes primero; solo id, group_id, title, body, created_at, updated_at, total_count. |
+| `publish_group_announcement(p_group_id,p_title,p_body,p_request_id)` | ADMIN ACTIVE | Publicación y cola atómicas; UUID estable por intento lógico evita duplicados. |
+| `update_group_announcement(p_group_id,p_announcement_id,p_title,p_body,p_updated_at)` | ADMIN ACTIVE | Versión exacta del servidor; 409 `announcement_changed` ante edición concurrente. |
+| `delete_group_announcement(p_group_id,p_announcement_id,p_updated_at)` | ADMIN ACTIVE | Borrado lógico con la misma protección de versión; cancela push pendientes. |
+| `functions/v1/send-announcement-push` | Solo service_role | POST desde pg_cron, reserva con lease, envía a Expo y consulta recibos; sin cuerpos ni tokens en logs/respuesta. |
+
+La web traduce errores RPC a mensajes españoles uniformes; PostgREST conserva sus códigos PT400/401/403/404/409. No hay caché persistente del muro; la página visible refresca cada 30 segundos, al recuperar foco y manualmente. Ver [parámetros, privacidad y operación](13-anuncios.md).
+
 ## 3. Ejemplos de request/response (endpoints núcleo)
 
 Errores en formato uniforme: `{ "error": { "code": "string_estable", "message": "texto en español", "details": {} } }`. Códigos HTTP: 400 validación, 401 sin sesión, 403 sin permiso, 404 no existe **o no visible** (anti-enumeración), 409 conflicto de unicidad, 422 regla de negocio, 429 rate limit.

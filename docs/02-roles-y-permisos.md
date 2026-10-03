@@ -212,3 +212,9 @@ Puntos verificables: (a) el `user.id` no cambia, por lo que todo el historial (`
 ## Suscripción del club a Asisteam [P2 autorizado, #56]
 
 Solo ADMIN ACTIVE del grupo puede consultar su facturación, iniciar checkout recurrente o cancelar renovación. ATHLETE, GUARDIAN y COACH reciben 403 en su grupo; otro tenant recibe 404. No hay rol global de usuario ni confirmación manual de pago por el ADMIN: únicamente Edge concilia evidencia consultada al proveedor con RPC service_role. Los toggles de estadísticas no afectan estos permisos. Ver [contrato SaaS](12-suscripciones-saas.md).
+
+## Anuncios del grupo [P2 autorizado, #57]
+
+ADMIN ACTIVE puede publicar, editar y eliminar lógicamente cualquier anuncio de su grupo. Todos los roles con membresía ACTIVE (ADMIN, ATHLETE, GUARDIAN, COACH) leen el muro, independientemente de los toggles de estadísticas. INVITED, PENDING, INACTIVE y usuarios ajenos no acceden. La RPC devuelve 404 para grupo no visible y 403 para un miembro sin ADMIN que intenta gestionar. No se exponen datos del autor ni de destinatarios.
+
+Cada usuario controla sus avisos push de anuncios, apagados por defecto. Solo se encolan dispositivos registrados, activos y con opt-in de miembros ACTIVE al publicar. La cola vuelve a comprobar estos permisos antes de reservar el envío. Los push ya entregados al proveedor no se pueden retirar. Ver [contrato y despliegue](13-anuncios.md).
