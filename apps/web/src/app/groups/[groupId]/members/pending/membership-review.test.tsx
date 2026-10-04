@@ -53,3 +53,12 @@ it("muestra una decisión concurrente como error y permite actualizar sin éxito
   expect(screen.queryByRole("status")).toBeNull();
   expect(mock.refresh).not.toHaveBeenCalled();
 });
+
+it("aprobación sin cupos permite revisar el plan y no declara al deportista activo", async () => {
+  mock.review.mockResolvedValue({ error: { code: "subscription_athlete_limit", message: "Solicita al administrador" } });
+  render(<MembershipReview groupId={groupId} member={member} />);
+  await userEvent.click(screen.getByRole("button", { name: "Aprobar" }));
+  expect((await screen.findByRole("link", { name: "Gestionar plan" })).getAttribute("href")).toBe(`/groups/${groupId}/billing`);
+  expect(screen.queryByRole("status")).toBeNull();
+  expect(mock.refresh).not.toHaveBeenCalled();
+});

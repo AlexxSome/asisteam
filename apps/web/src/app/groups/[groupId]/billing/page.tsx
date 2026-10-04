@@ -8,6 +8,7 @@ import { billingSummarySchema, formatClp, INVOICE_STATUS_LABELS, SUBSCRIPTION_ST
 import { getGroup } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
 import { BillingPanel } from "./billing-panel";
+import { ActionLink } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 const date = (value: string) => new Intl.DateTimeFormat("es-CL", { timeZone: "America/Santiago", dateStyle: "medium" }).format(new Date(value));
@@ -35,6 +36,10 @@ export default async function BillingPage({ params, searchParams }: {
     {billing.athlete_limit === 0 && <p>Suscribe un plan para activar deportistas. Puedes configurar el club y gestionar su suscripción.</p>}
     {billing.overdue_amount_clp > 0 && <Alert tone="warning">Monto vencido: {formatClp(billing.overdue_amount_clp)} CLP. Tu acceso e historial se conservan.</Alert>}
   </PageHeader>
+  <nav aria-label="Continuar en el grupo" className="flex flex-wrap gap-3">
+    <ActionLink href={`/groups/${groupId}`} variant="secondary">Volver al inicio del grupo</ActionLink>
+    <ActionLink href={`/groups/${groupId}/settings`} variant="secondary">Continuar configuración</ActionLink>
+  </nav>
   <BillingPanel groupId={groupId} billing={billing} />
   <section className="space-y-3" aria-label="Historial de cobros"><h2 className="text-xl font-semibold">Historial de cobros</h2>
     <p className="text-sm">Los estados se consultan a Mercado Pago. Un cobro pendiente se muestra vencido desde el día siguiente a su fecha prevista, en horario de Chile.</p>

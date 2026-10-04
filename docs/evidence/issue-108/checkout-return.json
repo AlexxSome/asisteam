@@ -1,0 +1,5 @@
+{
+  "header": "Suscripción del club0 deportistas activos · 0 cupos habilitadosSin suscripciónSuscribe un plan para activar deportistas. Puedes configurar el club y gestionar su suscripción.",
+  "notice": "Activa los cupos de tu grupo0 cupos habilitados. Puedes configurar el grupo y crear actividades. Para activar deportistas, incluido tu propio rol de deportista, necesitas el primer pago aprobado de un plan mensual. No hay prueba gratuita.Volver de Mercado Pago no confirma el pago. Los cupos se habilitan cuando el servidor verifica su aprobación.Revisar suscripción",
+  "url": "http://127.0.0.1:3108/groups/81eb2e11-717c-403f-899a-0eef8d304439/billing?status=approved&preapproval_id=synthetic"
+}

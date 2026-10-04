@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
-import { MEMBERSHIP_ROLES, type MembershipRole } from "@asisteam/core";
+import { groupCapacitySchema, MEMBERSHIP_ROLES, type MembershipRole } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { activeGroupCookie, isGroupId } from "@/lib/group-routing";
 
@@ -41,6 +41,21 @@ export const getGroup = cache(async (groupId: string) => {
   if (!data) notFound();
   return { ...data, id: membership.id, name: data.name ?? membership.name,
     roles: MEMBERSHIP_ROLES.filter((role) => data.roles?.includes(role)) };
+});
+
+// Request-scoped only. Never infer capacity from checkout parameters or status.
+export const getGroupCapacity = cache(async (groupId: string) => {
+  const group = await getGroup(groupId);
+  if (!group.roles.includes("ADMIN")) return null;
+  try {
+    const client = await createClient();
+    const { data, error } = await client.rpc("get_group_billing", { p_group_id: group.id, p_page: 1 });
+    const parsed = groupCapacitySchema.safeParse(data);
+    // A failed read is unknown, never zero capacity or a free plan.
+    return !error && parsed.success ? parsed.data : null;
+  } catch {
+    return null;
+  }
 });
 
 export async function groupHomePath() {

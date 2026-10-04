@@ -21,7 +21,7 @@ export default async function ManagedConsentsPage({ params, searchParams }: {
     <h2 className="text-xl font-semibold">Alta en {group.name}</h2>
     <p>Confirma el tratamiento de datos para completar el alta pendiente de tu pupilo.</p>
     {!data?.length && <p>No tienes consentimientos pendientes en esta página.</p>}
-    {data?.map(ward => <ManagedConsentForm key={ward.membership_id} membershipId={ward.membership_id} fullName={ward.full_name} relationship={ward.relationship} />)}
+    {data?.map(ward => <ManagedConsentForm key={ward.membership_id} membershipId={ward.membership_id} billingGroupId={group.roles.includes("ADMIN") ? group.id : undefined} fullName={ward.full_name} relationship={ward.relationship} />)}
     <h2 className="text-xl font-semibold">Activación de cuentas propias</h2>
     {!activations?.length && <p>No tienes solicitudes de activación en esta página.</p>}
     {activations?.map(ward => <AccountActivationConsent key={ward.request_id} requestId={ward.request_id} fullName={ward.full_name} relationship={ward.relationship} approved={ward.status === "APPROVED"} />)}

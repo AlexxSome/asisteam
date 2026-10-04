@@ -47,3 +47,14 @@ it("retira los campos de apoderado al corregir la fecha a un adulto", async () =
   await screen.findByRole("status");
   expect(mock.create).toHaveBeenCalledWith("group-id", { full_name: "Persona gestionada", birthdate: "1990-01-01", email: "" });
 });
+
+it("alta sin cupo enlaza al plan sin perder los campos ni anunciar éxito", async () => {
+  mock.create.mockResolvedValue({ error: { code: "subscription_athlete_limit", message: "Solicita al administrador" } });
+  render(<ManagedMemberForm groupId="group-id" />);
+  await userEvent.type(screen.getByLabelText("Nombre completo"), "Adulto de prueba");
+  await userEvent.type(screen.getByLabelText("Fecha de nacimiento"), "1990-01-01");
+  await userEvent.click(screen.getByRole("button", { name: "Crear cuenta gestionada" }));
+  expect((await screen.findByRole("link", { name: "Gestionar plan" })).getAttribute("href")).toBe("/groups/group-id/billing");
+  expect((screen.getByLabelText("Nombre completo") as HTMLInputElement).value).toBe("Adulto de prueba");
+  expect(screen.queryByRole("status")).toBeNull();
+});

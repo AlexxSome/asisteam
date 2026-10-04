@@ -66,7 +66,9 @@ export default async function WelcomePage() {
             <CardTitle className="text-xl">Crear un grupo</CardTitle>
             <CardDescription>
               Administra tu club o equipo: integrantes, actividades y
-              asistencia.
+              asistencia. Puedes configurarlo antes de contratar. Para activar
+              deportistas necesitas el primer pago aprobado de un plan mensual;
+              no hay prueba gratuita.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -84,6 +86,7 @@ export default async function WelcomePage() {
             <CardTitle className="text-xl">Unirme con código</CardTitle>
             <CardDescription>
               ¿Te compartieron un código de invitación? Únete como deportista.
+              El administrador gestiona los cupos; no necesitas contratar un plan.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -96,6 +99,8 @@ export default async function WelcomePage() {
           </CardContent>
         </Card>
       </div>
+
+      <p className="max-w-xl text-center text-sm text-muted-foreground">Si eres apoderado, abre la invitación por email que te envió el administrador. El código de grupo incorpora solo deportistas.</p>
 
       <Link href="/profile" className={buttonVariants({ variant: "outline" })}>
         Mi perfil

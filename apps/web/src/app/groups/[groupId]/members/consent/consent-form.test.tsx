@@ -67,3 +67,15 @@ it("un error anterior a la aprobación mantiene la decisión pendiente", async (
   expect(screen.getByRole("checkbox")).toBeTruthy();
   expect(screen.queryByRole("status")).toBeNull();
 });
+
+it.each([undefined, "group-id"])("consentimiento sin cupos respeta permiso ADMIN (%s)", async billingGroupId => {
+  mock.consent.mockResolvedValue({ error: { code: "subscription_athlete_limit", message: "Internal capacity message" } });
+  render(<ManagedConsentForm membershipId="membership-id" fullName="Pupilo" relationship="Tutor" billingGroupId={billingGroupId} />);
+  await userEvent.click(screen.getByRole("checkbox"));
+  await userEvent.click(screen.getByRole("button"));
+  const alert = await screen.findByRole("alert");
+  if (billingGroupId) expect(screen.getByRole("link", { name: "Gestionar plan" }).getAttribute("href")).toBe("/groups/group-id/billing");
+  else { expect(alert.textContent).toContain("Contacta a tu administrador"); expect(screen.queryByRole("link")).toBeNull(); }
+  expect(screen.queryByRole("status")).toBeNull();
+  expect(mock.refresh).not.toHaveBeenCalled();
+});

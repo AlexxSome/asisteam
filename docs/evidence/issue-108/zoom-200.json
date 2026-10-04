@@ -1,0 +1,49 @@
+{
+  "baseline": {
+    "dpr": 2,
+    "scale": 1,
+    "width": 1512
+  },
+  "pages": [
+    {
+      "page": "create",
+      "dpr": 4,
+      "h1": 1,
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "page": "home",
+      "dpr": 4,
+      "h1": 1,
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "page": "billing",
+      "dpr": 4,
+      "h1": 1,
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "page": "managed",
+      "dpr": 4,
+      "h1": 1,
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "page": "settings",
+      "dpr": 4,
+      "h1": 1,
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    }
+  ]
+}

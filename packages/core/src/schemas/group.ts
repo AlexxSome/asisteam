@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SUBSCRIPTION_CAPACITY_MESSAGES } from "./subscription";
 
 export const groupFormSchema = z.object({
   name: z.string().trim().min(3, "El nombre debe tener al menos 3 caracteres").max(80, "El nombre admite hasta 80 caracteres"),
@@ -46,7 +47,7 @@ export const GROUP_ERROR_MESSAGES: Record<string, string> = {
   athlete_birthdate_required: "Completa tu fecha de nacimiento en Mi perfil antes de agregarte como deportista.",
   minor_requires_guardian_consent: "Para participar como deportista siendo menor necesitas un apoderado vinculado con consentimiento vigente.",
   membership_already_exists: "Ya tienes una membresía de deportista en este grupo. Si está pendiente o inactiva, solicita su aprobación o reactivación.",
-  subscription_athlete_limit: "El club no tiene cupos disponibles en su suscripción. Solicita al administrador revisar el plan y su primer pago.",
+  subscription_athlete_limit: SUBSCRIPTION_CAPACITY_MESSAGES.member,
   group_member_limit: "El grupo alcanzó su límite operativo de integrantes activos.",
   invalid_invite_code: "Código no válido.",
   join_rate_limited: "Demasiados intentos. Vuelve a intentarlo en 15 minutos.",

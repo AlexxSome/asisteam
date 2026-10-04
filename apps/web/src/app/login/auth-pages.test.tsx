@@ -107,3 +107,10 @@ it("registro valida aceptación y versión en servidor, y no recibe una fecha de
   await expect(registerUser(profile)).rejects.toThrow("redirect:/welcome");
   expect(mock.signUp.mock.calls[0]![0].options.data.account_terms).toEqual({ accepted: true, version: ACCOUNT_TERMS_VERSION });
 });
+
+it("deportista sin cupos recibe contacto con administrador sin enlace a facturación", async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: "synthetic-user" } } });
+  render(await JoinPage({ searchParams: Promise.resolve({ error: "subscription_athlete_limit" }) }));
+  expect(screen.getByRole("alert").textContent).toContain("Contacta a tu administrador");
+  for (const link of screen.getAllByRole("link")) expect(link.getAttribute("href")).not.toContain("billing");
+});

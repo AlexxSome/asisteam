@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { groupFormSchema, type GroupFormInput } from "@asisteam/core";
@@ -88,6 +89,11 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
   return <div className="space-y-6"><form onSubmit={submit} noValidate className="space-y-5 rounded-lg border p-5">
     {groupId ? <h2 className="text-lg font-semibold">Datos del grupo</h2>
       : <p className="text-sm text-muted-foreground">Serás administrador del grupo. Las estadísticas del grupo estarán ocultas para deportistas y apoderados de forma predeterminada.</p>}
+    {!groupId && <aside aria-label="Antes de crear tu grupo" className="space-y-2 rounded-md bg-info-subtle p-4 text-sm">
+      <h2 className="font-semibold">Configura ahora; activa deportistas con un plan</h2>
+      <p>Puedes crear el grupo, completar su configuración y preparar actividades. Comienza con 0 cupos de deportistas; para activarlos necesitas el primer pago aprobado de una suscripción mensual.</p>
+      <p>El club paga a Asisteam. No hay plan gratuito ni prueba gratuita. Después de crear el grupo podrás revisar los planes en Suscripción y continuar la configuración.</p>
+    </aside>}
     <div className="space-y-2"><label htmlFor="name">Nombre del grupo</label>
       <input id="name" maxLength={80} autoComplete="organization" className={fieldClass} aria-invalid={!!errors.name} aria-describedby="name-error" {...register("name")} />
       <p id="name-error" className="text-sm text-destructive">{errors.name?.message}</p>
@@ -125,5 +131,6 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
       </button>
       <p className="text-sm text-muted-foreground">El código anterior dejará de funcionar en cuanto se regenere.</p>
     </section>}
+    {groupId && <Link href={`/groups/${groupId}`} className="inline-flex min-h-11 items-center underline">Volver al inicio del grupo</Link>}
   </div>;
 }

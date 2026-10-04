@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CapacityError } from "@/components/group-capacity";
 import { INVITATION_TERMS_VERSION, MANAGED_CONSENT_TERMS_VERSION } from "@asisteam/core";
 import { consentManagedMember, reviewManagedActivation } from "./actions";
 
@@ -47,17 +48,18 @@ export function AccountActivationConsent({ requestId, fullName, relationship, ap
   </section>;
 }
 
-export function ManagedConsentForm({ membershipId, fullName, relationship }: { membershipId: string; fullName: string; relationship: string }) {
+export function ManagedConsentForm({ membershipId, fullName, relationship, billingGroupId }: { membershipId: string; fullName: string; relationship: string; billingGroupId?: string }) {
   const router = useRouter();
   const [accepted, setAccepted] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>();
+  const [errorCode, setErrorCode] = useState<string>();
   const [done, setDone] = useState(false);
   return <form className="space-y-4 rounded-md border p-5" onSubmit={async event => {
-    event.preventDefault(); setPending(true); setError(undefined);
+    event.preventDefault(); setPending(true); setError(undefined); setErrorCode(undefined);
     try {
       const result = await consentManagedMember({ membership_id: membershipId, accepted });
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
       else { setDone(true); router.refresh(); }
     } catch { setError("No pudimos confirmar el consentimiento. Vuelve a intentarlo."); }
     finally { setPending(false); }
@@ -70,7 +72,7 @@ export function ManagedConsentForm({ membershipId, fullName, relationship }: { m
       <label className="flex min-h-11 items-start gap-3"><input type="checkbox" className="mt-1 size-5 shrink-0" checked={accepted} onChange={event => setAccepted(event.target.checked)} />
         Confirmo que soy apoderado de {fullName} y autorizo el tratamiento de sus datos para este fin.
       </label>
-      {error && <p role="alert" className="text-destructive">{error}</p>}
+      {error && <CapacityError error={{ code: errorCode, message: error }} groupId={billingGroupId} />}
       <button disabled={!accepted || pending} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">
         {pending ? "Guardando…" : "Consentir y activar al deportista"}
       </button>
