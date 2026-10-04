@@ -62,6 +62,22 @@ suite("Gestión de integrantes: HTTP y concurrencia", () => {
     expect((await clients[2]!.rpc("list_group_members", { p_group_id: groupId })).status).toBe(404);
     expect((await clients[0]!.rpc("update_managed_member", { p_group_id: groupId, p_membership_id: otherAdmin, p_full_name: "Cambio ajeno", p_birthdate: "1990-01-01" })).status).toBe(403);
   });
+  it("HTTP admite búsqueda y devuelve identidad, roles y bloqueo sin abrir acceso ajeno", async () => {
+    const response = await clients[0]!.rpc("list_group_members", {
+      p_group_id: groupId, p_search: "  pErSoNa  ", p_role: "ADMIN", p_status: "ACTIVE", p_offset: 0,
+    });
+    expect(response.error).toBeNull();
+    expect(response.data).toHaveLength(2);
+    expect(new Set(response.data.map((row: { user_id: string }) => row.user_id)).size).toBe(2);
+    for (const row of response.data) {
+      expect(row).toMatchObject({ total_count: 2, is_last_admin: false,
+        person_roles: [{ role: "ADMIN", status: "ACTIVE" }] });
+    }
+    const empty = await clients[0]!.rpc("list_group_members", { p_group_id: groupId, p_search: "Sin coincidencias" });
+    expect(empty.error).toBeNull();
+    expect(empty.data).toEqual([]);
+    expect((await clients[2]!.rpc("list_group_members", { p_group_id: groupId, p_search: "Persona" })).status).toBe(404);
+  });
   it("dos reactivaciones disputan el último cupo sin exceder 500", async () => {
     sql(`with profiles as (
       insert into public.users(full_name,email,birthdate,account_status)

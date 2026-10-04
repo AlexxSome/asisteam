@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "zoom": 1,
+      "innerWidth": 1440,
+      "dpr": 1,
+      "scale": 1,
+      "scrollWidth": 1440,
+      "inputHeight": 42,
+      "rows": 50
+    },
+    {
+      "zoom": 2,
+      "innerWidth": 720,
+      "dpr": 2,
+      "scale": 1,
+      "scrollWidth": 720,
+      "inputHeight": 42,
+      "rows": 50
+    }
+  ],
+  "keyboard": "PASS",
+  "method": "Chrome partition.default_zoom_level, isolated temporary profiles; no CSS zoom or viewport resizing"
+}

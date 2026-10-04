@@ -8,6 +8,7 @@ export const MEMBERSHIP_STATUS_LABELS = { ACTIVE: "Activo", INACTIVE: "Inactivo"
 export const ACCOUNT_STATUS_LABELS = { ACTIVE: "Cuenta propia", MANAGED: "Cuenta gestionada", INVITED: "Cuenta invitada" } as const;
 export const memberFilterSchema = z.object({
   role: z.enum(MEMBERSHIP_ROLES).optional(), status: z.enum(MEMBERSHIP_STATUSES).optional(),
+  search: z.string().trim().max(120).optional(),
   page: z.coerce.number().int().min(1).max(100001).default(1),
 });
 export const memberIdentitySchema = z.object({ group_id: z.string().uuid(), membership_id: z.string().uuid() });
@@ -22,6 +23,9 @@ export const groupMemberSchema = z.object({
   membership_id: z.string().uuid(), full_name: z.string(), email: z.string().nullable(), phone: z.string().nullable(),
   birthdate: z.string().nullable(), account_status: z.enum(ACCOUNT_STATUSES), role: z.enum(MEMBERSHIP_ROLES),
   status: z.enum(MEMBERSHIP_STATUSES), total_count: z.number(),
+  user_id: z.string().uuid(),
+  person_roles: z.array(z.object({ role: z.enum(MEMBERSHIP_ROLES), status: z.enum(MEMBERSHIP_STATUSES) })),
+  is_last_admin: z.boolean(),
 });
 export type GroupMember = z.infer<typeof groupMemberSchema>;
 export const MEMBER_MANAGEMENT_ERRORS: Record<string, string> = {
@@ -35,7 +39,7 @@ export const MEMBER_MANAGEMENT_ERRORS: Record<string, string> = {
   invalid_member_request: "Revisa los datos de la solicitud.",
   managed_email_unavailable: "No se pudo usar ese email. Revisa los datos del integrante.",
   membership_status_changed: "El estado del integrante cambió. Actualiza la página antes de continuar.",
-  LAST_ADMIN: "No puedes desactivar al último administrador activo del grupo.",
+  LAST_ADMIN: "No puedes desactivar al último administrador activo del grupo. Debe haber otro administrador activo antes de desactivar este rol.",
   guardian_has_active_wards: "El apoderado conserva acceso mientras tenga pupilos activos o pendientes en el grupo.",
   guardian_requires_active_ward: "El apoderado necesita un pupilo menor vigente en este grupo para reactivarse.",
   minor_requires_guardian_consent: "El menor requiere apoderado vinculado y consentimiento vigente antes de activarse.",

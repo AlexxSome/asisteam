@@ -25,3 +25,10 @@ it("COACH es canónico y su asignación rechaza identidad/rol inyectados", () =>
   expect(coachAssignmentSchema.safeParse({ ...identity, role: "ADMIN" }).success).toBe(false);
   expect(coachAssignmentSchema.safeParse({ ...identity, membership_id: "invalid" }).success).toBe(false);
 });
+
+it("normaliza búsqueda literal por nombre y limita su tamaño", () => {
+  expect(memberFilterSchema.parse({ search: "  ANA_%  ", page: "2" })).toEqual({ search: "ANA_%", page: 2 });
+  expect(memberFilterSchema.parse({ search: "  " }).search).toBe("");
+  expect(memberFilterSchema.safeParse({ search: "a".repeat(121) }).success).toBe(false);
+  expect(memberFilterSchema.safeParse({ search: ["Ana", "Juan"] }).success).toBe(false);
+});

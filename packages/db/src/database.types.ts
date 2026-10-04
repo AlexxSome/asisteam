@@ -2250,6 +2250,7 @@ export type Database = {
           p_group_id: string
           p_offset?: number
           p_role?: string
+          p_search?: string
           p_status?: string
         }
         Returns: {
@@ -2257,11 +2258,14 @@ export type Database = {
           birthdate: string
           email: string
           full_name: string
+          is_last_admin: boolean
           membership_id: string
+          person_roles: Json
           phone: string
           role: string
           status: string
           total_count: number
+          user_id: string
         }[]
       }
       list_guardianship_athletes: {

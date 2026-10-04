@@ -44,14 +44,14 @@ from public.activity_types where group_id is null limit 1;
 insert into public.attendance_records(id,activity_id,membership_id,status,note,recorded_by)
 values(pg_temp.id(601),pg_temp.id(501),pg_temp.id(311),'PRESENT','Nota histórica',pg_temp.id(101));
 
-select ok(not has_function_privilege('anon','public.list_group_members(uuid,text,text,integer)','EXECUTE'),'anon no ve datos privados');
+select ok(not has_function_privilege('anon','public.list_group_members(uuid,text,text,integer,text)','EXECUTE'),'anon no ve datos privados');
 select ok(not has_function_privilege('anon','public.update_managed_member(uuid,uuid,text,date,text,text)','EXECUTE'),'anon no edita');
 select ok(not has_function_privilege('anon','public.deactivate_membership(uuid,uuid)','EXECUTE'),'anon no desactiva');
 select ok(not has_function_privilege('anon','public.reactivate_membership(uuid,uuid)','EXECUTE'),'anon no reactiva');
 select ok(not has_function_privilege('authenticated','app_private.change_membership_status(uuid,uuid,boolean)','EXECUTE'),'helper privado cerrado');
 select ok(not has_table_privilege('authenticated','public.memberships','UPDATE'),'status no admite writes directos');
 select ok((select bool_and(proconfig @> array['search_path=""']) from pg_proc where oid in
-  ('public.list_group_members(uuid,text,text,integer)'::regprocedure,'public.update_managed_member(uuid,uuid,text,date,text,text)'::regprocedure,
+  ('public.list_group_members(uuid,text,text,integer,text)'::regprocedure,'public.update_managed_member(uuid,uuid,text,date,text,text)'::regprocedure,
    'public.deactivate_membership(uuid,uuid)'::regprocedure,'public.reactivate_membership(uuid,uuid)'::regprocedure,
    'app_private.change_membership_status(uuid,uuid,boolean)'::regprocedure)),'search_path fijo');
 set local role authenticated;
