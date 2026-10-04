@@ -1,7 +1,9 @@
+import { ACCOUNT_TERMS_VERSION } from "./account-consent";
 import { describe, expect, it } from "vitest";
 import { registerSchema } from "./register";
 
 const validInput = {
+  terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION,
   full_name: "Carla Reyes",
   email: "carla.reyes@example.cl",
   birthdate: "1994-03-15",

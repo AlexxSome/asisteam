@@ -172,6 +172,12 @@ Los consentimientos se conservan como evidencia aunque el vínculo se desactive 
 
 `birthdate_change_approvals` registra `(request_id, group_id)` como PK, `approved_by` y `approved_at`. Se requiere un ADMIN vigente por cada grupo ATHLETE `ACTIVE`/`PENDING`, sin autoaprobación. Las tablas son evidencia del flujo de corrección, no un audit log genérico. Solo se escriben mediante RPC; los ADMIN acceden a proyecciones de su grupo, mientras el titular ve sus propias solicitudes.
 
+### 2.11 account_consents — aceptación de la cuenta (#107)
+
+Evidencia independiente de `consents`: no pertenece a una guardianship ni autoriza datos o imágenes de menores. Guarda `id` UUID, `user_id` FK a `users` con `ON DELETE RESTRICT`, `terms_version`, `granted_at` UTC asignado por PostgreSQL y `channel` (`EMAIL_SIGNUP`, `INVITATION`, `IN_APP`). La unicidad `(user_id, terms_version)` hace idempotentes los reintentos y conserva el primer instante/canal. Se prohíben `UPDATE` y `DELETE` mediante permisos y trigger; RLS permite al titular leer únicamente su evidencia.
+
+La escritura pasa por el trigger transaccional de Auth (registro email/invitación con aceptación validada) o la RPC autenticada `accept_account_terms(p_accepted, p_terms_version)`. El servidor determina usuario, fecha, canal y versión vigente; el cliente solo expresa su aceptación explícita y la versión mostrada. `has_account_consent()` consulta la evidencia vigente del titular. No se rellenan históricos ni se acepta a partir del login o de metadata OAuth. Un perfil provisionado sin evidencia debe completar `/accept-terms` antes de continuar por la web.
+
 ## 3. Relaciones y cardinalidades
 
 - **users 1—N memberships N—1 groups**: un usuario pertenece a 0..N grupos; cada pertenencia (usuario, grupo, rol) es una fila. Un grupo tiene 1..N membresías (al menos el ADMIN creador).

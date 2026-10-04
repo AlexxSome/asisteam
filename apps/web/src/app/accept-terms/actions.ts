@@ -1,0 +1,23 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { accountConsentSchema } from "@asisteam/core";
+import { createClient } from "@/lib/supabase/server";
+
+export async function acceptAccountTerms(input: unknown): Promise<{ success: true } | { error: string }> {
+  const parsed = accountConsentSchema.safeParse(input);
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Revisa las condiciones antes de aceptar." };
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Tu sesión terminó. Inicia sesión para aceptar las condiciones." };
+    const { error } = await supabase.rpc("accept_account_terms", {
+      p_accepted: parsed.data.terms_accepted, p_terms_version: parsed.data.terms_version,
+    });
+    if (error) return { error: "No pudimos registrar tu aceptación. Actualiza la página y vuelve a intentarlo." };
+    revalidatePath("/", "layout");
+    return { success: true };
+  } catch {
+    return { error: "No pudimos conectar. Revisa tu conexión y vuelve a intentarlo." };
+  }
+}

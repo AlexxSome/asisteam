@@ -1,3 +1,4 @@
+import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
 // @vitest-environment jsdom
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
@@ -24,7 +25,7 @@ import JoinPage from "../join/page";
 import { registerUser } from "../register/actions";
 import { loginUser } from "./actions";
 
-const profile = { full_name: "Persona Sintética", email: "persona@example.test", password: "test-password-123", birthdate: "2000-01-01" };
+const profile = { terms_accepted: true as const, terms_version: ACCOUNT_TERMS_VERSION as typeof ACCOUNT_TERMS_VERSION, full_name: "Persona Sintética", email: "persona@example.test", password: "test-password-123", birthdate: "2000-01-01" };
 beforeEach(() => {
   vi.resetAllMocks();
   mock.getUser.mockResolvedValue({ data: { user: null } });
@@ -96,4 +97,13 @@ it.each([
 it.each([LoginPage, RegisterPage])("una sesión existente continúa la invitación en lugar de perderla en bienvenida", async page => {
   mock.getUser.mockResolvedValue({ data: { user: { id: "synthetic-user" } } });
   await expect(page({ searchParams: Promise.resolve({ invite_code: "ABCD1234" }) })).rejects.toThrow("redirect:/join?code=ABCD1234");
+});
+
+it("registro valida aceptación y versión en servidor, y no recibe una fecha de aceptación del cliente", async () => {
+  for (const input of [{ ...profile, terms_accepted: false }, { ...profile, terms_version: "old" }]) {
+    expect(await registerUser(input as unknown as typeof profile)).toHaveProperty("error");
+  }
+  expect(mock.signUp).not.toHaveBeenCalled();
+  await expect(registerUser(profile)).rejects.toThrow("redirect:/welcome");
+  expect(mock.signUp.mock.calls[0]![0].options.data.account_terms).toEqual({ accepted: true, version: ACCOUNT_TERMS_VERSION });
 });

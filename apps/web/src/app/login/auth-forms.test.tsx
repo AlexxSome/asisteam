@@ -42,6 +42,7 @@ it.each(cases)("$name mantiene etiqueta y rechaza dos submits simultáneos", asy
   action.mockReturnValue(new Promise(resolve => { finish = resolve; }));
   const { container } = render(element);
   for (const [id, value] of Object.entries(fields)) fireEvent.change(container.querySelector(`#${id}`)!, { target: { value } });
+  if (container.querySelector("input[type=checkbox]")) await userEvent.click(screen.getByRole("checkbox"));
   const form = container.querySelector("form")!;
   fireEvent.submit(form);
   fireEvent.submit(form);
@@ -60,6 +61,7 @@ it.each(cases)("$name permite reintentar un fallo de transporte y conserva el fo
   action.mockRejectedValueOnce(new Error("detalle privado del transporte")).mockResolvedValueOnce(result);
   const { container } = render(element);
   for (const [id, value] of Object.entries(fields)) fireEvent.change(container.querySelector(`#${id}`)!, { target: { value } });
+  if (container.querySelector("input[type=checkbox]")) await userEvent.click(screen.getByRole("checkbox"));
   await userEvent.click(screen.getByRole("button", { name: label }));
   expect((await screen.findByRole("alert")).textContent).toContain("No pudimos conectar");
   expect(container.textContent).not.toContain("detalle privado");
@@ -100,6 +102,7 @@ it("registro pasa la invitación a la acción sin mezclarla con los datos del pe
   actions.register.mockResolvedValue({ error: "Inténtalo nuevamente" });
   const { container } = render(<RegisterForm inviteCode="ABCD1234" />);
   for (const [id, value] of Object.entries(cases[1]!.fields)) fireEvent.change(container.querySelector(`#${id}`)!, { target: { value } });
+  await userEvent.click(screen.getByRole("checkbox"));
   await userEvent.click(screen.getByRole("button", { name: "Crear cuenta" }));
   expect(actions.register).toHaveBeenCalledWith(expect.objectContaining({ email: "persona@example.test" }), "ABCD1234");
 });

@@ -1,26 +1,33 @@
+import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-const mock = vi.hoisted(() => ({ signIn: vi.fn(), getUser: vi.fn(), getSession: vi.fn(), fetch: vi.fn() }));
+const mock = vi.hoisted(() => ({ signIn: vi.fn(), getUser: vi.fn(), getSession: vi.fn(), rpc: vi.fn(), fetch: vi.fn() }));
 vi.mock("next/headers", () => ({ headers: async () => new Headers({ "x-forwarded-for": "192.0.2.18" }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: {
   signInWithPassword: mock.signIn, getUser: mock.getUser, getSession: mock.getSession,
-} }) }));
+}, rpc: mock.rpc }) }));
 import { acceptInvitation, previewInvitation } from "./actions";
 import { InvitationForm } from "./invitation-form";
 const token = "synthetic-invitation-token-18";
-const registration = { full_name: "Persona invitada", email: "invited@example.test", password: "synthetic-password-18", birthdate: "1990-01-01", terms_accepted: true };
+const registration = { full_name: "Persona invitada", email: "invited@example.test", password: "synthetic-password-18", birthdate: "1990-01-01", terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION };
 beforeEach(() => {
   vi.resetAllMocks(); vi.stubGlobal("fetch", mock.fetch);
   vi.stubEnv("INVITATION_PROXY_SECRET", "synthetic-proxy-secret");
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
   mock.signIn.mockResolvedValue({ error: null });
+  mock.rpc.mockResolvedValue({ data: true, error: null });
   mock.getUser.mockResolvedValue({ data: { user: { id: "auth-id" } } });
   mock.getSession.mockResolvedValue({ data: { session: { access_token: "validated-session-token" } } });
   mock.fetch.mockResolvedValue(new Response(JSON.stringify({ group_id: "group-id", membership_status: "ACTIVE" })));
 });
 describe("aceptar invitación", () => {
+  it("cuenta existente sin evidencia acepta condiciones antes de consumir la invitación", async () => {
+    mock.rpc.mockResolvedValue({ data: false, error: null });
+    await expect(acceptInvitation(token, "session")).rejects.toThrow(`redirect:/accept-terms?return_to=${encodeURIComponent(`/invitations/${token}`)}`);
+    expect(mock.fetch).not.toHaveBeenCalled();
+  });
   it("rechaza formato inválido antes de llamar Edge", async () => {
     expect(await previewInvitation("bad")).toHaveProperty("error");
     expect(mock.fetch).not.toHaveBeenCalled();
@@ -80,21 +87,21 @@ describe("aceptar invitación", () => {
     expect(html).not.toContain("Usar mi sesión");
   });
   it("reclama con credenciales, establece sesión y abre el historial previo", async () => {
-    const credentials = { email: registration.email, password: registration.password, terms_accepted: true };
+    const credentials = { email: registration.email, password: registration.password, terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION };
     await expect(acceptInvitation(token, "claim", credentials)).rejects.toThrow("redirect:/groups/group-id/me/history");
     expect(JSON.parse(mock.fetch.mock.calls[0]?.[1].body)).toEqual({ action: "claim", token, registration: credentials });
     expect(mock.signIn).toHaveBeenCalledWith({ email: credentials.email, password: credentials.password });
   });
   it("reclamo bloqueado por apoderado muestra consentimiento y no inicia sesión", async () => {
     mock.fetch.mockResolvedValue(new Response(JSON.stringify({ error: { code: "guardian_consent_required" } }), { status: 422 }));
-    expect(await acceptInvitation(token, "claim", { email: registration.email, password: registration.password, terms_accepted: true }))
+    expect(await acceptInvitation(token, "claim", { email: registration.email, password: registration.password, terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION }))
       .toEqual({ error: expect.stringContaining("Tu apoderado debe otorgar") });
     expect(mock.signIn).not.toHaveBeenCalled();
   });
   it("el reclamo no reemplaza perfil ni habilita grupos pendientes o inactivos", async () => {
     expect(await acceptInvitation(token, "claim", registration)).toHaveProperty("error");
     expect(mock.fetch).not.toHaveBeenCalled();
-    const credentials = { email: registration.email, password: registration.password, terms_accepted: true };
+    const credentials = { email: registration.email, password: registration.password, terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION };
     mock.fetch.mockResolvedValue(new Response(JSON.stringify({ group_id: "group-id", membership_status: "PENDING" })));
     expect(await acceptInvitation(token, "claim", credentials)).toEqual({ pending: true });
     mock.fetch.mockResolvedValue(new Response(JSON.stringify({ group_id: "group-id", membership_status: "INACTIVE" })));

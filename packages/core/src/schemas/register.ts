@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { accountConsentSchema } from "./account-consent.ts";
 
 /**
  * Schema de registro con email y contraseña (HU-GEN-01).
@@ -45,6 +46,7 @@ export const birthdateSchema = z
   );
 
 export const registerSchema = z.object({
+  ...accountConsentSchema.shape,
   full_name: z
     .string({ required_error: "El nombre es obligatorio" })
     .trim()
@@ -72,11 +74,10 @@ export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const invitationRegistrationSchema = registerSchema.extend({
   phone: registerSchema.shape.phone.refine((value) => !value || /^\+[1-9][0-9]{7,14}$/.test(value), "Teléfono inválido (ej. +56912345678)"),
-  terms_accepted: z.literal(true, { errorMap: () => ({ message: "Debes aceptar las condiciones de uso y privacidad" }) }),
 });
 export type InvitationRegistrationInput = z.infer<typeof invitationRegistrationSchema>;
 
 // Reclamar un perfil existente no permite reemplazar sus datos de identidad.
 export const managedClaimSchema = invitationRegistrationSchema.pick({
-  email: true, password: true, terms_accepted: true,
+  email: true, password: true, terms_accepted: true, terms_version: true,
 }).strict();

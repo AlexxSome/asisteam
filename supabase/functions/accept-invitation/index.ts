@@ -15,6 +15,7 @@ const statuses: Record<string, number> = {
   invalid_registration: 400, registration_failed: 422, guardian_consent_required: 422,
   birthdate_confirmation_required: 422, athlete_birthdate_required: 422,
   group_member_limit: 422, user_group_limit: 422, rate_limit: 429, unavailable: 503,
+  account_terms_required: 422,
 };
 
 Deno.serve(async (request: Request) => {
@@ -105,6 +106,14 @@ Deno.serve(async (request: Request) => {
     if (!bearer) return fail("authentication_required");
     const { data: { user }, error: authError } = await admin.auth.getUser(bearer);
     if (authError || !user) return fail("authentication_required");
+    // Consultar como el titular: service_role no necesita leer la evidencia.
+    const actor = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: `Bearer ${bearer}` } },
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data: consent, error: consentError } = await actor.rpc("has_account_consent");
+    if (consentError) return fail("unavailable");
+    if (!consent) return fail("account_terms_required");
     const { data, error } = await admin.rpc("accept_invitation", { p_token_hash: tokenHash, p_auth_user_id: user.id });
     if (error || !data) return fail("unavailable");
     return data.error ? fail(data.error) : json(data);

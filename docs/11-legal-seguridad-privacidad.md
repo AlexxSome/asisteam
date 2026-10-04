@@ -120,6 +120,12 @@ flowchart TD
 
 ---
 
+### Aceptación informada de la cuenta (#107)
+
+Registro email, creación de credenciales por invitación y onboarding posterior a OAuth comparten aviso, enlaces públicos a condiciones/privacidad, versión visible y checkbox sin premarcar. El servidor exige aceptación explícita de la versión vigente; una cuenta existente sin evidencia se deriva a `/accept-terms`, sin consumir su invitación. Puede salir sin aceptar. La evidencia propia vive en `account_consents` (doc 04 §2.11); no sustituye `DATA_PROCESSING_MINOR`, `ACCOUNT_ACTIVATION_MINOR` ni `allows_avatar`.
+
+**Pendiente antes del release:** Producto debe validar contenido y versión del aviso público `/legal/2026-09-21`. Se reutilizó provisionalmente el texto de invitaciones existente, con autorización para #107; esta implementación no acredita revisión legal ni marca C-01/C-02 como completados. Cambiar texto requiere un nuevo snapshot público y una nueva versión coordinada en core y migración; nunca reescribir el documento ni la evidencia de una versión anterior.
+
 ## 4. Marco legal
 
 ### 4.1 Chile — Ley 19.628 (vigente a la fecha del plan)
