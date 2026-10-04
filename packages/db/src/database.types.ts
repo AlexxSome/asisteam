@@ -34,6 +34,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_consents: {
+        Row: {
+          channel: string
+          granted_at: string
+          id: string
+          terms_version: string
+          user_id: string
+        }
+        Insert: {
+          channel: string
+          granted_at?: string
+          id?: string
+          terms_version: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          granted_at?: string
+          id?: string
+          terms_version?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_consents_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       activities: {
         Row: {
           activity_type_id: string
@@ -1953,6 +1985,10 @@ export type Database = {
       }
     }
     Functions: {
+      accept_account_terms: {
+        Args: { p_accepted: boolean; p_terms_version: string }
+        Returns: string
+      }
       accept_invitation: {
         Args: { p_auth_user_id: string; p_token_hash: string }
         Returns: Json
@@ -2142,6 +2178,7 @@ export type Database = {
         }
         Returns: Json
       }
+      has_account_consent: { Args: never; Returns: boolean }
       invitation_context: { Args: { p_token_hash: string }; Returns: Json }
       invitation_registration_result: {
         Args: { p_auth_user_id: string; p_token_hash: string }

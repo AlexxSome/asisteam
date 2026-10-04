@@ -1,14 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { checkinPath } from "@asisteam/core";
-const mock = vi.hoisted(() => ({ get: vi.fn(), set: vi.fn(), exchange: vi.fn(), from: vi.fn(), select: vi.fn(), eq: vi.fn(), profile: vi.fn(), signOut: vi.fn() }));
+const mock = vi.hoisted(() => ({ get: vi.fn(), set: vi.fn(), exchange: vi.fn(), from: vi.fn(), select: vi.fn(), eq: vi.fn(), profile: vi.fn(), signOut: vi.fn(), rpc: vi.fn() }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.get, set: mock.set }) }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { exchangeCodeForSession: mock.exchange, signOut: mock.signOut }, from: mock.from }) }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { exchangeCodeForSession: mock.exchange, signOut: mock.signOut }, from: mock.from, rpc: mock.rpc }) }));
 import { GET } from "./route";
 import { SOCIAL_CONTEXT_COOKIE } from "@/lib/social-auth";
 const callback = (query = "code=valid") => GET(new Request(`https://untrusted-host.example/auth/callback?${query}`));
 
 beforeEach(() => {
   vi.resetAllMocks();
+  mock.rpc.mockResolvedValue({ data: true, error: null });
   vi.stubEnv("ASISTEAM_SITE_URL", "https://asisteam.example");
   mock.get.mockReturnValue({ value: "{}" });
   mock.exchange.mockResolvedValue({ data: { user: { id: "existing-auth-id" } }, error: null });
@@ -69,4 +70,23 @@ it.each(["error=access_denied", "code=valid"])("fallo OAuth conserva invitación
   mock.get.mockReturnValue({ value: JSON.stringify({ invite_code: "ABCD1234" }) });
   mock.exchange.mockRejectedValue(new Error("network"));
   expect((await callback(query)).headers.get("Location")).toBe("https://asisteam.example/login?invite_code=ABCD1234&social_error=1");
+});
+
+it("OAuth sin evidencia pide aceptación y conserva la invitación", async () => {
+  mock.rpc.mockResolvedValue({ data: false, error: null });
+  mock.get.mockReturnValue({ value: JSON.stringify({ invite_code: "ABCD1234" }) });
+  const url = new URL((await callback()).headers.get("Location")!);
+  expect(url.pathname).toBe("/accept-terms");
+  expect(url.searchParams.get("return_to")).toBe("/join?code=ABCD1234");
+  expect(mock.rpc).toHaveBeenCalledExactlyOnceWith("has_account_consent");
+});
+it("OAuth pendiente conserva QR en fragmento y falla cerrado si no puede verificar evidencia", async () => {
+  const checkin = { activity_id: "58000000-0000-4000-8000-000000000501", token: "a".repeat(64) };
+  mock.get.mockReturnValue({ value: JSON.stringify({ checkin }) });
+  mock.rpc.mockResolvedValue({ data: null, error: { message: "unavailable" } });
+  const url = new URL((await callback()).headers.get("Location")!);
+  expect(url.pathname).toBe("/accept-terms");
+  expect(url.searchParams.get("return_to")).toBe("/check-in");
+  expect(url.search).not.toContain(checkin.token);
+  expect(url.hash).toBe(new URL(checkinPath(checkin), "https://asisteam.example").hash);
 });

@@ -4,7 +4,8 @@ import { useRef, useState, type FormEvent } from "react";
 import { unstable_rethrow } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, type RegisterInput } from "@asisteam/core";
+import { ACCOUNT_TERMS_VERSION, registerSchema, type RegisterInput } from "@asisteam/core";
+import { AccountTermsField } from "@/components/account-terms-field";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,7 @@ export function RegisterForm({ inviteCode, providers }: { inviteCode?: string; p
     formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
+    defaultValues: { terms_version: ACCOUNT_TERMS_VERSION },
   });
 
   const submit = handleSubmit(async (values) => {
@@ -89,6 +91,8 @@ export function RegisterForm({ inviteCode, providers }: { inviteCode?: string; p
           {...register("password")}
         />
       </Field>
+
+      <AccountTermsField {...register("terms_accepted")} error={errors.terms_accepted?.message} versionError={errors.terms_version?.message} disabled={isSubmitting || socialPending} />
 
       {serverError && (
         <Alert>{serverError}</Alert>

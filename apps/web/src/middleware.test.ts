@@ -1,20 +1,44 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), maybeSingle: vi.fn(), from: vi.fn() }));
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), maybeSingle: vi.fn(), from: vi.fn(), rpc: vi.fn() }));
 vi.mock("@supabase/ssr", () => ({ createServerClient: (_url: string, _key: string, options: { cookies: { setAll: (cookies: unknown[]) => void } }) => {
   options.cookies.setAll([{ name: "refreshed-session", value: "synthetic", options: { httpOnly: true } }]);
-  return { auth: { getUser: mock.getUser }, from: mock.from };
+  return { auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc };
 } }));
 import { middleware } from "./middleware";
 const groupId = "17000000-0000-4000-8000-000000000201";
 beforeEach(() => {
   vi.resetAllMocks();
+  mock.rpc.mockResolvedValue({ data: true, error: null });
   mock.getUser.mockResolvedValue({ data: { user: { id: "user" } } });
   mock.from.mockReturnValue({ select: () => ({ eq: () => ({ maybeSingle: mock.maybeSingle }) }) });
   mock.maybeSingle.mockResolvedValue({ data: { id: groupId, roles: ["ADMIN"] }, error: null });
 });
 const request = (path: string) => new NextRequest(`http://localhost:3000${path}`);
+
+describe("aceptación pendiente", () => {
+  it.each(["/", "/welcome", "/profile", "/groups", "/groups/new", `/groups/${groupId}/settings`, "/wards", "/check-in"])("no se elude entrando directamente a %s", async path => {
+    mock.rpc.mockResolvedValue({ data: false, error: null });
+    const response = await middleware(request(path));
+    expect(response.status).toBe(303);
+    expect(new URL(response.headers.get("Location")!).pathname).toBe("/accept-terms");
+    expect(response.headers.get("Cache-Control")).toContain("no-store");
+    expect(response.cookies.get("refreshed-session")?.httpOnly).toBe(true);
+    expect(mock.from).not.toHaveBeenCalled();
+  });
+  it.each(["/accept-terms", "/legal/2026-09-21", "/login", "/register", "/auth/callback", "/reset-password", "/invitations/" + "a".repeat(32)])("%s sigue accesible sin aceptar", async path => {
+    mock.rpc.mockResolvedValue({ data: false });
+    expect((await middleware(request(path))).status).toBe(200);
+    expect(mock.rpc).not.toHaveBeenCalled();
+  });
+  it("conserva código válido y falla cerrado ante error sin divulgarlo", async () => {
+    mock.rpc.mockResolvedValue({ data: null, error: { message: "private detail" } });
+    const response = await middleware(request("/join?code=ABCD1234&token=secret"));
+    expect(new URL(response.headers.get("Location")!).searchParams.get("return_to")).toBe("/join?code=ABCD1234");
+    expect(response.headers.get("Location")).not.toMatch(/secret|private/);
+  });
+});
 
 describe("cache de superficies autenticadas", () => {
   it.each(["/profile", "/groups", "/wards", "/welcome"])("%s evita almacenar datos privados en el navegador", async path => {

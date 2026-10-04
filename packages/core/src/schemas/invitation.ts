@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ACCOUNT_TERMS_VERSION } from "./account-consent.ts";
 
 // ≥128 bits de entropía al emitir; aquí se valida el formato URL-safe.
 export const invitationTokenSchema = z.string().regex(/^[A-Za-z0-9_-]{22,256}$/);
@@ -8,11 +9,12 @@ export const invitationRequestSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("register"), token: invitationTokenSchema, registration: z.unknown() }).strict(),
   z.object({ action: z.literal("claim"), token: invitationTokenSchema, registration: z.unknown() }).strict(),
 ]);
-export const INVITATION_TERMS_VERSION = "2026-09-21";
+export const INVITATION_TERMS_VERSION = ACCOUNT_TERMS_VERSION;
 export const invitationErrorMessages: Record<string, string> = {
   invitation_expired: "Invitación expirada. Pide al ADMIN del grupo que te envíe una nueva invitación.",
   invitation_not_available: "La invitación no está disponible. Revisa el enlace y la cuenta con la que iniciaste sesión.",
   invalid_registration: "Revisa los datos y acepta las condiciones de uso y privacidad.",
+  account_terms_required: "Revisa y acepta las condiciones de tu cuenta antes de continuar con la invitación.",
   birthdate_confirmation_required: "La fecha de nacimiento no coincide con la registrada. Contacta al ADMIN.",
   guardian_consent_required: "Tu apoderado debe otorgar el consentimiento antes de activar tu cuenta.",
   athlete_birthdate_required: "Completa tu fecha de nacimiento en el perfil antes de aceptar.",

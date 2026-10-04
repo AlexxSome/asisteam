@@ -1,3 +1,4 @@
+import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
@@ -82,7 +83,7 @@ async function managedFixture(minor: boolean, needsReview = false) {
     expect(issued.error).toBeNull();
   }
   return { id, membershipId, token, guardianId, address, ip,
-    request: { action: "claim", token, registration: { email: address, password, terms_accepted: true } } };
+    request: { action: "claim", token, registration: { email: address, password, terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION } } };
 }
 
 async function guardianFixture(name: string, address = email(name)) {
@@ -122,6 +123,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
       const client = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
       const result = await client.auth.signInWithPassword({ email: email(name), password });
       if (!result.data.session) throw new Error("No se pudo iniciar sesión sintética");
+      expect((await client.rpc("accept_account_terms", { p_accepted: true, p_terms_version: ACCOUNT_TERMS_VERSION })).error).toBeNull();
       if (name === "existing") { jwt = result.data.session.access_token; owner = client; }
       else if (name === "guardian") { guardianJwt = result.data.session.access_token; existingGuardian = client; }
       else wrongJwt = result.data.session.access_token;
@@ -160,6 +162,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
       delete from public.memberships where group_id in (${groups});
       delete from public.groups where id in (${groups});
       delete from app_private.invitation_attempts where key in (${ips.flatMap(ip => ["preview", "accept"].map(action => `'${digest(`${secret}:${action}:${ip}`)}'`)).join(",")});
+      delete from public.account_consents where user_id in (${users});
       delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await admin.auth.admin.deleteUser(id);
   });
@@ -171,7 +174,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
   });
   it("el reclamo no convierte una invitación de registro normal en activación gestionada", async () => {
     const result = await invoke({ action: "claim", token: tokens.invited,
-      registration: { email: email("new"), password, terms_accepted: true } });
+      registration: { email: email("new"), password, terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION } });
     expect(result.status).toBe(404);
     expect(sql(`select count(*) from auth.users where email='${email("new")}';`)).toBe("0");
     expect(sql(`select status from public.invitations where token='${digest(tokens.invited)}';`)).toBe("PENDING");
@@ -190,10 +193,11 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
   });
   it("registro GoTrue vincula INVITED sin duplicado y permite contraseña propia", async () => {
     const result = await invoke({ action: "register", token: tokens.invited, registration: {
-      full_name: "Adulto activado", email: email("new"), password, birthdate: "1990-01-01", terms_accepted: true,
+      full_name: "Adulto activado", email: email("new"), password, birthdate: "1990-01-01", terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION,
     } });
     expect(result).toEqual({ status: 200, body: { group_id: groupId, membership_status: "ACTIVE" } });
     expect(sql(`select account_status from public.users where id='${invitedId}';`)).toBe("ACTIVE");
+    expect(sql(`select terms_version||':'||channel from public.account_consents where user_id='${invitedId}';`)).toBe(`${ACCOUNT_TERMS_VERSION}:INVITATION`);
     expect(sql(`select count(*) from public.users where email='${email("new")}';`)).toBe("1");
     expect(sql(`select count(*) from app_private.invitation_registrations where token_hash='${digest(tokens.invited)}';`)).toBe("0");
     const client = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
@@ -203,7 +207,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
   });
   it("GoTrue no deja credenciales ni consume token de menor sin consentimiento", async () => {
     const result = await invoke({ action: "register", token: tokens.minor, registration: {
-      full_name: "Menor sintético", email: email("minor"), password, birthdate: "2011-01-01", terms_accepted: true,
+      full_name: "Menor sintético", email: email("minor"), password, birthdate: "2011-01-01", terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION,
     } });
     expect(result.status).toBe(422);
     expect(sql(`select count(*) from auth.users where email='${email("minor")}';`)).toBe("0");
@@ -229,7 +233,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
       insert into public.invitations(group_id,email,invited_user_id,role,token,created_by)
       values('${groupId}','${email("race")}','${id}','ATHLETE','${digest(token)}','${existingProfileId}');`);
     const body = { action: "register", token, registration: {
-      full_name: "Registro concurrente", email: email("race"), password, birthdate: "1990-01-01", terms_accepted: true,
+      full_name: "Registro concurrente", email: email("race"), password, birthdate: "1990-01-01", terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION,
     } };
     const results = await Promise.all([invoke(body, undefined, ips[1]), invoke(body, undefined, ips[1])]);
     expect(results.filter(r => r.status === 200)).toHaveLength(1);
@@ -243,7 +247,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     expect(await invoke({ action: "preview", token: fixture.token }, undefined, fixture.ip))
       .toEqual({ status: 200, body: { group_name: "Grupo sintético #18", role: "GUARDIAN" } });
     const request = { action: "register", token: fixture.token, registration: {
-      full_name: "Apoderado registrado", email: fixture.address, password, birthdate: "1990-01-01", terms_accepted: true,
+      full_name: "Apoderado registrado", email: fixture.address, password, birthdate: "1990-01-01", terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION,
     } };
     expect(await invoke(request, undefined, fixture.ip))
       .toEqual({ status: 200, body: { group_id: groupId, membership_status: "ACTIVE" } });
@@ -326,6 +330,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     expect(claims.map(result => result.status).sort()).toEqual([200,404]);
     expect(claims.find(result => result.status === 200)?.body).toEqual({ group_id: groupId, membership_status: "ACTIVE" });
     expect(historySnapshot(fixture.id)).toBe(before);
+    expect(sql(`select count(*) from public.account_consents where user_id='${fixture.id}';`)).toBe("1");
     expect(sql(`select id||':'||account_status||':'||full_name||':'||phone from public.users where email='${fixture.address}';`))
       .toBe(`${fixture.id}:ACTIVE:Perfil gestionado conservado:+56912345678`);
     const client = createClient(apiUrl, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });

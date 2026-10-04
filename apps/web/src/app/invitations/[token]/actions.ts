@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { invitationErrorMessages, invitationRegistrationSchema, invitationTokenSchema, loginSchema, managedClaimSchema,
   type InvitationAcceptance, type InvitationPreview } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
+import { accountConsentPath } from "@/lib/account-consent-routing";
 
 type Result<T> = { data: T; error?: never } | { error: string; data?: never };
 
@@ -61,6 +62,8 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
     if (!user) return { error: invitationErrorMessages.authentication_required! };
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return { error: invitationErrorMessages.authentication_required! };
+    const { data: acceptedTerms, error: consentError } = await supabase.rpc("has_account_consent");
+    if (consentError || acceptedTerms !== true) redirect(accountConsentPath(`/invitations/${token}`));
     accepted = await invoke({ action: "accept", token }, session.access_token);
     if (accepted.error) return { error: accepted.error };
   }

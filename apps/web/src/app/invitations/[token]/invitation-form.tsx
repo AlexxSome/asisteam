@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
+import { AccountTermsField } from "@/components/account-terms-field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,6 +34,7 @@ export function InvitationForm({ token, signedInEmail, managedActivation = false
         const result = await acceptInvitation(token, mode, {
           email: form.get("email"), password: form.get("password"),
           terms_accepted: form.get("terms_accepted") === "on",
+          terms_version: ACCOUNT_TERMS_VERSION,
           ...(mode === "claim" ? {} : { full_name: form.get("full_name"),
             birthdate: form.get("birthdate"), phone: form.get("phone") || undefined }),
         });
@@ -54,16 +57,7 @@ export function InvitationForm({ token, signedInEmail, managedActivation = false
           <Input id="password" name="password" type="password" autoComplete={creatingCredentials ? "new-password" : "current-password"}
             minLength={creatingCredentials ? 10 : undefined} maxLength={128} required />
           {creatingCredentials && <p className="text-sm text-muted-foreground">Mínimo 10 caracteres.</p>}</div>
-        {creatingCredentials && <>
-          <details className="text-sm"><summary className="cursor-pointer underline">Uso y privacidad de tus datos</summary>
-            <p className="mt-2">Asisteam usa tus datos de perfil y asistencia para gestionar tu participación en los grupos deportivos.
-              Los administradores del grupo gestionan tus registros. Tus datos de contacto y fecha de nacimiento no se muestran a otros integrantes.</p>
-            <p className="mt-2">Si eres menor de edad, tu apoderado debe consentir el tratamiento de tus datos antes de activar tu cuenta.
-              Puedes solicitar acceso, rectificación o eliminación de tus datos al responsable de tu grupo.</p>
-          </details>
-          <label className="flex items-start gap-3 text-sm"><input name="terms_accepted" type="checkbox" required className="mt-1 size-4 shrink-0" />
-            Acepto las condiciones de uso y privacidad indicadas.</label>
-        </>}
+        {creatingCredentials && <AccountTermsField disabled={busy} />}
       </>}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       <Button className="w-full" type="submit" disabled={busy}>{busy ? "Procesando…" : mode === "claim" ? "Activar mi cuenta y ver mi historial" : mode === "register" ? "Activar cuenta y aceptar" : mode === "login" ? "Iniciar sesión y aceptar" : "Aceptar invitación"}</Button>

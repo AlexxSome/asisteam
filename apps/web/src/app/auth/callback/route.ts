@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { authCookieOptions } from "@/lib/supabase/cookie-options";
 import { SOCIAL_CALLBACK_PATH, SOCIAL_CONTEXT_COOKIE, socialAuthOrigin } from "@/lib/social-auth";
 import { authPath } from "@/lib/auth-context";
+import { accountConsentPath } from "@/lib/account-consent-routing";
 
 export async function GET(request: Request) {
   const origin = socialAuthOrigin();
@@ -32,6 +33,8 @@ export async function GET(request: Request) {
         if (!profileError && profile?.account_status === "ACTIVE") {
           destination = context.data.checkin ? checkinPath(context.data.checkin)
             : context.data.invite_code ? `/join?code=${context.data.invite_code}` : "/welcome";
+          const { data: accepted, error: consentError } = await supabase.rpc("has_account_consent");
+          if (consentError || accepted !== true) destination = accountConsentPath(destination);
         } else {
           await supabase.auth.signOut({ scope: "local" });
         }

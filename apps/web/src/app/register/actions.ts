@@ -21,7 +21,7 @@ export async function registerUser(input: RegisterInput, inviteCode?: string): P
     return { error: "Datos inválidos. Revisa el formulario e inténtalo nuevamente." };
   }
 
-  const { full_name, email, birthdate, phone, password } = parsed.data;
+  const { full_name, email, birthdate, phone, password, terms_accepted, terms_version } = parsed.data;
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
@@ -29,7 +29,7 @@ export async function registerUser(input: RegisterInput, inviteCode?: string): P
     password,
     options: {
       // El trigger handle_new_user copia estos metadatos a public.users.
-      data: { full_name, birthdate, phone: phone ?? null },
+      data: { full_name, birthdate, phone: phone ?? null, account_terms: { accepted: terms_accepted, version: terms_version } },
     },
   });
 

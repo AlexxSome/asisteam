@@ -5,6 +5,7 @@ import type { Database } from "@asisteam/db";
 import { isGroupId } from "@/lib/group-routing";
 import { resourceResponseHtml } from "@/lib/resource-state";
 import { authCookieOptions } from "@/lib/supabase/cookie-options";
+import { accountConsentPath } from "@/lib/account-consent-routing";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
@@ -41,6 +42,23 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   // Perfil y bienvenida también contienen datos privados sin contexto de grupo.
   if (user) response.headers.set("Cache-Control", "private, no-store");
+
+  // Consultar el aviso, autenticarse y salir siguen disponibles sin aceptar.
+  // Invitaciones capturan aceptación al crear credenciales o verifican el RPC
+  // en su Server Action si se usa una cuenta existente.
+  const pathname = request.nextUrl.pathname;
+  const publicRoute = ["/accept-terms", "/login", "/register", "/forgot-password", "/reset-password", "/auth/callback"].includes(pathname)
+    || pathname.startsWith("/legal/") || pathname.startsWith("/invitations/") || pathname.startsWith("/_next/");
+  if (user && !publicRoute) {
+    const { data: accepted, error } = await supabase.rpc("has_account_consent");
+    if (error || accepted !== true) {
+      const pending = NextResponse.redirect(new URL(accountConsentPath(pathname + request.nextUrl.search), request.url), 303);
+      pending.headers.set("Cache-Control", "private, no-store");
+      pending.headers.set("Referrer-Policy", "no-referrer");
+      response.cookies.getAll().forEach(cookie => pending.cookies.set(cookie));
+      return pending;
+    }
+  }
 
   const missingResource = () => {
     const missing = new NextResponse(resourceResponseHtml(404), {

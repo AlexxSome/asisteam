@@ -1,3 +1,4 @@
+import { ACCOUNT_TERMS_VERSION } from "./account-consent";
 import { describe, expect, it } from "vitest";
 import { invitationFormSchema, invitationRequestSchema, invitationTokenSchema, sendInvitationRequestSchema, sentInvitationSchema } from "./invitation";
 import { managedClaimSchema } from "./register";
@@ -13,7 +14,7 @@ describe("invitaciones", () => {
     expect(invitationRequestSchema.safeParse({ action: "accept", token: "a".repeat(32), user_id: "victim" }).success).toBe(false);
   });
   it("el reclamo solo acepta credenciales y condiciones, sin reemplazar el perfil gestionado", () => {
-    const registration = { email: "managed@example.test", password: "Synthetic-password-43!", terms_accepted: true };
+    const registration = { email: "managed@example.test", password: "Synthetic-password-43!", terms_accepted: true, terms_version: ACCOUNT_TERMS_VERSION };
     expect(managedClaimSchema.parse(registration)).toEqual(registration);
     expect(invitationRequestSchema.safeParse({ action: "claim", token: "a".repeat(32), registration }).success).toBe(true);
     for (const extra of [{ full_name: "Otra persona" }, { birthdate: "1990-01-01" }, { user_id: "victim" }, { terms_accepted: false }, { password: "short" }]) {
