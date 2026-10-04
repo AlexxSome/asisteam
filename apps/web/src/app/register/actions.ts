@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { registerSchema, type RegisterInput } from "@asisteam/core";
 
+import { invitationDestination } from "@/lib/auth-context";
 import { createClient } from "@/lib/supabase/server";
 
 export type RegisterResult = { error: string } | undefined;
@@ -14,7 +15,7 @@ export type RegisterResult = { error: string } | undefined;
  * con `account_status = ACTIVE`. Con las confirmaciones de email
  * deshabilitadas, signUp inicia sesión de inmediato (cookies HttpOnly).
  */
-export async function registerUser(input: RegisterInput): Promise<RegisterResult> {
+export async function registerUser(input: RegisterInput, inviteCode?: string): Promise<RegisterResult> {
   const parsed = registerSchema.safeParse(input);
   if (!parsed.success) {
     return { error: "Datos inválidos. Revisa el formulario e inténtalo nuevamente." };
@@ -49,5 +50,5 @@ export async function registerUser(input: RegisterInput): Promise<RegisterResult
     return { error: "No pudimos crear tu cuenta. Inténtalo nuevamente en unos minutos." };
   }
 
-  redirect("/welcome");
+  redirect(invitationDestination(inviteCode));
 }

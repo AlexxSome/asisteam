@@ -1,0 +1,1232 @@
+[
+  {
+    "route": "login",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 152.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Iniciar sesión",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "¿Olvidaste tu contraseña?",
+        "tag": "A",
+        "width": 223.203125
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crea una",
+        "tag": "A",
+        "width": 110.84375
+      }
+    ],
+    "h1": "Iniciar sesión",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/register?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "route": "register",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "full_name",
+        "label": "",
+        "tag": "INPUT",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "birthdate",
+        "label": "",
+        "tag": "INPUT",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "phone",
+        "label": "",
+        "tag": "INPUT",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 152.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crear cuenta",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Inicia sesión",
+        "tag": "A",
+        "width": 133
+      }
+    ],
+    "h1": "Crear cuenta",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "route": "forgot-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Enviar instrucciones",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Recuperar contraseña",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "route": "reset-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 152.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "confirmPassword",
+        "label": "",
+        "tag": "INPUT",
+        "width": 152.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar confirmación de contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Guardar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 238
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Solicitar un nuevo enlace",
+        "tag": "A",
+        "width": 216.65625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Restablecer contraseña",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "route": "login",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 207.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Iniciar sesión",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "¿Olvidaste tu contraseña?",
+        "tag": "A",
+        "width": 223.203125
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crea una",
+        "tag": "A",
+        "width": 110.84375
+      }
+    ],
+    "h1": "Iniciar sesión",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/register?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "route": "register",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "full_name",
+        "label": "",
+        "tag": "INPUT",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "birthdate",
+        "label": "",
+        "tag": "INPUT",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "phone",
+        "label": "",
+        "tag": "INPUT",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 207.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crear cuenta",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Inicia sesión",
+        "tag": "A",
+        "width": 133
+      }
+    ],
+    "h1": "Crear cuenta",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "route": "forgot-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Enviar instrucciones",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Recuperar contraseña",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "route": "reset-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 207.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "confirmPassword",
+        "label": "",
+        "tag": "INPUT",
+        "width": 207.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar confirmación de contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Guardar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 293
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Solicitar un nuevo enlace",
+        "tag": "A",
+        "width": 216.65625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Restablecer contraseña",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "route": "login",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Iniciar sesión",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "¿Olvidaste tu contraseña?",
+        "tag": "A",
+        "width": 223.203125
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crea una",
+        "tag": "A",
+        "width": 110.84375
+      }
+    ],
+    "h1": "Iniciar sesión",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/register?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "route": "register",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "full_name",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "birthdate",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "phone",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crear cuenta",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Inicia sesión",
+        "tag": "A",
+        "width": 133
+      }
+    ],
+    "h1": "Crear cuenta",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "route": "forgot-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Enviar instrucciones",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Recuperar contraseña",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "route": "reset-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "confirmPassword",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar confirmación de contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Guardar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Solicitar un nuevo enlace",
+        "tag": "A",
+        "width": 216.65625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Restablecer contraseña",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "route": "login",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Iniciar sesión",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "¿Olvidaste tu contraseña?",
+        "tag": "A",
+        "width": 223.203125
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crea una",
+        "tag": "A",
+        "width": 110.84375
+      }
+    ],
+    "h1": "Iniciar sesión",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/register?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "route": "register",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "full_name",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "birthdate",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "phone",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crear cuenta",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Inicia sesión",
+        "tag": "A",
+        "width": 133
+      }
+    ],
+    "h1": "Crear cuenta",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "route": "forgot-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Enviar instrucciones",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Recuperar contraseña",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "route": "reset-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "confirmPassword",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar confirmación de contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Guardar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Solicitar un nuevo enlace",
+        "tag": "A",
+        "width": 216.65625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Restablecer contraseña",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "route": "login",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Iniciar sesión",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "¿Olvidaste tu contraseña?",
+        "tag": "A",
+        "width": 223.203125
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crea una",
+        "tag": "A",
+        "width": 110.84375
+      }
+    ],
+    "h1": "Iniciar sesión",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/register?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "route": "register",
+    "controls": [
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Google",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Continuar con Apple",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "full_name",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "birthdate",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "phone",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Crear cuenta",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Inicia sesión",
+        "tag": "A",
+        "width": 133
+      }
+    ],
+    "h1": "Crear cuenta",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "route": "forgot-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "email",
+        "label": "",
+        "tag": "INPUT",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Enviar instrucciones",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Recuperar contraseña",
+    "h1Count": 1,
+    "links": [
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "route": "reset-password",
+    "controls": [
+      {
+        "height": 44,
+        "id": "password",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "confirmPassword",
+        "label": "",
+        "tag": "INPUT",
+        "width": 312.4375
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Mostrar confirmación de contraseña",
+        "tag": "BUTTON",
+        "width": 77.5625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Guardar nueva contraseña",
+        "tag": "BUTTON",
+        "width": 398
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Solicitar un nuevo enlace",
+        "tag": "A",
+        "width": 216.65625
+      },
+      {
+        "height": 44,
+        "id": "",
+        "label": "Volver a iniciar sesión",
+        "tag": "A",
+        "width": 194.5859375
+      }
+    ],
+    "h1": "Restablecer contraseña",
+    "h1Count": 1,
+    "links": [
+      "/forgot-password?invite_code=ABCD1234",
+      "/login?invite_code=ABCD1234"
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  }
+]
