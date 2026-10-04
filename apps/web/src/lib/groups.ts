@@ -67,3 +67,11 @@ export async function groupHomePath() {
   if (groups.length === 1) return `/groups/${groups[0]!.id}`;
   return "/groups";
 }
+
+/** A pending athlete sees only their request, never the group's private detail. */
+export const getMyPendingMemberships = cache(async () => {
+  const client = await createClient();
+  const { data, error } = await client.rpc("list_membership_onboarding", {});
+  if (error) throw new Error("No pudimos cargar tus solicitudes pendientes. Vuelve a intentarlo.");
+  return data ?? [];
+});

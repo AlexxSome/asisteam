@@ -9,6 +9,7 @@ vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: {
   getUser: mock.getUser, signUp: mock.signUp, signInWithPassword: mock.signIn,
 } }) }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
+vi.mock("@/lib/groups", () => ({ getMyPendingMemberships: async () => [] }));
 vi.mock("@/lib/social-auth", () => ({ getSocialProviderAvailability: async () => ({ google: true, apple: false }) }));
 vi.mock("@/components/social-login-buttons", () => ({ SocialLoginButtons: ({ context }: { context?: { invite_code?: string } }) => <div data-testid="social-context">{context?.invite_code}</div> }));
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }) => <>{children}</> }));

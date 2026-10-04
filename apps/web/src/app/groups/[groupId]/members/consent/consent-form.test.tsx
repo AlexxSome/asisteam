@@ -8,7 +8,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mock.refresh })
 import { AccountActivationConsent, ManagedConsentForm } from "./consent-form";
 afterEach(() => { cleanup(); vi.resetAllMocks(); });
 it("requiere checkbox explícito y confirma activación después del servidor", async () => {
-  mock.consent.mockResolvedValue({ success: true });
+  mock.consent.mockResolvedValue({ success: true, membershipStatus: "ACTIVE" });
   const user = userEvent.setup();
   render(<ManagedConsentForm membershipId="membership-id" fullName="Pupilo" relationship="Tutor" />);
   expect((screen.getByRole("button") as HTMLButtonElement).disabled).toBe(true);
@@ -78,4 +78,14 @@ it.each([undefined, "group-id"])("consentimiento sin cupos respeta permiso ADMIN
   else { expect(alert.textContent).toContain("Contacta a tu administrador"); expect(screen.queryByRole("link")).toBeNull(); }
   expect(screen.queryByRole("status")).toBeNull();
   expect(mock.refresh).not.toHaveBeenCalled();
+});
+
+it("consentir un alta por código conserva aprobación ADMIN pendiente y no anuncia activación", async () => {
+  mock.consent.mockResolvedValue({ success: true, membershipStatus: "PENDING" });
+  render(<ManagedConsentForm membershipId="membership-id" fullName="Pupilo por código" relationship="Tutor" managedEnrollment={false} />);
+  await userEvent.click(screen.getByRole("checkbox"));
+  await userEvent.click(screen.getByRole("button", { name: "Guardar consentimiento de datos" }));
+  const status = await screen.findByRole("status");
+  expect(status.textContent).toContain("Falta la aprobación del administrador");
+  expect(status.textContent).not.toContain("ya está activo");
 });

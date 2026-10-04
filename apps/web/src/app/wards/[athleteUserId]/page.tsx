@@ -1,3 +1,5 @@
+import { getGuardianTasks } from "@/lib/wards";
+import { MembershipProgress } from "@/app/groups/[groupId]/members/pending/membership-review";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ActionLink } from "@/components/ui/button";
 import { AppShell } from "@/components/app-shell";
@@ -14,6 +16,8 @@ export default async function WardPage({ params, searchParams }: {
 }) {
   const { page, period } = parseActivitySearch(await searchParams);
   const { ward, activities, hasNext } = await getWardActivities((await params).athleteUserId, page, period);
+  const tasks = new Map(await Promise.all(ward.groups.map(async group =>
+    [group.group_id, group.group_id ? await getGuardianTasks(group.group_id, ward.athlete_user_id) : null] as const)));
   const wardPath = `/wards/${ward.athlete_user_id}`;
   const hasActiveGroups = ward.groups.some((group) => group.membership_status === "ACTIVE");
   return <AppShell wards><div className="mx-auto max-w-3xl space-y-6">
@@ -58,6 +62,8 @@ export default async function WardPage({ params, searchParams }: {
         <Link href={`/groups/${group.group_id}`} prefetch={false} className="block break-words py-2 text-lg font-semibold underline">{group.name}</Link>
         {group.sport && <p>{group.sport}</p>}
         <p className="text-sm text-muted-foreground">{group.membership_status === "PENDING" ? "Pendiente de activación" : "Membresía activa"}</p>
+        {tasks.get(group.group_id)?.memberships[0] && <MembershipProgress groupId={group.group_id!} member={tasks.get(group.group_id)!.memberships[0]!} audience="guardian" />}
+        {!!tasks.get(group.group_id)?.activations && <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${group.group_id}/members/consent?athlete=${ward.athlete_user_id}`}>Revisar acceso con cuenta propia de {ward.full_name}</Link>}
         {group.membership_status === "ACTIVE" && <Link href={`/groups/${group.group_id}/wards/${ward.athlete_user_id}/history`} prefetch={false} className="inline-block min-h-11 py-2 underline">Ver historial de asistencia</Link>}
       </li>)}</ul>
     </section>

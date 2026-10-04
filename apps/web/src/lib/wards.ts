@@ -82,14 +82,28 @@ export async function getWard(athleteUserId: string) {
   return ward;
 }
 
-export const getGuardianTasks = cache(async (groupId: string) => {
+export const getGuardianOnboarding = cache(async (groupId: string, athleteUserId?: string, page = 1) => {
   const group = await getGroup(groupId);
   if (!group.roles.includes("GUARDIAN")) notFound();
+  if (athleteUserId !== undefined && !isGroupId(athleteUserId)) notFound();
   const client = await createClient();
-  const [consents, activations] = await Promise.all([
-    client.rpc("list_managed_member_consents", { p_group_id: group.id, p_offset: 0 }).select("total_count").limit(1),
-    client.rpc("list_managed_activation_requests", { p_group_id: group.id, p_offset: 0 }).select("total_count").limit(1),
-  ]);
-  if (consents.error || activations.error) throw new Error("No pudimos cargar los consentimientos. Vuelve a intentarlo.");
-  return { consents: consents.data?.[0]?.total_count ?? 0, activations: activations.data?.[0]?.total_count ?? 0 };
+  const { data, error } = await client.rpc("list_membership_onboarding", {
+    p_group_id: group.id, p_as_guardian: true, p_athlete_user_id: athleteUserId, p_offset: (page - 1) * 50,
+  });
+  if (error) throw new Error("No pudimos cargar los consentimientos. Vuelve a intentarlo.");
+  return data ?? [];
+});
+
+export const getGuardianTasks = cache(async (groupId: string, athleteUserId?: string) => {
+  const memberships = await getGuardianOnboarding(groupId, athleteUserId);
+  let consents = memberships.filter(member => member.can_consent).length;
+  // Preserve every actionable pending request, including code enrollments.
+  for (let offset = 50; offset < (memberships[0]?.total_count ?? 0); offset += 50) {
+    const rows = await getGuardianOnboarding(groupId, athleteUserId, offset / 50 + 1);
+    consents += rows.filter(member => member.can_consent).length;
+  }
+  const client = await createClient();
+  const activations = await client.rpc("list_managed_activation_requests", { p_group_id: groupId, p_offset: 0, p_athlete_user_id: athleteUserId }).select("total_count").limit(1);
+  if (activations.error) throw new Error("No pudimos cargar los consentimientos. Vuelve a intentarlo.");
+  return { consents, activations: activations.data?.[0]?.total_count ?? 0, memberships };
 });

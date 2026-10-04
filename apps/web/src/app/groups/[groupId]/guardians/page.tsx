@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
 import { GuardianForm } from "./guardian-form";
 
 export const metadata = { title: "Registrar apoderado" };
 export default async function GuardiansPage({ params, searchParams }: {
-  params: Promise<{ groupId: string }>; searchParams: Promise<{ q?: string; page?: string }>;
+  params: Promise<{ groupId: string }>; searchParams: Promise<{ q?: string; page?: string; membership?: string }>;
 }) {
   const group = await getGroup((await params).groupId);
   if (!group.roles.includes("ADMIN")) notFound();
@@ -14,6 +15,19 @@ export default async function GuardiansPage({ params, searchParams }: {
   const search = typeof query.q === "string" ? query.q.trim().slice(0, 120) : "";
   const page = typeof query.page === "string" && /^[1-9][0-9]{0,4}$/.test(query.page) ? Number(query.page) : 1;
   const supabase = await createClient();
+  if (query.membership !== undefined) {
+    if (!isGroupId(query.membership)) notFound();
+    const { data: context, error: contextError } = await supabase.rpc("list_membership_onboarding", { p_group_id: group.id, p_membership_id: query.membership });
+    if (contextError) throw new Error("No pudimos cargar el deportista. Vuelve a intentarlo.");
+    const athlete = context?.[0];
+    if (!athlete?.is_minor) notFound();
+    return <>
+      <h1 className="text-2xl font-semibold">Vincular apoderado de {athlete.full_name}</h1>
+      <p>Deportista seleccionado en {group.name}. El apoderado otorga su propio consentimiento.</p>
+      <GuardianForm groupId={group.id} athletes={[{ user_id: athlete.athlete_user_id, full_name: athlete.full_name }]} selectedAthleteId={athlete.athlete_user_id} />
+      <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${group.id}/members/pending?membership=${athlete.membership_id}`}>Volver al estado de incorporación</Link>
+    </>;
+  }
   const { data, error } = await supabase.rpc("list_guardianship_athletes", { p_group_id: group.id, p_search: search, p_offset: (page - 1) * 50 });
   if (error) throw new Error("No pudimos cargar los deportistas. Vuelve a intentarlo.");
   const pageUrl = (value: number) => `?${new URLSearchParams({ q: search, page: String(value) })}`;

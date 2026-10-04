@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
-import { groupHomePath } from "@/lib/groups";
+import { PendingJoinRequests } from "@/app/groups/[groupId]/members/pending/membership-review";
+import { groupHomePath, getMyPendingMemberships } from "@/lib/groups";
 
 export const metadata: Metadata = {
   title: "Bienvenida",
@@ -38,6 +39,7 @@ export default async function WelcomePage() {
     .eq("auth_user_id", user.id)
     .single<{ full_name: string; birthdate: string | null }>();
 
+  const pending = await getMyPendingMemberships();
   const firstName = profile?.full_name?.split(" ")[0] ?? "";
 
   return (
@@ -47,8 +49,7 @@ export default async function WelcomePage() {
           {firstName ? `¡Hola, ${firstName}!` : "¡Bienvenido/a a Asisteam!"}
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Tu cuenta está lista. Para comenzar, crea un grupo o únete a uno
-          existente con un código de invitación.
+          {pending.length ? "Tu cuenta está lista y tus solicitudes siguen guardadas. Revisa quién debe completar cada paso." : "Tu cuenta está lista. Para comenzar, crea un grupo o únete a uno existente con un código de invitación."}
         </p>
       </div>
 
@@ -60,6 +61,8 @@ export default async function WelcomePage() {
         </p>
       )}
 
+      <PendingJoinRequests memberships={pending} />
+      {pending.length > 0 && <h2 className="text-xl font-semibold">Otros grupos</h2>}
       <div className="grid w-full gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader>

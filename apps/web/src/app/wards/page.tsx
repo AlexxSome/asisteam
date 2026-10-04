@@ -1,3 +1,4 @@
+import { MembershipProgress } from "@/app/groups/[groupId]/members/pending/membership-review";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ActionLink } from "@/components/ui/button";
 import { AppShell } from "@/components/app-shell";
@@ -23,7 +24,7 @@ export default async function WardsPage({ searchParams }: {
       const active = group.membership_status === "ACTIVE";
       const [attendance, tasks] = await Promise.all([
         active ? getWardAttendanceHistory(group.group_id, ward.athlete_user_id, attendancePeriodFilterSchema.parse({ period: "month" }), 1) : null,
-        getGuardianTasks(group.group_id),
+        getGuardianTasks(group.group_id, ward.athlete_user_id),
       ]);
       return { group, attendance, tasks };
     }));
@@ -63,9 +64,10 @@ export default async function WardsPage({ searchParams }: {
               {attendance?.history ? <AttendanceSummary history={attendance.history} /> : attendance?.error && <p role="alert">{attendance.error}</p>}
               <Link href={`/groups/${group.group_id}/wards/${ward.athlete_user_id}/history?period=month`} prefetch={false} className="inline-flex min-h-11 items-center text-sm underline">Ver historial de {ward.full_name} en {group.name}</Link>
             </>}
+            {tasks?.memberships[0] && <MembershipProgress groupId={group.group_id!} member={tasks.memberships[0]} audience="guardian" />}
             {tasks && (tasks.consents > 0 || tasks.activations > 0) && <div className="rounded-md bg-muted p-3 text-sm">
-              <p>En este grupo · Altas por consentir: {tasks.consents} · Solicitudes de activación de cuenta: {tasks.activations}.</p>
-              <Link href={`/groups/${group.group_id}/members/consent`} className="inline-flex min-h-11 items-center underline">Revisar consentimientos y activaciones</Link>
+              <p>Para {ward.full_name} en este grupo · Tratamiento de datos pendiente: {tasks.consents} · Solicitudes de activación de cuenta: {tasks.activations}.</p>
+              <Link href={`/groups/${group.group_id}/members/consent?athlete=${ward.athlete_user_id}`} className="inline-flex min-h-11 items-center underline">Revisar consentimientos y activaciones</Link>
             </div>}
           </li>)}
         </ul>

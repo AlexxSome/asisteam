@@ -47,3 +47,11 @@ it("muestra el duplicado y conserva el formulario para corregir", async () => {
   expect((await screen.findByRole("alert")).textContent).toContain("ya está registrado");
   expect(screen.queryByRole("status")).toBeNull();
 });
+
+it("preselecciona únicamente una identidad incluida en el contexto autorizado", () => {
+  render(<GuardianForm groupId="group-id" athletes={[athlete]} selectedAthleteId={athlete.user_id} />);
+  expect((screen.getByLabelText("Deportista menor de edad") as HTMLSelectElement).value).toBe(athlete.user_id);
+  cleanup();
+  render(<GuardianForm groupId="group-id" athletes={[athlete]} selectedAthleteId="foreign-athlete" />);
+  expect((screen.getByLabelText("Deportista menor de edad") as HTMLSelectElement).value).toBe("");
+});

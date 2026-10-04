@@ -2062,6 +2062,10 @@ export type Database = {
         Args: { p_accepted: boolean; p_membership_id: string }
         Returns: undefined
       }
+      consent_membership_data: {
+        Args: { p_accepted: boolean; p_membership_id: string }
+        Returns: string
+      }
       consume_invitation_attempt: { Args: { p_key: string }; Returns: boolean }
       create_activity: {
         Args: {
@@ -2277,7 +2281,11 @@ export type Database = {
         }[]
       }
       list_managed_activation_requests: {
-        Args: { p_group_id: string; p_offset?: number }
+        Args: {
+          p_athlete_user_id?: string
+          p_group_id: string
+          p_offset?: number
+        }
         Returns: {
           full_name: string
           membership_id: string
@@ -2293,6 +2301,32 @@ export type Database = {
           full_name: string
           membership_id: string
           relationship: string
+          total_count: number
+        }[]
+      }
+      list_membership_onboarding: {
+        Args: {
+          p_as_guardian?: boolean
+          p_athlete_user_id?: string
+          p_group_id?: string
+          p_membership_id?: string
+          p_offset?: number
+        }
+        Returns: {
+          account_status: string
+          athlete_user_id: string
+          can_consent: boolean
+          capacity_block: string
+          full_name: string
+          group_id: string
+          group_name: string
+          guardian_linked: boolean
+          guardian_ready: boolean
+          is_minor: boolean
+          membership_id: string
+          membership_status: string
+          relationship: string
+          requires_managed_consent: boolean
           total_count: number
         }[]
       }

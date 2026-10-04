@@ -48,33 +48,33 @@ export function AccountActivationConsent({ requestId, fullName, relationship, ap
   </section>;
 }
 
-export function ManagedConsentForm({ membershipId, fullName, relationship, billingGroupId }: { membershipId: string; fullName: string; relationship: string; billingGroupId?: string }) {
+export function ManagedConsentForm({ membershipId, fullName, relationship, billingGroupId, managedEnrollment = true }: { membershipId: string; fullName: string; relationship: string; billingGroupId?: string; managedEnrollment?: boolean }) {
   const router = useRouter();
   const [accepted, setAccepted] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>();
   const [errorCode, setErrorCode] = useState<string>();
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<"ACTIVE" | "PENDING">();
   return <form className="space-y-4 rounded-md border p-5" onSubmit={async event => {
     event.preventDefault(); setPending(true); setError(undefined); setErrorCode(undefined);
     try {
       const result = await consentManagedMember({ membership_id: membershipId, accepted });
       if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
-      else { setDone(true); router.refresh(); }
+      else { setDone(result.membershipStatus); router.refresh(); }
     } catch { setError("No pudimos confirmar el consentimiento. Vuelve a intentarlo."); }
     finally { setPending(false); }
   }}>
     <h2 className="text-lg font-semibold">{fullName}</h2>
     <p>Vínculo registrado: {relationship}</p>
-    {done ? <p role="status">Consentimiento registrado. Tu pupilo ya está activo en el grupo.</p> : <>
-      <p>Autorizas a Asisteam a tratar el nombre, fecha de nacimiento e historial de asistencia de tu pupilo para gestionar su participación en el grupo. La cuenta permanece gestionada, sin credenciales propias. Esta autorización no habilita fotos ni la activación de una cuenta con contraseña.</p>
+    {done ? <p role="status">{done === "ACTIVE" ? "Consentimiento registrado. Tu pupilo ya está activo en el grupo; su cuenta sigue gestionada." : "Consentimiento registrado. Falta la aprobación del administrador para activar su membresía. No repitas el alta."}</p> : <>
+      <p>Autorizas a Asisteam a tratar el nombre, fecha de nacimiento e historial de asistencia de tu pupilo para gestionar su participación en el grupo. {managedEnrollment ? "La cuenta permanece gestionada, sin credenciales propias. La membresía se activa si hay cupo." : "La incorporación por código queda pendiente de aprobación del administrador después de consentir."} Esta autorización no habilita fotos ni la activación de una cuenta con contraseña.</p>
       <p className="text-sm text-muted-foreground">Versión del consentimiento: {MANAGED_CONSENT_TERMS_VERSION}. Puedes solicitar la revocación a soporte.</p>
       <label className="flex min-h-11 items-start gap-3"><input type="checkbox" className="mt-1 size-5 shrink-0" checked={accepted} onChange={event => setAccepted(event.target.checked)} />
         Confirmo que soy apoderado de {fullName} y autorizo el tratamiento de sus datos para este fin.
       </label>
       {error && <CapacityError error={{ code: errorCode, message: error }} groupId={billingGroupId} />}
       <button disabled={!accepted || pending} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">
-        {pending ? "Guardando…" : "Consentir y activar al deportista"}
+        {pending ? "Guardando…" : managedEnrollment ? "Consentir y activar membresía" : "Guardar consentimiento de datos"}
       </button>
     </>}
   </form>;

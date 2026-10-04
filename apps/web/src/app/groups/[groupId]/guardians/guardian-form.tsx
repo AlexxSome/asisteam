@@ -8,11 +8,11 @@ import { GUARDIANSHIP_ERROR_MESSAGES, guardianshipSchema, type GuardianshipInput
 import { createGuardianship, type CreateGuardianshipResult } from "./actions";
 
 const fieldClass = "min-h-11 w-full rounded-md border bg-background px-3 py-2";
-export function GuardianForm({ groupId, athletes }: { groupId: string; athletes: { user_id: string; full_name: string }[] }) {
+export function GuardianForm({ groupId, athletes, selectedAthleteId }: { groupId: string; athletes: { user_id: string; full_name: string }[]; selectedAthleteId?: string }) {
   const [error, setError] = useState<string>();
   const [created, setCreated] = useState<Extract<CreateGuardianshipResult, { guardianshipId: string }>>();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<GuardianshipInput>({
-    resolver: zodResolver(guardianshipSchema), defaultValues: { athlete_user_id: "", full_name: "", email: "", relationship: "" },
+    resolver: zodResolver(guardianshipSchema), defaultValues: { athlete_user_id: athletes.some(athlete => athlete.user_id === selectedAthleteId) ? selectedAthleteId : "", full_name: "", email: "", relationship: "" },
   });
   const submit = handleSubmit(async values => {
     setError(undefined);
@@ -28,7 +28,7 @@ export function GuardianForm({ groupId, athletes }: { groupId: string; athletes:
       ? <p>Invitación enviada. El apoderado puede registrarse o acceder con la cuenta del email indicado.</p>
       : <p role="alert">El vínculo quedó guardado, pero no se confirmó el envío del correo. Revisa las invitaciones para reenviar la pendiente o enviar una nueva con rol Apoderado. No repitas el registro del vínculo.</p>}
     <Link href={`/groups/${groupId}/invitations/new`} className="block underline">Revisar invitaciones</Link>
-    <Link href={`/groups/${groupId}`} className="inline-flex min-h-11 items-center underline">Volver al grupo</Link>
+    <Link href={`/groups/${groupId}/members/pending`} className="inline-flex min-h-11 items-center underline">Revisar estado de incorporación</Link>
   </section>;
   return <form className="max-w-xl space-y-4" onSubmit={submit} noValidate>
     <div className="space-y-2"><label htmlFor="guardian-athlete">Deportista menor de edad</label>

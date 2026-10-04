@@ -30,7 +30,7 @@ export async function reviewManagedActivation(input: unknown): Promise<{ success
   } catch { return fail("unavailable"); }
 }
 
-export async function consentManagedMember(input: unknown): Promise<{ success: true } | { error: { code: string; message: string; details: Record<string, never> } }> {
+export async function consentManagedMember(input: unknown): Promise<{ success: true; membershipStatus: "ACTIVE" | "PENDING" } | { error: { code: string; message: string; details: Record<string, never> } }> {
   const fail = (code: string) => ({ error: { code, message: MANAGED_MEMBER_ERROR_MESSAGES[code] ?? MANAGED_MEMBER_ERROR_MESSAGES.unavailable!, details: {} } });
   const parsed = managedConsentSchema.safeParse(input);
   if (!parsed.success) return fail("consent_required");
@@ -38,11 +38,15 @@ export async function consentManagedMember(input: unknown): Promise<{ success: t
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("authentication_required");
   try {
-    const { error } = await supabase.rpc("consent_managed_member", {
+    const { data, error } = await supabase.rpc("consent_membership_data", {
       p_membership_id: parsed.data.membership_id, p_accepted: parsed.data.accepted,
     });
     if (error) return fail(Object.hasOwn(MANAGED_MEMBER_ERROR_MESSAGES, error.message) ? error.message : "unavailable");
+    if (data !== "ACTIVE" && data !== "PENDING") return fail("unavailable");
     revalidatePath("/groups/[groupId]", "layout");
-    return { success: true };
+    revalidatePath("/wards", "layout");
+    revalidatePath("/welcome");
+    revalidatePath("/join");
+    return { success: true, membershipStatus: data };
   } catch { return fail("unavailable"); }
 }
