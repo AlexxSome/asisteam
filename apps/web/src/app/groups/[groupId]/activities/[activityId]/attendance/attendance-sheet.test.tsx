@@ -14,6 +14,7 @@ const error = { error: { code: "failed", message: "Falló el guardado", details:
 const controls = (name: string) => within(screen.getByRole("group", { name: `Asistencia de ${name}` }));
 beforeEach(() => {
   vi.resetAllMocks();
+  Element.prototype.scrollIntoView = vi.fn();
   actions.saveAttendance.mockImplementation(async (_group, _activity, records) => ({ records }));
   actions.clearAttendance.mockResolvedValue({ cleared: true });
 });
@@ -43,6 +44,7 @@ describe("toma de asistencia", () => {
     render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
     await user.tab(); // búsqueda
     await user.tab(); // acción en lote
+    await user.tab(); // nota
     await user.tab(); // presente
     const present = controls("Ana").getByRole("button", { name: "Presente" });
     expect(document.activeElement).toBe(present);
@@ -61,7 +63,7 @@ describe("toma de asistencia", () => {
     await user.click(controls("Ben").getByRole("button", { name: "Ausente" }));
     expect(actions.clearAttendance).toHaveBeenCalledWith(group, activity, ben.membership_id);
     expect(actions.saveAttendance).not.toHaveBeenCalled();
-    expect(screen.getByText("Registro desmarcado.")).toBeTruthy();
+    expect(screen.getByText(/Registro desmarcado\./)).toBeTruthy();
     expect(screen.getByText(/Sin marcar 1/)).toBeTruthy();
   });
   it("cambiar estado conserva nota; editar nota envía texto explícito", async () => {
@@ -70,7 +72,7 @@ describe("toma de asistencia", () => {
     render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ben]} />);
     await user.click(controls("Ben").getByRole("button", { name: "Atrasado" }));
     expect(actions.updateAttendance).toHaveBeenCalledWith(group, activity, ben.membership_id, { status: "LATE" });
-    await user.click(screen.getByText("Nota (registrada)"));
+    await user.click(screen.getByRole("button", { name: "Nota de Ben (registrada)" }));
     const note = screen.getByRole("textbox", { name: "Nota de Ben" });
     expect((note as HTMLTextAreaElement).value).toBe("Nota existente");
     await user.clear(note);
@@ -88,7 +90,7 @@ describe("toma de asistencia", () => {
     await user.click(controls("Ben").getByRole("button", { name: "Justificado" }));
     expect(actions.updateAttendance).toHaveBeenCalledWith(group, activity, ben.membership_id, { status: "EXCUSED" });
     expect(controls("Ben").getByRole("button", { name: "Ausente" }).getAttribute("aria-pressed")).toBe("true");
-    await user.click(screen.getByText("Nota (registrada)"));
+    await user.click(screen.getByRole("button", { name: "Nota de Ben (registrada)" }));
     expect((screen.getByRole("textbox", { name: "Nota de Ben" }) as HTMLTextAreaElement).value).toBe(ben.note);
     expect(screen.getByRole("alert").textContent).toBe("Falló el guardado");
   });
@@ -99,7 +101,7 @@ describe("toma de asistencia", () => {
     await user.type(screen.getByRole("searchbox"), "Ben");
     await user.click(screen.getByRole("button", { name: "Marcar todos como Presente" }));
     expect(actions.saveAttendance).not.toHaveBeenCalled();
-    expect(screen.getByRole("group", { name: "Confirmar presentes" })).toBeTruthy();
+    expect(screen.getByRole("group", { name: "Confirmar presentes" }).textContent).toContain("incluidos los que no aparecen en esta búsqueda o página");
     expect(screen.queryByRole("alertdialog")).toBeNull();
     await user.click(screen.getByRole("button", { name: "Confirmar" }));
     expect(actions.saveAttendance).toHaveBeenCalledWith(group, activity, [{ membership_id: ana.membership_id, status: "PRESENT" }], true);
@@ -126,7 +128,7 @@ it("la confirmación inline recibe foco, permite Tab fuera y Escape devuelve al 
   const cancel = screen.getByRole("button", { name: "Cancelar" });
   expect(document.activeElement).toBe(cancel);
   await user.tab();
-  expect(document.activeElement).toBe(controls("Ana").getByRole("button", { name: "Presente" }));
+  expect(document.activeElement).toBe(screen.getByRole("button", { name: "Nota de Ana (opcional)" }));
   await user.tab({ shift: true });
   await user.keyboard("{Escape}");
   expect(screen.queryByRole("group", { name: "Confirmar presentes" })).toBeNull();
@@ -149,7 +151,7 @@ it("bloquea la confirmación duplicada y devuelve foco al resultado cuando ya no
   expect(screen.getByRole("group", { name: "Confirmar presentes" })).toBeTruthy();
   await act(async () => finish({ records: [{ membership_id: ana.membership_id, status: "PRESENT", note: null }] }));
   expect(screen.queryByRole("group", { name: "Confirmar presentes" })).toBeNull();
-  expect(document.activeElement).toBe(screen.getByRole("status"));
+  expect(document.activeElement).toBe(screen.getByRole("status", { name: "Resultado del guardado masivo" }));
 });
 
 it("COACH corrige estados sin notas ni desmarcar la convocatoria", async () => {
@@ -193,7 +195,7 @@ it("conserva el borrador de una nota si la red rechaza el guardado", async () =>
   let rejectSave!: () => void;
   actions.updateAttendance.mockImplementation(() => new Promise((_resolve, reject) => { rejectSave = () => reject(new Error("network")); }));
   render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ben]} />);
-  await user.click(screen.getByText("Nota (registrada)"));
+  await user.click(screen.getByRole("button", { name: "Nota de Ben (registrada)" }));
   const note = screen.getByRole("textbox", { name: "Nota de Ben" }) as HTMLTextAreaElement;
   await user.clear(note); await user.type(note, "Borrador que quiero conservar");
   const save = screen.getByRole("button", { name: "Guardar nota" });
@@ -214,4 +216,70 @@ it("limpia una búsqueda vacía y devuelve el foco a la búsqueda", async () => 
   expect(document.activeElement).toBe(search);
   expect((search as HTMLInputElement).value).toBe("");
   expect(controls("Ana")).toBeTruthy();
+});
+
+it("mantiene feedback independiente al guardar dos filas simultáneas", async () => {
+  const user = userEvent.setup();
+  const other = { ...ben, status: null, note: null };
+  let finishAna!: (result: unknown) => void;
+  let finishBen!: (result: unknown) => void;
+  actions.saveAttendance.mockImplementation((_group, _activity, records) => new Promise(resolve => {
+    if (records[0].membership_id === ana.membership_id) finishAna = resolve;
+    else finishBen = resolve;
+  }));
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana, other]} />);
+  await user.click(controls("Ana").getByRole("button", { name: "Presente" }));
+  await user.click(controls("Ben").getByRole("button", { name: "Atrasado" }));
+  expect(screen.getByRole("status", { name: "Guardado de Ana" }).textContent).toContain("Guardando…");
+  expect(screen.getByRole("status", { name: "Guardado de Ben" }).textContent).toContain("Guardando…");
+  await act(async () => finishAna(error));
+  await act(async () => finishBen({ records: [{ membership_id: ben.membership_id, status: "LATE" }] }));
+  const anaRow = controls("Ana").getByRole("button", { name: "Presente" }).closest("li")!;
+  const benRow = controls("Ben").getByRole("button", { name: "Atrasado" }).closest("li")!;
+  expect(within(anaRow).getByRole("alert").textContent).toBe("Falló el guardado");
+  expect(within(anaRow).getByRole("status").textContent).toBe("Sin marcar · Sin confirmar");
+  expect(within(benRow).getByRole("status").textContent).toBe("Atrasado · Guardado");
+  expect(within(anaRow).getByRole("button", { name: "Presente" }).getAttribute("aria-pressed")).toBe("false");
+});
+
+it("conserva estado y nota confirmados al paginar, buscar sin resultados y limpiar", async () => {
+  const user = userEvent.setup();
+  const roster = [ben, ...academyRows.slice(0, 50)];
+  actions.updateAttendance.mockResolvedValue({ records: [{ membership_id: ben.membership_id, status: "PRESENT", note: "Nota confirmada" }] });
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={roster} />);
+  await user.click(controls("Ben").getByRole("button", { name: "Presente" }));
+  await user.click(screen.getByRole("button", { name: "Siguiente" }));
+  expect(document.activeElement).toBe(screen.getByRole("list", { name: "Deportistas" }));
+  expect(screen.queryByRole("group", { name: "Asistencia de Ben" })).toBeNull();
+  await user.click(screen.getByRole("button", { name: "Anterior" }));
+  await user.type(screen.getByRole("searchbox"), "Sin coincidencias");
+  expect(screen.getByRole("heading", { name: "Sin resultados para esta búsqueda" })).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: "Limpiar búsqueda" }));
+  expect(controls("Ben").getByRole("button", { name: "Presente" }).getAttribute("aria-pressed")).toBe("true");
+  expect(screen.getByRole("status", { name: "Guardado de Ben" }).textContent).toContain("Guardado");
+  await user.click(screen.getByRole("button", { name: "Nota de Ben (registrada)" }));
+  expect((screen.getByRole("textbox", { name: "Nota de Ben" }) as HTMLTextAreaElement).value).toBe("Nota confirmada");
+});
+
+it("revela la nota por teclado, asocia el panel y conserva el límite de 500 caracteres", async () => {
+  const user = userEvent.setup();
+  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ben]} />);
+  const toggle = screen.getByRole("button", { name: "Nota de Ben (registrada)" });
+  expect(toggle.getAttribute("aria-expanded")).toBe("false");
+  expect(screen.queryByRole("textbox", { name: "Nota de Ben" })).toBeNull();
+  toggle.focus();
+  await user.keyboard("{Enter}");
+  expect(toggle.getAttribute("aria-expanded")).toBe("true");
+  const note = screen.getByRole("textbox", { name: "Nota de Ben" }) as HTMLTextAreaElement;
+  expect(document.getElementById(toggle.getAttribute("aria-controls")!)?.contains(note)).toBe(true);
+  expect(note.maxLength).toBe(500);
+  await user.clear(note);
+  await user.click(note);
+  await user.paste("x".repeat(500));
+  await user.type(note, "y");
+  expect(note.value).toHaveLength(500);
+  await user.click(toggle);
+  expect(screen.queryByRole("textbox", { name: "Nota de Ben" })).toBeNull();
+  await user.click(toggle);
+  expect(note.value).toHaveLength(500);
 });

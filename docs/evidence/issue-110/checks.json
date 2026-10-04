@@ -1,0 +1,589 @@
+{
+  "measurements": [
+    {
+      "version": "before",
+      "width": 320,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 16,
+        "y": 621,
+        "width": 288,
+        "height": 234,
+        "bottom": 855
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 29,
+          "y": 690,
+          "width": 127,
+          "height": 44,
+          "bottom": 734,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 164,
+          "y": 690,
+          "width": 127,
+          "height": 44,
+          "bottom": 734,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 29,
+          "y": 742,
+          "width": 127,
+          "height": 44,
+          "bottom": 786,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 164,
+          "y": 742,
+          "width": 127,
+          "height": 44,
+          "bottom": 786,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 320,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 16,
+        "y": 497,
+        "width": 288,
+        "height": 178,
+        "bottom": 675
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 29,
+          "y": 562,
+          "width": 129,
+          "height": 44,
+          "bottom": 606,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 162,
+          "y": 562,
+          "width": 129,
+          "height": 44,
+          "bottom": 606,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 29,
+          "y": 610,
+          "width": 129,
+          "height": 44,
+          "bottom": 654,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 162,
+          "y": 610,
+          "width": 129,
+          "height": 44,
+          "bottom": 654,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "before",
+      "width": 375,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 16,
+        "y": 577,
+        "width": 343,
+        "height": 234,
+        "bottom": 811
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 29,
+          "y": 646,
+          "width": 154.5,
+          "height": 44,
+          "bottom": 690,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 191.5,
+          "y": 646,
+          "width": 154.5,
+          "height": 44,
+          "bottom": 690,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 29,
+          "y": 698,
+          "width": 154.5,
+          "height": 44,
+          "bottom": 742,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 191.5,
+          "y": 698,
+          "width": 154.5,
+          "height": 44,
+          "bottom": 742,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 375,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 16,
+        "y": 453,
+        "width": 343,
+        "height": 130,
+        "bottom": 583
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 29,
+          "y": 518,
+          "width": 76.25,
+          "height": 44,
+          "bottom": 562,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 109.25,
+          "y": 518,
+          "width": 76.25,
+          "height": 44,
+          "bottom": 562,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 189.5,
+          "y": 518,
+          "width": 76.25,
+          "height": 44,
+          "bottom": 562,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 269.75,
+          "y": 518,
+          "width": 76.25,
+          "height": 44,
+          "bottom": 562,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "before",
+      "width": 768,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 24,
+        "y": 517,
+        "width": 720,
+        "height": 182,
+        "bottom": 699
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 37,
+          "y": 586,
+          "width": 167.5,
+          "height": 44,
+          "bottom": 630,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 212.5,
+          "y": 586,
+          "width": 167.5,
+          "height": 44,
+          "bottom": 630,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 388,
+          "y": 586,
+          "width": 167.5,
+          "height": 44,
+          "bottom": 630,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 563.5,
+          "y": 586,
+          "width": 167.5,
+          "height": 44,
+          "bottom": 630,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 768,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 24,
+        "y": 441,
+        "width": 720,
+        "height": 130,
+        "bottom": 571
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 37,
+          "y": 506,
+          "width": 170.5,
+          "height": 44,
+          "bottom": 550,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 211.5,
+          "y": 506,
+          "width": 170.5,
+          "height": 44,
+          "bottom": 550,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 386,
+          "y": 506,
+          "width": 170.5,
+          "height": 44,
+          "bottom": 550,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 560.5,
+          "y": 506,
+          "width": 170.5,
+          "height": 44,
+          "bottom": 550,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "before",
+      "width": 1024,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 288,
+        "y": 525,
+        "width": 704,
+        "height": 182,
+        "bottom": 707
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 301,
+          "y": 594,
+          "width": 163.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 472.5,
+          "y": 594,
+          "width": 163.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 644,
+          "y": 594,
+          "width": 163.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 815.5,
+          "y": 594,
+          "width": 163.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 1024,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 288,
+        "y": 449,
+        "width": 704,
+        "height": 130,
+        "bottom": 579
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 301,
+          "y": 514,
+          "width": 166.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 471.5,
+          "y": 514,
+          "width": 166.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 642,
+          "y": 514,
+          "width": 166.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 812.5,
+          "y": 514,
+          "width": 166.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "before",
+      "width": 1440,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 368,
+        "y": 525,
+        "width": 960,
+        "height": 182,
+        "bottom": 707
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 381,
+          "y": 594,
+          "width": 227.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 616.5,
+          "y": 594,
+          "width": 227.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 852,
+          "y": 594,
+          "width": 227.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 1087.5,
+          "y": 594,
+          "width": 227.5,
+          "height": 44,
+          "bottom": 638,
+          "textOverflow": false
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 1440,
+      "height": 812,
+      "overflow": false,
+      "h1": 1,
+      "firstRow": {
+        "x": 368,
+        "y": 449,
+        "width": 960,
+        "height": 130,
+        "bottom": 579
+      },
+      "controls": [
+        {
+          "label": "Presente",
+          "x": 381,
+          "y": 514,
+          "width": 230.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        },
+        {
+          "label": "Ausente",
+          "x": 615.5,
+          "y": 514,
+          "width": 230.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        },
+        {
+          "label": "Atrasado",
+          "x": 850,
+          "y": 514,
+          "width": 230.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        },
+        {
+          "label": "Justificado",
+          "x": 1084.5,
+          "y": 514,
+          "width": 230.5,
+          "height": 44,
+          "bottom": 558,
+          "textOverflow": false
+        }
+      ]
+    }
+  ],
+  "long": {
+    "width": 375,
+    "height": 812,
+    "overflow": false,
+    "h1": 1,
+    "firstRow": {
+      "x": 16,
+      "y": 509,
+      "width": 343,
+      "height": 150,
+      "bottom": 659
+    },
+    "controls": [
+      {
+        "label": "Presente",
+        "x": 29,
+        "y": 594,
+        "width": 76.25,
+        "height": 44,
+        "bottom": 638,
+        "textOverflow": false
+      },
+      {
+        "label": "Ausente",
+        "x": 109.25,
+        "y": 594,
+        "width": 76.25,
+        "height": 44,
+        "bottom": 638,
+        "textOverflow": false
+      },
+      {
+        "label": "Atrasado",
+        "x": 189.5,
+        "y": 594,
+        "width": 76.25,
+        "height": 44,
+        "bottom": 638,
+        "textOverflow": false
+      },
+      {
+        "label": "Justificado",
+        "x": 269.75,
+        "y": 594,
+        "width": 76.25,
+        "height": 44,
+        "bottom": 638,
+        "textOverflow": false
+      }
+    ]
+  },
+  "keyboard": {
+    "outline": "solid",
+    "outlineWidth": "2px"
+  },
+  "checks": [
+    "pending/saved/error per row",
+    "network failure rollback",
+    "note reveal and save",
+    "no results and clear focus",
+    "confirmed selection through pagination",
+    "pagination focus to roster",
+    "filtered bulk scope and Escape",
+    "COACH no notes"
+  ]
+}
