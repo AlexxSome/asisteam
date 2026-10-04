@@ -1,0 +1,14 @@
+[
+  {
+    "action": "Enter en Gestionar plan",
+    "url": "http://127.0.0.1:3108/groups/81eb2e11-717c-403f-899a-0eef8d304439/billing"
+  },
+  {
+    "action": "Enter en Continuar configuración",
+    "url": "http://127.0.0.1:3108/groups/81eb2e11-717c-403f-899a-0eef8d304439/settings"
+  },
+  {
+    "action": "Enter en Volver al inicio del grupo",
+    "url": "http://127.0.0.1:3108/groups/81eb2e11-717c-403f-899a-0eef8d304439"
+  }
+]

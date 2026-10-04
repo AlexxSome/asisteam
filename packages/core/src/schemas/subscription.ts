@@ -21,6 +21,12 @@ export const billingSummarySchema = z.object({
   overdue_amount_clp: z.number().int().nonnegative(), total_invoices: z.number().int().nonnegative(), page: z.number().int().positive(),
 });
 export type BillingSummary = z.infer<typeof billingSummarySchema>;
+export const groupCapacitySchema = billingSummarySchema.pick({ active_athletes: true, athlete_limit: true });
+export type GroupCapacity = z.infer<typeof groupCapacitySchema>;
+export const SUBSCRIPTION_CAPACITY_MESSAGES = {
+  admin: "El grupo no tiene cupos disponibles para activar deportistas. Revisa el plan y el estado de su primer pago en Suscripción.",
+  member: "El grupo no tiene cupos disponibles para activar deportistas. Contacta a tu administrador para que revise la incorporación.",
+} as const;
 export const SUBSCRIPTION_STATUS_LABELS: Record<z.infer<typeof subscriptionStatusSchema>, string> = {
   CREATING: "Preparando suscripción", PENDING: "Pendiente de autorización", AUTHORIZED: "Cobro recurrente autorizado",
   PAUSED: "Cobros pausados", CANCELLED: "Renovación cancelada", FAILED: "No se pudo iniciar",

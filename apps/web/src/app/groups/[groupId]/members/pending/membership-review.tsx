@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
+import { CapacityError } from "@/components/group-capacity";
 import { membershipApprovalBlock, MEMBERSHIP_REVIEW_ERROR_MESSAGES, type PendingMembership } from "@asisteam/core";
 import { reviewMembership } from "./actions";
 
@@ -11,13 +12,14 @@ export function MembershipReview({ groupId, member }: { groupId: string; member:
   const reasonId = useId();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>();
+  const [errorCode, setErrorCode] = useState<string>();
   const [result, setResult] = useState<"approve" | "reject">();
   const block = membershipApprovalBlock(member);
   async function decide(decision: "approve" | "reject") {
-    setPending(true); setError(undefined);
+    setPending(true); setError(undefined); setErrorCode(undefined);
     try {
       const response = await reviewMembership({ group_id: groupId, membership_id: member.membership_id, decision });
-      if ("error" in response) setError(response.error.message);
+      if ("error" in response) { setError(response.error.message); setErrorCode(response.error.code); }
       else { setResult(decision); router.refresh(); }
     } catch { setError(MEMBERSHIP_REVIEW_ERROR_MESSAGES.unavailable); }
     finally { setPending(false); }
@@ -31,7 +33,7 @@ export function MembershipReview({ groupId, member }: { groupId: string; member:
       : "Incorporación rechazada. La membresía queda inactiva y conserva su historial."}</p> : <>
       {block && <p id={reasonId} className="text-sm">{block}</p>}
       {member.is_minor && !member.guardian_linked && <Link className="block underline" href={`/groups/${groupId}/guardians`}>Vincular apoderado</Link>}
-      {error && <p role="alert" className="text-destructive">{error}</p>}
+      {error && <CapacityError error={{ code: errorCode, message: error }} groupId={groupId} />}
       <div className="flex flex-wrap gap-3" aria-busy={pending}>
         <button type="button" disabled={pending || !!block} aria-describedby={block ? reasonId : undefined}
           onClick={() => decide("approve")} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">Aprobar</button>

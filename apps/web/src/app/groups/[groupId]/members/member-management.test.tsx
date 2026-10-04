@@ -82,3 +82,12 @@ it("COACH se puede desactivar y no ofrece volver a asignar el mismo rol", () => 
   expect(screen.queryByRole("button", { name: "Asignar rol Entrenador" })).toBeNull();
   expect(screen.getByRole("button", { name: "Desactivar" })).toBeTruthy();
 });
+
+it("reactivación sin cupos guía al ADMIN a su plan sin anunciar éxito", async () => {
+  mock.status.mockResolvedValue({ error: { code: "subscription_athlete_limit", message: "Solicita al administrador" } });
+  render(<MemberManagement groupId={groupId} member={{ ...member, status: "INACTIVE" }} />);
+  await userEvent.click(screen.getByRole("button", { name: "Reactivar" }));
+  expect((await screen.findByRole("link", { name: "Gestionar plan" })).getAttribute("href")).toBe(`/groups/${groupId}/billing`);
+  expect(screen.queryByRole("status")).toBeNull();
+  expect(mock.refresh).not.toHaveBeenCalled();
+});

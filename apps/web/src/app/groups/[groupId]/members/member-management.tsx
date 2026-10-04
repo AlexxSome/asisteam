@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CapacityError } from "@/components/group-capacity";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ACCOUNT_STATUS_LABELS, MEMBERSHIP_ROLE_LABELS, MEMBERSHIP_STATUS_LABELS, MEMBER_MANAGEMENT_ERRORS, managedMemberEditSchema, type GroupMember, type ManagedMemberEdit } from "@asisteam/core";
@@ -15,6 +16,7 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string>();
   const [error, setError] = useState<string>();
+  const [errorCode, setErrorCode] = useState<string>();
   const [birthdatePending, setBirthdatePending] = useState(false);
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ManagedMemberEdit>({
     resolver: zodResolver(managedMemberEditSchema),
@@ -24,29 +26,29 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
     reset({ full_name: member.full_name, email: member.email ?? "", phone: member.phone, birthdate: member.birthdate ?? "" });
   }, [member.full_name, member.email, member.phone, member.birthdate, reset]);
   async function changeStatus() {
-    setSaving(true); setError(undefined); setMessage(undefined);
+    setSaving(true); setError(undefined); setErrorCode(undefined); setMessage(undefined);
     try {
       const result = await changeMemberStatus({ group_id: groupId, membership_id: member.membership_id,
         action: member.status === "ACTIVE" ? "deactivate" : "reactivate" });
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
       else { setMessage(member.status === "ACTIVE" ? "Integrante desactivado. Su historial se conserva." : "Integrante reactivado. Su historial se conserva."); setConfirming(false); router.refresh(); }
     } catch { setError(MEMBER_MANAGEMENT_ERRORS.unavailable); }
     finally { setSaving(false); }
   }
   async function assignCoach() {
-    setSaving(true); setError(undefined); setMessage(undefined);
+    setSaving(true); setError(undefined); setErrorCode(undefined); setMessage(undefined);
     try {
       const result = await assignMemberCoach({ group_id: groupId, membership_id: member.membership_id });
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
       else { setMessage("Rol Entrenador asignado. Sus otros roles e historial se conservan."); router.refresh(); }
     } catch { setError(MEMBER_MANAGEMENT_ERRORS.unavailable); }
     finally { setSaving(false); }
   }
   const saveProfile = handleSubmit(async profile => {
-    setSaving(true); setError(undefined); setMessage(undefined); setBirthdatePending(false);
+    setSaving(true); setError(undefined); setErrorCode(undefined); setMessage(undefined); setBirthdatePending(false);
     try {
       const result = await updateManagedMember({ group_id: groupId, membership_id: member.membership_id, profile });
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
       else {
         setBirthdatePending(!!result.birthdatePending);
         setMessage(result.birthdatePending ? "Datos guardados. La fecha conserva su valor anterior hasta la confirmación de un administrador de cada grupo." : "Perfil actualizado en todos sus grupos.");
@@ -57,14 +59,14 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
   });
   const prefix = `member-${member.membership_id}`;
   async function activateAccount() {
-    setError(undefined); setMessage(undefined);
+    setError(undefined); setErrorCode(undefined); setMessage(undefined);
     if (!member.email) {
       setEditing(true); setError(MEMBER_MANAGEMENT_ERRORS.managed_email_required); return;
     }
     setSaving(true);
     try {
       const result = await requestManagedActivation({ group_id: groupId, membership_id: member.membership_id });
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
       else {
         setMessage(result.consentPending
           ? "Solicitud registrada. El apoderado debe autorizarla en Consentimientos de mis pupilos; después se enviará el enlace para crear contraseña."
@@ -109,6 +111,6 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
     {saving && <p role="status">Guardando…</p>}
     {message && <p role="status">{message}</p>}
     {birthdatePending && <Link className="underline" href="/profile/birthdate-requests">Revisar correcciones de fecha</Link>}
-    {error && <p role="alert" className="text-destructive">{error}</p>}
+    {error && <CapacityError error={{ code: errorCode, message: error }} groupId={groupId} />}
   </section>;
 }

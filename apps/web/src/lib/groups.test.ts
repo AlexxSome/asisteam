@@ -6,7 +6,7 @@ vi.mock("react", async (original) => ({ ...await original<typeof import("react")
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, forbidden: () => { throw new Error("403"); }, useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/groups" }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
-import { getGroup, getMyGroups, groupHomePath } from "./groups";
+import { getGroup, getGroupCapacity, getMyGroups, groupHomePath } from "./groups";
 import GroupPage from "@/app/groups/[groupId]/page";
 import GroupSettingsPage from "@/app/groups/[groupId]/settings/page";
 import GroupLayout from "@/app/groups/[groupId]/layout";
@@ -22,9 +22,11 @@ beforeEach(() => {
   mock.getUser.mockResolvedValue({ data: { user: { id: "auth-user" } } });
   mock.order.mockReturnValue({ order: () => Promise.resolve({ data: groups, error: null }) });
   mock.eq.mockReturnValue({ maybeSingle: mock.maybeSingle });
-  mock.from.mockReturnValue({ select: () => ({ order: mock.order, eq: mock.eq }) });
+  mock.from.mockImplementation(table => table === "v_group_activities"
+    ? { select: () => ({ eq: () => ({ limit: async () => ({ data: [], error: null }) }) }) }
+    : { select: () => ({ order: mock.order, eq: mock.eq }) });
   mock.maybeSingle.mockResolvedValue({ data: { ...groups[0], description: null, settings: null, invite_code: "CODE0001" }, error: null });
-  mock.rpc.mockResolvedValue({ data: [], error: null });
+  mock.rpc.mockImplementation(async name => ({ data: name === "get_group_billing" ? { active_athletes: 0, athlete_limit: 0 } : [], error: null }));
 });
 
 describe("contexto de grupos", () => {
@@ -122,5 +124,41 @@ describe("contexto de grupos", () => {
     expect(html).toContain("Guardar cambios");
     expect(html).toContain("Regenerar código");
     expect(html).toContain("CODE0001");
+  });
+});
+
+
+describe("capacidad y primeros pasos", () => {
+  it("proyecta solo capacidad para ADMIN, sin datos de facturación en el aviso", async () => {
+    mock.rpc.mockResolvedValue({ data: { active_athletes: 2, athlete_limit: 50, invoices: [{ amount_clp: 4990 }], subscription: { status: "CANCELLED" } }, error: null });
+    expect(await getGroupCapacity(a)).toEqual({ active_athletes: 2, athlete_limit: 50 });
+    expect(mock.rpc).toHaveBeenCalledWith("get_group_billing", { p_group_id: a, p_page: 1 });
+  });
+  it.each(["ATHLETE", "GUARDIAN", "COACH"])("%s no consulta facturación ni recibe aviso/guía comercial", async role => {
+    mock.maybeSingle.mockResolvedValue({ data: { ...groups[0], roles: [role] }, error: null });
+    expect(await getGroupCapacity(a)).toBeNull();
+    const layout = renderToStaticMarkup(await GroupLayout({ children: null, params: Promise.resolve({ groupId: a }) }));
+    const home = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(layout).not.toContain("Cupos de deportistas");
+    expect(layout).not.toContain(`/groups/${a}/billing`);
+    expect(home).not.toContain("Primeros pasos");
+    expect(mock.rpc).not.toHaveBeenCalled();
+  });
+  it.each([{ data: null, error: { message: "internal" } }, { data: {}, error: null }])("un fallo o DTO inválido no se convierte en cero cupos", async result => {
+    mock.rpc.mockResolvedValue(result);
+    expect(await getGroupCapacity(a)).toBeNull();
+    const html = renderToStaticMarkup(await GroupLayout({ children: null, params: Promise.resolve({ groupId: a }) }));
+    expect(html).toContain("No pudimos comprobar los cupos");
+    expect(html).not.toContain("0 cupos habilitados");
+    expect(html).not.toContain("internal");
+  });
+  it("grupo nuevo muestra el requisito antes de controles de alta y permite continuar configuración", async () => {
+    const home = await GroupPage({ params: Promise.resolve({ groupId: a }) });
+    const html = renderToStaticMarkup(await GroupLayout({ children: home, params: Promise.resolve({ groupId: a }) }));
+    expect(html.indexOf("0 cupos habilitados")).toBeLessThan(html.indexOf("Crear cuenta gestionada"));
+    expect(html).toContain("1 de 4 pasos listos");
+    expect(mock.from).toHaveBeenCalledWith("v_group_activities");
+    expect(mock.from).not.toHaveBeenCalledWith("activities");
+    for (const target of ["settings", "billing", "members", "activities/new"]) expect(html).toContain(`/groups/${a}/${target}`);
   });
 });

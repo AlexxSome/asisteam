@@ -1,12 +1,20 @@
 import Link from "next/link";
-import { getGroup } from "@/lib/groups";
+import { getGroup, getGroupCapacity } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
 import { JoinAsAthlete } from "./join-as-athlete";
+import { GettingStarted } from "./getting-started";
 
 export const metadata = { title: "Inicio del grupo" };
 
 export default async function GroupPage({ params }: { params: Promise<{ groupId: string }> }) {
   const group = await getGroup((await params).groupId);
+  const isAdmin = group.roles.includes("ADMIN");
+  const capacity = isAdmin ? await getGroupCapacity(group.id) : null;
+  const hasActivities = isAdmin ? await (async () => {
+    const client = await createClient();
+    const { data, error } = await client.from("v_group_activities").select("id").eq("group_id", group.id).limit(1);
+    return error || data === null ? null : data.length > 0;
+  })() : null;
   const pending = group.roles.includes("ADMIN")
     ? await (async () => {
       const supabase = await createClient();
@@ -19,6 +27,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
     <header><h1 className="text-2xl font-semibold">{group.name}</h1>
       {group.sport && <p className="mt-2 text-muted-foreground">{group.sport}</p>}
       {group.description && <p className="mt-3 whitespace-pre-wrap">{group.description}</p>}</header>
+    {isAdmin && <GettingStarted groupId={group.id} capacity={capacity} hasActivities={hasActivities} />}
     {group.roles.includes("ADMIN") && <section className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Administración del grupo</h2>
       <p>Código de invitación: <span className="font-mono tracking-widest">{group.invite_code}</span></p>

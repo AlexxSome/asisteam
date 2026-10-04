@@ -96,3 +96,24 @@ describe("configuración de grupo", () => {
     expect(mock.refresh).not.toHaveBeenCalled();
   });
 });
+
+
+it("advierte el primer pago antes de crear, sin agregar un paso obligatorio", () => {
+  render(<GroupForm />);
+  expect(screen.getByRole("complementary", { name: "Antes de crear tu grupo" }).textContent).toContain("0 cupos");
+  expect(screen.getByText(/No hay plan gratuito ni prueba gratuita/)).toBeTruthy();
+  expect(screen.getByRole("button", { name: "Crear grupo" })).toBeTruthy();
+  expect(screen.queryByRole("checkbox")).toBeNull();
+});
+it("ADMIN puede gestionar su plan ante error de cupos y un reintento limpia el enlace", async () => {
+  mock.join.mockResolvedValueOnce({ error: { code: "subscription_athlete_limit", message: "Solicita al administrador" } })
+    .mockResolvedValueOnce({ error: { code: "athlete_birthdate_required", message: "Completa tu fecha" } });
+  render(<JoinAsAthlete groupId="grupo" />);
+  await userEvent.click(screen.getByRole("button", { name: "Agregarme como deportista" }));
+  expect((await screen.findByRole("link", { name: "Gestionar plan" })).getAttribute("href")).toBe("/groups/grupo/billing");
+  expect(screen.getByRole("alert").textContent).not.toContain("Solicita al administrador");
+  expect(mock.refresh).not.toHaveBeenCalled();
+  await userEvent.click(screen.getByRole("button", { name: "Agregarme como deportista" }));
+  await screen.findByRole("link", { name: "Ir a Mi perfil" });
+  expect(screen.queryByRole("link", { name: "Gestionar plan" })).toBeNull();
+});

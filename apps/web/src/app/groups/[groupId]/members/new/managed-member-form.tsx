@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CapacityError } from "@/components/group-capacity";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isMinor, MANAGED_MEMBER_ERROR_MESSAGES, managedMemberSchema, type ManagedMemberInput } from "@asisteam/core";
@@ -10,6 +11,7 @@ import { createManagedMember, type CreateManagedMemberResult } from "./actions";
 const fieldClass = "w-full min-h-11 rounded-md border bg-background px-3 py-2";
 export function ManagedMemberForm({ groupId }: { groupId: string }) {
   const [error, setError] = useState<string>();
+  const [errorCode, setErrorCode] = useState<string>();
   const [created, setCreated] = useState<Extract<CreateManagedMemberResult, { member: unknown }>>();
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<ManagedMemberInput>({
     resolver: zodResolver(managedMemberSchema), shouldUnregister: true,
@@ -18,9 +20,10 @@ export function ManagedMemberForm({ groupId }: { groupId: string }) {
   const minor = isMinor(watch("birthdate"));
   const submit = handleSubmit(async values => {
     setError(undefined);
+    setErrorCode(undefined);
     try {
       const result = await createManagedMember(groupId, values);
-      if ("error" in result) setError(result.error.message);
+      if ("error" in result) { setError(result.error.message); setErrorCode(result.error.code); }
       else setCreated(result);
     } catch { setError(MANAGED_MEMBER_ERROR_MESSAGES.unavailable); }
   });
@@ -72,7 +75,7 @@ export function ManagedMemberForm({ groupId }: { groupId: string }) {
       </label>
       <p id="guardian-authorization-error" className="text-sm text-destructive">{errors.guardian?.authorized?.message ?? errors.guardian?.message}</p>
     </fieldset>}
-    {error && <p role="alert" className="text-destructive">{error}</p>}
+    {error && <CapacityError error={{ code: errorCode, message: error }} groupId={groupId} />}
     <button disabled={isSubmitting} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">
       {isSubmitting ? "Guardando…" : "Crear cuenta gestionada"}
     </button>

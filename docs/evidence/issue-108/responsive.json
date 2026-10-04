@@ -1,0 +1,447 @@
+[
+  {
+    "page": "create",
+    "h1": 1,
+    "newLinks": [],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "page": "create",
+    "h1": 1,
+    "newLinks": [],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "page": "create",
+    "h1": 1,
+    "newLinks": [],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "page": "create",
+    "h1": 1,
+    "newLinks": [],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "page": "create",
+    "h1": 1,
+    "newLinks": [],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "page": "home",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 155.171875
+      },
+      {
+        "height": 44,
+        "text": "Ver suscripción",
+        "width": 99.4921875
+      },
+      {
+        "height": 44,
+        "text": "Crear primera actividad",
+        "width": 151.40625
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "page": "home",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 155.171875
+      },
+      {
+        "height": 44,
+        "text": "Ver suscripción",
+        "width": 99.4921875
+      },
+      {
+        "height": 44,
+        "text": "Crear primera actividad",
+        "width": 151.40625
+      }
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "page": "home",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 155.171875
+      },
+      {
+        "height": 44,
+        "text": "Ver suscripción",
+        "width": 99.4921875
+      },
+      {
+        "height": 44,
+        "text": "Crear primera actividad",
+        "width": 151.40625
+      }
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "page": "home",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 155.171875
+      },
+      {
+        "height": 44,
+        "text": "Ver suscripción",
+        "width": 99.4921875
+      },
+      {
+        "height": 44,
+        "text": "Crear primera actividad",
+        "width": 151.40625
+      }
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "page": "home",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 155.171875
+      },
+      {
+        "height": 44,
+        "text": "Ver suscripción",
+        "width": 99.4921875
+      },
+      {
+        "height": 44,
+        "text": "Crear primera actividad",
+        "width": 151.40625
+      }
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "page": "billing",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 215.4375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 213.0703125
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "page": "billing",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 215.4375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 213.0703125
+      }
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "page": "billing",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 215.4375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 213.0703125
+      }
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "page": "billing",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 215.4375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 213.0703125
+      }
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "page": "billing",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 215.4375
+      },
+      {
+        "height": 44,
+        "text": "Continuar configuración",
+        "width": 213.0703125
+      }
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "page": "managed",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "page": "managed",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      }
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "page": "managed",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      }
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "page": "managed",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      }
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "page": "managed",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      }
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "page": "settings",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 176.859375
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "page": "settings",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 176.859375
+      }
+    ],
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "page": "settings",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 176.859375
+      }
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "page": "settings",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 176.859375
+      }
+    ],
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "page": "settings",
+    "h1": 1,
+    "newLinks": [
+      {
+        "height": 44,
+        "text": "Revisar suscripción",
+        "width": 180.234375
+      },
+      {
+        "height": 44,
+        "text": "Volver al inicio del grupo",
+        "width": 176.859375
+      }
+    ],
+    "scrollWidth": 1440,
+    "width": 1440
+  }
+]
