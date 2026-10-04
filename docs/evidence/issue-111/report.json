@@ -1,0 +1,37 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "height": 10560
+    },
+    {
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 10536
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "height": 10196
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "height": 4645
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 4301
+    }
+  ],
+  "checks": [
+    "320/375/768/1024/1440 and 200%-zoom equivalent reflow (720 CSS px): no horizontal overflow, 50 rows",
+    "global search finds Zeta beyond first 50 and resets page",
+    "empty/out-of-range recovery preserves total and filters",
+    "keyboard opens actions and Escape restores focus; last ADMIN disabled",
+    "clean cancel has no prompt; dirty cancel/link/filter preserve draft; no localStorage PII",
+    "confirmed discard closes editor"
+  ]
+}
