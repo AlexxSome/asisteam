@@ -4,6 +4,7 @@ import { checkinPath, socialLoginContextSchema, SOCIAL_AUTH_ERROR } from "@asist
 import { createClient } from "@/lib/supabase/server";
 import { authCookieOptions } from "@/lib/supabase/cookie-options";
 import { SOCIAL_CALLBACK_PATH, SOCIAL_CONTEXT_COOKIE, socialAuthOrigin } from "@/lib/social-auth";
+import { authPath } from "@/lib/auth-context";
 
 export async function GET(request: Request) {
   const origin = socialAuthOrigin();
@@ -18,6 +19,9 @@ export async function GET(request: Request) {
     const params = new URL(request.url).searchParams;
     const code = params.get("code");
     const context = socialLoginContextSchema.safeParse(JSON.parse(savedContext ?? "null"));
+    if (context.success && context.data.invite_code) {
+      destination = `${authPath("/login", context.data.invite_code)}&social_error=1`;
+    }
     if (context.success && code && code.length <= 4096 && params.getAll("code").length === 1 && !params.has("error")) {
       const supabase = await createClient();
       const { data, error } = await supabase.auth.exchangeCodeForSession(code);

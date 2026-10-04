@@ -1,3 +1,7 @@
+import type { SOCIAL_PROVIDERS } from "@asisteam/core";
+
+export type SocialProviderAvailability = Record<(typeof SOCIAL_PROVIDERS)[number], boolean | null>;
+
 export const SOCIAL_CONTEXT_COOKIE = "asisteam-oauth-context";
 export const SOCIAL_CALLBACK_PATH = "/auth/callback";
 
@@ -14,5 +18,30 @@ export function socialAuthOrigin(): string | null {
     return url.origin;
   } catch {
     return null;
+  }
+}
+
+/** Project only public capability flags; never send the settings response to a client. */
+export async function getSocialProviderAvailability(): Promise<SocialProviderAvailability> {
+  if (!socialAuthOrigin()) return { google: false, apple: false };
+  const unknown = { google: null, apple: null };
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) return unknown;
+    const response = await fetch(`${url}/auth/v1/settings`, {
+      headers: { apikey: key }, cache: "no-store", signal: AbortSignal.timeout(3000),
+    });
+    if (!response.ok) return unknown;
+    const settings: unknown = await response.json();
+    if (!settings || typeof settings !== "object" || !("external" in settings)) return unknown;
+    const external = settings.external;
+    if (!external || typeof external !== "object") return unknown;
+    return {
+      google: "google" in external && typeof external.google === "boolean" ? external.google : null,
+      apple: "apple" in external && typeof external.apple === "boolean" ? external.apple : null,
+    };
+  } catch {
+    return unknown;
   }
 }

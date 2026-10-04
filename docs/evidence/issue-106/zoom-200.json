@@ -1,0 +1,159 @@
+{
+  "nativeZoom": "200%",
+  "baselineWidth": 1512,
+  "baselineDpr": 2,
+  "checks": [
+    {
+      "route": "login",
+      "controls": [
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 312.44140625
+        },
+        {
+          "height": 44,
+          "width": 77.55859375
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 223.203125
+        },
+        {
+          "height": 44,
+          "width": 110.84375
+        }
+      ],
+      "dpr": 4,
+      "h1": "Iniciar sesión",
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "route": "register",
+      "controls": [
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 312.44140625
+        },
+        {
+          "height": 44,
+          "width": 77.55859375
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 133
+        }
+      ],
+      "dpr": 4,
+      "h1": "Crear cuenta",
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "route": "forgot-password",
+      "controls": [
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 194.58203125
+        }
+      ],
+      "dpr": 4,
+      "h1": "Recuperar contraseña",
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    },
+    {
+      "route": "reset-password",
+      "controls": [
+        {
+          "height": 44,
+          "width": 312.44140625
+        },
+        {
+          "height": 44,
+          "width": 77.55859375
+        },
+        {
+          "height": 44,
+          "width": 312.44140625
+        },
+        {
+          "height": 44,
+          "width": 77.55859375
+        },
+        {
+          "height": 44,
+          "width": 398
+        },
+        {
+          "height": 44,
+          "width": 216.65234375
+        },
+        {
+          "height": 44,
+          "width": 194.58203125
+        }
+      ],
+      "dpr": 4,
+      "h1": "Restablecer contraseña",
+      "scale": 1,
+      "scrollWidth": 756,
+      "width": 756
+    }
+  ]
+}

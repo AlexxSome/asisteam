@@ -11,7 +11,7 @@ import { Field } from "@/components/ui/field";
 import { Alert } from "@/components/ui/alert";
 import { requestPasswordRecovery } from "./actions";
 
-export function ForgotPasswordForm() {
+export function ForgotPasswordForm({ inviteCode }: { inviteCode?: string } = {}) {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit, formState: { errors, isSubmitting } } =
@@ -20,7 +20,7 @@ export function ForgotPasswordForm() {
   const submit = handleSubmit(async (values) => {
     setError(null);
     try {
-      const result = await requestPasswordRecovery(values);
+      const result = await requestPasswordRecovery(values, inviteCode);
       setMessage(result.message);
     } catch {
       setError("No pudimos conectar. Revisa tu conexión e inténtalo nuevamente.");
@@ -37,7 +37,7 @@ export function ForgotPasswordForm() {
   }
 
   if (message) {
-    return <Alert tone="success">{message}</Alert>;
+    return <div className="space-y-3"><Alert tone="success">{message}</Alert>{inviteCode && <p className="text-small text-muted-foreground">Abre el enlace en este navegador para conservar tu invitación. Si usas otro dispositivo, vuelve a abrir la invitación del grupo después de recuperar tu acceso.</p>}</div>;
   }
 
   return (

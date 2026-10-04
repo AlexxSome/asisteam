@@ -64,3 +64,9 @@ describe("retorno OAuth PKCE", () => {
     expect(mock.signOut).toHaveBeenCalledExactlyOnceWith({ scope: "local" });
   });
 });
+
+it.each(["error=access_denied", "code=valid"])("fallo OAuth conserva invitación validada para reintentar (%s)", async query => {
+  mock.get.mockReturnValue({ value: JSON.stringify({ invite_code: "ABCD1234" }) });
+  mock.exchange.mockRejectedValue(new Error("network"));
+  expect((await callback(query)).headers.get("Location")).toBe("https://asisteam.example/login?invite_code=ABCD1234&social_error=1");
+});

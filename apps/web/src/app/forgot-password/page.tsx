@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
+import { AuthLayout } from "@/components/auth-layout";
 import { ActionLink } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { authPath, parseInviteCode, type AuthSearchParams } from "@/lib/auth-context";
 import { ForgotPasswordForm } from "./forgot-password-form";
 
 export const metadata: Metadata = { title: "Recuperar contraseña" };
 
 // AUT-03: pública, incluso si hay otra cuenta abierta en este navegador.
-export default function ForgotPasswordPage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle as="h1">Recuperar contraseña</CardTitle>
-          <CardDescription>Ingresa tu email para recibir un enlace válido por 60 minutos.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <ForgotPasswordForm />
-          <p className="text-center text-sm text-muted-foreground">
-            <ActionLink href="/login">Volver a iniciar sesión</ActionLink>
-          </p>
-        </CardContent>
-      </Card>
-    </main>
-  );
+export default async function ForgotPasswordPage({ searchParams }: { searchParams: Promise<AuthSearchParams> }) {
+  const inviteCode = parseInviteCode((await searchParams).invite_code);
+  return <AuthLayout title="Recuperar contraseña" description="Ingresa tu email para recibir un enlace válido por 60 minutos." inviteCode={inviteCode}>
+    <ForgotPasswordForm inviteCode={inviteCode} />
+    <p className="text-center text-small text-muted-foreground">
+      <ActionLink href={authPath("/login", inviteCode)}>Volver a iniciar sesión</ActionLink>
+    </p>
+  </AuthLayout>;
 }

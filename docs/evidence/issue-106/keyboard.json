@@ -1,0 +1,96 @@
+[
+  {
+    "route": "login",
+    "focused": "email",
+    "invalid": [
+      {
+        "describedBy": "email-error",
+        "description": [
+          "Email inválido"
+        ],
+        "id": "email"
+      },
+      {
+        "describedBy": "password-error",
+        "description": [
+          "La contraseña es obligatoria"
+        ],
+        "id": "password"
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "route": "register",
+    "focused": "full_name",
+    "invalid": [
+      {
+        "describedBy": "full_name-error",
+        "description": [
+          "El nombre debe tener al menos 2 caracteres"
+        ],
+        "id": "full_name"
+      },
+      {
+        "describedBy": "email-error",
+        "description": [
+          "Email inválido"
+        ],
+        "id": "email"
+      },
+      {
+        "describedBy": "birthdate-help birthdate-error",
+        "description": [
+          "La usamos para aplicar las reglas de participación de menores.",
+          "Fecha inválida (formato AAAA-MM-DD)"
+        ],
+        "id": "birthdate"
+      },
+      {
+        "describedBy": "password-help password-error",
+        "description": [
+          "Mínimo 10 caracteres.",
+          "La contraseña debe tener al menos 10 caracteres"
+        ],
+        "id": "password"
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "route": "forgot-password",
+    "focused": "email",
+    "invalid": [
+      {
+        "describedBy": "email-error",
+        "description": [
+          "Email inválido"
+        ],
+        "id": "email"
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "route": "reset-password",
+    "focused": "password",
+    "invalid": [
+      {
+        "describedBy": "password-help password-error",
+        "description": [
+          "Entre 10 y 128 caracteres.",
+          "La contraseña debe tener al menos 10 caracteres"
+        ],
+        "id": "password"
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "route": "login-toggle",
+    "autocomplete": "current-password",
+    "focusOutline": "2px",
+    "inputType": "text",
+    "pressed": "true"
+  }
+]
