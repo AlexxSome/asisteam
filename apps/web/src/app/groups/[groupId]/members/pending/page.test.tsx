@@ -18,14 +18,14 @@ it.each(["ATHLETE", "GUARDIAN"])("%s no accede ni consulta pendientes", async ro
 it("página 2 usa offset y ofrece navegación a todos los resultados", async () => {
   mock.rpc.mockResolvedValue({ data: [{ membership_id: "member", total_count: 101 }], error: null });
   render(await PendingMembershipsPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({ page: "2" }) }));
-  expect(mock.rpc).toHaveBeenCalledWith("list_pending_memberships", { p_group_id: groupId, p_offset: 50 });
+  expect(mock.rpc).toHaveBeenCalledWith("list_membership_onboarding", { p_group_id: groupId, p_membership_id: undefined, p_offset: 50 });
   expect(screen.getByRole("link", { name: "Anterior" }).getAttribute("href")).toBe("?page=1");
   expect(screen.getByRole("link", { name: "Siguiente" }).getAttribute("href")).toBe("?page=3");
 });
 it("página inválida vuelve al comienzo y distingue lista vacía de un fallo", async () => {
   mock.rpc.mockResolvedValue({ data: [], error: null });
   render(await PendingMembershipsPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({ page: "-1" }) }));
-  expect(mock.rpc).toHaveBeenCalledWith("list_pending_memberships", { p_group_id: groupId, p_offset: 0 });
+  expect(mock.rpc).toHaveBeenCalledWith("list_membership_onboarding", { p_group_id: groupId, p_membership_id: undefined, p_offset: 0 });
   expect(screen.getByText("No hay incorporaciones pendientes en esta página.")).toBeTruthy();
   mock.rpc.mockResolvedValue({ data: null, error: { message: "private" } });
   await expect(PendingMembershipsPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({}) })).rejects.toThrow("No pudimos cargar las aprobaciones");

@@ -1,3 +1,5 @@
+import { getMyPendingMemberships } from "@/lib/groups";
+import { PendingJoinRequests } from "@/app/groups/[groupId]/members/pending/membership-review";
 import { AppShell } from "@/components/app-shell";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
 export default async function JoinPage({ searchParams }: {
   searchParams: Promise<{ code?: string; error?: string; pending?: string }>;
 }) {
-  const { code, error, pending } = await searchParams;
+  const { code, error } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -24,16 +26,15 @@ export default async function JoinPage({ searchParams }: {
     redirect(inviteCode.success ? `/login?invite_code=${inviteCode.data}` : "/login");
   }
 
+  const pending = await getMyPendingMemberships();
   const errorMessage = error && Object.hasOwn(GROUP_ERROR_MESSAGES, error)
     ? GROUP_ERROR_MESSAGES[error] : null;
 
   return (
     <AppShell><div className="flex flex-col items-center gap-4 text-center">
       <h1 className="text-2xl font-semibold">Unirme con código</h1>
-      <p className="max-w-md text-muted-foreground">Ingresa el código que compartió el administrador. Te incorporarás como deportista.</p>
-      {pending === "1" && <p role="status" className="max-w-md rounded-md border p-3 text-left">
-        Tu solicitud quedó pendiente. Necesitas un apoderado vinculado con consentimiento vigente y la confirmación del administrador antes de participar en el grupo.
-      </p>}
+      <p className="max-w-md text-muted-foreground">{pending.length ? "Para unirte a otro grupo, ingresa su código. Tus solicitudes anteriores siguen guardadas." : "Ingresa el código que compartió el administrador. Te incorporarás como deportista."}</p>
+      <PendingJoinRequests memberships={pending} />
       {errorMessage && <p role="alert" className="text-destructive">{errorMessage}</p>}
       <form action={joinByCode} className="w-full max-w-sm space-y-3 text-left">
         <label htmlFor="invite-code" className="block">Código de invitación</label>

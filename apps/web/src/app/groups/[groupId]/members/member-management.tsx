@@ -175,12 +175,17 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
         </details>}
       </div>
     </div>
+    {member.status === "PENDING" && member.role === "ATHLETE" && <div className="px-3 pb-3 text-small">
+      <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${groupId}/members/pending?membership=${member.membership_id}`}>Ver pasos pendientes de {member.full_name}</Link>
+      <p className="text-muted-foreground">Alta guardada. Revisa vínculo, consentimiento, aprobación y cupos antes de volver a registrar al deportista.</p>
+    </div>}
     <div id={`${prefix}-detail`} hidden={!expanded} className="space-y-3 border-t border-border p-4">
       <dl className="grid gap-3 text-small sm:grid-cols-3">
         <div className="min-w-0"><dt className="text-muted-foreground">Email</dt><dd className="[overflow-wrap:anywhere]">{member.email ?? "Sin email"}</dd></div>
         <div className="min-w-0"><dt className="text-muted-foreground">Teléfono</dt><dd className="[overflow-wrap:anywhere]">{member.phone ?? "Sin teléfono"}</dd></div>
         <div><dt className="text-muted-foreground">Fecha de nacimiento</dt><dd>{member.birthdate ?? "Sin fecha"}</dd></div>
       </dl>
+      {member.account_status === "MANAGED" && <p className="text-small">La cuenta gestionada no tiene credenciales propias. Su membresía puede estar activa para asistencia. La autorización de imagen es independiente y la administra el apoderado desde su perfil.</p>}
       {member.role === "COACH" && <p className="text-small">Puede tomar y corregir asistencia y ver reportes. No administra el grupo ni accede a notas privadas.</p>}
       {!editing && (member.account_status === "MANAGED"
         ? <Button type="button" variant="secondary" disabled={saving || confirming} onClick={openEditor}>Editar perfil</Button>

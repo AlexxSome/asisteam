@@ -16,7 +16,7 @@ it("bloquea aprobación sin vínculo, explica el motivo y permite rechazar", asy
   const approve = screen.getByRole("button", { name: "Aprobar" }) as HTMLButtonElement;
   expect(approve.disabled).toBe(true);
   expect(document.getElementById(approve.getAttribute("aria-describedby")!)?.textContent).toBe("Requiere apoderado vinculado");
-  expect(screen.getByRole("link", { name: "Vincular apoderado" }).getAttribute("href")).toBe(`/groups/${groupId}/guardians`);
+  expect(screen.getByRole("link", { name: "Vincular apoderado" }).getAttribute("href")).toBe(`/groups/${groupId}/guardians?membership=${member.membership_id}`);
   await userEvent.click(screen.getByRole("button", { name: "Rechazar" }));
   expect(mock.review).toHaveBeenCalledWith({ group_id: groupId, membership_id: member.membership_id, decision: "reject" });
   expect((await screen.findByRole("status")).textContent).toContain("inactiva");
@@ -61,4 +61,16 @@ it("aprobación sin cupos permite revisar el plan y no declara al deportista act
   expect((await screen.findByRole("link", { name: "Gestionar plan" })).getAttribute("href")).toBe(`/groups/${groupId}/billing`);
   expect(screen.queryByRole("status")).toBeNull();
   expect(mock.refresh).not.toHaveBeenCalled();
+});
+
+it("explica capacidad antes de aprobar y dirige al responsable autorizado", () => {
+  render(<MembershipReview groupId={groupId} member={{ ...member, capacity_block: "subscription_athlete_limit" }} />);
+  expect((screen.getByRole("button", { name: "Aprobar" }) as HTMLButtonElement).disabled).toBe(true);
+  expect(screen.getByRole("link", { name: "Resolver capacidad" }).getAttribute("href")).toBe(`/groups/${groupId}/billing`);
+});
+it("un enlace guardado a una membresía ya activa no permite volver a decidir", () => {
+  render(<MembershipReview groupId={groupId} member={{ ...member, membership_status: "ACTIVE" }} />);
+  expect(screen.queryByRole("button", { name: "Aprobar" })).toBeNull();
+  expect(screen.queryByRole("button", { name: "Rechazar" })).toBeNull();
+  expect(screen.getByRole("status").textContent).toContain("ya está activa");
 });

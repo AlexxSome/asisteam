@@ -30,11 +30,13 @@ export function ManagedMemberForm({ groupId }: { groupId: string }) {
   if (created) return <section className="space-y-4">
     <p role="status">{created.member.membership_status === "ACTIVE"
       ? "Cuenta gestionada creada. El deportista ya aparece en la toma de asistencia."
-      : "Perfil del menor guardado, pendiente del consentimiento de su apoderado. Aparecerá en asistencia cuando el apoderado lo otorgue."}</p>
+      : "Perfil del menor guardado, pendiente del consentimiento de su apoderado. Su membresía se activará al consentir si hay cupo; la cuenta seguirá gestionada, sin credenciales propias."}</p>
     {created.guardianInvitation === "sent" && <p>Invitación enviada al apoderado. Tras aceptarla, debe abrir «Consentimientos de mis pupilos» en el grupo.</p>}
     {created.guardianInvitation === "retry_required" && <p role="alert">El perfil quedó guardado, pero no se confirmó el envío al apoderado. Revisa las invitaciones y reenvía la pendiente o envía una nueva con rol Apoderado al email indicado. No repitas el alta.</p>}
     {created.member.membership_status === "PENDING" && <Link className="block underline" href={`/groups/${groupId}/invitations/new`}>Revisar invitaciones del apoderado</Link>}
-    <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${groupId}`}>Volver al grupo</Link>
+    {created.member.membership_status === "PENDING" && <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${groupId}/members/pending?membership=${created.member.membership_id}`}>Ver estado de esta incorporación</Link>}
+    <p className="text-sm">El tratamiento de datos, el acceso con cuenta propia y la autorización de imagen se gestionan por separado.</p>
+    <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${groupId}/members`}>Volver a integrantes</Link>
   </section>;
   return <form onSubmit={submit} className="max-w-xl space-y-4" noValidate>
     <div className="space-y-2"><label htmlFor="managed-name">Nombre completo</label>

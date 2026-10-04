@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), wardsRange: vi.fn(), groupsRange: vi.fn(), maybeSingle: vi.fn(),
-  activitiesRange: vi.fn(), activityLimit: vi.fn(), activitySelect: vi.fn(), activityGroups: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn(), home: vi.fn(), history: vi.fn(), group: vi.fn(), rpc: vi.fn(), taskSelect: vi.fn(), taskLimit: vi.fn() }));
+  activitiesRange: vi.fn(), activityLimit: vi.fn(), activitySelect: vi.fn(), activityGroups: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn(), home: vi.fn(), history: vi.fn(), group: vi.fn(), rpc: vi.fn(), taskSelect: vi.fn(), taskLimit: vi.fn(), onboarding: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/wards", redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
@@ -32,7 +32,8 @@ beforeEach(() => {
   mock.group.mockImplementation(async id => ({ id, roles: ["GUARDIAN"] }));
   mock.taskLimit.mockResolvedValue({ data: [], error: null });
   mock.taskSelect.mockReturnValue({ limit: mock.taskLimit });
-  mock.rpc.mockReturnValue({ select: mock.taskSelect });
+  mock.onboarding.mockResolvedValue({ data: [], error: null });
+  mock.rpc.mockImplementation(name => name === "list_membership_onboarding" ? mock.onboarding() : { select: mock.taskSelect });
   mock.getUser.mockResolvedValue({ data: { user: { id: "guardian-auth" } } });
   mock.wardsRange.mockResolvedValue({ data: [ward], error: null });
   mock.groupsRange.mockResolvedValue({ data: groups, error: null });
@@ -275,7 +276,8 @@ describe("resúmenes del inicio del apoderado", () => {
     expect(html).toContain("2026-03-31");
     expect(html).toContain("Práctica de tenis");
     expect(html).toContain("Cancha central");
-    expect(html).toContain("Altas por consentir: 5");
+    expect(html).toContain("Solicitudes de activación de cuenta: 5");
+    expect(html).toContain(`members/consent?athlete=${id}`);
     expect(html).toContain(`/groups/${groups[1]!.group_id}/members/consent`);
     expect(html).not.toContain("Tomar asistencia");
     expect(html).not.toContain("Crear actividad");
@@ -297,15 +299,19 @@ describe("resúmenes del inicio del apoderado", () => {
     expect(html).toContain("Se muestran 3 de 5 grupos");
     expect(html).toContain("Ver todos sus grupos");
   });
-  it("los totales de tareas se proyectan y limitan sin descargar datos personales", async () => {
-    mock.taskLimit.mockResolvedValueOnce({ data: [{ total_count: 107 }], error: null }).mockResolvedValueOnce({ data: [{ total_count: 3 }], error: null });
-    expect(await getGuardianTasks(groups[0]!.group_id)).toEqual({ consents: 107, activations: 3 });
-    expect(mock.taskSelect.mock.calls).toEqual([["total_count"], ["total_count"]]);
-    expect(mock.taskLimit.mock.calls).toEqual([[1], [1]]);
+  it("cuenta pendientes por código y gestionados de todas las páginas, con contexto GUARDIAN", async () => {
+    const rows = Array.from({ length: 50 }, () => ({ can_consent: true, total_count: 107 }));
+    mock.onboarding.mockResolvedValueOnce({ data: rows, error: null }).mockResolvedValueOnce({ data: rows, error: null })
+      .mockResolvedValueOnce({ data: rows.slice(0, 7), error: null });
+    mock.taskLimit.mockResolvedValueOnce({ data: [{ total_count: 3 }], error: null });
+    expect(await getGuardianTasks(groups[0]!.group_id)).toEqual({ consents: 107, activations: 3, memberships: rows });
+    expect(mock.rpc).toHaveBeenCalledWith("list_membership_onboarding", { p_group_id: groups[0]!.group_id, p_as_guardian: true, p_offset: 100, p_athlete_user_id: undefined });
+    expect(mock.taskSelect.mock.calls).toEqual([["total_count"]]);
+    expect(mock.taskLimit.mock.calls).toEqual([[1]]);
     mock.group.mockResolvedValue({ id: groups[0]!.group_id, roles: ["ATHLETE"] });
     await expect(getGuardianTasks(groups[0]!.group_id)).rejects.toThrow("404");
     mock.group.mockResolvedValue({ id: groups[0]!.group_id, roles: ["GUARDIAN"] });
-    mock.taskLimit.mockResolvedValue({ data: null, error: { message: "secret" } });
+    mock.onboarding.mockResolvedValue({ data: null, error: { message: "secret" } });
     await expect(getGuardianTasks(groups[0]!.group_id)).rejects.toThrow("No pudimos cargar los consentimientos");
   });
 });
@@ -323,4 +329,18 @@ it("la próxima actividad del pupilo contempla todos sus grupos activos, incluso
   mock.activityLimit.mockClear();
   expect((await getWardHomeActivities(id)).next).toBeNull();
   expect(mock.activityLimit).not.toHaveBeenCalled();
+});
+
+it("lista y detalle enlazan solo al consentimiento del pupilo y grupo seleccionados", async () => {
+  const state = { membership_id: "member", athlete_user_id: id, group_id: groups[1]!.group_id, group_name: groups[1]!.name,
+    full_name: ward.full_name, membership_status: "PENDING", account_status: "MANAGED", is_minor: true,
+    guardian_linked: true, guardian_ready: false, requires_managed_consent: true, can_consent: true, total_count: 1 };
+  mock.onboarding.mockResolvedValue({ data: [state], error: null });
+  const html = renderToStaticMarkup(await WardPage({ params: Promise.resolve({ athleteUserId: id }), searchParams: Promise.resolve({}) }));
+  expect(html).toContain(`/groups/${groups[1]!.group_id}/members/consent?athlete=${id}`);
+  expect(html).toContain("Cuenta gestionada");
+  expect(html).toContain("Pendiente · apoderado");
+  for (const [name, args] of mock.rpc.mock.calls) if (name === "list_membership_onboarding" || name === "list_managed_activation_requests") {
+    expect(args.p_athlete_user_id).toBe(id);
+  }
 });
