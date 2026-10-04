@@ -1,9 +1,9 @@
+import { ActivityAgenda, ActivityPeriodLinks } from "@/components/activity-agenda";
 import { Suspense } from "react";
 import { LoadingState } from "@/components/ui/loading-state";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ActionLink } from "@/components/ui/button";
 import Link from "next/link";
-import { activityTypeLabel, formatActivityDateTime } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { getActivities, parseActivitySearch, type ActivitySearchParams } from "@/lib/activities";
 
@@ -21,14 +21,11 @@ export default async function ActivitiesPage({ params, searchParams }: {
       <h1 className="text-2xl font-semibold">Actividades</h1>
       {group.roles.includes("ADMIN") && <div className="flex flex-wrap items-center gap-4">
         <Link href={`/groups/${groupId}/activity-types`} className="underline">Tipos de actividad</Link>
-        <Link href={`/groups/${groupId}/activities/new`} className="rounded-md bg-primary px-4 py-3 text-primary-foreground">Crear actividad</Link>
+        <Link href={`/groups/${groupId}/activities/new?from=group&period=${period}&page=${page}`} className="rounded-md bg-primary px-4 py-3 text-primary-foreground">Crear actividad</Link>
       </div>}
     </div>
-    <nav aria-label="Período de actividades" className="flex flex-wrap gap-5 underline">
-      <Link href={`/groups/${groupId}/activities?period=upcoming`} aria-current={period === "upcoming" ? "page" : undefined}>Próximas</Link>
-      <Link href={`/groups/${groupId}/activities?period=past`} aria-current={period === "past" ? "page" : undefined}>Pasadas</Link>
-      <Link href="/groups#agenda">Mi agenda de todos los grupos</Link>
-    </nav>
+    <ActivityPeriodLinks path={`/groups/${groupId}/activities`} period={period} label="Período de actividades" />
+    <Link href="/groups#agenda" className="inline-flex min-h-11 items-center underline">Mi agenda de todos los grupos</Link>
     <p className="text-sm text-muted-foreground">Horarios de Chile · America/Santiago</p>
     <div className="min-h-80">
     <Suspense key={`${groupId}:${period}:${page}`} fallback={<LoadingState label="Cargando actividades…" />}>
@@ -36,21 +33,14 @@ export default async function ActivitiesPage({ params, searchParams }: {
     {activities.length === 0 ? <EmptyState
       title={page > 1 ? "No hay actividades en esta página" : period === "upcoming" ? "No hay próximas actividades" : "No hay actividades pasadas"}
       action={page > 1 ? <ActionLink href={`/groups/${groupId}/activities?period=${period}`} variant="secondary">Volver a la primera página</ActionLink>
-        : <>{group.roles.includes("ADMIN") && <ActionLink href={`/groups/${groupId}/activities/new`} variant="primary">Crear actividad</ActionLink>}
+        : <>{group.roles.includes("ADMIN") && <ActionLink href={`/groups/${groupId}/activities/new?from=group&period=${period}&page=${page}`} variant="primary">Crear actividad</ActionLink>}
           <ActionLink href={`/groups/${groupId}/activities?period=${period === "upcoming" ? "past" : "upcoming"}`} variant="secondary">{period === "upcoming" ? "Ver actividades pasadas" : "Ver próximas actividades"}</ActionLink></>}>
       {page > 1 ? "Vuelve al inicio de la lista conservando el período seleccionado."
         : period === "upcoming" ? "Las actividades programadas del grupo aparecerán aquí." : "Las actividades ya realizadas aparecerán aquí. Puedes consultar las próximas actividades."}
-    </EmptyState> : <ul className="space-y-3">
-      {activities.map((activity) => <li key={activity.id} className="space-y-2 rounded-lg border p-4">
-        <Link href={`/groups/${groupId}/activities/${activity.id}`} className="break-words text-lg font-semibold underline">{activity.title}</Link>
-        <p className="flex items-center gap-2"><span aria-hidden className="size-3 rounded-full" style={{ backgroundColor: activity.activity_type_color ?? undefined }} />{activityTypeLabel(activity.activity_type_name ?? "", !!activity.is_system_type)}</p>
-        <p>{activity.starts_at && formatActivityDateTime(activity.starts_at)} → {activity.ends_at && formatActivityDateTime(activity.ends_at)}</p>
-        {activity.location && <p className="break-words text-muted-foreground">{activity.location}</p>}
-      </li>)}
-    </ul>}
-    <nav aria-label="Páginas de actividades" className="flex gap-5">
-      {page > 1 && <Link href={`/groups/${groupId}/activities?period=${period}&page=${page - 1}`} className="underline">Anterior</Link>}
-      {hasNext && <Link href={`/groups/${groupId}/activities?period=${period}&page=${page + 1}`} className="underline">Siguiente</Link>}
+    </EmptyState> : <ActivityAgenda activities={activities} page={page} period={period} context={{ from: "group" }} />}
+    <nav aria-label="Páginas de actividades" className="mt-4 flex flex-wrap gap-3">
+      {page > 1 && <Link href={`/groups/${groupId}/activities?period=${period}&page=${page - 1}`} className="inline-flex min-h-11 items-center px-3 underline">Anterior</Link>}
+      {hasNext && <Link href={`/groups/${groupId}/activities?period=${period}&page=${page + 1}`} className="inline-flex min-h-11 items-center px-3 underline">Siguiente</Link>}
     </nav>
   </>)}
     </Suspense>

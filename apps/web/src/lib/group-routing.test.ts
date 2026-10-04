@@ -4,7 +4,7 @@ import { createElement } from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GroupSelector } from "@/app/groups/group-selector";
-import { activeGroupCookie, activityReturnLink, isGroupId, switchedGroupPath } from "./group-routing";
+import { activeGroupCookie, activityReturnLink, activityReturnQuery, isGroupId, switchedGroupPath } from "./group-routing";
 
 const navigation = vi.hoisted(() => ({ pathname: "", push: vi.fn() }));
 vi.mock("next/navigation", () => ({ usePathname: () => navigation.pathname, useRouter: () => ({ push: navigation.push }) }));
@@ -14,6 +14,13 @@ const b = "17000000-0000-4000-8000-000000000202";
 afterEach(cleanup);
 
 describe("regreso desde una actividad", () => {
+  it("mantiene el origen de grupo entre detalle y edición con parámetros permitidos", () => {
+    const query = { from: "group", period: "past", page: "3" };
+    expect(activityReturnLink(a, query).href).toBe(`/groups/${a}/activities?period=past&page=3`);
+    expect(activityReturnQuery(query)).toBe("?from=group&period=past&page=3");
+    expect(activityReturnQuery({ from: "wards", ward: "../other" })).toBe("");
+    expect(activityReturnQuery({ from: "https://example.test" })).toBe("");
+  });
   it("conserva agenda, período y página de origen sin trasladarlos al cambiar grupo", () => {
     expect(activityReturnLink(a, { from: "agenda", period: "past", page: "2" }).href).toBe("/groups?period=past&page=2#agenda");
     expect(activityReturnLink(a, { from: "wards", ward: b, period: "past", page: "3" }).href).toBe(`/wards/${b}?period=past&page=3#agenda`);

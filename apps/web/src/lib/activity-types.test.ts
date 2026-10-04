@@ -119,6 +119,17 @@ describe("agenda de actividades", () => {
     expect(groupHtml).toContain('href="/groups#agenda"');
     expect(groupHtml).not.toContain("Crear actividad");
   });
+
+  it("agrupa una sola vez por día chileno incluso cuando UTC cruza medianoche", async () => {
+    mock.range.mockResolvedValue({ data: [activity, { ...activity, id: "night", starts_at: "2026-01-16T02:00:00Z", ends_at: "2026-01-16T04:00:00Z", location: null }], error: null });
+    const html = renderToStaticMarkup(await GroupsPage({ searchParams: Promise.resolve({}) }));
+    expect(html.match(/<h3 /g)).toHaveLength(1);
+    expect(html).toContain("jueves, 15 de enero de 2026");
+    expect(html).toContain("viernes, 16 de enero de 2026");
+    expect(html).toContain("23:00");
+    expect(html).toContain("Lugar por confirmar");
+    expect(html).toContain('aria-current="page" class="inline-flex min-h-11');
+  });
 });
 
 async function streamedHtml(node: ReactNode) {

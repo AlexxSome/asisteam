@@ -6,6 +6,7 @@ import { useEffect, useId, useTransition } from "react";
 import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core";
 import type { MyGroup } from "@/lib/groups";
 import { activeGroupCookie, switchedGroupPath } from "@/lib/group-routing";
+import { navigateWithUnsavedChanges } from "@/lib/use-unsaved-changes";
 
 export function GroupSelector({ groups, activeId, userId, guardianOnly }: {
   groups: MyGroup[]; activeId: string; userId: string; guardianOnly: boolean;
@@ -26,7 +27,7 @@ export function GroupSelector({ groups, activeId, userId, guardianOnly }: {
       className="min-h-11 w-full min-w-0 rounded-md border border-input bg-surface px-3 text-body"
       onChange={(event) => {
         const group = groups.find((item) => item.id === event.target.value);
-        if (group) startTransition(() => router.push(switchedGroupPath(pathname, group.id, group.roles)));
+        if (group) navigateWithUnsavedChanges(() => startTransition(() => router.push(switchedGroupPath(pathname, group.id, group.roles))));
       }}>
       {groups.map((group) => <option key={group.id} value={group.id}>
         {group.name} — {group.roles.map((role) => MEMBERSHIP_ROLE_LABELS[role]).join(" + ")}
