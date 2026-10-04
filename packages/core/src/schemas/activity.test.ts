@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ACTIVITY_WEEKDAYS, activityDateTimeInput, activityFormSchema, activityTypeLabel, chileDateTimeToUtc, formatActivityDateTime } from "./activity";
+import { ACTIVITY_WEEKDAYS, activityDateTimeInput, activityFormSchema, activityTypeLabel, chileDateTimeToUtc, formatActivityDateTime, formatActivityDay, formatActivityTime, activityRecurrenceSummary } from "./activity";
 
 const activity = {
   title: "Entrenamiento adultos", activity_type_id: "b2c3d4e5-0001-4b3c-8d4e-111111111111",
@@ -58,5 +58,18 @@ describe("recurrencia semanal", () => {
     const daily = { ...activity, starts_at: "2027-01-04T18:30", ends_at: "2027-01-04T20:00", recurrence_rule: { freq: "WEEKLY", by_weekday: [...ACTIVITY_WEEKDAYS], until: "2027-06-02" } };
     expect(activityFormSchema.safeParse(daily).success).toBe(true);
     expect(activityFormSchema.safeParse({ ...daily, recurrence_rule: { ...daily.recurrence_rule, until: "2027-06-03" } }).success).toBe(false);
+  });
+});
+
+describe("presentación de agenda y recurrencia", () => {
+  it("agrupa por fecha chilena y muestra horario de invierno/verano", () => {
+    expect(formatActivityDay("2026-01-16T02:30:00Z")).toContain("jueves, 15 de enero de 2026");
+    expect(formatActivityTime("2026-01-16T02:30:00Z")).toBe("23:30");
+    expect(formatActivityTime("2026-07-16T02:30:00Z")).toBe("22:30");
+  });
+  it("resume días ordenados y fecha final sin convertir la fecha civil a UTC", () => {
+    expect(activityRecurrenceSummary({ freq: "WEEKLY", by_weekday: ["TH", "TU"], until: "2026-09-30" }))
+      .toBe("Se repite semanalmente: martes, jueves, hasta el 30 de septiembre de 2026 (inclusive).");
+    expect(activityRecurrenceSummary(null)).toBe("Sin repetición");
   });
 });

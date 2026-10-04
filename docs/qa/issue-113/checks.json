@@ -1,0 +1,96 @@
+[
+  {
+    "screen": "agenda",
+    "width": 320,
+    "viewport": 320,
+    "scroll": 320,
+    "overflow": false
+  },
+  {
+    "screen": "form",
+    "width": 320,
+    "viewport": 320,
+    "scroll": 320,
+    "overflow": false
+  },
+  {
+    "screen": "agenda",
+    "width": 375,
+    "viewport": 375,
+    "scroll": 375,
+    "overflow": false
+  },
+  {
+    "screen": "form",
+    "width": 375,
+    "viewport": 375,
+    "scroll": 375,
+    "overflow": false
+  },
+  {
+    "screen": "agenda",
+    "width": 768,
+    "viewport": 768,
+    "scroll": 768,
+    "overflow": false
+  },
+  {
+    "screen": "form",
+    "width": 768,
+    "viewport": 768,
+    "scroll": 768,
+    "overflow": false
+  },
+  {
+    "screen": "agenda",
+    "width": 1024,
+    "viewport": 1024,
+    "scroll": 1024,
+    "overflow": false
+  },
+  {
+    "screen": "form",
+    "width": 1024,
+    "viewport": 1024,
+    "scroll": 1024,
+    "overflow": false
+  },
+  {
+    "screen": "agenda",
+    "width": 1440,
+    "viewport": 1440,
+    "scroll": 1440,
+    "overflow": false
+  },
+  {
+    "screen": "form",
+    "width": 1440,
+    "viewport": 1440,
+    "scroll": 1440,
+    "overflow": false
+  },
+  {
+    "screen": "agenda",
+    "width": 1440,
+    "zoom": 200,
+    "viewport": 1440,
+    "scroll": 1440,
+    "overflow": false
+  },
+  {
+    "screen": "form",
+    "width": 1440,
+    "zoom": 200,
+    "viewport": 1440,
+    "scroll": 1440,
+    "overflow": false
+  },
+  {
+    "navigation": "cancel dismiss, back dismiss, cancel accept",
+    "pass": true
+  },
+  {
+    "keyboard": "Escape restores destructive trigger focus",
+    "pass": true
+  }
+]

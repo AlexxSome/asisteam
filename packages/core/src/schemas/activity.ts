@@ -39,6 +39,33 @@ export function formatActivityDateTime(value: string): string {
   }).format(new Date(value));
 }
 
+export function formatActivityDay(value: string): string {
+  return new Intl.DateTimeFormat("es-CL", {
+    timeZone: ACTIVITY_TIME_ZONE, weekday: "long", day: "numeric", month: "long", year: "numeric",
+  }).format(new Date(value));
+}
+
+export function formatActivityTime(value: string): string {
+  return new Intl.DateTimeFormat("es-CL", {
+    timeZone: ACTIVITY_TIME_ZONE, timeStyle: "short", hourCycle: "h23",
+  }).format(new Date(value));
+}
+
+/** Date-only recurrence bounds are Chilean calendar dates, not UTC instants. */
+export function formatActivityCalendarDate(value: string): string {
+  try {
+    return Temporal.PlainDate.from(value).toLocaleString("es-CL", { day: "numeric", month: "long", year: "numeric" });
+  } catch { return "Fecha por definir"; }
+}
+
+export function activityRecurrenceSummary(value: unknown): string {
+  const rule = activityRecurrenceSchema.safeParse(value);
+  if (!rule.success) return "Sin repetición";
+  const days = ACTIVITY_WEEKDAYS.filter(day => rule.data.by_weekday.includes(day))
+    .map(day => ACTIVITY_WEEKDAY_LABELS[day].toLocaleLowerCase("es-CL")).join(", ");
+  return `Se repite semanalmente: ${days}, hasta el ${formatActivityCalendarDate(rule.data.until)} (inclusive).`;
+}
+
 const localDateTime = z.string().superRefine((value, ctx) => {
   try { chileDateTimeToUtc(value); } catch {
     ctx.addIssue({ code: z.ZodIssueCode.custom,
