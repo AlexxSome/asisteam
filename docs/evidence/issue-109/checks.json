@@ -1,0 +1,150 @@
+{
+  "responsive": [
+    {
+      "screen": "group",
+      "cta": [
+        {
+          "height": 44,
+          "top": 478
+        }
+      ],
+      "documentWidth": 320,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "screen": "group",
+      "cta": [
+        {
+          "height": 44,
+          "top": 454
+        }
+      ],
+      "documentWidth": 375,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 375
+    },
+    {
+      "screen": "group",
+      "cta": [
+        {
+          "height": 44,
+          "top": 438
+        }
+      ],
+      "documentWidth": 768,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 768
+    },
+    {
+      "screen": "group",
+      "cta": [
+        {
+          "height": 44,
+          "top": 446
+        }
+      ],
+      "documentWidth": 1024,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 1024
+    },
+    {
+      "screen": "group",
+      "cta": [
+        {
+          "height": 44,
+          "top": 446
+        }
+      ],
+      "documentWidth": 1440,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 1440
+    },
+    {
+      "screen": "wards",
+      "cta": [],
+      "documentWidth": 320,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "screen": "wards",
+      "cta": [],
+      "documentWidth": 375,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 375
+    },
+    {
+      "screen": "wards",
+      "cta": [],
+      "documentWidth": 768,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 768
+    },
+    {
+      "screen": "wards",
+      "cta": [],
+      "documentWidth": 1024,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 1024
+    },
+    {
+      "screen": "wards",
+      "cta": [],
+      "documentWidth": 1440,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "width": 1440
+    }
+  ],
+  "keyboard": {
+    "expanded": true,
+    "nextFocus": {
+      "href": "/groups/17000000-0000-4000-8000-000000000201/settings#invite",
+      "text": "Invitar con código o enlace",
+      "visible": true
+    },
+    "primaryFocus": {
+      "height": 44,
+      "text": "Tomar asistencia",
+      "visible": true
+    }
+  },
+  "reflow": [
+    {
+      "screen": "group",
+      "dpr": 1,
+      "overflow": false,
+      "width": 720
+    },
+    {
+      "screen": "wards",
+      "dpr": 1,
+      "overflow": false,
+      "width": 720
+    }
+  ],
+  "nativeZoom200": {
+    "verified": false,
+    "reason": "El Mac está bloqueado; el atajo del navegador integrado no modifica el zoom. Reflow 720 CSS px verificado por separado."
+  }
+}

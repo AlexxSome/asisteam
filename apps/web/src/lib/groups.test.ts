@@ -1,12 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn(), eq: vi.fn(), maybeSingle: vi.fn(), cookie: vi.fn(), rpc: vi.fn() }));
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn(), eq: vi.fn(), maybeSingle: vi.fn(), cookie: vi.fn(), rpc: vi.fn(), home: vi.fn(), history: vi.fn(), tasks: vi.fn() }));
 vi.mock("react", async (original) => ({ ...await original<typeof import("react")>(), cache: (fn: unknown) => fn }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, forbidden: () => { throw new Error("403"); }, useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/groups" }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
 import { getGroup, getGroupCapacity, getMyGroups, groupHomePath } from "./groups";
+vi.mock("@/lib/activities", async original => ({ ...await original<typeof import("./activities")>(), getHomeActivities: mock.home }));
+vi.mock("@/lib/attendance-history", () => ({ getMyAttendanceHistory: mock.history }));
+vi.mock("@/lib/wards", () => ({ getGuardianTasks: mock.tasks }));
+import { historyFixture } from "./attendance-history.test-fixture";
 import GroupPage from "@/app/groups/[groupId]/page";
 import GroupSettingsPage from "@/app/groups/[groupId]/settings/page";
 import GroupLayout from "@/app/groups/[groupId]/layout";
@@ -19,6 +23,9 @@ const groups = [
 ];
 beforeEach(() => {
   vi.resetAllMocks();
+  mock.home.mockResolvedValue({ next: null, previous: null, now: "2026-01-15T12:00:00Z" });
+  mock.history.mockResolvedValue({ history: historyFixture, error: null });
+  mock.tasks.mockResolvedValue({ consents: 0, activations: 0 });
   mock.getUser.mockResolvedValue({ data: { user: { id: "auth-user" } } });
   mock.order.mockReturnValue({ order: () => Promise.resolve({ data: groups, error: null }) });
   mock.eq.mockReturnValue({ maybeSingle: mock.maybeSingle });
@@ -26,7 +33,9 @@ beforeEach(() => {
     ? { select: () => ({ eq: () => ({ limit: async () => ({ data: [], error: null }) }) }) }
     : { select: () => ({ order: mock.order, eq: mock.eq }) });
   mock.maybeSingle.mockResolvedValue({ data: { ...groups[0], description: null, settings: null, invite_code: "CODE0001" }, error: null });
-  mock.rpc.mockImplementation(async name => ({ data: name === "get_group_billing" ? { active_athletes: 0, athlete_limit: 0 } : [], error: null }));
+  mock.rpc.mockImplementation(name => name === "get_group_billing"
+    ? Promise.resolve({ data: { active_athletes: 0, athlete_limit: 0 }, error: null })
+    : { select: () => ({ limit: async () => ({ data: [], error: null }) }) });
 });
 
 describe("contexto de grupos", () => {
@@ -109,12 +118,17 @@ describe("contexto de grupos", () => {
       expect(html).not.toContain(`href="/groups/${group.id === a ? b : a}/settings"`);
     }
   });
-  it("ADMIN ve menores pendientes con estado de apoderado", async () => {
-    mock.rpc.mockResolvedValue({ data: [{ membership_id: "pending-id", full_name: "Ana Soto", is_minor: true, guardian_ready: false, total_count: 1 }], error: null });
+  it("ADMIN ve el total de pendientes sin descargar perfiles ni volcar solicitudes", async () => {
+    const limit = vi.fn().mockResolvedValue({ data: [{ total_count: 357 }], error: null });
+    const select = vi.fn().mockReturnValue({ limit });
+    mock.rpc.mockImplementation(name => name === "list_pending_athletes" ? { select } : Promise.resolve({ data: { active_athletes: 1, athlete_limit: 50 }, error: null }));
     const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
     expect(mock.rpc).toHaveBeenCalledWith("list_pending_athletes", { p_group_id: a });
-    expect(html).toContain("Ana Soto");
-    expect(html).toContain("Requiere apoderado vinculado");
+    expect(select).toHaveBeenCalledWith("total_count");
+    expect(limit).toHaveBeenCalledWith(1);
+    expect(html).toContain("(357)");
+    expect(html).toContain("Revisar aprobaciones");
+    expect(html).not.toContain("primeras 100");
   });
   it("grupo ajeno conserva 404 antes de entrar a settings", async () => {
     await expect(GroupSettingsPage({ params: Promise.resolve({ groupId: "17000000-0000-4000-8000-000000000999" }) })).rejects.toThrow("404");
@@ -157,8 +171,55 @@ describe("capacidad y primeros pasos", () => {
     const html = renderToStaticMarkup(await GroupLayout({ children: home, params: Promise.resolve({ groupId: a }) }));
     expect(html.indexOf("0 cupos habilitados")).toBeLessThan(html.indexOf("Crear cuenta gestionada"));
     expect(html).toContain("1 de 4 pasos listos");
-    expect(mock.from).toHaveBeenCalledWith("v_group_activities");
+    expect(mock.home).toHaveBeenCalledWith(a);
     expect(mock.from).not.toHaveBeenCalledWith("activities");
     for (const target of ["settings", "billing", "members", "activities/new"]) expect(html).toContain(`/groups/${a}/${target}`);
+  });
+});
+
+
+describe("home por rol", () => {
+  const activity = { id: "next-id", group_id: a, title: "Entrenamiento sintético", starts_at: "2026-01-15T15:00:00Z", ends_at: "2026-01-15T16:00:00Z", location: "Cancha principal" };
+  it.each(["ADMIN", "COACH", "ATHLETE", "GUARDIAN"])("prioriza próxima actividad y respeta CTA de %s", async role => {
+    mock.maybeSingle.mockResolvedValue({ data: { ...groups[0], roles: [role] }, error: null });
+    mock.home.mockResolvedValue({ next: activity, previous: null, now: "2026-01-15T12:00:00Z" });
+    const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(html).toContain("Hoy");
+    expect(html).toContain("Cancha principal");
+    expect(html).toContain("12:00");
+    expect(html).toContain('href="/groups/' + a + '/activities/next-id"');
+    expect(html.includes("Tomar asistencia")).toBe(["ADMIN", "COACH"].includes(role));
+    expect(html.includes("Crear actividad")).toBe(role === "ADMIN");
+    expect(html.includes("Mi asistencia")).toBe(role === "ATHLETE");
+    expect(mock.history).toHaveBeenCalledTimes(role === "ATHLETE" ? 1 : 0);
+    expect(mock.tasks).toHaveBeenCalledTimes(role === "GUARDIAN" ? 1 : 0);
+    if (role === "ADMIN") expect(html.indexOf("Entrenamiento sintético")).toBeLessThan(html.indexOf("Administración del grupo"));
+    expect(html.match(/<h1/g)).toHaveLength(1);
+    expect(html).not.toContain('<h1 class="text-2xl font-semibold">Equipo A');
+  });
+  it("separa anterior, futuro, en curso y vacío sin crear convocatorias", async () => {
+    mock.home.mockResolvedValue({ next: { ...activity, starts_at: "2026-01-16T15:00:00Z", ends_at: "2026-01-16T16:00:00Z" }, previous: { ...activity, id: "past-id", title: "Encuentro anterior", starts_at: "2026-01-14T15:00:00Z", ends_at: "2026-01-14T16:00:00Z" }, now: "2026-01-15T12:00:00Z" });
+    let html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(html).toContain("Próxima"); expect(html).toContain("Anterior:"); expect(html).toContain("Revisar asistencia anterior");
+    mock.home.mockResolvedValue({ next: activity, previous: null, now: "2026-01-15T15:30:00Z" });
+    html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(html).toContain("Actividad en curso");
+    mock.home.mockResolvedValue({ next: null, previous: activity, now: "2026-01-16T15:30:00Z" });
+    html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(html).toContain("No hay próximas actividades");
+    expect(html).not.toContain("Tomar asistencia");
+    expect(mock.rpc.mock.calls.every(([name]) => ["get_group_billing", "list_pending_athletes"].includes(name))).toBe(true);
+  });
+  it("conserva null/Sin datos, período mensual y grupo para multirol sin mostrar notas", async () => {
+    mock.history.mockResolvedValue({ history: { ...historyFixture, totals: { ...historyFixture.totals, attendance_pct: null } }, error: null });
+    const html = renderToStaticMarkup(await GroupPage({ params: Promise.resolve({ groupId: a }) }));
+    expect(mock.history).toHaveBeenCalledWith(a, expect.objectContaining({ period: "month" }), 1);
+    expect(html).toContain("Mi asistencia"); expect(html).toContain("Sin datos"); expect(html).toContain("2026-03-01"); expect(html).toContain("2026-03-31");
+    expect(html).not.toContain(historyFixture.records[0]!.note);
+    expect(html).not.toContain("0.0 %");
+  });
+  it("un fallo de lectura no se convierte en agenda vacía", async () => {
+    mock.home.mockRejectedValue(new Error("No pudimos cargar las actividades. Vuelve a intentarlo."));
+    await expect(GroupPage({ params: Promise.resolve({ groupId: a }) })).rejects.toThrow("No pudimos cargar las actividades");
   });
 });

@@ -2,11 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PassThrough } from "node:stream";
 import { createElement, type ReactNode } from "react";
 import { renderToPipeableStream, renderToStaticMarkup } from "react-dom/server";
-const mock = vi.hoisted(() => ({ group: vi.fn(), groups: vi.fn(), range: vi.fn(), eq: vi.fn(), or: vi.fn(), from: vi.fn(), select: vi.fn(), in: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn() }));
+const mock = vi.hoisted(() => ({ group: vi.fn(), groups: vi.fn(), range: vi.fn(), eq: vi.fn(), or: vi.fn(), from: vi.fn(), select: vi.fn(), in: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn(), limit: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group, getMyGroups: mock.groups }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/groups", notFound: () => { throw new Error("404"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ from: mock.from }) }));
-import { ACTIVITY_PAGE_SIZE, getActivities, getMyActivities, getActivityTypes, parseActivitySearch } from "./activities";
+import { ACTIVITY_PAGE_SIZE, getActivities, getMyActivities, getActivityTypes, parseActivitySearch, getHomeActivities, homeActivityLabel } from "./activities";
 import GroupsPage from "@/app/groups/page";
 import ActivitiesPage from "@/app/groups/[groupId]/activities/page";
 const groupId = "29000000-0000-4000-8000-000000000201";
@@ -19,11 +19,12 @@ beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-01-15T12:00:00Z"));
-  const query = { select: mock.select, eq: mock.eq, or: mock.or, in: mock.in, gte: mock.gte, lt: mock.lt, order: mock.order, range: mock.range };
+  const query = { select: mock.select, eq: mock.eq, or: mock.or, in: mock.in, gte: mock.gte, lt: mock.lt, order: mock.order, range: mock.range, limit: mock.limit };
   for (const method of [mock.select, mock.eq, mock.or, mock.in, mock.gte, mock.lt, mock.order, mock.from]) method.mockReturnValue(query);
   mock.group.mockResolvedValue(groups[0]);
   mock.groups.mockResolvedValue({ groups });
   mock.range.mockResolvedValue({ data: [], error: null });
+  mock.limit.mockResolvedValue({ data: [], error: null });
 });
 afterEach(() => vi.useRealTimers());
 it("selector pide solo activos del grupo y sistema", async () => {
@@ -168,4 +169,37 @@ it("streaming anuncia carga real y luego entrega la lista sin datos ficticios", 
   finish({ data: [activity], error: null });
   await complete;
   expect(html).toContain(activity.title);
+});
+
+
+describe("lecturas acotadas del inicio", () => {
+  it("incluye una actividad en curso, separa la última terminada y proyecta columnas mínimas", async () => {
+    mock.limit.mockResolvedValueOnce({ data: [activity], error: null }).mockResolvedValueOnce({ data: [{ ...activity, id: "previous" }], error: null });
+    const result = await getHomeActivities(groupId);
+    expect(result.next?.id).toBe(activity.id);
+    expect(result.previous?.id).toBe("previous");
+    expect(mock.group).toHaveBeenCalledWith(groupId);
+    expect(mock.in.mock.calls).toEqual([["group_id", [groupId]], ["group_id", [groupId]]]);
+    expect(mock.select).toHaveBeenCalledWith("id, group_id, title, location, starts_at, ends_at");
+    expect(mock.gte).toHaveBeenCalledWith("ends_at", "2026-01-15T12:00:00.000Z");
+    expect(mock.lt).toHaveBeenCalledWith("ends_at", "2026-01-15T12:00:00.000Z");
+    expect(mock.limit.mock.calls).toEqual([[1], [1]]);
+  });
+  it("rechaza el grupo ajeno antes de consultar y no disfraza errores como vacío", async () => {
+    mock.group.mockRejectedValueOnce(new Error("404"));
+    await expect(getHomeActivities(otherGroupId)).rejects.toThrow("404");
+    expect(mock.from).not.toHaveBeenCalled();
+    mock.limit.mockResolvedValue({ data: null, error: { message: "private" } });
+    await expect(getHomeActivities(groupId)).rejects.toThrow("No pudimos cargar las actividades");
+  });
+  it.each([
+    ["2026-01-15T01:00:00Z", "2026-01-15T02:00:00Z", "2026-01-15T00:00:00Z", "Hoy"],
+    ["2026-01-15T04:00:00Z", "2026-01-15T05:00:00Z", "2026-01-15T00:00:00Z", "Próxima"],
+    ["2026-07-15T03:00:00Z", "2026-07-15T03:30:00Z", "2026-07-15T02:00:00Z", "Hoy"],
+    ["2026-01-15T01:00:00Z", "2026-01-15T02:00:00Z", "2026-01-15T01:30:00Z", "En curso"],
+    ["2026-01-15T01:00:00Z", "2026-01-15T02:00:00Z", "2026-01-15T02:30:00Z", "Anterior de hoy"],
+    ["2026-01-15T01:00:00Z", "2026-01-15T02:00:00Z", "2026-01-15T04:00:00Z", "Anterior"],
+  ])("clasifica en hora chilena %s", (starts_at, ends_at, now, label) => {
+    expect(homeActivityLabel({ starts_at, ends_at }, now)).toBe(label);
+  });
 });

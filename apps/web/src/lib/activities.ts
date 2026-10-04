@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { cache } from "react";
+import { activityDateTimeInput } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { getGroup, getMyGroups } from "@/lib/groups";
 import { isGroupId } from "@/lib/group-routing";
@@ -85,4 +87,36 @@ export async function getActivity(groupId: string, activityId: string) {
   if (error) throw new Error("No pudimos cargar la actividad. Vuelve a intentarlo.");
   if (!data) notFound();
   return data;
+}
+
+/** Request-scoped: the same group can appear under several wards. */
+export const getHomeActivities = cache(async (groupId: string) => {
+  await getGroup(groupId);
+  return loadHomeActivities([groupId]);
+});
+
+export async function getWardHomeActivities(athleteUserId: string) {
+  const ward = await getWard(athleteUserId);
+  return loadHomeActivities(ward.groups.flatMap(group => group.membership_status === "ACTIVE" && group.group_id ? [group.group_id] : []));
+}
+
+async function loadHomeActivities(groupIds: string[]) {
+  const now = new Date().toISOString();
+  if (!groupIds.length) return { next: null, previous: null, now };
+  const client = await createClient();
+  const columns = "id, group_id, title, location, starts_at, ends_at" as const;
+  const query = () => client.from("v_group_activities").select(columns).in("group_id", groupIds);
+  const [next, previous] = await Promise.all([
+    query().gte("ends_at", now).order("starts_at").order("id").limit(1),
+    query().lt("ends_at", now).order("starts_at", { ascending: false }).order("id").limit(1),
+  ]);
+  if (next.error || previous.error) throw new Error("No pudimos cargar las actividades. Vuelve a intentarlo.");
+  return { next: next.data?.[0] ?? null, previous: previous.data?.[0] ?? null, now };
+}
+
+export function homeActivityLabel(activity: { starts_at: string | null; ends_at: string | null }, now: string) {
+  if (!activity.starts_at || !activity.ends_at) return "Actividad";
+  if (Date.parse(activity.starts_at) <= Date.parse(now) && Date.parse(activity.ends_at) >= Date.parse(now)) return "En curso";
+  const today = activityDateTimeInput(activity.starts_at).slice(0, 10) === activityDateTimeInput(now).slice(0, 10);
+  return Date.parse(activity.ends_at) < Date.parse(now) ? (today ? "Anterior de hoy" : "Anterior") : (today ? "Hoy" : "Próxima");
 }
