@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
 import type { Database } from "@asisteam/db";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
+import { getGroup } from "@/lib/groups";
 
 type WardRow = Database["public"]["Views"]["v_my_wards"]["Row"];
 type WardGroupRow = Database["public"]["Views"]["v_my_ward_groups"]["Row"];
@@ -35,14 +37,14 @@ async function withGroups(client: Awaited<ReturnType<typeof createClient>>, rows
   return wards.filter((ward) => ward.groups.length > 0);
 }
 
-export async function getMyWards(page = 1) {
+export async function getMyWards(page = 1, pageSize = 50) {
   const client = await createClient();
   const { data: { user } } = await client.auth.getUser();
   if (!user) redirect("/login");
   const { data, error } = await client.from("v_my_wards").select(wardColumns)
-    .order("full_name").order("athlete_user_id").range((page - 1) * 50, page * 50);
+    .order("full_name").order("athlete_user_id").range((page - 1) * pageSize, page * pageSize);
   if (error) throw loadError();
-  return { wards: await withGroups(client, (data ?? []).slice(0, 50)), hasNext: (data?.length ?? 0) > 50 };
+  return { wards: await withGroups(client, (data ?? []).slice(0, pageSize)), hasNext: (data?.length ?? 0) > pageSize };
 }
 
 export async function getGroupWards(groupId: string, page = 1) {
@@ -79,3 +81,15 @@ export async function getWard(athleteUserId: string) {
   if (!ward) notFound();
   return ward;
 }
+
+export const getGuardianTasks = cache(async (groupId: string) => {
+  const group = await getGroup(groupId);
+  if (!group.roles.includes("GUARDIAN")) notFound();
+  const client = await createClient();
+  const [consents, activations] = await Promise.all([
+    client.rpc("list_managed_member_consents", { p_group_id: group.id, p_offset: 0 }).select("total_count").limit(1),
+    client.rpc("list_managed_activation_requests", { p_group_id: group.id, p_offset: 0 }).select("total_count").limit(1),
+  ]);
+  if (consents.error || activations.error) throw new Error("No pudimos cargar los consentimientos. Vuelve a intentarlo.");
+  return { consents: consents.data?.[0]?.total_count ?? 0, activations: activations.data?.[0]?.total_count ?? 0 };
+});

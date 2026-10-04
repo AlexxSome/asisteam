@@ -21,7 +21,7 @@ export function historyPageHref(groupId: string, filter: AttendancePeriodFilter,
   return `/groups/${groupId}/${athleteUserId ? `wards/${athleteUserId}` : "me"}/history?${query}`;
 }
 
-export async function getWardAttendanceHistory(groupId: string, athleteUserId: string, filter: AttendancePeriodFilter) {
+export async function getWardAttendanceHistory(groupId: string, athleteUserId: string, filter: AttendancePeriodFilter, pageSize = 50) {
   if (!isGroupId(athleteUserId)) notFound();
   const group = await getGroup(groupId);
   if (!group.roles.includes("GUARDIAN")) notFound();
@@ -30,7 +30,7 @@ export async function getWardAttendanceHistory(groupId: string, athleteUserId: s
   const { data, error } = await supabase.rpc("get_ward_attendance_history", {
     p_group_id: group.id, p_athlete_user_id: athleteUserId,
     p_period: filter.period, p_from: filter.from, p_to: filter.to,
-    p_activity_type_ids: filter.activity_type_ids, p_page: filter.page, p_page_size: 50,
+    p_activity_type_ids: filter.activity_type_ids, p_page: filter.page, p_page_size: pageSize,
   });
   if (["PT401", "PT403", "PT404"].includes(error?.code ?? "")) notFound();
   if (error?.code === "PT400") return { history: null, error: "Revisa el período y los tipos de actividad seleccionados." };
@@ -40,14 +40,14 @@ export async function getWardAttendanceHistory(groupId: string, athleteUserId: s
   return { history: parsed.data, error: null };
 }
 
-export async function getMyAttendanceHistory(groupId: string, filter: AttendancePeriodFilter) {
+export async function getMyAttendanceHistory(groupId: string, filter: AttendancePeriodFilter, pageSize = 50) {
   const group = await getGroup(groupId);
   if (!group.roles.includes("ATHLETE")) notFound();
   const supabase = await createClient();
   // La base resuelve la membership propia a partir del JWT en cada lectura.
   const { data, error } = await supabase.rpc("get_my_attendance_history", {
     p_group_id: group.id, p_period: filter.period, p_from: filter.from, p_to: filter.to,
-    p_activity_type_ids: filter.activity_type_ids, p_page: filter.page, p_page_size: 50,
+    p_activity_type_ids: filter.activity_type_ids, p_page: filter.page, p_page_size: pageSize,
   });
   if (["PT401", "PT403", "PT404"].includes(error?.code ?? "")) notFound();
   if (error?.code === "PT400") return { history: null, error: "Revisa el período y los tipos de actividad seleccionados." };

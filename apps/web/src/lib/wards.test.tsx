@@ -2,10 +2,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), wardsRange: vi.fn(), groupsRange: vi.fn(), maybeSingle: vi.fn(),
-  activitiesRange: vi.fn(), activitySelect: vi.fn(), activityGroups: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from }) }));
+  activitiesRange: vi.fn(), activityLimit: vi.fn(), activitySelect: vi.fn(), activityGroups: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn(), home: vi.fn(), history: vi.fn(), group: vi.fn(), rpc: vi.fn(), taskSelect: vi.fn(), taskLimit: vi.fn() }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/wards", redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
-import { getGroupWards, getMyWards, getWard, parseWardsPage } from "./wards";
+vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
+vi.mock("@/lib/activities", async original => ({ ...await original<typeof import("./activities")>(), getWardHomeActivities: mock.home }));
+vi.mock("@/lib/attendance-history", () => ({ getWardAttendanceHistory: mock.history }));
+import { historyFixture } from "./attendance-history.test-fixture";
+import { getGroupWards, getMyWards, getWard, parseWardsPage, getGuardianTasks } from "./wards";
 import { getWardActivities } from "./activities";
 import WardsPage from "@/app/wards/page";
 import WardPage from "@/app/wards/[athleteUserId]/page";
@@ -23,13 +27,20 @@ beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-01-15T12:00:00Z"));
+  mock.home.mockResolvedValue({ next: activity, previous: null, now: "2026-01-15T12:00:00Z" });
+  mock.history.mockResolvedValue({ history: historyFixture, error: null });
+  mock.group.mockImplementation(async id => ({ id, roles: ["GUARDIAN"] }));
+  mock.taskLimit.mockResolvedValue({ data: [], error: null });
+  mock.taskSelect.mockReturnValue({ limit: mock.taskLimit });
+  mock.rpc.mockReturnValue({ select: mock.taskSelect });
   mock.getUser.mockResolvedValue({ data: { user: { id: "guardian-auth" } } });
   mock.wardsRange.mockResolvedValue({ data: [ward], error: null });
   mock.groupsRange.mockResolvedValue({ data: groups, error: null });
   mock.maybeSingle.mockResolvedValue({ data: ward, error: null });
   mock.activitiesRange.mockResolvedValue({ data: [activity], error: null });
+  mock.activityLimit.mockResolvedValue({ data: [activity], error: null });
   const activityQuery = { select: mock.activitySelect, in: mock.activityGroups, order: mock.order,
-    gte: mock.gte, lt: mock.lt, range: mock.activitiesRange };
+    gte: mock.gte, lt: mock.lt, range: mock.activitiesRange, limit: mock.activityLimit };
   for (const method of [mock.activitySelect, mock.activityGroups, mock.order, mock.gte, mock.lt]) method.mockReturnValue(activityQuery);
   mock.from.mockImplementation((table: string) => {
     if (table === "v_group_activities") return activityQuery;
@@ -249,4 +260,67 @@ describe("agenda del pupilo", () => {
     await expect(WardPage({ params: Promise.resolve({ athleteUserId: id }), searchParams: Promise.resolve(search) })).rejects.toThrow("404");
     expect(mock.from).not.toHaveBeenCalled();
   });
+});
+
+
+describe("resúmenes del inicio del apoderado", () => {
+  it("muestra agenda, mes y consentimientos por grupo sin agregar métricas ni consultar pendientes", async () => {
+    mock.taskLimit.mockResolvedValue({ data: [{ total_count: 5 }], error: null });
+    const html = renderToStaticMarkup(await WardsPage({ searchParams: Promise.resolve({}) }));
+    expect(mock.home).toHaveBeenCalledTimes(1);
+    expect(mock.home).toHaveBeenCalledWith(id);
+    expect(mock.history).toHaveBeenCalledWith(groups[0]!.group_id, id, expect.objectContaining({ period: "month" }), 1);
+    expect(html).toContain("77.8 %");
+    expect(html).toContain("2026-03-01");
+    expect(html).toContain("2026-03-31");
+    expect(html).toContain("Práctica de tenis");
+    expect(html).toContain("Cancha central");
+    expect(html).toContain("Altas por consentir: 5");
+    expect(html).toContain(`/groups/${groups[1]!.group_id}/members/consent`);
+    expect(html).not.toContain("Tomar asistencia");
+    expect(html).not.toContain("Crear actividad");
+    expect(html).not.toContain(historyFixture.records[0]!.note);
+  });
+  it("conserva Sin datos y diferencia el vacío de actividades del error", async () => {
+    mock.home.mockResolvedValue({ next: null, previous: null, now: "2026-01-15T12:00:00Z" });
+    mock.history.mockResolvedValue({ history: { ...historyFixture, totals: { ...historyFixture.totals, attendance_pct: null } }, error: null });
+    const html = renderToStaticMarkup(await WardsPage({ searchParams: Promise.resolve({}) }));
+    expect(html).toContain("Sin datos"); expect(html).toContain("Aún no hay actividades en sus grupos");
+    mock.home.mockRejectedValue(new Error("No pudimos cargar las actividades"));
+    await expect(WardsPage({ searchParams: Promise.resolve({}) })).rejects.toThrow("No pudimos cargar las actividades");
+  });
+  it("acota resúmenes a diez pupilos por página y tres grupos con continuación explícita", async () => {
+    mock.groupsRange.mockResolvedValue({ data: Array.from({ length: 5 }, (_, i) => ({ ...groups[0], group_id: `46000000-0000-4000-8000-00000000020${i}` })), error: null });
+    const html = renderToStaticMarkup(await WardsPage({ searchParams: Promise.resolve({ page: "2" }) }));
+    expect(mock.wardsRange).toHaveBeenCalledWith(10, 20);
+    expect(mock.history).toHaveBeenCalledTimes(3);
+    expect(html).toContain("Se muestran 3 de 5 grupos");
+    expect(html).toContain("Ver todos sus grupos");
+  });
+  it("los totales de tareas se proyectan y limitan sin descargar datos personales", async () => {
+    mock.taskLimit.mockResolvedValueOnce({ data: [{ total_count: 107 }], error: null }).mockResolvedValueOnce({ data: [{ total_count: 3 }], error: null });
+    expect(await getGuardianTasks(groups[0]!.group_id)).toEqual({ consents: 107, activations: 3 });
+    expect(mock.taskSelect.mock.calls).toEqual([["total_count"], ["total_count"]]);
+    expect(mock.taskLimit.mock.calls).toEqual([[1], [1]]);
+    mock.group.mockResolvedValue({ id: groups[0]!.group_id, roles: ["ATHLETE"] });
+    await expect(getGuardianTasks(groups[0]!.group_id)).rejects.toThrow("404");
+    mock.group.mockResolvedValue({ id: groups[0]!.group_id, roles: ["GUARDIAN"] });
+    mock.taskLimit.mockResolvedValue({ data: null, error: { message: "secret" } });
+    await expect(getGuardianTasks(groups[0]!.group_id)).rejects.toThrow("No pudimos cargar los consentimientos");
+  });
+});
+
+it("la próxima actividad del pupilo contempla todos sus grupos activos, incluso fuera de los tres resúmenes", async () => {
+  const { getWardHomeActivities } = await vi.importActual<typeof import("./activities")>("./activities");
+  const activeGroups = Array.from({ length: 5 }, (_, i) => ({ ...groups[0], group_id: `46000000-0000-4000-8000-00000000020${i}` }));
+  mock.groupsRange.mockResolvedValue({ data: [...activeGroups, { ...groups[1], group_id: "pending-group" }], error: null });
+  const nearest = { ...activity, group_id: activeGroups[4]!.group_id };
+  mock.activityLimit.mockResolvedValueOnce({ data: [nearest], error: null }).mockResolvedValueOnce({ data: [], error: null });
+  expect((await getWardHomeActivities(id)).next).toEqual(nearest);
+  expect(mock.activityGroups.mock.calls).toEqual([["group_id", activeGroups.map(group => group.group_id)], ["group_id", activeGroups.map(group => group.group_id)]]);
+  expect(mock.activityLimit.mock.calls).toEqual([[1], [1]]);
+  mock.groupsRange.mockResolvedValue({ data: [groups[1]], error: null });
+  mock.activityLimit.mockClear();
+  expect((await getWardHomeActivities(id)).next).toBeNull();
+  expect(mock.activityLimit).not.toHaveBeenCalled();
 });

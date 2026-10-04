@@ -3,6 +3,15 @@ import Link from "next/link";
 import { ATTENDANCE_STATUS_LABELS, activityTypeLabel, attendancePeriodFilterSchema, formatActivityDateTime, reportPercentage, type AttendanceHistory, type AttendancePeriodFilter } from "@asisteam/core";
 import { historyPageHref } from "@/lib/attendance-history";
 
+/** Only the authorized monthly totals reach the home; no individual records. */
+export function AttendanceSummary({ history }: { history: Pick<AttendanceHistory, "period" | "totals"> }) {
+  return <div className="space-y-1">
+    <p className="text-sm">Asistencia del mes: <strong className={reportAttendanceClass(history.totals.attendance_pct)}>{reportPercentage(history.totals.attendance_pct)}</strong></p>
+    <p className="text-sm text-muted-foreground">Período: <time dateTime={history.period.from}>{history.period.from}</time> al <time dateTime={history.period.to}>{history.period.to}</time> · America/Santiago</p>
+    {history.totals.attendance_pct === null && <p className="text-sm text-muted-foreground">Sin convocatorias evaluables en este período.</p>}
+  </div>;
+}
+
 export function AttendanceHistoryContent({ history, filter, athleteUserId }: {
   history: AttendanceHistory; filter: AttendancePeriodFilter; athleteUserId?: string;
 }) {
