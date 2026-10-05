@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { MembershipRole } from "@asisteam/core";
-import { AppShell } from "./app-shell";
+import { AppShell, GroupLogo } from "./app-shell";
 
 const navigation = vi.hoisted(() => ({ pathname: "", push: vi.fn() }));
 vi.mock("next/navigation", () => ({ usePathname: () => navigation.pathname, useRouter: () => ({ push: navigation.push }) }));
@@ -76,4 +76,18 @@ describe("navegación compartida", () => {
     expect(nav.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
     expect(screen.getByRole("link", { name: "Mi agenda global" }).getAttribute("href")).toBe("/groups#agenda");
   });
+});
+
+it.each(["settings", "settings/visibility", "activity-types", "invitations/new"])("gestión conserva rutas y señala una sección activa en %s", suffix => {
+  navigation.pathname = `/groups/${groupId}/${suffix}`;
+  render(<AppShell group={group}><h1>Gestión</h1></AppShell>);
+  const nav = screen.getByRole("navigation", { name: "Gestión del grupo" });
+  expect(within(nav).getAllByRole("link")).toHaveLength(4);
+  expect(nav.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+  expect(nav.querySelector('[aria-current="page"]')?.getAttribute("href")).toBe(navigation.pathname);
+});
+it("logo no disponible conserva identificación accesible", () => {
+  render(<GroupLogo src="https://example.test/missing.png" name="Club local" />);
+  fireEvent.error(screen.getByRole("img", { name: "Logo de Club local" }));
+  expect(screen.getByRole("img", { name: "Club local: logo no disponible" }).textContent).toBe("CL");
 });

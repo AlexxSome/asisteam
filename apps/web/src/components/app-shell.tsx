@@ -19,6 +19,19 @@ type ShellProps = {
 };
 type NavigationItem = { label: string; href: string; active?: boolean };
 
+export function GroupLogo({ src, name, preview = false }: { src?: string | null; name: string; preview?: boolean }) {
+  const [failedSource, setFailedSource] = useState<string | null>(null);
+  const source = src?.trim();
+  const available = !!source && /^https?:\/\//i.test(source) && failedSource !== source;
+  return <span className={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-md border bg-muted ${preview ? "size-16" : "size-8"}`}>
+    {available ? <img key={source} src={source} alt={`Logo de ${name || "tu grupo"}`} width={preview ? 64 : 32} height={preview ? 64 : 32}
+      referrerPolicy="no-referrer" className="size-full object-contain" onError={() => setFailedSource(source)} />
+      : <span role="img" aria-label={`${name || "Tu grupo"}: ${source ? "logo no disponible" : "sin logo"}`} className="text-small font-semibold">
+        {name.trim().slice(0, 2).toLocaleUpperCase("es") || "GR"}
+      </span>}
+  </span>;
+}
+
 /** Shared navigation only: access checks remain in the server pages and RLS. */
 export function AppShell({ children, group, groups = [], userId, wards = false }: ShellProps) {
   const pathname = usePathname();
@@ -33,6 +46,13 @@ export function AppShell({ children, group, groups = [], userId, wards = false }
   const base = group ? `/groups/${group.id}` : "";
   const suffix = base && pathname?.startsWith(`${base}/`) ? pathname.slice(base.length) : "";
   const isAdmin = group?.roles.includes("ADMIN");
+  const managementItems = [
+    { label: "Datos y código", href: `${base}/settings`, active: suffix === "/settings" },
+    { label: "Visibilidad", href: `${base}/settings/visibility`, active: suffix === "/settings/visibility" },
+    { label: "Tipos de actividad", href: `${base}/activity-types`, active: suffix === "/activity-types" },
+    { label: "Invitaciones", href: `${base}/invitations/new`, active: suffix.startsWith("/invitations/") },
+  ];
+  const inManagement = isAdmin && managementItems.some(item => item.active);
 
   useEffect(() => {
     const updateHash = () => setHash(window.location.hash);
@@ -136,7 +156,7 @@ export function AppShell({ children, group, groups = [], userId, wards = false }
           <AccountMenu compact />
         </div>
         <div className="flex min-w-0 items-center gap-2 pb-1">
-          {group?.logo_url && <img src={group.logo_url} alt="" width={32} height={32} referrerPolicy="no-referrer" className="size-8 shrink-0 rounded object-cover" />}
+          {group?.logo_url && <GroupLogo key={group.logo_url} src={group.logo_url} name={group.name} />}
           <div className="min-w-0">
             <p className="text-small font-semibold [overflow-wrap:anywhere]">{group?.name ?? "Espacio personal"}</p>
             <p className="text-caption text-muted-foreground">{group ? group.roles.map(role => MEMBERSHIP_ROLE_LABELS[role]).join(" · ") : "Tu cuenta y todos tus grupos"}</p>
@@ -146,7 +166,18 @@ export function AppShell({ children, group, groups = [], userId, wards = false }
     </header>
     <div className="mx-auto grid max-w-7xl lg:grid-cols-[16rem_minmax(0,1fr)]">
       <aside className="hidden min-w-0 border-r border-border bg-surface p-4 lg:block">{navigation}</aside>
-      <main id="main-content" tabIndex={-1} className="min-w-0 space-y-6 p-4 outline-none md:p-6 lg:p-8">{children}</main>
+      <main id="main-content" tabIndex={-1} className="min-w-0 space-y-6 p-4 outline-none md:p-6 lg:p-8">
+        {inManagement && <nav aria-label="Gestión del grupo" className="space-y-2 border-b pb-4">
+          <p className="text-caption font-semibold text-muted-foreground">Gestión del grupo</p>
+          <ul className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">{managementItems.map(item => <li key={item.href} className="min-w-0">
+            <Link href={item.href} prefetch={false} aria-current={item.active ? "page" : undefined}
+              className={`flex min-h-11 items-center rounded-md border px-3 py-2 text-small ${item.active ? "border-primary bg-info-subtle font-semibold text-info" : "hover:bg-muted"}`}>
+              {item.label}<NavigationProgress />
+            </Link>
+          </li>)}</ul>
+        </nav>}
+        {children}
+      </main>
     </div>
     <dialog ref={dialog} id={menuId} aria-labelledby={titleId}
       onKeyDown={event => {

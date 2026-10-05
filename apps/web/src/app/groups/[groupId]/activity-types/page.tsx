@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { forbidden } from "next/navigation";
 import { activityTypeLabel } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
@@ -14,9 +15,9 @@ export default async function ActivityTypesPage({ params }: { params: Promise<{ 
   const types = await getActivityTypes(group.id, true);
   const customTypes = types.filter((type) => type.group_id === group.id);
   return <>
-    <Link href={`/groups/${groupId}/activities`} className="underline">Volver a actividades</Link>
-    <h1 className="text-2xl font-semibold">Tipos de actividad</h1>
-    <p>Define los tipos de tu grupo. Al desactivar uno, deja de ofrecerse para actividades nuevas; las actividades y su historial se conservan.</p>
+    <PageHeader title="Tipos de actividad" description="Organiza las actividades de este grupo con tipos personalizados. Elige Editar para cambiar uno existente.">
+      <ActionLink href={`/groups/${groupId}/activities`}>Volver a actividades</ActionLink>
+    </PageHeader>
     <section className="max-w-xl space-y-4 rounded-lg border p-4" aria-labelledby="new-type-heading">
       <h2 id="new-type-heading" className="text-lg font-semibold">Crear tipo personalizado</h2>
       <ActivityTypeForm groupId={group.id} />
