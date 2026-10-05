@@ -44,6 +44,8 @@ export function useUnsavedChanges(dirty: boolean) {
       const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
       if (!(link instanceof HTMLAnchorElement) || link.target === "_blank" || link.hasAttribute("download")) return;
       const url = new URL(link.href, window.location.href);
+      // Opening a mail/phone handler does not discard the draft in this page.
+      if (url.protocol !== "http:" && url.protocol !== "https:") return;
       if (url.pathname === location.pathname && url.search === location.search) return;
       if (!dirtyRef.current && !guardRef.current) return;
       event.preventDefault(); event.stopPropagation();

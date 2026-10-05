@@ -75,7 +75,7 @@ it.each([undefined, "group-id"])("consentimiento sin cupos respeta permiso ADMIN
   await userEvent.click(screen.getByRole("button"));
   const alert = await screen.findByRole("alert");
   if (billingGroupId) expect(screen.getByRole("link", { name: "Gestionar plan" }).getAttribute("href")).toBe("/groups/group-id/billing");
-  else { expect(alert.textContent).toContain("Contacta a tu administrador"); expect(screen.queryByRole("link")).toBeNull(); }
+  else { expect(alert.textContent).toContain("Contacta a tu administrador"); expect(screen.queryByRole("link", { name: "Gestionar plan" })).toBeNull(); }
   expect(screen.queryByRole("status")).toBeNull();
   expect(mock.refresh).not.toHaveBeenCalled();
 });
@@ -88,4 +88,13 @@ it("consentir un alta por código conserva aprobación ADMIN pendiente y no anun
   const status = await screen.findByRole("status");
   expect(status.textContent).toContain("Falta la aprobación del administrador");
   expect(status.textContent).not.toContain("ya está activo");
+});
+
+it("dirige revocación al soporte confirmado sin datos del menor ni aceptación automática", () => {
+  render(<ManagedConsentForm membershipId="membership-id" fullName="Pupilo privado" relationship="Tutor" />);
+  const href = screen.getByRole("link", { name: "Solicitar revocación a soporte" }).getAttribute("href")!;
+  expect(decodeURIComponent(href)).toBe("mailto:soporte@asisteam.cl?subject=Solicitud de revocación de consentimiento en Asisteam");
+  expect(href).not.toContain("Pupilo");
+  expect((screen.getByRole("checkbox") as HTMLInputElement).checked).toBe(false);
+  expect(mock.consent).not.toHaveBeenCalled();
 });
