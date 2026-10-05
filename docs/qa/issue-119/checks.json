@@ -1,0 +1,519 @@
+{
+  "base": "807dbe18d3f3d6be156727ecdf198135078753c5",
+  "environment": "Chrome, synthetic actions and real components with production CSS",
+  "checks": [
+    {
+      "scenario": "QR bounds",
+      "width": 320,
+      "qr": {
+        "x": 25,
+        "y": 274,
+        "width": 270,
+        "height": 270
+      }
+    },
+    {
+      "scenario": "qr-ready",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-error",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-closed",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-renewing",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-settings-error",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-missing",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-expired",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-unavailable",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-retry",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-registering",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-existing",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-ready",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-login",
+      "width": 320,
+      "scrollWidth": 320,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "QR bounds",
+      "width": 375,
+      "qr": {
+        "x": 47.5,
+        "y": 274,
+        "width": 280,
+        "height": 280
+      }
+    },
+    {
+      "scenario": "qr-ready",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-error",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-closed",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-renewing",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-settings-error",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-missing",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-expired",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-unavailable",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-retry",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-registering",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-existing",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-ready",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-login",
+      "width": 375,
+      "scrollWidth": 375,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "QR bounds",
+      "width": 768,
+      "qr": {
+        "x": 244,
+        "y": 282,
+        "width": 280,
+        "height": 280
+      }
+    },
+    {
+      "scenario": "qr-ready",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-error",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-closed",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-renewing",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-settings-error",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-missing",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-expired",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-unavailable",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-retry",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-registering",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-existing",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-ready",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-login",
+      "width": 768,
+      "scrollWidth": 768,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "QR bounds",
+      "width": 1024,
+      "qr": {
+        "x": 500,
+        "y": 290,
+        "width": 280,
+        "height": 280
+      }
+    },
+    {
+      "scenario": "qr-ready",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-error",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-closed",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-renewing",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-settings-error",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-missing",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-expired",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-unavailable",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-retry",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-registering",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-existing",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-ready",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-login",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "QR bounds",
+      "width": 1440,
+      "qr": {
+        "x": 708,
+        "y": 290,
+        "width": 280,
+        "height": 280
+      }
+    },
+    {
+      "scenario": "qr-ready",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-error",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-qr-closed",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-renewing",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "qr-settings-error",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-missing",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-expired",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-unavailable",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-retry",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-registering",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-existing",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-ready",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "checkin-login",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "dpr": 1,
+      "scale": 1
+    },
+    {
+      "scenario": "Native keyboard disclosure and save",
+      "pass": true
+    },
+    {
+      "scenario": "Keyboard retry and confirmation",
+      "pass": true
+    }
+  ]
+}
