@@ -1,0 +1,84 @@
+[
+  {
+    "headings": [
+      "Datos personales",
+      "Foto de perfil",
+      "Fotos de mis pupilos",
+      "Cuenta y seguridad",
+      "Privacidad y soporte",
+      "Navegación"
+    ],
+    "overflow": false,
+    "scrollWidth": 320,
+    "width": 320
+  },
+  {
+    "headings": [
+      "Datos personales",
+      "Foto de perfil",
+      "Fotos de mis pupilos",
+      "Cuenta y seguridad",
+      "Privacidad y soporte",
+      "Navegación"
+    ],
+    "overflow": false,
+    "scrollWidth": 375,
+    "width": 375
+  },
+  {
+    "headings": [
+      "Datos personales",
+      "Foto de perfil",
+      "Fotos de mis pupilos",
+      "Cuenta y seguridad",
+      "Privacidad y soporte",
+      "Navegación"
+    ],
+    "overflow": false,
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "headings": [
+      "Datos personales",
+      "Foto de perfil",
+      "Fotos de mis pupilos",
+      "Cuenta y seguridad",
+      "Privacidad y soporte",
+      "Navegación"
+    ],
+    "overflow": false,
+    "scrollWidth": 1024,
+    "width": 1024
+  },
+  {
+    "headings": [
+      "Datos personales",
+      "Foto de perfil",
+      "Fotos de mis pupilos",
+      "Cuenta y seguridad",
+      "Privacidad y soporte",
+      "Navegación"
+    ],
+    "overflow": false,
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "overflow": false,
+    "scrollWidth": 1440,
+    "width": 1440,
+    "zoom": "CSS 200%"
+  },
+  {
+    "case": "invalid-phone",
+    "error": "Teléfono inválido (ej. +56912345678)",
+    "focused": "phone",
+    "overflow": false
+  },
+  {
+    "case": "photo-preview",
+    "visible": true,
+    "uploadEnabled": true
+  }
+]
