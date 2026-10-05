@@ -108,3 +108,11 @@ it("al navegar A → B → A reemplaza historial, porcentaje y enlaces por los d
       .toBe(`/groups/${history.group_id}/me/history`);
   }
 });
+
+it("muestra resumen e identidad antes de los filtros", async () => {
+  render(await MyHistoryPage({ params, searchParams: Promise.resolve({}) }));
+  const summary = screen.getByRole("region", { name: "Resumen de mi asistencia" });
+  const form = screen.getByRole("form", { name: "Filtros de asistencia" });
+  expect(summary.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(screen.getByRole("heading", { level: 1 }).nextElementSibling?.textContent).toContain("Mi equipo");
+});

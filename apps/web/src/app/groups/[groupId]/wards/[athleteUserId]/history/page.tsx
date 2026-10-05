@@ -27,12 +27,12 @@ export default async function WardHistoryPage({ params, searchParams }: {
     parsed.success ? getWardAttendanceHistory(group.id, ward.athlete_user_id, filter)
       : Promise.resolve({ history: null, error: "Revisa los filtros: usa fechas válidas, un rango ordenado y tipos de actividad del grupo." }),
   ]);
+  const filters = <ReportFilters key={JSON.stringify(filter)} groupId={group.id} filter={filter} types={types} personal athleteUserId={ward.athlete_user_id} />;
   return <>
     <Link href={`/wards/${ward.athlete_user_id}`} prefetch={false} className="inline-block py-2 underline">Volver al perfil del pupilo</Link>
     <header><h1 className="text-h1">Historial de asistencia del pupilo</h1>
       <p className="mt-2 text-muted-foreground">{ward.full_name} · {group.name}</p></header>
-    <ReportFilters key={JSON.stringify(filter)} groupId={group.id} filter={filter} types={types} personal athleteUserId={ward.athlete_user_id} />
     {result.error && <p role="alert" className="rounded-md border border-destructive p-4">{result.error}</p>}
-    {result.history && <AttendanceHistoryContent history={result.history} filter={filter} athleteUserId={ward.athlete_user_id} />}
+    {result.history ? <AttendanceHistoryContent history={result.history} filter={filter} athleteUserId={ward.athlete_user_id} filters={filters} /> : filters}
   </>;
 }

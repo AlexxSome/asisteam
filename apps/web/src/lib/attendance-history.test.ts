@@ -80,3 +80,16 @@ it("pupilo conserva identidad y filtros en enlaces y rechaza contrato con datos 
   mock.rpc.mockResolvedValue({ data: null, error: { code: "PT400" } });
   expect((await getWardAttendanceHistory(groupId, athleteUserId, filter)).error).toContain("Revisa");
 });
+
+it.each(["week", "month", "season"])("historial %s normaliza fechas sin alterar el período ni el pupilo", (period) => {
+  const parsed = parseHistoryFilters({ period, from: "2026-03-01", to: "2026-03-31" });
+  expect(parsed.success).toBe(true);
+  if (!parsed.success) throw new Error("fixture inválida");
+  expect(parsed.data.to).toBeUndefined();
+  expect(parsed.data.from).toBe(period === "season" ? undefined : "2026-03-01");
+  const query = new URL(historyPageHref(groupId, parsed.data, 2, "pupilo"), "https://example.test");
+  expect(query.pathname).toContain("/wards/pupilo/history");
+  expect(query.searchParams.has("to")).toBe(false);
+  expect(query.searchParams.has("from")).toBe(period !== "season");
+  expect(query.searchParams.get("page")).toBe("2");
+});
