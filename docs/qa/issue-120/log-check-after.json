@@ -1,0 +1,8 @@
+{
+  "loginPost": true,
+  "registerPost": true,
+  "actionArguments": false,
+  "sensitivePayload": false,
+  "token": false,
+  "requests": 208
+}
