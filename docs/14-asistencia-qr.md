@@ -51,3 +51,34 @@ pnpm exec supabase gen types typescript --local
 ```
 
 pgTAP comprueba límites exactos, permisos, aislamiento, revocación, caducidad e idempotencia. Vitest cubre payloads estrictos, login, errores, reescaneo en la misma pestaña y rotación en pantalla. La integración utiliza Auth/PostgREST reales y verifica ocho escaneos simultáneos y asistencia manual concurrente con fixtures sintéticos propios que elimina al terminar.
+
+## UX y recuperación — #119
+
+El QR y la vigencia ocupan el primer bloque de la actividad. Los ajustes quedan plegados bajo **Ajustes de QR de todo el grupo**: abrirlos o editar campos no guarda nada. El botón de guardado y su explicación indican que afecta a todas las actividades, y la validación usa el schema compartido. Un fallo conserva el borrador y se anuncia como `alert`; un guardado correcto se anuncia como `status`.
+
+La llegada distingue lectura, registro pendiente, confirmación, registro anterior, QR vencido y operación no disponible. Cada estado permite volver a Mis grupos con una URL limpia. Solo una falla recuperable permite reintentar; un QR vencido pide reescanear, incluso después del login. Los segundos no están en una región viva. Las respuestas recibidas con la pestaña oculta se descartan y el QR se vuelve a consultar al recuperar visibilidad.
+
+### Evidencia antes/después
+
+Base: `807dbe18d3f3d6be156727ecdf198135078753c5`. Chrome con datos sintéticos, componentes reales (incluido el shell) y CSS del build de producción. Un fixture temporal externo al repositorio sustituye Server Actions/consultas y navegación de Next. No usa una sesión Supabase ni constituye un E2E autenticado o una certificación con lector de pantalla.
+
+| Escenario, 375 px | Antes | Después |
+|---|---|---|
+| QR y ajustes | [QR y formulario juntos](qa/issue-119/before-qr-375.png) | [QR y ajustes plegados](qa/issue-119/after-qr-375.png) |
+| Enlace sin QR | [Instrucción sin salida](qa/issue-119/before-checkin-375.png) | [Instrucción y regreso a grupos](qa/issue-119/after-checkin-375.png) |
+
+Estados adicionales: [renovación sin código vencido](qa/issue-119/after-renewing-375.png), [fallo al cargar QR](qa/issue-119/after-qr-error-375.png), [horario no disponible](qa/issue-119/after-qr-closed-375.png), [error al guardar con borrador conservado](qa/issue-119/after-settings-error-375.png), [guardado correcto](qa/issue-119/after-settings-success-375.png), [registrando](qa/issue-119/after-checkin-registering-375.png), [confirmación](qa/issue-119/after-checkin-ready-375.png), [registro anterior](qa/issue-119/after-checkin-existing-375.png), [vencido](qa/issue-119/after-checkin-expired-375.png), [login y aviso de reescaneo](qa/issue-119/after-checkin-login-375.png), [QR en escritorio](qa/issue-119/after-qr-1440.png).
+
+[Mediciones y teclado](qa/issue-119/checks.json): 72 comprobaciones PASS en 320, 375, 768, 1024 y 1440 px; sin overflow horizontal. A 375 px el QR completo cabe en el viewport de 812 px de alto. Chrome confirma Enter para desplegar ajustes, Tab al primer campo, guardado explícito y reintento con teclado. Los enlaces de salida carecen de token y se elimina el fragmento tras leerlo.
+
+### Gate local
+
+- 24 pruebas de comportamiento de los dos componentes: caducidad durante login, reescaneo con respuesta anterior pendiente, rotación, respuesta que consume su vigencia, pestaña oculta, errores recuperables/no recuperables y guardado explícito con validación/feedback.
+- Suite web: **821 PASS**, 81 pruebas de integración omitidas por su configuración opt-in. La primera ejecución tuvo un fallo transitorio en `profile-form.test.tsx` (retirada de previsualización tras guardar foto); la repetición completa pasó sin modificar perfil.
+- Suite core: **150 PASS**. Typecheck de web/core y build de producción: **PASS**. `git diff --check`: **PASS**.
+- Los scripts se ejecutaron con `corepack pnpm --filter @asisteam/web ...` y `corepack pnpm --filter @asisteam/core ...`; Turborepo seleccionaba pnpm 11 del PATH frente al 10.33.2 del repositorio. El build se ejecutó fuera del sandbox porque Turbopack abre un puerto interno. No se modificó la configuración de versiones.
+- No hay script de lint ni skills heredadas `frontend-check`, `frontend-ci` o `ship` instaladas; se aplican los gates reales y la entrega explícita de la skill del issue. No se cambian DB/RLS/RPC ni tipos generados, por lo que no se requieren nuevas migraciones ni el gate de pgTAP/integración para este cambio.
+
+La auto-revisión se limita al diff de #119 y sus efectos. Las reglas y límites del QR del contrato anterior se mantienen.
+
+[Zoom nativo 200 %](qa/issue-119/zoom-200.json): Chrome configurado desde Apariencia en un perfil temporal aislado; ventana 1440 px → viewport CSS 720 px, DPR 2 y escala visual 1. QR, ajustes abiertos y recuperación de un código vencido no desbordan. Tab/Enter siguen operativos en los ajustes. Capturas del viewport físico mediante CDP sin recorte: [QR](qa/issue-119/zoom-200-qr.png), [ajustes](qa/issue-119/zoom-200-settings.png), [vencido](qa/issue-119/zoom-200-expired.png).

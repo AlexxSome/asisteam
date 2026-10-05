@@ -2,6 +2,7 @@
 import { StrictMode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { checkinPath } from "@asisteam/core";
 const mock = vi.hoisted(() => ({ redeem: vi.fn() }));
 vi.mock("./actions", () => ({ redeemCheckin: mock.redeem }));
@@ -26,7 +27,9 @@ describe("llegada desde la cámara", () => {
   it("explica el vencimiento sin confirmar asistencia", async () => {
     mock.redeem.mockResolvedValue({ error: { code: "checkin_qr_expired", message: "Escanea el código actual" } });
     render(<CheckinForm authenticated />);
-    expect((await screen.findByRole("alert")).textContent).toBe("Escanea el código actual");
+    expect((await screen.findByRole("alert")).textContent).toContain("Escanea el código actual");
+    expect(screen.queryByRole("button", { name: "Reintentar registro" })).toBeNull();
+    expect(screen.getByRole("link", { name: "Volver a mis grupos" }).getAttribute("href")).toBe("/groups");
     expect(screen.queryByText("Llegada registrada")).toBeNull();
   });
   it("confirma que un registro anterior se conserva", async () => {
@@ -38,7 +41,8 @@ describe("llegada desde la cámara", () => {
   it("no invoca escrituras desde un enlace sin QR", async () => {
     window.history.replaceState(null, "", "/check-in");
     render(<CheckinForm authenticated />);
-    await waitFor(() => expect(screen.getByRole("alert").textContent).toContain("escanea el QR"));
+    await screen.findByText("Necesitas el QR de la actividad");
+    expect(screen.getByRole("link", { name: "Volver a mis grupos" }).getAttribute("href")).toBe("/groups");
     expect(mock.redeem).not.toHaveBeenCalled();
   });
   it("permite reescanear si la cámara reutiliza la misma pestaña", async () => {
@@ -52,5 +56,66 @@ describe("llegada desde la cámara", () => {
     });
     await screen.findByText("Atrasado");
     expect(mock.redeem).toHaveBeenLastCalledWith({ ...input, token: "b".repeat(64) });
+  });
+});
+
+describe("recuperación segura de la llegada", () => {
+  it("conserva el QR en memoria durante login y exige reescaneo si venció al volver", async () => {
+    const { rerender } = render(<CheckinForm authenticated={false} />);
+    await screen.findByRole("form", { name: "Iniciar sesión" });
+    expect(window.location.hash).toBe("");
+    expect(screen.getByText(/Si el QR vence mientras ingresas/)).toBeTruthy();
+    mock.redeem.mockResolvedValue({ error: { code: "checkin_qr_expired", message: "Escanea el código actual" } });
+    rerender(<CheckinForm authenticated />);
+    await screen.findByRole("alert");
+    expect(mock.redeem).toHaveBeenCalledExactlyOnceWith(input);
+    expect(screen.queryByRole("button", { name: "Reintentar registro" })).toBeNull();
+    for (const link of screen.getAllByRole("link")) {
+      expect(link.getAttribute("href")).not.toContain(input.token);
+      expect(link.getAttribute("href")).not.toContain("?");
+    }
+  });
+  it("reintenta con teclado un fallo recuperable y confirma actividad y estado", async () => {
+    const user = userEvent.setup();
+    mock.redeem.mockRejectedValueOnce(new Error("network"))
+      .mockResolvedValueOnce({ receipt: { activity_id: input.activity_id, group_id: "group", activity_title: "Entrenamiento del viernes", status: "LATE", created: true } });
+    render(<CheckinForm authenticated />);
+    const retry = await screen.findByRole("button", { name: "Reintentar registro" });
+    await user.tab();
+    expect(document.activeElement).toBe(retry);
+    await user.keyboard("{Enter}");
+    await screen.findByText("Llegada confirmada");
+    expect(screen.getByRole("status").textContent).toContain("Entrenamiento del viernes");
+    expect(screen.getByRole("status").textContent).toContain("Atrasado");
+    expect(mock.redeem).toHaveBeenCalledTimes(2);
+  });
+  it.each(["checkin_not_available", "checkin_window_closed"])("no reintenta %s y ofrece ayuda y salida", async code => {
+    mock.redeem.mockResolvedValue({ error: { code, message: "No disponible" } });
+    render(<CheckinForm authenticated />);
+    await screen.findByRole("alert");
+    expect(screen.getByText(/Consulta al administrador/)).toBeTruthy();
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(screen.getByRole("link", { name: "Volver a mis grupos" })).toBeTruthy();
+  });
+  it("muestra el estado registrando mientras espera respuesta", async () => {
+    mock.redeem.mockReturnValue(new Promise(() => {}));
+    render(<CheckinForm authenticated />);
+    expect((await screen.findByRole("status")).textContent).toBe("Registrando tu llegada…");
+    expect(screen.queryByText("Llegada confirmada")).toBeNull();
+  });
+  it("descarta la respuesta de un escaneo anterior cuando llega otro QR", async () => {
+    let resolveFirst!: (value: unknown) => void;
+    mock.redeem.mockReturnValueOnce(new Promise(resolve => { resolveFirst = resolve; }))
+      .mockResolvedValueOnce({ error: { code: "checkin_qr_expired", message: "Escanea el código actual" } });
+    render(<CheckinForm authenticated />);
+    await waitFor(() => expect(mock.redeem).toHaveBeenCalledTimes(1));
+    await act(async () => {
+      window.history.replaceState(null, "", checkinPath({ ...input, token: "b".repeat(64) }));
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    });
+    await screen.findByRole("alert");
+    await act(async () => resolveFirst({ receipt: { activity_id: input.activity_id, group_id: "group", activity_title: "Anterior", status: "PRESENT", created: true } }));
+    expect(screen.queryByText("Llegada confirmada")).toBeNull();
+    expect(screen.getByRole("alert").textContent).toContain("Escanea el código actual");
   });
 });

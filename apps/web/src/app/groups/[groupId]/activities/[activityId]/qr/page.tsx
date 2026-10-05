@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 import { notFound } from "next/navigation";
 import { formatActivityDateTime } from "@asisteam/core";
 import { getActivity } from "@/lib/activities";
@@ -13,10 +14,13 @@ export default async function ActivityQrPage({ params }: { params: Promise<{ gro
   const group = await getGroup(groupId);
   if (!group.roles.includes("ADMIN")) notFound();
   const [activity, result] = await Promise.all([getActivity(groupId, activityId), loadQrSettings(groupId)]);
-  return <>
-    <Link href={`/groups/${groupId}/activities/${activityId}`} className="underline">Volver a la actividad</Link>
-    <h1 className="break-words text-2xl font-semibold">Asistencia con QR · {activity.title}</h1>
-    <p>Inicio: {activity.starts_at && formatActivityDateTime(activity.starts_at)} (Chile).</p>
-    {"error" in result ? <p role="alert">{result.error.message}</p> : <QrDisplay groupId={groupId} activityId={activityId} initialSettings={result.settings} />}
-  </>;
+  return <div className="space-y-4">
+    <ActionLink href={`/groups/${groupId}/activities/${activityId}`} className="px-0">Volver a la actividad</ActionLink>
+    <header className="space-y-1">
+      <p className="text-caption font-medium text-muted-foreground">Asistencia con QR</p>
+      <h1 className="break-words text-xl font-semibold">{activity.title}</h1>
+      <p className="text-small">Inicio: {activity.starts_at && formatActivityDateTime(activity.starts_at)} (Chile).</p>
+    </header>
+    {"error" in result ? <Alert>{result.error.message} Vuelve a la actividad para abrir el QR nuevamente.</Alert> : <QrDisplay groupId={groupId} activityId={activityId} initialSettings={result.settings} />}
+  </div>;
 }

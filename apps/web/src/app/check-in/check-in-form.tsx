@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { ActionLink, Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 import { ATTENDANCE_STATUS_LABELS, CHECKIN_ERROR_MESSAGES, parseCheckinFragment, type CheckinInput } from "@asisteam/core";
 import { LoginForm } from "@/app/login/login-form";
 import { redeemCheckin } from "./actions";
@@ -32,24 +33,46 @@ export function CheckinForm({ authenticated }: { authenticated: boolean }) {
     return () => { active = false; };
   }, [input, authenticated, attempt]);
 
-  if (input === undefined) return <p role="status">Leyendo el QR…</p>;
-  if (!input) return <p role="alert">Abre la cámara de tu teléfono y escanea el QR actual que muestra el administrador de la actividad.</p>;
-  if (!authenticated || (result && "error" in result && result.error.code === "authentication_required")) return <>
-    <p>Inicia sesión con tu cuenta de deportista. Si el QR vence mientras ingresas, vuelve a escanearlo.</p>
+  const groupsLink = <ActionLink href="/groups">Volver a mis grupos</ActionLink>;
+  if (input === undefined) return <div className="space-y-4"><p role="status">Leyendo el QR…</p>{groupsLink}</div>;
+  if (!input) return <div className="space-y-4">
+    <Alert tone="warning"><h2 className="font-semibold">Necesitas el QR de la actividad</h2><p>Este enlace no contiene un QR válido.</p></Alert>
+    <p>Abre la cámara de tu teléfono y escanea el QR actual que muestra el administrador de la actividad.</p>
+    {groupsLink}
+  </div>;
+  if (!authenticated || (result && "error" in result && result.error.code === "authentication_required")) return <div className="space-y-4">
+    <h2 className="text-xl font-semibold">Inicia sesión para registrar tu llegada</h2>
+    <p>Usa tu cuenta de deportista. Si el QR vence mientras ingresas, vuelve a escanear el código actual del administrador.</p>
     <LoginForm checkin={input} />
-  </>;
-  if (!result) return <p role="status">Registrando tu llegada…</p>;
-  if ("error" in result) return <>
-    <p role="alert">{result.error.message}</p>
-    {result.error.code === "checkin_failed" && <button className="rounded-md border px-4 py-3" onClick={() => {
-      request.current = null; setResult(null); setAttempt(value => value + 1);
-    }}>Reintentar registro</button>}
-    <Link href="/groups" className="block underline">Volver a mis grupos</Link>
-  </>;
-  return <div className="space-y-4" role="status">
-    <h2 className="break-words text-xl font-medium">{result.receipt.activity_title}</h2>
-    <p>{result.receipt.created ? "Llegada registrada" : "Ya tenías un registro"}: <strong>{ATTENDANCE_STATUS_LABELS[result.receipt.status]}</strong>.</p>
-    {!result.receipt.created && <p>Se conservó tu asistencia anterior. Si necesitas corregirla, contacta al administrador.</p>}
-    <Link href={`/groups/${result.receipt.group_id}/activities/${result.receipt.activity_id}`} className="block underline">Ver actividad</Link>
+    {groupsLink}
+  </div>;
+  if (!result) return <div className="space-y-4">
+    <p role="status">Registrando tu llegada…</p>
+    <p className="text-small text-muted-foreground">Espera la confirmación antes de cerrar esta pantalla.</p>
+    {groupsLink}
+  </div>;
+  if ("error" in result) {
+    const expired = result.error.code === "checkin_qr_expired";
+    const retryable = result.error.code === "checkin_failed";
+    return <div className="space-y-4">
+      <Alert><h2 className="font-semibold">{expired ? "QR vencido o no válido" : retryable ? "No pudimos confirmar tu llegada" : "Registro no disponible"}</h2><p>{result.error.message}</p></Alert>
+      <p>{expired ? "Abre la cámara de tu teléfono y vuelve a escanear el QR actual del administrador."
+        : retryable ? "Revisa tu conexión y vuelve a intentar. Si la llegada ya se guardó, se conservará ese registro."
+          : "Consulta al administrador de la actividad para revisar el horario o tu acceso."}</p>
+      {retryable && <Button variant="secondary" onClick={() => {
+        request.current = null; setResult(null); setAttempt(value => value + 1);
+      }}>Reintentar registro</Button>}
+      {groupsLink}
+    </div>;
+  }
+  return <div className="space-y-4">
+    <Alert tone="success">
+      <h2 className="text-xl font-semibold">{result.receipt.created ? "Llegada confirmada" : "Ya tenías un registro"}</h2>
+      <p className="mt-2 font-medium">{result.receipt.activity_title}</p>
+      <p>Estado: <strong>{ATTENDANCE_STATUS_LABELS[result.receipt.status]}</strong>.</p>
+      {!result.receipt.created && <p className="mt-2">Se conservó tu asistencia anterior. Si necesitas corregirla, contacta al administrador.</p>}
+    </Alert>
+    <ActionLink href={`/groups/${result.receipt.group_id}/activities/${result.receipt.activity_id}`} variant="secondary">Ver actividad</ActionLink>
+    {groupsLink}
   </div>;
 }

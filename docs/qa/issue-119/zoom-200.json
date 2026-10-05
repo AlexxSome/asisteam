@@ -1,0 +1,29 @@
+{
+  "method": "Chrome Appearance page zoom set to 200% in an isolated temporary profile",
+  "checks": [
+    {
+      "scenario": "qr",
+      "width": 720,
+      "outerWidth": 1440,
+      "dpr": 2,
+      "scale": 1,
+      "scrollWidth": 720
+    },
+    {
+      "scenario": "settings",
+      "width": 720,
+      "outerWidth": 1440,
+      "dpr": 2,
+      "scale": 1,
+      "scrollWidth": 720
+    },
+    {
+      "scenario": "expired",
+      "width": 720,
+      "outerWidth": 1440,
+      "dpr": 2,
+      "scale": 1,
+      "scrollWidth": 720
+    }
+  ]
+}
