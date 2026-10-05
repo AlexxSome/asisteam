@@ -19,7 +19,7 @@ const sql = (query: string) => execFileSync("docker", ["exec", "-i", "supabase_d
 
 suite("anuncios con Auth/PostgREST y cola real", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
     if (sql("select count(*) from app_private.announcement_push_deliveries where status in ('PENDING','AWAITING_RECEIPT')") !== "0") {
       throw new Error("La integración requiere una cola local sin envíos pendientes ajenos a sus fixtures");

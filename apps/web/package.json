@@ -9,10 +9,12 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:integration": "RUN_SUPABASE_INTEGRATION=1 vitest run",
+    "test:integration:modules": "node e2e/run-integrations.mjs",
     "test:invitations": "RUN_INVITATION_INTEGRATION=1 vitest run invitation.integration.test.ts",
     "test:send-invitations": "RUN_SEND_INVITATION_INTEGRATION=1 vitest run send-invitation.integration.test.ts",
     "test:e2e": "playwright test --grep-invert @extended",
     "test:e2e:full": "playwright test",
+    "test:e2e:faults": "playwright test -c playwright.fault.config.ts",
     "test:e2e:report": "playwright show-report .next/qa/report"
   },
   "dependencies": {

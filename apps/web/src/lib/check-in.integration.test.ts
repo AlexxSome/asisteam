@@ -36,7 +36,7 @@ async function qr(activityId: string) {
 
 suite("autoasistencia QR mediante Auth/PostgREST reales", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
     const options = { auth: { persistSession: false, autoRefreshToken: false } };
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);

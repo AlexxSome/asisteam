@@ -19,7 +19,7 @@ export function InvitationForm({ token, signedInEmail, managedActivation = false
     : "Tu incorporación está pendiente. Tu apoderado debe estar vinculado y otorgar su consentimiento; después, el ADMIN podrá confirmar tu ingreso."}</p>;
   return <div className="space-y-5">
     {managedActivation ? <p className="text-sm">Crea tu contraseña para acceder al perfil que gestiona tu ADMIN. Si eres menor de edad, tu apoderado debe mantener vigente su autorización para activar la cuenta.</p> :
-    <div className="flex flex-wrap gap-2" aria-label="Cómo aceptar la invitación">
+    <div className="flex flex-wrap gap-2" role="group" aria-label="Cómo aceptar la invitación">
       {signedInEmail && <Button type="button" variant={mode === "session" ? "default" : "outline"} disabled={busy}
         onClick={() => { setMode("session"); setError(undefined); }}>Usar mi sesión</Button>}
       <Button type="button" variant={mode === "login" ? "default" : "outline"} disabled={busy}

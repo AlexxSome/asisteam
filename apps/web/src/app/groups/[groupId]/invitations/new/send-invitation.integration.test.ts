@@ -35,7 +35,7 @@ const tokenFromEmail = () => emails.at(-1)!.text.match(/\/invitations\/([a-f0-9]
 
 suite("emisión Edge + Auth + Postgres local", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo Supabase local");
     admin = createClient(config.API_URL, config.SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
     for (const name of ["admin", "athlete", "guardian", "outsider"]) {
@@ -51,6 +51,7 @@ suite("emisión Edge + Auth + Postgres local", () => {
     for (const [id, code] of [[groupId, run.slice(0,8)], [otherGroupId, run.slice(8,16)], [limitGroupId, run.slice(16,24)]]) {
       sql(`insert into public.groups(id,name,invite_code,created_by) values('${id}','Grupo emisión sintética','${code}','${credentials.get("admin")!.profileId}');`);
     }
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}'),('${otherGroupId}'),('${limitGroupId}');`);
     sql(`insert into public.memberships(user_id,group_id,role,status) values
       ('${credentials.get("admin")!.profileId}','${groupId}','ADMIN','ACTIVE'),
       ('${credentials.get("admin")!.profileId}','${limitGroupId}','ADMIN','ACTIVE'),
@@ -67,10 +68,16 @@ suite("emisión Edge + Auth + Postgres local", () => {
   afterAll(async () => {
     if (!admin) return;
     const ids = sql(`select auth_user_id from public.users where email like 'issue23-${run}-%@example.test' and auth_user_id is not null;`).split("\n").filter(Boolean);
-    sql(`delete from public.invitations where group_id in ('${groupId}','${otherGroupId}','${limitGroupId}');
+    // Solo fixtures de esta ejecución local. El registro añade evidencia append-only.
+    sql(`begin; set local session_replication_role=replica;
+      delete from public.account_consents where user_id in (select id from public.users where email like 'issue23-${run}-%@example.test');
+      delete from app_private.invitation_registrations where email like 'issue23-${run}-%@example.test';
+      delete from app_private.invitation_send_limits where group_id in ('${groupId}','${otherGroupId}','${limitGroupId}');
+      delete from public.invitations where group_id in ('${groupId}','${otherGroupId}','${limitGroupId}');
       delete from public.memberships where group_id in ('${groupId}','${otherGroupId}','${limitGroupId}');
+      delete from app_private.billing_legacy_groups where group_id in ('${groupId}','${otherGroupId}','${limitGroupId}');
       delete from public.groups where id in ('${groupId}','${otherGroupId}','${limitGroupId}');
-      delete from public.users where email like 'issue23-${run}-%@example.test';`);
+      delete from public.users where email like 'issue23-${run}-%@example.test'; commit;`);
     for (const id of ids) await admin.auth.admin.deleteUser(id);
   });
 

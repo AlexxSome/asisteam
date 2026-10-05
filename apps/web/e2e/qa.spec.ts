@@ -96,6 +96,12 @@ test('@smoke asistencia: 0/1/50/500, búsqueda y menor pendiente', async ({ page
 test('@smoke asistencia: confirmación teclado, processing, guardado y rollback offline', async ({ page, context }, info) => {
   await login(page, 'admin');
   await visit(page, `/groups/${groups.single}/activities/${activity(groups.single)}/attendance`);
+  // The supervised QA server may already contain a mark from a previous pass.
+  const selected = page.getByRole('button', { pressed: true });
+  if (await selected.count()) {
+    await selected.click();
+    await expect(page.getByRole('status', { name: `Guardado de ${rosterName(1)}` })).toContainText('Registro desmarcado');
+  }
   const markAll = page.getByRole('button', { name: 'Marcar todos como Presente' });
   await markAll.click();
   await expect(page.getByRole('button', { name: 'Cancelar', exact: true })).toBeFocused();
@@ -128,6 +134,14 @@ test('@smoke asistencia: confirmación teclado, processing, guardado y rollback 
 test('@smoke guardián: pupilo vigente y consentimiento', async ({ page }) => {
   await login(page, 'guardian');
   await visit(page, '/wards');
+  // Extended flows add synthetic wards; the stable fixture may be on a later page.
+  for (let index = 0; index < 50 && !(await page.getByText(wardName, { exact: true }).count()); index++) {
+    const next = page.getByRole('navigation', { name: 'Páginas de mis pupilos' }).getByRole('link', { name: 'Siguiente' });
+    if (!(await next.count())) break;
+    const destination = await next.getAttribute('href');
+    await next.click();
+    await expect(page).toHaveURL(new RegExp(`${destination!.replace('?', '\\?')}$`));
+  }
   await expect(page.getByText(wardName, { exact: true })).toBeVisible();
   await visit(page, `/groups/${groups.fifty}/members/consent`);
   await checkLayout(page);
@@ -146,7 +160,7 @@ test('@smoke logs: login y registro reales sin argumentos privados', async ({ pa
   // Existing synthetic account exercises the real action without sending email.
   await expect(page.getByRole('main').getByRole('alert')).toContainText('ya está registrado');
   await expect.poll(() => JSON.parse(readFileSync('.next/qa/log-check.json', 'utf8'))).toMatchObject({
-    loginPost: true, registerPost: true, actionArguments: false, sensitivePayload: false, token: false,
+    loginPost: true, registerPost: true, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false,
   });
 });
 

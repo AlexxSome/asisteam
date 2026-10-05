@@ -20,7 +20,7 @@ function sql(query: string): string {
 
 suite("Auth + PostgREST + Postgres: crear grupo", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Las pruebas solo admiten Supabase local");
     const options = { auth: { persistSession: false, autoRefreshToken: false } };
     admin = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
@@ -43,6 +43,7 @@ suite("Auth + PostgREST + Postgres: crear grupo", () => {
     const groups = `select id from public.groups where created_by in (${users})`;
     const authIds = sql(`select auth_user_id from public.users where email like 'issue20-${run}-%@example.test';`).split("\n").filter(Boolean);
     sql(`delete from public.memberships where group_id in (${groups});
+      delete from app_private.billing_legacy_groups where group_id in (${groups});
       delete from public.groups where created_by in (${users});
       delete from public.users where email like 'issue20-${run}-%@example.test';`);
     for (const id of authIds) await admin.auth.admin.deleteUser(id);
@@ -62,6 +63,9 @@ suite("Auth + PostgREST + Postgres: crear grupo", () => {
   });
 
   it("dos auto-incorporaciones simultáneas devuelven la misma segunda membresía", async () => {
+    expect((await clients.adult!.rpc("join_group_as_athlete", { p_group_id: groupId })).error?.message).toBe("subscription_athlete_limit");
+    // El escenario concurrente original corresponde a capacidad legacy.
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
     const results = await Promise.all([1, 2].map(() => clients.adult!.rpc("join_group_as_athlete", { p_group_id: groupId })));
     expect(results.map(result => result.error)).toEqual([null, null]);
     expect(results[0]!.data).toBe(results[1]!.data);

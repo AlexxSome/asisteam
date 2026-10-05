@@ -118,7 +118,7 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
       help="Pega el enlace público de una imagen (http o https). Si no está disponible, mostraremos las iniciales del grupo. También puedes dejarlo vacío.">
       <Input type="url" placeholder="https://..." {...register("logo_url")} />
     </Field>
-    <div className="flex items-center gap-3" aria-label="Vista previa del logo">
+    <div className="flex items-center gap-3" role="group" aria-label="Vista previa del logo">
       <GroupLogo key={watch("logo_url")} src={watch("logo_url")} name={watch("name")} preview />
       <p className="text-small text-muted-foreground">Vista previa del logo. Guarda los cambios para aplicarlo.</p>
     </div>
@@ -129,7 +129,7 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
     {groupId && <section id="invite" className="space-y-3 rounded-lg border p-5">
       <h2 className="text-lg font-semibold">Código de invitación</h2>
       <p>Comparte este código con quienes quieras incorporar como deportistas.</p>
-      <p className="font-mono text-xl tracking-widest" aria-label="Código de invitación">{code}</p>
+      <output className="block font-mono text-xl tracking-widest" aria-label="Código de invitación">{code}</output>
       {code && <div className="space-y-2">
         <label htmlFor="invite-link" className="block">Enlace para unirse</label>
         <Input id="invite-link" readOnly value={joinLink} onFocus={(event) => event.currentTarget.select()} />

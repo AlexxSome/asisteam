@@ -29,7 +29,7 @@ async function series() {
 
 suite("recurrencia: HTTP y concurrencia en Supabase local", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
     const options = { auth: { persistSession: false, autoRefreshToken: false } };
     admin = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
@@ -47,6 +47,8 @@ suite("recurrencia: HTTP y concurrencia en Supabase local", () => {
     [owner, outsider] = clients as [SupabaseClient, SupabaseClient];
     const created = await owner.rpc("create_group", { p_name: "Club recurrencia integración", p_sport: "Tenis" });
     expect(created.error).toBeNull(); groupId = created.data;
+    // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
     const joined = await owner.rpc("join_group_as_athlete", { p_group_id: groupId });
     expect(joined.error).toBeNull(); membershipId = joined.data;
     startsAt = sql("select ((app_private.chile_today()+14 + time '18:30') at time zone 'America/Santiago')::text;");
@@ -56,7 +58,7 @@ suite("recurrencia: HTTP y concurrencia en Supabase local", () => {
 
   afterAll(async () => {
     for (const id of [groupId, ...agendaGroupIds].filter(Boolean)) sql(`delete from public.attendance_records where activity_id in (select id from public.activities where group_id='${id}');
-      delete from public.activities where group_id='${id}'; delete from public.memberships where group_id='${id}'; delete from public.groups where id='${id}';`);
+      delete from public.activities where group_id='${id}'; delete from public.memberships where group_id='${id}'; delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id='${id}'); delete from public.groups where id='${id}';`);
     for (const id of authIds) {
       sql(`delete from public.users where auth_user_id='${id}';`);
       await admin.auth.admin.deleteUser(id);
@@ -117,6 +119,7 @@ suite("recurrencia: HTTP y concurrencia en Supabase local", () => {
       expect(created.error).toBeNull();
       const id = created.data as string;
       agendaGroupIds.push(id);
+      sql(`insert into app_private.billing_legacy_groups(group_id) values('${id}');`);
       const result = await owner.rpc("create_activity", { p_group_id: id, p_activity_type_id: activityType, p_title: name,
         p_starts_at: startsAt, p_ends_at: endsAt, p_location: "Cancha sintética" });
       expect(result.error).toBeNull();

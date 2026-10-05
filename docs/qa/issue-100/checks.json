@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-05",
+  "base": "1329031fab90a684048c3d49dc0ccbcc4f8c90aa",
+  "environment": "macOS arm64 / Chromium / Supabase local; synthetic data",
+  "manual": "PENDING: screen reader, native zoom, one-handed attendance timing",
+  "results": {
+    "playwright": {
+      "startTime": "2026-10-05T17:39:00.583Z",
+      "duration": 78365.629,
+      "expected": 33,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "transportFault": {
+      "startTime": "2026-10-05T17:40:57.005Z",
+      "duration": 17069.944,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "vitestWeb": {
+      "numPassedTests": 821,
+      "numFailedTests": 0,
+      "numPendingTests": 81
+    },
+    "integrations": {
+      "numPassedTests": 81,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "vitestCore": {
+      "passed": 150
+    },
+    "pgTAP": {
+      "passed": 1487,
+      "files": 33
+    },
+    "typecheckWeb": "PASS",
+    "typecheckCore": "PASS",
+    "buildWeb": "PASS; middleware-to-proxy warning; before final semantic-only markup adjustments",
+    "axe": {
+      "analyses": 40,
+      "violations": 0,
+      "incompleteRuleIds": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ]
+    }
+  }
+}

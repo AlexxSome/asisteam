@@ -26,7 +26,7 @@ El [diseño original completo](https://github.com/AlexxSome/asisteam/blob/48d404
 | [`/login`](../apps/web/src/app/login/page.tsx) | AUT-01 / AUT-07 | Público | Email y proveedores Google/Apple disponibles según configuración. |
 | [`/register`](../apps/web/src/app/register/page.tsx) | AUT-02 / AUT-07 | Público | Registro con aceptación informada y contexto de código. |
 | [`/forgot-password`](../apps/web/src/app/forgot-password/page.tsx) | AUT-03 | Público | Recuperación por email; conserva contexto de invitación. |
-| [`/reset-password`](../apps/web/src/app/reset-password/page.tsx) | AUT-04 | Recuperación | Nueva contraseña con sesión de recuperación; no una ruta token independiente. |
+| [`/reset-password`](../apps/web/src/app/reset-password/page.tsx) | AUT-04 | Recuperación | Recibe `?token=`; la acción verifica el token de recuperación en un cliente transitorio y limpia la URL tras guardar. |
 | [`/invitations/[token]`](../apps/web/src/app/invitations/%5Btoken%5D/page.tsx) | AUT-05 / AUT-06 | Destinatario | Aceptación o activación MANAGED, según la invitación validada. |
 | [`/accept-terms`](../apps/web/src/app/accept-terms/page.tsx) | AUT-02 / AUT-07, continuación | Sesión | Aceptación pendiente antes de continuar; página añadida por #107. |
 | [`/legal/2026-09-21`](../apps/web/src/app/legal/2026-09-21/page.tsx) | AUT-02 / CFG-03, aviso | Público | Archivo del aviso versionado; leerlo no registra consentimiento (#107). |
@@ -203,3 +203,10 @@ Resultados locales del 05-10-2026:
 | Auto-revisión y `git diff --check` | Acotados a los cuatro documentos y sus referencias; sin cambios funcionales. |
 
 Se ejecutaron los scripts reales mediante `corepack pnpm --filter @asisteam/core test/typecheck` y `corepack pnpm --filter @asisteam/web test/typecheck/build/test:e2e:full` (cada tarea por separado). No hay script lint ni skills auxiliares heredadas `frontend-check`, `frontend-ci` o `ship` instaladas; se usa el flujo de entrega explícito de la skill invocada. No hay cambios DB/RLS/RPC ni tipos que regenerar; no se ejecutaron pgTAP ni integraciones opt-in. La evidencia visual previa permanece enlazada y fechada; no se certifica otra pasada manual en esta rama.
+
+
+### Verificación adicional de la épica #100 — 05-10-2026
+
+[QA de cierre #100](qa/issue-100/README.md) amplía los recorridos de #120 con registro e invitación reales locales, cadena de menor/apoderado/consentimiento/aprobación, alta MANAGED, edición de series, lote de asistencia, QR, recuperación de contraseña y fallo del servidor. No agrega rutas: se conservan las 39 páginas del inventario.
+
+Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la semántica de grupos etiquetados en acceso social, aceptación de invitación, preview de logo y resumen de suscripción. La documentación de AUT-04 se ajusta al contrato existente y probado. La validación humana con lector, zoom nativo y tiempo de asistencia a una mano permanece **PENDIENTE**; este informe no cierra por sí solo la épica.

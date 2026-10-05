@@ -15,7 +15,7 @@ let otherAdmin: string;
 const sql = (input: string) => execFileSync("docker", ["exec", "-i", "supabase_db_asisteam", "psql", "-U", "postgres", "-d", "postgres", "-At", "-v", "ON_ERROR_STOP=1"], { input, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }).trim();
 suite("Gestión de integrantes: HTTP y concurrencia", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo Supabase local");
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
     for (const name of ["admin", "second", "outsider"]) {
@@ -31,6 +31,8 @@ suite("Gestión de integrantes: HTTP y concurrencia", () => {
     const group = await clients[0]!.rpc("create_group", { p_name: "Club gestión integración", p_sport: "Tenis" });
     if (group.error) throw new Error("No se pudo preparar grupo sintético");
     groupId = group.data;
+    // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
     mainAdmin = sql(`select id from public.memberships where group_id='${groupId}' and role='ADMIN';`);
     otherAdmin = sql(`insert into public.memberships(user_id,group_id,role,status,joined_at)
       select id,'${groupId}','ADMIN','ACTIVE',now() from public.users where email='${email("second")}' returning id;`).split("\n")[0]!;
@@ -43,7 +45,7 @@ suite("Gestión de integrantes: HTTP y concurrencia", () => {
       delete from public.attendance_records where membership_id in (select id from public.memberships where group_id='${groupId}');
       delete from public.activities where group_id='${groupId}';
       delete from public.memberships where group_id='${groupId}';
-      delete from public.groups where id='${groupId}';
+      delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id='${groupId}'); delete from public.groups where id='${groupId}';
       delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await service.auth.admin.deleteUser(id);
   });

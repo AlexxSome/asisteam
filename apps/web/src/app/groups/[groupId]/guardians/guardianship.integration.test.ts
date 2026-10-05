@@ -25,7 +25,7 @@ const input = (name: string) => ({ p_group_id: groupId, p_athlete_user_id: athle
 
 suite("Apoderados: HTTP, invitación y concurrencia", () => {
   beforeAll(async () => {
-    config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo Supabase local");
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
     for (const name of ["owner", "guardian", "outsider"]) {
@@ -42,6 +42,8 @@ suite("Apoderados: HTTP, invitación y concurrencia", () => {
     const group = await owner.rpc("create_group", { p_name: "Club apoderados integración", p_sport: "Tenis" });
     if (group.error) throw new Error("No se pudo preparar grupo sintético");
     groupId = group.data;
+    // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
     athleteId = sql(`insert into public.users(full_name,email,birthdate,account_status) values('Menor sintético','${email("minor")}','2020-01-01','MANAGED') returning id;`).split("\n")[0]!;
     sql(`insert into public.memberships(user_id,group_id,role,status) values('${athleteId}','${groupId}','ATHLETE','PENDING');`);
   }, 30_000);
@@ -59,7 +61,7 @@ suite("Apoderados: HTTP, invitación y concurrencia", () => {
       delete from public.invitations where group_id in (${groups});
       delete from app_private.invitation_send_limits where group_id in (${groups});
       delete from public.memberships where group_id in (${groups});
-      delete from public.groups where id in (${groups});
+      delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id in (${groups})); delete from public.groups where id in (${groups});
       delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await service.auth.admin.deleteUser(id);
   });

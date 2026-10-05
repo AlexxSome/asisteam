@@ -4,8 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import { roles, email, password, id, groups, activity, rosterName, pendingName, wardName } from './data.mjs';
 
 // Never read .env credentials: the CLI supplies the running local stack only.
-const config = JSON.parse(execFileSync('pnpm', ['exec', 'supabase', 'status', '-o', 'json'], {
-  cwd: '../..', encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+const config = JSON.parse(execFileSync('../../node_modules/.bin/supabase', ['status', '-o', 'json'], {
+  encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
 }));
 if (!['127.0.0.1', 'localhost'].includes(new URL(config.API_URL).hostname)) throw new Error('QA solo admite Supabase local');
 const sql = statement => {
@@ -99,8 +99,12 @@ for (const [index, status] of ['PRESENT','PRESENT','PRESENT','PRESENT','PRESENT'
 // Start this owned cache fresh; never touch .next/dev or another server.
 rmSync('.next/qa-app', { recursive: true, force: true });
 mkdirSync('.next/qa', { recursive: true });
-const status = { loginPost: false, registerPost: false, actionArguments: false, sensitivePayload: false, token: false, requests: 0 };
-const persist = () => writeFileSync('.next/qa/log-check.json', JSON.stringify(status, null, 2));
+const status = { loginPost: false, registerPost: false, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false, requests: 0 };
+const persist = () => {
+  // next build clears .next; a supervised QA server must not crash on logging.
+  mkdirSync('.next/qa', { recursive: true });
+  writeFileSync('.next/qa/log-check.json', JSON.stringify(status, null, 2));
+};
 persist();
 // Capture raw output only in memory. Reports retain booleans, never payloads.
 let tail = '';
@@ -115,20 +119,21 @@ function inspect(chunk) {
   status.loginPost ||= /POST \/login\b/.test(text);
   status.registerPost ||= /POST \/register\b/.test(text);
   status.actionArguments ||= /ƒ\s*(?:loginUser|registerUser)\s*\(/.test(text);
-  status.sensitivePayload ||= text.includes(password) || /qa120-[\w-]+@qa120\.example\.test/.test(text) || text.includes('QA120 Log Probe');
+  status.sensitivePayload ||= text.includes(password) || /qa(?:100|120)-[\w-]+@qa(?:100|120)\.example\.test/.test(text) || text.includes('QA120 Log Probe');
   status.token ||= /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/.test(text);
+  status.sensitiveUrl ||= /(?:GET|POST) \/(?:invitations\/[0-9a-f]{32,}|[^\s]*\?[^\s]*(?:token|token_hash|code|search|next)=)/.test(text);
   status.requests += (chunk.toString().match(/(?:GET|POST) \/[^\s]* \d{3}/g) ?? []).length;
   tail = text.slice(-4096);
   persist();
 }
-const child = spawn('pnpm', ['exec', 'next', 'dev', '--hostname', '127.0.0.1', '--port', '3120'], {
+const child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '--hostname', '127.0.0.1', '--port', '3120'], {
   env: { ...process.env, NEXT_PUBLIC_SUPABASE_URL: config.API_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY: config.ANON_KEY,
-    NEXT_PUBLIC_APP_URL: 'http://127.0.0.1:3120', NEXT_TELEMETRY_DISABLED: '1', ASISTEAM_QA: '1' }, stdio: ['ignore', 'pipe', 'pipe'],
+    NEXT_PUBLIC_APP_URL: 'http://127.0.0.1:3120', ASISTEAM_SITE_URL: 'http://127.0.0.1:3120', NEXT_TELEMETRY_DISABLED: '1', ASISTEAM_QA: '1' }, stdio: ['ignore', 'pipe', 'pipe'],
 });
 child.stdout.on('data', inspect); child.stderr.on('data', inspect);
 console.log('QA: fixtures locales listos; diagnósticos privados reducidos a indicadores.');
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
 child.on('exit', code => {
-  if (code && !status.sensitivePayload && !status.token) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
+  if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
   process.exit(code ?? 1);
 });

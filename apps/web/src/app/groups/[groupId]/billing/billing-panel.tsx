@@ -159,7 +159,7 @@ export function BillingPanel({ groupId, billing }: { groupId: string; billing: B
         <Input ref={emailRef} type="email" required autoComplete="email" maxLength={254} value={email} disabled={busy}
           onBlur={() => setEmailTouched(true)} onChange={event => { setEmail(event.target.value); setConfirmation(null); }} />
       </Field>
-      <div className="space-y-2 rounded-md bg-background p-3" aria-label="Resumen de la suscripción">
+      <div className="space-y-2 rounded-md bg-background p-3" role="group" aria-label="Resumen de la suscripción">
         <p className="font-semibold">{selectedPlan.name} · {formatClp(selectedAmount!)} {selectedPlan.currency}/mes</p>
         <p>{resumable ? "Continuarás el contrato existente con su importe contratado." : `Hasta ${selectedPlan.athlete_limit.toLocaleString("es-CL")} deportistas activos después del primer pago aprobado.`}</p>
         <p className="text-small">Cobro recurrente mensual. Sin prorrateo automático. La morosidad y la cancelación conservan el acceso, los cupos habilitados y el historial. Al reducir el plan, los integrantes existentes permanecen; se bloquean nuevas altas si superas el límite.</p>
