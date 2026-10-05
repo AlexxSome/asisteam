@@ -6,15 +6,17 @@ Guía para agentes de IA (Claude Code, Cursor, Copilot, Codex, Windsurf, etc.) q
 
 Aplicación **web [P0] y móvil [P1]** para el control de asistencia de deportistas/integrantes a entrenamientos y actividades de clubes o equipos deportivos. **Multi-tenant**: múltiples grupos independientes; un mismo usuario puede pertenecer a varios grupos con roles distintos. Mercado inicial: Chile/Latam (UI en español, zona horaria `America/Santiago`).
 
-**Roles por membresía (nunca globales):** `ADMIN` (gestiona el grupo, único que toma/edita asistencia en MVP), `ATHLETE` (deportista), `GUARDIAN` (apoderado de menores de edad). `COACH` es [P2].
+**Roles por membresía (nunca globales):** `ADMIN` (gestiona el grupo), `ATHLETE` (deportista), `GUARDIAN` (apoderado de menores de edad) y `COACH` (extensión [P2] autorizada e implementada en #55). ADMIN y COACH toman/corrigen estados; notas y desmarcado quedan reservados a ADMIN. La referencia de permisos sigue siendo [doc 02](docs/02-roles-y-permisos.md), incluida su sección de delegación COACH.
 
-**Estado actual del repo:** solo documentación (`docs/01`–`11` + `README.md`). No hay código todavía; la Fase 0 (setup del monorepo) es el siguiente paso según el roadmap.
+**Estado verificado al 05-10-2026:** monorepo pnpm/Turborepo con Next.js, `packages/core`, tipos en `packages/db`, Supabase (migraciones, RLS/RPC y Edge Functions), Vitest y Playwright/axe. Hay **39 páginas web** en la base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; [doc 05](docs/05-pantallas.md) enlaza cada archivo, código de pantalla y límite de implementación. Las 37 de la auditoría inicial preceden a las dos páginas de aceptación/aviso legal de #107. No hay cliente Expo implementado en este corte.
+
+**Módulos actuales:** acceso/invitaciones/consentimiento, grupos, integrantes/apoderados, actividades, asistencia, historial/reportes/visibilidad, perfil y soporte. Además existen COACH (#55), billing SaaS por club (#56), anuncios (#57), QR web (#58) y login social (#59), con decisiones verificadas. No eliminar esas capacidades por su etiqueta P2 ni extenderlas por inferencia. CSV (#36) y otras historias cerradas sin UI se registran como discrepancias en [doc 05 §7](docs/05-pantallas.md#7-reconciliación-de-historias-y-alcance); el cierre administrativo no demuestra entrega. Offline/móvil sigue pospuesto según #54.
 
 ### Etiquetas de prioridad
 
 - **[P0]** — MVP Web (~9 semanas): el corazón del producto.
 - **[P1]** — MVP Móvil + push + export CSV (completa la v1.0, meta 2026-11-13).
-- **[P2]** — Post-MVP por olas (offline, COACH, pagos, QR, etc.). **Nunca implementar features [P2] sin decisión explícita.**
+- **[P2]** — Post-MVP por olas. **Nunca implementar nuevas features [P2] sin decisión explícita.** COACH, suscripciones SaaS, anuncios, QR web y login social ya tienen autorización trazada en #55–#59; offline/geocerca y otras ampliaciones no se deducen de ella.
 
 ## 2. Stack tecnológico (decisión cerrada, doc 06)
 
@@ -24,19 +26,19 @@ Aplicación **web [P0] y móvil [P1]** para el control de asistencia de deportis
 | Móvil [P1] | **Expo SDK 54+** (React Native, TypeScript) + expo-router + EAS Build/Submit + Expo Notifications |
 | Backend | **Supabase**: PostgREST + RLS (lecturas), Edge Functions Deno/TS + RPC PL/pgSQL (escrituras con reglas de negocio), pg_cron (jobs) |
 | Base de datos | **PostgreSQL 17** (Supabase Cloud, AWS `sa-east-1`), esquema único multi-tenant discriminado por `group_id` |
-| Auth | Supabase Auth (email+contraseña [P0]; Google/Apple [P2]); `public.users` **desacoplada** de `auth.users` (FK opcional) para cuentas MANAGED sin credenciales |
+| Auth | Supabase Auth (email+contraseña [P0]; Google/Apple [P2 autorizado, #59]); `public.users` **desacoplada** de `auth.users` (FK opcional) para cuentas MANAGED sin credenciales |
 | Hosting/infra | Vercel Pro + Supabase Pro + Resend (email transaccional) + Sentry (errores) + GitHub Actions (CI) |
 | Monorepo | **pnpm + Turborepo** |
 
 Alternativas descartadas (comparativa en doc 06 §4): backend propio NestJS (ruta de salida documentada si se supera el BaaS) y Flutter (degradaba el P0 web).
 
-### Estructura del repositorio (objetivo)
+### Estructura del repositorio (actual y extensión planificada)
 
 ```
 asisteam/
 ├── apps/
 │   ├── web/          # Next.js 16 [P0]
-│   └── mobile/       # Expo [P1]
+│   └── mobile/       # Planificado: Expo [P1], aún no implementado
 ├── packages/
 │   ├── core/         # métrica canónica, schemas Zod, tipos de dominio, constantes de enums y etiquetas en español
 │   └── db/           # tipos generados con `supabase gen types typescript`
@@ -101,7 +103,7 @@ attendance_pct = (PRESENT + LATE) / (convocadas − EXCUSED) × 100
 
 ## 5. Modelo de datos (doc 04)
 
-9 tablas [P0]: `users`, `groups`, `memberships`, `guardianships`, `activity_types`, `activities`, `attendance_records`, `invitations`, `consents`. DDL completo en doc 04 §5.
+Base canónica de 9 tablas [P0] (no es el inventario completo del esquema actual): `users`, `groups`, `memberships`, `guardianships`, `activity_types`, `activities`, `attendance_records`, `invitations`, `consents`. DDL completo en doc 04 §5.
 
 ### Convenciones SQL
 
@@ -131,7 +133,7 @@ attendance_pct = (PRESENT + LATE) / (convocadas − EXCUSED) × 100
 - `consents` es append-only: revocar = `UPDATE revoked_at`, re-otorgar = fila nueva; jamás `DELETE` (evidencia de licitud).
 - Un ADMIN que también entrena tiene **dos filas** de membership; su asistencia referencia siempre la membership ATHLETE (CB-01).
 - El GUARDIAN obtiene membership GUARDIAN **auto-creada** en cada grupo donde su pupilo es miembro activo (CB-02) y no puede salir mientras tenga pupilos vigentes ahí (error 422 `guardian_has_active_wards`).
-- Tablas futuras (no crear en P0): `push_tokens`/`notifications` [P1], `justification_requests`/`payments`/`audit_log` [P2].
+- Extensiones autorizadas: billing y capacidad se documentan en [12-suscripciones-saas.md](docs/12-suscripciones-saas.md), anuncios/push en [13-anuncios.md](docs/13-anuncios.md) y QR en [14-asistencia-qr.md](docs/14-asistencia-qr.md). No confundir ese backend existente con un cliente móvil ni con cuotas por deportista. `justification_requests`, pagos de integrantes y auditoría general siguen fuera del alcance de esta reconciliación.
 
 ## 6. API y backend (doc 07)
 
@@ -139,12 +141,14 @@ No hay API REST artesanal: el contrato canónico es la tabla de operaciones de d
 
 - **Errores uniformes:** `{ "error": { "code": "snake_case_estable", "message": "texto en español", "details": {} } }`. HTTP: 400 validación, 401 sin sesión, 403 sin permiso, **404 no existe o no visible (anti-enumeración)**, 409 conflicto (ej. `LAST_ADMIN`, `membership_already_exists`), 422 regla de negocio (ej. `minor_cannot_leave`, `guardian_has_active_wards`), 429 rate limit.
 - **Validación:** schemas Zod en `packages/core`, compartidos por web, móvil y Edge Functions; CHECK/UNIQUE de Postgres como red final. Tipos regenerados con `supabase gen types` en cada migración; el CI falla si divergen.
-- **Reglas de negocio R1–R15** (doc 07 §5) — las críticas: R1 menor-requiere-apoderado+consentimiento; R2 solo ADMIN toma/edita asistencia; R3 upsert único por `(activity_id, membership_id)`, lote ≤ 500; R4 métrica canónica en vista SQL y core con los mismos tests; R5 último ADMIN no puede salir (409 `LAST_ADMIN`, con `FOR UPDATE`); R6 scoping por grupo vía RLS; R7 convocatoria = existe registro; R10 código de grupo solo incorpora ATHLETE (GUARDIAN solo por invitación dirigida); R12 invitaciones expiran a 7 días; R13 editar serie afecta solo futuras sin asistencia; R14 tipos de sistema inmutables.
+- **Reglas de negocio R1–R15** (doc 07 §5) — las críticas: R1 menor-requiere-apoderado+consentimiento; R2 ADMIN toma/edita asistencia; la extensión COACH de doc 02 permite estados sin notas ni desmarcado; R3 upsert único por `(activity_id, membership_id)`, lote ≤ 500; R4 métrica canónica en vista SQL y core con los mismos tests; R5 último ADMIN no puede salir (409 `LAST_ADMIN`, con `FOR UPDATE`); R6 scoping por grupo vía RLS; R7 convocatoria = existe registro; R10 código de grupo solo incorpora ATHLETE (GUARDIAN solo por invitación dirigida); R12 invitaciones expiran a 7 días; R13 editar serie afecta solo futuras sin asistencia; R14 tipos de sistema inmutables.
 - **Auth:** JWT access (1 h) + refresh rotatorio; en web con `@supabase/ssr` (cookies HttpOnly/Secure/SameSite=Lax, **nunca localStorage**); `auth.uid()` → `public.users.id` vía helper `auth_user_id()`.
 - **Seguridad:** `service_role` key SOLO en Edge Functions y CI, jamás en clientes ni `NEXT_PUBLIC_*`; anti-enumeración en login/recovery/invitaciones; rate limits (join por código 10/15 min, invitaciones 50/día/grupo); CORS por allowlist; contraseñas argon2id/bcrypt, mínimo 10 chars; scrubbing de PII en logs y Sentry (nunca email/phone/birthdate en logs).
-- **Límites:** máx. 500 memberships ACTIVE por grupo; 30 grupos por usuario; paginación PostgREST default 50 / máx. 100; reportes en vivo sin cache (si p95 > 500 ms, recién ahí vista materializada — no antes).
+- **Límites:** 500 memberships ACTIVE para grupos legacy; los planes pagados aplican cupos ATHLETE y límite operativo de 5.000 memberships ACTIVE según [doc 12 de suscripciones](docs/12-suscripciones-saas.md), que sustituye el límite general original; 30 grupos por usuario; paginación PostgREST default 50 / máx. 100; reportes en vivo sin cache (si p95 > 500 ms, recién ahí vista materializada — no antes).
 
 ## 7. Testing y CI (docs 06 §7.2, 09)
+
+**Estado del corte:** existen suites locales Vitest, pgTAP/integraciones y Playwright/axe; no hay workflow CI ni script `lint` versionados. El flujo remoto descrito abajo es el objetivo del plan, no evidencia de despliegue activo. Ejecutar los scripts reales y registrar PASS/FAIL/omitido según [QA #120](docs/qa/issue-120/README.md).
 
 1. **En cada PR:** lint + typecheck (Turborepo con cache remoto), Vitest de `packages/core` (incluye casos canónicos de la métrica), `supabase start` en Docker → migraciones → **pgTAP** (políticas RLS con seeds por rol, incluidos tests negativos de las 6 reglas de visibilidad) → integración de Edge Functions. Presupuesto: < 12 min.
 2. **Merge a `main`:** deploy automático a staging (Vercel + `supabase db push`).
@@ -162,6 +166,8 @@ No hay API REST artesanal: el contrato canónico es la tabla de operaciones de d
 - Reportes [P0] como tablas accesibles (copiar/pegar, Ctrl+F); gráficos enriquecidos son [P1]. Semáforo de %: ≥85 verde, 70–84.9 ámbar, <70 rojo. Chips de estado: PRESENT verde, LATE ámbar, ABSENT rojo, EXCUSED gris.
 
 ## 9. Roadmap resumido (doc 09)
+
+Calendario del plan original. Para disponibilidad actual, usar [doc 05](docs/05-pantallas.md); la planificación móvil/offline sigue diferida y esta tabla no la reactiva.
 
 | Fase | Qué | Duración |
 |---|---|---|
@@ -185,8 +191,11 @@ Cada módulo de Fase 1 cierra con sus políticas RLS testeadas en pgTAP antes de
 8. Textos de UI y mensajes de error en **español**; código e identificadores en **inglés**.
 9. Los 4 tipos de actividad de sistema y los toggles default `false` son inamovibles.
 10. Ante ambigüedad de producto, la fuente de verdad es `docs/` en este orden: 02 (permisos) → 04 (datos) → 07 (API) → 08 (métrica) → 11 (legal).
+11. Al cerrar un issue de UI, reconciliar rutas/códigos/estado en [doc 05](docs/05-pantallas.md) y componentes/estados en [sistema visual](docs/12-sistema-visual.md), con commit y evidencia. Una ruta lógica, una captura o un issue cerrado no prueba el flujo completo.
 
 ## 11. Índice de documentación
+
+Serie de producto 01–14 más sistema visual: 15 documentos principales; los dos archivos con prefijo 12 conservan su nombre histórico.
 
 | Doc | Contenido | Léelo para |
 |---|---|---|
@@ -201,3 +210,7 @@ Cada módulo de Fase 1 cierra con sus políticas RLS testeadas en pgTAP antes de
 | [09-roadmap.md](docs/09-roadmap.md) | 5 fases, orden de módulos, Gantt, 13 riesgos con mitigación | Planificar el desarrollo |
 | [10-historias-de-usuario.md](docs/10-historias-de-usuario.md) | 47 historias (HU-ADM/DEP/APO/GEN) con criterios Dado/Cuando/Entonces | Tickets y QA |
 | [11-legal-seguridad-privacidad.md](docs/11-legal-seguridad-privacidad.md) | Datos de menores, consentimiento, Ley 19.628/21.719, retención/anonimización, checklist C-01–C-20 | Cumplir el marco legal chileno |
+| [12-suscripciones-saas.md](docs/12-suscripciones-saas.md) | Billing SaaS, planes/cupos y Mercado Pago (#56) | Preservar la decisión club → Asisteam |
+| [12-sistema-visual.md](docs/12-sistema-visual.md) | Tokens, componentes y contratos de estados | Implementar UI coherente y mantener evidencia |
+| [13-anuncios.md](docs/13-anuncios.md) | Muro, opt-in y backend de avisos (#57) | Separar web existente de cliente Expo pendiente |
+| [14-asistencia-qr.md](docs/14-asistencia-qr.md) | QR temporal y llegada propia (#58) | Mantener permisos, caducidad e idempotencia |

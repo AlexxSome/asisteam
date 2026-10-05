@@ -1,318 +1,205 @@
 # Pantallas web y móvil
 
-**Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 08-reportes-y-estadisticas.md, 10-historias-de-usuario.md
+**Proyecto:** Asisteam · **Corte verificado:** 05-10-2026 · **Base:** `48d404ab96cecd1d6ddb109616e91ed0fcabce8b` (`develop`) · **Reconciliación:** [#121](https://github.com/AlexxSome/asisteam/issues/121), dependiente de [#102](https://github.com/AlexxSome/asisteam/issues/102) entregado en [PR #123](https://github.com/AlexxSome/asisteam/pull/123).
 
-Este documento inventaría todas las pantallas de Asisteam para web y app móvil, define la navegación por rol y detalla las pantallas críticas. Cada pantalla lleva un código estable (`AUT-01`, `ASI-01`, …) que se usa como referencia cruzada en 03-modulos-y-flujos.md y 10-historias-de-usuario.md.
+Este documento separa disponibilidad en el repositorio y objetivos de producto. La autorización se define en [02-roles-y-permisos.md](02-roles-y-permisos.md); el inventario no concede permisos. Los códigos `AUT-01`, `ASI-01`, etc. se conservan para las referencias de [módulos](03-modulos-y-flujos.md) e [historias](10-historias-de-usuario.md). Un código puede representar varias rutas o una sección dentro de otra pantalla.
+
+El [diseño original completo](https://github.com/AlexxSome/asisteam/blob/48d404ab96cecd1d6ddb109616e91ed0fcabce8b/docs/05-pantallas.md) conserva las propuestas de interacción y prioridades por plataforma como histórico. Las brechas de este corte no cancelan requisitos: cualquier cambio de producto requiere una decisión trazada.
 
 ## 1. Convenciones
 
-- **Columnas Web / Móvil:** indican con qué prioridad llega la pantalla a cada plataforma (`[P0]`, `[P1]`, `[P2]`) o `—` si no existe en esa plataforma en el horizonte del plan.
-- **Columna Prioridad:** prioridad de la funcionalidad en el producto (la más temprana entre plataformas).
-- **Rutas web:** en inglés, con el grupo activo en la URL: `/groups/:groupId/...`. Pantallas fuera de contexto de grupo cuelgan de raíz (`/login`, `/profile`).
-- **Regla de plataforma:** la app móvil [P1] cubre solo las funciones núcleo (consulta para todos los roles + toma de asistencia para ADMIN). Toda pantalla de **gestión** (crear grupo, CRUD de integrantes, invitaciones dirigidas, configuración del grupo) es solo web en v1.0 y llega a móvil recién en [P2].
-- **Excepciones a la regla de plataforma en [P1]:** además de las pantallas de consulta y ASI-01, llegan a móvil [P1] las pantallas de acceso y onboarding imprescindibles para operar la app desde el dispositivo (AUT-01/02/03/05, ONB-01/02/03), CFG-01 (cuenta propia, no gestión del grupo) e INT-05 (compartir código, usa el share sheet nativo). Ninguna implica gestión de datos del grupo. AUT-04 y AUT-06 se derivan siempre a web para simplificar el manejo de tokens por enlace de email.
-- **Multi-rol:** si un usuario tiene más de un rol en el grupo activo (ej.: ADMIN + ATHLETE), la interfaz muestra la vista del rol más permisivo (ADMIN) y agrega una sección "Mi asistencia" con sus datos de ATHLETE.
+- **Implementado:** existe código enlazado en la base del corte; no implica despliegue, proveedor configurado ni QA completa del flujo.
+- **Integrado/parcial:** el código lógico se atiende en una sección o comparte ruta; se explicitan las partes ausentes.
+- **Ruta lógica/objetivo UX:** dirección o interacción del plan original sin página equivalente; no se presenta como enlace operativo.
+- **Diferido o sin evidencia:** requiere planificación/ratificación, no una implementación deducida de un issue cerrado.
+- **Prioridad:** [P0]/[P1]/[P2] conserva el roadmap original. COACH, billing SaaS, anuncios, QR web y OAuth son [P2] ya autorizados; no se degradan ni se amplían por esta reconciliación.
+- **Parámetros:** la tabla usa `[groupId]`, `[activityId]`, `[athleteUserId]` y `[token]` como el App Router; equivalen a `:groupId`, etc. en contratos lógicos. No son URLs que se abran sin valores autorizados.
+- **Plataforma:** web responsive implementada; Expo [P1] planificado, sin cliente móvil en este corte. Offline [P2] fue pospuesto explícitamente en #54. La propuesta móvil del roadmap no se reactiva aquí.
 
-## 2. Inventario de pantallas
+## 2. Inventario de páginas reales
 
-### 2.1 Autenticación
+**39 archivos `page.tsx`** identificados en el grafo de graphify actualizado a la base del corte, cada uno enlazado abajo. Incluyen la entrada de redirección `/` y el aviso legal. La auditoría inicial sobre `d7dff870f2b2` tenía **37**; [#107](https://github.com/AlexxSome/asisteam/issues/107) añadió `/accept-terms` y `/legal/2026-09-21`. No se cuentan layouts, estados especiales, componentes, hashes, query strings ni handlers como páginas nuevas.
 
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| AUT-01 | Login (`/login`) | Todos | [P0] | [P1] | [P0] | Email + contraseña; enlaces a registro y recuperación. |
-| AUT-02 | Registro (`/register`) | Todos | [P0] | [P1] | [P0] | Crea `users` ACTIVE: full_name, email, contraseña, birthdate, phone opcional. |
-| AUT-03 | Recuperar contraseña (`/forgot-password`) | Todos | [P0] | [P1] | [P0] | Solicita email; envía enlace de restablecimiento. |
-| AUT-04 | Restablecer contraseña (`/reset-password?token=`) | Todos | [P0] | — | [P0] | Nueva contraseña desde enlace de email; siempre abre en web. |
-| AUT-05 | Aceptar invitación (`/invitations/:token`) | Todos | [P0] | [P1] | [P0] | Valida token de `invitations`; si el email no tiene cuenta ACTIVE, encadena registro/activación. |
-| AUT-06 | Activación de cuenta gestionada | ATHLETE | [P0] | — | [P0] | Convierte `account_status` MANAGED → ACTIVE: creación de contraseña; si es menor, requiere consentimiento del apoderado (ver 11-legal-seguridad-privacidad.md). |
-| AUT-07 | Login social Google/Apple | Todos | [P2] | [P2] | [P2] | Botones OAuth en AUT-01/AUT-02. |
+| Ruta real / archivo | Código de pantalla | Audiencia efectiva | Implementación y límite |
+|---|---|---|---|
+| [`/`](../apps/web/src/app/page.tsx) | GRP-01 / ONB-01 | Sesión | Redirección al grupo válido recordado, único grupo, selector o bienvenida. |
+| [`/login`](../apps/web/src/app/login/page.tsx) | AUT-01 / AUT-07 | Público | Email y proveedores Google/Apple disponibles según configuración. |
+| [`/register`](../apps/web/src/app/register/page.tsx) | AUT-02 / AUT-07 | Público | Registro con aceptación informada y contexto de código. |
+| [`/forgot-password`](../apps/web/src/app/forgot-password/page.tsx) | AUT-03 | Público | Recuperación por email; conserva contexto de invitación. |
+| [`/reset-password`](../apps/web/src/app/reset-password/page.tsx) | AUT-04 | Recuperación | Nueva contraseña con sesión de recuperación; no una ruta token independiente. |
+| [`/invitations/[token]`](../apps/web/src/app/invitations/%5Btoken%5D/page.tsx) | AUT-05 / AUT-06 | Destinatario | Aceptación o activación MANAGED, según la invitación validada. |
+| [`/accept-terms`](../apps/web/src/app/accept-terms/page.tsx) | AUT-02 / AUT-07, continuación | Sesión | Aceptación pendiente antes de continuar; página añadida por #107. |
+| [`/legal/2026-09-21`](../apps/web/src/app/legal/2026-09-21/page.tsx) | AUT-02 / CFG-03, aviso | Público | Archivo del aviso versionado; leerlo no registra consentimiento (#107). |
+| [`/welcome`](../apps/web/src/app/welcome/page.tsx) | ONB-01 / ONB-03 | Sin grupos activos | Crear/unirse, suscripción explicada y solicitudes pendientes. |
+| [`/join`](../apps/web/src/app/join/page.tsx) | ONB-02 / ONB-03 | Sesión | Código incorpora ATHLETE; muestra progreso pendiente del menor. |
+| [`/groups`](../apps/web/src/app/groups/page.tsx) | GRP-01 / ACT-01 global | Sesión | Selector de grupos y agenda global en #agenda. |
+| [`/groups/new`](../apps/web/src/app/groups/new/page.tsx) | ONB-04 | Sesión | Formulario de alta del grupo y contexto del primer pago. |
+| [`/groups/[groupId]`](../apps/web/src/app/groups/%5BgroupId%5D/page.tsx) | GRP-02 | Miembro del grupo | Inicio por roles, próxima actividad, pendientes y datos propios/pupilos. |
+| [`/groups/[groupId]/settings`](../apps/web/src/app/groups/%5BgroupId%5D/settings/page.tsx) | GRP-03 / INT-05 | ADMIN | Datos, código/enlace y regeneración; guardado explícito de datos. |
+| [`/groups/[groupId]/settings/visibility`](../apps/web/src/app/groups/%5BgroupId%5D/settings/visibility/page.tsx) | GRP-04 | ADMIN | Toggles independientes con guardado inmediato y vista previa. |
+| [`/groups/[groupId]/activity-types`](../apps/web/src/app/groups/%5BgroupId%5D/activity-types/page.tsx) | GRP-05 | ADMIN | Crear/editar/desactivar tipos propios; sistema inmutable. |
+| [`/groups/[groupId]/members`](../apps/web/src/app/groups/%5BgroupId%5D/members/page.tsx) | INT-01 | ADMIN | Búsqueda y filtros por rol/estado, acciones por fila; no detalle dedicado. |
+| [`/groups/[groupId]/members/new`](../apps/web/src/app/groups/%5BgroupId%5D/members/new/page.tsx) | INT-03 | ADMIN | Alta MANAGED; menor pendiente hasta consentimiento efectivo. |
+| [`/groups/[groupId]/members/pending`](../apps/web/src/app/groups/%5BgroupId%5D/members/pending/page.tsx) | INT-06 | ADMIN | Progreso de incorporación, vínculo, consentimiento y aprobación. |
+| [`/groups/[groupId]/members/consent`](../apps/web/src/app/groups/%5BgroupId%5D/members/consent/page.tsx) | APO-04 / AUT-06, consentimiento | GUARDIAN del pupilo | Tratamiento de datos y activación de cuenta separados; no es gestión ADMIN. |
+| [`/groups/[groupId]/invitations/new`](../apps/web/src/app/groups/%5BgroupId%5D/invitations/new/page.tsx) | INT-04 | ADMIN | Nueva invitación e historial mediante ?view=history, con reenvío. |
+| [`/groups/[groupId]/guardians`](../apps/web/src/app/groups/%5BgroupId%5D/guardians/page.tsx) | APO-01 / APO-02 parcial | ADMIN | Registrar/vincular apoderado a menor elegido; no directorio completo de apoderados. |
+| [`/wards`](../apps/web/src/app/wards/page.tsx) | APO-03 | GUARDIAN | Pupilos, grupos, actividad, métricas y tareas de consentimiento. |
+| [`/wards/[athleteUserId]`](../apps/web/src/app/wards/%5BathleteUserId%5D/page.tsx) | APO-04 | GUARDIAN vigente | Grupos y agenda del pupilo; entradas a historial/consentimiento por grupo. |
+| [`/groups/[groupId]/activities`](../apps/web/src/app/groups/%5BgroupId%5D/activities/page.tsx) | ACT-01 | Miembro del grupo | Agenda próximas/pasadas y paginación; no calendario mensual interactivo. |
+| [`/groups/[groupId]/activities/new`](../apps/web/src/app/groups/%5BgroupId%5D/activities/new/page.tsx) | ACT-03 | ADMIN | Creación simple o recurrencia semanal. |
+| [`/groups/[groupId]/activities/[activityId]`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/page.tsx) | ACT-02 | Miembro del grupo | Datos, retorno a agenda y acciones según rol; consulta de asistencia mediante historial. |
+| [`/groups/[groupId]/activities/[activityId]/edit`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/edit/page.tsx) | ACT-03 / ACT-04 | ADMIN | Edición y alcance de serie; preserva ocurrencias con asistencia. |
+| [`/groups/[groupId]/activities/[activityId]/attendance`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/attendance/page.tsx) | ASI-01 | ADMIN / COACH | Estados y guardado por fila; notas/desmarcado solo ADMIN. |
+| [`/me/history`](../apps/web/src/app/me/history/page.tsx) | PRF-02 / ASI-02 | ATHLETE | Selector de grupo o redirección si solo hay uno; vacío sin membership ATHLETE. |
+| [`/groups/[groupId]/me/history`](../apps/web/src/app/groups/%5BgroupId%5D/me/history/page.tsx) | PRF-02 / ASI-02 | ATHLETE propio | Historial individual con filtros y resumen. |
+| [`/groups/[groupId]/wards/[athleteUserId]/history`](../apps/web/src/app/groups/%5BgroupId%5D/wards/%5BathleteUserId%5D/history/page.tsx) | ASI-02 / APO-04 | GUARDIAN vigente | Historial del pupilo activo en ese grupo. |
+| [`/groups/[groupId]/reports`](../apps/web/src/app/groups/%5BgroupId%5D/reports/page.tsx) | REP-01 / REP-02 | Por permisos | ADMIN/COACH: reporte autorizado; ATHLETE/GUARDIAN: propios/pupilos y agregados según toggles. |
+| [`/profile`](../apps/web/src/app/profile/page.tsx) | PRF-01 / CFG-01 / CFG-03 | Sesión | Datos/foto, corrección de edad, cuenta y privacidad por soporte. |
+| [`/profile/birthdate-requests`](../apps/web/src/app/profile/birthdate-requests/page.tsx) | PRF-01, revisión | ADMIN revisor | Solicitudes de corrección de edad de sus grupos, limitadas por RPC. |
+| [`/groups/[groupId]/billing`](../apps/web/src/app/groups/%5BgroupId%5D/billing/page.tsx) | Extensión #56 (sin código histórico) | ADMIN | Plan, checkout, capacidad e historial de cobros del club. |
+| [`/groups/[groupId]/announcements`](../apps/web/src/app/groups/%5BgroupId%5D/announcements/page.tsx) | Extensión #57 (sin código histórico) | Miembro; edición ADMIN | Muro, publicación/edición y preferencia de avisos; no mensajería. |
+| [`/groups/[groupId]/activities/[activityId]/qr`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/qr/page.tsx) | ASI-04, emisión | ADMIN | QR temporal y ajustes plegables para todo el grupo. |
+| [`/check-in`](../apps/web/src/app/check-in/page.tsx) | ASI-04, llegada | ATHLETE propio | Lectura de fragmento QR, login si falta sesión y registro propio. |
 
-### 2.2 Onboarding
+El resto de rutas no es una pantalla independiente: [`/auth/callback`](../apps/web/src/app/auth/callback/route.ts) es el handler de autenticación y [`/profile/avatar/[ownerId]/[fileName]`](../apps/web/src/app/profile/avatar/%5BownerId%5D/%5BfileName%5D/route.ts) entrega imágenes autorizadas. `error.tsx`, `not-found.tsx` y los estados compartidos se documentan en el [sistema visual](12-sistema-visual.md#contratos-de-componentes-y-estados--corte-05-10-2026).
 
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| ONB-01 | Bienvenida sin grupos (`/welcome`) | Todos | [P0] | [P1] | [P0] | Usuario sin memberships: opciones "Crear un grupo" o "Unirme con código". |
-| ONB-02 | Unirse por código (`/join`) | ATHLETE | [P0] | [P1] | [P0] | Ingreso de `invite_code` (o deep link); solo incorpora ATHLETE. Adulto → ACTIVE; menor → PENDING. |
-| ONB-03 | Estado pendiente | ATHLETE menor | [P0] | [P1] | [P0] | Aviso al menor con membership PENDING: falta apoderado vinculado y/o confirmación del ADMIN. |
-| ONB-04 | Crear grupo (wizard, `/groups/new`) | ADMIN | [P0] | [P2] | [P0] | Pasos: datos del grupo (name, sport, description, logo_url) → toggles de visibilidad → invitar. Crea membership ADMIN del creador. |
+### 2.1 Códigos lógicos sin página propia y brechas
 
-### 2.3 Grupos
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| GRP-01 | Mis grupos (`/groups`) | Todos | [P0] | [P1] | [P0] | Lista de grupos del usuario con rol y estado de membership; punto de entrada del selector multi-grupo. |
-| GRP-02 | Dashboard del grupo (`/groups/:groupId`) | ADMIN | [P0] | [P1] | [P0] | Home ADMIN: próximas actividades, accesos rápidos (tomar asistencia, integrantes, reportes), pendientes de aprobación. En móvil [P1] solo consulta + acceso a toma de asistencia. |
-| GRP-03 | Configuración del grupo (`/groups/:groupId/settings`) | ADMIN | [P0] | [P2] | [P0] | Edita name, sport, description, logo; muestra y regenera `invite_code`. |
-| GRP-04 | Configuración de visibilidad (`/groups/:groupId/settings/visibility`) | ADMIN | [P0] | [P2] | [P0] | Toggles `athletes_can_view_group_stats` y `guardians_can_view_group_stats` (detalle en §5.7). |
-| GRP-05 | Tipos de actividad (`/groups/:groupId/settings/activity-types`) | ADMIN | [P0] | [P2] | [P0] | Lista tipos de sistema (solo lectura) + CRUD de tipos personalizados (name, color, is_active). |
-
-### 2.4 Integrantes
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| INT-01 | Lista de integrantes (`/groups/:groupId/members`) | ADMIN | [P0] | [P1] | [P0] | Tabla/lista con filtros por rol y estado (detalle en §5.2). Móvil [P1]: solo consulta. |
-| INT-02 | Detalle de integrante (`/groups/:groupId/members/:membershipId`) | ADMIN | [P0] | [P1] | [P0] | Perfil, roles en el grupo, apoderados vinculados (si es menor), resumen de asistencia. |
-| INT-03 | Crear cuenta gestionada (`/groups/:groupId/members/new`) | ADMIN | [P0] | [P2] | [P0] | Alta de perfil MANAGED (típico menores); si birthdate indica menor, exige vincular apoderado en el mismo flujo. Membership queda ACTIVE. |
-| INT-04 | Invitar por email (`/groups/:groupId/invitations/new`) | ADMIN | [P0] | [P2] | [P0] | Invitación dirigida con rol ATHLETE o GUARDIAN; crea `invitations` y, si no existe cuenta, `users` INVITED. |
-| INT-05 | Compartir código/enlace | ADMIN | [P0] | [P1] | [P0] | Muestra `invite_code` + enlace + QR para compartir; en móvil usa el share sheet nativo. |
-| INT-06 | Aprobaciones pendientes (`/groups/:groupId/members/pending`) | ADMIN | [P0] | [P2] | [P0] | Menores PENDING por código: verificar apoderado vinculado y confirmar o rechazar. |
-
-### 2.5 Apoderados
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| APO-01 | Apoderados del grupo (`/groups/:groupId/guardians`) | ADMIN | [P0] | [P2] | [P0] | Lista de GUARDIAN con sus pupilos en el grupo; acceso a vincular/desvincular. |
-| APO-02 | Vincular apoderado-deportista | ADMIN | [P0] | [P2] | [P0] | Crea `guardianships` (guardian_user_id, athlete_user_id, relationship); valida que el pupilo sea menor de 18. |
-| APO-03 | Mis pupilos (`/wards`) | GUARDIAN | [P0] | [P1] | [P0] | Home del apoderado: tarjetas por pupilo con próximas actividades y % de asistencia (detalle en §5.6). |
-| APO-04 | Detalle de pupilo (`/wards/:athleteUserId`) | GUARDIAN | [P0] | [P1] | [P0] | Perfil del pupilo, grupos donde es miembro, historial de asistencia por grupo. |
-
-### 2.6 Actividades
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| ACT-01 | Agenda del grupo (`/groups/:groupId/activities`) | Todos | [P0] | [P1] | [P0] | Lista/calendario semanal-mensual de actividades; filtro por activity_type; hora local America/Santiago. |
-| ACT-02 | Detalle de actividad (`/groups/:groupId/activities/:activityId`) | Todos | [P0] | [P1] | [P0] | Datos de la actividad + resumen de asistencia según rol (detalle en §5.3). |
-| ACT-03 | Crear/editar actividad (`/groups/:groupId/activities/new`) | ADMIN | [P0] | [P2] | [P0] | Formulario: title, activity_type_id, description, location, starts_at, ends_at; recurrencia semanal simple (días de semana + fecha fin). |
-| ACT-04 | Editar serie recurrente | ADMIN | [P0] | [P2] | [P0] | Diálogo al editar/eliminar una actividad con `recurrence_rule`: "solo esta" o "esta y las siguientes". |
-
-### 2.7 Asistencia
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| ASI-01 | Toma de asistencia (`/groups/:groupId/activities/:activityId/attendance`) | ADMIN | [P0] | [P1] | [P0] | Lista de deportistas del grupo con 4 estados + nota opcional; misma pantalla sirve para edición posterior (detalle en §5.1). |
-| ASI-02 | Historial individual (`/groups/:groupId/members/:membershipId/history` y `/me/history`) | ATHLETE, GUARDIAN, ADMIN | [P0] | [P1] | [P0] | Historial de asistencia de un deportista con filtros de período (detalle en §5.5). |
-| ASI-03 | Solicitud de justificación | ATHLETE, GUARDIAN | [P2] | [P2] | [P2] | Flujo solicitud/aprobación de inasistencias justificadas. |
-| ASI-04 | Autoregistro QR/geocerca | ATHLETE | — | [P2] | [P2] | Check-in del deportista por QR o geocerca. |
-| ASI-05 | Toma de asistencia offline | ADMIN | — | [P2] | [P2] | Modo offline con sincronización posterior sobre ASI-01 móvil. |
-
-### 2.8 Reportes
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| REP-01 | Reportes del grupo (`/groups/:groupId/reports`) | ADMIN | [P0] | [P1] | [P0] | % de asistencia por deportista, por tipo de actividad y por período (detalle en §5.4). Móvil [P1]: consulta. |
-| REP-02 | Estadísticas del grupo para no-ADMIN (`/groups/:groupId/stats`) | ATHLETE, GUARDIAN | [P0] | [P1] | [P0] | Tabla/gráfico agregado (nombre + % por integrante); visible solo si el toggle correspondiente de `groups.settings` está activo. |
-| REP-03 | Exportación CSV | ADMIN | [P1] | [P1] | [P1] | Botón "Exportar CSV" en REP-01 con los filtros aplicados. |
-| REP-04 | Ranking gamificado | Todos | [P2] | [P2] | [P2] | Ranking de asistencia con logros. |
-
-### 2.9 Configuración
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| CFG-01 | Cuenta y seguridad (`/settings/account`) | Todos | [P0] | [P1] | [P0] | Cambio de contraseña; cierre de sesión en todos los dispositivos. El email se muestra pero no es editable en el MVP (P0/P1); el cambio de email queda fuera de alcance (ver HU-GEN-04 en 10-historias-de-usuario.md). |
-| CFG-02 | Preferencias de notificaciones (`/settings/notifications`) | Todos | [P1] | [P1] | [P1] | Activar/desactivar push: recordatorio de actividad (todos), aviso de ausencia del pupilo (GUARDIAN). |
-| CFG-03 | Privacidad y eliminación de cuenta (`/settings/privacy`) | Todos | [P0] | [P2] | [P0] | Solicitud de eliminación de cuenta y solicitud de copia de datos personales tramitada vía soporte (respuesta ≤ 15 días hábiles) [P0]; autoservicio "Descargar mis datos" [P2] (Ley 19.628 / 21.719; ver 11-legal-seguridad-privacidad.md). |
-
-### 2.10 Perfil
-
-| Código | Pantalla | Rol(es) | Web | Móvil | Prioridad | Descripción breve |
-|---|---|---|---|---|---|---|
-| PRF-01 | Mi perfil (`/profile`) | Todos | [P0] | [P1] | [P0] | Ver/editar full_name, phone, birthdate, avatar_url. El email se muestra pero no es editable en el MVP (ver HU-GEN-04). |
-| PRF-02 | Mi asistencia (`/me/history`) | ATHLETE | [P0] | [P1] | [P0] | Acceso directo a ASI-02 con la propia membership; selector de grupo si pertenece a varios. |
-
-## 3. Mapas de navegación por rol
-
-### 3.1 ADMIN
-
-```mermaid
-flowchart TD
-    L[AUT-01 Login] --> G1[GRP-01 Mis grupos]
-    G1 -->|selector multi-grupo| D[GRP-02 Dashboard del grupo]
-    G1 --> ONB4[ONB-04 Crear grupo]
-    D --> A1[ACT-01 Agenda]
-    A1 --> A2[ACT-02 Detalle de actividad]
-    A2 --> AS1[ASI-01 Toma de asistencia]
-    A1 --> A3[ACT-03 Crear/editar actividad]
-    D --> I1[INT-01 Lista de integrantes]
-    I1 --> I2[INT-02 Detalle de integrante]
-    I2 --> H[ASI-02 Historial individual]
-    I1 --> I3[INT-03 Cuenta gestionada]
-    I1 --> I4[INT-04 Invitar por email]
-    I1 --> I6[INT-06 Aprobaciones pendientes]
-    D --> AP1[APO-01 Apoderados del grupo]
-    AP1 --> AP2[APO-02 Vincular apoderado]
-    D --> R1[REP-01 Reportes del grupo]
-    R1 -->|clic en deportista| H
-    D --> S1[GRP-03 Configuración del grupo]
-    S1 --> S2[GRP-04 Visibilidad]
-    S1 --> S3[GRP-05 Tipos de actividad]
-    S1 --> I5[INT-05 Compartir código]
-```
-
-### 3.2 ATHLETE (Deportista)
-
-```mermaid
-flowchart TD
-    L[AUT-01 Login] --> HOME[Inicio: próximas actividades\nde todos mis grupos]
-    L -.->|sin grupos| W[ONB-01 Bienvenida] --> J[ONB-02 Unirse por código]
-    J -.->|menor sin apoderado| P[ONB-03 Estado pendiente]
-    HOME -->|selector multi-grupo| A1[ACT-01 Agenda del grupo]
-    A1 --> A2[ACT-02 Detalle de actividad]
-    A2 -->|mi estado registrado| MH[PRF-02 Mi asistencia]
-    HOME --> MH
-    HOME -->|si toggle activo| ST[REP-02 Estadísticas del grupo]
-    HOME --> PR[PRF-01 Mi perfil]
-    PR --> CFG[CFG-01/CFG-02/CFG-03 Configuración]
-```
-
-### 3.3 GUARDIAN (Apoderado)
-
-```mermaid
-flowchart TD
-    L[AUT-01 Login] --> WD[APO-03 Mis pupilos]
-    L -.->|invitación dirigida| INV[AUT-05 Aceptar invitación] --> WD
-    WD --> WDD[APO-04 Detalle de pupilo]
-    WDD --> AG[ACT-01 Agenda del grupo del pupilo]
-    AG --> AD[ACT-02 Detalle de actividad]
-    WDD --> H[ASI-02 Historial del pupilo]
-    WDD -->|si toggle activo| ST[REP-02 Estadísticas del grupo]
-    WD --> PR[PRF-01 Mi perfil]
-    PR --> CFG[CFG-01/CFG-02/CFG-03 Configuración]
-```
-
-## 4. Diferencias web vs móvil
-
-### 4.1 Pantallas móvil-first
-
-Aunque el MVP [P0] es solo web responsive, estas pantallas se diseñan **móvil-first** desde el día 1 porque su uso real ocurre de pie, en la cancha, con una mano:
-
-- **ASI-01 Toma de asistencia:** objetivo de usabilidad: marcar 20 deportistas en menos de 60 segundos en un navegador móvil [P0]. Botones de estado de mínimo 44×44 px, sin scroll horizontal, guardado por fila sin recargar.
-- **ACT-01 Agenda / ACT-02 Detalle:** consulta rápida "¿a qué hora es el entrenamiento?"; carga inicial < 2 s en 4G.
-- **ASI-02 / PRF-02 Historial:** consulta del deportista o apoderado tras la actividad.
-
-Las pantallas de gestión (ONB-04, GRP-03/04/05, INT-03/04/06, APO-01/02, ACT-03/04) se optimizan para escritorio, manteniendo responsividad básica.
-
-### 4.2 Home según rol
-
-| Rol en el grupo activo | Home web | Home móvil [P1] |
+| Código / prioridad original | Ruta o propuesta original | Estado comprobado al corte |
 |---|---|---|
-| ADMIN | GRP-02 Dashboard del grupo | Pestaña Inicio: próxima actividad del día con botón directo "Tomar asistencia" (ASI-01) |
-| ATHLETE | Inicio: próximas actividades de todos sus grupos + % de asistencia del mes | Pestaña Inicio: misma vista |
-| GUARDIAN | APO-03 Mis pupilos | Pestaña Inicio: APO-03 |
-| Multi-rol (ej. ADMIN+ATHLETE) | Home del rol más permisivo (ADMIN) con sección "Mi asistencia" | Ídem |
+| AUT-06 [P0] | Activación MANAGED separada | Integrada en `/invitations/[token]`; consentimiento del apoderado en `/groups/[groupId]/members/consent`. |
+| AUT-07 [P2 autorizado] | Login Google/Apple | Integrado en acceso/registro; controles dependen de configuración de proveedores (#59). |
+| ONB-03 [P0] | Pantalla de espera del menor | Integrada en `/welcome` y `/join`; progreso con responsables, sin acceso al grupo mientras esté pendiente. |
+| ONB-04 [P0] | Wizard de datos → visibilidad → invitaciones | Existe formulario de grupo y guía de siguientes pasos; no es un wizard de tres páginas. |
+| GRP-05 [P0] | `/groups/:groupId/settings/activity-types` | Ruta lógica antigua; la real es `/groups/[groupId]/activity-types`. |
+| INT-02 [P0] | `/groups/:groupId/members/:membershipId` | **Sin página**. Acciones existentes en la nómina no equivalen al detalle de perfil/apoderados/resumen previsto. |
+| INT-05 [P0] | Compartir código/enlace y QR de invitación | Código/enlace integrado en Configuración; el QR de asistencia ASI-04 no demuestra un QR de invitación al grupo. |
+| APO-01 / APO-02 [P0] | Directorio de apoderados y vincular/desvincular | `/guardians` registra/vincula buscando al menor; no acredita el directorio ni la desvinculación completa descritos en el plan. |
+| ACT-04 [P0] | Diálogo de edición de serie | Integrado en `/activities/[activityId]/edit`; no una ruta nueva. |
+| ASI-02 [P0] | `/groups/:groupId/members/:membershipId/history` ADMIN | **Sin página**. Existen historial propio y de pupilo; la tabla ADMIN no enlaza un historial individual dedicado. |
+| ASI-03 [P2] | Solicitar/aprobar justificación | Sin UI identificada. Elegir EXCUSED en asistencia no es el flujo de solicitud/aprobación (#52/#53). |
+| ASI-04 [P2 autorizado] | QR/geocerca originalmente móvil | QR entregado en web (#58); geocerca excluida expresamente. |
+| ASI-05 [P2] | Asistencia offline móvil | Pospuesto por decisión registrada en #54; rollback y reintento de red no son cola offline. |
+| REP-02 [P0] | `/groups/:groupId/stats` | Integrada en `/groups/[groupId]/reports`; no existe `/stats`. |
+| REP-03 [P1] | Botón Exportar CSV en REP-01 | Sin control/descarga identificados; discrepancia de #36 registrada en §7. |
+| REP-04 [P2] | Ranking gamificado | Sin pantalla identificada; no se deduce de ordenar métricas. |
+| CFG-01 [P0] | `/settings/account`, contraseña y cerrar todas las sesiones | Cuenta dentro de `/profile`; contraseña vía recuperación; «Mi cuenta» cierra **este dispositivo**, no todas las sesiones. |
+| CFG-02 [P1] | `/settings/notifications`, recordatorio/ausencia | Sin página. La preferencia de anuncios en el muro pertenece a #57 y no implementa #44/#50. |
+| CFG-03 [P0] | `/settings/privacy` | Integrada en `/profile#privacy`: solicitudes por correo a soporte; no descarga, supresión ni revocación automáticas. |
+| PRF-02 [P0] | `/me/history` | Selector/redirección al historial por grupo; nunca un porcentaje global. |
 
-Navegación móvil [P1]: barra inferior de 4-5 pestañas — Inicio, Agenda (ACT-01), Asistencia (solo visible para ADMIN, entra a ASI-01 de la próxima actividad), Reportes (REP-01/REP-02 según rol y toggles), Perfil (PRF-01 + configuración).
+Las brechas P0 anteriores se documentan para decisión del responsable dentro de la épica #100; no se marca el MVP completo ni se crean rutas para hacer coincidir el código con el plan.
 
-### 4.3 Selector multi-grupo
+## 3. Navegación implementada por rol
 
-- **Web [P0]:** dropdown permanente en la barra superior con nombre + logo del grupo activo; al cambiar, se navega a la ruta equivalente del nuevo `groupId`. Opción "Ver todos mis grupos" abre GRP-01.
-- **Móvil [P1]:** el encabezado de la pestaña Inicio muestra el grupo activo; al tocarlo se abre un bottom sheet con la lista de grupos (nombre, logo, rol) y la opción "Unirme con código" (ONB-02).
-- El último grupo activo se persiste por cuenta y dispositivo (cookie de preferencia en web / preferencias de la app) y se restaura al iniciar sesión solo si la membership sigue ACTIVE. Esta preferencia no contiene tokens ni concede permisos.
-- El rol se resuelve **por grupo**: al cambiar de grupo puede cambiar la navegación completa (ej.: ADMIN en grupo A, ATHLETE en grupo B).
-- GUARDIAN puro (sin otra membership propia) no usa selector de grupo sino selector de **pupilo** en APO-03; los grupos se derivan de las memberships del pupilo.
-- Los deep links y notificaciones push [P1] siempre incluyen `groupId` y fijan el grupo activo al abrirse.
+La entrada [`groupHomePath()`](../apps/web/src/lib/groups.ts) lleva a `/welcome` si no hay grupos ACTIVE; restaura un grupo recordado aún autorizado, usa el único grupo o abre `/groups` si hay varios. GUARDIAN no redirige automáticamente a `/wards` por el mero rol: esa vista se alcanza desde la navegación.
 
-## 5. Detalle funcional de pantallas críticas
-
-### 5.1 ASI-01 — Toma de asistencia [P0] (móvil [P1])
-
-**Ruta:** `/groups/:groupId/activities/:activityId/attendance` · **Rol:** ADMIN.
-
-**Elementos**
-- Encabezado: título de la actividad, tipo (chip con color de `activity_types`), fecha/hora local, contador en vivo `Presentes X · Atrasados X · Ausentes X · Justificados X · Sin marcar X`.
-- Lista de deportistas: todas las memberships ATHLETE con status ACTIVE del grupo, orden alfabético por full_name; cada fila: avatar, nombre, 4 botones segmentados de estado (PRESENT / LATE / ABSENT / EXCUSED con colores verde/amarillo/rojo/gris) e ícono de nota.
-- Buscador por nombre (filtra en cliente).
-- Acción masiva: "Marcar todos como Presente" (los ya marcados no se sobrescriben; pide confirmación).
-- Nota opcional por fila: bottom sheet / popover con textarea (máx. 500 caracteres), guarda en `attendance_records.note`.
-
-**Estados vacíos:** sin deportistas ACTIVE → "Este grupo aún no tiene deportistas activos" con CTA a INT-03/INT-04 (solo web). Actividad futura (> 2 h antes de `starts_at`) → banner "Esta actividad aún no comienza; puedes registrar asistencia anticipada" (se permite, con esa advertencia).
-
-**Acciones y comportamiento**
-- Cada toque guarda de inmediato el `attendance_record` (upsert por `(activity_id, membership_id)`) con feedback visual < 300 ms; sin botón global "Guardar".
-- Tocar el estado ya seleccionado lo deselecciona (elimina el registro → vuelve a "sin marcar").
-- Edición posterior [P0]: la misma pantalla, reabierta en cualquier momento, muestra los estados guardados y permite cambiarlos; cada cambio actualiza `recorded_by` y `recorded_at`.
-
-**Validaciones visibles:** solo ADMIN del grupo accede (403 → pantalla "No tienes permisos"); pérdida de conexión → toast "Sin conexión: el cambio no se guardó" y la fila vuelve al estado anterior (el modo offline es ASI-05 [P2]).
-
-### 5.2 INT-01 — Lista de integrantes [P0] (móvil consulta [P1])
-
-**Ruta:** `/groups/:groupId/members` · **Rol:** ADMIN.
-
-**Elementos:** buscador por nombre; filtros por rol (ADMIN/ATHLETE/GUARDIAN) y status de membership (ACTIVE/PENDING/INVITED/INACTIVE); tabla web (avatar, full_name, rol(es) como chips, edad calculada desde birthdate con badge "Menor" si < 18, status con color, % de asistencia de la temporada, apoderados vinculados si es menor) / tarjetas en móvil; contador "N integrantes"; badge en filtro PENDING si hay menores esperando aprobación (INT-06).
-
-**Estados vacíos:** grupo nuevo → ilustración + "Aún no hay integrantes" con 3 CTA: compartir código (INT-05), invitar por email (INT-04), crear cuenta gestionada (INT-03).
-
-**Acciones:** fila → INT-02; menú por fila (web): editar, desactivar membership (status → INACTIVE, con confirmación; no borra historial), reenviar invitación si INVITED; botón primario "Agregar integrante" (INT-03/INT-04/INT-05).
-
-**Validaciones visibles:** un ATHLETE menor sin guardianship activa muestra advertencia "Sin apoderado vinculado" y no puede pasarse a ACTIVE hasta resolverlo; al desactivar al último ADMIN del grupo la acción se bloquea con mensaje explicativo.
-
-### 5.3 ACT-02 — Detalle de actividad [P0] (móvil [P1])
-
-**Ruta:** `/groups/:groupId/activities/:activityId` · **Roles:** todos los miembros del grupo.
-
-**Elementos:** título, chip de tipo con color, description, location (enlace a mapa si hay dirección), fecha y horario local (`starts_at`–`ends_at`), indicador "Se repite semanalmente hasta DD-MM-AAAA" si tiene `recurrence_rule`.
-- **Vista ADMIN:** resumen de asistencia (contadores por estado + % de la actividad), botón primario "Tomar asistencia" (ASI-01) o "Editar asistencia" si ya hay registros, menú editar/eliminar (con diálogo ACT-04 si es recurrente).
-- **Vista ATHLETE:** su propio estado registrado (chip PRESENT/LATE/ABSENT/EXCUSED con su nota si existe) o "Asistencia aún no registrada".
-- **Vista GUARDIAN:** ídem pero del pupilo; si tiene varios pupilos en el grupo, uno por fila.
-
-**Estados vacíos:** sin asistencia registrada y actividad pasada → ADMIN ve CTA destacado "Registrar asistencia pendiente".
-
-**Validaciones visibles:** ATHLETE y GUARDIAN nunca ven estados ni notas de otros deportistas (regla de visibilidad 5); si `ends_at` < `starts_at` el formulario ACT-03 lo impide antes de llegar aquí.
-
-### 5.4 REP-01 — Reportes del grupo [P0] (móvil consulta [P1])
-
-**Ruta:** `/groups/:groupId/reports` · **Rol:** ADMIN.
-
-**Elementos**
-- Filtros: período (semana | mes | rango personalizado | temporada), tipo de actividad (multiselección, sistema + personalizados).
-- KPIs: % de asistencia promedio del grupo, total de actividades del período, deportista con mejor asistencia, % de atrasos (LATE) como indicador de puntualidad separado.
-- Tabla por deportista: nombre, convocadas, PRESENT, LATE, ABSENT, EXCUSED, % de asistencia con 1 decimal según la métrica canónica `(PRESENT + LATE) / (convocadas − EXCUSED) × 100`; orden por % descendente; semáforo (≥ 85 % verde, 70–84,9 % amarillo, < 70 % rojo).
-- Gráfico de barras: % por tipo de actividad [P0]; gráfico de línea de evolución semanal del % del grupo [P1] (08-reportes-y-estadisticas.md asigna la línea de tendencia a [P1]; en [P0] la tendencia se expone solo como tabla por período).
-- Botón "Exportar CSV" [P1] con los filtros aplicados (ver 08-reportes-y-estadisticas.md).
-
-**Estados vacíos:** sin actividades con asistencia en el período → "No hay asistencia registrada en este período" + CTA para cambiar el filtro; deportista sin convocatorias en el período → fila con "—" en vez de 0 %.
-
-**Acciones:** clic en un deportista → ASI-02 con el mismo filtro de período aplicado.
-
-**Validaciones visibles:** denominador 0 (todas EXCUSED) muestra "—" y tooltip explicativo; los cálculos usan hora local America/Santiago para los cortes de semana/mes.
-
-### 5.5 ASI-02 — Historial individual de asistencia [P0] (móvil [P1])
-
-**Rutas:** `/me/history` (ATHLETE), `/wards/:athleteUserId` sección historial (GUARDIAN), `/groups/:groupId/members/:membershipId/history` (ADMIN).
-
-**Elementos:** encabezado con nombre del deportista y grupo (selector si pertenece a varios); KPI grande: % de asistencia del período (métrica canónica, 1 decimal) + desglose PRESENT / LATE / ABSENT / EXCUSED; filtros de período (semana | mes | rango | temporada) y tipo de actividad; línea de tiempo descendente: fecha, título de la actividad, chip de tipo, chip de estado; la nota de asistencia es visible para el propio ATHLETE, su GUARDIAN y el ADMIN (nunca para terceros).
-
-**Estados vacíos:** deportista recién ingresado → "Aún no tienes actividades con asistencia registrada"; período sin datos → mensaje + acceso rápido a "temporada".
-
-**Acciones:** tocar una fila → ACT-02; ADMIN además puede saltar a ASI-01 para corregir un registro puntual.
-
-**Validaciones visibles:** ATHLETE solo accede a su propio historial; GUARDIAN solo al de sus pupilos vigentes (guardianship activa); cualquier otro acceso → 403.
-
-### 5.6 APO-03 / APO-04 — Vista del apoderado [P0] (móvil [P1])
-
-**Rutas:** `/wards` y `/wards/:athleteUserId` · **Rol:** GUARDIAN.
-
-**Elementos (APO-03):** tarjeta por pupilo: avatar, nombre, edad, grupos donde es miembro, próxima actividad (fecha/hora local), % de asistencia del mes por grupo; banner por pupilo próximo a cumplir 18 ("En N días tu pupilo administrará su propia cuenta", ver 02-roles-y-permisos.md).
-
-**Elementos (APO-04):** perfil del pupilo (sin datos de contacto de terceros), pestañas: Agenda (ACT-01 filtrada a los grupos del pupilo), Historial (ASI-02 del pupilo), Estadísticas del grupo (REP-02, solo si `guardians_can_view_group_stats = true` en ese grupo).
-
-**Estados vacíos:** GUARDIAN sin pupilos vinculados → "Aún no tienes deportistas a tu cargo; pide al administrador del grupo que te vincule"; pupilo cuyo vínculo pasó a inactivo por mayoría de edad desaparece de la lista con aviso único informativo.
-
-**Acciones:** cambiar de pupilo (selector superior si hay más de uno); activar aviso push de ausencia [P1] en CFG-02.
-
-**Validaciones visibles:** todo el contenido se limita a los grupos donde el pupilo es miembro; no hay acceso a notas ni datos de otros deportistas (reglas de visibilidad 2 y 5).
-
-### 5.7 GRP-04 — Configuración de visibilidad [P0]
-
-**Ruta:** `/groups/:groupId/settings/visibility` · **Rol:** ADMIN.
-
-**Elementos:** dos toggles independientes con texto explicativo y estado por defecto **desactivado**:
-1. `athletes_can_view_group_stats` — "Los deportistas pueden ver las estadísticas del grupo (nombre y % de asistencia de cada integrante)".
-2. `guardians_can_view_group_stats` — "Los apoderados pueden ver las estadísticas del grupo".
-- Recuadro informativo fijo: "Aunque actives estas opciones, nunca se muestran datos de contacto, fechas de nacimiento, notas de asistencia individuales ni datos de apoderados de otros integrantes. Solo nombre y métricas agregadas."
-- Vista previa: miniatura de cómo ve REP-02 un ATHLETE con el toggle activo.
-
-**Estados vacíos:** no aplica (los toggles siempre existen); si el grupo no tiene asistencia registrada, la vista previa muestra datos de ejemplo marcados como tales.
-
-**Acciones:** cambio de toggle guarda de inmediato en `groups.settings` (JSONB) con toast de confirmación y efecto inmediato en REP-02.
-
-**Validaciones visibles:** solo ADMIN del grupo puede entrar; el cambio queda registrado con autor y fecha (auditoría completa de cambios es [P2]).
-
-## 6. Resumen de prioridades por plataforma
-
-| Corte | Pantallas incluidas |
+| Contexto | Recorrido implementado |
 |---|---|
-| **MVP Web [P0]** | AUT-01…AUT-06, ONB-01…ONB-04, GRP-01…GRP-05, INT-01…INT-06, APO-01…APO-04, ACT-01…ACT-04, ASI-01, ASI-02, REP-01, REP-02, CFG-01, CFG-03, PRF-01, PRF-02 — todas en web responsive, con ASI-01/ACT-01/ASI-02 diseñadas móvil-first. |
-| **App móvil + mejoras [P1]** | En móvil: AUT-01/02/03/05, ONB-01/02/03, GRP-01, GRP-02 (consulta), INT-01/INT-02 (consulta), INT-05, APO-03/04, ACT-01/02, ASI-01, ASI-02, REP-01 (consulta), REP-02, CFG-01, PRF-01/02. Nuevas en ambas plataformas: CFG-02 (preferencias push) y REP-03 (exportación CSV). |
-| **Post-MVP [P2]** | AUT-07 (login social), ASI-03 (justificaciones), ASI-04 (QR/geocerca), ASI-05 (offline), REP-04 (ranking); y la llegada a móvil de las pantallas de gestión: ONB-04, GRP-03/04/05, INT-03/04/06, APO-01/02, ACT-03/04, CFG-03. Pantallas de rol COACH, anuncios/mensajería, pagos y panel multi-club se especificarán al planificar [P2]. |
+| ADMIN | Inicio del grupo → Actividades → Detalle → Toma de asistencia; Integrantes → alta/invitación/aprobaciones/vincular; Gestión → configuración/tipos/suscripción; Reportes y Anuncios. |
+| COACH | Inicio → Actividades → Toma/corrección de estados y Reportes agregados; sin gestión, notas privadas ni desmarcado. |
+| ATHLETE | Inicio/agenda → detalle; Mi asistencia → historial de su grupo; Reportes conserva lo propio con toggles apagados; QR registra solo su membership ATHLETE. |
+| GUARDIAN | Mis pupilos → detalle → historial/consentimientos en el grupo del pupilo; Reportes mantiene sus pupilos aunque no tenga agregados grupales habilitados. |
+| Multirol | Unión de roles en el grupo; se conservan accesos propios ATHLETE y de pupilos GUARDIAN. La navegación no reemplaza controles de servidor/RLS. |
 
-**Criterio de cierre del MVP Web [P0]:** todas las pantallas marcadas [P0] en la columna Web operativas en navegador de escritorio y móvil, con los flujos de 03-modulos-y-flujos.md completos de extremo a extremo y las reglas de visibilidad verificadas por rol.
+[`AppShell`](../apps/web/src/components/app-shell.tsx) agrupa tareas, muestra contexto de grupo y separa espacio personal. El selector conserva únicamente destinos permitidos al cambiar de grupo; los IDs de una actividad/pupilo no se reutilizan como si pertenecieran al nuevo grupo. «Mi agenda global» es `/groups#agenda`; no suma porcentajes entre grupos.
+
+## 4. Web responsive y propuesta móvil
+
+La web usa navegación lateral desde 1024 px y un drawer modal en anchos menores, con retorno de foco. El [sistema visual](12-sistema-visual.md) define tokens, tamaños mínimos y contratos reales. El objetivo de tomar asistencia a una mano en 375 px continúa vigente; no equivale a una app móvil instalada.
+
+La distribución móvil de [doc 09](09-roadmap.md) sigue siendo un **objetivo**: acceso, consulta multirol y toma de asistencia; gestión completa queda fuera de la primera entrega nativa. Ni el backend de avisos Expo ni el cierre administrativo de #19 prueba esas pantallas. No hay tabs nativos, share sheet ni almacenamiento offline entregados por esta reconciliación.
+
+## 5. Contratos de pantallas críticas al corte
+
+### 5.1 ASI-01 — Toma de asistencia
+
+[`AttendanceSheet`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/attendance/attendance-sheet.tsx) presenta deportistas activos, búsqueda y páginas de 50. Contadores, estado textual, selección y guardado por fila distinguen sin marcar/guardando/guardado/error. El lote confirma «todos presentes» sobre los no marcados y usa bloques de hasta 500; conserva lo ya confirmado ante un fallo posterior. La nota es opcional y exclusiva de ADMIN, al igual que volver a sin marcar. COACH conserva notas existentes sin leerlas ni escribirlas.
+
+Sin nómina se ofrecen acciones según rol; un cambio fallido se revierte y admite recuperación. No hay cola offline. El objetivo histórico de marcar 20 personas en menos de 60 segundos es una meta de usabilidad, no una medición certificada por este inventario.
+
+### 5.2 INT-01 — Integrantes y altas
+
+[`/members`](../apps/web/src/app/groups/%5BgroupId%5D/members/page.tsx) busca por nombre, filtra rol/estado y pagina; cada fila corresponde a una membership y una persona puede repetirse por rol. Distingue nómina vacía, filtros sin resultados y página fuera de rango. Las acciones por fila no abren INT-02, que no tiene ruta.
+
+INT-03 no activa automáticamente a un menor: separa declaración ADMIN, vínculo y consentimiento efectivo del apoderado. INT-06 muestra el avance y quién completa cada paso; «Consentimientos de mis pupilos» pertenece al GUARDIAN. Doc 02 define cuándo el consentimiento basta y cuándo falta confirmación ADMIN.
+
+### 5.3 ACT-02 / ACT-03 / ACT-04 — Actividad y serie
+
+El detalle muestra horario de Chile, tipo, ubicación, recurrencia y retorno al contexto de agenda. ADMIN edita y muestra QR; ADMIN/COACH acceden a toma de asistencia. ATHLETE/GUARDIAN consultan estados y notas autorizadas mediante enlaces a sus historiales; no se promete un resumen de asistencia embebido en el detalle.
+
+La creación y edición comparten [`ActivityForm`](../apps/web/src/app/groups/%5BgroupId%5D/activities/new/activity-form.tsx). El alcance de serie se elige en la edición; futuras con asistencia quedan protegidas por el contrato de backend. La agenda real es una lista por próximas/pasadas, no un calendario mensual navegable.
+
+### 5.4 REP-01 / REP-02 — Reportes y estadísticas
+
+[`/reports`](../apps/web/src/app/groups/%5BgroupId%5D/reports/page.tsx) selecciona la presentación por permisos. ADMIN/COACH reciben el reporte autorizado, con filtros aplicados, promedio individual y total ponderado diferenciados; la proyección COACH conserva las restricciones de doc 02. ATHLETE/GUARDIAN reciben sus datos/pupilos y, si corresponde, agregados grupales de temporada; no necesitan `/stats`.
+
+[`ReportTable`](../apps/web/src/app/groups/%5BgroupId%5D/reports/report-table.tsx) presenta nombres y métricas en una región enfocable, encabezados por fila/columna, números tabulares y primera columna fija. La tabla por tipo incluye barras visuales de apoyo; la evolución semanal es tabla. **No hay botón CSV ni enlace de fila a historial ADMIN** en el corte. Null se presenta como «Sin datos»; los umbrales y fórmula vienen de core/SQL.
+
+### 5.5 ASI-02 / PRF-02 — Historial individual
+
+ATHLETE usa `/groups/[groupId]/me/history`; GUARDIAN, `/groups/[groupId]/wards/[athleteUserId]/history`. `/me/history` elige grupo o redirige. [`AttendanceHistoryContent`](../apps/web/src/components/attendance-history.tsx) comparte resumen, filtros y registros autorizados; las notas no se abren a terceros. La ruta ADMIN `/members/:membershipId/history` sigue como objetivo sin página.
+
+### 5.6 APO-03 / APO-04 — Apoderados
+
+`/wards` y su detalle presentan pupilos/grupos vigentes, próximas actividades, métricas por grupo y tareas. Historial y consentimientos tienen enlaces contextuales. La vista puede mostrar incorporaciones pendientes sin convertirlas en asistencia activa; el cumpleaños 18 retira la visibilidad según las reglas del servidor. La consulta de un pupilo nunca autoriza a ver a los demás deportistas.
+
+### 5.7 GRP-04 — Visibilidad
+
+`/groups/[groupId]/settings/visibility` usa dos toggles independientes, inicialmente false, guardado inmediato y vista previa (ejemplo rotulado si faltan registros). Incluye autor/fecha del último cambio. Mostrar agregados no expone contactos, birthdate ni notas privadas; doc 02 es la referencia para V1–V6. Los datos del grupo en `/settings` tienen guardado explícito y no comparten esa semántica de autosave.
+
+## 6. Alcance y criterios de mantenimiento
+
+| Prioridad original | Estado del corte |
+|---|---|
+| P0 web | Módulos y páginas de §2; brechas lógicas de §2.1 explícitas. No declarar todas las pantallas del plan operativas solo por el número de páginas. |
+| P1 móvil/push/CSV | Sin cliente Expo; CSV y recordatorios/ausencias sin UI verificada. Requieren decisión/planificación; no son trabajo implícito del rediseño. |
+| P2 autorizado | COACH, suscripciones del club, anuncios, QR web y OAuth existentes. Límites y evidencia en §7. |
+| P2 restante | Offline pospuesto; geocerca, ranking, justificaciones y gestión móvil no se implementan por inferencia. |
+
+Al terminar **cada issue de UI**, el mismo PR debe actualizar las filas de rutas/códigos que cambien, los contratos de componentes/estados del [sistema visual](12-sistema-visual.md), base/fecha, evidencia y pendientes. Mantener códigos estables; una nueva extensión sin código histórico usa el issue como identificador hasta que se acuerde uno. No convertir una propuesta UX en descripción de código ni un test omitido en PASS.
+
+## 7. Reconciliación de historias y alcance
+
+Consulta de cuerpo, comentarios, responsable e historial de GitHub al 05-10-2026 y contraste con las rutas/componentes del grafo. **Responsable** diferencia assignee registrado y autor del cierre; no se asigna trabajo nuevo por este documento. Fechas de cierre en UTC, como GitHub. Ningún issue antiguo fue cerrado/reabierto por #121.
+
+| Historia | Evidencia y responsable/historial | Decisión documental y seguimiento |
+|---|---|---|
+| [#36 · CSV](https://github.com/AlexxSome/asisteam/issues/36) P1 | Cerrado por AlexxSome el 29-09-2026 14:40:30Z, sin assignee ni comentarios; timeline sin PR de entrega vinculado. REP-01/ReportTable no ofrecen CSV. | **Cerrado sin implementación UI verificada**. Conservar P1; ratificar con AlexxSome el motivo del cierre antes de planificar. No implementar ni reabrir aquí. |
+| [#19 · App móvil](https://github.com/AlexxSome/asisteam/issues/19) P1 | Assignee AlexxSome; cerrado 29-09-2026 14:39:44Z, sin comentarios de entrega; grafo sin cliente `apps/mobile`. | **Sin cliente verificado**; [#54](https://github.com/AlexxSome/asisteam/issues/54#issuecomment-5933509828) registra luego que móvil se planificará más adelante. No reabrir el alcance por el rediseño. |
+| [#44 · Recordatorios](https://github.com/AlexxSome/asisteam/issues/44) / [#50 · Aviso de ausencia](https://github.com/AlexxSome/asisteam/issues/50) P1 | Sin assignee ni comentarios; cierres por AlexxSome el 29-09-2026 a 14:40:31Z (ambos eventos de cierre del timeline). Sin CFG-02 ni UI de esos avisos identificadas. | **Cierres sin UI verificada**; pedir ratificación del cierre en su futura planificación. El push de anuncios #57 no demuestra estas dos historias. |
+| [#52 · Solicitar justificación](https://github.com/AlexxSome/asisteam/issues/52) / [#53 · Aprobar](https://github.com/AlexxSome/asisteam/issues/53) P2 | #52 asignado a AlexxSome; #53 sin assignee. Cerrados por AlexxSome el 29-09-2026 a 14:50:39Z y 14:51:11Z, sin comentarios ni UI ASI-03 identificada. | **Sin flujo verificado**; conservar P2 y ratificar decisión con el autor de los cierres. EXCUSED manual no prueba solicitud/aprobación. |
+| [#54 · Offline](https://github.com/AlexxSome/asisteam/issues/54#issuecomment-5933509828) P2 | AlexxSome, assignee y autor del comentario/cierre del 01-10-2026: pospuesto, sin commits/PR, depende de Expo y ASI-01 móvil. | **Diferido explícitamente**. No desarrollar cola, sincronización ni app nativa en esta auditoría. |
+| [#55 · COACH](https://github.com/AlexxSome/asisteam/issues/55#issuecomment-5945537421) P2 | AlexxSome confirma [PR #95](https://github.com/AlexxSome/asisteam/pull/95), 02-10-2026; [doc 02](02-roles-y-permisos.md#delegación-coach-p2--hu-adm-20-55) y ASI-01/reportes registran la implementación. | **Autorizado e implementado**: estados y agregados; sin notas privadas ni gestión. Preservar esta capacidad. |
+| [#56 · Billing](https://github.com/AlexxSome/asisteam/issues/56#issuecomment-5966035726) P2 | AlexxSome confirma [PR #96](https://github.com/AlexxSome/asisteam/pull/96), 03-10-2026. [Doc 12](12-suscripciones-saas.md) registra el cambio de alcance a suscripciones SaaS por club. | **Autorizado e implementado**: club → Asisteam con Mercado Pago. Sustituye cuotas de deportistas; no crear tesorería de integrantes por el título antiguo. |
+| [#57 · Anuncios](https://github.com/AlexxSome/asisteam/issues/57#issuecomment-5966437188) P2 | AlexxSome confirma [PR #97](https://github.com/AlexxSome/asisteam/pull/97), 03-10-2026; muro y [doc 13](13-anuncios.md). | **Web y backend de avisos implementados**. Recepción push requiere cliente Expo, dispositivo y credenciales; no hay push de navegador ni mensajería directa. |
+| [#58 · QR](https://github.com/AlexxSome/asisteam/issues/58#issuecomment-5971087844) P2 | Assignee AlexxSome; confirma [PR #98](https://github.com/AlexxSome/asisteam/pull/98), 03-10-2026; emisión/check-in y [doc 14](14-asistencia-qr.md). | **Autorizado en web responsive**: ADMIN emite, ATHLETE se registra; preserva registros previos. No incluye geocerca ni exige Expo. |
+| [#59 · Google/Apple](https://github.com/AlexxSome/asisteam/issues/59#issuecomment-5971635628) P2 | AlexxSome confirma [PR #99](https://github.com/AlexxSome/asisteam/pull/99), 03-10-2026; acceso/registro y handler OAuth existentes. | **Implementación autorizada**, operativa solo con proveedores configurados. La aceptación de condiciones se completa en #107, no se infiere del login social. |
+
+Los cierres sin motivo verificable permanecen como discrepancias, no como decisiones «entregado» o «cancelado». El siguiente paso de producto corresponde a AlexxSome como autor/responsable identificado; esta rama deja la evidencia para esa revisión sin atribuirle una decisión que no registró.
+
+## 8. Evidencia y validación de esta reconciliación
+
+| Antes, base del corte | Después de #121 |
+|---|---|
+| AGENTS decía «solo documentación»; README enumeraba 11 documentos y capacidades existentes como futuras. | Monorepo/módulos actuales, serie 01–14 más guía visual (15 documentos) y extensiones autorizadas enlazados. |
+| 37 páginas de una auditoría anterior; rutas lógicas mezcladas con disponibles. | 39 fuentes `page.tsx` enlazadas, dos adiciones de #107, secciones integradas y páginas ausentes explícitas. |
+| #36 cerrado podía interpretarse como CSV disponible; #54 como offline entregado. | Historial/responsables y decisión documental individual sin cambios de estado de issues. |
+| Guía visual anclada en tokens #102, con #103 aún descrito como futuro. | Contratos actuales de componentes, foco, carga/error/vacío, tablas y actualización por issue. |
+
+Cambio de documentación: no altera pantallas ni reglas. La comparación anterior es la evidencia antes/después del contenido; no se atribuye un cambio visual a esta rama. La evidencia sintética de teclado y 320/375/768/1024/1440 px reside en [QA #120](qa/issue-120/README.md), con sus límites explícitos. El zoom nativo 200 % y lector de pantalla pendientes de la matriz final no se convierten en PASS por actualizar este mapa.
+
+Resultados locales del 05-10-2026:
+
+| Comprobación | Resultado de #121 |
+|---|---|
+| Enlaces y anclas | 141 enlaces relativos válidos; anclas Markdown verificadas. |
+| Inventario | 39 páginas del grafo enlazadas exactamente una vez en §2; coinciden con las páginas del build, excluyendo handlers y `_not-found`. |
+| Vitest core | 150 PASS. |
+| Vitest web | 821 PASS en repetición completa; 81 integraciones opt-in omitidas. La primera pasada tuvo 820 PASS y el fallo intermitente de preview de foto ya documentado en #119/#120; no se modificó perfil ni se afirma reparado. |
+| Typecheck web/core y build web | PASS; build fuera del sandbox por el puerto interno de Turbopack. Aviso preexistente de `middleware` → `proxy`. |
+| Playwright completo | Intentado; no llegó a ejecutar casos porque el proceso del servidor resolvió pnpm global 11.1.1 frente a 10.33.2. No se atribuyen nuevas capturas/teclado/viewports a esta ejecución. |
+| Auto-revisión y `git diff --check` | Acotados a los cuatro documentos y sus referencias; sin cambios funcionales. |
+
+Se ejecutaron los scripts reales mediante `corepack pnpm --filter @asisteam/core test/typecheck` y `corepack pnpm --filter @asisteam/web test/typecheck/build/test:e2e:full` (cada tarea por separado). No hay script lint ni skills auxiliares heredadas `frontend-check`, `frontend-ci` o `ship` instaladas; se usa el flujo de entrega explícito de la skill invocada. No hay cambios DB/RLS/RPC ni tipos que regenerar; no se ejecutaron pgTAP ni integraciones opt-in. La evidencia visual previa permanece enlazada y fechada; no se certifica otra pasada manual en esta rama.
