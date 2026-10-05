@@ -85,3 +85,8 @@ Capturas seleccionadas revisadas visualmente: [ADMIN 375](admin-375.png), [GUARD
 **Pendiente para el gate final de la épica:** pasada humana con lector de pantalla y zoom nativo 200 %, revisión de los casos axe incompletos, foco/contraste no textual exhaustivo y combinaciones de estados/roles indicadas en la matriz. Los E2E comprueban teclado en Chromium automáticamente; no equivalen a haber escuchado VoiceOver/NVDA. No se ejecutaron cobros reales, invitaciones por email/Edge ni la cadena completa de alta/consentimiento/serie. Esos recorridos quedan explícitos para completar al cierre; las superficies existentes sí se capturan. DB/RLS/RPC no cambiaron: pgTAP, regeneración de tipos e integraciones opt-in no se ejecutaron en esta rama.
 
 Referencias: [Next logging](https://nextjs.org/docs/app/api-reference/config/next-config-js/logging), [Playwright accesibilidad](https://playwright.dev/docs/accessibility-testing), [contraste](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html), [reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html), [targets](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html), [diálogos](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
+
+
+## Seguimiento de la épica #100
+
+La [pasada adicional del 05-10-2026](../issue-100/README.md) completa recorridos técnicos que esta evidencia histórica dejó pendientes. Incluye los límites restantes y el guion humano. El runner actual también omite URLs con query e invitaciones en los logs de desarrollo, y permite reutilizar explícitamente el servidor supervisado con `ASISTEAM_QA_REUSE=1`. Los resultados anteriores se conservan como registro de #120.

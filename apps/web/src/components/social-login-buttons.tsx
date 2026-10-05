@@ -21,7 +21,7 @@ export function SocialLoginButtons({ context = {}, disabled = false, providers, 
   const pendingRef = useRef(false);
   const [activeProvider, setActiveProvider] = useState<Provider | null>(null);
   return (
-    <div className="space-y-3" aria-label="Acceso con cuenta social">
+    <div role="group" className="space-y-3" aria-label="Acceso con cuenta social">
       {SOCIAL_PROVIDERS.map(provider => (
         <div key={provider} className="space-y-1">
           <Button type="button" variant="secondary" className="w-full" loading={pending && provider === activeProvider}

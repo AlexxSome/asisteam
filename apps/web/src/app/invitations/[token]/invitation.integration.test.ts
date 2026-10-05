@@ -111,7 +111,7 @@ async function guardianFixture(name: string, address = email(name)) {
 suite("Edge + Auth + Postgres: invitaciones", () => {
   beforeAll(async () => {
     if (!secret) throw new Error("Falta INVITATION_PROXY_SECRET para el runtime Edge local");
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     apiUrl = config.API_URL; anonKey = config.ANON_KEY;
     if (!["127.0.0.1", "localhost"].includes(new URL(apiUrl).hostname)) throw new Error("Las pruebas solo admiten Supabase local");
     admin = createClient(apiUrl, config.SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
@@ -130,6 +130,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     }
     existingProfileId = sql(`select id from public.users where auth_user_id='${existingAuthId}';`);
     sql(`insert into public.groups(id,name,invite_code,created_by) values('${groupId}','Grupo sintético #18','${run.slice(0,8)}','${existingProfileId}');
+      insert into app_private.billing_legacy_groups(group_id) values('${groupId}');
       insert into public.memberships(user_id,group_id,role,status) values('${existingProfileId}','${groupId}','ADMIN','ACTIVE');
       insert into public.users(id,full_name,email,birthdate,account_status) values
         ('${invitedId}','Invitado sintético','${email("new")}','1990-01-01','INVITED'),
@@ -160,6 +161,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
       delete from public.invitations where group_id in (${groups});
       delete from app_private.invitation_send_limits where group_id in (${groups});
       delete from public.memberships where group_id in (${groups});
+      delete from app_private.billing_legacy_groups where group_id in (${groups});
       delete from public.groups where id in (${groups});
       delete from app_private.invitation_attempts where key in (${ips.flatMap(ip => ["preview", "accept"].map(action => `'${digest(`${secret}:${action}:${ip}`)}'`)).join(",")});
       delete from public.account_consents where user_id in (${users});
@@ -300,6 +302,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     const codeGroup = await owner.rpc("create_group", { p_name: "Ingreso por código del apoderado", p_sport: "Tenis" });
     expect(codeGroup.error).toBeNull();
     fixtureGroupIds.push(codeGroup.data);
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${codeGroup.data}');`);
     const code = sql(`select invite_code from public.groups where id='${codeGroup.data}';`);
     const joined = await existingGuardian.rpc("join_group_by_code", { p_invite_code: code });
     expect(joined.error).toBeNull();
@@ -316,6 +319,7 @@ suite("Edge + Auth + Postgres: invitaciones", () => {
     const secondGroup = randomUUID(); fixtureGroupIds.push(secondGroup);
     sql(`insert into public.groups(id,name,invite_code,created_by)
       values('${secondGroup}','Otro grupo previo','${randomUUID().replaceAll("-", "").slice(0,8)}','${existingProfileId}');
+      insert into app_private.billing_legacy_groups(group_id) values('${secondGroup}');
       insert into public.memberships(user_id,group_id,role,status,joined_at)
       values('${fixture.id}','${secondGroup}','ATHLETE','ACTIVE',now()-interval '60 days');`);
     const before = historySnapshot(fixture.id);

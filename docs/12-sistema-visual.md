@@ -82,7 +82,7 @@ Esta tabla describe la implementación compartida existente, no declara migradas
 | Carga de contenido | [LoadingState](../apps/web/src/components/ui/loading-state.tsx): texto `status`, sección `aria-busy` y esqueletos ocultos a lectores. | No introduce contenido ficticio como datos reales; no prueba que toda ruta tenga la misma boundary. |
 | Navegación pendiente | [NavigationProgress](../apps/web/src/components/ui/navigation-progress.tsx) usa `useLinkStatus` dentro de Link. | Anuncio «Cargando página…» mientras el router está pendiente; contempla navegación cancelada. |
 | Vacío | [EmptyState](../apps/web/src/components/ui/empty-state.tsx): título opcional H2, descripción y acción provistos por pantalla. | El consumidor diferencia grupo vacío, filtro sin coincidencias y página fuera de rango; CTA según permiso. |
-| Error recuperable / sin red | [ErrorState](../apps/web/src/components/ui/error-state.tsx): título según conexión, alert, `reset()` y regreso a grupos. | Reintento explícito; no cola ni reenvío offline automático. Un fallo de carga no debe aparecer como colección vacía. |
+| Error recuperable / sin red | [ErrorState](../apps/web/src/components/ui/error-state.tsx): título según conexión, alert, `router.refresh()` + `reset()`, estado «Volviendo a cargar…» y regreso a grupos. | Reintento explícito; no cola ni reenvío offline automático. Un fallo de carga no debe aparecer como colección vacía. |
 | Recurso no disponible | [UnavailableState](../apps/web/src/components/ui/unavailable-state.tsx): mensaje seguro compartido y regreso a grupos. | No revela existencia de un grupo/recurso ajeno; distinguir errores de transporte en el consumidor. |
 | Mutación procesando / éxito / error | Button + mensaje de la pantalla; asistencia tiene feedback y rollback por fila. | Conservar borrador si falla cuando el formulario lo soporte; no anunciar éxito antes de confirmar servidor. No existe un toast global obligatorio ni una única semántica de autosave. |
 | Selección / disabled | Asistencia usa texto, marca y `aria-pressed`; Button/Input exponen disabled real. | La selección no depende solo de color. Disabled debe acompañarse de la explicación pertinente, no sustituirla. |
@@ -132,3 +132,10 @@ git diff --check
 ```
 
 No existe script `lint` en el root ni en los paquetes afectados. Las integraciones Supabase se omiten por defecto (76 casos); no hubo cambios de DB/RLS/RPC ni regeneración de tipos de DB. El build necesitó permiso para el puerto interno de Turbopack; el wrapper Turbo raíz encuentra pnpm global 11, por lo que se ejecutan los scripts por paquete con Corepack. El warning de Next sobre `middleware` → `proxy` es preexistente. QA completa de todas las rutas/roles y lector de pantalla corresponde a #120; la composición de navegación, formularios y diálogo de asistencia permanece en sus issues.
+
+
+## Verificación adicional de #100 — 05-10-2026
+
+El [informe de cierre técnico](qa/issue-100/README.md) conserva resultados y límites de la nueva pasada. La prueba de transporte del servidor detectó que `reset()` reutilizaba la respuesta fallida: el reintento ahora solicita contenido fresco y bloquea el botón durante la transición. Las capturas de error y recuperación documentan ambos estados sobre datos locales.
+
+Los contenedores con nombre accesible de acceso social, métodos de aceptación de invitación, preview de logo y resumen de suscripción usan `role="group"`; un `div` genérico no admite ese nombre. El código de invitación usa `output` con nombre accesible, conservando la presentación. No se cambian tokens ni estilos. Axe mide colores tras finalizar las transiciones finitas para no confundir un fotograma intermedio con el estado del control. Los hallazgos `incomplete` se revisan y clasifican en el informe; no se convierten automáticamente en aprobación WCAG. Sigue pendiente escuchar un lector de pantalla, comprobar zoom nativo y medir la tarea real de cancha.

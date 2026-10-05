@@ -9,9 +9,10 @@ import { LoadingState } from "./loading-state";
 import { NavigationProgress } from "./navigation-progress";
 import { resourceResponseHtml } from "@/lib/resource-state";
 
-const navigation = vi.hoisted(() => ({ pending: false }));
+const navigation = vi.hoisted(() => ({ pending: false, refresh: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: navigation.refresh }) }));
 vi.mock("next/link", async importOriginal => ({ ...await importOriginal<typeof import("next/link")>(), useLinkStatus: () => navigation }));
-afterEach(() => { cleanup(); vi.restoreAllMocks(); navigation.pending = false; });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); navigation.refresh.mockClear(); navigation.pending = false; });
 
 it("ofrece reintentar con teclado y no mueve el foco a los mensajes", async () => {
   const user = userEvent.setup();
@@ -25,6 +26,7 @@ it("ofrece reintentar con teclado y no mueve el foco a los mensajes", async () =
   expect(document.activeElement).toBe(retry);
   await user.keyboard("{Enter}");
   expect(reset).toHaveBeenCalledOnce();
+  expect(navigation.refresh).toHaveBeenCalledOnce();
   expect(document.activeElement).toBe(retry);
   expect(screen.getByRole("link", { name: "Volver a mis grupos" }).getAttribute("href")).toBe("/groups");
 });

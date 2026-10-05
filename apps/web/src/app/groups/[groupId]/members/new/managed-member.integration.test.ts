@@ -27,7 +27,7 @@ function sql(query: string) {
 
 suite("MANAGED: Auth + invitación + consentimiento + asistencia", () => {
   beforeAll(async () => {
-    config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo Supabase local");
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
     for (const name of ["owner", "outsider"]) {

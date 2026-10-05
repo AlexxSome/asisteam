@@ -63,7 +63,8 @@ describe("perfil: operaciones independientes", () => {
     fireEvent.click(screen.getByRole("button", { name: "Subir foto" }));
     await screen.findByText("Foto guardada");
     expect(name().value).toBe("Mi borrador");
-    expect(screen.queryByAltText("Vista previa de la foto seleccionada")).toBeNull();
+    // The preview is cleared by the effect reacting to the successful upload.
+    await waitFor(() => expect(screen.queryByAltText("Vista previa de la foto seleccionada")).toBeNull());
     expect(dirty()).toBe(true);
   });
   it("mantiene valores y protección ante errores de guardado y red", async () => {

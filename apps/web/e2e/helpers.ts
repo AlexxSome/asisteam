@@ -24,11 +24,23 @@ export async function checkLayout(page: Page) {
 }
 
 export async function checkAccessibility(page: Page, info: TestInfo) {
+  // Measure settled colors, not an intermediate frame while primary/secondary
+  // button colors are transitioning. Never wait for infinite progress spinners.
+  await page.evaluate(async () => {
+    await Promise.all(document.getAnimations().filter(animation =>
+      animation.effect?.getTiming().iterations !== Infinity,
+    ).map(animation => animation.finished.catch(() => {})));
+  });
   const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
   // Do not attach HTML/DOM snippets (they can contain form values).
   const issues = result.violations.map(({ id, impact, nodes }) => ({ id, impact, targets: nodes.map(node => node.target) }));
-  const summary = JSON.stringify({ violations: issues, incomplete: result.incomplete.map(rule => rule.id), contrast: result.passes.find(rule => rule.id === 'color-contrast')?.nodes.flatMap(node => node.any.filter(check => check.id === 'color-contrast').map(check => ({ ratio: check.data?.contrastRatio, foreground: check.data?.fgColor, background: check.data?.bgColor, expected: check.data?.expectedContrastRatio }))) }, null, 2);
-  const path = info.outputPath('axe-summary.json');
+  const summary = JSON.stringify({ route: new URL(page.url()).pathname.replace(/\/invitations\/[^/]+/, '/invitations/[token]'),
+    viewport: page.viewportSize(), violations: issues, incomplete: result.incomplete.map(rule => ({
+    id: rule.id, nodes: rule.nodes.map(node => ({ target: node.target,
+      checks: [...node.any, ...node.all, ...node.none].map(check => ({ id: check.id, message: check.message })),
+    })),
+  })), contrast: result.passes.find(rule => rule.id === 'color-contrast')?.nodes.flatMap(node => node.any.filter(check => check.id === 'color-contrast').map(check => ({ ratio: check.data?.contrastRatio, foreground: check.data?.fgColor, background: check.data?.bgColor, expected: check.data?.expectedContrastRatio }))) }, null, 2);
+  const path = info.outputPath(`axe-summary-${info.attachments.length + 1}.json`);
   writeFileSync(path, summary);
   await info.attach('axe-summary', { path, contentType: 'application/json' });
   expect(issues, 'axe: revisión automática acotada; no certifica WCAG').toEqual([]);

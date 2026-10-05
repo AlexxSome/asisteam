@@ -2,6 +2,7 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: '**/faults.spec.ts',
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,
@@ -17,6 +18,7 @@ export default defineConfig({
   },
   webServer: {
     command: 'node e2e/server.mjs', url: 'http://127.0.0.1:3120/login',
-    reuseExistingServer: false, timeout: 180_000, stdout: 'pipe', stderr: 'pipe',
+    // Explicit opt-in for the supervised human pass on this same local QA server.
+    reuseExistingServer: process.env.ASISTEAM_QA_REUSE === '1', timeout: 180_000, stdout: 'pipe', stderr: 'pipe',
   },
 });

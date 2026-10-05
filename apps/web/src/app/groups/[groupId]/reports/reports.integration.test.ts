@@ -18,7 +18,7 @@ function sql(query: string) {
 }
 suite("reportes con Auth y PostgREST real", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
     const options = { auth: { persistSession: false, autoRefreshToken: false } };
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
@@ -33,6 +33,8 @@ suite("reportes con Auth y PostgREST real", () => {
     }
     const group = await clients.owner!.rpc("create_group", { p_name: "Reportes integración", p_sport: "Tenis" });
     expect(group.error).toBeNull(); groupId = group.data;
+    // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
     membershipId = sql(`insert into public.memberships(user_id,group_id,role,status,joined_at) select id,'${groupId}','ATHLETE','ACTIVE','2026-01-01' from public.users where email='${email("athlete")}' returning id;`).split("\n")[0]!;
     teammateMembershipId = sql(`insert into public.memberships(user_id,group_id,role,status,joined_at) select id,'${groupId}','ATHLETE','ACTIVE','2026-01-01' from public.users where email='${email("teammate")}' returning id;`).split("\n")[0]!;
     sql(`update public.groups set created_at='2026-01-01' where id='${groupId}';
@@ -55,7 +57,7 @@ suite("reportes con Auth y PostgREST real", () => {
     const groups = `select id from public.groups where created_by in (${users})`;
     sql(`delete from public.attendance_records where activity_id in (select id from public.activities where group_id in (${groups}));
       delete from public.activities where group_id in (${groups}); delete from public.memberships where group_id in (${groups});
-      delete from public.groups where id in (${groups}); delete from public.users where id in (${users});`);
+      delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id in (${groups})); delete from public.groups where id in (${groups}); delete from public.users where id in (${users});`);
     for (const id of authIds) await service.auth.admin.deleteUser(id);
   });
   it("RPC serializa conteos y porcentajes como números y refleja correcciones", async () => {

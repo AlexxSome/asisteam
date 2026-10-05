@@ -1,0 +1,2491 @@
+{
+  "date": "2026-10-05",
+  "analyses": [
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000002/activities/01200000-0000-4000-8000-000000000101/attendance",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_9bn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/invitations/[token]",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/activities/01200000-0000-4000-8000-000000000102",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/activities/01200000-0000-4000-8000-000000000102/edit",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/new",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_inebn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 14.63,
+          "foreground": "#0f172a",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/join",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_9bn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/profile/birthdate-requests",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_inebn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/settings",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/settings/visibility",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.47,
+          "foreground": "#92400e",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/activity-types",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 14.63,
+          "foreground": "#0f172a",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/guardians",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/members/pending",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000005000/members",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/invitations/[token]",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/check-in",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000005000/announcements",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/wards",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_9bn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/wards/01200000-0000-4000-8000-000000002001",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_inebn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/wards/01200000-0000-4000-8000-000000002001/history",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/members/consent",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/me/history",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_inebn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/me/history",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/register",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/forgot-password",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/legal/2026-09-21",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/accept-terms",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.72,
+          "foreground": "#ffffff",
+          "background": "#1e40af",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/welcome",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_9bn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/reset-password",
+      "viewport": {
+        "width": 320,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.47,
+          "foreground": "#92400e",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000002/activities/01200000-0000-4000-8000-000000000101/attendance",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".border-success > .h-4.leading-4.inline-block"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.94,
+          "foreground": "#991b1b",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000000003",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.94,
+          "foreground": "#991b1b",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "route": "/groups/01200000-0000-4000-8000-000000005000/activities",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                ".lg\\:hidden"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        }
+      ]
+    }
+  ],
+  "symbolMeasurement": {
+    "symbol": "✓",
+    "hiddenFromReader": true,
+    "symbolContrast": 6.4923831516894746,
+    "borderContrast": 6.4923831516894746,
+    "foreground": "rgb(22, 101, 52)",
+    "background": "rgb(220, 252, 231)",
+    "border": "rgb(22, 101, 52)",
+    "width": 76.25,
+    "height": 44
+  }
+}

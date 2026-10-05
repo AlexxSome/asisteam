@@ -62,7 +62,7 @@ describe("configuración de grupo", () => {
     await waitFor(() => expect(mock.update).toHaveBeenCalledWith(groupId, {
       name: "Club Ñuñoa", sport: "Tenis", description: "", logo_url: "",
     }));
-    expect(await screen.findByRole("status")).toHaveProperty("textContent", "Cambios guardados.");
+    expect(await screen.findByRole("status", { name: "" })).toHaveProperty("textContent", "Cambios guardados.");
     expect(mock.refresh).toHaveBeenCalledOnce();
     expect(mock.create).not.toHaveBeenCalled();
   });
@@ -74,7 +74,7 @@ describe("configuración de grupo", () => {
     expect(mock.rotate).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Confirmar regeneración" }));
     await waitFor(() => expect(mock.rotate).toHaveBeenCalledWith(groupId));
-    expect(screen.getByLabelText("Código de invitación").textContent).toBe("CODE0002");
+    expect(screen.getByRole("status", { name: "Código de invitación" }).textContent).toBe("CODE0002");
     expect(screen.getByRole<HTMLInputElement>("textbox", { name: "Enlace para unirse" }).value)
       .toBe(`${window.location.origin}/join?code=CODE0002`);
     expect(mock.refresh).toHaveBeenCalledOnce();
@@ -96,7 +96,7 @@ describe("configuración de grupo", () => {
     expect(mock.rotate).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Confirmar regeneración" }));
     expect((await screen.findByRole("alert")).textContent).toContain("No pudimos regenerar el código.");
-    expect(screen.getByLabelText("Código de invitación").textContent).toBe("CODE0001");
+    expect(screen.getByRole("status", { name: "Código de invitación" }).textContent).toBe("CODE0001");
     expect(mock.refresh).not.toHaveBeenCalled();
   });
 });
@@ -145,16 +145,16 @@ it("bloquea doble confirmación y mantiene éxito junto al código", async () =>
   expect(mock.rotate).toHaveBeenCalledOnce();
   expect(screen.getByRole<HTMLButtonElement>("button", { name: "Confirmar regeneración" }).disabled).toBe(true);
   await act(async () => finish({ code: "CODE0002" }));
-  expect(screen.getByRole("status").closest("section")?.id).toBe("invite");
-  expect(screen.getByRole("status").textContent).toContain("Código regenerado");
+  expect(screen.getByRole("status", { name: "" }).closest("section")?.id).toBe("invite");
+  expect(screen.getByRole("status", { name: "" }).textContent).toContain("Código regenerado");
 });
 it("error al copiar es local y ofrece copia manual", async () => {
   const user = userEvent.setup();
   Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: vi.fn().mockRejectedValue(new Error("denied")) } });
   render(<GroupForm groupId="grupo" inviteCode="CODE0001" />);
   await user.click(screen.getByRole("button", { name: "Copiar enlace" }));
-  expect(screen.getByRole("status").textContent).toContain("copiarlo manualmente");
-  expect(screen.getByRole("status").closest("section")?.id).toBe("invite");
+  expect(screen.getByRole("status", { name: "" }).textContent).toContain("copiarlo manualmente");
+  expect(screen.getByRole("status", { name: "" }).closest("section")?.id).toBe("invite");
 });
 it("preview del logo cae a iniciales si falla y permite cambiar de URL", () => {
   render(<GroupForm initialValues={{ name: "Club local", sport: "Tenis", logo_url: "https://example.test/logo.png" }} />);

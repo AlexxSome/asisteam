@@ -37,7 +37,7 @@ function consent(guardianId: string, athleteId: string) {
 
 suite("Aprobaciones: HTTP e invariantes concurrentes", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo Supabase local");
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
     for (const name of ["owner", "outsider"]) {
@@ -52,6 +52,8 @@ suite("Aprobaciones: HTTP e invariantes concurrentes", () => {
     const group = await owner.rpc("create_group", { p_name: "Club aprobaciones integración", p_sport: "Tenis" });
     if (group.error) throw new Error("No se pudo preparar grupo sintético");
     groupId = group.data;
+    // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
   }, 30_000);
 
   afterAll(async () => {
@@ -64,7 +66,7 @@ suite("Aprobaciones: HTTP e invariantes concurrentes", () => {
       delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id in (${users}));
       delete from public.guardianships where athlete_user_id in (${users});
       delete from public.memberships where group_id in (${groups});
-      delete from public.groups where id in (${groups});
+      delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id in (${groups})); delete from public.groups where id in (${groups});
       delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await service.auth.admin.deleteUser(id);
   });
@@ -115,6 +117,7 @@ suite("Aprobaciones: HTTP e invariantes concurrentes", () => {
     for (let n = 1; n <= 2; n++) {
       const group = await owner.rpc("create_group", { p_name: `Club concurrente ${n}`, p_sport: "Tenis" });
       expect(group.error).toBeNull();
+      sql(`insert into app_private.billing_legacy_groups(group_id) values('${group.data}');`);
       const member = pending(`limit-minor-${n}`, true, group.data);
       consent(tutor, member.userId);
       args.push({ p_group_id: group.data, p_membership_id: member.membershipId });

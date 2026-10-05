@@ -20,7 +20,7 @@ function sql(query: string) {
 }
 suite("historial del pupilo con Auth y PostgREST reales", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
     const options = { auth: { persistSession: false, autoRefreshToken: false } };
     service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
@@ -35,6 +35,8 @@ suite("historial del pupilo con Auth y PostgREST reales", () => {
     }
     const group = await clients.owner!.rpc("create_group", { p_name: "Historial pupilo integración", p_sport: "Tenis" });
     expect(group.error).toBeNull(); groupId = group.data;
+    // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
+    sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
     sql(`update public.groups set created_at='2026-01-01' where id='${groupId}';
       insert into public.users(id,full_name,birthdate,account_status) values
         ('${athleteUserId}','Pupilo sintético',(app_private.chile_today()-interval '14 years')::date,'MANAGED'),
@@ -71,7 +73,7 @@ suite("historial del pupilo con Auth y PostgREST reales", () => {
       delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id='${athleteUserId}');
       delete from public.guardianships where athlete_user_id='${athleteUserId}';
       delete from public.memberships where group_id in (${groups});
-      delete from public.groups where id in (${groups}); delete from public.users where id in (${users}); commit;`);
+      delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id in (${groups})); delete from public.groups where id in (${groups}); delete from public.users where id in (${users}); commit;`);
     for (const id of authIds) await service.auth.admin.deleteUser(id);
   });
   it("JWT del apoderado devuelve solo pupilo, métricas completas y página solicitada", async () => {

@@ -30,7 +30,7 @@ async function invoke(body: unknown, bearer?: string) {
 suite("#107: Auth + RPC + Edge con aceptación versionada", () => {
   beforeAll(async () => {
     if (!secret) throw new Error("Falta el secreto sintético del Edge local");
-    const config = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
+    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
     apiUrl = config.API_URL; anonKey = config.ANON_KEY;
     if (!["127.0.0.1", "localhost"].includes(new URL(apiUrl).hostname)) throw new Error("Solo se admiten pruebas locales");
     admin = createClient(apiUrl, config.SERVICE_ROLE_KEY, options);
