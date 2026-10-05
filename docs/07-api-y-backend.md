@@ -19,7 +19,7 @@ Para que el contrato sea legible y estable ante los clientes (web [P0] y móvil 
 ```mermaid
 flowchart LR
     W["Web Next.js 16 [P0]"] -->|supabase-js| GW[Supabase API Gateway]
-    M["Móvil Expo [P1]"] -->|supabase-js| GW
+    M["Apps nativas Java / Swift [P1]"] -->|HTTPS + JWT| GW
     GW --> AUTH["Supabase Auth\n(JWT access + refresh)"]
     GW --> PGRST["PostgREST\nlecturas: vistas + RLS"]
     GW --> RPC["RPC PL/pgSQL\nwrites transaccionales"]
@@ -242,10 +242,10 @@ El permiso se reevalúa en la base en cada lectura, incluida la consulta directa
 
 | Método | Ruta lógica | Rol | Descripción | Implementación | Prioridad |
 |---|---|---|---|---|---|
-| POST | /api/v1/users/me/push-tokens | Autenticado | Registra token de Expo Notifications del dispositivo | PostgREST `push_tokens` + RLS por owner | [P1] |
+| POST | /api/v1/users/me/push-tokens | Autenticado | Contrato actual registra token Expo; migrar a token nativo FCM/APNs | PostgREST `push_tokens` + RLS por owner; esquema/proveedor pendientes | [P1] |
 | — | (jobs) | Sistema | Recordatorio de actividad a miembros; aviso de ausencia (ABSENT) al apoderado tras el registro | `pg_cron` + Edge Function `functions/v1/send-push` (idempotente) | [P1] |
 
-Para anuncios #57 se implementan las RPC `register_announcement_push_token(p_token,p_platform)`, `unregister_announcement_push_token(p_token)` y `set_announcement_push_enabled(p_enabled)` con identidad del JWT, no `user_id` aportado por el cliente. Registro Expo IOS/ANDROID, opt-in independiente y desregistro al cerrar sesión. El contrato P1 de recordatorios/ausencias anterior sigue pendiente en este checkout.
+Para anuncios #57 se implementan las RPC `register_announcement_push_token(p_token,p_platform)`, `unregister_announcement_push_token(p_token)` y `set_announcement_push_enabled(p_enabled)` con identidad del JWT, no `user_id` aportado por el cliente. **Implementación actual:** registro de tokens Expo IOS/ANDROID, opt-in independiente y desregistro al cerrar sesión. **Plan móvil vigente desde 2026-10-05:** migrar token/transporte a FCM para Android y APNs para iOS; revisar esquema, Edge Function, secretos y transición de tokens. El contrato P1 de recordatorios/ausencias anterior sigue pendiente en este checkout.
 
 ### 2.12 Anuncios [P2 autorizado, #57]
 
@@ -389,7 +389,7 @@ Eliminar una ocurrencia con asistencia devuelve 409 `attendance_confirmation_req
 
 ## 4. Validaciones por recurso
 
-Los schemas Zod viven en `packages/core` y se comparten entre web [P0], móvil [P1] y Edge Functions; los CHECK/UNIQUE de PostgreSQL son la red de seguridad (ver 04-modelo-de-datos.md).
+Los schemas Zod viven en `packages/core` y se comparten entre web [P0] y Edge Functions. Las apps nativas [P1] validan formularios localmente contra los contratos de campo/error; CHECK/UNIQUE/RPC de PostgreSQL son la red de seguridad (ver 04-modelo-de-datos.md).
 
 | Recurso | Validaciones clave |
 |---|---|

@@ -6,15 +6,15 @@
 
 ## 1. Resumen ejecutivo
 
-El plan lleva Asisteam desde cero hasta la **v1.0 (MVP Web [P0] + MVP Móvil [P1]) en 19 semanas calendario** con un equipo de 2-3 desarrolladores full-stack, sobre el stack decidido en 06-arquitectura-y-stack.md (Supabase + Next.js 16 [P0], Expo/React Native [P1], monorepo pnpm + Turborepo con `packages/core`). La beta con clubes reales corre en paralelo al desarrollo móvil para no alargar el calendario. Todo el alcance post-v1.0 [P2] se organiza en olas temáticas priorizables tras el feedback de la beta.
+El calendario de 19 semanas se basaba en Expo y ya no es una fecha comprometida para el MVP móvil. El stack móvil vigente desde el 2026-10-05 es desarrollo nativo: Java/Android y Swift/iOS. La planificación de 10–12 semanas para Fase 2 es preliminar; el equipo debe recalcular fechas de v1.0 según capacidad y fechas reales de inicio. La beta web puede continuar en paralelo. Todo el alcance post-v1.0 [P2] se organiza en olas temáticas priorizables tras el feedback de la beta.
 
 | Fase | Nombre | Duración | Ventana estimada | Hito de cierre |
 |---|---|---|---|---|
 | 0 | Preparación | 2 semanas | 2026-07-06 → 2026-07-17 | Infraestructura y diseño listos |
 | 1 | MVP Web [P0] | 9 semanas | 2026-07-20 → 2026-09-18 | MVP Web desplegado en producción |
-| 2 | MVP Móvil [P1] | 6 semanas | 2026-09-21 → 2026-10-30 | Apps en revisión/beta de tiendas |
-| 3 | Beta con clubes + hardening | 8 semanas calendario (solapada con Fase 2; ~4 semanas-persona dedicadas) | 2026-09-21 → 2026-11-13 | **v1.0 — 2026-11-13** |
-| 4 | Post-MVP [P2] por olas | 4-6 semanas por ola | Desde 2026-11-16, según backlog | Releases v1.x / v2 |
+| 2 | MVP Móvil nativo [P1] | 10–12 semanas (preliminar) | Por replanificar | Android Java e iOS Swift en pruebas internas |
+| 3 | Beta con clubes + hardening | Se mantiene en paralelo; 2 semanas de hardening tras Fase 2 | 2026-09-21 → estimado 2026-12-28 a 2027-01-11 | **v1.0 por replanificar** |
+| 4 | Post-MVP [P2] por olas | 4-6 semanas por ola | Tras v1.0, según backlog | Releases v1.x / v2 |
 
 ---
 
@@ -75,7 +75,7 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 | M6 Historial individual | M5, M3 | Lee `attendance_records`; GUARDIAN requiere `guardianships` |
 | M7 Reportes ADMIN | M5, M6 | Vistas agregadas sobre asistencia; reutiliza filtros de período de M6 |
 | M8 Visibilidad | M7, M2 | Los toggles de `groups.settings` condicionan las vistas de M7 para no-ADMIN |
-| Fase 2 (móvil [P1]) | Fase 1 completa | Reutiliza `packages/core`, tipos generados, RLS y RPC/Edge Functions ya probados |
+| Fase 2 (móvil [P1]) | Fase 1 completa | Reutiliza backend, RLS y RPC/Edge Functions; implementa dos clientes nativos y verifica contratos/casos canónicos por plataforma |
 | Push notifications [P1] | M4, M3 | Recordatorios usan `activities.starts_at`; aviso de ausencia usa `guardianships` |
 | Export CSV [P1] | M7 | Exporta los mismos datasets de las vistas de reportes |
 
@@ -89,26 +89,26 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 
 ---
 
-## 4. Fase 2 — MVP Móvil [P1] (6 semanas)
+## 4. Fase 2 — MVP Móvil [P1] (10–12 semanas preliminares)
 
-**Objetivo:** entregar la app iOS/Android (Expo SDK 54+, expo-router) con las funciones núcleo — consulta para todos los roles y toma de asistencia para ADMIN — más notificaciones push y exportación CSV, completando el alcance de la v1.0.
+**Objetivo:** entregar dos apps nativas — Android en Java e iOS en Swift — con las funciones núcleo: consulta para todos los roles y toma de asistencia para ADMIN, más notificaciones push y exportación CSV. La fecha de v1.0 se recalcula cuando se confirme capacidad y fecha de inicio; la meta original del 2026-11-13 queda en riesgo y no se considera comprometida.
 
 **Entregables por semana:**
 
 | Semana | Entregable |
 |---|---|
-| S1 | App Expo en el monorepo reutilizando `packages/core`, supabase-js, tipos generados y TanStack Query; auth (login, recuperación) y selector multi-grupo [P1]. |
-| S2-S3 | Consulta para todos los roles: agenda de actividades, historial individual, pantalla de reportes condicionada por toggles (mismas vistas/RPC del backend, cero lógica duplicada) [P1]. |
-| S4 | Toma y edición de asistencia para ADMIN, optimizada para uso en cancha (lista táctil, 4 estados, nota opcional) [P1]. Primer build interno con EAS Build y envío temprano a TestFlight/Play internal testing (adelanta la fricción de tiendas, riesgo R7). |
-| S5 | Notificaciones push con Expo Notifications: recordatorio de actividad y aviso de ausencia al apoderado, disparadas desde pg_cron + Edge Functions idempotentes [P1]. |
-| S6 | Exportación CSV de reportes (web y móvil, generada desde las vistas de M7) [P1]; QA en dispositivos físicos iOS/Android; EAS Submit a revisión de tiendas. |
+| S1-S2 | Bases de los dos proyectos nativos, identidad visual, autenticación/sesión segura, selector multi-grupo y capa HTTP/DTO; alinear respuestas con PostgREST/RPC. |
+| S3-S5 | Consulta multirol: agenda, historial propio/de pupilos y reportes desde vistas/RPC; pruebas de permisos y casos canónicos en Android e iOS. |
+| S6-S7 | Toma/edición de asistencia para ADMIN, optimizada para cancha; lista táctil, cuatro estados, nota opcional y recuperación visible de errores. Builds internos tempranos por plataforma. |
+| S8-S9 | Migrar push: registro de tokens FCM/APNs, proveedor/transporte de Edge Function, opt-in, baja al cerrar sesión y pruebas físicas; mantener compatibilidad durante transición con los tokens Expo de anuncios ya existentes. |
+| S10 | Exportación CSV; QA en dispositivos físicos; accesibilidad, privacidad, firma, fichas y envío a revisión de Google Play y App Store. Reserva de 1–2 semanas si la integración nativa o tiendas la requieren. |
 
 **Criterios de salida (verificables):**
 1. Builds distribuidos a los clubes piloto vía TestFlight y Play internal testing; envío a revisión pública completado.
 2. Push de recordatorio recibida en dispositivo físico ≤ 15 min antes de `starts_at` (hora America/Santiago); aviso de ausencia llega al GUARDIAN al registrarse un ABSENT de su pupilo.
 3. Toma de asistencia de 20 deportistas completable en < 60 segundos en un Android de gama media.
 4. CSV exportado reproduce exactamente los valores de la vista SQL (mismo redondeo a 1 decimal).
-5. Cero lógica de métrica o visibilidad duplicada en la app: solo consumo de vistas/RPC.
+5. Cero reglas de autorización o métricas sensibles duplicadas: el backend entrega proyecciones de vistas/RPC. Los modelos/validadores de transporte nativos cubren cada plataforma y sus fixtures pasan los casos canónicos compartidos.
 
 ---
 
@@ -116,7 +116,7 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 
 **Objetivo:** validar el producto con 3-5 clubes reales usando el MVP Web en operación diaria, corregir con datos de uso real y dejar la plataforma lista legal y operativamente para v1.0.
 
-**Estructura temporal:** la beta web comienza el 2026-09-21 (inmediatamente después de Fase 1) y corre en paralelo a la Fase 2 con ~0,5 dev de dedicación para soporte y fixes; las 2 semanas finales (2026-11-02 → 2026-11-13) son de dedicación completa al hardening.
+**Estructura temporal:** la beta web comienza el 2026-09-21 y continúa durante la Fase 2 con ~0,5 dev de dedicación para soporte y fixes; las 2 semanas finales de hardening se mueven después de los builds nativos y se estiman entre 2026-12-15 y 2027-01-11, según Fase 2 cierre en 10 o 12 semanas.
 
 **Entregables:**
 - 3-5 clubes piloto operando: onboarding asistido, grupos reales creados, asistencia tomada en entrenamientos reales durante ≥ 4 semanas.
@@ -170,18 +170,19 @@ gantt
     M7 Reportes ADMIN           :f1g, after f1f, 1w
     M8 Visibilidad y estabilizacion :f1h, after f1g, 1w
     MVP Web en produccion       :milestone, mw, 2026-09-18, 0d
-    section Fase 2 MVP Movil [P1]
-    Setup Expo y auth           :f2a, 2026-09-21, 1w
-    Consulta multi-rol          :f2b, after f2a, 2w
-    Toma de asistencia ADMIN y build EAS :f2c, after f2b, 1w
-    Push notifications          :f2d, after f2c, 1w
-    Export CSV y envio a tiendas :f2e, after f2d, 1w
+    section Fase 2 MVP Movil nativo [P1]
+    Apps nativas Java y Swift   :f2a, 2026-10-05, 2w
+    Consulta multi-rol          :f2b, after f2a, 3w
+    Toma de asistencia y builds internos :f2c, after f2b, 2w
+    Migracion push FCM APNs     :f2d, after f2c, 2w
+    CSV QA y envio a tiendas    :f2e, after f2d, 1w
+    Buffer de integracion       :f2buf, after f2e, 2w
     section Fase 3 Beta y hardening
-    Beta web con clubes piloto (paralela) :f3a, 2026-09-21, 6w
-    Hardening y cumplimiento legal :f3b, 2026-11-02, 2w
-    v1.0                        :milestone, v10, 2026-11-13, 0d
+    Beta web con clubes piloto (paralela) :f3a, 2026-09-21, 16w
+    Hardening y cumplimiento legal :f3b, after f2buf, 2w
+    v1.0                        :milestone, v10, after f3b, 0d
     section Fase 4 Post-MVP [P2]
-    Ola 1 Operacion en cancha   :f4a, 2026-11-16, 6w
+    Ola 1 Operacion en cancha   :f4a, after f3b, 6w
     Ola 2 Comunicacion          :f4b, after f4a, 5w
     Ola 3 Gestion del club      :f4c, after f4b, 6w
     Ola 4 Plataforma            :f4d, after f4c, 6w
@@ -191,16 +192,16 @@ gantt
 
 ## 8. Duración total hasta v1.0 y supuestos
 
-**Duración total: 19 semanas calendario** (2026-07-06 → 2026-11-13), rango con contingencia **19-21 semanas** (v1.0 a más tardar el 2026-11-27). Desglose: Fase 0 (2) + Fase 1 (9) + Fase 2 (6) + 2 semanas dedicadas de cierre de Fase 3; la beta de Fase 3 no suma calendario porque corre solapada con la Fase 2.
+El calendario anterior de 19 semanas (2026-07-06 → 2026-11-13) dejó de ser válido al sustituir Expo por dos clientes nativos. **Estimación preliminar:** Fase 2 toma 10 semanas de trabajo más hasta 2 semanas de contingencia; iniciando el 2026-10-05, los builds quedan entre 2026-12-14 y 2026-12-28. Se suman 2 semanas de hardening, por lo que v1.0 se proyecta entre 2026-12-28 y 2027-01-11. El equipo debe confirmar capacidad, fechas y revisión de tiendas antes de comprometer una fecha.
 
 **Supuestos explícitos:**
 1. Equipo de 2-3 devs full-stack TypeScript/React/SQL disponibles desde el 2026-07-06, sin ausencias prolongadas; con 2 devs, sumar ~3 semanas al total.
 2. No hay diseñador dedicado: el diseño UX se resuelve en Fase 0 con shadcn/ui y wireframes hechos por el equipo; un rediseño visual profundo no está presupuestado.
 3. Los 3 flujos no-CRUD complejos (menor-requiere-apoderado, MANAGED→ACTIVE con consentimiento, recurrencia semanal) no crecen más allá de lo diseñado en los spikes de Fase 0; cualquier extensión se corta al alcance etiquetado (riesgo R12).
 4. La estimación de ~9 semanas del MVP Web proviene de la decisión de arquitectura (06-arquitectura-y-stack.md) y asume auth, CRUD, storage y email resueltos por Supabase/Resend.
-5. La revisión de tiendas (Apple/Google) toma ≤ 2 semanas; se mitiga enviando builds internos desde la semana 4 de Fase 2 y usando OTA updates para fixes.
+5. Builds internos Android/iOS se distribuyen temprano para descubrir problemas de firma, permisos y tiendas; no se presupone OTA. La duración de revisión de tiendas se confirma durante la Fase 2.
 6. Los clubes piloto se reclutan durante la Fase 1 (gestión comercial en paralelo, no consume capacidad dev).
-7. Costos de infraestructura según 06-arquitectura-y-stack.md: ~USD 45-70/mes en [P0], ~150-170/mes al sumar [P1].
+7. Costos de infraestructura según 06-arquitectura-y-stack.md: ~USD 45-70/mes estimados en [P0]; el costo de builds nativos, firma y publicación [P1] queda por estimar.
 8. Corte de alcance estricto: solo entra a v1.0 lo etiquetado [P0]/[P1]; todo lo demás va al backlog de Fase 4 [P2].
 
 ---
@@ -212,12 +213,12 @@ gantt
 | R1 | **Adopción baja**: los ADMIN de clubes no incorporan el hábito de tomar asistencia digital | Negocio | Media | Alto | Beta con 3-5 clubes reales y onboarding asistido en Fase 3; métrica de adopción del flujo central (E2 de 01-vision-y-alcance.md §2.5: asistencia tomada en ≥ 3 actividades en los primeros 14 días); toma de asistencia < 60 s como criterio de salida; recordatorio push al ADMIN [P1] |
 | R2 | **Datos de menores**: el flujo MANAGED + consentimiento del apoderado incumple Ley 19.628/21.719 (vigente dic 2026) o filtra datos sensibles | Legal/técnico | Media | Crítico | Revisión legal temprana del diseño en Fase 0-1 (11-legal-seguridad-privacidad.md); checklist de cumplimiento como criterio de salida de Fase 3; regla de visibilidad 5 aplicada con vistas de columnas explícitas, nunca `SELECT *` sobre `users`; minimización de datos de menores |
 | R3 | **Complejidad de la recurrencia**: la expansión de `recurrence_rule` genera actividades duplicadas o con horas corridas por DST | Técnico | Alta | Medio | Alcance cerrado a la regla canónica (días de semana + fecha fin, nada más en [P0]); expansión server-side en una sola RPC idempotente; tests con casos de cambio de hora de America/Santiago; spike dedicado en Fase 0 |
-| R4 | **Asistencia sin conectividad**: canchas y gimnasios con señal pobre impiden guardar la toma de asistencia | Funcional | Alta | Medio | En [P0]/[P1]: guardado por lote idempotente + reintento automático de TanStack Query con estado visible; medir % de fallos de red en beta; el modo offline completo con sincronización es [P2] (Ola 1) y se confirma con ese dato |
-| R5 | **Calidad de datos**: emails mal escritos, deportistas duplicados, `birthdate` faltante que rompe la regla de menores | Funcional | Alta | Medio | Validación Zod compartida (`packages/core`) en web, móvil y Edge Functions; `birthdate` obligatoria para rol ATHLETE; detección de email duplicado al invitar (único en `users.email`); auditoría de datos con los clubes piloto en Fase 3 |
+| R4 | **Asistencia sin conectividad**: canchas y gimnasios con señal pobre impiden guardar la toma de asistencia | Funcional | Alta | Medio | En [P0]/[P1]: guardado por lote idempotente, estados visibles y reintento acotado implementado por cada cliente; medir % de fallos de red en beta; el modo offline completo con sincronización es [P2] y sigue diferido |
+| R5 | **Calidad de datos**: emails mal escritos, deportistas duplicados, `birthdate` faltante que rompe la regla de menores | Funcional | Alta | Medio | Zod en web/Edge Functions, validación local nativa Java/Swift contra el mismo contrato, y CHECK/UNIQUE/RPC en backend; `birthdate` obligatoria para rol ATHLETE; auditoría con clubes piloto |
 | R6 | **Scope creep**: pedidos de la beta (pagos, mensajería, QR) se cuelan en v1.0 | Gestión | Alta | Alto | Toda funcionalidad lleva etiqueta [P0]/[P1]/[P2] y no cambia de prioridad sin decisión explícita registrada; lo nuevo entra por defecto al backlog [P2] de Fase 4; revisión de alcance semanal contra el checklist del canon |
-| R7 | **Dependencia de tiendas de apps**: rechazo o demora de Apple/Google bloquea la v1.0 | Externo | Media | Medio | Cuentas creadas en Fase 0; build interno con EAS Build y TestFlight/Play internal desde la semana 4 de Fase 2; OTA updates de Expo para fixes sin re-revisión; la beta de Fase 3 arranca sobre web y no depende de las tiendas |
+| R7 | **Dependencia de tiendas y toolchains nativas**: firma, certificados, provisioning o revisión demoran el lanzamiento | Externo/técnico | Media | Alto | Configurar Gradle/Android Studio y Xcode, certificados y cuentas temprano; publicar builds internos en TestFlight/Play internal desde las primeras semanas; la beta web no depende de las tiendas |
 | R8 | **Rendimiento de reportes**: agregaciones por período degradan con grupos grandes o temporadas largas | Técnico | Media | Medio | Vistas SQL con índices sobre `attendance_records(activity_id, membership_id)` y `activities(group_id, starts_at)`; `EXPLAIN ANALYZE` con seeds de volumen (100 grupos, 50 deportistas, 1 año de actividades) en CI; criterio de salida Fase 3: P95 < 2 s; materialización de vistas solo si el dato real lo exige |
-| R9 | **Dispersión de la lógica de dominio** entre SQL (RLS, vistas, PL/pgSQL) y TypeScript (Edge Functions, `packages/core`) | Técnico | Alta | Medio | Convención obligatoria desde el día 1 (06-arquitectura-y-stack.md): lectura = RLS + vistas/RPC; todo write no trivial = Edge Function/RPC; misma batería de casos canónicos de la métrica ejecutada contra la vista SQL y contra `packages/core` en cada CI |
+| R9 | **Dispersión de la lógica de dominio** entre SQL, TypeScript, Java y Swift | Técnico | Alta | Alto | Permisos/métricas/reglas sensibles viven en RLS + vistas/RPC; clientes nativos presentan DTOs del backend; compartir fixtures de contrato y probar Android/iOS contra casos canónicos en CI |
 | R10 | **Regresión de RLS**: un cambio mal probado filtra datos entre grupos o expone contacto/`birthdate`/notas de terceros | Técnico | Media | Crítico | pgTAP + seeds por rol en CI como gate obligatorio de merge; tests negativos por cada una de las 6 reglas de visibilidad; prohibición de `SELECT *` sobre `users` hacia no-ADMIN; revisión RLS dedicada en el hardening de Fase 3 |
 | R11 | **CI frágil**: los tests de integración sobre supabase CLI/Docker se vuelven lentos e intermitentes y el equipo deja de correrlos | Técnico | Media | Medio | Hardening del pipeline presupuestado dentro de la Fase 0; cache de imágenes Docker y de dependencias; presupuesto de duración (< 12 min) monitoreado; tests pgTAP particionados por módulo |
 | R12 | **Deslizamiento de las 9 semanas**: los flujos no-CRUD (M3) crecen y erosionan la ventaja del stack elegido | Gestión/técnico | Media | Alto | Spikes de diseño en Fase 0 con decisión escrita; M3 va temprano (S3-S4) para quemar el riesgo con margen de reacción; corte estricto al alcance [P0]; checkpoint de mitad de Fase 1 (fin de S4): si M3 no cerró, se replanifica antes de tocar M5-M8 |

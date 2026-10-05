@@ -8,14 +8,14 @@ Aplicación **web [P0] y móvil [P1]** para el control de asistencia de deportis
 
 **Roles por membresía (nunca globales):** `ADMIN` (gestiona el grupo), `ATHLETE` (deportista), `GUARDIAN` (apoderado de menores de edad) y `COACH` (extensión [P2] autorizada e implementada en #55). ADMIN y COACH toman/corrigen estados; notas y desmarcado quedan reservados a ADMIN. La referencia de permisos sigue siendo [doc 02](docs/02-roles-y-permisos.md), incluida su sección de delegación COACH.
 
-**Estado verificado al 05-10-2026:** monorepo pnpm/Turborepo con Next.js, `packages/core`, tipos en `packages/db`, Supabase (migraciones, RLS/RPC y Edge Functions), Vitest y Playwright/axe. Hay **39 páginas web** en la base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; [doc 05](docs/05-pantallas.md) enlaza cada archivo, código de pantalla y límite de implementación. Las 37 de la auditoría inicial preceden a las dos páginas de aceptación/aviso legal de #107. No hay cliente Expo implementado en este corte.
+**Estado verificado al 05-10-2026:** monorepo pnpm/Turborepo con Next.js, `packages/core`, tipos en `packages/db`, Supabase (migraciones, RLS/RPC y Edge Functions), Vitest y Playwright/axe. Hay **39 páginas web** en la base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; [doc 05](docs/05-pantallas.md) enlaza cada archivo, código de pantalla y límite de implementación. Las 37 de la auditoría inicial preceden a las dos páginas de aceptación/aviso legal de #107. No hay cliente móvil implementado; la planificación vigente es nativo: Java para Android y Swift para iOS.
 
-**Módulos actuales:** acceso/invitaciones/consentimiento, grupos, integrantes/apoderados, actividades, asistencia, historial/reportes/visibilidad, perfil y soporte. Además existen COACH (#55), billing SaaS por club (#56), anuncios (#57), QR web (#58) y login social (#59), con decisiones verificadas. No eliminar esas capacidades por su etiqueta P2 ni extenderlas por inferencia. CSV (#36) y otras historias cerradas sin UI se registran como discrepancias en [doc 05 §7](docs/05-pantallas.md#7-reconciliación-de-historias-y-alcance); el cierre administrativo no demuestra entrega. Offline/móvil sigue pospuesto según #54.
+**Módulos actuales:** acceso/invitaciones/consentimiento, grupos, integrantes/apoderados, actividades, asistencia, historial/reportes/visibilidad, perfil y soporte. Además existen COACH (#55), billing SaaS por club (#56), anuncios (#57), QR web (#58) y login social (#59), con decisiones verificadas. No eliminar esas capacidades por su etiqueta P2 ni extenderlas por inferencia. CSV (#36) y otras historias cerradas sin UI se registran como discrepancias en [doc 05 §7](docs/05-pantallas.md#7-reconciliación-de-historias-y-alcance); el cierre administrativo no demuestra entrega. Offline sigue pospuesto según #54; la app móvil P1 se planifica nativa.
 
 ### Etiquetas de prioridad
 
 - **[P0]** — MVP Web (~9 semanas): el corazón del producto.
-- **[P1]** — MVP Móvil + push + export CSV (completa la v1.0, meta 2026-11-13).
+- **[P1]** — MVP móvil nativo Java/Android + Swift/iOS, push y export CSV. La meta anterior 2026-11-13 queda pendiente de replanificar tras el cambio de stack.
 - **[P2]** — Post-MVP por olas. **Nunca implementar nuevas features [P2] sin decisión explícita.** COACH, suscripciones SaaS, anuncios, QR web y login social ya tienen autorización trazada en #55–#59; offline/geocerca y otras ampliaciones no se deducen de ella.
 
 ## 2. Stack tecnológico (decisión cerrada, doc 06)
@@ -23,7 +23,7 @@ Aplicación **web [P0] y móvil [P1]** para el control de asistencia de deportis
 | Capa | Elección |
 |---|---|
 | Web [P0] | **Next.js 16** (App Router, React 19, TypeScript 5) + Tailwind CSS 4 + shadcn/ui + supabase-js 2 + TanStack Query 5 + react-hook-form + Zod |
-| Móvil [P1] | **Expo SDK 54+** (React Native, TypeScript) + expo-router + EAS Build/Submit + Expo Notifications |
+| Móvil [P1] | **Android nativo en Java** (Android Studio/Gradle) + **iOS nativo en Swift** (Xcode); distribución por Google Play y App Store. Migración de push Expo a tokens/APNs/FCM pendiente de planificar. |
 | Backend | **Supabase**: PostgREST + RLS (lecturas), Edge Functions Deno/TS + RPC PL/pgSQL (escrituras con reglas de negocio), pg_cron (jobs) |
 | Base de datos | **PostgreSQL 17** (Supabase Cloud, AWS `sa-east-1`), esquema único multi-tenant discriminado por `group_id` |
 | Auth | Supabase Auth (email+contraseña [P0]; Google/Apple [P2 autorizado, #59]); `public.users` **desacoplada** de `auth.users` (FK opcional) para cuentas MANAGED sin credenciales |
@@ -38,7 +38,7 @@ Alternativas descartadas (comparativa en doc 06 §4): backend propio NestJS (rut
 asisteam/
 ├── apps/
 │   ├── web/          # Next.js 16 [P0]
-│   └── mobile/       # Planificado: Expo [P1], aún no implementado
+│   └── mobile/       # Planificado [P1]: apps nativas Android (Java) e iOS (Swift)
 ├── packages/
 │   ├── core/         # métrica canónica, schemas Zod, tipos de dominio, constantes de enums y etiquetas en español
 │   └── db/           # tipos generados con `supabase gen types typescript`
@@ -140,7 +140,7 @@ Base canónica de 9 tablas [P0] (no es el inventario completo del esquema actual
 No hay API REST artesanal: el contrato canónico es la tabla de operaciones de doc 07 §2 con notación lógica `/api/v1/...`, donde cada operación se implementa vía PostgREST (vista), RPC (`rpc/nombre`) o Edge Function (`functions/v1/nombre`).
 
 - **Errores uniformes:** `{ "error": { "code": "snake_case_estable", "message": "texto en español", "details": {} } }`. HTTP: 400 validación, 401 sin sesión, 403 sin permiso, **404 no existe o no visible (anti-enumeración)**, 409 conflicto (ej. `LAST_ADMIN`, `membership_already_exists`), 422 regla de negocio (ej. `minor_cannot_leave`, `guardian_has_active_wards`), 429 rate limit.
-- **Validación:** schemas Zod en `packages/core`, compartidos por web, móvil y Edge Functions; CHECK/UNIQUE de Postgres como red final. Tipos regenerados con `supabase gen types` en cada migración; el CI falla si divergen.
+- **Validación:** schemas Zod en `packages/core` para web y Edge Functions; las apps nativas validan formularios localmente según el mismo contrato. CHECK/UNIQUE/RPC de Postgres son la red final. Tipos TS se regeneran con `supabase gen types` en cada migración; CI falla si divergen.
 - **Reglas de negocio R1–R15** (doc 07 §5) — las críticas: R1 menor-requiere-apoderado+consentimiento; R2 ADMIN toma/edita asistencia; la extensión COACH de doc 02 permite estados sin notas ni desmarcado; R3 upsert único por `(activity_id, membership_id)`, lote ≤ 500; R4 métrica canónica en vista SQL y core con los mismos tests; R5 último ADMIN no puede salir (409 `LAST_ADMIN`, con `FOR UPDATE`); R6 scoping por grupo vía RLS; R7 convocatoria = existe registro; R10 código de grupo solo incorpora ATHLETE (GUARDIAN solo por invitación dirigida); R12 invitaciones expiran a 7 días; R13 editar serie afecta solo futuras sin asistencia; R14 tipos de sistema inmutables.
 - **Auth:** JWT access (1 h) + refresh rotatorio; en web con `@supabase/ssr` (cookies HttpOnly/Secure/SameSite=Lax, **nunca localStorage**); `auth.uid()` → `public.users.id` vía helper `auth_user_id()`.
 - **Seguridad:** `service_role` key SOLO en Edge Functions y CI, jamás en clientes ni `NEXT_PUBLIC_*`; anti-enumeración en login/recovery/invitaciones; rate limits (join por código 10/15 min, invitaciones 50/día/grupo); CORS por allowlist; contraseñas argon2id/bcrypt, mínimo 10 chars; scrubbing de PII en logs y Sentry (nunca email/phone/birthdate en logs).
@@ -173,8 +173,8 @@ Calendario del plan original. Para disponibilidad actual, usar [doc 05](docs/05-
 |---|---|---|
 | 0 | Monorepo, Supabase, CI/CD, esquema canónico completo + helpers RLS, wireframes, spikes de los 3 flujos críticos | 2 sem (desde 2026-07-06) |
 | 1 | MVP Web [P0]: M1 Auth → M2 Grupos → M3 Integrantes/apoderados (2 sem, el más riesgoso) → M4 Actividades → M5 Asistencia → M6 Historial → M7 Reportes → M8 Visibilidad | 9 sem |
-| 2 | MVP Móvil [P1] (Expo, push, CSV) | 6 sem |
-| 3 | Beta con 3-5 clubes reales + hardening legal (solapada) | → **v1.0: 2026-11-13** |
+| 2 | MVP Móvil [P1] (Java/Android, Swift/iOS, push, CSV) | Replanificar; estimación inicial 10–12 sem |
+| 3 | Beta con 3-5 clubes reales + hardening legal (solapada) | → v1.0 por replanificar (estimación preliminar: 2026-12-28 a 2027-01-11) |
 | 4 | Olas [P2] | post-v1.0 |
 
 Cada módulo de Fase 1 cierra con sus políticas RLS testeadas en pgTAP antes de pasar al siguiente.
@@ -182,7 +182,7 @@ Cada módulo de Fase 1 cierra con sus políticas RLS testeadas en pgTAP antes de
 ## 10. Reglas de oro para agentes de IA
 
 1. **Respeta las etiquetas [P0]/[P1]/[P2]**: no implementes ni "prepares" alcance de una prioridad superior sin pedirlo explícito. El scope creep es el riesgo #6 del proyecto.
-2. **La lógica de dominio no se duplica**: métrica, schemas Zod, enums y etiquetas viven en `packages/core` y/o vistas SQL — jamás re-implementadas ad-hoc en una pantalla o Edge Function.
+2. **La lógica de dominio no se duplica**: métricas y reglas sensibles viven en vistas/RPC SQL; schemas Zod, enums y etiquetas TS sirven a web/Edge Functions. Apps nativas Java/Swift consumen DTOs y métricas del backend; sus modelos de transporte no alteran reglas ni fuente canónica.
 3. **Nunca expongas a no-ADMIN**: email, phone, birthdate, notas de terceros ni apoderados de terceros (regla V5). Ante la duda, proyecta menos columnas.
 4. **Todo write no trivial pasa por RPC/Edge Function** transaccional; el cliente nunca escribe directo contra tablas base con invariantes.
 5. **UTC en la base, America/Santiago en la presentación**. Los cortes de semana/mes se calculan en hora de Chile.
@@ -212,5 +212,5 @@ Serie de producto 01–14 más sistema visual: 15 documentos principales; los do
 | [11-legal-seguridad-privacidad.md](docs/11-legal-seguridad-privacidad.md) | Datos de menores, consentimiento, Ley 19.628/21.719, retención/anonimización, checklist C-01–C-20 | Cumplir el marco legal chileno |
 | [12-suscripciones-saas.md](docs/12-suscripciones-saas.md) | Billing SaaS, planes/cupos y Mercado Pago (#56) | Preservar la decisión club → Asisteam |
 | [12-sistema-visual.md](docs/12-sistema-visual.md) | Tokens, componentes y contratos de estados | Implementar UI coherente y mantener evidencia |
-| [13-anuncios.md](docs/13-anuncios.md) | Muro, opt-in y backend de avisos (#57) | Separar web existente de cliente Expo pendiente |
+| [13-anuncios.md](docs/13-anuncios.md) | Muro, opt-in y backend de avisos (#57) | Backend actual usa Expo Push; apps nativas requieren migrar tokens/transporte a FCM/APNs |
 | [14-asistencia-qr.md](docs/14-asistencia-qr.md) | QR temporal y llegada propia (#58) | Mantener permisos, caducidad e idempotencia |

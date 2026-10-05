@@ -6,7 +6,7 @@
 
 ## 1. Decisión de arquitectura (resumen ejecutivo)
 
-Se adopta la **Propuesta A del panel técnico: Supabase (PostgreSQL 17 + Auth + RLS + Edge Functions) como backend gestionado, Next.js 16 para el MVP Web [P0] y Expo/React Native para la app móvil [P1]**, organizados en un monorepo pnpm + Turborepo con un paquete compartido `packages/core`.
+Se adopta Supabase (PostgreSQL 17 + Auth + RLS + Edge Functions) como backend gestionado, Next.js 16 para el MVP Web [P0] y **desarrollo nativo para móvil [P1]: Java en Android y Swift en iOS**. El cambio de Expo a nativo fue decidido el 2026-10-05. Se mantienen pnpm + Turborepo para el monorepo; los proyectos Android/iOS vivirán bajo `apps/mobile/` y tendrán builds propios de Gradle y Xcode.
 
 Razones dominantes (detalle comparativo en la sección 4):
 
@@ -23,7 +23,7 @@ Injertos adoptados de las propuestas descartadas: monorepo con `packages/core` (
 flowchart LR
     subgraph Clientes
         WEB["Web app Next.js 16<br/>responsive, navegador móvil [P0]"]
-        MOB["App móvil Expo / React Native<br/>iOS y Android [P1]"]
+        MOB["Apps nativas<br/>Android: Java · iOS: Swift [P1]"]
     end
 
     subgraph Vercel["Vercel Pro (CDN, presencia GRU)"]
@@ -40,7 +40,7 @@ flowchart LR
     end
 
     RESEND["Resend<br/>email transaccional [P0]"]
-    EXPUSH["Expo Notifications<br/>push [P1]"]
+    PUSH["Push nativo<br/>FCM / APNs [P1]<br/>migración desde Expo pendiente"]
     SENTRY["Sentry<br/>errores web/móvil/Edge"]
 
     WEB --> NEXT
@@ -56,7 +56,7 @@ flowchart LR
     CRON --> PG
     CRON --> EDGE
     EDGE --> RESEND
-    EDGE --> EXPUSH
+    EDGE --> PUSH
     WEB -.-> SENTRY
     MOB -.-> SENTRY
     EDGE -.-> SENTRY
@@ -80,11 +80,11 @@ La métrica canónica de asistencia `(PRESENT + LATE) / (convocadas − EXCUSED)
 | Capa | Elección | Justificación |
 |---|---|---|
 | **Web [P0]** | Next.js 16 (App Router, React 19, TypeScript 5) + Tailwind CSS 4 + shadcn/ui; supabase-js 2 + TanStack Query 5; react-hook-form + Zod (schemas desde `packages/core`); tipos generados con `supabase gen types` | HTML nativo con SSR: tablas de reportes con copiar/pegar y Ctrl+F, carga <1 s, accesibilidad estándar. El requisito [P0] explícito es web responsive usable en navegador móvil; React + TS es el perfil de contratación más abundante en Chile/Latam. |
-| **Móvil [P1]** | Expo SDK 54+ (React Native, TypeScript) con expo-router; EAS Build/Submit + OTA updates; push con Expo Notifications | Reutiliza supabase-js, tipos generados, TanStack Query y `packages/core` del monorepo: solo se reescribe la UI. EAS elimina la infraestructura de builds nativas para un equipo de 2-3 devs. |
+| **Móvil [P1]** | App Android nativa en Java (Android Studio/Gradle) y app iOS nativa en Swift (Xcode); distribución por Google Play y App Store. Push nativo con FCM/APNs, sujeto a migrar el transporte/token Expo existente. | Dos clientes y ciclos de build/release independientes. Consumen el contrato Supabase existente; no comparten UI ni ejecutan directamente `packages/core`/schemas Zod TypeScript. Requieren contrato DTO estable y pruebas de paridad con casos canónicos. |
 | **Backend** | Supabase: PostgREST + RLS para lecturas [P0]; Edge Functions (Deno/TS) y RPC (PL/pgSQL) para writes no triviales; triggers + constraints; pg_cron | Cero servidores; el aislamiento multi-tenant vive en la base. Los 3 flujos complejos del canon (menor-requiere-apoderado, MANAGED→ACTIVE, recurrencia semanal) se concentran en Edge Functions/RPC testeables. |
 | **Base de datos** | PostgreSQL 17 (Supabase Cloud, AWS sa-east-1); esquema único multi-tenant con `group_id`; enums nativos; JSONB para `groups.settings`; `timestamptz` en UTC con presentación America/Santiago; vistas SQL para la métrica canónica | Calce 1:1 con el modelo canónico de 04-modelo-de-datos.md. sa-east-1 da ~35-60 ms desde Santiago. Datos en Postgres estándar: `pg_dump` portable (salida de emergencia del lock-in). |
 | **Autenticación** | Supabase Auth: email+contraseña y recuperación [P0]; `inviteUserByEmail` para invitaciones dirigidas (estado INVITED); `public.users` desacoplada de `auth.users` (FK opcional) para cuentas MANAGED sin credenciales; Google/Apple [P2] sin cambiar de proveedor | Resuelve registro, login, recuperación y verificación de email sin código propio. El desacople `public.users` ↔ `auth.users` es la pieza a medida que habilita cuentas gestionadas para menores y el flujo de claim con consentimiento del apoderado (ver 11-legal-seguridad-privacidad.md). RLS consume `auth.uid()` vía helpers SECURITY DEFINER: `is_member(group_id)`, `is_group_admin(group_id)`, `is_guardian_of(athlete_user_id)`. |
-| **Hosting / infra** | Vercel Pro (frontend, CDN con presencia GRU) + Supabase Cloud Pro + Resend (email transaccional) + Sentry (free/dev) + GitHub Actions (CI con supabase CLI local y pgTAP) + EAS al iniciar [P1] | Todo gestionado; ~USD 45-70/mes en [P0]. GitHub Actions corre los tests de RLS contra Supabase local en Docker, sin tocar producción. |
+| **Hosting / infra** | Vercel Pro (web) + Supabase Cloud Pro + Resend + Sentry + GitHub Actions; builds nativos Gradle/Xcode y distribución en tiendas [P1] | Todo gestionado; ~USD 45-70/mes estimados en [P0]. Los costos de CI nativo/firma/distribución móvil quedan por estimar. GitHub Actions corre los tests de RLS contra Supabase local en Docker. |
 | **Monorepo** | pnpm + Turborepo: `apps/web` [P0], `apps/mobile` [P1], `packages/core`, `packages/db` (tipos generados), `supabase/` (migraciones, funciones, seeds, tests pgTAP) | Una sola fuente para la métrica canónica, los schemas Zod y los tipos de dominio, consumida por web, móvil y Edge Functions. |
 
 Estructura del repositorio:
@@ -93,7 +93,7 @@ Estructura del repositorio:
 asisteam/
 ├── apps/
 │   ├── web/          # Next.js 16 [P0]
-│   └── mobile/       # Expo [P1]
+│   └── mobile/       # Android nativo (Java) e iOS nativo (Swift) [P1]
 ├── packages/
 │   ├── core/         # métrica canónica, schemas Zod, tipos de dominio, constantes de enums
 │   └── db/           # tipos generados con `supabase gen types typescript`
@@ -107,20 +107,20 @@ asisteam/
 
 ## 4. Alternativas evaluadas
 
-| Criterio | **A. BaaS: Supabase + Next.js + Expo (GANADORA)** | B. Backend propio: NestJS + Next.js + Expo | C. UI unificada: Flutter + Supabase |
+| Criterio | **A. BaaS: Supabase + Next.js + móvil nativo (vigente)** | B. Backend propio: NestJS + Next.js + móvil nativo | C. UI unificada: Flutter + Supabase |
 |---|---|---|---|
 | **Tiempo a MVP Web [P0]** | **~9 semanas** — auth, CRUD, storage y email resueltos por la plataforma | ~12 semanas — 1,5-2,5 semanas de plumbing (auth, CI/CD, staging) antes de la primera feature | ~12 semanas — y el P0 sale sobre Flutter web, la plataforma más débil del framework |
 | **Mantenibilidad (2-3 devs)** | **Alta** — cero servidores; foco en dominio, RLS y UI | Media — upgrades, backups, parches e incidentes recaen en el equipo sin plataforma | Media — sin servidores, pero UI canvas + lógica en 3 capas (RLS, PL/pgSQL, Deno) |
 | **Talento en Chile/Latam** | **Máximo** — TypeScript + React + SQL, el pool full-stack más grande | Máximo — mismo perfil, con curva NestJS (~1 semana) | Limitado — pool Flutter 3-5x menor; Dart backend inexistente (igual se trabaja en 2 lenguajes) |
-| **Costo infra [P0]** | **USD 45-70/mes**; con [P1] ~150-170 | USD 60-120/mes; con [P1] +EAS | USD 40-55/mes (el más bajo); con [P1] ~80-150 |
+| **Costo infra** | **USD 45-70/mes estimados en [P0]**; costo móvil [P1] por recalcular para builds nativos | USD 60-120/mes; costo móvil [P1] por recalcular | USD 40-55/mes; con [P1] ~80-150 según estimación original |
 | **Escalabilidad a cientos de grupos** | **Sí** — esquema compartido + `group_id` + RLS; escala con compute add-on sin rediseño | Sí — pool model equivalente; escala en contenedores | Sí — mismo patrón de datos que A |
-| **Reutilización web↔móvil** | Alta — supabase-js, tipos generados, TanStack Query y `packages/core` compartidos; solo se reescribe la UI en Expo [P1] | Media-alta — misma API REST + api-client OpenAPI + `packages/core`; UI móvil desde cero | **Máxima (~90%)** — una sola base Dart; [P1] en 3-4 semanas |
+| **Reutilización web↔móvil** | Baja para UI y lógica cliente: Java/Swift son implementaciones separadas; sí se comparte backend/contrato y casos de aceptación | Media-alta — misma API REST + api-client OpenAPI + lógica de dominio compartible | **Máxima (~90%)** — una sola base Dart; [P1] en 3-4 semanas |
 | **Riesgo de lock-in** | Medio — PostgREST/Auth/Edge Functions propietarios, pero datos en Postgres estándar (`pg_dump` → RDS/Neon); `packages/core` portable | **Mínimo** — contenedores y Postgres estándar, auth self-hosted | Medio — mismo lock-in Supabase que A, más riesgo de plataforma Flutter web |
 | **Reglas de negocio del canon (permisos por membership, visibilidad, menor-requiere-apoderado)** | **Muy buen calce** — constraints + RLS declarativa + vistas SQL para la métrica; MANAGED exige desacoplar `public.users` (patrón conocido) | Muy buen calce — dominio tipado y testeable en NestJS, pero el aislamiento multi-tenant depende de disciplina de guards (RLS termina siendo necesaria igual) | Buen calce en datos, pero lógica repartida en RLS + PL/pgSQL + Edge Functions, más difícil de testear |
 | **Calidad UX del MVP Web [P0]** | **Excelente** — HTML nativo, tablas de reportes con copiar/pegar, SSR, carga <1 s | Excelente — mismo frontend Next.js | Débil — payload 2-6 MB, arranque 3-8 s en 4G, tablas canvas sin Ctrl+F ni copiar a Excel, accesibilidad frágil |
 | **Veredicto** | **Elegida: gana en los criterios de mayor peso (tiempo, talento, calce del canon, UX del P0) con lock-in aceptable** | Descartada como inicio; es la ruta de evolución si se supera el BaaS | Descartada: optimiza [P1] sacrificando el [P0], que es lo que valida el negocio |
 
-**Por qué se descartaron:** la Propuesta C invierte las prioridades — su fortaleza (reutilización ~90% web/móvil) beneficia al [P1], pero degrada el [P0] (web responsive con reportes tabulares del ADMIN, el corazón del producto que valida el negocio). La Propuesta B paga ~3 semanas extra y una superficie operativa (servidores, backups, parches) injustificable con 2-3 devs; queda documentada como **ruta de salida**: si algún día se supera el BaaS, se migra el esquema SQL con `pg_dump` y se reemplaza solo la capa PostgREST/Auth, llevándose `packages/core` tal cual.
+**Por qué se descartó Flutter para el P0:** su fortaleza de compartir UI web/móvil beneficiaría al [P1], pero degradaría el [P0] web responsive con reportes tabulares. La decisión vigente de nativo prioriza experiencia e integración de cada sistema operativo; el costo es mantener dos clientes y duplicar parte de la lógica de presentación/validación. La Propuesta B sigue siendo ruta de salida si se supera el BaaS.
 
 ## 5. Web + móvil: código compartido, paridad y orden de construcción
 
@@ -128,10 +128,10 @@ asisteam/
 
 | Compartido (una sola fuente) | Específico por plataforma |
 |---|---|
-| `packages/core`: métrica canónica de asistencia, schemas Zod (formularios y payloads), tipos de dominio, constantes de enums y etiquetas en español (PRESENT=Presente, etc.) | UI: componentes shadcn/ui (web) vs componentes React Native (móvil) |
-| `packages/db`: tipos generados desde el esquema con `supabase gen types` | Navegación: App Router (web) vs expo-router (móvil) |
-| Cliente supabase-js 2 (auth, PostgREST, Storage, invocación de Edge Functions) | Notificaciones push [P1] (solo móvil); las mismas reglas de negocio se disparan desde pg_cron + Edge Functions |
-| Hooks de datos con TanStack Query 5 (queries y mutaciones tipadas, claves de cache comunes) | Manejo de sesión persistente (cookies SSR en web; SecureStore en móvil) |
+| Backend Supabase: Auth, PostgREST/RLS, vistas, RPC y Edge Functions | UI y navegación: web Next.js vs Android Java vs iOS Swift |
+| Contratos de datos estables y casos de aceptación compartidos como fixtures | Clientes HTTP, modelos DTO, manejo de sesión y formularios se implementan por plataforma |
+| SQL/RPC conserva la fuente canónica de métricas y reglas sensibles | Push móvil [P1]: migrar el transporte y tokens Expo a FCM/APNs |
+| `packages/core` y `packages/db` continúan sirviendo a web/Edge/CI TypeScript | Apps nativas no consumen directamente paquetes TypeScript/Zod |
 
 ### 5.2 Paridad funcional entre plataformas
 
@@ -142,7 +142,7 @@ asisteam/
 ### 5.3 Orden de construcción
 
 1. **[P0] Semanas 1-9:** esquema SQL + RLS + pgTAP primero (contrato de datos estable), luego web Next.js consumiendo PostgREST/Edge Functions. La "API" queda definida por el esquema, las vistas/RPC y las Edge Functions — no hay una capa API separada que versionar (ver 07-api-y-backend.md).
-2. **[P1]:** la app Expo consume **exactamente los mismos** endpoints PostgREST, vistas, RPC y Edge Functions, sin cambios de backend; el esfuerzo es solo UI móvil + push. Esto es verificable: las únicas migraciones SQL nuevas requeridas para el arranque de [P1] son las dos tablas de notificaciones definidas en 04-modelo-de-datos.md §7.1 — `push_tokens` (registro de tokens de Expo Notifications) y `notifications` (historial y centro de notificaciones), esta última entregable dentro de la semana de push de la Fase 2 (ver 09-roadmap.md).
+2. **[P1]:** los clientes Java/Swift consumirán los mismos endpoints PostgREST, vistas, RPC y Edge Functions. El esfuerzo incluye dos UIs nativas, clientes de red/sesión, pruebas de contrato y migración del push. La integración actual de anuncios #57 guarda tokens Expo y envía por Expo Push; esa infraestructura debe convivir durante la transición y luego migrarse a tokens/transporte nativos. Definir proveedor, esquema de tokens y despliegue forma parte de la Fase 2. No replicar en clientes reglas de permisos, visibilidad o cálculo que ya pertenecen a RLS/vistas/RPC.
 3. **[P2]:** login social, modo offline con sincronización, QR/geocerca, etc., se montan sobre la misma base sin rediseño.
 
 ## 6. Multi-tenancy y escalamiento a múltiples clubes
@@ -177,7 +177,7 @@ asisteam/
 |---|---|
 | ~200 grupos activos (~6.000 usuarios, ~60.000 `attendance_records`/mes) | Compute add-on de Supabase (Small/Medium); vistas materializadas para reportes si se cruza el umbral p95 |
 | Miles de grupos | Read replica de Supabase para vistas de reportes y exportaciones CSV [P1]; pooling con Supavisor en modo transacción |
-| Notificaciones masivas [P1] | pg_cron encola en tabla `notification_jobs` (idempotente, con `status` y reintentos); una Edge Function consume el lote y llama a Expo Push / Resend — nunca envío síncrono dentro de la petición del usuario |
+| Notificaciones masivas [P1] | pg_cron encola trabajos idempotentes; una Edge Function consume el lote y envía por el transporte nativo FCM/APNs (migración pendiente desde Expo Push) / Resend — nunca envío síncrono dentro de la petición del usuario |
 | Cliente institucional que exija residencia en Chile o aislamiento fuerte | Salida documentada: `pg_dump` a Postgres autogestionado + capa API propia (Propuesta B); el esquema y `packages/core` se llevan sin cambios |
 
 ## 7. Entornos, CI/CD, observabilidad y costos
@@ -197,7 +197,7 @@ Secretos por entorno en Vercel/Supabase/GitHub Actions; nunca en el repositorio.
 1. **En cada PR:** lint + typecheck (Turborepo, con cache remoto), tests unitarios de `packages/core` (Vitest, incluye los casos canónicos de la métrica), `supabase start` en Docker → aplica migraciones → corre **pgTAP** (políticas RLS con seeds por rol, vistas de métrica contra los mismos casos que Vitest) → tests de integración de Edge Functions.
 2. **Merge a `main`:** deploy automático de frontend a staging (Vercel) + `supabase db push` y deploy de Edge Functions al proyecto staging.
 3. **Release (tag `vX.Y.Z`):** mismos pasos contra producción, con aprobación manual (environment protegido de GitHub).
-4. **[P1]:** EAS Build/Submit por tag; OTA updates (canal por entorno) para fixes de UI sin pasar por tiendas.
+4. **[P1]:** builds nativos Android con Gradle y iOS con Xcode; distribución interna por Play Console/TestFlight y publicación por las tiendas. Definir estrategia de firma, secretos y versionado por plataforma.
 
 El hardening de este pipeline (Supabase CLI sobre Docker es más lento y frágil que un backend con DI) está presupuestado dentro de las 9 semanas de [P0], como señaló el panel.
 
@@ -217,10 +217,10 @@ El hardening de este pipeline (Supabase CLI sobre Docker es más lento y frágil
 | Supabase Pro (+ compute add-on en escala) | 25 | 25 | 85-135 (Small/Medium add-on) |
 | Resend (email transaccional) | 0 (free, 3k/mes) | 20 | 20 |
 | Sentry | 0 (free/dev) | 0-26 | 26 (Team) |
-| EAS (builds/updates móvil) [P1] | — | 19-99 | 19-99 |
+| Builds nativos, firma y publicación Android/iOS [P1] | — | **Pendiente de cotización** | **Pendiente de cotización** |
 | Monitor de uptime | 0 | 0 | 0-10 |
 | Backups externos (storage cifrado) | 1-5 | 1-5 | 5-10 |
-| **Total** | **~46-70** | **~85-195 (típico ~150-170)** | **~175-340 (típico ~220-280)** |
+| **Total** | **~46-70** | **No recalculado** (la estimación anterior incluía EAS) | **No recalculado** |
 
 Supuestos de la columna de escala: 200 grupos × ~30 miembros ≈ 6.000 usuarios, ~2.000 actividades/mes, ~60.000 `attendance_records`/mes (~720k/año) — volumen holgado para un Postgres con compute Small/Medium, sin rediseño.
 

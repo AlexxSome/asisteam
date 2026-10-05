@@ -530,7 +530,7 @@ Soporte de notificaciones push (recordatorio de actividad; aviso de ausencia al 
 - `push_tokens`: `id`, `user_id` (FK users), `platform` (`IOS` | `ANDROID` | `WEB`), `token` (único), `created_at`, `last_seen_at`. Un usuario, N dispositivos. Nombre alineado con 06-arquitectura-y-stack.md y con `POST /api/v1/users/me/push-tokens` de 07-api-y-backend.md §2.11.
 - `notifications`: `id`, `user_id` (FK users), `type` (`ACTIVITY_REMINDER` | `ABSENCE_ALERT`), `payload` (jsonb: activity_id, group_id, athlete_user_id...), `sent_at`, `read_at`. Historial y centro de notificaciones in-app.
 
-**Implementado para anuncios en #57:** `push_tokens` admite IOS/ANDROID (Expo), incluye `is_active` y se registra/desregistra mediante RPC. La columna `token` no se concede a clientes. `announcement_push_preferences` guarda el opt-in por usuario para todos sus grupos; ausencia de fila equivale a `false`. No se crea aún el centro `notifications` ni soporte WEB, recordatorios o avisos de ausencia. Esquema y transición de cola: [13-anuncios.md](13-anuncios.md).
+**Implementado para anuncios en #57:** `push_tokens` admite IOS/ANDROID (tokens Expo), incluye `is_active` y se registra/desregistra mediante RPC. La columna `token` no se concede a clientes. `announcement_push_preferences` guarda el opt-in por usuario para todos sus grupos; ausencia de fila equivale a `false`. No se crea aún el centro `notifications` ni soporte WEB, recordatorios o avisos de ausencia. La planificación nativa Java/Swift del 2026-10-05 requiere migrar tokens y transporte Expo a FCM/APNs; véase [13-anuncios.md](13-anuncios.md).
 
 ### 7.1.1 Anuncios [P2 autorizado, #57]
 

@@ -14,7 +14,7 @@ El [diseño original completo](https://github.com/AlexxSome/asisteam/blob/48d404
 - **Diferido o sin evidencia:** requiere planificación/ratificación, no una implementación deducida de un issue cerrado.
 - **Prioridad:** [P0]/[P1]/[P2] conserva el roadmap original. COACH, billing SaaS, anuncios, QR web y OAuth son [P2] ya autorizados; no se degradan ni se amplían por esta reconciliación.
 - **Parámetros:** la tabla usa `[groupId]`, `[activityId]`, `[athleteUserId]` y `[token]` como el App Router; equivalen a `:groupId`, etc. en contratos lógicos. No son URLs que se abran sin valores autorizados.
-- **Plataforma:** web responsive implementada; Expo [P1] planificado, sin cliente móvil en este corte. Offline [P2] fue pospuesto explícitamente en #54. La propuesta móvil del roadmap no se reactiva aquí.
+- **Plataforma:** web responsive implementada; no hay cliente móvil implementado en el corte verificado. La planificación vigente desde 2026-10-05 define apps nativas Java/Android y Swift/iOS [P1]. Offline [P2] fue pospuesto explícitamente en #54 y sigue diferido.
 
 ## 2. Inventario de páginas reales
 
@@ -109,7 +109,7 @@ La entrada [`groupHomePath()`](../apps/web/src/lib/groups.ts) lleva a `/welcome`
 
 La web usa navegación lateral desde 1024 px y un drawer modal en anchos menores, con retorno de foco. El [sistema visual](12-sistema-visual.md) define tokens, tamaños mínimos y contratos reales. El objetivo de tomar asistencia a una mano en 375 px continúa vigente; no equivale a una app móvil instalada.
 
-La distribución móvil de [doc 09](09-roadmap.md) sigue siendo un **objetivo**: acceso, consulta multirol y toma de asistencia; gestión completa queda fuera de la primera entrega nativa. Ni el backend de avisos Expo ni el cierre administrativo de #19 prueba esas pantallas. No hay tabs nativos, share sheet ni almacenamiento offline entregados por esta reconciliación.
+La distribución móvil de [doc 09](09-roadmap.md) sigue siendo un **objetivo**: acceso, consulta multirol y toma de asistencia; gestión completa queda fuera de la primera entrega nativa. El backend de avisos actual usa Expo Push, pero no existe cliente Expo ni app Java/Swift entregada. No hay tabs nativos, share sheet ni almacenamiento offline implementados en este corte.
 
 ## 5. Contratos de pantallas críticas al corte
 
@@ -154,7 +154,7 @@ ATHLETE usa `/groups/[groupId]/me/history`; GUARDIAN, `/groups/[groupId]/wards/[
 | Prioridad original | Estado del corte |
 |---|---|
 | P0 web | Módulos y páginas de §2; brechas lógicas de §2.1 explícitas. No declarar todas las pantallas del plan operativas solo por el número de páginas. |
-| P1 móvil/push/CSV | Sin cliente Expo; CSV y recordatorios/ausencias sin UI verificada. Requieren decisión/planificación; no son trabajo implícito del rediseño. |
+| P1 móvil/push/CSV | Sin cliente móvil; CSV y recordatorios/ausencias sin UI verificada. Stack nativo Java/Swift planificado; migración de Expo Push a FCM/APNs pendiente de diseño en Fase 2. |
 | P2 autorizado | COACH, suscripciones del club, anuncios, QR web y OAuth existentes. Límites y evidencia en §7. |
 | P2 restante | Offline pospuesto; geocerca, ranking, justificaciones y gestión móvil no se implementan por inferencia. |
 
@@ -170,10 +170,10 @@ Consulta de cuerpo, comentarios, responsable e historial de GitHub al 05-10-2026
 | [#19 · App móvil](https://github.com/AlexxSome/asisteam/issues/19) P1 | Assignee AlexxSome; cerrado 29-09-2026 14:39:44Z, sin comentarios de entrega; grafo sin cliente `apps/mobile`. | **Sin cliente verificado**; [#54](https://github.com/AlexxSome/asisteam/issues/54#issuecomment-5933509828) registra luego que móvil se planificará más adelante. No reabrir el alcance por el rediseño. |
 | [#44 · Recordatorios](https://github.com/AlexxSome/asisteam/issues/44) / [#50 · Aviso de ausencia](https://github.com/AlexxSome/asisteam/issues/50) P1 | Sin assignee ni comentarios; cierres por AlexxSome el 29-09-2026 a 14:40:31Z (ambos eventos de cierre del timeline). Sin CFG-02 ni UI de esos avisos identificadas. | **Cierres sin UI verificada**; pedir ratificación del cierre en su futura planificación. El push de anuncios #57 no demuestra estas dos historias. |
 | [#52 · Solicitar justificación](https://github.com/AlexxSome/asisteam/issues/52) / [#53 · Aprobar](https://github.com/AlexxSome/asisteam/issues/53) P2 | #52 asignado a AlexxSome; #53 sin assignee. Cerrados por AlexxSome el 29-09-2026 a 14:50:39Z y 14:51:11Z, sin comentarios ni UI ASI-03 identificada. | **Sin flujo verificado**; conservar P2 y ratificar decisión con el autor de los cierres. EXCUSED manual no prueba solicitud/aprobación. |
-| [#54 · Offline](https://github.com/AlexxSome/asisteam/issues/54#issuecomment-5933509828) P2 | AlexxSome, assignee y autor del comentario/cierre del 01-10-2026: pospuesto, sin commits/PR, depende de Expo y ASI-01 móvil. | **Diferido explícitamente**. No desarrollar cola, sincronización ni app nativa en esta auditoría. |
+| [#54 · Offline](https://github.com/AlexxSome/asisteam/issues/54#issuecomment-5933509828) P2 | AlexxSome, assignee y autor del comentario/cierre del 01-10-2026: pospuesto, sin commits/PR, depende del cliente móvil y ASI-01. | **Diferido explícitamente**. La decisión de Java/Swift no reactiva cola ni sincronización offline. |
 | [#55 · COACH](https://github.com/AlexxSome/asisteam/issues/55#issuecomment-5945537421) P2 | AlexxSome confirma [PR #95](https://github.com/AlexxSome/asisteam/pull/95), 02-10-2026; [doc 02](02-roles-y-permisos.md#delegación-coach-p2--hu-adm-20-55) y ASI-01/reportes registran la implementación. | **Autorizado e implementado**: estados y agregados; sin notas privadas ni gestión. Preservar esta capacidad. |
 | [#56 · Billing](https://github.com/AlexxSome/asisteam/issues/56#issuecomment-5966035726) P2 | AlexxSome confirma [PR #96](https://github.com/AlexxSome/asisteam/pull/96), 03-10-2026. [Doc 12](12-suscripciones-saas.md) registra el cambio de alcance a suscripciones SaaS por club. | **Autorizado e implementado**: club → Asisteam con Mercado Pago. Sustituye cuotas de deportistas; no crear tesorería de integrantes por el título antiguo. |
-| [#57 · Anuncios](https://github.com/AlexxSome/asisteam/issues/57#issuecomment-5966437188) P2 | AlexxSome confirma [PR #97](https://github.com/AlexxSome/asisteam/pull/97), 03-10-2026; muro y [doc 13](13-anuncios.md). | **Web y backend de avisos implementados**. Recepción push requiere cliente Expo, dispositivo y credenciales; no hay push de navegador ni mensajería directa. |
+| [#57 · Anuncios](https://github.com/AlexxSome/asisteam/issues/57#issuecomment-5966437188) P2 | AlexxSome confirma [PR #97](https://github.com/AlexxSome/asisteam/pull/97), 03-10-2026; muro y [doc 13](13-anuncios.md). | **Web y backend de avisos implementados**. El envío actual depende de Expo Push; las apps nativas requieren migrar tokens/transporte a FCM/APNs. No hay push de navegador ni mensajería directa. |
 | [#58 · QR](https://github.com/AlexxSome/asisteam/issues/58#issuecomment-5971087844) P2 | Assignee AlexxSome; confirma [PR #98](https://github.com/AlexxSome/asisteam/pull/98), 03-10-2026; emisión/check-in y [doc 14](14-asistencia-qr.md). | **Autorizado en web responsive**: ADMIN emite, ATHLETE se registra; preserva registros previos. No incluye geocerca ni exige Expo. |
 | [#59 · Google/Apple](https://github.com/AlexxSome/asisteam/issues/59#issuecomment-5971635628) P2 | AlexxSome confirma [PR #99](https://github.com/AlexxSome/asisteam/pull/99), 03-10-2026; acceso/registro y handler OAuth existentes. | **Implementación autorizada**, operativa solo con proveedores configurados. La aceptación de condiciones se completa en #107, no se infiere del login social. |
 

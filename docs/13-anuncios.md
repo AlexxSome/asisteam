@@ -1,6 +1,6 @@
 # Anuncios de grupo — HU-ADM-22 / #57
 
-El alcance autorizado incluye muro y gestión web más infraestructura de notificaciones Expo. No incluye la app móvil, Web Push, comentarios, adjuntos, recordatorios de actividades ni avisos de ausencias.
+El alcance autorizado (#57) incluye muro y gestión web más infraestructura de notificaciones Expo ya implementada. No incluye la app móvil, Web Push, comentarios, adjuntos, recordatorios de actividades ni avisos de ausencias. **Cambio de planificación 2026-10-05:** el cliente futuro será nativo (Java/Android y Swift/iOS), así que recibir anuncios requiere migrar el registro de tokens y el envío Expo a FCM/APNs. Este documento describe la implementación actual mientras no se completa esa migración.
 
 ## Muro y permisos
 
@@ -12,7 +12,7 @@ El alcance autorizado incluye muro y gestión web más infraestructura de notifi
 - La página no usa caché persistente. Refresca al recuperar foco, cada 30 segundos mientras esté visible y con «Actualizar muro».
 - Publicación y cola son transaccionales. El cliente conserva el UUID `p_request_id` al reintentar una publicación incierta; mismo ID/datos devuelve la misma publicación, otro contenido produce 409. Editar no emite otro push.
 
-## Contrato para el cliente Expo
+## Contrato de la implementación actual Expo (transitorio)
 
 1. Configurar credenciales APNs/FCM y obtener el `ExpoPushToken` del proyecto después del permiso del sistema operativo.
 2. Con JWT del usuario, llamar `register_announcement_push_token(p_token,p_platform)` con `IOS` o `ANDROID`. Registrar no habilita automáticamente los avisos.
