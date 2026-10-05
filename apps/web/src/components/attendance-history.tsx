@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { reportAttendanceClass, attendanceStatusClasses } from "@/lib/attendance-presentation";
 import Link from "next/link";
 import { ATTENDANCE_STATUS_LABELS, activityTypeLabel, attendancePeriodFilterSchema, formatActivityDateTime, reportPercentage, type AttendanceHistory, type AttendancePeriodFilter } from "@asisteam/core";
@@ -12,8 +13,8 @@ export function AttendanceSummary({ history }: { history: Pick<AttendanceHistory
   </div>;
 }
 
-export function AttendanceHistoryContent({ history, filter, athleteUserId }: {
-  history: AttendanceHistory; filter: AttendancePeriodFilter; athleteUserId?: string;
+export function AttendanceHistoryContent({ history, filter, athleteUserId, filters }: {
+  history: AttendanceHistory; filter: AttendancePeriodFilter; athleteUserId?: string; filters?: ReactNode;
 }) {
   const ward = Boolean(athleteUserId);
   const pageHref = (nextFilter: AttendancePeriodFilter, page = 1) => historyPageHref(history.group_id, nextFilter, page, athleteUserId);
@@ -29,6 +30,7 @@ export function AttendanceHistoryContent({ history, filter, athleteUserId }: {
         </dl>
         <p className="text-small text-muted-foreground">Los atrasos cuentan como asistencia. Los justificados no penalizan. Sin datos significa que no hay convocatorias evaluables en este período.</p>
       </section>
+      {filters}
       {history.totals.convened === 0 ? <section className="space-y-2 rounded-lg border border-border bg-surface p-4">
         <p>{filter.period === "season" && filter.activity_type_ids.length === 0 ? (ward ? "Tu pupilo aún no tiene actividades con asistencia registrada." : "Aún no tienes actividades con asistencia registrada.") : "No hay asistencia registrada en este período con los filtros seleccionados."}</p>
         <Link href={pageHref(attendancePeriodFilterSchema.parse({ period: "season" }))} className="block underline">Ver toda la temporada</Link>

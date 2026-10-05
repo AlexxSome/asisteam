@@ -8,15 +8,16 @@ import type { ReportSearchParams } from "./reports";
 export function parseHistoryFilters(query: ReportSearchParams) {
   const ids = query.activity_type_id;
   return attendancePeriodFilterSchema.safeParse({
-    period: query.period, from: query.from || undefined, to: query.to || undefined,
+    period: query.period, from: query.period === "season" ? undefined : query.from || undefined,
+    to: query.period === "custom" ? query.to || undefined : undefined,
     activity_type_ids: ids ? (Array.isArray(ids) ? ids : [ids]) : [], page: query.page,
   });
 }
 
 export function historyPageHref(groupId: string, filter: AttendancePeriodFilter, page = 1, athleteUserId?: string) {
   const query = new URLSearchParams({ period: filter.period, page: String(page) });
-  if (filter.from) query.set("from", filter.from);
-  if (filter.to) query.set("to", filter.to);
+  if (filter.period !== "season" && filter.from) query.set("from", filter.from);
+  if (filter.period === "custom" && filter.to) query.set("to", filter.to);
   for (const id of filter.activity_type_ids) query.append("activity_type_id", id);
   return `/groups/${groupId}/${athleteUserId ? `wards/${athleteUserId}` : "me"}/history?${query}`;
 }

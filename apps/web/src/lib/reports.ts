@@ -7,7 +7,8 @@ export type ReportSearchParams = Record<string, string | string[] | undefined>;
 export function parseReportFilters(query: ReportSearchParams) {
   const ids = query.activity_type_id;
   return reportFilterSchema.safeParse({
-    period: query.period, from: query.from || undefined, to: query.to || undefined,
+    period: query.period, from: query.period === "season" ? undefined : query.from || undefined,
+    to: query.period === "custom" ? query.to || undefined : undefined,
     activity_type_ids: ids ? (Array.isArray(ids) ? ids : [ids]) : [],
     include_inactive: query.include_inactive === "true", page: query.page, sort: query.sort,
   });
@@ -15,8 +16,8 @@ export function parseReportFilters(query: ReportSearchParams) {
 
 export function reportPageHref(groupId: string, filter: ReportFilter, page: number) {
   const query = new URLSearchParams({ period: filter.period, sort: filter.sort, page: String(page) });
-  if (filter.from) query.set("from", filter.from);
-  if (filter.to) query.set("to", filter.to);
+  if (filter.period !== "season" && filter.from) query.set("from", filter.from);
+  if (filter.period === "custom" && filter.to) query.set("to", filter.to);
   if (filter.include_inactive) query.set("include_inactive", "true");
   for (const id of filter.activity_type_ids) query.append("activity_type_id", id);
   return `/groups/${groupId}/reports?${query}`;

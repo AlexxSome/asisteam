@@ -34,7 +34,7 @@ it("con toggles apagados muestra fecha, tipo, estado, nota y porcentaje del pupi
 it.each(["week", "month", "custom", "season"])("período %s conserva pupilo, grupo y filtros al consultar, paginar y restablecer", async (period) => {
   mock.history.mockResolvedValue({ history: { ...historyFixture, page: 2, page_size: 2 }, error: null });
   render(await WardHistoryPage({ params, searchParams: Promise.resolve({ period, from: "2026-03-01", to: "2026-03-31", page: "2", activity_type_id: historyFixture.records[0]!.activity_type_id }) }));
-  expect(mock.history).toHaveBeenCalledWith(historyFixture.group_id, athleteUserId, expect.objectContaining({ period, from: "2026-03-01", to: "2026-03-31", page: 2 }));
+  expect(mock.history).toHaveBeenCalledWith(historyFixture.group_id, athleteUserId, expect.objectContaining({ period, from: period === "season" ? undefined : "2026-03-01", to: period === "custom" ? "2026-03-31" : undefined, page: 2 }));
   const path = `/groups/${historyFixture.group_id}/wards/${athleteUserId}/history`;
   expect(screen.getByRole("button", { name: "Aplicar filtros" }).closest("form")?.getAttribute("action")).toBe(path);
   expect(screen.getByRole("link", { name: "Restablecer filtros" }).getAttribute("href")).toBe(path);
@@ -63,4 +63,12 @@ it("filtro inválido no consulta un período distinto y vacío conserva identida
   expect(screen.getByText("Sin actividades en el período")).toBeTruthy();
   expect(screen.queryByText(/^\d+\.\d %$/)).toBeNull();
   expect(screen.getByRole("link", { name: "Ver toda la temporada" }).getAttribute("href")).toContain(`/wards/${athleteUserId}/history?period=season`);
+});
+
+it("muestra resumen e identidad antes de los filtros", async () => {
+  render(await WardHistoryPage({ params, searchParams: Promise.resolve({}) }));
+  const summary = screen.getByRole("region", { name: "Resumen de asistencia del pupilo" });
+  const form = screen.getByRole("form", { name: "Filtros de asistencia" });
+  expect(summary.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(screen.getByRole("heading", { level: 1 }).nextElementSibling?.textContent).toContain("Pupilo sintético · Club del pupilo");
 });

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { reportFixture } from "@/lib/reports.test-fixture";
 import { historyFixture } from "@/lib/attendance-history.test-fixture";
 const mock = vi.hoisted(() => ({ group: vi.fn(), types: vi.fn(), report: vi.fn(), stats: vi.fn(), history: vi.fn(), wards: vi.fn(), wardHistory: vi.fn() }));
@@ -11,6 +11,9 @@ vi.mock("@/lib/wards", async (original) => ({ ...await original<typeof import("@
 vi.mock("@/lib/reports", async (original) => ({ ...await original<typeof import("@/lib/reports")>(), getGroupAttendanceReport: mock.report, getGroupStats: mock.stats }));
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); } }));
 import GroupReportsPage from "./page";
+import userEvent from "@testing-library/user-event";
+import { ReportFilters } from "./report-filters";
+import { reportFilterSchema } from "@asisteam/core";
 const params = Promise.resolve({ groupId: reportFixture.group_id });
 const ward = { athlete_user_id: "49000000-0000-4000-8000-000000000001", full_name: "Pupilo sintético" };
 beforeEach(() => {
@@ -29,8 +32,9 @@ it("muestra tabla accesible, 85.7 %, atraso separado y controles de filtro", asy
   const row = within(table).getByRole("row", { name: /Persona sintética/ });
   expect(within(row).getByText("85.7 %")).toBeTruthy();
   expect(within(row).getByText("16.7 %")).toBeTruthy();
-  expect(within(row).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["8", "5", "1", "1", "1", "85.7 %", "16.7 %"]);
+  expect(within(row).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["85.7 %", "8", "5", "1", "1", "1", "16.7 %"]);
   expect(screen.getByRole("combobox", { name: "Período" })).toBeTruthy();
+  await userEvent.setup().click(screen.getByText("Más filtros (0 activos)"));
   expect(screen.getByRole("checkbox", { name: "Competencia" })).toBeTruthy();
   expect(screen.getByRole("checkbox", { name: "Incluir deportistas inactivos" })).toBeTruthy();
   expect(screen.getByRole("button", { name: "Aplicar filtros" })).toBeTruthy();
@@ -211,4 +215,56 @@ it("COACH ve reportes filtrados aun sin toggles y no recibe CTA de gestión", as
   expect(screen.getByRole("region", { name: "Resumen por deportista" })).toBeTruthy();
   expect(screen.queryByRole("link", { name: "Crear primera actividad" })).toBeNull();
   expect(mock.stats).not.toHaveBeenCalled();
+});
+
+it("prioriza el resumen y distingue promedio individual de total ponderado", async () => {
+  const report = structuredClone(reportFixture);
+  report.totals.average_attendance_pct = 75;
+  mock.report.mockResolvedValue({ report, error: null });
+  render(await GroupReportsPage({ params, searchParams: Promise.resolve({}) }));
+  const summary = screen.getByRole("region", { name: "Resumen del reporte" });
+  expect(summary.compareDocumentPosition(screen.getByRole("form", { name: "Filtros de asistencia" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(within(summary).getByText("Promedio individual").nextElementSibling?.textContent).toBe("75.0 %");
+  expect(within(summary).getByText("Asistencia total ponderada").nextElementSibling?.textContent).toBe("85.7 %");
+  const table = within(screen.getByRole("region", { name: "Resumen por deportista" })).getByRole("table");
+  expect(table.querySelector("caption")?.textContent).toContain("página 1");
+  expect(within(table).getAllByRole("columnheader").every((cell) => cell.getAttribute("scope") === "col")).toBe(true);
+  expect(within(table).getAllByRole("rowheader").every((cell) => cell.getAttribute("scope") === "row")).toBe(true);
+});
+
+it("muestra filtros aplicados fuera del desplegable y conserva selección al cerrarlo", async () => {
+  const type = { id: reportFixture.by_activity_type[0]!.activity_type_id, name: "COMPETITION", group_id: null, is_active: false };
+  const filter = reportFilterSchema.parse({ period: "month", from: "2026-03-01", activity_type_ids: [type.id], include_inactive: true, sort: "name", page: 3 });
+  render(<ReportFilters groupId={reportFixture.group_id} filter={filter} types={[type]} />);
+  const form = screen.getByRole("form") as HTMLFormElement;
+  const details = form.querySelector("details")!;
+  expect(details.open).toBe(false);
+  expect(form.querySelector("p")?.textContent).toContain("Competencia (inactivo)");
+  expect(form.querySelector("p")?.textContent).toContain("Activos e inactivos · Nombre (A–Z)");
+  const advanced = screen.getByText("Más filtros (4 activos)");
+  const user = userEvent.setup();
+  await user.click(advanced);
+  expect(screen.getByRole("checkbox", { name: "Incluir deportistas inactivos" })).toBeTruthy();
+  await user.click(advanced);
+  const data = new FormData(form);
+  expect(data.getAll("activity_type_id")).toEqual([type.id]);
+  expect(data.get("include_inactive")).toBe("true");
+  expect(data.get("from")).toBe("2026-03-01");
+  expect(data.has("page")).toBe(false);
+});
+
+it("cambiar período desmonta fechas incompatibles y exige ambas solo en rango", () => {
+  const filter = reportFilterSchema.parse({ period: "custom", from: "2026-03-01", to: "2026-03-31" });
+  render(<ReportFilters groupId={reportFixture.group_id} filter={filter} types={[]} />);
+  const form = screen.getByRole("form") as HTMLFormElement;
+  const period = screen.getByRole("combobox", { name: "Período" });
+  for (const value of ["month", "week", "season", "custom"]) {
+    fireEvent.change(period, { target: { value } });
+    const data = new FormData(form);
+    expect(data.get("period")).toBe(value);
+    expect(data.has("to")).toBe(value === "custom");
+    expect(data.has("from")).toBe(value !== "season");
+    for (const input of form.querySelectorAll<HTMLInputElement>('input[type="date"]')) expect(input.required).toBe(value === "custom");
+  }
+  expect(screen.getByRole("link", { name: "Restablecer filtros" }).getAttribute("href")).toBe(`/groups/${reportFixture.group_id}/reports`);
 });

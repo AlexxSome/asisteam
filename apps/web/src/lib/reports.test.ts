@@ -66,3 +66,16 @@ it("COACH consulta el reporte agregado y una revocación se vuelve a verificar",
   mock.rpc.mockResolvedValue({ data: null, error: { code: "PT403" } });
   await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("404");
 });
+
+it.each(["week", "month", "season"])("%s descarta fechas incompatibles de URLs antiguas y de paginación", (period) => {
+  const parsed = parseReportFilters({ period, from: "2026-03-01", to: "2026-03-31", sort: "name", include_inactive: "true" });
+  expect(parsed.success).toBe(true);
+  if (!parsed.success) throw new Error("fixture inválida");
+  expect(parsed.data.to).toBeUndefined();
+  expect(parsed.data.from).toBe(period === "season" ? undefined : "2026-03-01");
+  const query = new URL(reportPageHref(groupId, { ...parsed.data, to: "2026-03-31" }, 2), "https://example.test").searchParams;
+  expect(query.has("to")).toBe(false);
+  expect(query.has("from")).toBe(period !== "season");
+  expect(query.get("sort")).toBe("name");
+  expect(query.get("include_inactive")).toBe("true");
+});
