@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { ActionLink } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { forbidden } from "next/navigation";
 import { attendanceMetrics, groupSettingsSchema, type GroupStats } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
@@ -21,15 +22,15 @@ export default async function GroupVisibilityPage({ params }: { params: Promise<
     members: [{ ...metric, membership_id: "33000000-0000-4000-8000-000000000001", full_name: "Deportista de ejemplo", avatar_url: null }],
   } : report;
   return <>
-    <h1 className="text-2xl font-semibold">Visibilidad de estadísticas</h1>
+    <PageHeader title="Visibilidad de estadísticas" description="Elige quién puede consultar los datos agregados del grupo. Cada cambio se guarda de inmediato." />
     <VisibilityForm groupId={group.id} initialSettings={settings} />
     {group.settings_updated_at && <p className="text-sm text-muted-foreground">Último cambio: {group.settings_updated_by_name}, {new Intl.DateTimeFormat("es-CL", {
       dateStyle: "medium", timeStyle: "short", timeZone: "America/Santiago",
     }).format(new Date(group.settings_updated_at))} (hora de Chile).</p>}
-    <section className="space-y-3"><h2 className="text-xl font-semibold">Vista previa para deportistas</h2>
+    <section className="space-y-3"><h2 className="text-xl font-semibold">Vista previa para deportistas y apoderados</h2>
       <p>{example ? "Datos de ejemplo: el grupo aún no tiene asistencia registrada." : "Así se verá la tabla con la opción activada. Vista previa de hasta tres deportistas."}</p>
       <StatsTable report={preview} />
     </section>
-    <Link href={`/groups/${group.id}/settings`} className="underline">Volver a configuración</Link>
+    <ActionLink href={`/groups/${group.id}/settings`}>Volver a datos y código</ActionLink>
   </>;
 }
