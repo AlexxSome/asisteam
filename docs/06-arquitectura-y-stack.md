@@ -2,6 +2,8 @@
 
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 04-modelo-de-datos.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 09-roadmap.md, 11-legal-seguridad-privacidad.md
 
+[Seguro] **MIG-01 (#145, 2026-10-06):** [inventario, ADR e infraestructura propuestos](migration/issue-145/README.md) para la épica #144. El usuario confirmó un desarrollador y ausencia de producción/usuarios reales; proveedor, presupuesto y continuidad siguen PENDIENTES. Nest aún no está implementado; este documento conserva la arquitectura entregada.
+
 ---
 
 ## 1. Decisión de arquitectura (resumen ejecutivo)
