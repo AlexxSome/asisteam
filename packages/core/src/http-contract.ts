@@ -31,6 +31,7 @@ export const httpOwnProfileSchema = z.object({
 }).strict();
 
 export const httpSchemas = {
+  Session: z.object({ user_id: uuid }).strict(),
   Empty: z.object({}).strict(),
   PageQuery: httpPageQuerySchema,
   GroupParams: z.object({ groupId: uuid }).strict(),
@@ -48,8 +49,9 @@ export const httpSchemas = {
 
 export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 500, 503, 504] as const;
 
-/** Only specified operations enter the generated SDK. Domain handlers arrive in #149/#151. */
+/** Only specified operations enter the generated SDK. Domain handlers arrive in #151 and following module issues. */
 export const httpOperations = {
+  getSession: { method: "GET", path: "/api/v1/auth/session", module: "auth", authenticated: true, response: "Session", status: 200, state: "implemented", summary: "Identidad del perfil verificada; sesión vigente y cuenta ACTIVE" },
   health: { method: "GET", path: "/api/v1/health", module: "runtime", authenticated: false, response: "Health", status: 200, state: "implemented", summary: "Vida del proceso" },
   ready: { method: "GET", path: "/api/v1/ready", module: "runtime", authenticated: false, response: "Ready", status: 200, state: "implemented", summary: "Disponibilidad de PostgreSQL" },
   listMyGroups: { method: "GET", path: "/api/v1/me/groups", module: "groups", authenticated: true, query: "PageQuery", response: "MyGroups", status: 200, state: "contract-only", summary: "Grupos con membresía ACTIVE; roles locales unidos, orden name/id" },

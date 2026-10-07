@@ -1,0 +1,37 @@
+{
+  "base": "e7bc9ffdc7853637ff8b6624914402e78c493097",
+  "environment": "local-synthetic-postgresql17-gotrue",
+  "node": "v24.16.0",
+  "checks": [
+    {
+      "check": "api-unit",
+      "status": "PASS",
+      "tests": 10,
+      "omitted": 0
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "tests": 2,
+      "omitted": 0,
+      "seconds": 2.278,
+      "covers": [
+        "V1-V6 real runtime role",
+        "COACH state-only and multirol",
+        "single reused pool pid and cleared context",
+        "real GoTrue signature and logout",
+        "concurrent profile lock without deadlock",
+        "migrator role rejected",
+        "session invalidated before COMMIT rolls back write",
+        "expired and fake identities rejected",
+        "closed transaction rejected"
+      ]
+    },
+    {
+      "check": "pgtap-api-session-rls",
+      "status": "PASS",
+      "tests": 16,
+      "omitted": 0
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "commit": "e7bc9ffdc7853637ff8b6624914402e78c493097",
+  "sourceCommit": "e7bc9ffdc7853637ff8b6624914402e78c493097",
+  "date": "2026-10-07T12:34:14.374Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.57
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.65
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 0.93
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.28
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 3.44
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "FAIL",
+      "seconds": 4.4,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ],
+  "validationScope": "Uncommitted issue #149 diff on recorded sourceCommit; final delivery commit in Git/PR"
+}

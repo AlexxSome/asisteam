@@ -5,6 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import type { Server } from 'node:http';
 import { CONFIG, type RuntimeConfig } from './config.js';
+import { SessionController, SessionGuard, TokenVerifier } from './auth.js';
 import { Database } from './database.js';
 import { HealthController } from './health.js';
 import { SafeLogger } from './logger.js';
@@ -12,8 +13,8 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [HealthController],
-    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database],
+    controllers: [HealthController, SessionController],
+    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database, TokenVerifier, SessionGuard],
   })
   class RuntimeModule {}
   const app = await NestFactory.create<NestExpressApplication>(RuntimeModule, { logger, abortOnError: false, bodyParser: false });

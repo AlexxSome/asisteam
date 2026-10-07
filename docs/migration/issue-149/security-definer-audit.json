@@ -1,0 +1,1436 @@
+{
+  "base": "e7bc9ffdc7853637ff8b6624914402e78c493097",
+  "environment": "local-synthetic-postgresql17",
+  "definers": [
+    {
+      "schema": "app_private",
+      "function": "accept_invitation",
+      "signature": "p_token_hash text, p_auth_user_id uuid, p_registration jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "api_session_user_id",
+      "signature": "p_session_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": false,
+      "classification": "session_adapter",
+      "actor_boundary": "auth.uid + matching live auth.sessions + ACTIVE public.users; dedicated API-only grant; pgTAP and runtime HTTP negatives"
+    },
+    {
+      "schema": "app_private",
+      "function": "billing_actor",
+      "signature": "p_group_id uuid, p_auth_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "can_manage_attendance",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "app_private",
+      "function": "can_read_group_activities",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "app_private",
+      "function": "can_view_group_stats",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "app_private",
+      "function": "change_membership_status",
+      "signature": "p_group_id uuid, p_membership_id uuid, p_active boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "create_single_activity",
+      "signature": "p_group_id uuid, p_activity_type_id uuid, p_title text, p_starts_at timestamp with time zone, p_ends_at timestamp with time zone, p_description text, p_location text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "deactivate_adult_guardianships",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "dispatch_announcement_push",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "dispatch_guardianship_majority",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "enforce_subscription_capacity",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "group_athlete_limit",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "group_membership_limit",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "has_account_activation_consent",
+      "signature": "p_user_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "has_minor_consent",
+      "signature": "p_user_id uuid, p_avatar boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "lock_activity_series",
+      "signature": "p_group_id uuid, p_activity_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "lock_attendance_activity",
+      "signature": "p_activity_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "preserve_minor_consent",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "record_account_consent",
+      "signature": "p_user_id uuid, p_terms_version text, p_channel text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "require_announcement_admin",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "review_pending_membership",
+      "signature": "p_group_id uuid, p_membership_id uuid, p_approve boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "sync_guardian_memberships",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "validate_activity_type",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "validate_attendance_membership",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "validate_guardianship",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "validate_membership",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "app_private",
+      "function": "validate_profile_update",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "accept_account_terms",
+      "signature": "p_accepted boolean, p_terms_version text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "accept_invitation",
+      "signature": "p_token_hash text, p_auth_user_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "approve_membership",
+      "signature": "p_group_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "assign_member_coach",
+      "signature": "p_group_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "auth_user_id",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=public"
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "begin_subscription_checkout",
+      "signature": "p_group_id uuid, p_actor_auth_id uuid, p_plan_code text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "can_read_avatar",
+      "signature": "p_name text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "can_upload_avatar",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "cancel_invitation_registration",
+      "signature": "p_nonce_hash text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "claim_announcement_push",
+      "signature": "p_receipts boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "claim_guardianship_majority_emails",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "claim_subscription_creation",
+      "signature": "p_subscription_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "clear_attendance_record",
+      "signature": "p_activity_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "complete_announcement_push",
+      "signature": "p_delivery_id uuid, p_claim_token uuid, p_outcome text, p_ticket_id text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "complete_guardianship_majority_email",
+      "signature": "p_delivery_id uuid, p_claim_token uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "consent_managed_member",
+      "signature": "p_membership_id uuid, p_accepted boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "consent_membership_data",
+      "signature": "p_membership_id uuid, p_accepted boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "consume_invitation_attempt",
+      "signature": "p_key text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "create_activity",
+      "signature": "p_group_id uuid, p_activity_type_id uuid, p_title text, p_starts_at timestamp with time zone, p_ends_at timestamp with time zone, p_description text, p_location text, p_recurrence_rule jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "create_group",
+      "signature": "p_name text, p_sport text, p_description text, p_logo_url text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "create_guardianship",
+      "signature": "p_group_id uuid, p_athlete_user_id uuid, p_full_name text, p_email text, p_relationship text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "create_managed_member",
+      "signature": "p_group_id uuid, p_full_name text, p_birthdate date, p_email text, p_guardian jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "deactivate_membership",
+      "signature": "p_group_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "delete_activity",
+      "signature": "p_group_id uuid, p_activity_id uuid, p_scope text, p_confirm_attendance boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "delete_group_announcement",
+      "signature": "p_group_id uuid, p_announcement_id uuid, p_updated_at timestamp with time zone",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "get_group_attendance_report",
+      "signature": "p_group_id uuid, p_period text, p_from date, p_to date, p_activity_type_ids uuid[], p_include_inactive boolean, p_page integer, p_page_size integer, p_sort text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "get_group_billing",
+      "signature": "p_group_id uuid, p_page integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "get_group_stats",
+      "signature": "p_group_id uuid, p_page integer, p_page_size integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "get_my_attendance_history",
+      "signature": "p_group_id uuid, p_period text, p_from date, p_to date, p_activity_type_ids uuid[], p_page integer, p_page_size integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "get_qr_checkin_settings",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "get_subscription_context",
+      "signature": "p_group_id uuid, p_actor_auth_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "get_ward_attendance_history",
+      "signature": "p_group_id uuid, p_athlete_user_id uuid, p_period text, p_from date, p_to date, p_activity_type_ids uuid[], p_page integer, p_page_size integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "handle_new_user",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Auth trigger context; ordinary invocation cannot execute trigger function; API has no CREATE privilege"
+    },
+    {
+      "schema": "public",
+      "function": "has_account_consent",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "invitation_context",
+      "signature": "p_token_hash text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "invitation_registration_result",
+      "signature": "p_token_hash text, p_auth_user_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "is_group_admin",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "is_guardian_of",
+      "signature": "p_athlete_user_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "is_member",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "issue_activity_checkin_qr",
+      "signature": "p_activity_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "issue_invitation",
+      "signature": "p_auth_user_id uuid, p_group_id uuid, p_token_hash text, p_email text, p_role text, p_invitation_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "issue_managed_activation",
+      "signature": "p_auth_user_id uuid, p_group_id uuid, p_membership_id uuid, p_token_hash text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "join_group_as_athlete",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "join_group_by_code",
+      "signature": "p_invite_code text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_avatar_permissions",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_birthdate_reviews",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_group_announcements",
+      "signature": "p_group_id uuid, p_page integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_group_members",
+      "signature": "p_group_id uuid, p_role text, p_status text, p_offset integer, p_search text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_guardianship_athletes",
+      "signature": "p_group_id uuid, p_search text, p_offset integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_managed_activation_requests",
+      "signature": "p_group_id uuid, p_offset integer, p_athlete_user_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_managed_member_consents",
+      "signature": "p_group_id uuid, p_offset integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_membership_onboarding",
+      "signature": "p_group_id uuid, p_athlete_user_id uuid, p_membership_id uuid, p_offset integer, p_as_guardian boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_my_wards",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_pending_athletes",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "list_pending_memberships",
+      "signature": "p_group_id uuid, p_offset integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "lookup_billing_subscription",
+      "signature": "p_subscription_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "prepare_invitation_registration",
+      "signature": "p_token_hash text, p_nonce_hash text, p_email text, p_registration jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "publish_group_announcement",
+      "signature": "p_group_id uuid, p_title text, p_body text, p_request_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "reactivate_membership",
+      "signature": "p_group_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "record_announcement_push_run",
+      "signature": "p_processed integer",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "record_attendance_bulk",
+      "signature": "p_activity_id uuid, p_records jsonb, p_only_unmarked boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "register_announcement_push_token",
+      "signature": "p_token text, p_platform text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "reject_pending_membership",
+      "signature": "p_group_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "reject_subscription_creation",
+      "signature": "p_subscription_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "request_birthdate_change",
+      "signature": "p_birthdate date",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "request_managed_activation",
+      "signature": "p_group_id uuid, p_membership_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "review_birthdate_change",
+      "signature": "p_request_id uuid, p_group_id uuid, p_approve boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "review_managed_activation",
+      "signature": "p_request_id uuid, p_accepted boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "rotate_invite_code",
+      "signature": "p_group_id uuid",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "run_guardianship_majority",
+      "signature": "",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "self_checkin",
+      "signature": "p_activity_id uuid, p_token text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "set_announcement_push_enabled",
+      "signature": "p_enabled boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "set_avatar_permission",
+      "signature": "p_guardianship_id uuid, p_allow boolean",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "set_qr_checkin_settings",
+      "signature": "p_group_id uuid, p_settings jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "sync_group_subscription",
+      "signature": "p_subscription_id uuid, p_provider_id text, p_status text, p_provider_updated_at timestamp with time zone, p_next_payment_at timestamp with time zone, p_checkout_url text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "sync_subscription_invoice",
+      "signature": "p_provider_subscription_id text, p_invoice_id text, p_due_at timestamp with time zone, p_amount_clp integer, p_currency text, p_status text, p_payment_id text, p_paid_at timestamp with time zone, p_provider_updated_at timestamp with time zone",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": false,
+      "authenticated_execute": false,
+      "classification": "service_or_internal_excluded",
+      "actor_boundary": "Not executable by API; explicit privileged actor arguments remain in service/internal boundary"
+    },
+    {
+      "schema": "public",
+      "function": "unregister_announcement_push_token",
+      "signature": "p_token text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "update_activity",
+      "signature": "p_group_id uuid, p_activity_id uuid, p_activity_type_id uuid, p_title text, p_starts_at timestamp with time zone, p_ends_at timestamp with time zone, p_description text, p_location text, p_scope text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "update_attendance_record",
+      "signature": "p_record_id uuid, p_changes jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "update_group_announcement",
+      "signature": "p_group_id uuid, p_announcement_id uuid, p_title text, p_body text, p_updated_at timestamp with time zone",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "update_group_settings",
+      "signature": "p_group_id uuid, p_changes jsonb",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    },
+    {
+      "schema": "public",
+      "function": "update_managed_member",
+      "signature": "p_group_id uuid, p_membership_id uuid, p_full_name text, p_birthdate date, p_email text, p_phone text",
+      "owner": "postgres",
+      "search_path": [
+        "search_path=\"\""
+      ],
+      "api_execute": true,
+      "authenticated_execute": true,
+      "classification": "authenticated_compatibility",
+      "actor_boundary": "Existing authenticated policy/RPC context; signature does not accept authenticated actor ID; target IDs remain subject to existing SQL checks and pgTAP suites"
+    }
+  ]
+}
