@@ -1,12 +1,12 @@
 # MIG-01 · Infraestructura, costos y calendario
 
-[Seguro] El usuario confirmó **un desarrollador, ningún despliegue de producción ni usuario real, y solo datos de prueba** el 2026-10-06. No confirmó proveedor, región, presupuesto, dedicación, RPO/RTO ni ventana/observación. [Suposición] Las cantidades y objetivos siguientes son un escenario de discusión; **no constituyen un presupuesto aprobado, compra ni fecha comprometida**.
+[Seguro] Producción, usuarios, naturaleza/volumen de datos y cantidad/dedicación de desarrolladores siguen **PENDIENTES de confirmación**. Proveedor, región, presupuesto, RPO/RTO y ventana/observación siguen propuestos, sin aceptación. [Suposición] Las cantidades y objetivos siguientes son un escenario de discusión; **no constituyen un presupuesto aprobado, compra ni fecha comprometida**.
 
 ## Opción para evaluar antes del lanzamiento
 
 [Probable] Evaluar AWS `sa-east-1` (São Paulo): PostgreSQL 17 gestionado en RDS, S3 privado y API/worker como **procesos separados en una sola VM** inicialmente. API y worker siguen siendo dos aplicaciones con límites y ciclo de vida separados; coubicarlos evita operar otra VM sin carga real medida. Una VM y una DB separadas para staging contienen exclusivamente fixtures sintéticos. Next.js conserva Vercel.
 
-[Probable] Esta opción reduce servicios nuevos para una sola persona, pero obliga a mantener SO, TLS, contenedores, despliegue y recuperación de la VM. Single-AZ y una sola VM no ofrecen redundancia de aplicación/DB. El worker deberá tener límites de recursos para no agotar la API; separar su VM o aumentar capacidad depende de mediciones, no de estimaciones de usuarios inexistentes.
+[Probable] Esta opción reduce servicios nuevos para una sola persona, pero obliga a mantener SO, TLS, contenedores, despliegue y recuperación de la VM. Single-AZ y una sola VM no ofrecen redundancia de aplicación/DB. El worker deberá tener límites de recursos para no agotar la API; separar su VM o aumentar capacidad depende de mediciones, no de una cantidad de usuarios sin medir.
 
 [Seguro] AWS documenta [peering Lightsail con RDS](https://docs.aws.amazon.com/lightsail/latest/userguide/lightsail-how-to-set-up-vpc-peering-with-aws-resources.html) a través de la VPC por defecto de la región. [Probable] #147 debe comprobar red privada, subredes/grupos de seguridad, TLS PostgreSQL, salida a integraciones y credenciales distintas de staging; la existencia de peering no configura aislamiento por sí sola. RDS permanece sin acceso público. Si las restricciones de red no encajan, recotizar compute en la VPC requerida antes de elegir proveedor.
 
@@ -45,21 +45,21 @@
 | [Probable] Worker en VM separada de 2 GB | [Suposición] +USD 12; subtotal USD 156,15; con Supabase USD 181,15 | [Probable] Separar si compite por recursos o requiere despliegue independiente; configuración/monitorización adicionales. PENDIENTE. |
 | [Probable] API con segunda VM de 4 GB y balanceador Lightsail | [Suposición] +USD 24 + 18; subtotal USD 186,15 antes de mejoras DB | [Probable] Solo si disponibilidad/carga lo exigen; no resuelve Single-AZ de DB. Multi-AZ debe recotizarse. PENDIENTE. |
 | [Probable] PostgreSQL en DB Lightsail económica | [Seguro] La documentación consultada enumera hasta PostgreSQL 16, y el bundle USD 15 no cifra datos | [Probable] No seleccionarla sin verificar 17/cifrado/extensiones; preferir el candidato RDS 17. [Fuente](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-choosing-a-database.html). |
-| [Probable] Plataforma de contenedores totalmente administrada | [Suposición] Sin cotización regional aceptada | [Probable] Pedir oferta de API/worker + RDS/S3 si administrar VPS supera la disponibilidad del único desarrollador; comparar costo mensual **y horas de operación**. PENDIENTE. |
+| [Probable] Plataforma de contenedores totalmente administrada | [Suposición] Sin cotización regional aceptada | [Probable] Pedir oferta de API/worker + RDS/S3 si administrar VPS supera la disponibilidad del equipo asignado; comparar costo mensual **y horas de operación**. PENDIENTE. |
 
 [Seguro] [RDS documenta backups y PITR](https://docs.aws.amazon.com/AmazonRDS/latest/gettingstartedguide/managing-backup-restore.html) con retención configurable. [Probable] Proponer PITR 7 días, dump semanal cifrado fuera de la instancia, inventario/versionado de objetos y restauración ensayada; validar grants/extensiones en PostgreSQL 17 destino según [catálogo de extensiones RDS](https://docs.aws.amazon.com/AmazonRDS/latest/PostgreSQLReleaseNotes/postgresql-extensions.html). No asumir que un backup de DB incluye S3 ni que una tarifa garantiza RPO/RTO.
 
 [Suposición] Para discutir: RPO ≤15 min y RTO ≤4 h, ventana de 2 h, observación de 7 días; sin aceptación ni medición todavía. [Probable] Si el ensayo no cumple esos tiempos o se requieren mayor disponibilidad/retención, ajustar infraestructura, presupuesto y calendario antes de lanzar con usuarios reales.
 
-## Recalibración con un desarrollador
+## Escenarios de capacidad y recalibración pendiente
 
-[Seguro] El rango inicial 12–16 semanas de #144 se basaba en **dos** desarrolladores y apoyo parcial QA/operación; esa capacidad no coincide con la cantidad confirmada. [Suposición] Adoptar **20–28 semanas** como referencia provisional con una persona dedicada, incluyendo sus tareas QA/operación. No equivale a duplicar linealmente el rango anterior, ni fija fechas de inicio/fin; su dedicación y experiencia siguen pendientes.
+[Seguro] El rango inicial 12–16 semanas de #144 se basaba en **dos** desarrolladores y apoyo parcial QA/operación; esa capacidad aún no está confirmada para este proyecto. [Suposición] Evaluar **20–28 semanas** como referencia provisional si se asigna una persona dedicada, incluyendo sus tareas QA/operación. No equivale a duplicar linealmente el rango anterior, ni fija fechas de inicio/fin; su dedicación y experiencia siguen pendientes.
 
 | Trabajo de recalibración | Dato/evidencia que falta | Responsable propuesto |
 | --- | --- | --- |
 | [Probable] Capacidad neta semanal | Horas disponibles menos QA/operación/soporte y otras features; identificar revisión de producto | Titular/desarrollador |
-| [Probable] Prueba vertical #146–#150 | Tiempo real de ESM/core, entorno, roles/SQL y un flujo grupos/perfil | Desarrollador único |
-| [Probable] Ensayo identidad/archivos | Hash/OAuth compatibles, trigger invitación/MANAGED, objetos y FK Auth | Desarrollador único · #150/#161/#164 |
+| [Probable] Prueba vertical #146–#150 | Tiempo real de ESM/core, entorno, roles/SQL y un flujo grupos/perfil | Desarrollador asignado |
+| [Probable] Ensayo identidad/archivos | Hash/OAuth compatibles, trigger invitación/MANAGED, objetos y FK Auth | Desarrollador asignado · #150/#161/#164 |
 | [Probable] Integraciones | Acceso a cuentas sandbox, Resend, Expo y cambio de webhook MP; no sustituir por mocks para aceptación externa | Desarrollador/operación · #158/#159 |
 | [Probable] Lanzamiento antes de migrar | Si ingresan usuarios/pagos reales, volver a medir volumen, continuidad y ventana | Titular/producto |
 | [Probable] Corte y recuperación | Tiempo de restauración, reconciliación, drenar jobs y observación #166/#167 | Desarrollador/operación |

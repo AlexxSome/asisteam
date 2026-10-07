@@ -1,10 +1,10 @@
 # MIG-01 · Runtime, SQL e integraciones
 
-[Seguro] Inventario estático del commit `ecf2864955cae6b692f98bbcd992d5f1085755e0`, 2026-10-06. [Seguro] El usuario confirmó que no hay producción ni usuarios reales; no se accedió a consolas, secretos ni datos de proveedores. **VERIFICADO_LOCAL** describe código/config versionados; **PENDIENTE** describe ensayos y acuerdos aún sin evidencia.
+[Seguro] Inventario estático del commit `ecf2864955cae6b692f98bbcd992d5f1085755e0`, 2026-10-06. [Seguro] Producción y usuarios reales no están confirmados; en esta revisión no se accedió a consolas, secretos ni datos de proveedores. **VERIFICADO_LOCAL** describe código/config versionados; **PENDIENTE** describe ensayos y acuerdos aún sin evidencia.
 
 ## Seis Edge Functions
 
-[Seguro] Cada entrypoint existente se enlaza debajo. [Probable] Todos los destinos, DTO de transporte y pruebas de migración son propuestas; responsable: desarrollador único, con revisión de producto/operación pendiente. La cola, locks y RPC transaccionales se conservan hasta probar su reemplazo.
+[Seguro] Cada entrypoint existente se enlaza debajo. [Probable] Todos los destinos, DTO de transporte y pruebas de migración son propuestas; responsable: desarrollador asignado, con revisión de producto/operación pendiente. La cola, locks y RPC transaccionales se conservan hasta probar su reemplazo.
 
 | Edge y consumidor actual | Destino propuesto / DTO / autorización | SQL y efecto conservados | Prueba de origen y gate de destino |
 | --- | --- | --- | --- |
@@ -21,11 +21,11 @@
 
 | Dependencia local | Tratamiento propuesto / responsable |
 | --- | --- |
-| [Seguro] `auth.users`, `auth.uid()`, FK, `handle_new_user` y metadata de registro/invitación/términos | [Probable] #149/#150/#164: adaptador temporal y sustitución de triggers/FK por identidad propia con UUID conservados; probar registro transaccional, MANAGED e identidad social. Desarrollador único. |
-| [Seguro] `storage.buckets`/`storage.objects`, `can_read_avatar` y `can_upload_avatar` | [Probable] #161: permisos desde API + S3 privado, mapa de propietarios, transferencia/checksum y revocación de imagen; Storage antes de Auth. Desarrollador único. |
-| [Seguro] `pgcrypto` declarado; HMAC y bytes aleatorios existentes | [Probable] #150/#160/#165: comprobar versión/extensión en PostgreSQL 17 destino y preservar firma/ventana QR; nunca enviar claves de `app_private.qr_checkin_keys`. Desarrollador único. |
-| [Seguro] `pg_cron`, `pg_net` declarados y consultas `vault.decrypted_secrets` | [Probable] #157/#159: trasladar agenda/despacho y configuración a worker; mantener funciones de dominio/ledger. No suponer que Vault/pg_net están disponibles en RDS. Desarrollador único. |
-| [Seguro] Helpers/RLS/SECURITY DEFINER, grants, constraints, triggers, métricas y límites | [Probable] #149/#150/#165: conservar/adaptar con roles reales no propietarios/NOBYPASSRLS, search_path y SQL↔core, V1–V6/R1, COACH/multirol y pooling. Desarrollador único. |
+| [Seguro] `auth.users`, `auth.uid()`, FK, `handle_new_user` y metadata de registro/invitación/términos | [Probable] #149/#150/#164: adaptador temporal y sustitución de triggers/FK por identidad propia con UUID conservados; probar registro transaccional, MANAGED e identidad social. Desarrollador asignado. |
+| [Seguro] `storage.buckets`/`storage.objects`, `can_read_avatar` y `can_upload_avatar` | [Probable] #161: permisos desde API + S3 privado, mapa de propietarios, transferencia/checksum y revocación de imagen; Storage antes de Auth. Desarrollador asignado. |
+| [Seguro] `pgcrypto` declarado; HMAC y bytes aleatorios existentes | [Probable] #150/#160/#165: comprobar versión/extensión en PostgreSQL 17 destino y preservar firma/ventana QR; nunca enviar claves de `app_private.qr_checkin_keys`. Desarrollador asignado. |
+| [Seguro] `pg_cron`, `pg_net` declarados y consultas `vault.decrypted_secrets` | [Probable] #157/#159: trasladar agenda/despacho y configuración a worker; mantener funciones de dominio/ledger. No suponer que Vault/pg_net están disponibles en RDS. Desarrollador asignado. |
+| [Seguro] Helpers/RLS/SECURITY DEFINER, grants, constraints, triggers, métricas y límites | [Probable] #149/#150/#165: conservar/adaptar con roles reales no propietarios/NOBYPASSRLS, search_path y SQL↔core, V1–V6/R1, COACH/multirol y pooling. Desarrollador asignado. |
 
 ## Jobs realmente versionados
 
@@ -63,4 +63,4 @@
 
 [Probable] #158 debe crear un contrato de sandbox con URL antigua, consultar destino efectivo, ensayar mecanismo admitido por el proveedor, y demostrar que eventos de renovación/pagos llegan al receptor nuevo y conservan ledger. Registrar únicamente ID sintético redactado, método, entorno y resultado; consultar soporte si la API no admite actualización. No cancelar/recrear contratos reales para resolverlo por inferencia.
 
-[Seguro] El usuario declaró que todavía no hay producción ni usuarios reales. [Probable] Si se confirma ausencia de contratos reales en la cuenta al habilitar billing, la primera contratación debe usar el webhook nuevo y este riesgo de contratos anteriores será no aplicable para ese corte; falta esa verificación de cuenta. Si algún contrato sigue dependiendo de Supabase, conservar el receptor antiguo prolonga convivencia y bloquea afirmar salida completa.
+[Seguro] La existencia de producción, usuarios y contratos reales no está confirmada. [Probable] Si se confirma ausencia de contratos reales en la cuenta al habilitar billing, la primera contratación debe usar el webhook nuevo y este riesgo de contratos anteriores será no aplicable para ese corte; falta esa verificación de cuenta. Si algún contrato sigue dependiendo de Supabase, conservar el receptor antiguo prolonga convivencia y bloquea afirmar salida completa.

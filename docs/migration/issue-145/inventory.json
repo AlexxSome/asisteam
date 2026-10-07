@@ -1621,7 +1621,7 @@
         "apps/web/src/app/invitations/[token]/invitation.integration.test.ts",
         "supabase/tests/account_consents.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/account_consents.test.sql",
@@ -1654,7 +1654,7 @@
         "supabase/tests/membership_approvals.test.sql",
         "supabase/tests/membership_onboarding.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/membership_approvals.test.sql",
@@ -1687,7 +1687,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/group_subscriptions.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -1722,7 +1722,7 @@
         "apps/web/src/app/profile/page.test.tsx",
         "supabase/tests/profile.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 161,
       "display_tests": [
         "supabase/tests/profile.test.sql",
@@ -1756,7 +1756,7 @@
         "supabase/tests/attendance_edit.test.sql",
         "supabase/tests/coach_role.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 155,
       "display_tests": [
         "supabase/tests/attendance.test.sql",
@@ -1786,7 +1786,7 @@
       "tests": [
         "supabase/tests/membership_onboarding.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/membership_onboarding.test.sql"
@@ -1822,7 +1822,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/weekly_activities.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 154,
       "display_tests": [
         "supabase/tests/activities.test.sql",
@@ -1867,7 +1867,7 @@
         "supabase/tests/create_groups.test.sql",
         "supabase/tests/social_auth.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/create_groups.test.sql",
@@ -1899,7 +1899,7 @@
         "apps/web/src/app/groups/[groupId]/guardians/guardianship.integration.test.ts",
         "supabase/tests/guardianships.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/guardianships.test.sql",
@@ -1935,7 +1935,7 @@
         "supabase/tests/managed_members.test.sql",
         "supabase/tests/membership_onboarding.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/managed_members.test.sql",
@@ -1969,7 +1969,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/manage_members.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -2001,7 +2001,7 @@
         "apps/web/src/app/groups/[groupId]/activities/new/weekly-activities.integration.test.ts",
         "supabase/tests/weekly_activities.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 154,
       "display_tests": [
         "supabase/tests/weekly_activities.test.sql",
@@ -2033,7 +2033,7 @@
         "apps/web/src/lib/announcements.integration.test.ts",
         "supabase/tests/group_announcements.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 159,
       "display_tests": [
         "supabase/tests/group_announcements.test.sql",
@@ -2069,7 +2069,7 @@
         "supabase/tests/group_subscriptions.test.sql",
         "supabase/tests/manage_members.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 156,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -2106,7 +2106,7 @@
         "apps/web/src/lib/subscription-billing.integration.test.ts",
         "supabase/tests/group_subscriptions.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 158,
       "display_tests": [
         "supabase/tests/group_subscriptions.test.sql",
@@ -2139,7 +2139,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/group_stats_visibility.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 156,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -2173,7 +2173,7 @@
         "apps/web/src/lib/attendance-history.test.ts",
         "supabase/tests/attendance_history.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 156,
       "display_tests": [
         "supabase/tests/attendance_history.test.sql",
@@ -2203,7 +2203,7 @@
       "tests": [
         "supabase/tests/qr_attendance.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 160,
       "display_tests": [
         "supabase/tests/qr_attendance.test.sql"
@@ -2234,7 +2234,7 @@
         "apps/web/src/lib/attendance-history.test.ts",
         "supabase/tests/ward_attendance_history.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 156,
       "display_tests": [
         "supabase/tests/ward_attendance_history.test.sql",
@@ -2278,7 +2278,7 @@
         "apps/web/src/app/auth/callback/route.test.ts",
         "supabase/tests/account_consents.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/account_consents.test.sql",
@@ -2310,7 +2310,7 @@
         "apps/web/src/lib/check-in.integration.test.ts",
         "supabase/tests/qr_attendance.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 160,
       "display_tests": [
         "supabase/tests/qr_attendance.test.sql",
@@ -2345,7 +2345,7 @@
         "supabase/tests/create_groups.test.sql",
         "supabase/tests/social_auth.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/create_groups.test.sql",
@@ -2377,7 +2377,7 @@
         "apps/web/src/app/invitations/[token]/invitation.integration.test.ts",
         "supabase/tests/join_group_by_code.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/join_group_by_code.test.sql",
@@ -2407,7 +2407,7 @@
       "tests": [
         "supabase/tests/profile.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 161,
       "display_tests": [
         "supabase/tests/profile.test.sql"
@@ -2437,7 +2437,7 @@
         "supabase/tests/manage_members.test.sql",
         "supabase/tests/profile.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/manage_members.test.sql"
@@ -2467,7 +2467,7 @@
         "apps/web/src/lib/announcements.integration.test.ts",
         "supabase/tests/group_announcements.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 159,
       "display_tests": [
         "supabase/tests/group_announcements.test.sql",
@@ -2502,7 +2502,7 @@
         "supabase/tests/manage_members.test.sql",
         "supabase/tests/member_roster_search.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -2533,7 +2533,7 @@
         "apps/web/src/app/groups/[groupId]/guardians/guardianship.integration.test.ts",
         "supabase/tests/guardianships.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/guardianships.test.sql",
@@ -2570,7 +2570,7 @@
         "apps/web/src/lib/wards.test.tsx",
         "supabase/tests/managed_activation.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 153,
       "display_tests": [
         "supabase/tests/managed_activation.test.sql",
@@ -2614,7 +2614,7 @@
         "apps/web/src/lib/wards.test.tsx",
         "supabase/tests/membership_onboarding.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/membership_onboarding.test.sql",
@@ -2645,7 +2645,7 @@
         "apps/web/src/lib/groups.test.ts",
         "supabase/tests/join_group_by_code.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/join_group_by_code.test.sql",
@@ -2677,7 +2677,7 @@
         "apps/web/src/lib/announcements.integration.test.ts",
         "supabase/tests/group_announcements.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 159,
       "display_tests": [
         "supabase/tests/group_announcements.test.sql",
@@ -2710,7 +2710,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/manage_members.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -2749,7 +2749,7 @@
         "supabase/tests/group_subscriptions.test.sql",
         "supabase/tests/qr_attendance.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 155,
       "display_tests": [
         "supabase/tests/attendance.test.sql",
@@ -2781,7 +2781,7 @@
         "apps/web/src/app/groups/[groupId]/members/pending/membership-review.integration.test.ts",
         "supabase/tests/membership_approvals.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/membership_approvals.test.sql",
@@ -2812,7 +2812,7 @@
         "apps/web/src/app/profile/actions.test.ts",
         "supabase/tests/profile.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/profile.test.sql",
@@ -2844,7 +2844,7 @@
         "apps/web/src/app/invitations/[token]/invitation.integration.test.ts",
         "supabase/tests/managed_activation.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 153,
       "display_tests": [
         "supabase/tests/managed_activation.test.sql",
@@ -2875,7 +2875,7 @@
         "supabase/tests/manage_members.test.sql",
         "supabase/tests/profile.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/manage_members.test.sql"
@@ -2907,7 +2907,7 @@
         "apps/web/src/app/invitations/[token]/invitation.integration.test.ts",
         "supabase/tests/managed_activation.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 153,
       "display_tests": [
         "supabase/tests/managed_activation.test.sql",
@@ -2941,7 +2941,7 @@
         "supabase/tests/configure_groups.test.sql",
         "supabase/tests/join_group_by_code.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/configure_groups.test.sql",
@@ -2973,7 +2973,7 @@
         "apps/web/src/lib/check-in.integration.test.ts",
         "supabase/tests/qr_attendance.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 160,
       "display_tests": [
         "supabase/tests/qr_attendance.test.sql",
@@ -3005,7 +3005,7 @@
         "apps/web/src/lib/announcements.integration.test.ts",
         "supabase/tests/group_announcements.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 159,
       "display_tests": [
         "supabase/tests/group_announcements.test.sql",
@@ -3036,7 +3036,7 @@
         "apps/web/src/app/profile/actions.test.ts",
         "supabase/tests/profile.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 161,
       "display_tests": [
         "supabase/tests/profile.test.sql",
@@ -3068,7 +3068,7 @@
         "apps/web/src/lib/check-in.integration.test.ts",
         "supabase/tests/qr_attendance.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 160,
       "display_tests": [
         "supabase/tests/qr_attendance.test.sql",
@@ -3102,7 +3102,7 @@
         "supabase/tests/activity_types.test.sql",
         "supabase/tests/weekly_activities.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 154,
       "display_tests": [
         "supabase/tests/activity_types.test.sql",
@@ -3138,7 +3138,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/group_reports.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 155,
       "display_tests": [
         "supabase/tests/attendance_edit.test.sql",
@@ -3170,7 +3170,7 @@
         "apps/web/src/lib/announcements.integration.test.ts",
         "supabase/tests/group_announcements.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 159,
       "display_tests": [
         "supabase/tests/group_announcements.test.sql",
@@ -3204,7 +3204,7 @@
         "supabase/tests/coach_role.test.sql",
         "supabase/tests/group_stats_visibility.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 151,
       "display_tests": [
         "supabase/tests/coach_role.test.sql",
@@ -3237,7 +3237,7 @@
         "supabase/tests/manage_members.test.sql",
         "supabase/tests/managed_activation.test.sql"
       ],
-      "owner": "Desarrollador único",
+      "owner": "Desarrollador asignado; nombre y dedicación PENDIENTES",
       "delivery_issue": 152,
       "display_tests": [
         "supabase/tests/manage_members.test.sql",
@@ -4532,7 +4532,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.auth_user_id": {
@@ -4550,7 +4550,7 @@
         "destination": "Adaptador de identidad SQL/Nest; MIG-17–MIG-20",
         "delivery_issue": 164,
         "treatment": "Adaptar dependencia Auth; conservar perfiles/UUID y garantías de trigger",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.handle_new_user": {
@@ -4565,7 +4565,7 @@
         "destination": "Adaptador de identidad SQL/Nest; MIG-17–MIG-20",
         "delivery_issue": 164,
         "treatment": "Adaptar dependencia Auth; conservar perfiles/UUID y garantías de trigger",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.chile_today": {
@@ -4604,7 +4604,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.is_minor": {
@@ -4619,7 +4619,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.has_minor_consent": {
@@ -4634,7 +4634,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.is_member": {
@@ -4649,7 +4649,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.is_group_admin": {
@@ -4664,7 +4664,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.is_guardian_of": {
@@ -4681,7 +4681,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.can_upload_avatar": {
@@ -4707,7 +4707,7 @@
         "destination": "/api/v1/me/avatar/permission",
         "delivery_issue": 161,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.validate_membership": {
@@ -4722,7 +4722,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.validate_guardianship": {
@@ -4737,7 +4737,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.protect_consent": {
@@ -4752,7 +4752,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.sync_guardian_memberships": {
@@ -4767,7 +4767,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.validate_profile_update": {
@@ -4782,7 +4782,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.deactivate_adult_guardianships": {
@@ -4797,7 +4797,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.request_birthdate_change": {
@@ -4819,7 +4819,7 @@
         "destination": "/api/v1/me/birthdate-change-requests",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.review_birthdate_change": {
@@ -4842,7 +4842,7 @@
         "destination": "/api/v1/birthdate-change-requests/{requestId}/reviews",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_birthdate_reviews": {
@@ -4865,7 +4865,7 @@
         "destination": "/api/v1/me/birthdate-reviews",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_avatar_permissions": {
@@ -4887,7 +4887,7 @@
         "destination": "/api/v1/me/wards/avatar-permissions",
         "delivery_issue": 161,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.set_avatar_permission": {
@@ -4909,7 +4909,7 @@
         "destination": "/api/v1/guardianships/{guardianshipId}/avatar-permission",
         "delivery_issue": 161,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.can_read_avatar": {
@@ -4926,7 +4926,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.preserve_minor_consent": {
@@ -4941,7 +4941,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.prepare_invitation_registration": {
@@ -4965,7 +4965,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.cancel_invitation_registration": {
@@ -4988,7 +4988,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.consume_invitation_attempt": {
@@ -5010,7 +5010,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.invitation_context": {
@@ -5038,7 +5038,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.accept_invitation": {
@@ -5058,7 +5058,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.accept_invitation": {
@@ -5082,7 +5082,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.protect_system_activity_type": {
@@ -5097,7 +5097,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.validate_activity_type": {
@@ -5112,7 +5112,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.can_read_group_activities": {
@@ -5127,7 +5127,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.create_activity": {
@@ -5152,7 +5152,7 @@
         "destination": "/api/v1/groups/{groupId}/activities",
         "delivery_issue": 154,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.validate_attendance_membership": {
@@ -5167,7 +5167,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.lock_attendance_activity": {
@@ -5184,7 +5184,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.record_attendance_bulk": {
@@ -5211,7 +5211,7 @@
         "destination": "/api/v1/activities/{activityId}/attendance/batch",
         "delivery_issue": 155,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.clear_attendance_record": {
@@ -5235,7 +5235,7 @@
         "destination": "/api/v1/activities/{activityId}/attendance/{membershipId}",
         "delivery_issue": 155,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.create_group": {
@@ -5258,7 +5258,7 @@
         "destination": "/api/v1/groups",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.join_group_as_athlete": {
@@ -5281,7 +5281,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/self-athlete",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.rotate_invite_code": {
@@ -5304,7 +5304,7 @@
         "destination": "/api/v1/groups/{groupId}/invite-code/rotate",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.join_group_by_code": {
@@ -5326,7 +5326,7 @@
         "destination": "/api/v1/memberships/join-by-code",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_pending_athletes": {
@@ -5348,7 +5348,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/pending-summary",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.issue_invitation": {
@@ -5372,7 +5372,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.create_managed_member": {
@@ -5395,7 +5395,7 @@
         "destination": "/api/v1/groups/{groupId}/managed-members",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_managed_member_consents": {
@@ -5412,7 +5412,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.consent_managed_member": {
@@ -5429,7 +5429,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.create_guardianship": {
@@ -5451,7 +5451,7 @@
         "destination": "/api/v1/groups/{groupId}/guardianships",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_guardianship_athletes": {
@@ -5473,7 +5473,7 @@
         "destination": "/api/v1/groups/{groupId}/guardianships/eligible-athletes",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_pending_memberships": {
@@ -5490,7 +5490,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.review_pending_membership": {
@@ -5507,7 +5507,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.approve_membership": {
@@ -5530,7 +5530,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/approve",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.reject_pending_membership": {
@@ -5552,7 +5552,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/reject",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.activity_local_to_utc": {
@@ -5567,7 +5567,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.lock_activity_series": {
@@ -5582,7 +5582,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.update_activity": {
@@ -5605,7 +5605,7 @@
         "destination": "/api/v1/groups/{groupId}/activities/{activityId}",
         "delivery_issue": 154,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.delete_activity": {
@@ -5627,7 +5627,7 @@
         "destination": "/api/v1/groups/{groupId}/activities/{activityId}",
         "delivery_issue": 154,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.normalize_activity_type_name": {
@@ -5642,7 +5642,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.update_attendance_record": {
@@ -5667,7 +5667,7 @@
         "destination": "/api/v1/attendance/{recordId}",
         "delivery_issue": 155,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.attendance_metrics": {
@@ -5684,7 +5684,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_group_attendance_report": {
@@ -5709,7 +5709,7 @@
         "destination": "/api/v1/groups/{groupId}/reports/attendance",
         "delivery_issue": 156,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.update_group_settings": {
@@ -5732,7 +5732,7 @@
         "destination": "/api/v1/groups/{groupId}/settings",
         "delivery_issue": 151,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.can_view_group_stats": {
@@ -5747,7 +5747,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_group_stats": {
@@ -5770,7 +5770,7 @@
         "destination": "/api/v1/groups/{groupId}/stats",
         "delivery_issue": 156,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_group_members": {
@@ -5794,7 +5794,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.update_managed_member": {
@@ -5817,7 +5817,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/managed-profile",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.change_membership_status": {
@@ -5834,7 +5834,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.deactivate_membership": {
@@ -5857,7 +5857,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/deactivate",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.reactivate_membership": {
@@ -5880,7 +5880,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/reactivate",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.has_account_activation_consent": {
@@ -5895,7 +5895,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.request_managed_activation": {
@@ -5917,7 +5917,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/activation-requests",
         "delivery_issue": 153,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_managed_activation_requests": {
@@ -5943,7 +5943,7 @@
         "destination": "/api/v1/groups/{groupId}/activation-requests",
         "delivery_issue": 153,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.review_managed_activation": {
@@ -5965,7 +5965,7 @@
         "destination": "/api/v1/activation-requests/{requestId}/review",
         "delivery_issue": 153,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.issue_managed_activation": {
@@ -5987,7 +5987,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.invitation_registration_result": {
@@ -6009,7 +6009,7 @@
         "delivery_issue": 153,
         "destination": "Servicio interno de invitaciones/registro, con adaptador Auth temporal",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.attendance_period_bounds": {
@@ -6024,7 +6024,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_my_attendance_history": {
@@ -6046,7 +6046,7 @@
         "destination": "/api/v1/groups/{groupId}/me/attendance-history",
         "delivery_issue": 156,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_my_wards": {
@@ -6061,7 +6061,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.run_guardianship_majority": {
@@ -6083,7 +6083,7 @@
         "delivery_issue": 157,
         "destination": "Servicio interno worker de mayoría de edad",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.claim_guardianship_majority_emails": {
@@ -6105,7 +6105,7 @@
         "delivery_issue": 157,
         "destination": "Servicio interno worker de mayoría de edad",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.complete_guardianship_majority_email": {
@@ -6127,7 +6127,7 @@
         "delivery_issue": 157,
         "destination": "Servicio interno worker de mayoría de edad",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.dispatch_guardianship_majority": {
@@ -6144,7 +6144,7 @@
         "destination": "Worker privado; retirar despacho cron/net/vault al cambiar ejecutor",
         "delivery_issue": 157,
         "treatment": "Reemplazar transporte programado; conservar función transaccional/ledger",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_ward_attendance_history": {
@@ -6166,7 +6166,7 @@
         "destination": "/api/v1/groups/{groupId}/wards/{athleteUserId}/attendance-history",
         "delivery_issue": 156,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.can_manage_attendance": {
@@ -6181,7 +6181,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.assign_member_coach": {
@@ -6204,7 +6204,7 @@
         "destination": "/api/v1/groups/{groupId}/memberships/{membershipId}/coach",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.billing_actor": {
@@ -6219,7 +6219,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.begin_subscription_checkout": {
@@ -6241,7 +6241,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_subscription_context": {
@@ -6261,7 +6261,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.claim_subscription_creation": {
@@ -6283,7 +6283,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.reject_subscription_creation": {
@@ -6303,7 +6303,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.sync_group_subscription": {
@@ -6325,7 +6325,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.sync_subscription_invoice": {
@@ -6347,7 +6347,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.group_athlete_limit": {
@@ -6364,7 +6364,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.group_membership_limit": {
@@ -6381,7 +6381,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.enforce_subscription_capacity": {
@@ -6396,7 +6396,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_group_billing": {
@@ -6422,7 +6422,7 @@
         "destination": "/api/v1/groups/{groupId}/billing",
         "delivery_issue": 158,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.lookup_billing_subscription": {
@@ -6442,7 +6442,7 @@
         "delivery_issue": 158,
         "destination": "Repositorio billing API/webhook; RPC privada, sin endpoint directo",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.register_announcement_push_token": {
@@ -6459,7 +6459,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.unregister_announcement_push_token": {
@@ -6476,7 +6476,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.set_announcement_push_enabled": {
@@ -6498,7 +6498,7 @@
         "destination": "/api/v1/me/announcement-push-preference",
         "delivery_issue": 159,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.require_announcement_admin": {
@@ -6515,7 +6515,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.publish_group_announcement": {
@@ -6537,7 +6537,7 @@
         "destination": "/api/v1/groups/{groupId}/announcements",
         "delivery_issue": 159,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.update_group_announcement": {
@@ -6559,7 +6559,7 @@
         "destination": "/api/v1/groups/{groupId}/announcements/{announcementId}",
         "delivery_issue": 159,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.delete_group_announcement": {
@@ -6581,7 +6581,7 @@
         "destination": "/api/v1/groups/{groupId}/announcements/{announcementId}",
         "delivery_issue": 159,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_group_announcements": {
@@ -6603,7 +6603,7 @@
         "destination": "/api/v1/groups/{groupId}/announcements",
         "delivery_issue": 159,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.claim_announcement_push": {
@@ -6625,7 +6625,7 @@
         "delivery_issue": 159,
         "destination": "Servicio interno worker de anuncios/push",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.complete_announcement_push": {
@@ -6647,7 +6647,7 @@
         "delivery_issue": 159,
         "destination": "Servicio interno worker de anuncios/push",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.record_announcement_push_run": {
@@ -6669,7 +6669,7 @@
         "delivery_issue": 159,
         "destination": "Servicio interno worker de anuncios/push",
         "treatment": "Preservar transacción/ledger, reemplazar Edge y reducir grants a rol del servicio",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.dispatch_announcement_push": {
@@ -6684,7 +6684,7 @@
         "destination": "Worker privado; retirar despacho cron/net/vault al cambiar ejecutor",
         "delivery_issue": 159,
         "treatment": "Reemplazar transporte programado; conservar función transaccional/ledger",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.qr_checkin_status": {
@@ -6701,7 +6701,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.qr_checkin_token": {
@@ -6719,7 +6719,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.get_qr_checkin_settings": {
@@ -6741,7 +6741,7 @@
         "destination": "/api/v1/groups/{groupId}/check-in/settings",
         "delivery_issue": 160,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.set_qr_checkin_settings": {
@@ -6763,7 +6763,7 @@
         "destination": "/api/v1/groups/{groupId}/check-in/settings",
         "delivery_issue": 160,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.issue_activity_checkin_qr": {
@@ -6785,7 +6785,7 @@
         "destination": "/api/v1/activities/{activityId}/check-in/qr",
         "delivery_issue": 160,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.self_checkin": {
@@ -6807,7 +6807,7 @@
         "destination": "/api/v1/activities/{activityId}/check-in",
         "delivery_issue": 160,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.protect_account_consent": {
@@ -6822,7 +6822,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.account_terms_version": {
@@ -6837,7 +6837,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "app_private.record_account_consent": {
@@ -6854,7 +6854,7 @@
         "destination": "SQL portable interno/compatibilidad; sin nueva ruta pública inferida",
         "delivery_issue": 165,
         "treatment": "Conservar y probar antes de retirar compatibilidad o privilegios",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.accept_account_terms": {
@@ -6876,7 +6876,7 @@
         "destination": "/api/v1/account-consents",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.has_account_consent": {
@@ -6915,7 +6915,7 @@
         "destination": "/api/v1/account-consents/current",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.list_membership_onboarding": {
@@ -6949,7 +6949,7 @@
         "destination": "/api/v1/memberships/onboarding",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       },
       "public.consent_membership_data": {
@@ -6971,7 +6971,7 @@
         "destination": "/api/v1/memberships/{membershipId}/data-consents",
         "delivery_issue": 152,
         "treatment": "Preservar SQL y adaptar contexto de identidad; envolver en API Nest",
-        "owner": "Desarrollador único; nombre y revisión de producto/operación PENDIENTES",
+        "owner": "Desarrollador asignado; nombre y revisión de producto/operación PENDIENTES",
         "required_validation": "Paridad del comportamiento/proyección y permisos con rol destino real; suites origen son referencias estáticas, no PASS"
       }
     },
@@ -7027,12 +7027,14 @@
     "versioned_storage_buckets": 1
   },
   "confirmed_operating_context": {
-    "production_deployed": false,
-    "real_users": false,
-    "data": "Solo pruebas, declaración del usuario el 2026-10-06; no inspección de cuentas externas",
-    "developers": 1
+    "production_deployed": null,
+    "real_users": null,
+    "data": "PENDIENTE de confirmación; sin inspección de cuentas externas",
+    "developers": null,
+    "weekly_developer_hours": null,
+    "real_mercadopago_contracts": null
   },
-  "decision_status": "PROPUESTAS_PENDIENTES; el usuario autorizó PR documental y mantener #145 abierto",
+  "decision_status": "PROPUESTAS_PENDIENTES; publicación autorizada por invocación de skill, sin aceptación de decisiones operativas",
   "source_sha256": {
     "apps/web/src/app/accept-terms/actions.ts": "386dc54effb7695c056dace1637fffd42c174058111c00db422181412ecc2feb",
     "apps/web/src/app/accept-terms/page.tsx": "f6a3eb224bc8ffd758ad5c909b56344d54e013bd2cd246499122d0266bcaac26",
@@ -7096,6 +7098,98 @@
     "supabase/functions/send-invitation/handler.ts": "39e0a894f9080bf651346dc625f0bb48ac308848f68413af181cdbda9a7a9dc5",
     "supabase/functions/send-invitation/index.ts": "7e72ddf392e91c3ee22da630245f7d6bf2e8dcdefba13b00a2f7911cf6699075",
     "supabase/functions/subscription-billing/handler.ts": "1b211403f302a848d1e895410ded8e8223e56d513ed78547a26d09cefaa398c9",
-    "supabase/functions/subscription-billing/runtime.ts": "e587d7f2b1dae82328be7752ef56aa040d28b811bcdc909aaff280881db5373b"
+    "supabase/functions/subscription-billing/runtime.ts": "e587d7f2b1dae82328be7752ef56aa040d28b811bcdc909aaff280881db5373b",
+    "supabase/functions/mercadopago-webhook/index.ts": "d7f9ed1b15e142a08993f4a11a5e03751c53ae292fe2a71c37ebb0385394c7a8",
+    "supabase/functions/subscription-billing/index.ts": "07885e25534c221b6dfa00b6eb8966ddcc8ab9c72effdbc0adb31baed63a0c08"
+  },
+  "edge_entrypoints": {
+    "accept-invitation": "supabase/functions/accept-invitation/index.ts",
+    "guardianship-majority": "supabase/functions/guardianship-majority/index.ts",
+    "mercadopago-webhook": "supabase/functions/mercadopago-webhook/index.ts",
+    "send-announcement-push": "supabase/functions/send-announcement-push/index.ts",
+    "send-invitation": "supabase/functions/send-invitation/index.ts",
+    "subscription-billing": "supabase/functions/subscription-billing/index.ts"
+  },
+  "postgrest_tests": {
+    "users": [
+      "supabase/tests/profile.test.sql"
+    ],
+    "groups": [
+      "supabase/tests/configure_groups.test.sql"
+    ],
+    "memberships": [
+      "supabase/tests/profile.test.sql"
+    ],
+    "birthdate_change_requests": [
+      "supabase/tests/profile.test.sql"
+    ],
+    "invitations": [
+      "supabase/tests/send_invitations.test.sql"
+    ],
+    "activity_types": [
+      "supabase/tests/activity_types.test.sql"
+    ],
+    "v_activity_types": [
+      "supabase/tests/activity_types.test.sql"
+    ],
+    "v_group_activities": [
+      "supabase/tests/activities.test.sql"
+    ],
+    "v_group_detail": [
+      "supabase/tests/groups.test.sql"
+    ],
+    "v_my_groups": [
+      "supabase/tests/groups.test.sql"
+    ],
+    "v_my_wards": [
+      "supabase/tests/my_wards.test.sql"
+    ],
+    "v_my_ward_groups": [
+      "supabase/tests/my_wards.test.sql"
+    ],
+    "v_attendance_operator": [
+      "supabase/tests/coach_role.test.sql"
+    ],
+    "v_attendance_roster": [
+      "supabase/tests/attendance.test.sql"
+    ],
+    "announcement_push_preferences": [
+      "supabase/tests/group_announcements.test.sql"
+    ],
+    "push_tokens": [
+      "supabase/tests/group_announcements.test.sql"
+    ]
+  },
+  "auth_tests": {
+    "getUser": [
+      "apps/web/src/app/accept-terms/actions.test.ts"
+    ],
+    "getSession": [
+      "apps/web/src/app/groups/[groupId]/invitations/new/actions.test.ts"
+    ],
+    "signUp": [
+      "apps/web/src/app/login/auth-pages.test.tsx"
+    ],
+    "signInWithPassword": [
+      "apps/web/src/app/login/actions.test.ts"
+    ],
+    "signOut": [
+      "apps/web/src/app/login/sign-out.test.ts"
+    ],
+    "resetPasswordForEmail": [
+      "apps/web/src/app/forgot-password/actions.test.ts"
+    ],
+    "verifyOtp": [
+      "apps/web/src/app/reset-password/actions.test.ts"
+    ],
+    "updateUser": [
+      "apps/web/src/app/reset-password/actions.test.ts"
+    ],
+    "signInWithOAuth": [
+      "apps/web/src/app/login/social-actions.test.ts"
+    ],
+    "exchangeCodeForSession": [
+      "apps/web/src/app/auth/callback/route.test.ts"
+    ]
   }
 }
