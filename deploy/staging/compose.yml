@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: asisteam-staging-postgres:17.9
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_DB: asisteam_staging
+      POSTGRES_USER: staging_bootstrap
+      POSTGRES_PASSWORD_FILE: /run/secrets/bootstrap_password
+    secrets: [bootstrap_password, runtime_password, migrator_password]
+    volumes:
+      - staging_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -h 127.0.0.1 -U staging_bootstrap -d asisteam_staging]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    networks: [database]
+  migrate:
+    image: ${API_IMAGE:?Set an immutable API image ID or registry digest}
+    command: [node, scripts/migrate-staging.mjs]
+    secrets: [migrator_url]
+    volumes:
+      - ./migrations:/migrations:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [database]
+  api:
+    image: ${API_IMAGE:?Set an immutable API image ID or registry digest}
+    command: [node, scripts/start-secret.mjs]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL_FILE: /run/secrets/runtime_url
+    secrets: [runtime_url]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    ports: ["127.0.0.1:${STAGING_PORT:-30467}:3001"]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3001/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    stop_grace_period: 15s
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [database, gateway]
+networks:
+  gateway:
+  database:
+    internal: true
+volumes:
+  staging_data:
+secrets:
+  bootstrap_password:
+    file: ${STAGING_SECRETS_DIR:?External secret directory}/bootstrap_password
+  runtime_password:
+    file: ${STAGING_SECRETS_DIR}/runtime_password
+  migrator_password:
+    file: ${STAGING_SECRETS_DIR}/migrator_password
+  runtime_url:
+    file: ${STAGING_SECRETS_DIR}/runtime_url
+  migrator_url:
+    file: ${STAGING_SECRETS_DIR}/migrator_url

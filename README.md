@@ -49,7 +49,7 @@ corepack pnpm --filter @asisteam/web typecheck
 corepack pnpm --filter @asisteam/web build
 ```
 
-El [método QA de #120](docs/qa/issue-120/README.md) detalla fixtures sintéticos, Playwright, roles, teclado, viewports y límites de la evidencia. Las integraciones de backend son opt-in; una suite unitaria verde no las sustituye. Toda modificación DB/RLS/RPC requiere sus pruebas, pgTAP y regeneración de tipos cuando corresponda. Los gates remotos del roadmap son objetivos: el corte actual no tiene workflow CI ni script `lint` versionados.
+El [método QA de #120](docs/qa/issue-120/README.md) detalla fixtures sintéticos, Playwright, roles, teclado, viewports y límites de la evidencia. Las integraciones de backend son opt-in; una suite unitaria verde no las sustituye. Toda modificación DB/RLS/RPC requiere sus pruebas, pgTAP y regeneración de tipos cuando corresponda. Los gates remotos del roadmap son objetivos: MIG-03 (#147) añade workflow CI y lint; ver [evidencia y límites](docs/migration/issue-147/README.md).
 
 ## Documentación
 

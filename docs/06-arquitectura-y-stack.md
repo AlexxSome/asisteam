@@ -6,6 +6,8 @@
 
 [Seguro] **MIG-02 (#146, 2026-10-07):** [base ejecutable Nest/Node](migration/issue-146/README.md) con `apps/api`, sondas `/health` y `/ready`, pool pg, errores/logs seguros y contenedor probado localmente. Solo la infraestructura HTTP está implementada; las operaciones de producto siguen en Supabase. CI/staging, OpenAPI y sesión/RLS corresponden a #147–#149.
 
+[Seguro] **MIG-03 (#147, 2026-10-07):** [CI y staging Docker sintético](migration/issue-147/README.md), gates con omisiones explícitas, roles separados, secretos externos y rollback por artefacto inmutable. Provisión externa pendiente según elección del usuario; las operaciones de producto continúan en Supabase.
+
 ---
 
 ## 1. Decisión de arquitectura (resumen ejecutivo)

@@ -26,3 +26,7 @@ Thumbs.db
 
 # graphify (grafo de conocimiento local, regenerable con /graphify .)
 graphify-out/
+
+# CI sanitized results and transient Vitest reports
+.ci-results/
+.ci-*.json
