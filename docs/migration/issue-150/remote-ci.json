@@ -1,0 +1,26 @@
+{
+  "headSha": "cd0305cbcdde9ab459d109cb84fb1a16867c558d",
+  "runId": 37631241378,
+  "url": "https://github.com/AlexxSome/asisteam/actions/runs/37631241378",
+  "status": "completed",
+  "conclusion": "success",
+  "environment": "github-actions-synthetic",
+  "jobs": [
+    {
+      "name": "checks",
+      "conclusion": "success"
+    },
+    {
+      "name": "backend",
+      "conclusion": "success"
+    },
+    {
+      "name": "staging",
+      "conclusion": "success"
+    },
+    {
+      "name": "required",
+      "conclusion": "success"
+    }
+  ]
+}
