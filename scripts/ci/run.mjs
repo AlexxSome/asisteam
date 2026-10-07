@@ -36,6 +36,10 @@ export async function check(label, command, args = [], options = {}) {
   if (status !== 'PASS') { const error = new Error(`Check fallido: ${label}; diagnóstico retenido sin publicar valores sensibles.`); error.diagnostic = output; throw error; }
   return stdout;
 }
+export function verify(label, run) {
+  try { run(); evidence.checks.push({ check: label, status: 'PASS' }); }
+  catch (error) { evidence.checks.push({ check: label, status: 'FAIL' }); throw error; }
+}
 export async function suite(name, run) {
   try { await run(); } catch (error) {
     // Error messages from dependencies must never be forwarded to CI logs.
