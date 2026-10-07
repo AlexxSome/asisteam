@@ -11,6 +11,12 @@ const configSchema = z.object({
       return ['postgres:', 'postgresql:'].includes(url.protocol) && !!url.hostname && !!url.pathname.slice(1);
     } catch { return false; }
   }),
+  SUPABASE_AUTH_URL: z.string().url().optional(),
+  SUPABASE_AUTH_PUBLIC_KEY: z.string().min(1).refine(value => {
+    if (value.startsWith('sb_publishable_')) return true;
+    try { return JSON.parse(Buffer.from(value.split('.')[1] ?? '', 'base64url').toString()).role === 'anon'; } catch { return false; }
+  }).optional(),
+  AUTH_TIMEOUT_MS: milliseconds(2000),
   PG_POOL_MAX: z.coerce.number().int().min(1).max(50).default(10),
   PG_CONNECT_TIMEOUT_MS: milliseconds(2000),
   PG_STATEMENT_TIMEOUT_MS: milliseconds(3000),
@@ -26,7 +32,14 @@ export class ConfigurationError extends Error {
   }
 }
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
-  const parsed = configSchema.safeParse(environment);
+  const parsed = configSchema.superRefine((value, ctx) => {
+    if (!!value.SUPABASE_AUTH_URL !== !!value.SUPABASE_AUTH_PUBLIC_KEY) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Configura el emisor y la clave pública juntos.' });
+    if (value.SUPABASE_AUTH_URL) {
+      let url: URL;
+      try { url = new URL(value.SUPABASE_AUTH_URL); } catch { return; }
+      if (url.username || url.password || url.search || url.hash || url.pathname !== '/auth/v1' || (url.protocol !== 'https:' && !(value.NODE_ENV !== 'production' && url.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(url.hostname)))) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Emisor inválido.' });
+    }
+  }).safeParse(environment);
   if (!parsed.success) throw new ConfigurationError([...new Set(parsed.error.issues.map((issue) => String(issue.path[0])))]);
   return parsed.data;
 }

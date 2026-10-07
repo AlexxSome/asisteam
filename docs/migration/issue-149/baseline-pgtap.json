@@ -1,0 +1,13 @@
+{
+  "base": "e7bc9ffdc7853637ff8b6624914402e78c493097",
+  "environment": "local-synthetic",
+  "source": "Unmodified test file in original develop checkout; SQL tested on local migrated Supabase",
+  "check": "supabase test db supabase/tests/send_invitations.test.sql",
+  "status": "FAIL",
+  "tests": 51,
+  "failed": 1,
+  "case": 15,
+  "description": "rechazos no consumen cuota",
+  "actual": 1,
+  "expected": 0
+}

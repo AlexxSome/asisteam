@@ -2,6 +2,9 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  getSession(): Promise<operations["getSession"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getSession", {});
+  }
   health(): Promise<operations["health"]["responses"][200]["content"]["application/json"]> {
     return this.execute("health", {});
   }

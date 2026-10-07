@@ -6,7 +6,10 @@
 
 [Seguro] **MIG-02 (#146, 2026-10-07):** [base ejecutable Nest/Node](migration/issue-146/README.md) con `apps/api`, sondas `/health` y `/ready`, pool pg, errores/logs seguros y contenedor probado localmente. Solo la infraestructura HTTP está implementada; las operaciones de producto siguen en Supabase. CI/staging, OpenAPI y sesión/RLS corresponden a #147–#149.
 
-[Seguro] **MIG-04 (#148, 2026-10-07):** [OpenAPI/client/adaptador Next](migration/issue-148/README.md) especifica el primer contrato grupos/perfil y añade `/api/v1/health` y `/api/v1/ready` reales. Las operaciones de dominio figuran `contract-only`; auth/RLS #149 y migración #151 siguen pendientes. Generación y divergencia forman parte de CI; la bandera por módulo conserva un ejecutor y el backend actual sigue atendiendo Supabase.
+[Seguro] **MIG-04 (#148, 2026-10-07):** [OpenAPI/client/adaptador Next](migration/issue-148/README.md) especifica el primer contrato grupos/perfil y añade `/api/v1/health` y `/api/v1/ready` reales. Las operaciones de dominio figuran `contract-only`; La sesión/RLS se concreta en MIG-05; la migración de dominio #151 sigue pendiente. Generación y divergencia forman parte de CI; la bandera por módulo conserva un ejecutor y el backend actual sigue atendiendo Supabase.
+
+
+[Seguro] **MIG-05 (#149, 2026-10-07):** [sesión temporal Nest y contexto SQL](migration/issue-149/README.md) implementa `GET /api/v1/auth/session` → `{user_id}` y verificación Supabase/JWKS/GoTrue, perfil ACTIVE, revocación y transacción en una sola conexión `asisteam_api` sin ownership/BYPASSRLS. Los guards de membresía ACTIVE y proyecciones por rol se reutilizarán en #151–#160; las operaciones de dominio de la tabla siguen en Supabase. OpenAPI distingue sesión implementada y handlers `contract-only`. El [runbook API](../apps/api/README.md#sesión-temporal-y-rol-postgresql--mig-05) exige credenciales externas por rol, emisor fijo y configuración conjunta Auth/base; jobs/webhook no heredan permisos API. Tipos regenerados sin cambio de esquema público; pruebas RLS específicas verdes y un fallo pgTAP preexistente documentado.
 
 ---
 
