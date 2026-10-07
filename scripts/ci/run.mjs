@@ -26,7 +26,7 @@ export async function check(label, command, args = [], options = {}) {
       const report = JSON.parse(readFileSync(resolve(options.cwd ?? '.', options.report), 'utf8'));
       record.tests = options.playwright ? report.stats.expected : report.numPassedTests;
       record.omitted = options.playwright ? report.stats.skipped : (report.numPendingTests ?? 0) + (report.numTodoTests ?? 0);
-      const failedFiles = (report.testResults ?? []).filter(result => result.status === 'failed').map(result => relative(process.cwd(), result.name)).filter(name => !name.startsWith('..') && /^[A-Za-z0-9_./\[\]-]+\.tsx?$/.test(name));
+      const failedFiles = (report.testResults ?? []).filter(result => result.status === 'failed').map(result => relative(process.cwd(), result.name)).filter(name => !name.startsWith('..') && /^[A-Za-z0-9_./[\]-]+\.tsx?$/.test(name));
       if (failedFiles.length) record.failedFiles = failedFiles;
       if (options.requireAll && (record.omitted !== 0 || record.tests < 1 || (options.playwright ? report.stats.unexpected : report.numFailedTests) !== 0)) status = 'FAIL';
     } catch { status = 'FAIL'; }
