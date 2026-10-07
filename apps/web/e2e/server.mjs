@@ -134,7 +134,10 @@ const child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev',
 });
 child.stdout.on('data', inspect); child.stderr.on('data', inspect);
 console.log('QA: fixtures locales listos; diagnósticos privados reducidos a indicadores.');
-for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, async () => {
+  if(nest)await nest.stop();
+  child.kill(signal);
+});
 child.on('exit', async code => {
   if(nest)await nest.stop();
   if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));

@@ -22,6 +22,7 @@ export type ApiClientOptions = {
   accessToken?: () => Promise<string | null>;
   timeoutMs?: number;
   fetch?: typeof globalThis.fetch;
+  invitationProxy?: { secret: string; clientIp: string };
 };
 type Input = { params?: object; query?: object; body?: unknown };
 type Operation = {
@@ -77,6 +78,11 @@ export class ApiTransport {
         headers.authorization = `Bearer ${token}`;
       }
       if (controller.signal.aborted) throw new ApiClientError(504, "request_timeout");
+      if (operationId === "previewInvitation" || operationId === "acceptInvitation" || operationId === "registerInvitation" || operationId === "claimInvitation") {
+        const proxy = this.options.invitationProxy;
+        if (!proxy?.secret || !proxy.clientIp || /[\r\n]/.test(proxy.secret + proxy.clientIp)) throw new ApiClientError(401, "authentication_required");
+        headers["x-asisteam-proxy"] = proxy.secret; headers["x-asisteam-client-ip"] = proxy.clientIp;
+      }
       if (body !== undefined) headers["content-type"] = "application/json";
       const response = await (this.options.fetch ?? globalThis.fetch)(url, {
         method: operation.method, headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }),

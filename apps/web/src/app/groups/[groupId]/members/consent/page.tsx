@@ -1,3 +1,4 @@
+import { invitationOperation } from "@/lib/invitations";
 import { notFound } from "next/navigation";
 import { getGuardianOnboarding } from "@/lib/wards";
 import { MembershipProgress } from "../pending/membership-review";
@@ -17,7 +18,7 @@ export default async function ManagedConsentsPage({ params, searchParams }: {
   const supabase = await createClient();
   const data = await getGuardianOnboarding(group.id, query.athlete, query.athlete ? 1 : page);
   if (query.athlete && !data.length) notFound();
-  const { data: activations, error: activationError } = await supabase.rpc("list_managed_activation_requests", { p_group_id: group.id, p_offset: (page - 1) * 50, p_athlete_user_id: query.athlete });
+  const { data: activations, error: activationError } = await invitationOperation(() => supabase.rpc("list_managed_activation_requests", { p_group_id: group.id, p_offset: (page - 1) * 50, p_athlete_user_id: query.athlete }), async api => (await api.listManagedActivations({params:{groupId:group.id},query:{page,athlete_user_id:query.athlete}})).data);
   if (activationError) throw new Error("No pudimos cargar las solicitudes de activación. Vuelve a intentarlo.");
   return <>
     <h1 className="text-2xl font-semibold">Consentimientos de mis pupilos</h1>

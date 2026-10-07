@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { MEMBER_MANAGEMENT_ERRORS, coachAssignmentSchema, managedActivationSchema, managedMemberUpdateSchema, memberStatusSchema } from "@asisteam/core";
+import { invitationOperation } from "@/lib/invitations";
 import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { sendInvitation } from "../invitations/new/actions";
@@ -18,7 +19,7 @@ export async function requestManagedActivation(input: unknown): Promise<MemberRe
     const client = await createClient();
     if (!(await client.auth.getUser()).data.user) return fail("authentication_required");
     const { group_id, membership_id } = parsed.data;
-    const { data, error } = await client.rpc("request_managed_activation", { p_group_id: group_id, p_membership_id: membership_id });
+    const { data, error } = await invitationOperation(() => client.rpc("request_managed_activation", { p_group_id: group_id, p_membership_id: membership_id }), async api => (await api.requestManagedActivation({params:{groupId:group_id,membershipId:membership_id}})).status);
     if (error) return fail(Object.hasOwn(MEMBER_MANAGEMENT_ERRORS, error.message) ? error.message : "unavailable");
     revalidatePath(`/groups/${group_id}/members/consent`);
     if (data === "CONSENT_PENDING") return { success: true, consentPending: true };

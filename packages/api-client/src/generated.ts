@@ -53,6 +53,33 @@ export class ApiClient extends ApiTransport {
   getWard(input: { params: operations["getWard"]["parameters"]["path"] }): Promise<operations["getWard"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getWard", input ?? {});
   }
+  sendInvitation(input: { body: operations["sendInvitation"]["requestBody"]["content"]["application/json"] }): Promise<operations["sendInvitation"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("sendInvitation", input ?? {});
+  }
+  previewInvitation(input: { body: operations["previewInvitation"]["requestBody"]["content"]["application/json"] }): Promise<operations["previewInvitation"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("previewInvitation", input ?? {});
+  }
+  acceptInvitation(input: { body: operations["acceptInvitation"]["requestBody"]["content"]["application/json"] }): Promise<operations["acceptInvitation"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("acceptInvitation", input ?? {});
+  }
+  registerInvitation(input: { body: operations["registerInvitation"]["requestBody"]["content"]["application/json"] }): Promise<operations["registerInvitation"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("registerInvitation", input ?? {});
+  }
+  claimInvitation(input: { body: operations["claimInvitation"]["requestBody"]["content"]["application/json"] }): Promise<operations["claimInvitation"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("claimInvitation", input ?? {});
+  }
+  listInvitations(input: { params: operations["listInvitations"]["parameters"]["path"]; query?: operations["listInvitations"]["parameters"]["query"] }): Promise<operations["listInvitations"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listInvitations", input ?? {});
+  }
+  requestManagedActivation(input: { params: operations["requestManagedActivation"]["parameters"]["path"] }): Promise<operations["requestManagedActivation"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("requestManagedActivation", input ?? {});
+  }
+  reviewManagedActivation(input: { params: operations["reviewManagedActivation"]["parameters"]["path"]; body: operations["reviewManagedActivation"]["requestBody"]["content"]["application/json"] }): Promise<operations["reviewManagedActivation"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("reviewManagedActivation", input ?? {});
+  }
+  listManagedActivations(input: { params: operations["listManagedActivations"]["parameters"]["path"]; query?: operations["listManagedActivations"]["parameters"]["query"] }): Promise<operations["listManagedActivations"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listManagedActivations", input ?? {});
+  }
   getSession(): Promise<operations["getSession"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getSession", {});
   }

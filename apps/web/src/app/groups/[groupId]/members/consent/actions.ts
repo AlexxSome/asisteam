@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { activationReviewSchema, managedActivationSchema, managedConsentSchema, MANAGED_MEMBER_ERROR_MESSAGES, MEMBER_MANAGEMENT_ERRORS } from "@asisteam/core";
+import { invitationOperation } from "@/lib/invitations";
 import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { sendInvitation } from "../../invitations/new/actions";
@@ -17,7 +18,7 @@ export async function reviewManagedActivation(input: unknown): Promise<{ success
   try {
     const client = await createClient();
     if (!(await client.auth.getUser()).data.user) return fail("authentication_required");
-    const { data, error } = await client.rpc("review_managed_activation", { p_request_id: parsed.data.request_id, p_accepted: parsed.data.accepted });
+    const { data, error } = await invitationOperation(() => client.rpc("review_managed_activation", { p_request_id: parsed.data.request_id, p_accepted: parsed.data.accepted }), api => api.reviewManagedActivation({params:{requestId:parsed.data.request_id},body:{accepted:parsed.data.accepted}}));
     if (error) return fail(Object.hasOwn(MEMBER_MANAGEMENT_ERRORS, error.message) ? error.message : "unavailable");
     // La decisión ya se confirmó en Postgres, aunque el envío posterior falle.
     approvalRecorded = parsed.data.accepted;

@@ -1,0 +1,64 @@
+{
+  "sourceCommit": "7cbf13d775c75cf1cf205fd26656e119ff1d4db9",
+  "date": "2026-10-07T19:35:35.885Z",
+  "environment": "local-synthetic",
+  "node": "v24.16.0",
+  "checks": [
+    {
+      "check": "invitations-http-real-final",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0,
+      "seconds": 5.82
+    },
+    {
+      "check": "next-nest-gotrue-invitations-e2e",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0,
+      "failed": 0,
+      "seconds": 16.01
+    },
+    {
+      "check": "qa-e2e-shutdown-nologin-restored",
+      "status": "PASS"
+    },
+    {
+      "check": "qa-startup-failure-role-login-password-restored",
+      "status": "PASS"
+    },
+    {
+      "check": "post-fixture-lint-typecheck",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all-after-fixture-fix",
+      "status": "FAIL",
+      "files": 35,
+      "tests": 1514,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failedTests": [
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "check": "pgtap-api-invitations-final",
+      "status": "PASS",
+      "tests": 11
+    }
+  ],
+  "externalResend": "SIMULATED",
+  "auth": "REAL_LOCAL_GOTRUE",
+  "readinessIncidents": [
+    {
+      "check": "bridge-qa-readiness",
+      "status": "FAIL",
+      "stage": "before-product-http",
+      "resolution": "CLI Edge runtime started on retry; QA deadline increased from45 to90seconds; final E2E/integration PASS."
+    }
+  ]
+}

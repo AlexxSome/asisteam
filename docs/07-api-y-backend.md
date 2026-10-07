@@ -563,3 +563,13 @@ El reenvío marca la fila previa EXPIRED y crea otra PENDING en la misma transac
 - RPC de reserva/conciliación privadas para service_role; ninguna acredita un pago desde el cliente. Capacidad activa solo tras evidencia de pago, snapshot legacy, locks y trigger de altas/reactivaciones.
 
 Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-suscripciones-saas.md](12-suscripciones-saas.md).
+
+## Migración de invitaciones/activación · MIG-09 (#153), 07-10-2026
+
+[Seguro] [Contrato y evidencia](migration/issue-153/README.md) actualizan el transporte de envío/reenvío/aceptación dirigida y claim MANAGED con ASISTEAM_TRANSPORT_INVITATIONS=nest. R1/R11/R12, ADMIN/apoderado, token SHA-256/7 días/un uso, cuota 50/día Chile y reservas/locks viven en SQL canónico. La lista ADMIN implementada tiene 10 filas por página; la lista de solicitudes tiene 50. La notación lógica anterior no describe las rutas HTTP reales, detalladas en OpenAPI/MIG-09.
+
+[Seguro] Nest emite y confirma la transacción antes de Resend, verifica sesión/consentimiento para writes autenticados y controla reserva/nonce para registro. Las wrappers privadas derivan actor de auth.uid(), con EXECUTE solo asisteam_api. El rol separado asisteam_invitation accede exclusivamente a cinco RPC de registro/ratelimit, sin tablas/ownership/BYPASSRLS. Los tipos DB se regeneraron sin cambios del esquema público.
+
+[Seguro] La frontera service_role de §6/AGENTS se conserva: invitation-auth es un bridge temporal limitado a GoTrue createUser, con secreto independiente y nonce efímero validado/consumido por trigger; no autoriza grupos, emite ni acepta por su cuenta. Nest nunca recibe service_role. Los endpoints legacy permanecen para reversión seleccionada, sin ejecución doble/fallback. Supabase Auth/trigger y retirada Edge/Auth continúan pendientes #162/#164.
+
+[Seguro] Los links ya emitidos conservan /invitations/:token y su hash/base; no se invalidan masivamente. Caducados/reutilizados no crean cuenta ni membresía. Fallo de correo deja PENDING visible, no éxito; revisión del apoderado confirmada permanece registrada aunque falle envío posterior. Consentimiento indisponible devuelve error temporal, sin confundirse con falta de consentimiento. Revocación manual sigue su RPC previa, fuera de las nueve operaciones portadas.

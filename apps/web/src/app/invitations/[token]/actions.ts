@@ -1,5 +1,8 @@
 "use server";
 
+import { ApiClient, ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { memberOperation } from "@/lib/members";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { invitationErrorMessages, invitationRegistrationSchema, invitationTokenSchema, loginSchema, managedClaimSchema,
@@ -17,6 +20,16 @@ async function invoke<T>(body: unknown, accessToken?: string): Promise<Result<T>
   // deben sanearlo en su proxy de entrada; nunca confiar en headers arbitrarios.
   const ip = incoming.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
   try {
+    if (moduleTransport("invitations") === "nest") {
+      const api = new ApiClient({ origin: process.env.ASISTEAM_API_ORIGIN ?? "", timeoutMs: 15000,
+        invitationProxy: { secret, clientIp: ip }, accessToken: async () => accessToken ?? null });
+      const input = body as { action: "preview" | "accept" | "register" | "claim"; token: string; registration?: unknown };
+      const value = input.action === "preview" ? await api.previewInvitation({body:{token:input.token}})
+        : input.action === "accept" ? await api.acceptInvitation({body:{token:input.token}})
+        : input.action === "claim" ? await api.claimInvitation({body:{token:input.token,registration:managedClaimSchema.parse(input.registration)}})
+        : await api.registerInvitation({body:{token:input.token,registration:invitationRegistrationSchema.parse(input.registration)}});
+      return {data:value as T};
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/accept-invitation`, {
       method: "POST", cache: "no-store", signal: AbortSignal.timeout(15_000),
       headers: { "Content-Type": "application/json", "x-asisteam-proxy": secret, "x-asisteam-client-ip": ip,
@@ -28,8 +41,8 @@ async function invoke<T>(body: unknown, accessToken?: string): Promise<Result<T>
       return { error: invitationErrorMessages[value.error?.code] ?? invitationErrorMessages.unavailable! };
     }
     return { data: value as T };
-  } catch {
-    return { error: invitationErrorMessages.unavailable! };
+  } catch (error) {
+    return { error: error instanceof ApiClientError ? invitationErrorMessages[error.error.code] ?? invitationErrorMessages.unavailable! : invitationErrorMessages.unavailable! };
   }
 }
 
@@ -61,9 +74,10 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: invitationErrorMessages.authentication_required! };
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return { error: invitationErrorMessages.authentication_required! };
-    const { data: acceptedTerms, error: consentError } = await supabase.rpc("has_account_consent");
-    if (consentError || acceptedTerms !== true) redirect(accountConsentPath(`/invitations/${token}`));
+    if (!session || session.user.id !== user.id) return { error: invitationErrorMessages.authentication_required! };
+    const { data: acceptedTerms, error: consentError } = await memberOperation(() => supabase.rpc("has_account_consent"), async api => (await api.getCurrentAccountConsent()).accepted);
+    if (consentError) return { error: invitationErrorMessages.unavailable! };
+    if (acceptedTerms !== true) redirect(accountConsentPath(`/invitations/${token}`));
     accepted = await invoke({ action: "accept", token }, session.access_token);
     if (accepted.error) return { error: accepted.error };
   }

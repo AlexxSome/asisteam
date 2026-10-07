@@ -11,6 +11,7 @@ const messages: Record<number, [string, string]> = {
   404: ['resource_not_found', 'El recurso no existe o no tienes acceso.'],
   405: ['method_not_allowed', 'El método no está permitido.'],
   408: ['request_timeout', 'La solicitud excedió el tiempo permitido.'],
+  410: ['invitation_expired', 'La invitación expiró. Solicita una nueva.'],
   409: ['state_conflict', 'La operación entra en conflicto con el estado actual.'],
   413: ['payload_too_large', 'La solicitud supera el tamaño permitido.'],
   422: ['business_rule_violation', 'No se cumplen las condiciones para realizar esta acción.'],

@@ -19,10 +19,18 @@ beforeEach(() => {
   mock.signIn.mockResolvedValue({ error: null });
   mock.rpc.mockResolvedValue({ data: true, error: null });
   mock.getUser.mockResolvedValue({ data: { user: { id: "auth-id" } } });
-  mock.getSession.mockResolvedValue({ data: { session: { access_token: "validated-session-token" } } });
+  mock.getSession.mockResolvedValue({ data: { session: { user:{id:"auth-id"}, access_token: "validated-session-token" } } });
   mock.fetch.mockResolvedValue(new Response(JSON.stringify({ group_id: "group-id", membership_status: "ACTIVE" })));
 });
 describe("aceptar invitación", () => {
+  it("indisponibilidad de consentimiento falla sin consumir ni redirigir a aceptación", async () => {
+    mock.rpc.mockResolvedValue({data:null,error:{code:"503",message:"private-error"}});
+    expect(await acceptInvitation(token,"session")).toEqual({error:expect.stringContaining("No pudimos procesar")});expect(mock.fetch).not.toHaveBeenCalled();
+  });
+  it("sesión mezclada con otro usuario falla antes de consumir", async () => {
+    mock.getSession.mockResolvedValue({data:{session:{user:{id:"other"},access_token:"private"}}});
+    expect(await acceptInvitation(token,"session")).toHaveProperty("error");expect(mock.rpc).not.toHaveBeenCalled();expect(mock.fetch).not.toHaveBeenCalled();
+  });
   it("cuenta existente sin evidencia acepta condiciones antes de consumir la invitación", async () => {
     mock.rpc.mockResolvedValue({ data: false, error: null });
     await expect(acceptInvitation(token, "session")).rejects.toThrow(`redirect:/accept-terms?return_to=${encodeURIComponent(`/invitations/${token}`)}`);
