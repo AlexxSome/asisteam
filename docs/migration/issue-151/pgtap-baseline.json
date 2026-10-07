@@ -1,0 +1,13 @@
+{
+  "base": "497d76aa067f414e54e31bcd1707a36c024d2c67",
+  "environment": "local-synthetic",
+  "method": "git show base:supabase/tests/send_invitations.test.sql -> temporary file -> supabase test db",
+  "test": "send_invitations.test.sql",
+  "status": "FAIL",
+  "failed": 1,
+  "tests": 51,
+  "case": 15,
+  "assertion": "rechazos no consumen cuota",
+  "supabaseDiffFiles": 0,
+  "note": "Preexisting local failure; required backend gate is not PASS."
+}

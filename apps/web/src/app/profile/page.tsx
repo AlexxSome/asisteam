@@ -3,7 +3,7 @@ import { SUPPORT_EMAIL, SUPPORT_REQUEST_URLS } from "@/lib/support";
 import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import type { OwnProfile } from "@asisteam/core";
+import { getProfilePageData } from "@/lib/profile";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForm } from "./profile-form";
 import { AvatarPermissions, type AvatarPermission } from "./avatar-permissions";
@@ -13,15 +13,10 @@ export default async function ProfilePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-  const { data: profile } = await supabase.from("users").select("id, full_name, email, phone, birthdate, avatar_url").eq("auth_user_id", user.id).single<OwnProfile>();
-  if (!profile) return <AppShell><div className="mx-auto max-w-xl space-y-6"><h1>Mi perfil</h1><p role="alert">No pudimos cargar tu perfil. Vuelve a intentarlo.</p><Link href="/groups">Volver</Link></div></AppShell>;
-  const [{ data: allowed }, { data: requests }, { data: adminRoles }, { data: avatarPermissions }] = await Promise.all([
-    supabase.rpc("can_upload_avatar"),
-    supabase.from("birthdate_change_requests").select("id, requested_birthdate, status").eq("user_id", profile.id).order("created_at", { ascending: false }).limit(1),
-    supabase.from("memberships").select("id").eq("user_id", profile.id).eq("role", "ADMIN").eq("status", "ACTIVE").limit(1),
-    supabase.rpc("list_avatar_permissions"),
-  ]);
-  const request = requests?.[0];
+  let data;
+  try { data = await getProfilePageData(user.id); } catch { data = null; }
+  if (!data) return <AppShell><div className="mx-auto max-w-xl space-y-6"><h1>Mi perfil</h1><p role="alert">No pudimos cargar tu perfil. Vuelve a intentarlo.</p><Link href="/groups">Volver</Link></div></AppShell>;
+  const { profile, allowed, request, hasAdminRole, avatarPermissions } = data;
   return <AppShell><div className="mx-auto max-w-xl space-y-6">
     <Link href="/groups" className="text-sm underline">Volver a mis grupos</Link>
     <header><h1 className="text-2xl font-semibold">Mi perfil</h1><p className="mt-2 text-muted-foreground">Tus datos son los mismos en todos tus grupos.</p></header>
@@ -51,6 +46,6 @@ export default async function ProfilePage() {
       <p className="text-small text-muted-foreground">Estos enlaces abren tu aplicación de correo; debes enviar el mensaje para iniciar la solicitud. No descargan datos, eliminan tu cuenta ni revocan permisos automáticamente.</p>
       <p className="break-words text-small">Si no se abre tu correo, escribe a <a href={SUPPORT_REQUEST_URLS.help} className="underline underline-offset-4">{SUPPORT_EMAIL}</a>. No envíes contraseñas ni documentos o datos sensibles de menores en el primer mensaje.</p>
     </section>
-    {!!adminRoles?.length && <Link href="/profile/birthdate-requests" className="block underline">Revisar correcciones de edad de mis grupos</Link>}
+    {hasAdminRole && <Link href="/profile/birthdate-requests" className="block underline">Revisar correcciones de edad de mis grupos</Link>}
   </div></AppShell>;
 }

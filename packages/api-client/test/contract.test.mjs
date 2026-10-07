@@ -11,10 +11,10 @@ const page = { data: [group], pagination: { page: 1, page_size: 50, total: 1 } }
 const response = (payload, status = 200, headers = {}) => new Response(JSON.stringify(payload), { status, headers });
 const options = (fetch, extra = {}) => ({ origin: 'http://127.0.0.1:3001', accessToken: async () => 'synthetic-only', fetch, ...extra });
 
-test('OpenAPI/generador son deterministas, con DTO estrictos y operaciones contract-only explícitas', async () => {
+test('OpenAPI/generador son deterministas, con DTO estrictos y estado de implementación explícito', async () => {
   const spec = document();
   assert.equal(spec.openapi, '3.0.3');
-  assert.equal(spec.paths['/api/v1/groups'].post['x-implementation-status'], 'contract-only');
+  assert.equal(spec.paths['/api/v1/groups'].post['x-implementation-status'], 'implemented');
   assert.deepEqual(spec.paths['/api/v1/me'].get.security, [{ bearerAuth: [] }]);
   assert.equal(spec.components.schemas.OwnProfile.additionalProperties, false);
   assert.equal(spec.components.schemas.CreateGroup.properties.name.minLength, 3);

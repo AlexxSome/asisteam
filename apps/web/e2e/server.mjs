@@ -1,3 +1,4 @@
+import { startQaNest } from './nest-runtime.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
@@ -126,14 +127,16 @@ function inspect(chunk) {
   tail = text.slice(-4096);
   persist();
 }
+const nest = process.env.ASISTEAM_QA_NEST === '1' ? await startQaNest(config) : null;
 const child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '--hostname', '127.0.0.1', '--port', '3120'], {
-  env: { ...process.env, NEXT_PUBLIC_SUPABASE_URL: config.API_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY: config.ANON_KEY,
+  env: { ...process.env, ...nest?.env, NEXT_PUBLIC_SUPABASE_URL: config.API_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY: config.ANON_KEY,
     NEXT_PUBLIC_APP_URL: 'http://127.0.0.1:3120', ASISTEAM_SITE_URL: 'http://127.0.0.1:3120', NEXT_TELEMETRY_DISABLED: '1', ASISTEAM_QA: '1' }, stdio: ['ignore', 'pipe', 'pipe'],
 });
 child.stdout.on('data', inspect); child.stderr.on('data', inspect);
 console.log('QA: fixtures locales listos; diagnósticos privados reducidos a indicadores.');
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
-child.on('exit', code => {
+child.on('exit', async code => {
+  if(nest)await nest.stop();
   if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
   process.exit(code ?? 1);
 });

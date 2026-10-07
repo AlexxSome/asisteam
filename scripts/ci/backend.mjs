@@ -7,6 +7,7 @@ await suite('backend', async () => {
   await check('database-migrations', 'pnpm', ['exec', 'supabase', 'migration', 'up', '--local']);
   await check('api-session-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/api']);
   await check('api-session-rls-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/session-rls.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
+  await check('api-groups-profile-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/groups-profile.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('portability-rehearsal', 'pnpm', ['migration:portability']);
   verify('portability-no-omissions', () => {
     const report = JSON.parse(readFileSync('.ci-results/portability.json', 'utf8'));

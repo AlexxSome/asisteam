@@ -1,3 +1,6 @@
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -17,6 +20,15 @@ export const getMyGroups = cache(async () => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+  if (moduleTransport("groups") === "nest") {
+    try {
+      const result = await createServerApiClient().listMyGroups({ query: { page: 1, page_size: 100 } });
+      return { userId: user.id, groups: result.data as MyGroup[] };
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 401) redirect("/login");
+      throw new Error("No pudimos cargar tus grupos. Vuelve a intentarlo.", { cause: error });
+    }
+  }
   const { data, error } = await supabase.from("v_my_groups")
     .select("id, name, sport, logo_url, roles").order("name").order("id");
   if (error) throw new Error("No pudimos cargar tus grupos. Vuelve a intentarlo.");
@@ -33,6 +45,16 @@ export const getGroup = cache(async (groupId: string) => {
   const { groups } = await getMyGroups();
   const membership = groups.find((group) => group.id === groupId.toLowerCase());
   if (!membership) notFound();
+  if (moduleTransport("groups") === "nest") {
+    try {
+      const data = await createServerApiClient().getGroup({ params: { groupId } });
+      return { invite_code: null, settings: null, settings_updated_at: null, settings_updated_by_name: null, ...data, roles: [...data.roles] };
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 404) notFound();
+      if (error instanceof ApiClientError && error.status === 401) redirect("/login");
+      throw new Error("No pudimos cargar el grupo. Vuelve a intentarlo.", { cause: error });
+    }
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.from("v_group_detail")
     .select("id, name, sport, description, logo_url, roles, invite_code, settings, can_view_group_stats, settings_updated_at, settings_updated_by_name")

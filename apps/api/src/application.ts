@@ -7,13 +7,14 @@ import type { Server } from 'node:http';
 import { CONFIG, type RuntimeConfig } from './config.js';
 import { SessionController, SessionGuard, TokenVerifier } from './auth.js';
 import { Database } from './database.js';
+import { GroupsProfileController } from './groups-profile.js';
 import { HealthController } from './health.js';
 import { SafeLogger } from './logger.js';
 import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [HealthController, SessionController],
+    controllers: [HealthController, SessionController, GroupsProfileController],
     providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database, TokenVerifier, SessionGuard],
   })
   class RuntimeModule {}

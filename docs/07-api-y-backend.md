@@ -2,20 +2,22 @@
 
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 08-reportes-y-estadisticas.md, 11-legal-seguridad-privacidad.md
 
-[Seguro] **MIG-01 (#145, 2026-10-06):** [matriz de contratos y destinos Nest propuestos](migration/issue-145/contracts.md), con consumidor, firma vigente, permiso, efecto, prueba y responsable. Las rutas Nest de producto todavía no existen; el contrato actual y las historias pendientes se distinguen en el [registro de decisiones](migration/issue-145/README.md).
+[Seguro] **MIG-01 (#145, 2026-10-06):** [matriz de contratos y destinos Nest propuestos](migration/issue-145/contracts.md), con consumidor, firma vigente, permiso, efecto, prueba y responsable. En el corte MIG-01 aún no había rutas Nest de producto; el contrato actual y las historias pendientes se distinguen en el [registro de decisiones](migration/issue-145/README.md).
 
 [Seguro] **MIG-02 (#146, 2026-10-07):** [base ejecutable Nest/Node](migration/issue-146/README.md) con `apps/api`, sondas `/health` y `/ready`, pool pg, errores/logs seguros y contenedor probado localmente. Solo la infraestructura HTTP está implementada; las operaciones de producto siguen en Supabase. CI/staging, OpenAPI y sesión/RLS corresponden a #147–#149.
 
-[Seguro] **MIG-04 (#148, 2026-10-07):** [OpenAPI/client/adaptador Next](migration/issue-148/README.md) especifica el primer contrato grupos/perfil y añade `/api/v1/health` y `/api/v1/ready` reales. Las operaciones de dominio figuran `contract-only`; La sesión/RLS se concreta en MIG-05; la migración de dominio #151 sigue pendiente. Generación y divergencia forman parte de CI; la bandera por módulo conserva un ejecutor y el backend actual sigue atendiendo Supabase.
+[Seguro] **MIG-04 (#148, 2026-10-07):** [OpenAPI/client/adaptador Next](migration/issue-148/README.md) especifica el primer contrato grupos/perfil y añade `/api/v1/health` y `/api/v1/ready` reales. En el corte MIG-04 las operaciones de dominio figuraban `contract-only`; La sesión/RLS se concreta en MIG-05; la implementación de grupos/perfil se registra después en MIG-07. Generación y divergencia forman parte de CI; la bandera por módulo conserva un ejecutor y el backend actual sigue atendiendo Supabase.
 
 
-[Seguro] **MIG-05 (#149, 2026-10-07):** [sesión temporal Nest y contexto SQL](migration/issue-149/README.md) implementa `GET /api/v1/auth/session` → `{user_id}` y verificación Supabase/JWKS/GoTrue, perfil ACTIVE, revocación y transacción en una sola conexión `asisteam_api` sin ownership/BYPASSRLS. Los guards de membresía ACTIVE y proyecciones por rol se reutilizarán en #151–#160; las operaciones de dominio de la tabla siguen en Supabase. OpenAPI distingue sesión implementada y handlers `contract-only`. El [runbook API](../apps/api/README.md#sesión-temporal-y-rol-postgresql--mig-05) exige credenciales externas por rol, emisor fijo y configuración conjunta Auth/base; jobs/webhook no heredan permisos API. Tipos regenerados sin cambio de esquema público; pruebas RLS específicas verdes y un fallo pgTAP preexistente documentado.
+[Seguro] **MIG-05 (#149, 2026-10-07):** [sesión temporal Nest y contexto SQL](migration/issue-149/README.md) implementa `GET /api/v1/auth/session` → `{user_id}` y verificación Supabase/JWKS/GoTrue, perfil ACTIVE, revocación y transacción en una sola conexión `asisteam_api` sin ownership/BYPASSRLS. Los guards de membresía ACTIVE y proyecciones por rol se reutilizarán en #151–#160; las operaciones de dominio de la tabla siguen en Supabase. Ese corte distinguía sesión implementada y handlers `contract-only`; MIG-07 actualiza grupos/perfil. El [runbook API](../apps/api/README.md#sesión-temporal-y-rol-postgresql--mig-05) exige credenciales externas por rol, emisor fijo y configuración conjunta Auth/base; jobs/webhook no heredan permisos API. Tipos regenerados sin cambio de esquema público; pruebas RLS específicas verdes y un fallo pgTAP preexistente documentado.
 
 ---
 
+[Seguro] **MIG-07 (#151, 2026-10-07):** [grupos/perfil y selector por Nest](migration/issue-151/README.md) implementa el primer recorrido de dominio con sesión temporal, consentimiento vigente, RLS, DTO por rol y RPC canónicas. OpenAPI/SDK generados y banderas GROUPS/PROFILE permiten el recorrido Next→Nest→PostgreSQL o el transporte Supabase sobre la misma base, sin fallback ni writes duplicados. Código/menores/revisión de edad/permisos de imagen conservan sus invariantes. Auth/Storage y otros módulos permanecen en su migración separada; evidencia local no acredita despliegue cloud.
+
 ## 1. Enfoque general del backend
 
-El stack elegido (ver 06-arquitectura-y-stack.md) es **Supabase (PostgreSQL 17 + Auth + RLS + PostgREST + Edge Functions)**. Por lo tanto Asisteam **no expone una API REST artesanal**: la "API" es la combinación de tres capas, con una convención estricta de equipo adoptada desde el día 1:
+El stack base (ver 06-arquitectura-y-stack.md) es **Supabase (PostgreSQL 17 + Auth + RLS + PostgREST + Edge Functions)**. MIG-07 incorpora handlers Nest para grupos/perfil bajo banderas; reutilizan la misma base, RLS y RPC. Los módulos aún pendientes conservan la combinación de tres capas original y su convención de equipo:
 
 | Capa | Uso | Regla |
 |---|---|---|

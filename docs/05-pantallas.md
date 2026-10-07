@@ -210,3 +210,9 @@ Se ejecutaron los scripts reales mediante `corepack pnpm --filter @asisteam/core
 [QA de cierre #100](qa/issue-100/README.md) amplía los recorridos de #120 con registro e invitación reales locales, cadena de menor/apoderado/consentimiento/aprobación, alta MANAGED, edición de series, lote de asistencia, QR, recuperación de contraseña y fallo del servidor. No agrega rutas: se conservan las 39 páginas del inventario.
 
 Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la semántica de grupos etiquetados en acceso social, aceptación de invitación, preview de logo y resumen de suscripción. La documentación de AUT-04 se ajusta al contrato existente y probado. La validación humana con lector, zoom nativo y tiempo de asistencia a una mano permanece **PENDIENTE**; este informe no cierra por sí solo la épica.
+
+## Migración de transporte de grupos/perfil · MIG-07 (#151), 07-10-2026
+
+[Seguro] [Evidencia MIG-07](migration/issue-151/README.md) registra GRP-01/02/03/04, creación/ingreso y PRF-01 (incluida revisión ADMIN) consumiendo Nest bajo GROUPS/PROFILE=nest. Se conservan las 39 páginas, códigos/rutas y estado visible: confirmación de guardado, error sin éxito, fecha pendiente y permisos de imagen. Las otras capacidades de una página (agenda/miembros/asistencia/billing) siguen sus módulos/transportes; esta entrega no declara esas operaciones migradas.
+
+[Seguro] El selector conserva grupo/cookie por usuario; middleware vuelve a comprobar membership antes del streaming, con 404 para ajeno/inactivo/PENDING y permisos de gestión. E2E real local pasó 8 pruebas a 375 px: cuatro roles/multirol, selector, restricciones y guardar configuración/perfil; axe acotado. Storage mantiene autorización temporal. El retorno a Supabase usa la misma base y no repite una acción fallida o de resultado incierto.

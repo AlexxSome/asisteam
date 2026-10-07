@@ -1,3 +1,5 @@
+import { ApiClient, ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { canManageAttendance } from "@asisteam/core";
@@ -82,9 +84,24 @@ export async function middleware(request: NextRequest) {
   }
   if (segments[1] === "groups" && segments[2] && segments[2] !== "new") {
     const groupId = segments[2];
-    const { data: group } = user && isGroupId(groupId)
-      ? await supabase.from("v_my_groups").select("id, roles").eq("id", groupId).maybeSingle()
-      : { data: null };
+    let group: { id: string | null; roles: string[] | null } | null = null;
+    if (user && isGroupId(groupId)) {
+      if (moduleTransport("groups") === "nest") {
+        try {
+          const client = new ApiClient({ origin: process.env.ASISTEAM_API_ORIGIN ?? "", accessToken: async () => {
+            const { data, error } = await supabase.auth.getSession();
+            return !error && data.session?.user.id === user.id ? data.session.access_token : null;
+          } });
+          group = await client.getGroup({ params: { groupId } });
+        } catch (error) {
+          if (!(error instanceof ApiClientError) || ![401, 404].includes(error.status)) {
+            const unavailable = new NextResponse("No pudimos cargar el grupo. Vuelve a intentarlo.", { status: 503, headers: { "Cache-Control": "private, no-store" } });
+            response.cookies.getAll().forEach(cookie => unavailable.cookies.set(cookie));
+            return unavailable;
+          }
+        }
+      } else { group = (await supabase.from("v_my_groups").select("id, roles").eq("id", groupId).maybeSingle()).data; }
+    }
     const forbidden = () => {
       const denied = new NextResponse(resourceResponseHtml(403), {
         status: 403, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store" },

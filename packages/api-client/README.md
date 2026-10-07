@@ -52,3 +52,9 @@ const result = await runModuleOperation("groups", {
 [Seguro] Este PR entrega el adaptador/selector reutilizable; las páginas/acciones existentes conservan Supabase y aún no invocan el selector. Activación de grupos/perfil y su integración a UI corresponden a #151 después de #149. No establecer `nest` en producción antes de esos gates. Las demás banderas son puntos de integración; no acreditan SDK/handler completo de esos módulos. Volver a `supabase` selecciona el ejecutor anterior para futuras operaciones sobre la misma base; no duplica una operación fallida ni revierte datos.
 
 [Seguro] Referencias de generación: [openapi-typescript](https://openapi-ts.dev/cli), [zod-to-json-schema](https://github.com/StefanTerdell/zod-to-json-schema). Alcance/evidencia: [MIG-04](../../docs/migration/issue-148/README.md).
+
+## Grupos/perfil implementados · MIG-07 (#151)
+
+[Seguro] Las operaciones de grupos/perfil de OpenAPI ahora figuran `implemented`: listado/detalle, crear/editar, settings, rotación, ingreso/autoalta, perfil/contexto, revisión de edad y permiso de imagen. [Evidencia y rollback](../../docs/migration/issue-151/README.md). Los consumidores Next seleccionan GROUPS/PROFILE usando configuración exclusivamente del servidor. Storage mantiene su adaptador temporal, y las otras capacidades de las páginas conservan su transporte anterior.
+
+[Seguro] Supabase sigue siendo el default; para el recorrido nuevo, activar ASISTEAM_TRANSPORT_GROUPS y ASISTEAM_TRANSPORT_PROFILE en nest con los orígenes de la tabla. El middleware utiliza la sesión SSR validada para comprobar detalle de grupo antes del streaming; los Server Components/Actions usan el adaptador server-only. La prueba de paridad alterna Nest/PostgREST sobre PostgreSQL real y comprueba un único grupo/perfil; no es un despliegue cloud.
