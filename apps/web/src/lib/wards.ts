@@ -1,6 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import type { Database } from "@asisteam/db";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
+import { ApiClientError } from "@asisteam/api-client";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
@@ -41,6 +45,10 @@ export async function getMyWards(page = 1, pageSize = 50) {
   const client = await createClient();
   const { data: { user } } = await client.auth.getUser();
   if (!user) redirect("/login");
+  if (moduleTransport("members") === "nest") {
+    const result = await createServerApiClient().listMyWards({ query: { page } });
+    return { wards: result.data, hasNext: result.has_next };
+  }
   const { data, error } = await client.from("v_my_wards").select(wardColumns)
     .order("full_name").order("athlete_user_id").range((page - 1) * pageSize, page * pageSize);
   if (error) throw loadError();
@@ -52,6 +60,10 @@ export async function getGroupWards(groupId: string, page = 1) {
   const client = await createClient();
   const { data: { user } } = await client.auth.getUser();
   if (!user) redirect("/login");
+  if (moduleTransport("members") === "nest") {
+    const result = await createServerApiClient().listMyWards({ query: { page, group_id: groupId } });
+    return { wards: result.data.map(ward => ({ athlete_user_id: ward.athlete_user_id, full_name: ward.full_name })), hasNext: result.has_next };
+  }
   // Filtrar en la vista antes de paginar: otros grupos no desplazan a estos pupilos.
   const { data: memberships, error } = await client.from("v_my_ward_groups")
     .select("athlete_user_id").eq("group_id", groupId).eq("membership_status", "ACTIVE")
@@ -73,6 +85,10 @@ export async function getWard(athleteUserId: string) {
   const client = await createClient();
   const { data: { user } } = await client.auth.getUser();
   if (!user) notFound();
+  if (moduleTransport("members") === "nest") {
+    try { return await createServerApiClient().getWard({ params: { athleteUserId } }); }
+    catch (error) { if (error instanceof ApiClientError && error.status === 404) notFound(); throw loadError(); }
+  }
   const { data, error } = await client.from("v_my_wards").select(wardColumns)
     .eq("athlete_user_id", athleteUserId).maybeSingle();
   if (error) throw loadError();
@@ -87,9 +103,9 @@ export const getGuardianOnboarding = cache(async (groupId: string, athleteUserId
   if (!group.roles.includes("GUARDIAN")) notFound();
   if (athleteUserId !== undefined && !isGroupId(athleteUserId)) notFound();
   const client = await createClient();
-  const { data, error } = await client.rpc("list_membership_onboarding", {
+  const { data, error } = await memberOperation(() => client.rpc("list_membership_onboarding", {
     p_group_id: group.id, p_as_guardian: true, p_athlete_user_id: athleteUserId, p_offset: (page - 1) * 50,
-  });
+  }), async api => (await api.listMembershipOnboarding({ query: { group_id: group.id, as_guardian: true, athlete_user_id: athleteUserId, page } })).data);
   if (error) throw new Error("No pudimos cargar los consentimientos. Vuelve a intentarlo.");
   return data ?? [];
 });

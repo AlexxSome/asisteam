@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { GUARDIANSHIP_ERROR_MESSAGES, guardianshipIdSchema, guardianshipSchema } from "@asisteam/core";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 import { sendInvitation } from "../invitations/new/actions";
@@ -20,10 +21,10 @@ export async function createGuardianship(groupId: string, input: unknown): Promi
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("authentication_required");
   try {
-    const { data, error } = await supabase.rpc("create_guardianship", {
+    const { data, error } = await memberOperation(() => supabase.rpc("create_guardianship", {
       p_group_id: groupId, p_athlete_user_id: parsed.data.athlete_user_id,
       p_full_name: parsed.data.full_name, p_email: parsed.data.email, p_relationship: parsed.data.relationship,
-    });
+    }), async api => (await api.createGuardianship({ params: { groupId }, body: parsed.data })).guardianship_id);
     if (error) return fail(Object.hasOwn(GUARDIANSHIP_ERROR_MESSAGES, error.message) ? error.message : "unavailable");
     const id = guardianshipIdSchema.safeParse(data);
     if (!id.success) return fail("unavailable");

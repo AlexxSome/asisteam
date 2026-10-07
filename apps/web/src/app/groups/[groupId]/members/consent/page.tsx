@@ -25,7 +25,7 @@ export default async function ManagedConsentsPage({ params, searchParams }: {
     <p>El consentimiento de datos, la membresía activa, el acceso con contraseña y la autorización de imagen son decisiones diferentes.</p>
     {!data.some(ward => ward.can_consent) && <p>No tienes consentimientos de datos pendientes en esta página.</p>}
     {data.map(ward => <section key={ward.membership_id} className="space-y-3">
-      {ward.can_consent ? <ManagedConsentForm membershipId={ward.membership_id} billingGroupId={group.roles.includes("ADMIN") ? group.id : undefined} fullName={ward.full_name} relationship={ward.relationship} managedEnrollment={ward.requires_managed_consent} />
+      {ward.can_consent ? <ManagedConsentForm membershipId={ward.membership_id} billingGroupId={group.roles.includes("ADMIN") ? group.id : undefined} fullName={ward.full_name} relationship={ward.relationship ?? ""} managedEnrollment={ward.requires_managed_consent} />
         : <><h3 className="text-lg font-semibold">{ward.full_name}</h3><MembershipProgress groupId={group.id} member={ward} audience="guardian" /></>}
     </section>)}
     <h2 className="text-xl font-semibold">Activación de cuentas propias</h2>

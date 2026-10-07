@@ -2,6 +2,57 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  listGroupMembers(input: { params: operations["listGroupMembers"]["parameters"]["path"]; query?: operations["listGroupMembers"]["parameters"]["query"] }): Promise<operations["listGroupMembers"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listGroupMembers", input ?? {});
+  }
+  createManagedMember(input: { params: operations["createManagedMember"]["parameters"]["path"]; body: operations["createManagedMember"]["requestBody"]["content"]["application/json"] }): Promise<operations["createManagedMember"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("createManagedMember", input ?? {});
+  }
+  updateManagedMember(input: { params: operations["updateManagedMember"]["parameters"]["path"]; body: operations["updateManagedMember"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateManagedMember"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("updateManagedMember", input ?? {});
+  }
+  approveMembership(input: { params: operations["approveMembership"]["parameters"]["path"] }): Promise<operations["approveMembership"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("approveMembership", input ?? {});
+  }
+  rejectMembership(input: { params: operations["rejectMembership"]["parameters"]["path"] }): Promise<operations["rejectMembership"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("rejectMembership", input ?? {});
+  }
+  deactivateMembership(input: { params: operations["deactivateMembership"]["parameters"]["path"] }): Promise<operations["deactivateMembership"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("deactivateMembership", input ?? {});
+  }
+  reactivateMembership(input: { params: operations["reactivateMembership"]["parameters"]["path"] }): Promise<operations["reactivateMembership"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("reactivateMembership", input ?? {});
+  }
+  assignMemberCoach(input: { params: operations["assignMemberCoach"]["parameters"]["path"] }): Promise<operations["assignMemberCoach"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("assignMemberCoach", input ?? {});
+  }
+  listMembershipOnboarding(input?: { query?: operations["listMembershipOnboarding"]["parameters"]["query"] }): Promise<operations["listMembershipOnboarding"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listMembershipOnboarding", input ?? {});
+  }
+  consentMembershipData(input: { params: operations["consentMembershipData"]["parameters"]["path"]; body: operations["consentMembershipData"]["requestBody"]["content"]["application/json"] }): Promise<operations["consentMembershipData"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("consentMembershipData", input ?? {});
+  }
+  createGuardianship(input: { params: operations["createGuardianship"]["parameters"]["path"]; body: operations["createGuardianship"]["requestBody"]["content"]["application/json"] }): Promise<operations["createGuardianship"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("createGuardianship", input ?? {});
+  }
+  listGuardianshipAthletes(input: { params: operations["listGuardianshipAthletes"]["parameters"]["path"]; query?: operations["listGuardianshipAthletes"]["parameters"]["query"] }): Promise<operations["listGuardianshipAthletes"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listGuardianshipAthletes", input ?? {});
+  }
+  getPendingSummary(input: { params: operations["getPendingSummary"]["parameters"]["path"] }): Promise<operations["getPendingSummary"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getPendingSummary", input ?? {});
+  }
+  getCurrentAccountConsent(): Promise<operations["getCurrentAccountConsent"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getCurrentAccountConsent", {});
+  }
+  acceptAccountTerms(input: { body: operations["acceptAccountTerms"]["requestBody"]["content"]["application/json"] }): Promise<operations["acceptAccountTerms"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("acceptAccountTerms", input ?? {});
+  }
+  listMyWards(input?: { query?: operations["listMyWards"]["parameters"]["query"] }): Promise<operations["listMyWards"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listMyWards", input ?? {});
+  }
+  getWard(input: { params: operations["getWard"]["parameters"]["path"] }): Promise<operations["getWard"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getWard", input ?? {});
+  }
   getSession(): Promise<operations["getSession"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getSession", {});
   }

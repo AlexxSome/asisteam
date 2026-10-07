@@ -58,3 +58,9 @@ const result = await runModuleOperation("groups", {
 [Seguro] Las operaciones de grupos/perfil de OpenAPI ahora figuran `implemented`: listado/detalle, crear/editar, settings, rotación, ingreso/autoalta, perfil/contexto, revisión de edad y permiso de imagen. [Evidencia y rollback](../../docs/migration/issue-151/README.md). Los consumidores Next seleccionan GROUPS/PROFILE usando configuración exclusivamente del servidor. Storage mantiene su adaptador temporal, y las otras capacidades de las páginas conservan su transporte anterior.
 
 [Seguro] Supabase sigue siendo el default; para el recorrido nuevo, activar ASISTEAM_TRANSPORT_GROUPS y ASISTEAM_TRANSPORT_PROFILE en nest con los orígenes de la tabla. El middleware utiliza la sesión SSR validada para comprobar detalle de grupo antes del streaming; los Server Components/Actions usan el adaptador server-only. La prueba de paridad alterna Nest/PostgREST sobre PostgreSQL real y comprueba un único grupo/perfil; no es un despliegue cloud.
+
+## Integrantes/apoderados/consentimientos implementados · MIG-08 (#152)
+
+[Seguro] [Contrato, fuentes SQL y evidencia](../../docs/migration/issue-152/README.md) registran 17 operaciones `implemented` de MEMBERS. DTO ADMIN de nómina incluye PII autorizado; onboarding y pupilos solo proyectan datos autorizados, sin email/teléfono/fecha/notas de terceros. Filtros opcionales `undefined` se omiten del querystring; `false`, cadenas y defaults válidos se conservan.
+
+[Seguro] `ASISTEAM_TRANSPORT_MEMBERS=nest` selecciona un ejecutor por operación; el default es Supabase. `lib/members` normaliza errores HTTP a códigos estables para los consumidores existentes sin usar mensajes remotos. Error/timeout no invoca el otro write. El middleware/aceptación/callback usan la misma selección. Invitación y claim de credenciales conservan #153; una pantalla puede tener operaciones de ambos módulos sin repetir ninguna.

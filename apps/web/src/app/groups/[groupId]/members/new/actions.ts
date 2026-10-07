@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { MANAGED_MEMBER_ERROR_MESSAGES, managedMemberSchema, managedMemberResultSchema, type ManagedMemberResult } from "@asisteam/core";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 import { sendInvitation } from "../../invitations/new/actions";
@@ -19,11 +20,11 @@ export async function createManagedMember(groupId: string, input: unknown): Prom
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("authentication_required");
   try {
-    const { data, error } = await supabase.rpc("create_managed_member", {
+    const { data, error } = await memberOperation(() => supabase.rpc("create_managed_member", {
       p_group_id: groupId, p_full_name: parsed.data.full_name,
       p_birthdate: parsed.data.birthdate, p_email: parsed.data.email || undefined,
       p_guardian: parsed.data.guardian,
-    });
+    }), api => api.createManagedMember({ params: { groupId }, body: parsed.data }));
     if (error) return fail(Object.hasOwn(MANAGED_MEMBER_ERROR_MESSAGES, error.message) ? error.message : "unavailable");
     const member = managedMemberResultSchema.safeParse(data);
     if (!member.success) return fail("unavailable");

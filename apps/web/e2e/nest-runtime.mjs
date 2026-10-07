@@ -23,6 +23,6 @@ export async function startQaNest(config) {
     sql("alter role asisteam_api login password '"+password+"';");
     app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+password+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:config.API_URL+'/auth/v1',SUPABASE_AUTH_PUBLIC_KEY:config.ANON_KEY}),new SafeLogger(()=>{}));
     await app.listen(0,'127.0.0.1');
-    return { env: { ASISTEAM_API_ORIGIN: await app.getUrl(), ASISTEAM_API_SUPABASE_URL: config.API_URL, ASISTEAM_TRANSPORT_GROUPS:'nest',ASISTEAM_TRANSPORT_PROFILE:'nest' }, stop };
+    return { env: { ASISTEAM_API_ORIGIN: await app.getUrl(), ASISTEAM_API_SUPABASE_URL: config.API_URL, ASISTEAM_TRANSPORT_GROUPS:'nest',ASISTEAM_TRANSPORT_PROFILE:'nest',ASISTEAM_TRANSPORT_MEMBERS:'nest' }, stop };
   } catch(error) { await stop(); throw new Error('No se pudo iniciar Nest para QA.',{cause:error}); }
 }

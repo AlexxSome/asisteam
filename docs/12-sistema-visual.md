@@ -145,3 +145,9 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 [Seguro] [MIG-07](migration/issue-151/README.md) conserva GroupForm, toggles, ProfileForm, selector, revisión de edad y AvatarPermissions con sus estados actuales. Guardar exitosamente confirma/refresca; error/timeout no muestra éxito ni ejecuta fallback; fecha minor→adulto pendiente mantiene el valor anterior hasta confirmación de todos los grupos. Cuando el middleware no puede comprobar el grupo por indisponibilidad de Nest responde 503 con mensaje seguro y no-store; no lo confunde con ausencia de membresía.
 
 [Seguro] E2E Next→Nest→PostgreSQL/GoTrue pasó 8 pruebas a 375 px, incluyendo layout/axe, navegación por cuatro roles/multirol y guardado grupo/perfil. No se modifican tokens/estilos ni se añaden componentes; El lector de pantalla y prueba de cancha continúan fuera de esta evidencia; axe acotado no certifica WCAG completa.
+
+## Contratos de estado con Nest · MIG-08 (#152), 07-10-2026
+
+[Seguro] [MIG-08](migration/issue-152/README.md) conserva MemberManagement, MembershipReview/Progress, ManagedConsentForm y estados de MANAGED/onboarding: alta guardada PENDING no equivale a credenciales, ratificación MANAGED activa sin cuenta propia; código con consentimiento permanece PENDING hasta aprobación. Edición refresca el perfil global; COACH conserva la fila ATHLETE; baja/reactivación conserva historia; fecha menor→adulto conserva valor hasta aprobación de todos los grupos. No introduce componentes ni cambios de disposición.
+
+[Seguro] Los consumidores traducen solo códigos estables a mensajes españoles existentes. Middleware distingue indisponibilidad Nest (503/no-store) de pupilo no visible (404); conserva cookies refrescadas y no redirige a aceptar por un timeout. Error/timeout no anuncia éxito ni ejecuta otro transporte. E2E de nómina a 375 px y pupilos a 320 px verifica disposición y axe acotado; no certifica revisión humana completa WCAG.

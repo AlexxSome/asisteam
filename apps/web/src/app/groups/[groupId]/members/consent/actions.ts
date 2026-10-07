@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { activationReviewSchema, managedActivationSchema, managedConsentSchema, MANAGED_MEMBER_ERROR_MESSAGES, MEMBER_MANAGEMENT_ERRORS } from "@asisteam/core";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { sendInvitation } from "../../invitations/new/actions";
 
@@ -38,9 +39,9 @@ export async function consentManagedMember(input: unknown): Promise<{ success: t
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("authentication_required");
   try {
-    const { data, error } = await supabase.rpc("consent_membership_data", {
+    const { data, error } = await memberOperation(() => supabase.rpc("consent_membership_data", {
       p_membership_id: parsed.data.membership_id, p_accepted: parsed.data.accepted,
-    });
+    }), async api => (await api.consentMembershipData({ params: { membershipId: parsed.data.membership_id }, body: { accepted: parsed.data.accepted } })).status);
     if (error) return fail(Object.hasOwn(MANAGED_MEMBER_ERROR_MESSAGES, error.message) ? error.message : "unavailable");
     if (data !== "ACTIVE" && data !== "PENDING") return fail("unavailable");
     revalidatePath("/groups/[groupId]", "layout");

@@ -1,0 +1,34 @@
+{
+  "sourceCommit": "7cf082e0f08b0e2bdfcd03c72d7314cdd558cf78",
+  "date": "2026-10-07T18:34:58.378898+00:00",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "members-http-after-optional-query-fix",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "next-nest-members-five-flows",
+      "status": "PASS",
+      "tests": 5,
+      "omitted": 0,
+      "seconds": 37.5,
+      "viewports": [
+        320,
+        375
+      ]
+    },
+    {
+      "check": "middleware-and-members-final",
+      "status": "PASS",
+      "tests": 63,
+      "omitted": 0
+    },
+    {
+      "check": "web-typecheck-after-middleware-fix",
+      "status": "PASS"
+    }
+  ]
+}

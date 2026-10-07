@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { memberHttpSchemas, memberHttpOperations } from "./http-members-contract";
 import { MEMBERSHIP_ROLES } from "./enums";
 import { groupFormSchema, groupSettingsSchema, groupSettingsChangeSchema, joinCodeSchema } from "./schemas/group";
 import { profileSchema } from "./schemas/profile";
@@ -31,6 +32,7 @@ export const httpOwnProfileSchema = z.object({
 }).strict();
 
 export const httpSchemas = {
+  ...memberHttpSchemas,
   Session: z.object({ user_id: uuid }).strict(),
   Empty: z.object({}).strict(),
   PageQuery: httpPageQuerySchema,
@@ -68,6 +70,7 @@ export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 500, 503,
 
 /** Only specified operations enter the generated SDK. Domain handlers arrive in #151 and following module issues. */
 export const httpOperations = {
+  ...memberHttpOperations,
   getSession: { method: "GET", path: "/api/v1/auth/session", module: "auth", authenticated: true, response: "Session", status: 200, state: "implemented", summary: "Identidad del perfil verificada; sesión vigente y cuenta ACTIVE" },
   health: { method: "GET", path: "/api/v1/health", module: "runtime", authenticated: false, response: "Health", status: 200, state: "implemented", summary: "Vida del proceso" },
   ready: { method: "GET", path: "/api/v1/ready", module: "runtime", authenticated: false, response: "Ready", status: 200, state: "implemented", summary: "Disponibilidad de PostgreSQL" },

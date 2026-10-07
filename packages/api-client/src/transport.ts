@@ -63,7 +63,7 @@ export class ApiTransport {
     let path = operation.path;
     for (const [key, value] of Object.entries(params)) path = path.replace(`{${key}}`, encodeURIComponent(String(value)));
     const url = new URL(path, this.origin);
-    for (const [key, value] of Object.entries(query)) url.searchParams.set(key, String(value));
+    for (const [key, value] of Object.entries(query)) if (value !== undefined) url.searchParams.set(key, String(value));
     const controller = new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
     const deadline = new Promise<never>((_resolve, reject) => {
