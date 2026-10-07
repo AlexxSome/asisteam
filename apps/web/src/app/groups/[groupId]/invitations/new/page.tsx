@@ -1,3 +1,4 @@
+import { invitationOperation } from "@/lib/invitations";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ActionLink } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
@@ -23,10 +24,12 @@ export default async function NewInvitationPage({ params, searchParams }: {
   const history = query.view === "history" || query.page !== undefined;
   const supabase = await createClient();
   // Proyección ADMIN, RLS por grupo: ni digest ni datos del perfil invitado.
-  const { data, error, count } = await supabase.from("invitations")
+  const result = await invitationOperation(() => supabase.from("invitations")
     .select("id, email, role, status, expires_at, created_at", { count: "exact" })
     .eq("group_id", groupId).order("created_at", { ascending: false }).order("id", { ascending: false })
-    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1).then(value => ({data:value.error?null:{data:value.data,total:value.count??0},error:value.error})), api => api.listInvitations({params:{groupId},query:{page}}));
+  const {data: rows,error} = result;
+  const data=rows?.data,count=rows?.total;
   if (error) throw new Error("No pudimos cargar las invitaciones. Vuelve a intentarlo.");
   return <>
     <PageHeader title="Invitaciones del grupo" description="Invita por email o revisa el estado de las invitaciones enviadas." />

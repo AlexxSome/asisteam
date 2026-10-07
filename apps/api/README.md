@@ -1,6 +1,6 @@
-# API · MIG-02/MIG-05/MIG-07/MIG-08 (#146, #149, #151, #152)
+# API · MIG-02/MIG-05/MIG-07/MIG-08/MIG-09 (#146, #149, #151, #152, #153)
 
-[Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone sondas operativas y `GET /api/v1/auth/session` con sesión/RLS temporal de [MIG-05](../../docs/migration/issue-149/README.md); grupos/perfil tienen handlers reales en [MIG-07](../../docs/migration/issue-151/README.md); integrantes/apoderados/consentimientos tienen handlers reales en [MIG-08](../../docs/migration/issue-152/README.md); otros dominios siguen #153–#160. [OpenAPI/cliente #148](../../packages/api-client/README.md) y [CI/staging #147](../../docs/migration/issue-147/README.md) tienen infraestructura entregada y evidencia separada; no acreditan migración de tráfico.
+[Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone sondas operativas y `GET /api/v1/auth/session` con sesión/RLS temporal de [MIG-05](../../docs/migration/issue-149/README.md); grupos/perfil tienen handlers reales en [MIG-07](../../docs/migration/issue-151/README.md); integrantes/apoderados/consentimientos tienen handlers reales en [MIG-08](../../docs/migration/issue-152/README.md); invitaciones/activación tienen handlers reales en [MIG-09](../../docs/migration/issue-153/README.md); otros dominios siguen #154–#160. [OpenAPI/cliente #148](../../packages/api-client/README.md) y [CI/staging #147](../../docs/migration/issue-147/README.md) tienen infraestructura entregada y evidencia separada; no acreditan migración de tráfico.
 
 ## Build y arranque
 
@@ -46,7 +46,7 @@ DATABASE_URL=postgresql://asisteam_runtime:synthetic-only@127.0.0.1:55466/asiste
 
 [Seguro] Errores: `{ "error": { "code": "...", "message": "texto en español", "details": {} } }`. Rutas inexistentes: 404 `resource_not_found`; JSON inválido: 400 `invalid_request`; body >64 KiB: 413 `payload_too_large`; plazo agotado: 504 `request_timeout`; excepción inesperada: 500 `internal_error`. El filtro no serializa mensajes/stack/SQL internos.
 
-[Seguro] Cada respuesta lleva UUID local en `x-request-id` y `cache-control: no-store`; el header de entrada no se reutiliza. Logs JSON por allowlist: fecha, nivel, evento, request_id, status y duración; no registran URL/query, headers, body, identidad, configuración ni excepción. Los mensajes libres del framework se sustituyen por eventos fijos. No existe CORS habilitado ni endpoint de escritura de producto en este entregable. La sesión se recibe como Bearer desde el adaptador servidor Next, conservando cookies SSR fuera de esta API.
+[Seguro] Cada respuesta lleva UUID local en `x-request-id` y `cache-control: no-store`; el header de entrada no se reutiliza. Logs JSON por allowlist: fecha, nivel, evento, request_id, status y duración; no registran URL/query, headers, body, identidad, configuración ni excepción. Los mensajes libres del framework se sustituyen por eventos fijos. CORS permanece deshabilitado; los handlers de dominio reciben llamadas del adaptador servidor Next. La sesión se recibe como Bearer desde el adaptador servidor Next, conservando cookies SSR fuera de esta API.
 
 ## Contenedor y PostgreSQL sintético
 
@@ -96,3 +96,11 @@ pnpm exec supabase test db supabase/tests/api_session_rls.test.sql
 [Seguro] [MIG-08](../../docs/migration/issue-152/README.md) documenta 17 operaciones HTTP/SDK sobre las mismas RPC/vistas autorizadas: nómina ADMIN/búsqueda, MANAGED, revisión de pendientes, bajas/reactivaciones, COACH, vínculo, onboarding, consentimiento de datos, pupilos y aceptación vigente de cuenta. El actor siempre procede de SessionGuard; schemas estrictos rechazan campos extra. `asisteam_api` ejecuta SQL parametrizado con RLS. No se copian R1, cupos ni locks a Nest.
 
 [Seguro] `GET /account-consents/current` y `POST /account-consents` bajo `/api/v1` permiten completar la aceptación previa; conservan sesión vigente, perfil ACTIVE y contexto RLS, y omiten únicamente el gate que permitirían satisfacer. El resto exige consentimiento vigente. Invitaciones, activación de credenciales y jobs de mayoría/revocación conservan su adaptador temporal (#153/#160).
+
+## Invitaciones y activación · MIG-09 (#153)
+
+[Seguro] [Contrato, runbook y evidencia](../../docs/migration/issue-153/README.md) registran nueve operaciones HTTP/SDK de INVITATIONS: envío/reenvío/activación, preview, aceptación existente, registro dirigido, claim MANAGED, lista y solicitud/revisión/lista de activación. Nest reutiliza RPC/locks/triggers canónicos; no recibe actor desde HTTP.
+
+[Seguro] Configurar INVITATION_DATABASE_URL del rol asisteam_invitation en el mismo host/puerto/base que DATABASE_URL; la migración lo crea NOLOGIN, sin password ni tablas/ownership/BYPASSRLS, con cinco RPC de registro/ratelimit. Provisionar LOGIN/password externos. INVITATION_PROXY_SECRET (≥32 caracteres) se comparte exclusivamente con Next; INVITATION_AUTH_BRIDGE_SECRET independiente (≥32) se comparte exclusivamente con la Edge invitation-auth. RESEND_API_KEY, INVITATION_EMAIL_FROM e INVITATION_WEB_URL configuran envío. HTTP_TIMEOUT_MS=30000 y ASISTEAM_API_TIMEOUT_MS=30000 permiten los deadlines externos de 10 s; un timeout no revierte efectos confirmados.
+
+[Seguro] La service_role sigue exclusivamente en Edge/CI, conforme AGENTS/doc07. El bridge temporal ejecuta solo createUser con secreto y nonce reservado por Nest; el trigger Auth consume la reserva y enlaza/acepta atómicamente. Su retirada corresponde a #162/#164: esta entrega no elimina Supabase Auth ni acredita envío externo Resend. Ausencia de configuración falla cerrado, sin fallback.

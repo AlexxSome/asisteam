@@ -1,0 +1,39 @@
+{
+  "sourceCommit": "7cbf13d775c75cf1cf205fd26656e119ff1d4db9",
+  "date": "2026-10-07T19:39:22.588Z",
+  "environment": "local-synthetic-shared-supabase",
+  "node": "v24.16.0",
+  "scope": "Base checkout test against existing local stack; additive MIG09 migration installed, canonical issuance functions/test byte-identical; not a fresh base DB.",
+  "checks": [
+    {
+      "check": "base-pgtap-send-invitations",
+      "status": "FAIL",
+      "file": "send_invitations.test.sql",
+      "failedTests": [
+        15
+      ],
+      "tests": 51
+    },
+    {
+      "check": "same-case-15-confirmed",
+      "status": "PASS"
+    }
+  ],
+  "hashes": [
+    {
+      "file": "supabase/tests/send_invitations.test.sql",
+      "sha256": "b661252f892b13d20156ecab1abcd16c7dd5b362b787e07b64d336d52fb91c1f",
+      "identicalToBase": true
+    },
+    {
+      "file": "supabase/migrations/20260922050000_send_invitations.sql",
+      "sha256": "3263ca274d6df2f944857126f633aff247dbdc066fb3d349cd58e8b45b9cced7",
+      "identicalToBase": true
+    },
+    {
+      "file": "supabase/migrations/20260925010000_activate_managed_accounts.sql",
+      "sha256": "cd2d40e056ad7b065accf95be83848873c780c545f39f0e4c5a882c0ef66769a",
+      "identicalToBase": true
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 "use server";
 
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { revalidatePath } from "next/cache";
 import { SEND_INVITATION_ERROR_MESSAGES, sendInvitationRequestSchema, sentInvitationSchema, type SentInvitation } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
@@ -18,6 +21,11 @@ export async function sendInvitation(input: unknown): Promise<SendInvitationResu
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return fail("authentication_required");
   try {
+    if (moduleTransport("invitations") === "nest") {
+      const result = await createServerApiClient().sendInvitation({body:parsed.data});
+      revalidatePath(`/groups/${parsed.data.group_id}/invitations/new`);
+      return result;
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-invitation`, {
       method: "POST", cache: "no-store", signal: AbortSignal.timeout(20_000),
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
@@ -33,8 +41,8 @@ export async function sendInvitation(input: unknown): Promise<SendInvitationResu
     }
     const invitation = sentInvitationSchema.safeParse(body.invitation);
     return invitation.success ? { invitation: invitation.data } : fail("unavailable");
-  } catch {
+  } catch (error) {
     revalidatePath(`/groups/${parsed.data.group_id}/invitations/new`);
-    return fail("unavailable");
+    return fail(error instanceof ApiClientError && Object.hasOwn(SEND_INVITATION_ERROR_MESSAGES,error.error.code) ? error.error.code : "unavailable");
   }
 }

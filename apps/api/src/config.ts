@@ -17,6 +17,12 @@ const configSchema = z.object({
     try { return JSON.parse(Buffer.from(value.split('.')[1] ?? '', 'base64url').toString()).role === 'anon'; } catch { return false; }
   }).optional(),
   AUTH_TIMEOUT_MS: milliseconds(2000),
+  INVITATION_DATABASE_URL: z.string().url().optional(),
+  INVITATION_PROXY_SECRET: z.string().min(32).optional(),
+  INVITATION_AUTH_BRIDGE_SECRET: z.string().min(32).optional(),
+  INVITATION_WEB_URL: z.string().url().optional(),
+  RESEND_API_KEY: z.string().min(1).optional(),
+  INVITATION_EMAIL_FROM: z.string().min(1).optional(),
   PG_POOL_MAX: z.coerce.number().int().min(1).max(50).default(10),
   PG_CONNECT_TIMEOUT_MS: milliseconds(2000),
   PG_STATEMENT_TIMEOUT_MS: milliseconds(3000),
@@ -34,6 +40,10 @@ export class ConfigurationError extends Error {
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
   const parsed = configSchema.superRefine((value, ctx) => {
     if (!!value.SUPABASE_AUTH_URL !== !!value.SUPABASE_AUTH_PUBLIC_KEY) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Configura el emisor y la clave pública juntos.' });
+    if (value.INVITATION_DATABASE_URL) {
+      const main = new URL(value.DATABASE_URL), invitations = new URL(value.INVITATION_DATABASE_URL);
+      if (!['postgres:', 'postgresql:'].includes(invitations.protocol) || main.hostname !== invitations.hostname || main.port !== invitations.port || main.pathname !== invitations.pathname) ctx.addIssue({code:"custom",path:["INVITATION_DATABASE_URL"],message:"Las conexiones deben usar la misma base."});
+    }
     if (value.SUPABASE_AUTH_URL) {
       let url: URL;
       try { url = new URL(value.SUPABASE_AUTH_URL); } catch { return; }

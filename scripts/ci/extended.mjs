@@ -8,5 +8,6 @@ await suite('extended', async () => {
     await check('playwright-responsive-axe', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--reporter=json'], { env: { INVITATION_PROXY_SECRET: secret, RUN_INVITATION_E2E: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-playwright.json' }, report: 'apps/web/.ci-playwright.json', playwright: true, requireAll: true });
     await check('playwright-transport-faults', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:faults', '--reporter=json'], { env: { PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-faults.json' }, report: 'apps/web/.ci-faults.json', playwright: true, requireAll: true });
   });
+  await check('playwright-nest-invitations', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--grep', 'MIG-09', '--reporter=json'], { env: { ASISTEAM_QA_NEST: '1', ASISTEAM_QA_INVITATIONS: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-nest-invitations.json' }, report: 'apps/web/.ci-nest-invitations.json', playwright: true, requireAll: true });
   await check('playwright-nest-groups-profile', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--grep', 'MIG-07|rol .*:|cambio de grupo|restricciones reales', '--reporter=json'], { env: { ASISTEAM_QA_NEST: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-nest-playwright.json' }, report: 'apps/web/.ci-nest-playwright.json', playwright: true, requireAll: true });
 });

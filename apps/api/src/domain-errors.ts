@@ -1,7 +1,7 @@
 import { HttpException } from '@nestjs/common';
-import { GUARDIANSHIP_ERROR_MESSAGES, MANAGED_MEMBER_ERROR_MESSAGES, MEMBER_MANAGEMENT_ERRORS, MEMBERSHIP_REVIEW_ERROR_MESSAGES, GROUP_ERROR_MESSAGES } from '@asisteam/core/runtime';
+import { GUARDIANSHIP_ERROR_MESSAGES, MANAGED_MEMBER_ERROR_MESSAGES, MEMBER_MANAGEMENT_ERRORS, MEMBERSHIP_REVIEW_ERROR_MESSAGES, GROUP_ERROR_MESSAGES, SEND_INVITATION_ERROR_MESSAGES, invitationErrorMessages } from '@asisteam/core/runtime';
 
-const memberMessages = { ...MEMBER_MANAGEMENT_ERRORS, ...MEMBERSHIP_REVIEW_ERROR_MESSAGES, ...MANAGED_MEMBER_ERROR_MESSAGES, ...GUARDIANSHIP_ERROR_MESSAGES, invalid_member_filters: 'Revisa los filtros de integrantes.' };
+const memberMessages = { ...SEND_INVITATION_ERROR_MESSAGES, ...invitationErrorMessages, ...MEMBER_MANAGEMENT_ERRORS, ...MEMBERSHIP_REVIEW_ERROR_MESSAGES, ...MANAGED_MEMBER_ERROR_MESSAGES, ...GUARDIANSHIP_ERROR_MESSAGES, invalid_member_filters: 'Revisa los filtros de integrantes.' };
 const profileMessages: Record<string, string> = {
   account_consent_required: 'Acepta las condiciones vigentes para continuar.',
   athlete_birthdate_required: 'La fecha de nacimiento es obligatoria para deportistas.',

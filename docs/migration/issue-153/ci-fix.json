@@ -1,0 +1,59 @@
+{
+  "sourceCommit": "424b765be657d9cf7d2b830c569548d400922256",
+  "environment": "local-synthetic-plus-linux-runtime-probe",
+  "originalRun": "https://github.com/AlexxSome/asisteam/actions/runs/37677270890",
+  "originalRemote": {
+    "checks": "SUCCESS",
+    "staging": "SUCCESS",
+    "backend": "CANCELLED",
+    "required": "FAILURE",
+    "lastPassedBackendCheck": "api-members-consents-http",
+    "blockedAt": "api-invitations-http",
+    "timeoutMinutes": 12
+  },
+  "cause": "macOS-specific /private/tmp tempdir outside cleanup after opening PostgreSQL; ENOENT leaves open connection",
+  "checks": [
+    {
+      "sourceCommit": "424b765be657d9cf7d2b830c569548d400922256",
+      "check": "missing-tempdir-open-db-reproduction",
+      "status": "PASS",
+      "expectedFailure": "ENOENT",
+      "processDidNotExitWithinSeconds": 5,
+      "cleanup": "owned-process-group-killed-no-roles-or-fixtures-created"
+    },
+    {
+      "sourceCommit": "424b765be657d9cf7d2b830c569548d400922256",
+      "check": "tempdir-failure-exits-without-open-db-after-fix",
+      "status": "PASS",
+      "expectedFailure": "ENOENT",
+      "processExit": 1,
+      "seconds": 3.28,
+      "timeoutSeconds": 5
+    },
+    {
+      "check": "linux-node-tempdir-portability",
+      "status": "PASS",
+      "node": "v24.16.0",
+      "legacyDirectoryExists": false
+    },
+    {
+      "check": "invitations-http-final",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0,
+      "seconds": 8.8
+    },
+    {
+      "check": "e2e-final",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0,
+      "seconds": 15.52
+    },
+    {
+      "check": "lint-typecheck",
+      "status": "PASS"
+    }
+  ],
+  "nextRemoteRun": "PENDING"
+}

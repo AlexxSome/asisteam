@@ -58,6 +58,9 @@ enabled = false
 client_id = "env(SUPABASE_AUTH_EXTERNAL_APPLE_CLIENT_ID)"
 secret = "env(SUPABASE_AUTH_EXTERNAL_APPLE_SECRET)"
 
+[functions.invitation-auth]
+verify_jwt = false
+
 [functions.accept-invitation]
 # Preview y registro usan el token de invitación; accept valida getUser en Edge.
 verify_jwt = false

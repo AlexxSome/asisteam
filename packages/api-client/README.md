@@ -64,3 +64,7 @@ const result = await runModuleOperation("groups", {
 [Seguro] [Contrato, fuentes SQL y evidencia](../../docs/migration/issue-152/README.md) registran 17 operaciones `implemented` de MEMBERS. DTO ADMIN de nómina incluye PII autorizado; onboarding y pupilos solo proyectan datos autorizados, sin email/teléfono/fecha/notas de terceros. Filtros opcionales `undefined` se omiten del querystring; `false`, cadenas y defaults válidos se conservan.
 
 [Seguro] `ASISTEAM_TRANSPORT_MEMBERS=nest` selecciona un ejecutor por operación; el default es Supabase. `lib/members` normaliza errores HTTP a códigos estables para los consumidores existentes sin usar mensajes remotos. Error/timeout no invoca el otro write. El middleware/aceptación/callback usan la misma selección. Invitación y claim de credenciales conservan #153; una pantalla puede tener operaciones de ambos módulos sin repetir ninguna.
+
+## Invitaciones implementadas · MIG-09 (#153)
+
+[Seguro] INVITATIONS=nest selecciona las nueve operaciones del [runbook MIG-09](../../docs/migration/issue-153/README.md), conservando rutas/pantallas y links previos sobre la misma base. Preview/register/claim/accept requieren invitationProxy {secret,clientIp} exclusivamente servidor; solo accept lleva además Bearer de sesión verificada. Tokens viajan en body, nunca en URL de la API; respuestas/errores son mínimos y 410 conserva expiración. Los secretos no se exponen a componentes ni NEXT_PUBLIC. No hay retry/fallback: un resultado incierto se consulta antes de reenviar.
