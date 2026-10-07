@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { GuardianForm } from "./guardian-form";
 
@@ -17,7 +18,7 @@ export default async function GuardiansPage({ params, searchParams }: {
   const supabase = await createClient();
   if (query.membership !== undefined) {
     if (!isGroupId(query.membership)) notFound();
-    const { data: context, error: contextError } = await supabase.rpc("list_membership_onboarding", { p_group_id: group.id, p_membership_id: query.membership });
+    const { data: context, error: contextError } = await memberOperation(() => supabase.rpc("list_membership_onboarding", { p_group_id: group.id, p_membership_id: query.membership }), async api => (await api.listMembershipOnboarding({ query: { group_id: group.id, membership_id: query.membership } })).data);
     if (contextError) throw new Error("No pudimos cargar el deportista. Vuelve a intentarlo.");
     const athlete = context?.[0];
     if (!athlete?.is_minor) notFound();
@@ -28,7 +29,7 @@ export default async function GuardiansPage({ params, searchParams }: {
       <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${group.id}/members/pending?membership=${athlete.membership_id}`}>Volver al estado de incorporación</Link>
     </>;
   }
-  const { data, error } = await supabase.rpc("list_guardianship_athletes", { p_group_id: group.id, p_search: search, p_offset: (page - 1) * 50 });
+  const { data, error } = await memberOperation(() => supabase.rpc("list_guardianship_athletes", { p_group_id: group.id, p_search: search, p_offset: (page - 1) * 50 }), async api => (await api.listGuardianshipAthletes({ params: { groupId: group.id }, query: { search, page } })).data);
   if (error) throw new Error("No pudimos cargar los deportistas. Vuelve a intentarlo.");
   const pageUrl = (value: number) => `?${new URLSearchParams({ q: search, page: String(value) })}`;
   return <>

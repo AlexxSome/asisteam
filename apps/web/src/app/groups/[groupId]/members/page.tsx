@@ -6,6 +6,7 @@ import { Pagination } from "@/components/ui/pagination";
 import { notFound } from "next/navigation";
 import { groupMemberSchema, memberFilterSchema, MEMBERSHIP_ROLE_LABELS, MEMBERSHIP_ROLES, MEMBERSHIP_STATUSES, MEMBERSHIP_STATUS_LABELS } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { MemberManagement } from "./member-management";
 
@@ -22,9 +23,9 @@ export default async function MembersPage({ params, searchParams }: {
   const { role, status, page, search } = parsed.data;
   const client = await createClient();
   const loadPage = async (offset: number) => {
-    const { data, error } = await client.rpc("list_group_members", {
+    const { data, error } = await memberOperation(() => client.rpc("list_group_members", {
       p_group_id: group.id, p_role: role, p_status: status, p_offset: offset, p_search: search || undefined,
-    });
+    }), async api => (await api.listGroupMembers({ params: { groupId: group.id }, query: { role, status, search, page: offset / 50 + 1 } })).data);
     if (error?.code === "PT403" || error?.code === "PT404") notFound();
     if (error) throw new Error("No pudimos cargar los integrantes. Vuelve a intentarlo.");
     return groupMemberSchema.array().parse(data ?? []);

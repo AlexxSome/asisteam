@@ -7,6 +7,7 @@ import { getGroup, getGroupCapacity } from "@/lib/groups";
 import { getHomeActivities, homeActivityLabel } from "@/lib/activities";
 import { getMyAttendanceHistory } from "@/lib/attendance-history";
 import { getGuardianTasks } from "@/lib/wards";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { JoinAsAthlete } from "./join-as-athlete";
 import { GettingStarted } from "./getting-started";
@@ -25,8 +26,7 @@ export default async function GroupPage({ params }: { params: Promise<{ groupId:
     isAdmin ? (async () => {
       const client = await createClient();
       // The RPC's total_count is computed before this response limit.
-      const { data, error } = await client.rpc("list_pending_athletes", { p_group_id: group.id })
-        .select("total_count").limit(1);
+      const { data, error } = await memberOperation(() => client.rpc("list_pending_athletes", { p_group_id: group.id }).select("total_count").limit(1), async api => [{ total_count: (await api.getPendingSummary({ params: { groupId: group.id } })).total }]);
       if (error) throw new Error("No pudimos cargar las aprobaciones pendientes. Vuelve a intentarlo.");
       return data?.[0]?.total_count ?? 0;
     })() : null,

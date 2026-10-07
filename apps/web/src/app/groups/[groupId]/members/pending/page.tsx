@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { MembershipReview } from "./membership-review";
 
@@ -17,7 +18,7 @@ export default async function PendingMembershipsPage({ params, searchParams }: {
   if (query.membership !== undefined && !isGroupId(query.membership)) notFound();
   const membership = query.membership;
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("list_membership_onboarding", { p_group_id: group.id, p_membership_id: membership, p_offset: (page - 1) * 50 });
+  const { data, error } = await memberOperation(() => supabase.rpc("list_membership_onboarding", { p_group_id: group.id, p_membership_id: membership, p_offset: (page - 1) * 50 }), async api => (await api.listMembershipOnboarding({ query: { group_id: group.id, membership_id: membership, page } })).data);
   if (error) throw new Error("No pudimos cargar las aprobaciones. Vuelve a intentarlo.");
   return <>
     <header className="space-y-2"><h1 className="text-2xl font-semibold">Aprobaciones</h1>

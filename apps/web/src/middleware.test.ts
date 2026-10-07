@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ApiClient, ApiClientError } from "@asisteam/api-client";
 import { NextRequest } from "next/server";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), maybeSingle: vi.fn(), from: vi.fn(), rpc: vi.fn() }));
@@ -187,3 +188,37 @@ describe("COACH: permisos limitados por grupo", () => {
      expect((await middleware(request(`/groups/${groupId}/billing`))).status).toBe(404);
    });
  });
+
+
+describe("MIG-08 MEMBERS Nest antes del streaming", () => {
+  beforeEach(() => {
+    vi.stubEnv("ASISTEAM_TRANSPORT_MEMBERS", "nest");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
+    vi.stubEnv("ASISTEAM_API_SUPABASE_URL", "http://127.0.0.1:54321");
+    vi.stubEnv("ASISTEAM_API_ORIGIN", "http://127.0.0.1:3001");
+  });
+  afterEach(() => { vi.restoreAllMocks(); vi.unstubAllEnvs(); });
+  it("aceptación pendiente redirige usando Nest sin ejecutar RPC legacy", async () => {
+    vi.spyOn(ApiClient.prototype,"getCurrentAccountConsent").mockResolvedValue({accepted:false});
+    expect((await middleware(request("/wards"))).status).toBe(303);
+    expect(mock.rpc).not.toHaveBeenCalled();
+  });
+  it("indisponibilidad al comprobar consentimiento devuelve 503 seguro y conserva cookie", async () => {
+    vi.spyOn(ApiClient.prototype,"getCurrentAccountConsent").mockRejectedValue(new ApiClientError(504,"request_timeout"));
+    const response=await middleware(request("/wards"));
+    expect(response.status).toBe(503);
+    expect(response.headers.get("Cache-Control")).toContain("no-store");
+    expect(response.cookies.get("refreshed-session")?.httpOnly).toBe(true);
+    expect(response.headers.get("Location")).toBeNull();
+    expect(mock.rpc).not.toHaveBeenCalled();
+  });
+  it.each([404,503])("pupilo: distingue HTTP %i de ausencia sin fallback",async status=>{
+    vi.spyOn(ApiClient.prototype,"getCurrentAccountConsent").mockResolvedValue({accepted:true});
+    vi.spyOn(ApiClient.prototype,"getWard").mockRejectedValue(new ApiClientError(status,"synthetic"));
+    const response=await middleware(request(`/wards/${groupId}`));
+    expect(response.status).toBe(status);
+    expect(response.headers.get("Cache-Control")).toContain("no-store");
+    expect(mock.from).not.toHaveBeenCalled();expect(mock.rpc).not.toHaveBeenCalled();
+    expect(await response.text()).not.toContain(groupId);
+  });
+});

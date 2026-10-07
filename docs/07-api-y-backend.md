@@ -15,9 +15,11 @@
 
 [Seguro] **MIG-07 (#151, 2026-10-07):** [grupos/perfil y selector por Nest](migration/issue-151/README.md) implementa el primer recorrido de dominio con sesión temporal, consentimiento vigente, RLS, DTO por rol y RPC canónicas. OpenAPI/SDK generados y banderas GROUPS/PROFILE permiten el recorrido Next→Nest→PostgreSQL o el transporte Supabase sobre la misma base, sin fallback ni writes duplicados. Código/menores/revisión de edad/permisos de imagen conservan sus invariantes. Auth/Storage y otros módulos permanecen en su migración separada; evidencia local no acredita despliegue cloud.
 
+[Seguro] **MIG-08 (#152, 2026-10-07):** [integrantes/apoderados/consentimientos por Nest](migration/issue-152/README.md) implementa 17 operaciones HTTP y SDK con MEMBERS=nest, sesión vigente, perfil ACTIVE y contexto RLS. Nómina ADMIN/búsqueda, alta/edición MANAGED, pendientes, bajas/reactivaciones, COACH, vínculo, onboarding, consentimiento de datos, pupilos y aceptación vigente reutilizan las RPC/vistas canónicas; no cambian esquema ni reglas SQL. Aceptación y consulta de consentimiento omiten únicamente su gate para poder completarlo. Envío de invitación/claim permanece #153; mayoría/revocación conservan sus jobs/RPC y visibilidad inmediata.
+
 ## 1. Enfoque general del backend
 
-El stack base (ver 06-arquitectura-y-stack.md) es **Supabase (PostgreSQL 17 + Auth + RLS + PostgREST + Edge Functions)**. MIG-07 incorpora handlers Nest para grupos/perfil bajo banderas; reutilizan la misma base, RLS y RPC. Los módulos aún pendientes conservan la combinación de tres capas original y su convención de equipo:
+El stack base (ver 06-arquitectura-y-stack.md) es **Supabase (PostgreSQL 17 + Auth + RLS + PostgREST + Edge Functions)**. MIG-07/MIG-08 incorporan handlers Nest para grupos/perfil e integrantes/apoderados/consentimientos bajo banderas; reutilizan la misma base, RLS y RPC. Los módulos aún pendientes conservan la combinación de tres capas original y su convención de equipo:
 
 | Capa | Uso | Regla |
 |---|---|---|

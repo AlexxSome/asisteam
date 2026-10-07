@@ -45,6 +45,12 @@ export async function middleware(request: NextRequest) {
   // Perfil y bienvenida también contienen datos privados sin contexto de grupo.
   if (user) response.headers.set("Cache-Control", "private, no-store");
 
+  const unavailableResource = () => {
+    const unavailable = new NextResponse("No pudimos cargar los datos. Vuelve a intentarlo.", { status: 503, headers: { "Cache-Control": "private, no-store" } });
+    response.cookies.getAll().forEach(cookie => unavailable.cookies.set(cookie));
+    return unavailable;
+  };
+
   // Consultar el aviso, autenticarse y salir siguen disponibles sin aceptar.
   // Invitaciones capturan aceptación al crear credenciales o verifican el RPC
   // en su Server Action si se usa una cuenta existente.
@@ -52,8 +58,25 @@ export async function middleware(request: NextRequest) {
   const publicRoute = ["/accept-terms", "/login", "/register", "/forgot-password", "/reset-password", "/auth/callback"].includes(pathname)
     || pathname.startsWith("/legal/") || pathname.startsWith("/invitations/") || pathname.startsWith("/_next/");
   if (user && !publicRoute) {
-    const { data: accepted, error } = await supabase.rpc("has_account_consent");
-    if (error || accepted !== true) {
+    let accepted = false;
+    let consentFailed = false;
+    if (moduleTransport("members") === "nest") {
+      try {
+        const client = new ApiClient({ origin: process.env.ASISTEAM_API_ORIGIN ?? "", accessToken: async () => {
+          const { data, error } = await supabase.auth.getSession();
+          return !error && data.session?.user.id === user.id ? data.session.access_token : null;
+        } });
+        accepted = (await client.getCurrentAccountConsent()).accepted;
+      } catch (error) {
+        if (!(error instanceof ApiClientError) || error.status !== 401) return unavailableResource();
+        consentFailed = true;
+      }
+    } else {
+      const result = await supabase.rpc("has_account_consent");
+      accepted = result.data === true;
+      consentFailed = !!result.error;
+    }
+    if (consentFailed || accepted !== true) {
       const pending = NextResponse.redirect(new URL(accountConsentPath(pathname + request.nextUrl.search), request.url), 303);
       pending.headers.set("Cache-Control", "private, no-store");
       pending.headers.set("Referrer-Policy", "no-referrer");
@@ -75,9 +98,25 @@ export async function middleware(request: NextRequest) {
     response.headers.set("Cache-Control", "private, no-store");
     const athleteUserId = segments[2];
     if (athleteUserId) {
-      const { data: ward, error } = user && isGroupId(athleteUserId)
-        ? await supabase.from("v_my_wards").select("athlete_user_id").eq("athlete_user_id", athleteUserId).maybeSingle()
-        : { data: null, error: null };
+      let ward: { athlete_user_id: string | null } | null = null;
+      let error = false;
+      if (user && isGroupId(athleteUserId)) {
+        if (moduleTransport("members") === "nest") {
+          try {
+            const client = new ApiClient({ origin: process.env.ASISTEAM_API_ORIGIN ?? "", accessToken: async () => {
+              const session = await supabase.auth.getSession();
+              return !session.error && session.data.session?.user.id === user.id ? session.data.session.access_token : null;
+            } });
+            ward = await client.getWard({ params: { athleteUserId } });
+          } catch (failure) {
+            if (!(failure instanceof ApiClientError) || ![401, 404].includes(failure.status)) return unavailableResource();
+            error = true;
+          }
+        } else {
+          const result = await supabase.from("v_my_wards").select("athlete_user_id").eq("athlete_user_id", athleteUserId).maybeSingle();
+          ward = result.data; error = !!result.error;
+        }
+      }
       // Revalidar antes de streaming: mismo HTTP 404 para ajeno, adulto o inexistente.
       if (error || !ward) return missingResource();
     }

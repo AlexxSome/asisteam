@@ -1,0 +1,20 @@
+{
+  "commit": "7cf082e0f08b0e2bdfcd03c72d7314cdd558cf78",
+  "sourceCommit": "7cf082e0f08b0e2bdfcd03c72d7314cdd558cf78",
+  "date": "2026-10-07T18:32:03.730Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "send-invitations-unchanged-base",
+      "status": "FAIL",
+      "seconds": 2.27,
+      "sqlFailures": [
+        {
+          "file": "baseline.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { groupCapacitySchema, MEMBERSHIP_ROLES, type MembershipRole } from "@asisteam/core";
+import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
 import { activeGroupCookie, isGroupId } from "@/lib/group-routing";
 
@@ -93,7 +94,7 @@ export async function groupHomePath() {
 /** A pending athlete sees only their request, never the group's private detail. */
 export const getMyPendingMemberships = cache(async () => {
   const client = await createClient();
-  const { data, error } = await client.rpc("list_membership_onboarding", {});
+  const { data, error } = await memberOperation(() => client.rpc("list_membership_onboarding", {}), async api => (await api.listMembershipOnboarding()).data);
   if (error) throw new Error("No pudimos cargar tus solicitudes pendientes. Vuelve a intentarlo.");
   return data ?? [];
 });
