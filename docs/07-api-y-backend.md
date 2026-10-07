@@ -2,6 +2,8 @@
 
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 08-reportes-y-estadisticas.md, 11-legal-seguridad-privacidad.md
 
+[Seguro] **MIG-01 (#145, 2026-10-06):** [matriz de contratos y destinos Nest propuestos](migration/issue-145/contracts.md), con consumidor, firma vigente, permiso, efecto, prueba y responsable. Las rutas Nest todavía no existen; el contrato actual y las historias pendientes se distinguen en el [registro de decisiones](migration/issue-145/README.md).
+
 ---
 
 ## 1. Enfoque general del backend
