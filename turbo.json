@@ -5,15 +5,10 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
-    },
-    "test": {
-      "dependsOn": ["^test"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    }
+    "typecheck": { "dependsOn": ["^typecheck"] },
+    "test": { "dependsOn": ["^test"] },
+    "dev": { "cache": false, "persistent": true },
+    "@asisteam/api#test": { "dependsOn": ["build", "^test"] },
+    "@asisteam/api#typecheck": { "dependsOn": ["^build", "^typecheck"] }
   }
 }

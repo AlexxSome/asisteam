@@ -12,13 +12,14 @@ Las 37 páginas citadas por la auditoría del 03-10-2026 corresponden a su base 
 
 | Ubicación | Contenido actual |
 |---|---|
+| `apps/api/` | NestJS 12.1.2/Node 24: runtime de migración, health/readiness y pool pg; [runbook MIG-02](apps/api/README.md), sin operaciones de producto migradas |
 | `apps/web/` | Next.js 16, React 19 y TypeScript; Tailwind 4, componentes compartidos, Vitest y Playwright/axe |
 | `packages/core/` | Métrica canónica, schemas Zod, enums, etiquetas en español y reglas compartidas |
 | `packages/db/` | Tipos generados de Supabase |
 | `supabase/` | Migraciones, RLS, vistas/RPC, Edge Functions, seeds y pruebas de backend |
 | `docs/` | Contratos de producto, inventario y evidencia de QA |
 
-pnpm **10.33.2** y Turborepo coordinan el monorepo; Node **≥20**. El backend usa Supabase/PostgreSQL: PostgREST con RLS para lecturas y RPC/Edge Functions para escrituras con invariantes. La app Expo/React Native sigue planificada: no hay cliente móvil implementado en este corte; web responsive no equivale a app nativa.
+pnpm **10.33.2** y Turborepo coordinan el monorepo; Node **24.16.0 LTS** (línea 24). El backend usa Supabase/PostgreSQL: PostgREST con RLS para lecturas y RPC/Edge Functions para escrituras con invariantes. La app Expo/React Native sigue planificada: no hay cliente móvil implementado en este corte; web responsive no equivale a app nativa.
 
 ## Módulos y alcance existente
 
