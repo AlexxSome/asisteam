@@ -2,7 +2,7 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  testIgnore: '**/faults.spec.ts',
+  testIgnore: process.env.ASISTEAM_QA_NEST === '1' ? '**/faults.spec.ts' : ['**/faults.spec.ts', '**/nest-groups-profile.spec.ts'],
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,

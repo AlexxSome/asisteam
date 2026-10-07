@@ -1,5 +1,8 @@
 "use server";
 
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { revalidatePath } from "next/cache";
 import { avatarContentType, avatarFileSchema, profileSchema, type OwnProfile, type ProfileInput } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
@@ -21,6 +24,15 @@ function profileError(message?: string): ProfileResult {
 export async function saveProfile(input: ProfileInput): Promise<ProfileResult> {
   const parsed = profileSchema.safeParse(input);
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Revisa los datos del perfil." };
+  if (moduleTransport("profile") === "nest") {
+    try {
+      const result = await createServerApiClient().updateOwnProfile({ body: parsed.data });
+      revalidatePath("/profile"); revalidatePath("/welcome");
+      return { ok: true, profile: result.profile, message: result.birthdate_change_pending
+        ? "Nombre y teléfono guardados. La nueva fecha queda pendiente de un ADMIN de cada grupo; conservamos tu fecha actual hasta la última confirmación."
+        : "Tu perfil se actualizó en todos tus grupos." };
+    } catch (error) { return profileError(error instanceof ApiClientError ? error.error.code : undefined); }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: "Inicia sesión para editar tu perfil." };
@@ -76,6 +88,14 @@ export async function reviewBirthdate(requestId: string, groupId: string, approv
   if (!/^[0-9a-f-]{36}$/.test(requestId) || !/^[0-9a-f-]{36}$/.test(groupId) || typeof approve !== "boolean") {
     return { ok: false, message: "Solicitud inválida." };
   }
+  if (moduleTransport("profile") === "nest") {
+    try {
+      const data = await createServerApiClient().reviewBirthdate({ params: { requestId }, body: { group_id: groupId, approve } });
+      revalidatePath("/profile"); revalidatePath("/profile/birthdate-requests");
+      return { ok: true, message: data.status === "APPLIED" ? "Todos los grupos confirmaron. Se aplicó la fecha y se desactivaron los vínculos de apoderados."
+        : data.status === "REJECTED" ? "Solicitud rechazada. La fecha original se conserva." : "Confirmación guardada. Falta la aprobación de otros grupos." };
+    } catch { return { ok: false, message: "La solicitud ya no está disponible o no tienes permiso para revisarla. Actualiza la página." }; }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: "Inicia sesión para revisar solicitudes." };
@@ -88,6 +108,13 @@ export async function reviewBirthdate(requestId: string, groupId: string, approv
 
 export async function setAvatarPermission(guardianshipId: string, allow: boolean): Promise<ProfileResult> {
   if (!/^[0-9a-f-]{36}$/.test(guardianshipId) || typeof allow !== "boolean") return { ok: false, message: "Solicitud inválida." };
+  if (moduleTransport("profile") === "nest") {
+    try {
+      await createServerApiClient().setAvatarPermission({ params: { guardianshipId }, body: { allow } });
+      revalidatePath("/profile");
+      return { ok: true, message: allow ? "Autorización de imagen registrada." : "Permiso de imagen retirado. Si no existe otra autorización vigente, su foto dejará de estar disponible." };
+    } catch { return { ok: false, message: "No pudimos cambiar el permiso. Verifica que el vínculo y el consentimiento del menor sigan vigentes." }; }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: "Inicia sesión para revisar permisos de imagen." };

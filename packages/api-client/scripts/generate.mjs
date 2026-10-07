@@ -25,7 +25,7 @@ export function document() {
       ...(operation.body ? { requestBody: { required: true, content: json(ref(operation.body)) } } : {}), responses,
     };
   }
-  return { openapi: '3.0.3', info: { title: 'Asisteam HTTP', version: '1.0.0', description: 'MIG-04. Operaciones contract-only requieren #149/#151. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema.' }, paths, components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } }, schemas } };
+  return { openapi: '3.0.3', info: { title: 'Asisteam HTTP', version: '1.0.0', description: 'MIG-07. Grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema.' }, paths, components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } }, schemas } };
 }
 
 export async function artifacts() {

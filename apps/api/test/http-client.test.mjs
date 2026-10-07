@@ -16,7 +16,7 @@ test('cliente compilado consume Nest real versionado y conserva sondas operativa
   assert.deepEqual(await (await fetch(`${origin}/health`)).json(), { status: 'ok' });
   await assert.rejects(client.ready(), { status: 503, error: { code: 'service_unavailable', message: 'El servicio no está disponible. Vuelve a intentarlo.', details: {} } });
   const absent = await fetch(`${origin}/api/v1/me`);
-  assert.equal(absent.status, 404); // Specification does not advertise a domain handler as delivered.
+  assert.equal(absent.status, 401); // Domain handler now requires a verified session.
   assert.equal(absent.headers.get('cache-control'), 'no-store');
 });
 test('filtro Nest normaliza 409 y 422 sin excepción ni SQL', () => {

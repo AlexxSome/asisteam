@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { MEMBERSHIP_ROLES } from "./enums";
-import { groupFormSchema, groupSettingsSchema } from "./schemas/group";
+import { groupFormSchema, groupSettingsSchema, groupSettingsChangeSchema, joinCodeSchema } from "./schemas/group";
 import { profileSchema } from "./schemas/profile";
 import { apiErrorResponseSchema } from "./schemas/api-error";
 
@@ -42,6 +42,23 @@ export const httpSchemas = {
   OwnProfile: httpOwnProfileSchema,
   UpdateOwnProfile: profileSchema,
   ProfileUpdated: z.object({ profile: httpOwnProfileSchema, birthdate_change_pending: z.boolean() }).strict(),
+  GroupSettingsChange: groupSettingsChangeSchema,
+  GroupSettings: z.object({ settings: groupSettingsSchema }).strict(),
+  InviteCode: z.object({ code: joinCodeSchema }).strict(),
+  JoinByCode: z.object({ code: joinCodeSchema }).strict(),
+  JoinedGroup: z.object({ membership: z.object({ group_id: uuid, status: z.enum(["ACTIVE", "PENDING"]) }).strict() }).strict(),
+  Success: z.object({ success: z.literal(true) }).strict(),
+  ProfileContext: z.object({
+    avatar_allowed: z.boolean(), has_admin_role: z.boolean(),
+    birthdate_request: z.object({ id: uuid, requested_birthdate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), status: z.enum(["PENDING", "APPROVED", "APPLIED", "REJECTED", "CANCELLED"]) }).strict().nullable(),
+    avatar_permissions: z.array(z.object({ guardianship_id: uuid, full_name: z.string(), allows_avatar: z.boolean() }).strict()),
+  }).strict(),
+  BirthdateReviews: z.object({ data: z.array(z.object({ request_id: uuid, group_id: uuid, group_name: z.string(), full_name: z.string(), old_birthdate: z.string(), requested_birthdate: z.string(), approved: z.boolean() }).strict()) }).strict(),
+  ReviewParams: z.object({ requestId: uuid }).strict(),
+  ReviewBirthdate: z.object({ group_id: uuid, approve: z.boolean() }).strict(),
+  BirthdateReviewed: z.object({ status: z.enum(["PENDING", "APPLIED", "REJECTED"]) }).strict(),
+  AvatarPermissionParams: z.object({ guardianshipId: uuid }).strict(),
+  AvatarPermissionChange: z.object({ allow: z.boolean() }).strict(),
   ApiError: apiErrorResponseSchema,
   Health: z.object({ status: z.literal("ok") }).strict(),
   Ready: z.object({ status: z.literal("ready") }).strict(),
@@ -54,9 +71,18 @@ export const httpOperations = {
   getSession: { method: "GET", path: "/api/v1/auth/session", module: "auth", authenticated: true, response: "Session", status: 200, state: "implemented", summary: "Identidad del perfil verificada; sesión vigente y cuenta ACTIVE" },
   health: { method: "GET", path: "/api/v1/health", module: "runtime", authenticated: false, response: "Health", status: 200, state: "implemented", summary: "Vida del proceso" },
   ready: { method: "GET", path: "/api/v1/ready", module: "runtime", authenticated: false, response: "Ready", status: 200, state: "implemented", summary: "Disponibilidad de PostgreSQL" },
-  listMyGroups: { method: "GET", path: "/api/v1/me/groups", module: "groups", authenticated: true, query: "PageQuery", response: "MyGroups", status: 200, state: "contract-only", summary: "Grupos con membresía ACTIVE; roles locales unidos, orden name/id" },
-  getGroup: { method: "GET", path: "/api/v1/groups/{groupId}", module: "groups", authenticated: true, params: "GroupParams", response: "GroupDetail", status: 200, state: "contract-only", summary: "Detalle visible; código/settings solo ADMIN, grupo ajeno 404" },
-  createGroup: { method: "POST", path: "/api/v1/groups", module: "groups", authenticated: true, body: "CreateGroup", response: "GroupCreated", status: 201, state: "contract-only", summary: "Crear grupo + ADMIN mediante create_group; actor de sesión" },
-  getOwnProfile: { method: "GET", path: "/api/v1/me", module: "profile", authenticated: true, response: "OwnProfile", status: 200, state: "contract-only", summary: "Datos propios; no sirve para perfiles de terceros" },
-  updateOwnProfile: { method: "PATCH", path: "/api/v1/me", module: "profile", authenticated: true, body: "UpdateOwnProfile", response: "ProfileUpdated", status: 200, state: "contract-only", summary: "Editar perfil conservando revisión de birthdate y consentimiento" },
+  listMyGroups: { method: "GET", path: "/api/v1/me/groups", module: "groups", authenticated: true, query: "PageQuery", response: "MyGroups", status: 200, state: "implemented", summary: "Grupos con membresía ACTIVE; roles locales unidos, orden name/id" },
+  getGroup: { method: "GET", path: "/api/v1/groups/{groupId}", module: "groups", authenticated: true, params: "GroupParams", response: "GroupDetail", status: 200, state: "implemented", summary: "Detalle visible; código/settings solo ADMIN, grupo ajeno 404" },
+  createGroup: { method: "POST", path: "/api/v1/groups", module: "groups", authenticated: true, body: "CreateGroup", response: "GroupCreated", status: 201, state: "implemented", summary: "Crear grupo + ADMIN mediante create_group; actor de sesión" },
+  updateGroup: { method: "PATCH", path: "/api/v1/groups/{groupId}", module: "groups", authenticated: true, params: "GroupParams", body: "CreateGroup", response: "Success", status: 200, state: "implemented", summary: "Actualizar datos del grupo; ADMIN ACTIVE y RLS" },
+  updateGroupSettings: { method: "PATCH", path: "/api/v1/groups/{groupId}/settings", module: "groups", authenticated: true, params: "GroupParams", body: "GroupSettingsChange", response: "GroupSettings", status: 200, state: "implemented", summary: "Toggles independientes mediante RPC" },
+  rotateInviteCode: { method: "POST", path: "/api/v1/groups/{groupId}/invite-code/rotate", module: "groups", authenticated: true, params: "GroupParams", response: "InviteCode", status: 201, state: "implemented", summary: "Regenerar código; ADMIN ACTIVE" },
+  joinAsAthlete: { method: "POST", path: "/api/v1/groups/{groupId}/memberships/self", module: "groups", authenticated: true, params: "GroupParams", response: "Success", status: 201, state: "implemented", summary: "ADMIN se agrega como ATHLETE; RPC conserva R1 y cupos" },
+  joinByCode: { method: "POST", path: "/api/v1/groups/join", module: "groups", authenticated: true, body: "JoinByCode", response: "JoinedGroup", status: 201, state: "implemented", summary: "Ingreso ATHLETE; menor PENDING y contador persistido" },
+  getProfileContext: { method: "GET", path: "/api/v1/me/profile-context", module: "profile", authenticated: true, response: "ProfileContext", status: 200, state: "implemented", summary: "Solicitud propia y permisos vigentes de imagen" },
+  listBirthdateReviews: { method: "GET", path: "/api/v1/me/birthdate-reviews", module: "profile", authenticated: true, response: "BirthdateReviews", status: 200, state: "implemented", summary: "Correcciones de otros integrantes autorizadas por RPC" },
+  reviewBirthdate: { method: "POST", path: "/api/v1/me/birthdate-reviews/{requestId}", module: "profile", authenticated: true, params: "ReviewParams", body: "ReviewBirthdate", response: "BirthdateReviewed", status: 201, state: "implemented", summary: "Revisión ADMIN por grupo; no autoaprobación" },
+  setAvatarPermission: { method: "PATCH", path: "/api/v1/me/avatar-permissions/{guardianshipId}", module: "profile", authenticated: true, params: "AvatarPermissionParams", body: "AvatarPermissionChange", response: "Success", status: 200, state: "implemented", summary: "Apoderado vigente autoriza o retira imagen; historia conservada" },
+  getOwnProfile: { method: "GET", path: "/api/v1/me", module: "profile", authenticated: true, response: "OwnProfile", status: 200, state: "implemented", summary: "Datos propios; no sirve para perfiles de terceros" },
+  updateOwnProfile: { method: "PATCH", path: "/api/v1/me", module: "profile", authenticated: true, body: "UpdateOwnProfile", response: "ProfileUpdated", status: 200, state: "implemented", summary: "Editar perfil conservando revisión de birthdate y consentimiento" },
 } as const;

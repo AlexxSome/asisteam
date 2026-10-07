@@ -1,6 +1,7 @@
 import { Catch, HttpException, type ArgumentsHost, type ExceptionFilter } from '@nestjs/common';
 import { apiErrorResponseSchema } from '@asisteam/core/runtime';
 import type { Response } from 'express';
+import { DomainException } from './domain-errors.js';
 import { SafeLogger } from './logger.js';
 
 const messages: Record<number, [string, string]> = {
@@ -31,6 +32,6 @@ export class SafeExceptionFilter implements ExceptionFilter {
     const status = exception instanceof HttpException ? exception.getStatus()
       : parserType === 'entity.too.large' ? 413 : parserType === 'entity.parse.failed' ? 400 : 500;
     this.logger.event('error', 'request_failed', { request_id: response.locals.requestId, status });
-    response.status(status).json(errorBody(status));
+    response.status(status).json(exception instanceof DomainException ? exception.safeBody : errorBody(status));
   }
 }

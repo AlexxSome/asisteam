@@ -1,6 +1,6 @@
-# API · MIG-02/MIG-05 (#146, #149)
+# API · MIG-02/MIG-05/MIG-07 (#146, #149, #151)
 
-[Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone sondas operativas y `GET /api/v1/auth/session` con sesión/RLS temporal de [MIG-05](../../docs/migration/issue-149/README.md); los handlers de dominio siguen sus entregables #151–#160. [OpenAPI/cliente #148](../../packages/api-client/README.md) y [CI/staging #147](../../docs/migration/issue-147/README.md) tienen infraestructura entregada y evidencia separada; no acreditan migración de tráfico.
+[Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone sondas operativas y `GET /api/v1/auth/session` con sesión/RLS temporal de [MIG-05](../../docs/migration/issue-149/README.md); grupos/perfil tienen handlers reales en [MIG-07](../../docs/migration/issue-151/README.md); otros dominios siguen #152–#160. [OpenAPI/cliente #148](../../packages/api-client/README.md) y [CI/staging #147](../../docs/migration/issue-147/README.md) tienen infraestructura entregada y evidencia separada; no acreditan migración de tráfico.
 
 ## Build y arranque
 
@@ -84,3 +84,9 @@ pnpm exec supabase test db supabase/tests/api_session_rls.test.sql
 ```
 
 [Seguro] Las integraciones admiten exclusivamente Supabase loopback, crean fixtures sintéticos y restauran LOGIN/password del rol después de la prueba. La segunda usa GoTrue real (registro/logout); la primera usa un emisor sintético y SQL real, incluidas rutas de fixture que no forman parte de la app publicada. [Evidencia, auditoría y fallo pgTAP de base](../../docs/migration/issue-149/README.md).
+
+## Grupos y perfil · MIG-07
+
+[Seguro] [Contrato y runbook](../../docs/migration/issue-151/README.md) especifican los handlers reales bajo `/api/v1`, sesión/aviso, RLS, DTO por rol, código, revisión de edad y permisos de imagen. La implementación reutiliza SQL canónico y la conexión mínima de MIG-05; no permite elegir actor/role/function SQL desde HTTP. El runtime sigue usando PostgreSQL/Auth del mismo proyecto Supabase. Nest no sirve bytes de Storage todavía.
+
+[Seguro] Backend CI exige `API_RLS_TEST=1` para las suites de sesión y grupos/perfil, sin omisiones. QA extendida ejecuta Next con GROUPS/PROFILE=nest a375px. Para activar las banderas de producto, configurar el origen API y el mismo proyecto según el [runbook de cliente](../../packages/api-client/README.md); retornar a supabase conserva datos y nunca dispara fallback ante errores.

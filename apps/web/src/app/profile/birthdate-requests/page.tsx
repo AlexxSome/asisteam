@@ -1,3 +1,5 @@
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { AppShell } from "@/components/app-shell";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -9,7 +11,12 @@ export default async function BirthdateRequestsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-  const { data, error } = await supabase.rpc("list_birthdate_reviews");
+  let data: BirthdateReview[] | null = null;
+  let error = false;
+  try {
+    if (moduleTransport("profile") === "nest") data = (await createServerApiClient().listBirthdateReviews()).data;
+    else { const result = await supabase.rpc("list_birthdate_reviews"); data = result.data; error = !!result.error; }
+  } catch { error = true; }
   return <AppShell><div className="mx-auto max-w-3xl space-y-6">
     <Link href="/profile" className="underline">Volver a mi perfil</Link>
     <h1 className="text-2xl font-semibold">Correcciones de fecha de nacimiento</h1>

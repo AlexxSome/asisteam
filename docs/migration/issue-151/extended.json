@@ -1,0 +1,45 @@
+{
+  "commit": "497d76aa067f414e54e31bcd1707a36c024d2c67",
+  "sourceCommit": "497d76aa067f414e54e31bcd1707a36c024d2c67",
+  "date": "2026-10-07T14:36:02.994Z",
+  "node": "v24.19.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.63
+    },
+    {
+      "check": "chromium-install",
+      "status": "PASS",
+      "seconds": 0.37
+    },
+    {
+      "check": "nest-domain-build",
+      "status": "PASS",
+      "seconds": 0.21
+    },
+    {
+      "check": "playwright-responsive-axe",
+      "status": "PASS",
+      "seconds": 105.3,
+      "tests": 33,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-transport-faults",
+      "status": "PASS",
+      "seconds": 17.1,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-groups-profile",
+      "status": "PASS",
+      "seconds": 20.73,
+      "tests": 8,
+      "omitted": 0
+    }
+  ]
+}

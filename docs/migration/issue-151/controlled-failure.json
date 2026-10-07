@@ -1,0 +1,39 @@
+{
+  "commit": "497d76aa067f414e54e31bcd1707a36c024d2c67",
+  "sourceCommit": "497d76aa067f414e54e31bcd1707a36c024d2c67",
+  "date": "2026-10-07T14:39:42.692Z",
+  "node": "v24.19.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "probe-type-baseline",
+      "status": "PASS",
+      "seconds": 1.54
+    },
+    {
+      "check": "controlled-pgtap-failure",
+      "status": "FAIL",
+      "seconds": 1.77,
+      "sqlFailures": [
+        {
+          "file": "authorization.test.sql",
+          "failed": 1
+        }
+      ],
+      "expected": true
+    },
+    {
+      "check": "controlled-type-failure",
+      "status": "FAIL",
+      "seconds": 0.77,
+      "errorCodes": [
+        "TS2322"
+      ],
+      "expected": true
+    },
+    {
+      "check": "controlled-failure-detected",
+      "status": "PASS"
+    }
+  ]
+}
