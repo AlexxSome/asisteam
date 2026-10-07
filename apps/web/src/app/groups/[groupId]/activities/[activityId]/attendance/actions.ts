@@ -4,6 +4,9 @@ import { revalidatePath } from "next/cache";
 import { ATTENDANCE_ERROR_MESSAGES, attendanceBatchSchema, attendanceChangesSchema, attendanceSavedRecordsSchema, type AttendanceInput } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 
 type Failure = { error: { code: string; message: string; details: Record<string, never> } };
 export type AttendanceResult = Failure | { records: AttendanceInput[] };
@@ -17,6 +20,13 @@ export async function saveAttendance(groupId: string, activityId: string, input:
   if (!isGroupId(groupId) || !isGroupId(activityId)) return failure("activity_not_found");
   const parsed = attendanceBatchSchema.safeParse(input);
   if (!parsed.success || typeof onlyUnmarked !== "boolean") return failure("invalid_attendance_batch");
+  if (moduleTransport("attendance") === "nest") {
+    try {
+      const result = await createServerApiClient().saveAttendance({ params: { groupId, activityId }, body: { records: parsed.data, only_unmarked: onlyUnmarked } });
+      revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
+      return result;
+    } catch (error) { return failure(error instanceof ApiClientError ? error.error.code : "attendance_save_failed"); }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");
@@ -34,6 +44,13 @@ export async function saveAttendance(groupId: string, activityId: string, input:
 
 export async function clearAttendance(groupId: string, activityId: string, membershipId: string): Promise<Failure | { cleared: true }> {
   if (![groupId, activityId, membershipId].every(isGroupId)) return failure("invalid_attendance_batch");
+  if (moduleTransport("attendance") === "nest") {
+    try {
+      const result = await createServerApiClient().clearAttendance({ params: { groupId, activityId, membershipId } });
+      revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
+      return result;
+    } catch (error) { return failure(error instanceof ApiClientError ? error.error.code : "attendance_save_failed"); }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");
@@ -47,6 +64,13 @@ export async function updateAttendance(groupId: string, activityId: string, memb
   if (![groupId, activityId, membershipId].every(isGroupId)) return failure("attendance_record_not_found");
   const parsed = attendanceChangesSchema.safeParse(input);
   if (!parsed.success) return failure("invalid_attendance_changes");
+  if (moduleTransport("attendance") === "nest") {
+    try {
+      const result = await createServerApiClient().updateAttendance({ params: { groupId, activityId, membershipId }, body: parsed.data });
+      revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
+      return result;
+    } catch (error) { return failure(error instanceof ApiClientError ? error.error.code : "attendance_save_failed"); }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");

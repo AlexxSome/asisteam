@@ -1,0 +1,39 @@
+{
+  "commit": "0075459b48fac9a9c79854e1f9ce1e68f6cf7216",
+  "date": "2026-10-07T21:37:07.295Z",
+  "environment": "macos-arm64-local-synthetic",
+  "checks": [
+    {
+      "check": "MIG-11 guardado, recarga, corrección ADMIN y COACH por teclado a375px",
+      "status": "PASS",
+      "seconds": 6.445,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "axe375-1",
+      "status": "PASS",
+      "violations": 0,
+      "humanPendingRules": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ]
+    },
+    {
+      "check": "MIG-11 dos lotes: fallo de red conserva500 confirmados, sin cola ni reenvío",
+      "status": "PASS",
+      "seconds": 4.682,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "axe375-3",
+      "status": "PASS",
+      "violations": 0,
+      "humanPendingRules": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ]
+    }
+  ]
+}

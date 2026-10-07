@@ -1,0 +1,31 @@
+{
+  "commit": "0075459b48fac9a9c79854e1f9ce1e68f6cf7216",
+  "sourceCommit": "0075459b48fac9a9c79854e1f9ce1e68f6cf7216",
+  "date": "2026-10-07T21:39:13.721Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "quota-test-byte-identical-to-base",
+      "status": "PASS"
+    },
+    {
+      "check": "quota-baseline-on-shared-stack",
+      "status": "FAIL",
+      "seconds": 1.92,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    },
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 53.2,
+      "tests": 81,
+      "omitted": 0
+    }
+  ]
+}

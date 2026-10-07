@@ -10,6 +10,7 @@ import { Database } from './database.js';
 import { InvitationsController, InvitationRegistrationStore } from './invitations.js';
 import { MembersConsentsController } from './members-consents.js';
 import { GroupsProfileController } from './groups-profile.js';
+import { AttendanceController } from './attendance.js';
 import { ActivitiesController } from './activities.js';
 import { HealthController } from './health.js';
 import { SafeLogger } from './logger.js';
@@ -17,7 +18,7 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    controllers: [AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
     providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore],
   })
   class RuntimeModule {}
@@ -41,6 +42,9 @@ export async function createApplication(config: RuntimeConfig, logger = new Safe
     });
     next();
   });
+  // Large notes remain bounded by the strict500-record attendance schema.
+  app.useBodyParser('json', { limit: '2mb', type: request => request.method === 'PUT'
+    && /^\/api\/v1\/groups\/[^/]+\/activities\/[^/]+\/attendance\/?$/.test(request.url ?? '') });
   app.useBodyParser('json', { limit: '64kb' });
   app.useGlobalFilters(new SafeExceptionFilter(logger));
   const server: Server = app.getHttpServer();

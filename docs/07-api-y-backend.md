@@ -578,3 +578,8 @@ Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-su
 ## Migración de actividades/tipos · MIG-10 (#154), 07-10-2026
 
 [Seguro] [Contrato y evidencia MIG-10](migration/issue-154/README.md) implementan diez operaciones HTTP/SDK con ACTIVITIES=nest: listado/detalle/agendas/inicio, creación/edición/eliminación de actividades y listado/creación/edición-desactivación de tipos. UTC/offset en HTTP y America/Santiago en formularios/expansión; schemas estrictos, columnas explícitas y membership ACTIVE/ADMIN por transacción. RPC/RLS canónicas preservan límites26semanas/150, locks, historia de series y cuatro tipos de sistema inmutables. No cambia SQL ni RLS; el retorno a Supabase conserva la misma base y no repite operaciones inciertas.
+
+
+## Migración de asistencia · MIG-11 (#155), 07-10-2026
+
+[Seguro] [Contrato y evidencia MIG-11](migration/issue-155/README.md) implementan GET roster100/PUT lote1–500/PATCH parcial/DELETE desmarcado bajo /api/v1/groups/{groupId}/activities/{activityId}/attendance, seleccionados por ATTENDANCE=nest. Sesión/consentimiento/membership y tenant comprobados en transacción; vistas/RPC canónicas mantienen atomicidad, UNIQUE y privacidad COACH (estados sin notas/desmarcado). Solo el PUT admite2MiB para notas Unicode; no cambia SQL/RLS ni métricas. Next conserva éxitos de lotes previos y comunica fallo restante sin retry/fallback/cola offline.

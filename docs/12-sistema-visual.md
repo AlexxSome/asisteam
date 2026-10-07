@@ -160,3 +160,8 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de actividades/tipos con Nest · MIG-10 (#154), 07-10-2026
 
 [Seguro] [MIG-10](migration/issue-154/README.md) conserva ActivityForm/ActivityTypeForm, validación y resumen de horas de Chile, repetición inclusiva y alcance esta/siguientes. El código attendance_confirmation_required mantiene la confirmación adicional de eliminación puntual. Series conservan ocurrencias con asistencia. Error/timeout conserva mensaje sin éxito, sin otro ejecutor; tipo desactivado conserva actividades/historial. No introduce componentes, tokens ni estilos. La evidencia375px/axe acotada figura en MIG-10; no certifica revisión humana completa.
+
+
+## Estados de asistencia con Nest · MIG-11 (#155), 07-10-2026
+
+[Seguro] [MIG-11](migration/issue-155/README.md) conserva AttendanceSheet, selección textual/check/aria-pressed, objetivos44px, confirmación inline y feedback por fila. Los lotes confirmados permanecen tras un error posterior; rollback afecta el pendiente y comunica resultado parcial. COACH no recibe notas ni controles de notas/desmarcado. No agrega componentes/tokens/estilos; no existe cola offline ni éxito antes de confirmar servidor. Evidencia375px/teclado/axe acotada en MIG-11.
