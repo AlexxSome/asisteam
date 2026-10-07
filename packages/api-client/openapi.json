@@ -3,9 +3,1633 @@
   "info": {
     "title": "Asisteam HTTP",
     "version": "1.0.0",
-    "description": "MIG-09. Invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
+    "description": "MIG-10. Actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
   },
   "paths": {
+    "/api/v1/groups/{groupId}/activities": {
+      "get": {
+        "operationId": "listGroupActivities",
+        "summary": "Agenda del grupo ACTIVE; página50, próximas/pasadas",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "upcoming",
+                "past"
+              ],
+              "default": "upcoming"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Activities"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createActivity",
+        "summary": "ADMIN: materializar actividad/serie mediante RPC canónica",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateActivity"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityCreated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/activities": {
+      "get": {
+        "operationId": "listActivities",
+        "summary": "Agenda de grupos ACTIVE seleccionados; 50 filas, próxima o pasada",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "group_ids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "upcoming",
+                "past"
+              ],
+              "default": "upcoming"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Activities"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/activities/home": {
+      "get": {
+        "operationId": "getHomeActivities",
+        "summary": "Próxima/en curso y anterior para inicio por grupos autorizados",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "group_ids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeActivities"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/{groupId}/activities/{activityId}": {
+      "get": {
+        "operationId": "getActivity",
+        "summary": "Detalle con columnas explícitas y 404 anti-enumeración",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "activityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Activity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateActivity",
+        "summary": "ADMIN: puntual o futuras sin asistencia, sin reexpandir",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "activityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateActivity"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivitiesAffected"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteActivity",
+        "summary": "ADMIN: preservar historial de serie; confirmación puntual adicional",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "activityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteActivity"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivitiesAffected"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/{groupId}/activity-types": {
+      "get": {
+        "operationId": "listActivityTypes",
+        "summary": "Tipos de sistema/grupo, página100",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "include_inactive",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityTypes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createActivityType",
+        "summary": "ADMIN: crear tipo personalizado",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateActivityType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityTypeSaved"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/{groupId}/activity-types/{typeId}": {
+      "patch": {
+        "operationId": "updateActivityType",
+        "summary": "ADMIN: editar/desactivar propio, sistema inmutable",
+        "tags": [
+          "activities"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "typeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateActivityType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityTypeSaved"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/groups/{groupId}/memberships": {
       "get": {
         "operationId": "listGroupMembers",
@@ -6584,6 +8208,849 @@
       }
     },
     "schemas": {
+      "ActivityParams": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "activityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "groupId",
+          "activityId"
+        ],
+        "additionalProperties": false
+      },
+      "ActivityTypeParams": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "typeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "groupId",
+          "typeId"
+        ],
+        "additionalProperties": false
+      },
+      "GroupActivityQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "default": 1
+          },
+          "period": {
+            "type": "string",
+            "enum": [
+              "upcoming",
+              "past"
+            ],
+            "default": "upcoming"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ActivityQuery": {
+        "type": "object",
+        "properties": {
+          "group_ids": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "default": 1
+          },
+          "period": {
+            "type": "string",
+            "enum": [
+              "upcoming",
+              "past"
+            ],
+            "default": "upcoming"
+          }
+        },
+        "required": [
+          "group_ids"
+        ],
+        "additionalProperties": false
+      },
+      "ActivitySelection": {
+        "type": "object",
+        "properties": {
+          "group_ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_ids"
+        ],
+        "additionalProperties": false
+      },
+      "ActivityTypeQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "default": 1
+          },
+          "include_inactive": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "Activity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "group_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "activity_type_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "activity_type_name": {
+            "type": "string"
+          },
+          "activity_type_color": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_system_type": {
+            "type": "boolean"
+          },
+          "recurrence_rule": {
+            "type": "object",
+            "properties": {
+              "freq": {
+                "type": "string",
+                "enum": [
+                  "WEEKLY"
+                ]
+              },
+              "by_weekday": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "MO",
+                    "TU",
+                    "WE",
+                    "TH",
+                    "FR",
+                    "SA",
+                    "SU"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 7
+              },
+              "until": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            },
+            "required": [
+              "freq",
+              "by_weekday",
+              "until"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "recurrence_source_id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "group_id",
+          "activity_type_id",
+          "title",
+          "description",
+          "location",
+          "starts_at",
+          "ends_at",
+          "activity_type_name",
+          "activity_type_color",
+          "is_system_type",
+          "recurrence_rule",
+          "recurrence_source_id"
+        ],
+        "additionalProperties": false
+      },
+      "Activities": {
+        "type": "object",
+        "properties": {
+          "activities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "group_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "activity_type_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "location": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "starts_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "ends_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "activity_type_name": {
+                  "type": "string"
+                },
+                "activity_type_color": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "is_system_type": {
+                  "type": "boolean"
+                },
+                "recurrence_rule": {
+                  "type": "object",
+                  "properties": {
+                    "freq": {
+                      "type": "string",
+                      "enum": [
+                        "WEEKLY"
+                      ]
+                    },
+                    "by_weekday": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "MO",
+                          "TU",
+                          "WE",
+                          "TH",
+                          "FR",
+                          "SA",
+                          "SU"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 7
+                    },
+                    "until": {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    }
+                  },
+                  "required": [
+                    "freq",
+                    "by_weekday",
+                    "until"
+                  ],
+                  "additionalProperties": false,
+                  "nullable": true
+                },
+                "recurrence_source_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id",
+                "group_id",
+                "activity_type_id",
+                "title",
+                "description",
+                "location",
+                "starts_at",
+                "ends_at",
+                "activity_type_name",
+                "activity_type_color",
+                "is_system_type",
+                "recurrence_rule",
+                "recurrence_source_id"
+              ],
+              "additionalProperties": false
+            },
+            "maxItems": 50
+          },
+          "hasNext": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "activities",
+          "hasNext"
+        ],
+        "additionalProperties": false
+      },
+      "HomeActivities": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "group_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "activity_type_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "location": {
+                "type": "string",
+                "nullable": true
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "activity_type_name": {
+                "type": "string"
+              },
+              "activity_type_color": {
+                "type": "string",
+                "nullable": true
+              },
+              "is_system_type": {
+                "type": "boolean"
+              },
+              "recurrence_rule": {
+                "type": "object",
+                "properties": {
+                  "freq": {
+                    "type": "string",
+                    "enum": [
+                      "WEEKLY"
+                    ]
+                  },
+                  "by_weekday": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "MO",
+                        "TU",
+                        "WE",
+                        "TH",
+                        "FR",
+                        "SA",
+                        "SU"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 7
+                  },
+                  "until": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  }
+                },
+                "required": [
+                  "freq",
+                  "by_weekday",
+                  "until"
+                ],
+                "additionalProperties": false,
+                "nullable": true
+              },
+              "recurrence_source_id": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "group_id",
+              "activity_type_id",
+              "title",
+              "description",
+              "location",
+              "starts_at",
+              "ends_at",
+              "activity_type_name",
+              "activity_type_color",
+              "is_system_type",
+              "recurrence_rule",
+              "recurrence_source_id"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "previous": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "group_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "activity_type_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "location": {
+                "type": "string",
+                "nullable": true
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "activity_type_name": {
+                "type": "string"
+              },
+              "activity_type_color": {
+                "type": "string",
+                "nullable": true
+              },
+              "is_system_type": {
+                "type": "boolean"
+              },
+              "recurrence_rule": {
+                "type": "object",
+                "properties": {
+                  "freq": {
+                    "type": "string",
+                    "enum": [
+                      "WEEKLY"
+                    ]
+                  },
+                  "by_weekday": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "MO",
+                        "TU",
+                        "WE",
+                        "TH",
+                        "FR",
+                        "SA",
+                        "SU"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 7
+                  },
+                  "until": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  }
+                },
+                "required": [
+                  "freq",
+                  "by_weekday",
+                  "until"
+                ],
+                "additionalProperties": false,
+                "nullable": true
+              },
+              "recurrence_source_id": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "group_id",
+              "activity_type_id",
+              "title",
+              "description",
+              "location",
+              "starts_at",
+              "ends_at",
+              "activity_type_name",
+              "activity_type_color",
+              "is_system_type",
+              "recurrence_rule",
+              "recurrence_source_id"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "now": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "next",
+          "previous",
+          "now"
+        ],
+        "additionalProperties": false
+      },
+      "ActivityTypes": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "group_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "is_active": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id",
+                "group_id",
+                "name",
+                "color",
+                "is_active"
+              ],
+              "additionalProperties": false
+            },
+            "maxItems": 100
+          },
+          "hasNext": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "data",
+          "hasNext"
+        ],
+        "additionalProperties": false
+      },
+      "CreateActivity": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          },
+          "activity_type_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recurrence_rule": {
+            "type": "object",
+            "properties": {
+              "freq": {
+                "type": "string",
+                "enum": [
+                  "WEEKLY"
+                ]
+              },
+              "by_weekday": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "MO",
+                    "TU",
+                    "WE",
+                    "TH",
+                    "FR",
+                    "SA",
+                    "SU"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 7
+              },
+              "until": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            },
+            "required": [
+              "freq",
+              "by_weekday",
+              "until"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          }
+        },
+        "required": [
+          "title",
+          "activity_type_id",
+          "description",
+          "location",
+          "starts_at",
+          "ends_at"
+        ],
+        "additionalProperties": false
+      },
+      "UpdateActivity": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          },
+          "activity_type_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "single",
+              "series"
+            ]
+          }
+        },
+        "required": [
+          "title",
+          "activity_type_id",
+          "description",
+          "location",
+          "starts_at",
+          "ends_at",
+          "scope"
+        ],
+        "additionalProperties": false
+      },
+      "DeleteActivity": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": [
+              "single",
+              "series"
+            ]
+          },
+          "confirm_attendance": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "scope",
+          "confirm_attendance"
+        ],
+        "additionalProperties": false
+      },
+      "ActivityCreated": {
+        "type": "object",
+        "properties": {
+          "activityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "activityId"
+        ],
+        "additionalProperties": false
+      },
+      "ActivitiesAffected": {
+        "type": "object",
+        "properties": {
+          "affected": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "affected"
+        ],
+        "additionalProperties": false
+      },
+      "CreateActivityType": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 40
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          }
+        },
+        "required": [
+          "name",
+          "color"
+        ],
+        "additionalProperties": false
+      },
+      "UpdateActivityType": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 40
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "is_active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "color",
+          "is_active"
+        ],
+        "additionalProperties": false
+      },
+      "ActivityTypeSaved": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
       "MemberParams": {
         "type": "object",
         "properties": {

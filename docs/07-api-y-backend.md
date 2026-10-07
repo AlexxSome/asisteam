@@ -573,3 +573,8 @@ Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-su
 [Seguro] La frontera service_role de §6/AGENTS se conserva: invitation-auth es un bridge temporal limitado a GoTrue createUser, con secreto independiente y nonce efímero validado/consumido por trigger; no autoriza grupos, emite ni acepta por su cuenta. Nest nunca recibe service_role. Los endpoints legacy permanecen para reversión seleccionada, sin ejecución doble/fallback. Supabase Auth/trigger y retirada Edge/Auth continúan pendientes #162/#164.
 
 [Seguro] Los links ya emitidos conservan /invitations/:token y su hash/base; no se invalidan masivamente. Caducados/reutilizados no crean cuenta ni membresía. Fallo de correo deja PENDING visible, no éxito; revisión del apoderado confirmada permanece registrada aunque falle envío posterior. Consentimiento indisponible devuelve error temporal, sin confundirse con falta de consentimiento. Revocación manual sigue su RPC previa, fuera de las nueve operaciones portadas.
+
+
+## Migración de actividades/tipos · MIG-10 (#154), 07-10-2026
+
+[Seguro] [Contrato y evidencia MIG-10](migration/issue-154/README.md) implementan diez operaciones HTTP/SDK con ACTIVITIES=nest: listado/detalle/agendas/inicio, creación/edición/eliminación de actividades y listado/creación/edición-desactivación de tipos. UTC/offset en HTTP y America/Santiago en formularios/expansión; schemas estrictos, columnas explícitas y membership ACTIVE/ADMIN por transacción. RPC/RLS canónicas preservan límites26semanas/150, locks, historia de series y cuatro tipos de sistema inmutables. No cambia SQL ni RLS; el retorno a Supabase conserva la misma base y no repite operaciones inciertas.

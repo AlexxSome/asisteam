@@ -1,5 +1,8 @@
 "use server";
 
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { revalidatePath } from "next/cache";
 import { ACTIVITY_ERROR_MESSAGES, activityFormSchema, activityScopeSchema, chileDateTimeToUtc } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +14,14 @@ export async function createActivity(groupId: string, input: unknown): Promise<C
   if (!isGroupId(groupId)) return { error: { code: "group_not_found", message: ACTIVITY_ERROR_MESSAGES.group_not_found!, details: {} } };
   const parsed = activityFormSchema.safeParse(input);
   if (!parsed.success) return { error: { code: "invalid_activity", message: "Revisa los campos indicados.", details: parsed.error.flatten().fieldErrors } };
+  if (moduleTransport("activities") === "nest") {
+    try {
+      const value = parsed.data;
+      const result = await createServerApiClient().createActivity({ params: { groupId }, body: { ...value, starts_at: chileDateTimeToUtc(value.starts_at), ends_at: chileDateTimeToUtc(value.ends_at) } });
+      revalidatePath(`/groups/${groupId}/activities`);
+      return result;
+    } catch (error) { if (error instanceof ApiClientError) return failure(error.error.code); throw error; }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: { code: "authentication_required", message: ACTIVITY_ERROR_MESSAGES.authentication_required!, details: {} } };
@@ -30,7 +41,7 @@ export async function createActivity(groupId: string, input: unknown): Promise<C
 }
 
 type MutationResult = { affected: number } | { error: { code: string; message: string; details: Record<string, string[] | undefined> } };
-function failure(code: string): MutationResult {
+function failure(code: string): { error: { code: string; message: string; details: Record<string, string[] | undefined> } } {
   return { error: { code, message: ACTIVITY_ERROR_MESSAGES[code] ?? "No pudimos guardar el cambio. Vuelve a intentarlo.", details: {} } };
 }
 
@@ -40,6 +51,14 @@ export async function updateActivity(groupId: string, activityId: string, input:
   if (!parsedScope.success) return failure("invalid_activity_scope");
   const parsed = activityFormSchema.safeParse(input);
   if (!parsed.success) return { error: { code: "invalid_activity", message: "Revisa los campos indicados.", details: parsed.error.flatten().fieldErrors } };
+  if (moduleTransport("activities") === "nest") {
+    try {
+      const { recurrence_rule: _recurrence, ...value } = parsed.data;
+      const result = await createServerApiClient().updateActivity({ params: { groupId, activityId }, body: { ...value, starts_at: chileDateTimeToUtc(value.starts_at), ends_at: chileDateTimeToUtc(value.ends_at), scope: parsedScope.data } });
+      revalidatePath(`/groups/${groupId}/activities`, "layout");
+      return result;
+    } catch (error) { if (error instanceof ApiClientError) return failure(error.error.code); throw error; }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");
@@ -59,6 +78,13 @@ export async function deleteActivity(groupId: string, activityId: string, scope:
   if (!isGroupId(groupId) || !isGroupId(activityId)) return failure("activity_not_found");
   const parsed = activityScopeSchema.safeParse(scope);
   if (!parsed.success) return failure("invalid_activity_scope");
+  if (moduleTransport("activities") === "nest") {
+    try {
+      const result = await createServerApiClient().deleteActivity({ params: { groupId, activityId }, body: { scope: parsed.data, confirm_attendance: confirmAttendance === true } });
+      revalidatePath(`/groups/${groupId}/activities`, "layout");
+      return result;
+    } catch (error) { if (error instanceof ApiClientError) return failure(error.error.code); throw error; }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");
