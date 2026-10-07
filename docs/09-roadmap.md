@@ -2,6 +2,9 @@
 
 **Proyecto:** Asisteam | **Fecha:** 2026-07-03 | **Documentos relacionados:** 01-vision-y-alcance.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 10-historias-de-usuario.md, 11-legal-seguridad-privacidad.md
 
+
+[Seguro] **MIG-06 (#150, 2026-10-07):** [compatibilidad y recalibración de corte](migration/issue-150/README.md#cronograma-y-ventana-recalibrados). PostgreSQL17.9 restaura el fixture con auth/storage de compatibilidad; dos dispatchers net/Vault requieren worker antes de retirar origen. [Probable] Camino crítico: #157/#159, #161 antes de #164, #162–#164 antes de salida final #165, luego #166. La ventana de dos horas se sustituye por medición de congelación/drenado/export-import/reconciliación/objetos/smoke/admisión; volumen/proveedor/equipo impiden fijar fechas comprometidas.
+
 ---
 
 ## 1. Resumen ejecutivo

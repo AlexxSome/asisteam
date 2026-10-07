@@ -1,0 +1,56 @@
+{
+  "sourceCommit": "9f1aeec508de5352b4f03ff7eedf3460ba710554",
+  "date": "2026-10-07T13:39:24.753Z",
+  "environment": "local-synthetic",
+  "node": "v24.16.0",
+  "checks": [
+    {
+      "check": "local-only-source-and-versions",
+      "status": "PASS",
+      "seconds": 2.14
+    },
+    {
+      "check": "export-schema-without-existing-data",
+      "status": "PASS",
+      "seconds": 0.189
+    },
+    {
+      "check": "owned-empty-source-clone",
+      "status": "PASS",
+      "seconds": 1.35
+    },
+    {
+      "check": "gotrue-synthetic-credential-export",
+      "status": "PASS",
+      "seconds": 2.012
+    },
+    {
+      "check": "domain-and-oauth-transport-fixtures",
+      "status": "PASS",
+      "seconds": 0.067
+    },
+    {
+      "check": "local-storage-export",
+      "status": "FAIL",
+      "seconds": 0.314
+    },
+    {
+      "check": "owned-resource-cleanup",
+      "status": "PASS",
+      "seconds": 0.281
+    }
+  ],
+  "pending": [
+    "independent-auth-login-and-sessions-162-164",
+    "oauth-provider-login-163",
+    "private-s3-authorization-161",
+    "managed-provider-and-production-volume",
+    "worker-dispatch-157-159",
+    "full-cutover-and-rollback-166"
+  ],
+  "sourceImage": "public.ecr.aws/supabase/postgres:17.6.1.143",
+  "sourcePostgres": "17.6",
+  "schemaBytes": 457757,
+  "schemaSha256": "394039b521b76c99d200c45763454075c0f9f061937616bcc4480c92dc226857",
+  "omittedProviderDefaultAcls": 18
+}
