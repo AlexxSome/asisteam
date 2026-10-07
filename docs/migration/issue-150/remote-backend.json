@@ -1,0 +1,69 @@
+{
+  "commit": "86c1f84f03c863a49561e0eb15bf8e18214379e6",
+  "sourceCommit": "cd0305cbcdde9ab459d109cb84fb1a16867c558d",
+  "date": "2026-10-07T13:47:16.398Z",
+  "node": "v24.16.0",
+  "environment": "github-actions-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 107.45
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.5
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 6.18
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 3.38
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 27.77
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 6.19,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 3.31
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "PASS",
+      "seconds": 9.5
+    },
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 65.62,
+      "tests": 81,
+      "omitted": 0
+    }
+  ]
+}

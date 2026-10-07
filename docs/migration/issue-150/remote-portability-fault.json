@@ -1,0 +1,56 @@
+{
+  "sourceCommit": "cd0305cbcdde9ab459d109cb84fb1a16867c558d",
+  "date": "2026-10-07T13:49:43.050Z",
+  "environment": "github-actions-synthetic",
+  "node": "v24.16.0",
+  "checks": [
+    {
+      "check": "local-only-source-and-versions",
+      "status": "PASS",
+      "seconds": 1.663
+    },
+    {
+      "check": "export-schema-without-existing-data",
+      "status": "PASS",
+      "seconds": 0.168
+    },
+    {
+      "check": "owned-empty-source-clone",
+      "status": "PASS",
+      "seconds": 1.027
+    },
+    {
+      "check": "gotrue-synthetic-credential-export",
+      "status": "PASS",
+      "seconds": 1.99
+    },
+    {
+      "check": "domain-and-oauth-transport-fixtures",
+      "status": "PASS",
+      "seconds": 0.1
+    },
+    {
+      "check": "local-storage-export",
+      "status": "FAIL",
+      "seconds": 0.318
+    },
+    {
+      "check": "owned-resource-cleanup",
+      "status": "PASS",
+      "seconds": 0.494
+    }
+  ],
+  "pending": [
+    "independent-auth-login-and-sessions-162-164",
+    "oauth-provider-login-163",
+    "private-s3-authorization-161",
+    "managed-provider-and-production-volume",
+    "worker-dispatch-157-159",
+    "full-cutover-and-rollback-166"
+  ],
+  "sourceImage": "public.ecr.aws/supabase/postgres:17.6.1.143",
+  "sourcePostgres": "17.6",
+  "schemaBytes": 457771,
+  "schemaSha256": "0d0aa3dd3f40d1ce17ab46e13b0d9783e0fb2eaa068e19f5e74fd2b923323dda",
+  "omittedProviderDefaultAcls": 18
+}

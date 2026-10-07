@@ -75,10 +75,18 @@ pnpm ci:backend
 | Credenciales | [Seguro] PASS3 bcrypt2a reales transportados y verificados en pgcrypto; contraseñas incorrectas rechazadas. 2b/2y/ausente/malformado/algoritmo no soportado no verifican en este ensayo |
 | Fallo controlado | [Seguro] FAIL esperado tras objetos, cleanup PASS; gate `portability-cleanup-after-failure` PASS |
 | API sesión/RLS y tipos | [Seguro] PASS2 integraciones de #149; tipos generados coinciden con `packages/db` |
-| pgTAP completo | [Seguro] FAIL preexistente: 1 en `send_invitations.test.sql` (cuota/caso15 documentado en #149). Gate backend permanece rojo |
+| pgTAP completo | [Seguro] FAIL preexistente: 1 en `send_invitations.test.sql` (cuota/caso15 documentado en #149). Gate local backend permanece rojo; CI efímero PASS (ver abajo) |
 | Reproducción de base | [Seguro] [baseline-pgtap.json](baseline-pgtap.json): mismo fallo1 con archivo exacto de `9f1aeec`; sin cambios en supabase/ ni tipos DB frente a esa base |
 | Integraciones reales producto/Edge | [Seguro] [product-integrations.json](product-integrations.json) PASS81/81, cero omitidas,57.66s; ejecutadas aparte porque backend se detiene en pgTAP |
 | Auto-revisión/lint final/diff | [Seguro] PASS diff limitado a #150; trabajo ajeno intacto |
 | Playwright/UI y proveedor cloud | [Seguro] OMITIDOS: no hay cambios UI, despliegue ni provisión externa en este ensayo |
 
-[Seguro] La entrega es revisable mediante PR; el fallo pgTAP preexistente impide declarar aprobado el gate global y debe resolverse antes de merge. Los casos de login/recovery/OAuth/S3 y el corte real pertenecen a #161–#166 y no se presentan como PASS de #150. El valor de este entregable es el ensayo reproducible y la lista concreta de incompatibilidades/gates, no una migración de producción.
+[Seguro] La entrega es revisable mediante PR. El pgTAP local existente sigue fallando, mientras que el gate remoto con DB efímera limpia pasa; no se atribuye una causa al contraste sin evidencia adicional. Los casos de login/recovery/OAuth/S3 y el corte real pertenecen a #161–#166 y no se presentan como PASS de #150. El valor de este entregable es el ensayo reproducible y la lista concreta de incompatibilidades/gates, no una migración de producción.
+
+## CI remoto sobre el commit de implementación
+
+[Seguro] [Run37631241378](https://github.com/AlexxSome/asisteam/actions/runs/37631241378), commit `cd0305cbcdde9ab459d109cb84fb1a16867c558d`: **checks, backend, staging y required PASS**; [resumen](remote-ci.json). Backend267s, checks124s y staging79s, dentro de12min/job. La corrección documental posterior conserva el código ensayado; el estado del nuevo SHA se consulta en el PR, sin heredar automáticamente este PASS.
+
+[Seguro] [Backend remoto](remote-backend.json) confirma pgTAP completo PASS, tipos coincidentes, integración sesión/RLS y81/81 integraciones de producto,0 omitidas. [Portabilidad remota](remote-portability.json) confirma las16 etapas del ensayo; [fallo/cleanup](remote-portability-fault.json) conserva el FAIL inyectado esperado y cleanup PASS. No se adjuntan logs crudos ni credenciales.
+
+[Seguro] La reproducción del archivo base demuestra que el fallo local de cuota ya existía fuera del diff #150 **en ese stack local**. CI limpio no lo reproduce. Esta evidencia no identifica su causa ni autoriza presentarlo como defecto SQL global, fallo remoto o riesgo introducido por este PR. Los resultados locales se mantienen como FAIL en su propio entorno; no se reemplazan ni ocultan con el PASS remoto.
