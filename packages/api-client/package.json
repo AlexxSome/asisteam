@@ -1,0 +1,16 @@
+{
+  "name": "@asisteam/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "generate": "node scripts/generate.mjs",
+    "check:generated": "node scripts/generate.mjs --check",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": { "@asisteam/core": "workspace:*", "zod": "^3.25.0" },
+  "devDependencies": { "@types/node": "24.19.1", "typescript": "5.9.3", "openapi-typescript": "7.13.0", "zod-to-json-schema": "3.25.2" }
+}
