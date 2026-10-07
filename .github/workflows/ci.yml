@@ -5,6 +5,8 @@ on:
     branches: [develop, main]
     tags: ['v*']
   workflow_dispatch:
+env:
+  SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
 permissions:
   contents: read
 concurrency:

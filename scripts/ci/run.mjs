@@ -1,8 +1,8 @@
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve, relative } from 'node:path';
 
-export const evidence = { commit: process.env.GITHUB_SHA ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(), date: new Date().toISOString(), node: process.version, environment: process.env.GITHUB_ACTIONS ? 'github-actions-synthetic' : 'local-synthetic', checks: [] };
+export const evidence = { commit: process.env.GITHUB_SHA ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(), sourceCommit: process.env.SOURCE_COMMIT ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(), date: new Date().toISOString(), node: process.version, environment: process.env.GITHUB_ACTIONS ? 'github-actions-synthetic' : 'local-synthetic', checks: [] };
 export function save(name) {
   mkdirSync('.ci-results', { recursive: true });
   writeFileSync(`.ci-results/${name}.json`, JSON.stringify(evidence, null, 2) + '\n');
@@ -26,6 +26,8 @@ export async function check(label, command, args = [], options = {}) {
       const report = JSON.parse(readFileSync(resolve(options.cwd ?? '.', options.report), 'utf8'));
       record.tests = options.playwright ? report.stats.expected : report.numPassedTests;
       record.omitted = options.playwright ? report.stats.skipped : (report.numPendingTests ?? 0) + (report.numTodoTests ?? 0);
+      const failedFiles = (report.testResults ?? []).filter(result => result.status === 'failed').map(result => relative(process.cwd(), result.name)).filter(name => !name.startsWith('..') && /^[A-Za-z0-9_./\[\]-]+\.tsx?$/.test(name));
+      if (failedFiles.length) record.failedFiles = failedFiles;
       if (options.requireAll && (record.omitted !== 0 || record.tests < 1 || (options.playwright ? report.stats.unexpected : report.numFailedTests) !== 0)) status = 'FAIL';
     } catch { status = 'FAIL'; }
   }
