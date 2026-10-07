@@ -17,8 +17,7 @@
     "api:check": "pnpm --filter @asisteam/core build && pnpm --filter @asisteam/api-client check:generated",
     "ci:backend": "node scripts/ci/backend.mjs",
     "ci:staging": "node scripts/ci/staging.mjs",
-    "ci:extended": "node scripts/ci/extended.mjs",
-    "migration:portability": "node scripts/migration/portability/run.mjs"
+    "ci:extended": "node scripts/ci/extended.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

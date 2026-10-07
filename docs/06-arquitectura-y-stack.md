@@ -8,9 +8,6 @@
 
 [Seguro] **MIG-03 (#147, 2026-10-07):** [CI y staging Docker sintético](migration/issue-147/README.md), gates con omisiones explícitas, roles separados, secretos externos y rollback por artefacto inmutable. Provisión externa pendiente según elección del usuario; las operaciones de producto continúan en Supabase.
 
-
-[Seguro] **MIG-06 (#150, 2026-10-07):** [ensayo de portabilidad](migration/issue-150/README.md) a PostgreSQL17.9 independiente con fixtures sintéticos, RLS/constraints/grants reconciliados, bcrypt GoTrue y transferencia HTTP local de avatares con SHA-256. Conserva esquemas auth/storage de compatibilidad; login/OAuth/worker/S3 y retiro completo continúan en sus hitos. No modifica el backend productivo.
-
 ---
 
 ## 1. Decisión de arquitectura (resumen ejecutivo)
