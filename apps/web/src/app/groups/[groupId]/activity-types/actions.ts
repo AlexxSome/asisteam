@@ -1,5 +1,8 @@
 "use server";
 
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { revalidatePath } from "next/cache";
 import { ACTIVITY_TYPE_ERROR_MESSAGES, activityTypeSchema, activityTypeUpdateSchema } from "@asisteam/core";
 import { createClient } from "@/lib/supabase/server";
@@ -17,6 +20,19 @@ async function saveType(groupId: string, input: unknown, typeId?: string): Promi
   if (typeId !== undefined && !isGroupId(typeId)) return failure("activity_type_not_found");
   const parsed = (typeId === undefined ? activityTypeSchema : activityTypeUpdateSchema).safeParse(input);
   if (!parsed.success) return failure("invalid_activity_type", parsed.error.flatten().fieldErrors);
+  if (moduleTransport("activities") === "nest") {
+    try {
+      const client = createServerApiClient();
+      const result = typeId === undefined
+        ? await client.createActivityType({ params: { groupId }, body: activityTypeSchema.parse(parsed.data) })
+        : await client.updateActivityType({ params: { groupId, typeId }, body: activityTypeUpdateSchema.parse(parsed.data) });
+      revalidatePath(`/groups/${groupId}`, "layout");
+      return result;
+    } catch (error) {
+      if (error instanceof ApiClientError) return failure(Object.hasOwn(ACTIVITY_TYPE_ERROR_MESSAGES, error.error.code) ? error.error.code : "activity_type_save_failed");
+      throw error;
+    }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return failure("authentication_required");

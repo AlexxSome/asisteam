@@ -1,4 +1,110 @@
 export interface paths {
+    "/api/v1/groups/{groupId}/activities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Agenda del grupo ACTIVE; página50, próximas/pasadas */
+        get: operations["listGroupActivities"];
+        put?: never;
+        /** ADMIN: materializar actividad/serie mediante RPC canónica */
+        post: operations["createActivity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/activities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Agenda de grupos ACTIVE seleccionados; 50 filas, próxima o pasada */
+        get: operations["listActivities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/activities/home": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Próxima/en curso y anterior para inicio por grupos autorizados */
+        get: operations["getHomeActivities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{groupId}/activities/{activityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Detalle con columnas explícitas y 404 anti-enumeración */
+        get: operations["getActivity"];
+        put?: never;
+        post?: never;
+        /** ADMIN: preservar historial de serie; confirmación puntual adicional */
+        delete: operations["deleteActivity"];
+        options?: never;
+        head?: never;
+        /** ADMIN: puntual o futuras sin asistencia, sin reexpandir */
+        patch: operations["updateActivity"];
+        trace?: never;
+    };
+    "/api/v1/groups/{groupId}/activity-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tipos de sistema/grupo, página100 */
+        get: operations["listActivityTypes"];
+        put?: never;
+        /** ADMIN: crear tipo personalizado */
+        post: operations["createActivityType"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{groupId}/activity-types/{typeId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** ADMIN: editar/desactivar propio, sistema inmutable */
+        patch: operations["updateActivityType"];
+        trace?: never;
+    };
     "/api/v1/groups/{groupId}/memberships": {
         parameters: {
             query?: never;
@@ -702,6 +808,224 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        ActivityParams: {
+            /** Format: uuid */
+            groupId: string;
+            /** Format: uuid */
+            activityId: string;
+        };
+        ActivityTypeParams: {
+            /** Format: uuid */
+            groupId: string;
+            /** Format: uuid */
+            typeId: string;
+        };
+        GroupActivityQuery: {
+            /** @default 1 */
+            page: number;
+            /**
+             * @default upcoming
+             * @enum {string}
+             */
+            period: "upcoming" | "past";
+        };
+        ActivityQuery: {
+            group_ids: string;
+            /** @default 1 */
+            page: number;
+            /**
+             * @default upcoming
+             * @enum {string}
+             */
+            period: "upcoming" | "past";
+        };
+        ActivitySelection: {
+            group_ids: string;
+        };
+        ActivityTypeQuery: {
+            /** @default 1 */
+            page: number;
+            /** @default false */
+            include_inactive: boolean;
+        };
+        Activity: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            group_id: string;
+            /** Format: uuid */
+            activity_type_id: string;
+            title: string;
+            description: string | null;
+            location: string | null;
+            /** Format: date-time */
+            starts_at: string;
+            /** Format: date-time */
+            ends_at: string;
+            activity_type_name: string;
+            activity_type_color: string | null;
+            is_system_type: boolean;
+            recurrence_rule: {
+                /** @enum {string} */
+                freq: "WEEKLY";
+                by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                until: string;
+            } | null;
+            /** Format: uuid */
+            recurrence_source_id: string | null;
+        };
+        Activities: {
+            activities: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                title: string;
+                description: string | null;
+                location: string | null;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: date-time */
+                ends_at: string;
+                activity_type_name: string;
+                activity_type_color: string | null;
+                is_system_type: boolean;
+                recurrence_rule: {
+                    /** @enum {string} */
+                    freq: "WEEKLY";
+                    by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                    until: string;
+                } | null;
+                /** Format: uuid */
+                recurrence_source_id: string | null;
+            }[];
+            hasNext: boolean;
+        };
+        HomeActivities: {
+            next: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                title: string;
+                description: string | null;
+                location: string | null;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: date-time */
+                ends_at: string;
+                activity_type_name: string;
+                activity_type_color: string | null;
+                is_system_type: boolean;
+                recurrence_rule: {
+                    /** @enum {string} */
+                    freq: "WEEKLY";
+                    by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                    until: string;
+                } | null;
+                /** Format: uuid */
+                recurrence_source_id: string | null;
+            } | null;
+            previous: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                title: string;
+                description: string | null;
+                location: string | null;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: date-time */
+                ends_at: string;
+                activity_type_name: string;
+                activity_type_color: string | null;
+                is_system_type: boolean;
+                recurrence_rule: {
+                    /** @enum {string} */
+                    freq: "WEEKLY";
+                    by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                    until: string;
+                } | null;
+                /** Format: uuid */
+                recurrence_source_id: string | null;
+            } | null;
+            /** Format: date-time */
+            now: string;
+        };
+        ActivityTypes: {
+            data: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string | null;
+                name: string;
+                color: string | null;
+                is_active: boolean;
+            }[];
+            hasNext: boolean;
+        };
+        CreateActivity: {
+            title: string;
+            /** Format: uuid */
+            activity_type_id: string;
+            description: string;
+            location: string;
+            /** Format: date-time */
+            starts_at: string;
+            /** Format: date-time */
+            ends_at: string;
+            recurrence_rule?: {
+                /** @enum {string} */
+                freq: "WEEKLY";
+                by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                until: string;
+            } | null;
+        };
+        UpdateActivity: {
+            title: string;
+            /** Format: uuid */
+            activity_type_id: string;
+            description: string;
+            location: string;
+            /** Format: date-time */
+            starts_at: string;
+            /** Format: date-time */
+            ends_at: string;
+            /** @enum {string} */
+            scope: "single" | "series";
+        };
+        DeleteActivity: {
+            /** @enum {string} */
+            scope: "single" | "series";
+            confirm_attendance: boolean;
+        };
+        ActivityCreated: {
+            /** Format: uuid */
+            activityId: string;
+        };
+        ActivitiesAffected: {
+            affected: number;
+        };
+        CreateActivityType: {
+            name: string;
+            color: string;
+        };
+        UpdateActivityType: {
+            name: string;
+            color: string;
+            is_active: boolean;
+        };
+        ActivityTypeSaved: {
+            /** Format: uuid */
+            id: string;
+        };
         MemberParams: {
             /** Format: uuid */
             groupId: string;
@@ -1239,6 +1563,1248 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listGroupActivities: {
+        parameters: {
+            query?: {
+                page?: number;
+                period?: "upcoming" | "past";
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Activities"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    createActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateActivity"];
+            };
+        };
+        responses: {
+            /** @description Respuesta válida */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityCreated"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    listActivities: {
+        parameters: {
+            query: {
+                group_ids: string;
+                page?: number;
+                period?: "upcoming" | "past";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Activities"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    getHomeActivities: {
+        parameters: {
+            query: {
+                group_ids: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HomeActivities"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    getActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+                activityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Activity"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    deleteActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+                activityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteActivity"];
+            };
+        };
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivitiesAffected"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    updateActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+                activityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateActivity"];
+            };
+        };
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivitiesAffected"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    listActivityTypes: {
+        parameters: {
+            query?: {
+                page?: number;
+                include_inactive?: boolean;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityTypes"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    createActivityType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateActivityType"];
+            };
+        };
+        responses: {
+            /** @description Respuesta válida */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityTypeSaved"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    updateActivityType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+                typeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateActivityType"];
+            };
+        };
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityTypeSaved"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     listGroupMembers: {
         parameters: {
             query?: {

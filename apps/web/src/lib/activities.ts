@@ -1,3 +1,6 @@
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { activityDateTimeInput } from "@asisteam/core";
@@ -20,6 +23,15 @@ export function parseActivitySearch({ page = "1", period = "upcoming" }: Activit
 
 export async function getActivityTypes(groupId: string, includeInactive = false) {
   await getGroup(groupId);
+  if (moduleTransport("activities") === "nest") {
+    const client = createServerApiClient();
+    const types = [];
+    for (let page = 1; ; page++) {
+      const result = await client.listActivityTypes({ params: { groupId }, query: { page, include_inactive: includeInactive } });
+      types.push(...result.data);
+      if (!result.hasNext) return types;
+    }
+  }
   const supabase = await createClient();
   const types: { id: string; name: string; group_id: string | null; color: string | null; is_active: boolean | null }[] = [];
   for (let offset = 0; ; offset += 100) {
@@ -36,6 +48,8 @@ export async function getActivityTypes(groupId: string, includeInactive = false)
 
 export async function getActivities(groupId: string, page = 1, period: ActivityPeriod = "upcoming") {
   await getGroup(groupId);
+  parseActivitySearch({ page: String(page), period });
+  if (moduleTransport("activities") === "nest") return createServerApiClient().listGroupActivities({ params: { groupId }, query: { page, period } });
   return loadActivities([groupId], page, period);
 }
 
@@ -67,6 +81,7 @@ export async function getWardActivities(athleteUserId: string, page = 1, period:
 async function loadActivities(groupIds: string[], page: number, period: ActivityPeriod) {
   parseActivitySearch({ page: String(page), period });
   if (!groupIds.length) return { activities: [], hasNext: false };
+  if (moduleTransport("activities") === "nest") return createServerApiClient().listActivities({ query: { group_ids: groupIds.join(","), page, period } });
   const supabase = await createClient();
   const offset = (page - 1) * ACTIVITY_PAGE_SIZE;
   const query = supabase.from("v_group_activities").select(activityColumns).in("group_id", groupIds);
@@ -81,6 +96,10 @@ async function loadActivities(groupIds: string[], page: number, period: Activity
 export async function getActivity(groupId: string, activityId: string) {
   await getGroup(groupId);
   if (!isGroupId(activityId)) notFound();
+  if (moduleTransport("activities") === "nest") {
+    try { return await createServerApiClient().getActivity({ params: { groupId, activityId } }); }
+    catch (error) { if (error instanceof ApiClientError && error.status === 404) notFound(); throw error; }
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.from("v_group_activities").select(activityColumns)
     .eq("group_id", groupId).eq("id", activityId).maybeSingle();
@@ -103,6 +122,7 @@ export async function getWardHomeActivities(athleteUserId: string) {
 async function loadHomeActivities(groupIds: string[]) {
   const now = new Date().toISOString();
   if (!groupIds.length) return { next: null, previous: null, now };
+  if (moduleTransport("activities") === "nest") return createServerApiClient().getHomeActivities({ query: { group_ids: groupIds.join(",") } });
   const client = await createClient();
   const columns = "id, group_id, title, location, starts_at, ends_at" as const;
   const query = () => client.from("v_group_activities").select(columns).in("group_id", groupIds);

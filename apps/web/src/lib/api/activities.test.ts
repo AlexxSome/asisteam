@@ -1,0 +1,34 @@
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { ApiClientError } from "@asisteam/api-client";
+const mock=vi.hoisted(()=>({ from:vi.fn(),rpc:vi.fn(),getGroup:vi.fn(),listGroupActivities:vi.fn(),listActivities:vi.fn(),getActivity:vi.fn(),getHomeActivities:vi.fn(),listActivityTypes:vi.fn(),createActivity:vi.fn(),updateActivity:vi.fn(),deleteActivity:vi.fn(),createActivityType:vi.fn(),updateActivityType:vi.fn(),revalidate:vi.fn() }));
+vi.mock("react",async original=>({...await original<typeof import("react")>(),cache:(fn:unknown)=>fn}));
+vi.mock("next/navigation",()=>({notFound:()=>{throw new Error('404');}}));
+vi.mock("next/cache",()=>({revalidatePath:mock.revalidate}));
+vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({from:mock.from,rpc:mock.rpc})}));
+vi.mock("./server",()=>({createServerApiClient:()=>mock}));
+vi.mock("../groups",()=>({getGroup:mock.getGroup,getMyGroups:async()=>({groups:[{id,name:'Club'}]})}));
+vi.mock("../wards",()=>({getWard:async()=>({groups:[{group_id:id,name:'Club',membership_status:'ACTIVE'},{group_id:other,name:'Otro',membership_status:'PENDING'}]})}));
+import { getActivities,getActivity,getActivityTypes,getMyActivities,getWardActivities,getHomeActivities } from "../activities";
+import {createActivity,updateActivity,deleteActivity} from "@/app/groups/[groupId]/activities/new/actions";
+import {createActivityType,updateActivityType} from "@/app/groups/[groupId]/activity-types/actions";
+const id='17000000-0000-4000-8000-000000000201',other='17000000-0000-4000-8000-000000000202';
+const form={title:'Actividad sintética',activity_type_id:id,description:'',location:'',starts_at:'2026-09-05T18:30',ends_at:'2026-09-05T20:00',recurrence_rule:null};
+beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_ACTIVITIES','nest');vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');mock.listGroupActivities.mockResolvedValue({activities:[],hasNext:false});mock.listActivities.mockResolvedValue({activities:[{id,group_id:id}],hasNext:false});});
+afterEach(()=>vi.unstubAllEnvs());
+it('agendas mantienen página/período y filtran grupos ACTIVE del pupilo',async()=>{
+  await getActivities(id,2,'past');expect(mock.listGroupActivities).toHaveBeenLastCalledWith({params:{groupId:id},query:{page:2,period:'past'}});
+  expect((await getMyActivities()).activities[0]).toHaveProperty('group_name','Club');await getWardActivities(other);
+  expect(mock.listActivities).toHaveBeenLastCalledWith({query:{group_ids:id,page:1,period:'upcoming'}});expect(mock.from).not.toHaveBeenCalled();
+});
+it('detalle404 y tarjetas inicio solo usan el ejecutor Nest',async()=>{mock.getActivity.mockRejectedValue(new ApiClientError(404,'activity_not_found'));await expect(getActivity(id,other)).rejects.toThrow('404');mock.getHomeActivities.mockResolvedValue({next:null,previous:null,now:'2026-10-07T00:00:00Z'});await getHomeActivities(id);expect(mock.getHomeActivities).toHaveBeenCalledWith({query:{group_ids:id}});expect(mock.from).not.toHaveBeenCalled();});
+it('tipos recorre todas las páginas manteniendo includeInactive',async()=>{mock.listActivityTypes.mockResolvedValueOnce({data:[{id}],hasNext:true}).mockResolvedValueOnce({data:[{id:other}],hasNext:false});expect(await getActivityTypes(id,true)).toHaveLength(2);expect(mock.listActivityTypes).toHaveBeenLastCalledWith({params:{groupId:id},query:{page:2,include_inactive:true}});});
+it('create/update/delete convierten Chile→UTC y preservan scope/confirmación',async()=>{
+ mock.createActivity.mockResolvedValue({activityId:other});mock.updateActivity.mockResolvedValue({affected:2});mock.deleteActivity.mockResolvedValue({affected:1});
+ expect(await createActivity(id,form)).toEqual({activityId:other});expect(mock.createActivity).toHaveBeenCalledWith({params:{groupId:id},body:{...form,starts_at:'2026-09-05T22:30:00Z',ends_at:'2026-09-06T00:00:00Z'}});
+ expect(await updateActivity(id,other,form,'series')).toEqual({affected:2});expect(mock.updateActivity.mock.calls[0]![0].body).not.toHaveProperty('recurrence_rule');
+ expect(await deleteActivity(id,other,'single',false)).toEqual({affected:1});expect(mock.deleteActivity).toHaveBeenCalledWith({params:{groupId:id,activityId:other},body:{scope:'single',confirm_attendance:false}});expect(mock.rpc).not.toHaveBeenCalled();
+});
+it('rechaza horario inexistente y límite de recurrencia antes del write',async()=>{expect(await createActivity(id,{...form,starts_at:'2026-09-06T00:30',ends_at:'2026-09-06T02:00'})).toHaveProperty('error');expect(await createActivity(id,{...form,recurrence_rule:{freq:'WEEKLY',by_weekday:['MO'],until:'2099-01-01'}})).toHaveProperty('error');expect(mock.createActivity).not.toHaveBeenCalled();});
+it('tipos son personalizados; edición no crea cuando faltaid',async()=>{mock.createActivityType.mockResolvedValue({id:other});mock.updateActivityType.mockResolvedValue({id:other});expect(await createActivityType(id,{name:'Tipo propio',color:'#123456'})).toEqual({id:other});expect(await updateActivityType(id,other,{name:'Tipo propio',color:'#123456',is_active:false})).toEqual({id:other});expect(await updateActivityType(id,undefined as unknown as string,{})).toHaveProperty('error');expect(mock.createActivityType).toHaveBeenCalledTimes(1);expect(mock.from).not.toHaveBeenCalled();});
+it.each([503,504])('timeout/error%s no ejecuta segundo transporte ni confirma éxito',async status=>{mock.createActivity.mockRejectedValue(new ApiClientError(status,'request_timeout'));expect(await createActivity(id,form)).toHaveProperty('error');expect(mock.createActivity).toHaveBeenCalledTimes(1);expect(mock.rpc).not.toHaveBeenCalled();expect(mock.revalidate).not.toHaveBeenCalled();});
+it('conflicto con asistencia conserva código para confirmación adicional UI',async()=>{mock.deleteActivity.mockRejectedValue(new ApiClientError(409,'attendance_confirmation_required'));expect(await deleteActivity(id,other,'single',false)).toMatchObject({error:{code:'attendance_confirmation_required',message:expect.stringContaining('Confirma')}});});

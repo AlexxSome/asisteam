@@ -2,6 +2,36 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  listGroupActivities(input: { params: operations["listGroupActivities"]["parameters"]["path"]; query?: operations["listGroupActivities"]["parameters"]["query"] }): Promise<operations["listGroupActivities"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listGroupActivities", input ?? {});
+  }
+  listActivities(input?: { query?: operations["listActivities"]["parameters"]["query"] }): Promise<operations["listActivities"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listActivities", input ?? {});
+  }
+  getHomeActivities(input?: { query?: operations["getHomeActivities"]["parameters"]["query"] }): Promise<operations["getHomeActivities"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getHomeActivities", input ?? {});
+  }
+  getActivity(input: { params: operations["getActivity"]["parameters"]["path"] }): Promise<operations["getActivity"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getActivity", input ?? {});
+  }
+  createActivity(input: { params: operations["createActivity"]["parameters"]["path"]; body: operations["createActivity"]["requestBody"]["content"]["application/json"] }): Promise<operations["createActivity"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("createActivity", input ?? {});
+  }
+  updateActivity(input: { params: operations["updateActivity"]["parameters"]["path"]; body: operations["updateActivity"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateActivity"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("updateActivity", input ?? {});
+  }
+  deleteActivity(input: { params: operations["deleteActivity"]["parameters"]["path"]; body: operations["deleteActivity"]["requestBody"]["content"]["application/json"] }): Promise<operations["deleteActivity"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("deleteActivity", input ?? {});
+  }
+  listActivityTypes(input: { params: operations["listActivityTypes"]["parameters"]["path"]; query?: operations["listActivityTypes"]["parameters"]["query"] }): Promise<operations["listActivityTypes"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("listActivityTypes", input ?? {});
+  }
+  createActivityType(input: { params: operations["createActivityType"]["parameters"]["path"]; body: operations["createActivityType"]["requestBody"]["content"]["application/json"] }): Promise<operations["createActivityType"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("createActivityType", input ?? {});
+  }
+  updateActivityType(input: { params: operations["updateActivityType"]["parameters"]["path"]; body: operations["updateActivityType"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateActivityType"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("updateActivityType", input ?? {});
+  }
   listGroupMembers(input: { params: operations["listGroupMembers"]["parameters"]["path"]; query?: operations["listGroupMembers"]["parameters"]["query"] }): Promise<operations["listGroupMembers"]["responses"][200]["content"]["application/json"]> {
     return this.execute("listGroupMembers", input ?? {});
   }

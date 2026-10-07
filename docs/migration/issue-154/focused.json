@@ -1,0 +1,19 @@
+{
+  "commit": "e75031442dbaa669ee8795145ec66e092bb17eed",
+  "sourceCommit": "e75031442dbaa669ee8795145ec66e092bb17eed",
+  "date": "2026-10-07T21:02:36.762Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "activities-http-postgres",
+      "status": "PASS",
+      "seconds": 1.16
+    },
+    {
+      "check": "activities-e2e375-axe",
+      "status": "PASS",
+      "seconds": 18.59
+    }
+  ]
+}

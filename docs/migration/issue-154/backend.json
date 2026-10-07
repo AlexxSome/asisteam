@@ -1,0 +1,88 @@
+{
+  "commit": "e75031442dbaa669ee8795145ec66e092bb17eed",
+  "sourceCommit": "e75031442dbaa669ee8795145ec66e092bb17eed",
+  "date": "2026-10-07T21:03:24.342Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.58
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.64
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 0.23
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.16
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.23
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 0.7
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.59
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 5.41
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 17.01
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 5.13,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 3.24
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "FAIL",
+      "seconds": 5.28,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}

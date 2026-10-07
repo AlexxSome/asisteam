@@ -155,3 +155,8 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de invitación/activación con Nest · MIG-09 (#153), 07-10-2026
 
 [Seguro] [MIG-09](migration/issue-153/README.md) conserva formularios/códigos actuales: envío confirmado muestra éxito; email incierto muestra error y refresca historial PENDING para recuperación explícita. Link expirado/usado se presenta no disponible; claim conserva perfil/historial y solicita solo credenciales/aceptación, sin edición de nacimiento. La decisión del apoderado ya registrada permanece visible si falla el correo posterior; ADMIN no sustituye esa decisión. Error/timeout no ejecuta otro transporte ni muestra éxito. Consentimiento temporalmente indisponible se distingue del gate pendiente. No hay nuevos tokens visuales ni componentes.
+
+
+## Estados de actividades/tipos con Nest · MIG-10 (#154), 07-10-2026
+
+[Seguro] [MIG-10](migration/issue-154/README.md) conserva ActivityForm/ActivityTypeForm, validación y resumen de horas de Chile, repetición inclusiva y alcance esta/siguientes. El código attendance_confirmation_required mantiene la confirmación adicional de eliminación puntual. Series conservan ocurrencias con asistencia. Error/timeout conserva mensaje sin éxito, sin otro ejecutor; tipo desactivado conserva actividades/historial. No introduce componentes, tokens ni estilos. La evidencia375px/axe acotada figura en MIG-10; no certifica revisión humana completa.

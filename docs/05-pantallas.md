@@ -226,3 +226,8 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Invitaciones y activación por Nest · MIG-09 (#153), 07-10-2026
 
 [Seguro] [MIG-09](migration/issue-153/README.md) reconcilia AUT-05/AUT-06 (/invitations/:token), INT-04 (envío/historial/reenvío), acciones de activación MANAGED en nómina y APO-04 (solicitud/revisión). INVITATIONS=nest selecciona un ejecutor; MEMBERS mantiene datos/consentimiento y Auth mantiene cookies SSR. Se conservan las 39 páginas y códigos, sin nuevos componentes/disposición. Links previos se resuelven sobre la misma tabla/hashes. El alcance local/externo y las verificaciones de 375 px/axe figuran en la evidencia, sin acreditar despliegue cloud o validación humana.
+
+
+## Actividades/tipos por Nest · MIG-10 (#154), 07-10-2026
+
+[Seguro] [MIG-10](migration/issue-154/README.md) reconcilia ACT-01/02/03/04, GRP-05 y agendas/tarjetas de GRP-02, /groups, /wards y /wards/:athleteUserId mediante ACTIVITIES=nest. Conserva las 39 páginas, rutas/códigos, formularios y estados. Lecturas globales/pupilo mantienen selección de grupos ACTIVE; CRUD preserva alcance puntual/serie, historial y fechas de Chile. La evidencia local de integración/E2E, límites y resultado de CI está enlazada; no acredita deploy cloud ni lector humano.
