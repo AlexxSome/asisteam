@@ -2,7 +2,9 @@
 
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 04-modelo-de-datos.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 09-roadmap.md, 11-legal-seguridad-privacidad.md
 
-[Seguro] **MIG-01 (#145, 2026-10-06):** [inventario, ADR e infraestructura propuestos](migration/issue-145/README.md) para la épica #144. Producción, usuarios, capacidad del equipo, proveedor, presupuesto y continuidad siguen PENDIENTES de confirmación o aceptación. Nest aún no está implementado; este documento conserva la arquitectura entregada.
+[Seguro] **MIG-01 (#145, 2026-10-06):** [inventario, ADR e infraestructura propuestos](migration/issue-145/README.md) para la épica #144. Producción, usuarios, capacidad del equipo, proveedor, presupuesto y continuidad siguen PENDIENTES de confirmación o aceptación. La arquitectura de producto sigue en Supabase; MIG-02 añade solo su runtime de transición.
+
+[Seguro] **MIG-02 (#146, 2026-10-07):** [base ejecutable Nest/Node](migration/issue-146/README.md) con `apps/api`, sondas `/health` y `/ready`, pool pg, errores/logs seguros y contenedor probado localmente. Solo la infraestructura HTTP está implementada; las operaciones de producto siguen en Supabase. CI/staging, OpenAPI y sesión/RLS corresponden a #147–#149.
 
 ---
 
