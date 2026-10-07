@@ -1,0 +1,1433 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Asisteam HTTP",
+    "version": "1.0.0",
+    "description": "MIG-04. Operaciones contract-only requieren #149/#151. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health",
+        "summary": "Vida del proceso",
+        "tags": [
+          "runtime"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ready": {
+      "get": {
+        "operationId": "ready",
+        "summary": "Disponibilidad de PostgreSQL",
+        "tags": [
+          "runtime"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ready"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/groups": {
+      "get": {
+        "operationId": "listMyGroups",
+        "summary": "Grupos con membresía ACTIVE; roles locales unidos, orden name/id",
+        "tags": [
+          "groups"
+        ],
+        "x-implementation-status": "contract-only",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyGroups"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups/{groupId}": {
+      "get": {
+        "operationId": "getGroup",
+        "summary": "Detalle visible; código/settings solo ADMIN, grupo ajeno 404",
+        "tags": [
+          "groups"
+        ],
+        "x-implementation-status": "contract-only",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups": {
+      "post": {
+        "operationId": "createGroup",
+        "summary": "Crear grupo + ADMIN mediante create_group; actor de sesión",
+        "tags": [
+          "groups"
+        ],
+        "x-implementation-status": "contract-only",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGroup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupCreated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "getOwnProfile",
+        "summary": "Datos propios; no sirve para perfiles de terceros",
+        "tags": [
+          "profile"
+        ],
+        "x-implementation-status": "contract-only",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateOwnProfile",
+        "summary": "Editar perfil conservando revisión de birthdate y consentimiento",
+        "tags": [
+          "profile"
+        ],
+        "x-implementation-status": "contract-only",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOwnProfile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileUpdated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Empty": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "PageQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        },
+        "additionalProperties": false
+      },
+      "GroupParams": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "groupId"
+        ],
+        "additionalProperties": false
+      },
+      "MyGroups": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sport": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "logo_url": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "ADMIN",
+                      "ATHLETE",
+                      "GUARDIAN",
+                      "COACH"
+                    ]
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "sport",
+                "logo_url",
+                "roles"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "page_size": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "page",
+              "page_size",
+              "total"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "additionalProperties": false
+      },
+      "GroupDetail": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "sport": {
+                "type": "string",
+                "nullable": true
+              },
+              "logo_url": {
+                "type": "string",
+                "nullable": true
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "ATHLETE",
+                    "GUARDIAN",
+                    "COACH"
+                  ]
+                },
+                "minItems": 1
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "can_view_group_stats": {
+                "type": "boolean"
+              },
+              "access": {
+                "type": "string",
+                "enum": [
+                  "member"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "sport",
+              "logo_url",
+              "roles",
+              "description",
+              "can_view_group_stats",
+              "access"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "sport": {
+                "type": "string",
+                "nullable": true
+              },
+              "logo_url": {
+                "type": "string",
+                "nullable": true
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "ADMIN",
+                    "ATHLETE",
+                    "GUARDIAN",
+                    "COACH"
+                  ]
+                },
+                "minItems": 1
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "can_view_group_stats": {
+                "type": "boolean"
+              },
+              "access": {
+                "type": "string",
+                "enum": [
+                  "admin"
+                ]
+              },
+              "invite_code": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9]{8}$"
+              },
+              "settings": {
+                "type": "object",
+                "properties": {
+                  "athletes_can_view_group_stats": {
+                    "type": "boolean"
+                  },
+                  "guardians_can_view_group_stats": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "athletes_can_view_group_stats",
+                  "guardians_can_view_group_stats"
+                ],
+                "additionalProperties": false
+              },
+              "settings_updated_at": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "settings_updated_by_name": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "sport",
+              "logo_url",
+              "roles",
+              "description",
+              "can_view_group_stats",
+              "access",
+              "invite_code",
+              "settings",
+              "settings_updated_at",
+              "settings_updated_by_name"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "CreateGroup": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 80
+          },
+          "sport": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string"
+          },
+          "logo_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "sport"
+        ],
+        "additionalProperties": false
+      },
+      "GroupCreated": {
+        "type": "object",
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "group_id"
+        ],
+        "additionalProperties": false
+      },
+      "OwnProfile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthdate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "nullable": true
+          },
+          "avatar_url": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "full_name",
+          "email",
+          "phone",
+          "birthdate",
+          "avatar_url"
+        ],
+        "additionalProperties": false
+      },
+      "UpdateOwnProfile": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^\\+[1-9][0-9]{7,14}$",
+            "nullable": true
+          },
+          "birthdate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "nullable": true
+          }
+        },
+        "required": [
+          "full_name",
+          "phone",
+          "birthdate"
+        ],
+        "additionalProperties": false
+      },
+      "ProfileUpdated": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "full_name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              },
+              "phone": {
+                "type": "string",
+                "nullable": true
+              },
+              "birthdate": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "nullable": true
+              },
+              "avatar_url": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "full_name",
+              "email",
+              "phone",
+              "birthdate",
+              "avatar_url"
+            ],
+            "additionalProperties": false
+          },
+          "birthdate_change_pending": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "profile",
+          "birthdate_change_pending"
+        ],
+        "additionalProperties": false
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              },
+              "details": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "details"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "Ready": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

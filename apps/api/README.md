@@ -1,6 +1,6 @@
 # API · MIG-02 (#146)
 
-[Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone únicamente sondas operativas; los módulos de producto, la sesión/RLS (#149), OpenAPI (#148) y CI/staging (#147) siguen sus entregables.
+[Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone únicamente sondas operativas; los módulos de producto y sesión/RLS (#149) siguen sus entregables. [OpenAPI/cliente #148](../../packages/api-client/README.md) y [CI/staging #147](../../docs/migration/issue-147/README.md) tienen infraestructura entregada y evidencia separada; no acreditan migración de tráfico.
 
 ## Build y arranque
 
@@ -39,6 +39,7 @@ DATABASE_URL=postgresql://asisteam_runtime:synthetic-only@127.0.0.1:55466/asiste
 | --- | --- |
 | `GET /health` | 200 `{ "status": "ok" }`; vida del proceso independientemente de DB |
 | `GET /ready` | 200 `{ "status": "ready" }` tras `SELECT 1`; 503 `service_unavailable` si PostgreSQL no responde |
+| `GET /api/v1/health`, `GET /api/v1/ready` | Aliases de las mismas sondas, validados con schemas HTTP core y consumidos por el SDK de #148 |
 
 [Seguro] Errores: `{ "error": { "code": "...", "message": "texto en español", "details": {} } }`. Rutas inexistentes: 404 `resource_not_found`; JSON inválido: 400 `invalid_request`; body >64 KiB: 413 `payload_too_large`; plazo agotado: 504 `request_timeout`; excepción inesperada: 500 `internal_error`. El filtro no serializa mensajes/stack/SQL internos.
 

@@ -19,3 +19,4 @@ export * from "./schemas/subscription";
 export * from "./schemas/announcement";
 export * from "./schemas/check-in";
 export * from "./schemas/api-error";
+export * from "./http-contract";

@@ -3,6 +3,7 @@ WORKDIR /repo
 RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json ./
 COPY packages/core/ packages/core/
+COPY packages/api-client/ packages/api-client/
 COPY apps/api/ apps/api/
 RUN pnpm install --frozen-lockfile --filter @asisteam/api... && pnpm exec turbo run build --filter @asisteam/api
 # --legacy deploy supports the existing workspace without changing package injection.

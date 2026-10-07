@@ -1,0 +1,275 @@
+{
+  "issue": 148,
+  "base": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+  "branch": "codex/148-openapi-cliente-web",
+  "scope": "Base + issue working diff, tested before commit; delivery commit in Git/PR. Synthetic only.",
+  "runs": {
+    "checks": {
+      "commit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "sourceCommit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "date": "2026-10-07T03:53:25.937Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 1.57
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.22
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 2.36
+        },
+        {
+          "check": "api-contract-fixture-build",
+          "status": "PASS",
+          "seconds": 0.85
+        },
+        {
+          "check": "next-http-contract",
+          "status": "PASS",
+          "seconds": 9.14
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 6.92
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 15.39,
+          "tests": 830,
+          "omitted": 81
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 0.83
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.49
+        }
+      ]
+    },
+    "backend": {
+      "commit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "sourceCommit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "date": "2026-10-07T03:53:28.741Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "supabase-local-start",
+          "status": "PASS",
+          "seconds": 4.8
+        },
+        {
+          "check": "database-types-generation",
+          "status": "PASS",
+          "seconds": 3.97
+        },
+        {
+          "check": "database-types-match",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all",
+          "status": "FAIL",
+          "seconds": 3.9,
+          "sqlFailures": [
+            {
+              "file": "group_subscriptions.test.sql",
+              "failed": 2
+            },
+            {
+              "file": "send_invitations.test.sql",
+              "failed": 1
+            }
+          ]
+        }
+      ]
+    },
+    "staging": {
+      "commit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "sourceCommit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "date": "2026-10-07T03:53:27.533Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 17.95
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.48
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.1
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 14.05
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.38
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.29
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.96,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.7
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 0.75
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.7
+        }
+      ]
+    },
+    "issue-148-product-integrations": {
+      "commit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "sourceCommit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "date": "2026-10-07T03:56:16.437Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 50.89,
+          "tests": 81,
+          "omitted": 0
+        }
+      ]
+    },
+    "baseline-pgtap": {
+      "commit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "sourceCommit": "c9da1a348a6026c3f8a10c490600b1293aa89ab7",
+      "date": "2026-10-07T03:54:28.590Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "pgtap-base-c9da1a3",
+          "status": "FAIL",
+          "seconds": 4.19,
+          "sqlFailures": [
+            {
+              "file": "group_subscriptions.test.sql",
+              "failed": 2
+            },
+            {
+              "file": "send_invitations.test.sql",
+              "failed": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "limits": [
+    "pgTAP backend FAIL precedes this issue.",
+    "Domain endpoints contract-only; #149/#151 pending.",
+    "Same-base check is configuration attestation; physical DB/RLS parity pending #149/#151.",
+    "Next smoke uses real Next dev + real Nest health; domain fixture is synthetic.",
+    "Remote CI pending publication."
+  ]
+}

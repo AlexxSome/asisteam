@@ -6,6 +6,8 @@
 
 [Seguro] **MIG-02 (#146, 2026-10-07):** [base ejecutable Nest/Node](migration/issue-146/README.md) con `apps/api`, sondas `/health` y `/ready`, pool pg, errores/logs seguros y contenedor probado localmente. Solo la infraestructura HTTP está implementada; las operaciones de producto siguen en Supabase. CI/staging, OpenAPI y sesión/RLS corresponden a #147–#149.
 
+[Seguro] **MIG-04 (#148, 2026-10-07):** [OpenAPI/client/adaptador Next](migration/issue-148/README.md) especifica el primer contrato grupos/perfil y añade `/api/v1/health` y `/api/v1/ready` reales. Las operaciones de dominio figuran `contract-only`; auth/RLS #149 y migración #151 siguen pendientes. Generación y divergencia forman parte de CI; la bandera por módulo conserva un ejecutor y el backend actual sigue atendiendo Supabase.
+
 ---
 
 ## 1. Enfoque general del backend

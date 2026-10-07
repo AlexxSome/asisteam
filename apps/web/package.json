@@ -8,6 +8,7 @@
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "test:api-contract": "node scripts/api-contract-smoke.mjs",
     "test:integration": "RUN_SUPABASE_INTEGRATION=1 vitest run",
     "test:integration:modules": "node e2e/run-integrations.mjs",
     "test:invitations": "RUN_INVITATION_INTEGRATION=1 vitest run invitation.integration.test.ts",
@@ -18,6 +19,7 @@
     "test:e2e:report": "playwright show-report .next/qa/report"
   },
   "dependencies": {
+    "@asisteam/api-client": "workspace:*",
     "@asisteam/core": "workspace:*",
     "@asisteam/db": "workspace:*",
     "@hookform/resolvers": "^3.9.0",
@@ -30,6 +32,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.0",
+    "server-only": "0.0.1",
     "tailwind-merge": "^3.0.0",
     "zod": "^3.25.0"
   },
