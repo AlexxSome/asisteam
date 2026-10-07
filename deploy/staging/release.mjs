@@ -17,7 +17,8 @@ function immutable(image) {
 }
 export async function current() {
   validate();
-  try { return immutable(readFileSync(`${process.env.STAGING_STATE_DIR}/current`, 'utf8').trim()); } catch { return null; }
+  try { return immutable(readFileSync(`${process.env.STAGING_STATE_DIR}/current`, 'utf8').trim()); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
 }
 export async function deploy(image) {
   validate(); immutable(image);

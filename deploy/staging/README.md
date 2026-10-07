@@ -17,7 +17,7 @@ node deploy/staging/release.mjs sha256:<id-completo>
 node deploy/staging/release.mjs rollback
 ```
 
-[Seguro] `pnpm ci:staging` automatiza generación temporal de secretos, build, dos artefactos distintos, deploy, rollback por digest, permisos de roles, privacidad de logs y prueba PostgreSQL real API. Luego elimina únicamente su proyecto `asisteam-staging-synthetic` y volumen sintético. **No ejecutarlo mientras se usa ese proyecto para revisión manual.** El runner de CI vive en una VM efímera.
+[Seguro] `pnpm ci:staging` automatiza generación temporal de secretos, build, dos artefactos distintos, deploy, rollback por digest y recuperación automática ante un artefacto fallido, permisos de roles, privacidad de logs y prueba PostgreSQL real API. Luego elimina únicamente su proyecto `asisteam-staging-synthetic` y volumen sintético. **No ejecutarlo mientras se usa ese proyecto para revisión manual.** El runner de CI vive en una VM efímera.
 
 [Seguro] Los secretos se crean una vez fuera del repositorio, sin imprimir valores. Directorio 0700 y archivos 0444 permiten que el bind de Docker Secrets los lea como usuarios sin privilegios; otros usuarios del host no atraviesan el directorio privado. Para un proveedor externo, sustituir esta generación sintética por su gestor de secretos y validar sus permisos. No imprimir `compose config`, URLs, variables ni logs DB completos. Nunca reutilizar estas credenciales en producción ni guardar secrets en artefactos.
 

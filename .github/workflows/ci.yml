@@ -29,6 +29,7 @@ jobs:
           name: checks-evidence
           path: .ci-results/*.json
           retention-days: 7
+          include-hidden-files: true
   backend:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
@@ -48,6 +49,7 @@ jobs:
           name: backend-evidence
           path: .ci-results/*.json
           retention-days: 7
+          include-hidden-files: true
   staging:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
@@ -66,6 +68,7 @@ jobs:
           name: staging-evidence
           path: .ci-results/*.json
           retention-days: 7
+          include-hidden-files: true
   required:
     if: always()
     needs: [checks, backend, staging]

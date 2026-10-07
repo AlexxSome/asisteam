@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { check, suite, verify } from './run.mjs';
+import { check, suite, verify, evidence } from './run.mjs';
 import { deploy, rollback, current, composeArgs } from '../../deploy/staging/release.mjs';
 
 await suite('staging', async () => {
@@ -25,6 +25,11 @@ await suite('staging', async () => {
     await rollback();
     const active = await current();
     verify('rollback-release-state', () => assert.equal(active, image));
+    const failureStart = evidence.checks.length;
+    await assert.rejects(deploy('sha256:' + '0'.repeat(64)));
+    for (const record of evidence.checks.slice(failureStart)) if (record.status === 'FAIL') record.expected = true;
+    const recovered = await current();
+    verify('automatic-rollback-release-state', () => assert.equal(recovered, image));
     const container = (await check('rollback-container-id', 'docker', [...composeArgs, 'ps', '-q', 'api'], { env: { API_IMAGE: image } })).trim();
     const restoredImage = (await check('rollback-artifact-query', 'docker', ['inspect', container, '--format', '{{.Image}}'])).trim();
     verify('rollback-artifact-identity', () => assert.equal(restoredImage, image));

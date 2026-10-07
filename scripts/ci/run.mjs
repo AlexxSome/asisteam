@@ -29,6 +29,12 @@ export async function check(label, command, args = [], options = {}) {
       if (options.requireAll && (record.omitted !== 0 || record.tests < 1 || (options.playwright ? report.stats.unexpected : report.numFailedTests) !== 0)) status = 'FAIL';
     } catch { status = 'FAIL'; }
   }
+  if (status === 'FAIL') {
+    const codes = [...new Set(output.match(/\bTS[0-9]{4}\b/g) ?? [])];
+    if (codes.length) record.errorCodes = codes;
+    const sqlFailures = [...output.matchAll(/([a-z_]+\.test\.sql)\s+\(Wstat: [^\n]*Failed: ([0-9]+)/g)].map(match => ({ file: match[1], failed: Number(match[2]) }));
+    if (sqlFailures.length) record.sqlFailures = sqlFailures;
+  }
   if (options.noSkip && /# skipped [1-9]|# tests 0/.test(output)) status = 'FAIL';
   record.status = status;
   evidence.checks.push(record);

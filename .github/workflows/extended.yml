@@ -26,3 +26,4 @@ jobs:
           name: extended-sanitized-evidence
           path: .ci-results/*.json
           retention-days: 7
+          include-hidden-files: true

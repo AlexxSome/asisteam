@@ -4,7 +4,7 @@
 
 ## Entrega
 
-[Seguro] ESLint fijado para TS/JS web/core/API y herramientas CI; recomendado con sintaxis TypeScript. No-unused-vars se delega al typecheck/convenciones existentes; no-undef lo verifica TypeScript en TS. Se excluyen tipos DB generados, builds y Edge Deno (su runtime/integraciones se comprueban por separado). Dos fixtures de QA descartan causas SQL sensibles y el runner privado descarta diagnósticos: la excepción preserve-caught-error está acotada a esos archivos. El catch vacío permitido se limita al smoke preexistente de #146.
+[Seguro] ESLint fijado para TS/JS web/core/API y herramientas CI; recomendado con sintaxis TypeScript. No-unused-vars permanece fuera del gate inicial para conservar el alcance del código existente; no-undef lo verifica TypeScript en TS. Se excluyen tipos DB generados, builds y Edge Deno (su runtime/integraciones se comprueban por separado). Dos fixtures de QA descartan causas SQL sensibles y el runner privado descarta diagnósticos: la excepción preserve-caught-error está acotada a esos archivos. El catch vacío permitido se limita al smoke preexistente de #146.
 
 [Seguro] [CI](../../../.github/workflows/ci.yml) ejecuta lint/typecheck/build/core+web+API, pgTAP completo y 81 integraciones HTTP/Postgres/Edge con flags explícitos, staging/roles/readiness/migraciones y rollback de artefacto. Los tres jobs obligatorios tienen timeout 12 min; `required` exige éxito de todos, incluyendo cuando uno falla/se cancela. Las acciones están fijadas a commits oficiales. Falta configurar branch protection en GitHub para exigir **CI / required**; publicar el workflow no aplica esa configuración administrativa.
 
@@ -37,8 +37,8 @@ pnpm ci:extended
 | Staging Docker | PASS: roles mínimos, ledger, deploy de dos imágenes, restauración del digest inicial, logs seguros y PostgreSQL real API |
 | Probes de regresión | PASS: pgTAP y tipos fallan con errores controlados; fuentes temporales retiradas |
 | pgTAP sobre stack local existente | FAIL preexistente: 3/1487 en 33 archivos, mismo resultado en develop original; Academia 44–45 y cuota invitaciones 15 |
-| CI remoto sobre DB efímera limpia | PENDIENTE de ejecución del PR; no equivale a los resultados locales |
-| Suite extendida / lector humano | PENDIENTE / fuera de este entregable |
+| CI remoto sobre DB efímera limpia | Checks PASS (81 s), staging PASS (66 s); backend FAIL pgTAP en run 37567425731; gate required FAIL |
+| Suite extendida / lector humano | PASS local: 33 Playwright/axe (103.54 s) + 1 fallo transporte (17.07 s), 0 omitidas / lector fuera de este entregable |
 | Provisión externa | PENDIENTE, según elección explícita del usuario |
 
 [Seguro] No se modifica SQL/RLS de producto, contratos de datos ni UI; no hay tipos de dominio nuevos que regenerar. La migración operativa staging se verifica con rol migrator y restricción runtime; no sustituye las pruebas canónicas SQL↔core. El fallo local pgTAP no se oculta ni se corrige ampliando alcance sin evidencia: la corrida efímera del PR deberá aclararlo antes de declarar el gate remoto aprobado.

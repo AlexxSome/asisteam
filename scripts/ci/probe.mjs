@@ -16,6 +16,7 @@ await suite('controlled-failure', async () => {
     finally { rmSync(file); }
     // Expected FAIL stays explicit; the probe itself passes only after observing it.
     assert.equal(evidence.checks.filter(check => check.status === 'FAIL').length, 2);
+    for (const record of evidence.checks) if (record.status === 'FAIL') record.expected = true;
     evidence.checks.push({ check: 'controlled-failure-detected', status: 'PASS' });
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
