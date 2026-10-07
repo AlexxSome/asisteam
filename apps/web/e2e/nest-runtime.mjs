@@ -1,5 +1,7 @@
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { createApplication } from '../../api/dist/application.js';
 import { loadConfig } from '../../api/dist/config.js';
@@ -32,7 +34,7 @@ export async function startQaNest(config) {
     sql("alter role asisteam_api login password '"+password+"';");
     if(invitations){
       sql("alter role asisteam_invitation login password '"+password+"';");
-      edgeDir=mkdtempSync('/private/tmp/asisteam-qa-invitation-');writeFileSync(edgeDir+'/env',`INVITATION_AUTH_BRIDGE_SECRET=${bridgeSecret}\n`,{mode:0o600});
+      edgeDir=mkdtempSync(join(tmpdir(),'asisteam-qa-invitation-'));writeFileSync(edgeDir+'/env',`INVITATION_AUTH_BRIDGE_SECRET=${bridgeSecret}\n`,{mode:0o600});
       let ready=false;edge=spawn('pnpm',['exec','supabase','functions','serve','invitation-auth','--env-file',edgeDir+'/env'],{cwd:new URL('../../../',import.meta.url),detached:true,stdio:['ignore','pipe','pipe']});
       for(const stream of [edge.stdout,edge.stderr])stream.on('data',chunk=>{ready||=/Serving functions/i.test(chunk.toString());});
       const deadline=Date.now()+90000;while(!ready&&Date.now()<deadline&&edge.exitCode===null)await new Promise(resolve=>setTimeout(resolve,100));if(!ready)throw new Error('Bridge QA no disponible.');

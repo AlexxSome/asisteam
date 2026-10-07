@@ -3,6 +3,8 @@ import { test } from 'node:test';
 import { randomUUID, createHash } from 'node:crypto';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import pg from 'pg';
 import { createApplication } from '../dist/application.js';
 import { loadConfig } from '../dist/config.js';
@@ -13,16 +15,19 @@ const hash=value=>createHash('sha256').update(value).digest('hex');
 test('MIG-09 Nest/SQL/GoTrue real: issuance, legacy links, registration, replay, concurrency, MANAGED, consent and proxy boundaries', {skip:process.env.API_RLS_TEST!=='1',timeout:120000},async()=>{
   const config=JSON.parse(execFileSync('pnpm',['exec','supabase','status','-o','json'],{cwd:new URL('../../../',import.meta.url),encoding:'utf8',stdio:['ignore','pipe','pipe']}));
   assert.equal(config.API_URL,'http://127.0.0.1:54321');
-  const db=new pg.Client({connectionString:config.DB_URL});await db.connect();
+  const db=new pg.Client({connectionString:config.DB_URL,connectionTimeoutMillis:5000,statement_timeout:10000,query_timeout:12000});
   const run=randomUUID(),g=randomUUID(),password='Synthetic-password-153!',secret='synthetic-proxy-'+randomUUID(),bridgeSecret='synthetic-bridge-'+randomUUID(),rolePassword=randomUUID(),profiles=[],logs=[],mail=[];
   const email=name=>'mig153-'+run+'-'+name+'@example.test';
-  const dir=mkdtempSync('/private/tmp/asisteam-153-edge-');writeFileSync(dir+'/env',`INVITATION_AUTH_BRIDGE_SECRET=${bridgeSecret}\n`,{mode:0o600});
-  const previous=(await db.query("select rolname,rolcanlogin,rolpassword from pg_authid where rolname in ('asisteam_api','asisteam_invitation')")).rows;
+  let dir, connected=false, previous=[];
   const realFetch=globalThis.fetch;let app,edge,failMail=false;
   async function authRequest(path,body){const response=await realFetch(config.API_URL+'/auth/v1/'+path,{method:'POST',headers:{apikey:config.ANON_KEY,'content-type':'application/json'},body:JSON.stringify(body)});assert.equal(response.status,200);return response.json();}
   async function account(name){const response=await realFetch(config.API_URL+'/auth/v1/admin/users',{method:'POST',headers:{apikey:config.SERVICE_ROLE_KEY,authorization:'Bearer '+config.SERVICE_ROLE_KEY,'content-type':'application/json'},body:JSON.stringify({email:email(name),password,email_confirm:true,user_metadata:{full_name:'Sintético MIG09',birthdate:'1990-01-01'}})});assert.equal(response.status,200);const user=await response.json();const id=(await db.query('select id from public.users where auth_user_id=$1',[user.id])).rows[0].id;profiles.push(id);await db.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[id]);return {id,auth:user.id,token:(await authRequest('token?grant_type=password',{email:email(name),password})).access_token};}
   const snapshot=async id=>JSON.stringify((await db.query("select (select jsonb_agg(to_jsonb(m) order by id) from public.memberships m where user_id=$1) as memberships,(select jsonb_agg(to_jsonb(a) order by id) from public.attendance_records a where membership_id in(select id from public.memberships where user_id=$1)) as attendance,(select jsonb_agg(to_jsonb(c) order by id) from public.consents c where guardianship_id in(select id from public.guardianships where athlete_user_id=$1)) as consents",[id])).rows[0]);
   try{
+    // Acquire temporary resources inside cleanup scope and before opening DB.
+    dir=mkdtempSync(join(tmpdir(),'asisteam-153-edge-'));writeFileSync(join(dir,'env'),`INVITATION_AUTH_BRIDGE_SECRET=${bridgeSecret}\n`,{mode:0o600});
+    await db.connect();connected=true;
+    previous=(await db.query("select rolname,rolcanlogin,rolpassword from pg_authid where rolname in ('asisteam_api','asisteam_invitation')")).rows;
     for(const role of ['asisteam_api','asisteam_invitation'])await db.query("alter role "+role+" login password '"+rolePassword+"'");
     let ready=false;edge=spawn('pnpm',['exec','supabase','functions','serve','invitation-auth','--env-file',dir+'/env'],{cwd:new URL('../../../',import.meta.url),stdio:['ignore','pipe','pipe'],detached:true});for(const stream of [edge.stdout,edge.stderr])stream.on('data',chunk=>{ready||=/Serving functions/i.test(chunk.toString());});
     const deadline=Date.now()+90000;while(!ready&&Date.now()<deadline&&edge.exitCode===null)await new Promise(resolve=>setTimeout(resolve,100));assert.ok(ready,'bridge local listo');
@@ -65,12 +70,14 @@ test('MIG-09 Nest/SQL/GoTrue real: issuance, legacy links, registration, replay,
     await db.query("update app_private.invitation_send_limits set attempts=49 where group_id=$1",[g]);const quota=await Promise.allSettled([admin.sendInvitation({body:{action:'send',group_id:g,email:email('quota1'),role:'ATHLETE'}}),admin.sendInvitation({body:{action:'send',group_id:g,email:email('quota2'),role:'ATHLETE'}})]);assert.equal(quota.filter(x=>x.status==='fulfilled').length,1);assert.equal(quota.find(x=>x.status==='rejected').reason.status,429);assert.equal((await db.query('select attempts from app_private.invitation_send_limits where group_id=$1',[g])).rows[0].attempts,50);
     assert.ok(!logs.join('').includes(secret));assert.ok(!logs.join('').includes(bridgeSecret));assert.ok(!logs.join('').includes(owner.token));assert.ok(!logs.join('').includes(password));assert.ok(!logs.join('').includes(email('new')));
   }finally{
-    globalThis.fetch=realFetch;if(app)await app.close();if(edge?.pid){try{process.kill(-edge.pid,'SIGTERM');}catch{/* Owned process already stopped. */}await new Promise(resolve=>setTimeout(resolve,500));try{process.kill(-edge.pid,'SIGKILL');}catch{/* Owned process already stopped. */}}rmSync(dir,{recursive:true,force:true});
+    globalThis.fetch=realFetch;if(app)await app.close();if(edge?.pid){try{process.kill(-edge.pid,'SIGTERM');}catch{/* Owned process already stopped. */}await new Promise(resolve=>setTimeout(resolve,500));try{process.kill(-edge.pid,'SIGKILL');}catch{/* Owned process already stopped. */}}if(dir)rmSync(dir,{recursive:true,force:true});
+    if(connected){try{
     const own=(await db.query('select id,auth_user_id from public.users where email like $1',['mig153-'+run+'-%@example.test'])).rows,ids=own.map(r=>r.id),authIds=own.map(r=>r.auth_user_id).filter(Boolean);
     let cleanupFailed=false;await db.query('begin');try{await db.query("set local session_replication_role='replica'");
       for(const sql of ['delete from app_private.managed_activation_requests where membership_id in(select id from public.memberships where group_id=$1)','delete from app_private.managed_member_enrollments where membership_id in(select id from public.memberships where group_id=$1)','delete from public.attendance_records where activity_id in(select id from public.activities where group_id=$1)','delete from public.activities where group_id=$1','delete from app_private.invitation_registrations where token_hash in(select token from public.invitations where group_id=$1)','delete from public.invitations where group_id=$1','delete from app_private.invitation_send_limits where group_id=$1','delete from public.memberships where group_id=$1','delete from app_private.billing_legacy_groups where group_id=$1','delete from public.groups where id=$1'])await db.query(sql,[g]);
       await db.query('delete from public.consents where guardianship_id in(select id from public.guardianships where athlete_user_id=any($1::uuid[]))',[ids]);await db.query('delete from public.guardianships where athlete_user_id=any($1::uuid[])',[ids]);await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[ids]);await db.query('delete from public.users where id=any($1::uuid[])',[ids]);await db.query('delete from auth.sessions where user_id=any($1::uuid[])',[authIds]);await db.query('delete from auth.identities where user_id=any($1::uuid[])',[authIds]);await db.query('delete from auth.users where id=any($1::uuid[])',[authIds]);await db.query("delete from app_private.invitation_attempts where key=$1",[hash(`${secret}:preview:rate-${run}`)]);
       for(const row of previous){const old=row.rolpassword===null?'null':"'"+row.rolpassword.replaceAll("'","''")+"'";await db.query('alter role '+row.rolname+' '+(row.rolcanlogin?'login':'nologin')+' password '+old);}await db.query('commit');
-    }catch{await db.query('rollback');cleanupFailed=true;}finally{await db.end();}assert.equal(cleanupFailed,false,'Limpieza acotada MIG09 completa');
+    }catch{await db.query('rollback');cleanupFailed=true;}assert.equal(cleanupFailed,false,'Limpieza acotada MIG09 completa');
+    }finally{await db.end();}}else await db.end();
   }
 });
