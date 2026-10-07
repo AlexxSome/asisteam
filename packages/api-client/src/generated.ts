@@ -32,6 +32,18 @@ export class ApiClient extends ApiTransport {
   updateActivityType(input: { params: operations["updateActivityType"]["parameters"]["path"]; body: operations["updateActivityType"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateActivityType"]["responses"][200]["content"]["application/json"]> {
     return this.execute("updateActivityType", input ?? {});
   }
+  getAttendanceRoster(input: { params: operations["getAttendanceRoster"]["parameters"]["path"]; query?: operations["getAttendanceRoster"]["parameters"]["query"] }): Promise<operations["getAttendanceRoster"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getAttendanceRoster", input ?? {});
+  }
+  saveAttendance(input: { params: operations["saveAttendance"]["parameters"]["path"]; body: operations["saveAttendance"]["requestBody"]["content"]["application/json"] }): Promise<operations["saveAttendance"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("saveAttendance", input ?? {});
+  }
+  updateAttendance(input: { params: operations["updateAttendance"]["parameters"]["path"]; body: operations["updateAttendance"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateAttendance"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("updateAttendance", input ?? {});
+  }
+  clearAttendance(input: { params: operations["clearAttendance"]["parameters"]["path"] }): Promise<operations["clearAttendance"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("clearAttendance", input ?? {});
+  }
   listGroupMembers(input: { params: operations["listGroupMembers"]["parameters"]["path"]; query?: operations["listGroupMembers"]["parameters"]["query"] }): Promise<operations["listGroupMembers"]["responses"][200]["content"]["application/json"]> {
     return this.execute("listGroupMembers", input ?? {});
   }

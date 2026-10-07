@@ -231,3 +231,8 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Actividades/tipos por Nest · MIG-10 (#154), 07-10-2026
 
 [Seguro] [MIG-10](migration/issue-154/README.md) reconcilia ACT-01/02/03/04, GRP-05 y agendas/tarjetas de GRP-02, /groups, /wards y /wards/:athleteUserId mediante ACTIVITIES=nest. Conserva las 39 páginas, rutas/códigos, formularios y estados. Lecturas globales/pupilo mantienen selección de grupos ACTIVE; CRUD preserva alcance puntual/serie, historial y fechas de Chile. La evidencia local de integración/E2E, límites y resultado de CI está enlazada; no acredita deploy cloud ni lector humano.
+
+
+## Asistencia por Nest · MIG-11 (#155), 07-10-2026
+
+[Seguro] [MIG-11](migration/issue-155/README.md) reconcilia ASI-01 mediante ATTENDANCE=nest: roster completo paginado, guardado por fila/lote, corrección parcial y desmarcado ADMIN. Conserva39 páginas, rutas/códigos, botones44px, confirmación/guardado/error, privacidad COACH y éxitos parciales entre lotes. La evidencia local375px/teclado/recarga/fallo de red y sus límites figuran en el runbook; no acredita deploy cloud ni revisión humana completa.

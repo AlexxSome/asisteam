@@ -1,7 +1,7 @@
 import { HttpException } from '@nestjs/common';
-import { ACTIVITY_ERROR_MESSAGES, ACTIVITY_TYPE_ERROR_MESSAGES, GUARDIANSHIP_ERROR_MESSAGES, MANAGED_MEMBER_ERROR_MESSAGES, MEMBER_MANAGEMENT_ERRORS, MEMBERSHIP_REVIEW_ERROR_MESSAGES, GROUP_ERROR_MESSAGES, SEND_INVITATION_ERROR_MESSAGES, invitationErrorMessages } from '@asisteam/core/runtime';
+import { ATTENDANCE_ERROR_MESSAGES, ACTIVITY_ERROR_MESSAGES, ACTIVITY_TYPE_ERROR_MESSAGES, GUARDIANSHIP_ERROR_MESSAGES, MANAGED_MEMBER_ERROR_MESSAGES, MEMBER_MANAGEMENT_ERRORS, MEMBERSHIP_REVIEW_ERROR_MESSAGES, GROUP_ERROR_MESSAGES, SEND_INVITATION_ERROR_MESSAGES, invitationErrorMessages } from '@asisteam/core/runtime';
 
-const memberMessages = { ...ACTIVITY_ERROR_MESSAGES, ...ACTIVITY_TYPE_ERROR_MESSAGES, ...SEND_INVITATION_ERROR_MESSAGES, ...invitationErrorMessages, ...MEMBER_MANAGEMENT_ERRORS, ...MEMBERSHIP_REVIEW_ERROR_MESSAGES, ...MANAGED_MEMBER_ERROR_MESSAGES, ...GUARDIANSHIP_ERROR_MESSAGES, invalid_member_filters: 'Revisa los filtros de integrantes.' };
+const memberMessages = { ...ATTENDANCE_ERROR_MESSAGES, ...ACTIVITY_ERROR_MESSAGES, ...ACTIVITY_TYPE_ERROR_MESSAGES, ...SEND_INVITATION_ERROR_MESSAGES, ...invitationErrorMessages, ...MEMBER_MANAGEMENT_ERRORS, ...MEMBERSHIP_REVIEW_ERROR_MESSAGES, ...MANAGED_MEMBER_ERROR_MESSAGES, ...GUARDIANSHIP_ERROR_MESSAGES, invalid_member_filters: 'Revisa los filtros de integrantes.' };
 const profileMessages: Record<string, string> = {
   account_consent_required: 'Acepta las condiciones vigentes para continuar.',
   athlete_birthdate_required: 'La fecha de nacimiento es obligatoria para deportistas.',

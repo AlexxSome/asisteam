@@ -68,3 +68,8 @@ const result = await runModuleOperation("groups", {
 ## Invitaciones implementadas · MIG-09 (#153)
 
 [Seguro] INVITATIONS=nest selecciona las nueve operaciones del [runbook MIG-09](../../docs/migration/issue-153/README.md), conservando rutas/pantallas y links previos sobre la misma base. Preview/register/claim/accept requieren invitationProxy {secret,clientIp} exclusivamente servidor; solo accept lleva además Bearer de sesión verificada. Tokens viajan en body, nunca en URL de la API; respuestas/errores son mínimos y 410 conserva expiración. Los secretos no se exponen a componentes ni NEXT_PUBLIC. No hay retry/fallback: un resultado incierto se consulta antes de reenviar.
+
+
+## Asistencia implementada · MIG-11 (#155)
+
+[Seguro] [MIG-11](../../docs/migration/issue-155/README.md) añade getAttendanceRoster/saveAttendance/updateAttendance/clearAttendance implementados. ATTENDANCE=nest activa loader/acciones; Supabase sigue default. Roster100 por página, lote1–500, corrección parcial y notas/desmarcado ADMIN; COACH obtiene notas nulas. Un error no invoca el segundo transporte ni reintenta automáticamente. Consultar tras resultado incierto antes de repetir.

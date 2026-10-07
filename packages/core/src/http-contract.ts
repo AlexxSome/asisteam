@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { attendanceHttpSchemas, attendanceHttpOperations } from "./http-attendance-contract";
 import { activityHttpSchemas, activityHttpOperations } from "./http-activities-contract";
 import { invitationHttpSchemas, invitationHttpOperations } from "./http-invitations-contract";
 import { memberHttpSchemas, memberHttpOperations } from "./http-members-contract";
@@ -35,6 +36,7 @@ export const httpOwnProfileSchema = z.object({
 
 export const httpSchemas = {
   ...activityHttpSchemas,
+  ...attendanceHttpSchemas,
   ...memberHttpSchemas,
   ...invitationHttpSchemas,
   Session: z.object({ user_id: uuid }).strict(),
@@ -75,6 +77,7 @@ export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 410, 500,
 /** Only specified operations enter the generated SDK. Domain handlers arrive in #151 and following module issues. */
 export const httpOperations = {
   ...activityHttpOperations,
+  ...attendanceHttpOperations,
   ...memberHttpOperations,
   ...invitationHttpOperations,
   getSession: { method: "GET", path: "/api/v1/auth/session", module: "auth", authenticated: true, response: "Session", status: 200, state: "implemented", summary: "Identidad del perfil verificada; sesión vigente y cuenta ACTIVE" },

@@ -3,6 +3,9 @@ import { canManageAttendance, attendanceSavedRecordsSchema, type AttendanceRoste
 import { getGroup } from "@/lib/groups";
 import { getActivity } from "@/lib/activities";
 import { createClient } from "@/lib/supabase/server";
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 
 export async function getAttendance(groupId: string, activityId: string) {
   const group = await getGroup(groupId);
@@ -10,6 +13,23 @@ export async function getAttendance(groupId: string, activityId: string) {
   // mantiene la defensa al reutilizar el loader fuera de esa ruta.
   if (!canManageAttendance(group.roles)) notFound();
   const activity = await getActivity(groupId, activityId);
+  if (moduleTransport("attendance") === "nest") {
+    try {
+      const client = createServerApiClient();
+      const roster: AttendanceRosterRow[] = [];
+      let canEditNotes = false;
+      for (let page = 1; ; page++) {
+        const result = await client.getAttendanceRoster({ params: { groupId, activityId }, query: { page } });
+        roster.push(...result.roster);
+        canEditNotes = result.canEditNotes;
+        if (!result.hasNext) break;
+      }
+      return { activity, roster, canEditNotes };
+    } catch (error) {
+      if (error instanceof ApiClientError && [403, 404].includes(error.status)) notFound();
+      throw error;
+    }
+  }
   const supabase = await createClient();
   const roster: AttendanceRosterRow[] = [];
   const saved = new Map<string, { status: AttendanceRosterRow["status"]; note: string | null }>();
