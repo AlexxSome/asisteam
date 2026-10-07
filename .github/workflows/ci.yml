@@ -1,0 +1,75 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [develop, main]
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24.16.0
+      - run: corepack enable && corepack prepare pnpm@10.33.2 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm ci:checks
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: checks-evidence
+          path: .ci-results/*.json
+          retention-days: 7
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: 24.16.0
+      - run: corepack enable && corepack prepare pnpm@10.33.2 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm ci:backend
+      - run: node scripts/ci/probe.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: backend-evidence
+          path: .ci-results/*.json
+          retention-days: 7
+  staging:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: 24.16.0
+      - run: corepack enable && corepack prepare pnpm@10.33.2 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm ci:staging
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: staging-evidence
+          path: .ci-results/*.json
+          retention-days: 7
+  required:
+    if: always()
+    needs: [checks, backend, staging]
+    runs-on: ubuntu-24.04
+    steps:
+      - env:
+          CHECKS: ${{ needs.checks.result }}
+          BACKEND: ${{ needs.backend.result }}
+          STAGING: ${{ needs.staging.result }}
+        run: test "$CHECKS" = success && test "$BACKEND" = success && test "$STAGING" = success

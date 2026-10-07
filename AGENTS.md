@@ -148,7 +148,7 @@ No hay API REST artesanal: el contrato canónico es la tabla de operaciones de d
 
 ## 7. Testing y CI (docs 06 §7.2, 09)
 
-**Estado del corte:** existen suites locales Vitest, pgTAP/integraciones y Playwright/axe; no hay workflow CI ni script `lint` versionados. El flujo remoto descrito abajo es el objetivo del plan, no evidencia de despliegue activo. Ejecutar los scripts reales y registrar PASS/FAIL/omitido según [QA #120](docs/qa/issue-120/README.md).
+**Estado del corte:** existen suites locales Vitest, pgTAP/integraciones y Playwright/axe; MIG-03 (#147) añade workflow CI y `lint`; su evidencia está en `docs/migration/issue-147/README.md`. El flujo remoto descrito abajo es el objetivo del plan, no evidencia de despliegue activo. Ejecutar los scripts reales y registrar PASS/FAIL/omitido según [QA #120](docs/qa/issue-120/README.md).
 
 1. **En cada PR:** lint + typecheck (Turborepo con cache remoto), Vitest de `packages/core` (incluye casos canónicos de la métrica), `supabase start` en Docker → migraciones → **pgTAP** (políticas RLS con seeds por rol, incluidos tests negativos de las 6 reglas de visibilidad) → integración de Edge Functions. Presupuesto: < 12 min.
 2. **Merge a `main`:** deploy automático a staging (Vercel + `supabase db push`).
