@@ -1,0 +1,123 @@
+{
+  "commit": "d61847ad1a1c1e3893ae75bfbec11090fdb74f58",
+  "sourceCommit": "6f54213b5dea8773dd14cf70e45c9fb741e7b3e2",
+  "date": "2026-10-08T03:37:50.274Z",
+  "node": "v24.16.0",
+  "environment": "github-actions-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 95.84
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 0.95
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 4.72
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 1.39
+    },
+    {
+      "check": "worker-two-replicas",
+      "status": "PASS",
+      "seconds": 0.79
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.16
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.55
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 1.1
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.96
+    },
+    {
+      "check": "api-announcements-http",
+      "status": "PASS",
+      "seconds": 1.07
+    },
+    {
+      "check": "api-billing-http",
+      "status": "PASS",
+      "seconds": 1.1
+    },
+    {
+      "check": "api-reports-http",
+      "status": "PASS",
+      "seconds": 6.73
+    },
+    {
+      "check": "api-qr-http",
+      "status": "PASS",
+      "seconds": 1.14
+    },
+    {
+      "check": "api-attendance-http",
+      "status": "PASS",
+      "seconds": 2.34
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 6.82
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 23.92
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 4.28,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 2.12
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "FAIL",
+      "seconds": 6.17,
+      "sqlFailures": [
+        {
+          "file": "group_subscriptions.test.sql",
+          "failed": 2
+        }
+      ]
+    }
+  ]
+}

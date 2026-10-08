@@ -7,6 +7,9 @@ update public.users set id=pg_temp.id(right(auth_user_id::text,12)::int+100) whe
 insert into public.groups(id,name,invite_code,created_by) values
 (pg_temp.id(201),'Equipo pagador','BILL0001',pg_temp.id(101)),(pg_temp.id(202),'Club ajeno','BILL0002',pg_temp.id(103)),
 (pg_temp.id(203),'Academia','BILL0003',pg_temp.id(101)),(pg_temp.id(204),'Club histórico','BILL0004',pg_temp.id(101));
+-- La temporada debe preceder al ingreso (-1 día) y a la actividad (-1 hora),
+-- incluso cuando la corrida cruza la medianoche en America/Santiago.
+update public.groups set created_at=now()-interval '2 days' where id=pg_temp.id(203);
 -- Solo este grupo representa el snapshot anterior al despliegue.
 insert into app_private.billing_legacy_groups values(pg_temp.id(204));
 insert into public.memberships(id,user_id,group_id,role,status) values

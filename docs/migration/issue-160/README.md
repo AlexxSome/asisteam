@@ -48,7 +48,7 @@ ASISTEAM_QA_NEST=1 pnpm --filter @asisteam/web test:e2e:full --grep MIG-16
 | pgTAP QR + sesión/RLS | PASS66; 0 omitidas |
 | Backend global / Edge | FAIL pgTAP global preexistente3; módulos HTTP/worker/portabilidad/tipos PASS / Edge81/81 PASS,0 omitidas,49.84s |
 | E2E375px/teclado/axe/login/emisión/llegada/errores | PASS1/1,0 omitidas,13.47s; Next→Nest→PostgreSQL/GoTrue reales locales |
-| CI remoto y despliegue/corte cloud | PENDIENTE; no acreditados por pruebas locales |
+| CI remoto y despliegue/corte cloud | CI inicial falló solo group_subscriptions44–45; seguimiento de corrección en checks del PR#198. Corte cloud no ejecutado |
 
 [Seguro] La primera corrida de checks detectó un enlace workspace ausente en node_modules de worker después del merge #159. Se restauró instalación con lockfile congelado y se repiten los checks; no se modifican manifest/lock/versiones. pnpm11 del PATH se sustituye durante comandos por un shim temporal que invoca corepack pnpm10.33.2. No se integra configuración local de herramientas.
 
@@ -56,10 +56,22 @@ ASISTEAM_QA_NEST=1 pnpm --filter @asisteam/web test:e2e:full --grep MIG-16
 
 [Seguro] [Checks sanitizados](checks.json), [backend](backend.json), [baseline pgTAP](baseline.json) y [E2E](e2e.json) solo registran base/entorno/resultado/duración/conteos. [Emisión y ajuste guardado](qr-mig16-admin-375.png) con QR enmascarado; [marca propia anterior](qr-mig16-llegada-375.png) tras login; [QR vencido](qr-mig16-vencido-375.png). Inspección visual confirma que no hay payloads/tokens/códigos legibles. Axe sin violaciones en [QR](axe-qr.json), [llegada](axe-llegada.json) y [vencido](axe-vencido.json); revisión automática acotada, no certificación con lector humano.
 
-[Seguro] Gate pgTAP completo: group_subscriptions.test.sql casos44–45 (have0/want1000, NULL/want100.0) y send_invitations.test.sql15 (have1/want0). Se reprodujeron los mismos3 fallos con archivos exactos de35c0520 mediante git show y ejecución de esos dos archivos temporales. Este diff no altera migraciones ni esas suites, no toca cuotas/fixtures ajenos y no corrige problemas anteriores ampliando alcance. PR draft; gate global y revisión del usuario pendientes antes de merge.
+[Seguro] Gate pgTAP completo: group_subscriptions.test.sql casos44–45 (have0/want1000, NULL/want100.0) y send_invitations.test.sql15 (have1/want0). Se reprodujeron los mismos3 fallos con archivos exactos de35c0520 mediante git show y ejecución de esos dos archivos temporales. Ese resultado describe la entrega inicial; la petición posterior de reparar CI autoriza la corrección limitada documentada abajo. No cambia cuotas ni migraciones; el PR permanece draft para revisión del usuario.
 
 [Seguro] Las primeras corridas E2E requirieron corregir selectors de SVG/status y esperar final de login/lectura inicial antes de simular un cambio de fragmento; la corrida final pasa con UI de producto existente. No se sustituyen endpoints de producto por mocks.
 
 [Seguro] [Edge sanitizado](edge.json) registra81/81 integraciones reales locales,0 omitidas; recupera la etapa detenida por pgTAP global. No hay migración nueva ni tipos DB divergentes.
 
 [Seguro] Revisión final del diff, lint y typecheck repetidos tras los ajustes de E2E: PASS. next-env.d.ts restaurado exactamente a su cambio ajeno inicial; manifest/lockfile intactos.
+
+## Corrección del CI del PR#198
+
+[Seguro] [Run inicial37723615111](https://github.com/AlexxSome/asisteam/actions/runs/37723615111), fuente6f54213: checks y staging PASS; backend falla únicamente group_subscriptions44–45, y required refleja ese fallo. HTTP QR PASS1.14s; el fallo local anterior de send_invitations no aparece en ese entorno limpio. [Artefacto remoto sanitizado](ci-initial-backend.json).
+
+[Seguro] La fixture crea Academia en now(), ingresa atletas en now()-1d y crea actividad en now()-1h. El reporte season comienza en la fecha de creación del grupo en America/Santiago; a las00:40 Chile del runner, la actividad pertenece al día anterior y queda fuera del período (0 convocadas/null). Graphify actualizado no identifica SQL; el usuario autorizó explícitamente revisar/corregir ese archivo y consultar la función PostgreSQL. Se consultó get_group_attendance_report y su helper temporal, sin escaneo general ni cambio de funciones.
+
+[Seguro] La única corrección de código establece created_at=now()-2d para la Academia sintética, antes del ingreso y de la actividad. Conserva las aserciones de1000 convocadas y100.0 %, los lotes500 y las reglas canónicas. No modifica SQL de producto, esquema, RLS, billing ni transporte QR.
+
+[Seguro] [Regresión de medianoche](ci-regression.json): fixture original con actividad a23:30 del día anterior reproduce exactamente44–45 (FAIL esperado); la fixture corregida pasa el mismo escenario y la suite con reloj actual. [pgTAP global posterior](pgtap-followup.json): solo persiste el fallo local preexistente send_invitations15; Academia pasa. No se atribuye causa a ese fallo local. Estas variantes temporales usan PostgreSQL real y rollback; no cambian el reloj ni la función de reporte. Auto-revisión: cambio acotado a cronología sintética y evidencia, sin reducir aserciones.
+
+[Seguro] El CI de la corrección se comprueba en los [checks del PR#198](https://github.com/AlexxSome/asisteam/pull/198/checks); el resultado remoto se registra en la descripción del PR tras concluir, separado de la validación local. next-env.d.ts continúa excluido y preservado. No se hace merge ni cierre del issue.
