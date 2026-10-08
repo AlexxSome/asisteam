@@ -83,3 +83,7 @@ const result = await runModuleOperation("groups", {
 ## Billing implementado · MIG-14 (#158)
 
 [Seguro] getGroupBilling/manageSubscription figuran implemented; [runbook y evidencia](../../docs/migration/issue-158/README.md). BILLING=nest migra página y Server Action con schemas estrictos y sesión solo servidor. El webhook firmado se consume directamente por Mercado Pago y el relay antiguo, fuera del SDK Bearer. Configurar timeout60s en cliente/API. La reserva incierta se concilia sin POST automático. Una vez que el operador ejecuta handoff SQL a NEST, volver una bandera a supabase no restaura el ejecutor: rollback usa artefacto Nest compatible, misma DB/reservas/ledger.
+
+## QR y llegada propia · MIG-16 (#160)
+
+[Seguro] [Contrato, compatibilidad y evidencia](../../docs/migration/issue-160/README.md) implementa getQrSettings/setQrSettings/issueCheckinQr/selfCheckin. QR=nest selecciona las cuatro acciones web sobre la misma DB. Sesión/consentimiento vigentes y permisos SQL canónicos; HMAC-SHA256, claves privadas, reloj, ventana y locks permanecen en PostgreSQL. Token solo en body HTTP y fragmento web retirado; errores/logs sin payloads reutilizables. Códigos emitidos por el transporte anterior siguen válidos hasta su límite original sobre la misma base; no hay rotación/retirada de claves en este entregable.

@@ -15,6 +15,7 @@ await suite('backend', async () => {
   await check('api-announcements-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/announcements.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-billing-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/billing.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-reports-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/reports.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
+  await check('api-qr-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/qr.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-attendance-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/attendance.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-invitations-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/invitations.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('portability-rehearsal', 'pnpm', ['migration:portability']);

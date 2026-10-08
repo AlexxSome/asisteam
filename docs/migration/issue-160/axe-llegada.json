@@ -1,0 +1,59 @@
+{
+  "route": "/check-in",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "violations": [],
+  "incomplete": [],
+  "contrast": [
+    {
+      "ratio": 17.06,
+      "foreground": "#0f172a",
+      "background": "#f8fafc",
+      "expected": "3:1"
+    },
+    {
+      "ratio": 6.49,
+      "foreground": "#166534",
+      "background": "#dcfce7",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.49,
+      "foreground": "#166534",
+      "background": "#dcfce7",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.49,
+      "foreground": "#166534",
+      "background": "#dcfce7",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.49,
+      "foreground": "#166534",
+      "background": "#dcfce7",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.49,
+      "foreground": "#166534",
+      "background": "#dcfce7",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.4,
+      "foreground": "#1d4ed8",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    }
+  ]
+}

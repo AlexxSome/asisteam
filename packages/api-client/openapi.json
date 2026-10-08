@@ -3,9 +3,608 @@
   "info": {
     "title": "Asisteam HTTP",
     "version": "1.0.0",
-    "description": "MIG-15. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
+    "description": "MIG-16. QR/configuración/llegada propia implementados sobre firma, reloj y claves SQL existentes. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
   },
   "paths": {
+    "/api/v1/groups/{groupId}/check-in-settings": {
+      "get": {
+        "operationId": "getQrSettings",
+        "summary": "ADMIN ACTIVE consulta horario QR del grupo",
+        "tags": [
+          "qr"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QrSettings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "setQrSettings",
+        "summary": "ADMIN configura ventana/atraso mediante RPC canónica",
+        "tags": [
+          "qr"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QrSettings"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QrSettings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/activities/{activityId}/check-in-qr": {
+      "post": {
+        "operationId": "issueCheckinQr",
+        "summary": "ADMIN emite HMAC temporal; clave y reloj permanecen en SQL",
+        "tags": [
+          "qr"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckinQr"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/check-in": {
+      "post": {
+        "operationId": "selfCheckin",
+        "summary": "ATHLETE ACTIVE registra solo llegada propia; conserva marca previa",
+        "tags": [
+          "qr"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckinInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckinReceipt"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/groups/{groupId}/announcements": {
       "get": {
         "operationId": "getAnnouncements",
@@ -11245,6 +11844,132 @@
       }
     },
     "schemas": {
+      "CheckinActivityParams": {
+        "type": "object",
+        "properties": {
+          "activityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "activityId"
+        ],
+        "additionalProperties": false
+      },
+      "QrSettings": {
+        "type": "object",
+        "properties": {
+          "opens_before_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1440
+          },
+          "closes_after_minutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1440
+          },
+          "late_after_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1440
+          }
+        },
+        "required": [
+          "opens_before_minutes",
+          "closes_after_minutes",
+          "late_after_minutes"
+        ],
+        "additionalProperties": false
+      },
+      "CheckinInput": {
+        "type": "object",
+        "properties": {
+          "activity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "token": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "activity_id",
+          "token"
+        ],
+        "additionalProperties": false
+      },
+      "CheckinQr": {
+        "type": "object",
+        "properties": {
+          "activity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "token": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "activity_id",
+          "token",
+          "server_time",
+          "expires_at"
+        ],
+        "additionalProperties": false
+      },
+      "CheckinReceipt": {
+        "type": "object",
+        "properties": {
+          "activity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "group_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "activity_title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PRESENT",
+              "ABSENT",
+              "LATE",
+              "EXCUSED"
+            ]
+          },
+          "recorded_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "activity_id",
+          "group_id",
+          "activity_title",
+          "status",
+          "recorded_at",
+          "created"
+        ],
+        "additionalProperties": false
+      },
       "AnnouncementParams": {
         "type": "object",
         "properties": {

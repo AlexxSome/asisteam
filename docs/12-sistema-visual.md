@@ -1,5 +1,6 @@
 # Sistema visual web
 
+[Seguro] **MIG-16 (#160, 2026-10-08):** [QR y llegada propia mediante Nest](migration/issue-160/README.md) añade cuatro operaciones HTTP/SDK y QR=nest sobre las mismas RPC/claves SQL. ASI-04 conserva emisión ADMIN, ajustes plegables/guardado explícito, renovación por reloj servidor, fragmento retirado, login, confirmación/registro anterior/vencido/no disponible y reintento manual. El transporte no amplía roles ni agrega pantallas; la evidencia local sintética se registra en el runbook.
 Corte de contratos: **05-10-2026**, base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; reconciliación [#121](https://github.com/AlexxSome/asisteam/issues/121). El [inventario de pantallas](05-pantallas.md) distingue las rutas entregadas y las propuestas.
 
 Base P0 de [#102](https://github.com/AlexxSome/asisteam/issues/102), según la dirección de la [épica #100](https://github.com/AlexxSome/asisteam/issues/100). Fuente ejecutable: `apps/web/src/app/globals.css`. Tema claro único: `color-scheme: only light`; la preferencia oscura del sistema no cambia la paleta. No añadir clases `dark:` ni una clase `.dark` a la aplicación.
