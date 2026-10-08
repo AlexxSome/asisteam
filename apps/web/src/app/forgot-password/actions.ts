@@ -1,5 +1,7 @@
 "use server";
 
+import { nativeAuthEnabled } from '@/lib/api/native-auth-config';
+import { assertAuthOrigin, nativeAuthClient } from '@/lib/api/native-auth';
 import { passwordRecoverySchema, type PasswordRecoveryInput } from "@asisteam/core";
 import { createRecoveryClient } from "@/lib/supabase/recovery";
 import { cookies } from "next/headers";
@@ -16,10 +18,13 @@ export async function requestPasswordRecovery(input: PasswordRecoveryInput, invi
       ...authCookieOptions(), path: "/reset-password", maxAge: code ? 3600 : 0,
     });
     try {
+      if(nativeAuthEnabled()){await assertAuthOrigin();await(await nativeAuthClient()).requestRecovery({body:parsed.data});}
+      else {
       const supabase = createRecoveryClient();
       // La plantilla usa SiteURL y TokenHash; funciona también en otro
       // navegador y no depende de una cookie PKCE del navegador solicitante.
       await supabase.auth.resetPasswordForEmail(parsed.data.email);
+      }
     } catch {
       // Tanto errores de red como respuestas del proveedor (incluido 429)
       // mantienen el mismo resultado público, sin revelar cuentas ni PII.

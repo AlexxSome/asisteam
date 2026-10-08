@@ -50,6 +50,10 @@ export function ResetPasswordForm({ token, inviteCode }: { token: string; invite
     );
   }
 
+  // Keep this component mounted after removing ?token= from browser history,
+  // so Next's search-param update cannot replace confirmed success with error.
+  if (!token) return <Alert>El enlace es inválido o está incompleto. Solicita uno nuevo.</Alert>;
+
   return (
     <form aria-busy={isSubmitting} onSubmit={onSubmit} className="space-y-4" noValidate>
       <Field id="password" label="Nueva contraseña" error={errors.password?.message} help="Entre 10 y 128 caracteres.">

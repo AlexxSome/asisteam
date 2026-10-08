@@ -22,6 +22,8 @@ export type ApiClientOptions = {
   accessToken?: () => Promise<string | null>;
   timeoutMs?: number;
   fetch?: typeof globalThis.fetch;
+  authProxy?: { secret: string; clientIp: string };
+  nativeAuth?: boolean;
   invitationProxy?: { secret: string; clientIp: string };
 };
 type Input = { params?: object; query?: object; body?: unknown };
@@ -82,6 +84,12 @@ export class ApiTransport {
         const proxy = this.options.invitationProxy;
         if (!proxy?.secret || !proxy.clientIp || /[\r\n]/.test(proxy.secret + proxy.clientIp)) throw new ApiClientError(401, "authentication_required");
         headers["x-asisteam-proxy"] = proxy.secret; headers["x-asisteam-client-ip"] = proxy.clientIp;
+      }
+      if (this.options.nativeAuth) headers['x-asisteam-native-auth']='1';
+      if (this.options.authProxy && operation.path.startsWith('/api/v1/auth/')) {
+        const proxy=this.options.authProxy;
+        if (!proxy.secret || !proxy.clientIp || /[\r\n]/.test(proxy.secret+proxy.clientIp)) throw new ApiClientError(401,'authentication_required');
+        headers['x-asisteam-auth-proxy']=proxy.secret;headers['x-asisteam-client-ip']=proxy.clientIp;
       }
       if (body !== undefined) headers["content-type"] = "application/json";
       const response = await (this.options.fetch ?? globalThis.fetch)(url, {

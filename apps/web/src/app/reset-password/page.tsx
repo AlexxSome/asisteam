@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { recoveryTokenSchema } from "@asisteam/core";
 import { AuthLayout } from "@/components/auth-layout";
 import { ActionLink } from "@/components/ui/button";
-import { Alert } from "@/components/ui/alert";
 import { authPath, parseInviteCode, RECOVERY_INVITE_COOKIE, type AuthSearchParams } from "@/lib/auth-context";
 import { ResetPasswordForm } from "./reset-password-form";
 
@@ -22,9 +21,7 @@ export default async function ResetPasswordPage({ searchParams }: {
   const inviteCode = parseInviteCode(params.invite_code)
     ?? parseInviteCode((await cookies()).get(RECOVERY_INVITE_COOKIE)?.value);
   return <AuthLayout title="Restablecer contraseña" description="Define una nueva contraseña para recuperar tu acceso." inviteCode={inviteCode}>
-    {parsed.success ? <ResetPasswordForm token={parsed.data} inviteCode={inviteCode} /> : (
-      <Alert>El enlace es inválido o está incompleto. Solicita uno nuevo.</Alert>
-    )}
+    <ResetPasswordForm token={parsed.success ? parsed.data : ""} inviteCode={inviteCode} />
     <p className="text-center text-small text-muted-foreground">
       <ActionLink href={authPath("/forgot-password", inviteCode)}>Solicitar un nuevo enlace</ActionLink>
     </p>

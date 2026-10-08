@@ -1,4 +1,7 @@
 "use server";
+import { nativeAuthEnabled, NATIVE_ACCESS_COOKIE, NATIVE_REFRESH_COOKIE } from '@/lib/api/native-auth-config';
+import { assertAuthOrigin, nativeAuthClient, setNativeCookies, clearNativeCookies } from '@/lib/api/native-auth';
+import { ApiClientError } from '@asisteam/api-client';
 
 import { redirect, RedirectType } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -16,9 +19,24 @@ const INVALID_CREDENTIALS_ERROR = "Email o contraseña incorrectos";
 export async function signOutUser(): Promise<{ error: string }> {
   const failure = { error: "No pudimos cerrar tu sesión. Vuelve a intentarlo." };
   try {
+    if(nativeAuthEnabled()&&((await cookies()).get(NATIVE_ACCESS_COOKIE)||(await cookies()).get(NATIVE_REFRESH_COOKIE))){
+      await assertAuthOrigin();
+      const store=await cookies(),access=store.get(NATIVE_ACCESS_COOKIE)?.value,refresh=store.get(NATIVE_REFRESH_COOKIE)?.value;
+      let token=access;
+      const api=await nativeAuthClient(access);
+      try{await api.logoutSession();}catch(error){
+        if(!(error instanceof ApiClientError)||error.status!==401)throw error;
+        if(refresh){
+          try { token=(await api.refreshSession({body:{refresh_token:refresh}})).access_token;await(await nativeAuthClient(token)).logoutSession(); }
+          catch (refreshError) { if (!(refreshError instanceof ApiClientError) || refreshError.status !== 401) throw refreshError; }
+        }
+      }
+      await clearNativeCookies();
+    }else{
     const supabase = await createClient({ requireCookieWrites: true });
     const { error } = await supabase.auth.signOut({ scope: "local" });
     if (error) return failure;
+    }
   } catch {
     return failure;
   }
@@ -47,9 +65,14 @@ export async function loginUser(input: LoginInput, inviteCode?: string, checkin?
   }
 
   const { email, password } = parsed.data;
-  const supabase = await createClient();
-
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  let error: {status?:number}|null=null;
+  if(nativeAuthEnabled()){
+    try{await assertAuthOrigin();await setNativeCookies(await(await nativeAuthClient()).loginPassword({body:{email,password}}));}
+    catch(failure){error={status:failure instanceof ApiClientError?failure.status:503};}
+  }else{
+    const supabase = await createClient();
+    error=(await supabase.auth.signInWithPassword({ email, password })).error;
+  }
 
   if (error) {
     if (error.status === 429) {
@@ -69,6 +92,7 @@ export async function loginWithSocial(input: SocialLoginInput): Promise<LoginRes
   const origin = socialAuthOrigin();
   if (!parsed.success || !origin) return { error: SOCIAL_AUTH_ERROR };
 
+  if(nativeAuthEnabled()){await assertAuthOrigin();await clearNativeCookies();}
   let destination: string;
   try {
     const supabase = await createClient();

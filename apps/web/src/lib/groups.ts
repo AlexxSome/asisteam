@@ -71,6 +71,11 @@ export const getGroupCapacity = cache(async (groupId: string) => {
   const group = await getGroup(groupId);
   if (!group.roles.includes("ADMIN")) return null;
   try {
+    if (moduleTransport("billing") === "nest") {
+      const data = await createServerApiClient().getGroupBilling({ params: { groupId: group.id }, query: { page: 1 } });
+      const parsed = groupCapacitySchema.safeParse(data);
+      return parsed.success ? parsed.data : null;
+    }
     const client = await createClient();
     const { data, error } = await client.rpc("get_group_billing", { p_group_id: group.id, p_page: 1 });
     const parsed = groupCapacitySchema.safeParse(data);

@@ -1,0 +1,211 @@
+{
+  "sourceCommit": "5cfcb192b7f552ecb6e9ec09dab9717ef357ddbe",
+  "date": "2026-10-08T15:04:42.833Z",
+  "environment": "local-synthetic",
+  "node": "v24.16.0",
+  "checks": [
+    {
+      "check": "local-only-source-and-versions",
+      "status": "PASS",
+      "seconds": 2.408
+    },
+    {
+      "check": "export-schema-without-existing-data",
+      "status": "PASS",
+      "seconds": 0.125
+    },
+    {
+      "check": "owned-empty-source-clone",
+      "status": "PASS",
+      "seconds": 0.644
+    },
+    {
+      "check": "gotrue-synthetic-credential-export",
+      "status": "PASS",
+      "seconds": 1.918
+    },
+    {
+      "check": "domain-and-oauth-transport-fixtures",
+      "status": "PASS",
+      "seconds": 0.122
+    },
+    {
+      "check": "local-storage-export",
+      "status": "PASS",
+      "seconds": 0.278
+    },
+    {
+      "check": "synthetic-dump-export",
+      "status": "PASS",
+      "seconds": 0.125
+    },
+    {
+      "check": "standalone-postgres-start",
+      "status": "PASS",
+      "seconds": 1.042
+    },
+    {
+      "check": "clean-restore-with-explicit-compatibility",
+      "status": "PASS",
+      "seconds": 0.368
+    },
+    {
+      "check": "all-table-counts-and-content-reconciliation",
+      "status": "PASS",
+      "seconds": 9.612
+    },
+    {
+      "check": "catalog-constraints-policies-and-current-grants",
+      "status": "PASS",
+      "seconds": 0.136
+    },
+    {
+      "check": "restored-constraints-rls-roles-and-canonical-metrics",
+      "status": "PASS",
+      "seconds": 0.09
+    },
+    {
+      "check": "imported-bcrypt-verification-and-recovery-cases",
+      "status": "PASS",
+      "seconds": 1.144
+    },
+    {
+      "check": "nonportable-dispatch-and-extension-detection",
+      "status": "PASS",
+      "seconds": 0.613
+    },
+    {
+      "check": "object-import-manifest-and-checksums",
+      "status": "PASS",
+      "seconds": 0.26
+    },
+    {
+      "check": "owned-resource-cleanup",
+      "status": "PASS",
+      "seconds": 0.29
+    }
+  ],
+  "pending": [
+    "independent-auth-login-and-sessions-162-164",
+    "oauth-provider-login-163",
+    "private-s3-authorization-161",
+    "managed-provider-and-production-volume",
+    "worker-dispatch-157-159",
+    "full-cutover-and-rollback-166"
+  ],
+  "sourceImage": "public.ecr.aws/supabase/postgres:17.6.1.143",
+  "sourcePostgres": "17.6",
+  "schemaBytes": 520335,
+  "schemaSha256": "9682399bc61c19fc5483f692c7081c0311d54affb02ea5dfeb66f5cfcf0e20b7",
+  "omittedProviderDefaultAcls": 18,
+  "dumpBytes": 548316,
+  "targetPostgres": "17.9 (Debian 17.9-1.pgdg12+1)",
+  "targetImage": "sha256:47f917f7409eacd22fc5dfb1dee634e1b55cf0c01d1a7eb701be2227a03e0641",
+  "tables": 73,
+  "nonEmptyTables": 16,
+  "credentials": [
+    {
+      "kind": "gotrue-2a",
+      "verified": true,
+      "recovery": false
+    },
+    {
+      "kind": "gotrue-2a",
+      "verified": true,
+      "recovery": false
+    },
+    {
+      "kind": "gotrue-2a",
+      "verified": true,
+      "recovery": false
+    },
+    {
+      "kind": "2a",
+      "verified": true,
+      "recovery": false
+    },
+    {
+      "kind": "2b",
+      "verified": false,
+      "recovery": true
+    },
+    {
+      "kind": "2y",
+      "verified": false,
+      "recovery": true
+    },
+    {
+      "kind": "missing",
+      "verified": false,
+      "recovery": true
+    },
+    {
+      "kind": "unsupported",
+      "verified": false,
+      "recovery": true
+    },
+    {
+      "kind": "malformed",
+      "verified": false,
+      "recovery": true
+    }
+  ],
+  "oauth": {
+    "transportIdentities": 2,
+    "providerSubjectCollisionSeparated": true,
+    "providerAuthentication": "PENDING"
+  },
+  "nonportable": [
+    {
+      "signature": "app_private.dispatch_announcement_push()",
+      "dependencies": [
+        "pg_net",
+        "vault"
+      ]
+    },
+    {
+      "signature": "app_private.dispatch_guardianship_majority()",
+      "dependencies": [
+        "pg_net",
+        "vault"
+      ]
+    },
+    {
+      "signature": "app_private.announcement_handoff(text,boolean)",
+      "dependencies": [
+        "pg_cron"
+      ]
+    },
+    {
+      "signature": "app_private.majority_handoff(text,boolean)",
+      "dependencies": [
+        "pg_cron"
+      ]
+    }
+  ],
+  "authStorage": "native SQL compatibility schemas retained; services absent",
+  "objects": {
+    "count": 3,
+    "bytes": 204,
+    "checksums": [
+      {
+        "fixture": "avatar-0",
+        "bytes": 68,
+        "sha256": "a8918ec9e6fb15cbe75554d45e8e89e31c6d76491b496f529f5b1fcdf15e243f"
+      },
+      {
+        "fixture": "avatar-1",
+        "bytes": 68,
+        "sha256": "a8918ec9e6fb15cbe75554d45e8e89e31c6d76491b496f529f5b1fcdf15e243f"
+      },
+      {
+        "fixture": "avatar-2",
+        "bytes": 68,
+        "sha256": "a8918ec9e6fb15cbe75554d45e8e89e31c6d76491b496f529f5b1fcdf15e243f"
+      }
+    ],
+    "ownerMappingPreserved": true,
+    "destination": "private local directory (S3 integration pending #161)"
+  },
+  "verificationScope": "#162 pending working diff on develop@5cfcb192; backend pgtap used temporary quota scoping, reverted before commit"
+}

@@ -1,5 +1,7 @@
 "use server";
 
+import { nativeAuthEnabled } from '@/lib/api/native-auth-config';
+import { assertAuthOrigin, nativeAuthClient, setNativeCookies } from '@/lib/api/native-auth';
 import { ApiClient, ApiClientError } from "@asisteam/api-client";
 import { moduleTransport } from "@/lib/api/config";
 import { memberOperation } from "@/lib/members";
@@ -22,7 +24,7 @@ async function invoke<T>(body: unknown, accessToken?: string): Promise<Result<T>
   try {
     if (moduleTransport("invitations") === "nest") {
       const api = new ApiClient({ origin: process.env.ASISTEAM_API_ORIGIN ?? "", timeoutMs: 15000,
-        invitationProxy: { secret, clientIp: ip }, accessToken: async () => accessToken ?? null });
+        nativeAuth:nativeAuthEnabled(),invitationProxy: { secret, clientIp: ip }, accessToken: async () => accessToken ?? null });
       const input = body as { action: "preview" | "accept" | "register" | "claim"; token: string; registration?: unknown };
       const value = input.action === "preview" ? await api.previewInvitation({body:{token:input.token}})
         : input.action === "accept" ? await api.acceptInvitation({body:{token:input.token}})
@@ -55,6 +57,24 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
   if (!invitationTokenSchema.safeParse(token).success || !["session", "login", "register", "claim"].includes(mode)) {
     return { error: invitationErrorMessages.invitation_not_available! };
   }
+  if(nativeAuthEnabled()){
+    await assertAuthOrigin();
+    if(mode==='register'||mode==='claim'){
+      const schema=mode==='claim'?managedClaimSchema:invitationRegistrationSchema,parsed=schema.safeParse(input);
+      if(!parsed.success)return{error:invitationErrorMessages.invalid_registration!};
+      const accepted=await invoke<InvitationAcceptance>({action:mode,token,registration:parsed.data});
+      if(accepted.error)return{error:accepted.error};
+      if(!accepted.data)return{error:invitationErrorMessages.unavailable!};
+      try{await setNativeCookies(await(await nativeAuthClient()).loginPassword({body:{email:parsed.data.email,password:parsed.data.password}}));}
+      catch{return{error:'Tu cuenta quedó activada. Inicia sesión desde el acceso habitual para entrar a tu grupo.'};}
+      if(accepted.data.membership_status==='PENDING')return{pending:true};
+      redirect(mode==='claim'?`/groups/${accepted.data.group_id}/me/history`:`/groups/${accepted.data.group_id}`);
+    }
+    if(mode==='login'){
+      const parsed=loginSchema.safeParse(input);if(!parsed.success)return{error:'Email o contraseña incorrectos'};
+      try{await setNativeCookies(await(await nativeAuthClient()).loginPassword({body:parsed.data}));}catch{return{error:'Email o contraseña incorrectos'};}
+    }
+  }
   const supabase = await createClient();
   let accepted: Result<InvitationAcceptance>;
   if (mode === "register" || mode === "claim") {
@@ -65,7 +85,7 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
     const { error } = await supabase.auth.signInWithPassword({ email: parsed.data.email, password: parsed.data.password });
     if (error) return { error: "Tu cuenta quedó activada. Inicia sesión desde el acceso habitual para entrar a tu grupo." };
   } else {
-    if (mode === "login") {
+    if (mode === "login" && !nativeAuthEnabled()) {
       const parsed = loginSchema.safeParse(input);
       if (!parsed.success) return { error: "Email o contraseña incorrectos" };
       const { error } = await supabase.auth.signInWithPassword(parsed.data);

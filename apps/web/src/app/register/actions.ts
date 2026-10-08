@@ -1,5 +1,7 @@
 "use server";
 
+import { nativeAuthEnabled } from '@/lib/api/native-auth-config';
+import { assertAuthOrigin, nativeAuthClient, setNativeCookies } from '@/lib/api/native-auth';
 import { redirect } from "next/navigation";
 import { registerSchema, type RegisterInput } from "@asisteam/core";
 
@@ -21,6 +23,13 @@ export async function registerUser(input: RegisterInput, inviteCode?: string): P
     return { error: "Datos inválidos. Revisa el formulario e inténtalo nuevamente." };
   }
 
+  if(nativeAuthEnabled()){
+    try{
+      await assertAuthOrigin();const api=await nativeAuthClient();await api.registerPassword({body:parsed.data});
+      await setNativeCookies(await api.loginPassword({body:{email:parsed.data.email,password:parsed.data.password}}));
+    }catch{return {error:'No pudimos crear tu cuenta. Revisa los datos y la contraseña o inicia sesión si ya tienes acceso.'};}
+    redirect(invitationDestination(inviteCode));
+  }
   const { full_name, email, birthdate, phone, password, terms_accepted, terms_version } = parsed.data;
   const supabase = await createClient();
 

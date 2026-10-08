@@ -22,6 +22,11 @@ const configSchema = z.object({
   S3_ENDPOINT: z.string().url().optional(),
   S3_ACCESS_KEY_ID: z.string().min(1).optional(),
   S3_SECRET_ACCESS_KEY: z.string().min(1).optional(),
+  NATIVE_AUTH_DATABASE_URL: z.string().url().optional(),
+  NATIVE_AUTH_SECRET: z.string().min(32).optional(),
+  NATIVE_AUTH_ISSUER: z.string().url().optional(),
+  NATIVE_AUTH_WEB_URL: z.string().url().optional(),
+  NATIVE_AUTH_PROXY_SECRET: z.string().min(32).optional(),
   AUTH_TIMEOUT_MS: milliseconds(2000),
   BILLING_DATABASE_URL: z.string().url().optional(),
   MERCADOPAGO_ACCESS_TOKEN: z.string().min(1).optional(),
@@ -51,6 +56,17 @@ export class ConfigurationError extends Error {
 }
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
   const parsed = configSchema.superRefine((value, ctx) => {
+    const native = [value.NATIVE_AUTH_DATABASE_URL,value.NATIVE_AUTH_SECRET,value.NATIVE_AUTH_ISSUER,value.NATIVE_AUTH_WEB_URL,value.NATIVE_AUTH_PROXY_SECRET];
+    if (native.some(Boolean) && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Configura Auth independiente completo.'});
+    if (value.NATIVE_AUTH_DATABASE_URL) {
+      const a=new URL(value.DATABASE_URL),b=new URL(value.NATIVE_AUTH_DATABASE_URL);
+      if (!['postgres:','postgresql:'].includes(b.protocol) || a.hostname!==b.hostname || a.port!==b.port || a.pathname!==b.pathname) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_DATABASE_URL'],message:'Misma base requerida.'});
+    }
+    for (const field of ['NATIVE_AUTH_ISSUER','NATIVE_AUTH_WEB_URL'] as const) {
+      if (!value[field]) continue;
+      const url=new URL(value[field]);
+      if (url.username||url.password||url.search||url.hash||url.pathname!=='/'||!(url.protocol==='https:'||value.NODE_ENV!=='production'&&url.protocol==='http:'&&['127.0.0.1','localhost'].includes(url.hostname))) ctx.addIssue({code:'custom',path:[field],message:'Origen inválido.'});
+    }
     if (!!value.S3_ACCESS_KEY_ID !== !!value.S3_SECRET_ACCESS_KEY) ctx.addIssue({code:'custom',path:['S3_ACCESS_KEY_ID'],message:'Configura las credenciales juntas.'});
     if(value.S3_LOCAL_POLICY_ONLY && (value.NODE_ENV === 'production' || !value.S3_ENDPOINT || !['127.0.0.1','localhost'].includes(new URL(value.S3_ENDPOINT).hostname))) ctx.addIssue({code:'custom',path:['S3_LOCAL_POLICY_ONLY'],message:'Solo admite un fixture local sin ACL.'});
     if (value.S3_ENDPOINT) {

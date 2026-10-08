@@ -2,6 +2,27 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  loginPassword(input: { body: operations["loginPassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["loginPassword"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("loginPassword", input ?? {});
+  }
+  registerPassword(input: { body: operations["registerPassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["registerPassword"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("registerPassword", input ?? {});
+  }
+  requestRecovery(input: { body: operations["requestRecovery"]["requestBody"]["content"]["application/json"] }): Promise<operations["requestRecovery"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("requestRecovery", input ?? {});
+  }
+  resetPassword(input: { body: operations["resetPassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["resetPassword"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("resetPassword", input ?? {});
+  }
+  refreshSession(input: { body: operations["refreshSession"]["requestBody"]["content"]["application/json"] }): Promise<operations["refreshSession"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("refreshSession", input ?? {});
+  }
+  logoutSession(): Promise<operations["logoutSession"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("logoutSession", {});
+  }
+  changePassword(input: { body: operations["changePassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["changePassword"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("changePassword", input ?? {});
+  }
   getQrSettings(input: { params: operations["getQrSettings"]["parameters"]["path"] }): Promise<operations["getQrSettings"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getQrSettings", input ?? {});
   }

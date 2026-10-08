@@ -1,3 +1,5 @@
+import { moduleTransport } from '@/lib/api/config';
+import { createServerApiClient } from '@/lib/api/server';
 import { AppShell } from "@/components/app-shell";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -33,11 +35,9 @@ export default async function WelcomePage() {
   const home = await groupHomePath();
   if (home !== "/welcome") redirect(home);
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("full_name, birthdate")
-    .eq("auth_user_id", user.id)
-    .single<{ full_name: string; birthdate: string | null }>();
+  const profile = moduleTransport('profile')==='nest'
+    ? await createServerApiClient().getOwnProfile()
+    : (await supabase.from('users').select('full_name, birthdate').eq('auth_user_id',user.id).single<{full_name:string;birthdate:string|null}>()).data;
 
   const pending = await getMyPendingMemberships();
   const firstName = profile?.full_name?.split(" ")[0] ?? "";

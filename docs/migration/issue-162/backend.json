@@ -1,0 +1,145 @@
+{
+  "commit": "5cfcb192b7f552ecb6e9ec09dab9717ef357ddbe",
+  "sourceCommit": "5cfcb192b7f552ecb6e9ec09dab9717ef357ddbe",
+  "date": "2026-10-08T15:03:28.684Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.4
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.68
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 0.24
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 0.17
+    },
+    {
+      "check": "worker-two-replicas",
+      "status": "PASS",
+      "seconds": 0.4
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 0.35
+    },
+    {
+      "check": "api-private-storage-http",
+      "status": "PASS",
+      "seconds": 3.61
+    },
+    {
+      "check": "next-native-auth-browser",
+      "status": "PASS",
+      "seconds": 16.7
+    },
+    {
+      "check": "api-native-auth-http",
+      "status": "PASS",
+      "seconds": 31.37
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.39
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.28
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 0.74
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.67
+    },
+    {
+      "check": "api-announcements-http",
+      "status": "PASS",
+      "seconds": 0.67
+    },
+    {
+      "check": "api-billing-http",
+      "status": "PASS",
+      "seconds": 0.77
+    },
+    {
+      "check": "api-reports-http",
+      "status": "PASS",
+      "seconds": 2.91
+    },
+    {
+      "check": "api-qr-http",
+      "status": "PASS",
+      "seconds": 0.61
+    },
+    {
+      "check": "api-attendance-http",
+      "status": "PASS",
+      "seconds": 1.67
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 5.38
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 19.35
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 4.8,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 2.77
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "PASS",
+      "seconds": 4.16
+    },
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 51.65,
+      "tests": 81,
+      "omitted": 0
+    }
+  ],
+  "verificationScope": "#162 pending working diff on develop@5cfcb192; backend pgtap used temporary quota scoping, reverted before commit"
+}
