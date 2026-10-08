@@ -1,0 +1,247 @@
+{
+  "sourceCommit": "6427cfa10d723c9668310d911c2d60454e939998",
+  "environment": "local-synthetic",
+  "executionScope": "pending CI correction diff; browser correction verified separately after backend run",
+  "checks": [
+    {
+      "check": "ci-runner-tests",
+      "status": "PASS",
+      "seconds": 0.17
+    },
+    {
+      "check": "lint",
+      "status": "PASS",
+      "seconds": 2.16
+    },
+    {
+      "check": "http-contract-generation",
+      "status": "PASS",
+      "seconds": 1.39
+    },
+    {
+      "check": "typecheck",
+      "status": "PASS",
+      "seconds": 1.86
+    },
+    {
+      "check": "api-contract-fixture-build",
+      "status": "PASS",
+      "seconds": 0.86
+    },
+    {
+      "check": "next-http-contract",
+      "status": "PASS",
+      "seconds": 7.69
+    },
+    {
+      "check": "build",
+      "status": "PASS",
+      "seconds": 28.78
+    },
+    {
+      "check": "core-unit",
+      "status": "PASS",
+      "seconds": 1.06,
+      "tests": 150,
+      "omitted": 0
+    },
+    {
+      "check": "web-unit",
+      "status": "PASS",
+      "seconds": 16.18,
+      "tests": 919,
+      "omitted": 81
+    },
+    {
+      "check": "worker-unit",
+      "status": "PASS",
+      "seconds": 0.3
+    },
+    {
+      "check": "api-unit",
+      "status": "PASS",
+      "seconds": 1.87
+    },
+    {
+      "check": "api-client-contract",
+      "status": "PASS",
+      "seconds": 0.62
+    }
+  ],
+  "backendChecks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.62
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.69
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 1.34
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 0.64
+    },
+    {
+      "check": "worker-two-replicas",
+      "status": "PASS",
+      "seconds": 0.49
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 1.61
+    },
+    {
+      "check": "api-private-storage-http",
+      "status": "PASS",
+      "seconds": 4.6
+    },
+    {
+      "check": "next-native-auth-browser",
+      "status": "PASS",
+      "seconds": 16.63
+    },
+    {
+      "check": "next-social-auth-browser",
+      "status": "PASS",
+      "seconds": 13.87
+    },
+    {
+      "check": "api-social-auth-http",
+      "status": "PASS",
+      "seconds": 0.82
+    },
+    {
+      "check": "api-native-auth-http",
+      "status": "PASS",
+      "seconds": 31.18
+    },
+    {
+      "check": "api-auth-cutover-http",
+      "status": "PASS",
+      "seconds": 3.6
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.24
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.5
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 0.73
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.63
+    },
+    {
+      "check": "api-announcements-http",
+      "status": "PASS",
+      "seconds": 0.67
+    },
+    {
+      "check": "api-billing-http",
+      "status": "PASS",
+      "seconds": 0.76
+    },
+    {
+      "check": "api-reports-http",
+      "status": "PASS",
+      "seconds": 3.16
+    },
+    {
+      "check": "api-qr-http",
+      "status": "PASS",
+      "seconds": 0.63
+    },
+    {
+      "check": "api-attendance-http",
+      "status": "PASS",
+      "seconds": 1.93
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 5.13
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 18.59
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 5.02,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 2.75
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "PASS",
+      "seconds": 5.11
+    },
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 50.84,
+      "tests": 81,
+      "omitted": 0
+    }
+  ],
+  "middlewareAuthRegression": {
+    "status": "PASS",
+    "tests": 64,
+    "newRegressionTests": 5
+  },
+  "pgtap": {
+    "status": "PASS",
+    "tests": 1673,
+    "files": 41
+  },
+  "browserExplicitEmptyAnonKey": "PASS",
+  "remoteDiagnosticRun": {
+    "id": 37849614977,
+    "status": "FAIL",
+    "phase": "next-ready",
+    "head": "6427cfa10d723c9668310d911c2d60454e939998"
+  },
+  "publishedShaCI": "See PR202 latest checks; not credited by this local report",
+  "criticalFilesSha256": {
+    "apps/web/src/middleware.ts": "561d4206597dab3b0f45946548dfbabd69bb292c09f069c433f14d58d00053d5",
+    "apps/web/scripts/native-auth-smoke.mjs": "cb53c2f4d95ee0529f46f2d980f75e30af4ac3f010da02ee596c39c9c2e84520",
+    "apps/web/src/lib/api/auth-cutover.test.ts": "30c7b407f0594ac631317e6e7d10fd9bd8f0560870cbcfd7b39630fd12f37ce7",
+    "supabase/tests/send_invitations.test.sql": "ae772aad13ce0cec446dacdac15de72cc7ce577c59cb9415e8b9d892f36626e6"
+  }
+}

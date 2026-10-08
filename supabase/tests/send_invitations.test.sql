@@ -42,7 +42,10 @@ select throws_ok($$select public.issue_invitation('23000000-0000-4000-8000-00000
 select throws_ok($$select public.issue_invitation('23000000-0000-4000-8000-000000000001','23000000-0000-4000-8000-000000000201','plain-token','x@example.test','ATHLETE')$$,'PT400','invalid_invitation','SQL solo recibe digest SHA-256');
 select throws_ok($$select public.issue_invitation('23000000-0000-4000-8000-000000000001','23000000-0000-4000-8000-000000000201',repeat('a',64),'invalid-email','ATHLETE')$$,'PT400','invalid_invitation','SQL valida email');
 select is((select count(*) from public.users where email='x@example.test'),0::bigint,'fallos no crean perfiles');
-select is((select count(*) from app_private.invitation_send_limits),0::bigint,'rechazos no consumen cuota');
+-- Other groups may have counters from HTTP fixtures run earlier in backend CI.
+-- Every rejected request above targets this group; assert its counter only.
+select is((select count(*) from app_private.invitation_send_limits
+ where group_id='23000000-0000-4000-8000-000000000201'),0::bigint,'rechazos no consumen cuota del grupo');
 
 create temp table issued(label text primary key, result jsonb);
 insert into issued values('new',public.issue_invitation('23000000-0000-4000-8000-000000000001',

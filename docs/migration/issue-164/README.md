@@ -47,7 +47,7 @@ select app_private.auth_cutover('ACTIVATE');
 
 [Seguro] Chromium Next→Nest→PostgreSQL recorre registro/perfil/cookies/refresh/logout/recovery/reset/login sin anon key; también corre OAuth/linking firmado sintético de #163. HIBP/Resend y Google/Apple se simulan; estos ensayos no prueban entrega de correo ni login externo. Las unitarias web verifican ausencia de SDK/fallback aun para visitantes anónimos. pgTAP cubre controles/permisos/FK/claims y rechazo de actor PostgREST; la suite canónica cubre V1–V6/R1/métrica SQL↔core.
 
-| Verificación final | Resultado |
+| Verificación inicial (`863b706`) | Resultado |
 | --- | --- |
 | `pnpm ci:checks` | [Seguro] PASS 12 gates; core150, web914, API/SDK/worker; 81 integraciones excluidas de la fase unitaria y ejecutadas aparte |
 | Chromium Next→Nest→PostgreSQL | [Seguro] PASS contraseña/recovery/cookies sin anon key y OAuth/linking firmado sintético |
@@ -64,3 +64,13 @@ select app_private.auth_cutover('ACTIVATE');
 [Seguro] Evidencia sanitizada: `checks.json`, `backend.json`, `staging.json`, `portability.json`, `product-integrations.json`, `pgtap-final.json` y `verification-summary.json`. `sourceCommit` identifica la base porque las ejecuciones se hicieron sobre el diff pendiente; no acreditan CI remoto del commit publicado. El resumen incluye hashes de los archivos críticos verificados.
 
 [Seguro] Auto-revisión del diff atribuible a #164: corregidos el aborto tras importación, el contexto API exigido al actor nativo, la reconciliación de credenciales previas y el rechazo de configuración retirada antes de activar la autoridad. Revisados grants/SECURITY DEFINER, locks de congelación, replay/revocación, preservación de IDs/consentimientos/historial y privacidad. La prueba OAuth refresca su snapshot de estadísticas para observar la espera real de la operación de contraseña. El cambio ajeno de `next-env.d.ts` se conserva fuera del commit.
+
+## Corrección de CI del PR #202
+
+[Seguro] El run remoto inicial `37846529618` aprobó checks/staging y falló en `next-native-auth-browser` antes de pgTAP. Su artefacto solo conservaba nombre/tiempo del check. Se añadió `native-auth-browser.json` con fase, categoría de fallo, operaciones/estados HTTP y conteos/booleanos; no incluye páginas, URLs, cuentas, contraseñas, tokens ni excepciones.
+
+[Seguro] El run diagnóstico `37849614977` (`6427cfa`) falló en `next-ready`, sin llamadas Auth ni cuenta creada. El middleware seleccionaba Nest únicamente si ya existían cookies propias: un visitante anónimo inicializaba el SDK legacy sin anon key y `/login` fallaba. La configuración `.env.local` rellenaba la variable borrada del ensayo local y ocultaba esa dependencia. La corrección selecciona middleware Nest también sin cookies y fija la key explícitamente vacía en el smoke. Cinco regresiones cubren rutas públicas anónimas con cookies legacy y 404 de grupo privado; middleware/Auth PASS 64/64.
+
+[Seguro] La petición de corregir CI también reconcilia la aserción de cuota preexistente: los rechazos consultan el contador del mismo grupo del fixture, sin depender de contadores de otros grupos creados por las integraciones HTTP anteriores. No se borran contadores ni se alteran reglas de negocio. Se conservan los casos de 50 envíos, rechazo del 51 y reinicio diario. pgTAP completo PASS 1673/1673 en 41 archivos y backend local completo PASS con producto/Edge 81/81, cero omitidas.
+
+[Seguro] `ci-correction.json` y los reportes de diagnóstico registran las ejecuciones del ajuste; los reportes iniciales conservan los fallos históricos. El resultado remoto del SHA publicado se consulta en los checks del [PR #202](https://github.com/AlexxSome/asisteam/pull/202). El retiro externo, RTO y proveedores reales permanecen pendientes según este runbook.

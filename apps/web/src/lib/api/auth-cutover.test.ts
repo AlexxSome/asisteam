@@ -7,6 +7,8 @@ vi.mock('next/headers',()=>({cookies:async()=>({get:(name:string)=>fixture.value
 vi.mock('./native-auth',()=>({nativeUser:fixture.user}));
 import {createClient} from '../supabase/server';
 import {TRANSPORT_MODULES} from './config';
+import {middleware} from '@/middleware';
+import {NextRequest} from 'next/server';
 beforeEach(()=>{
  vi.stubEnv('ASISTEAM_TRANSPORT_AUTH','nest');for(const module of TRANSPORT_MODULES)vi.stubEnv('ASISTEAM_TRANSPORT_'+module.toUpperCase(),'nest');
  vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');
@@ -21,4 +23,13 @@ it('anonymous native mode never falls back to legacy cookies or SDK',async()=>{
 it('verified native session exposes only server compatibility identity',async()=>{
  fixture.user.mockResolvedValue({id:'synthetic-subject'});fixture.values.set('asisteam-access','synthetic-access');
  const client=await createClient();expect((await client.auth.getSession()).data.session?.access_token).toBe('synthetic-access');expect(fixture.client).not.toHaveBeenCalled();
+});
+it.each(['/login','/register','/forgot-password','/reset-password'])('anonymous %s middleware uses Nest without legacy key or cookies',async path=>{
+ vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY','');
+ const response=await middleware(new NextRequest('https://web.example.test'+path,{headers:{cookie:'sb-retired-auth-token=synthetic-old'}}));
+ expect(response.status).toBe(200);expect(fixture.client).not.toHaveBeenCalled();
+});
+it('anonymous native middleware keeps private group anti-enumeration',async()=>{
+ const response=await middleware(new NextRequest('https://web.example.test/groups/64000000-0000-4000-8000-000000000001'));
+ expect(response.status).toBe(404);expect(fixture.client).not.toHaveBeenCalled();
 });

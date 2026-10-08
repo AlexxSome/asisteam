@@ -34,8 +34,8 @@ try{
  mkdirSync(fixture);owns=true;
  mkdirSync(new URL('csrf/',fixture));writeFileSync(new URL('csrf/route.ts',fixture),'import {assertAuthOrigin} from "@/lib/api/native-auth"; export async function POST(){try{await assertAuthOrigin();return new Response(null,{status:204});}catch{return new Response(null,{status:403});}}');
  writeFileSync(new URL('page.tsx',fixture),'import {signOutUser} from "@/app/login/actions";export default function Fixture(){return <form action={async()=>{"use server";await signOutUser();}}><button>Cerrar sesión sintética</button></form>;}');
- const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),NEXT_PUBLIC_SUPABASE_URL:'http://127.0.0.1:54321',NEXT_PUBLIC_SUPABASE_ANON_KEY:'synthetic-build-fixture',ASISTEAM_API_SUPABASE_URL:'http://127.0.0.1:54321',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
- delete env.NEXT_PUBLIC_SUPABASE_ANON_KEY; // MIG-20: no legacy SDK/config needed for sessions.
+ // Empty explicitly: deleting the key lets Next refill it from .env.local.
+ const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),NEXT_PUBLIC_SUPABASE_URL:'http://127.0.0.1:54321',NEXT_PUBLIC_SUPABASE_ANON_KEY:'',ASISTEAM_API_SUPABASE_URL:'http://127.0.0.1:54321',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
  for(const module of ['groups','profile','members','invitations','activities','attendance','reports','billing','announcements','qr','storage'])env['ASISTEAM_TRANSPORT_'+module.toUpperCase()]='nest';
  next=spawn(process.execPath,['node_modules/next/dist/bin/next','dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd:new URL('..',import.meta.url),env,stdio:'ignore'});
  phase('next-ready');let ready=false;for(let n=0;n<120;n++){try{if((await originalFetch(webOrigin+'/login',{signal:AbortSignal.timeout(15000)})).ok){ready=true;break;}}catch{/* Next is still starting. */}if(next.exitCode!==null)throw Error('Next terminó antes del smoke nativo');await delay(250);}assert.ok(ready);

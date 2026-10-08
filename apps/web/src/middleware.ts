@@ -1,4 +1,4 @@
-import { nativeAuthEnabled, NATIVE_ACCESS_COOKIE, NATIVE_REFRESH_COOKIE } from '@/lib/api/native-auth-config';
+import { nativeAuthEnabled } from '@/lib/api/native-auth-config';
 import { nativeAuthMiddleware } from '@/lib/api/native-auth-middleware';
 import { ApiClient, ApiClientError } from "@asisteam/api-client";
 import { moduleTransport } from "@/lib/api/config";
@@ -21,7 +21,9 @@ export async function middleware(request: NextRequest) {
   // Provider callbacks must reach their browser-bound validation even when the
   // old session lacks consent or cannot refresh on Apple's cross-site POST.
   if (request.nextUrl.pathname.startsWith('/auth/callback/')) return NextResponse.next();
-  if(nativeAuthEnabled()&&(request.cookies.has(NATIVE_ACCESS_COOKIE)||request.cookies.has(NATIVE_REFRESH_COOKIE)))return nativeAuthMiddleware(request);
+  // Anonymous/legacy-cookie visitors also use the selected authority. The
+  // retired provider must never be initialized before the first native login.
+  if(nativeAuthEnabled())return nativeAuthMiddleware(request);
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient<Database>(
