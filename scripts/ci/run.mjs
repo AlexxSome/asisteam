@@ -1,5 +1,5 @@
 import { spawn, execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 
 export const evidence = { commit: process.env.GITHUB_SHA ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(), sourceCommit: process.env.SOURCE_COMMIT ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(), date: new Date().toISOString(), node: process.version, environment: process.env.GITHUB_ACTIONS ? 'github-actions-synthetic' : 'local-synthetic', checks: [] };
@@ -36,6 +36,11 @@ export async function check(label, command, args = [], options = {}) {
     if (codes.length) record.errorCodes = codes;
     const sqlFailures = [...output.matchAll(/([a-z_]+\.test\.sql)\s+\(Wstat: [^\n]*Failed: ([0-9]+)/g)].map(match => ({ file: match[1], failed: Number(match[2]) }));
     if (sqlFailures.length) record.sqlFailures = sqlFailures;
+    const locations = [...output.matchAll(/(?:file:\/\/)?[^\s()]*\/((?:apps|packages|scripts)\/[A-Za-z0-9_./-]+\.(?:mjs|[jt]sx?)):(\d+):(\d+)/g)]
+      .map(match => ({ file: match[1], line: Number(match[2]), column: Number(match[3]) }))
+      .filter(location => !relative(process.cwd(), resolve(location.file)).startsWith('..') && existsSync(resolve(location.file)));
+    const uniqueLocations = [...new Map(locations.map(location => [JSON.stringify(location), location])).values()].slice(0, 8);
+    if (uniqueLocations.length) record.failureLocations = uniqueLocations;
   }
   if (options.noSkip && /# skipped [1-9]|# tests 0/.test(output)) status = 'FAIL';
   record.status = status;

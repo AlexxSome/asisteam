@@ -1,0 +1,56 @@
+{
+  "issue": 164,
+  "sourceCommit": "c0b77320979af0abbb307ec3f18c55374a9ded70",
+  "date": "2026-10-08T21:22:19.896405+00:00",
+  "environment": "local-synthetic",
+  "executionScope": "pending implementation diff; not published SHA or external retirement",
+  "results": {
+    "checks": "PASS",
+    "backend": "FAIL: unchanged send_invitations.test.sql case 15; all prior gates PASS",
+    "staging": "PASS including expected injected deployment failure",
+    "productIntegrations": {
+      "status": "PASS",
+      "tests": 81,
+      "omitted": 0
+    },
+    "authCutover": {
+      "status": "PASS",
+      "tests": 1,
+      "seconds": 3.291,
+      "covers": "isolated import, existing native credentials, frozen writer, premature retired config, forward recovery, deletion of auth schema, legacy invitation claim"
+    },
+    "pgtapFinal": {
+      "status": "FAIL",
+      "files": 41,
+      "tests": 1673,
+      "failed": 1,
+      "newAuthCutoverTests": 16,
+      "newAuthCutoverStatus": "PASS"
+    },
+    "quotaCounterIsolated": {
+      "status": "PASS",
+      "tests": 51,
+      "method": "temporary identical test plus delete invitation_send_limits inside original BEGIN/ROLLBACK; no persistent mutation",
+      "originalFileUnchangedAgainstBase": true
+    },
+    "databaseTypes": "PASS, private schema only; public generated types unchanged"
+  },
+  "pending": [
+    "External environment provision/cutover and recorded RTO (#166)",
+    "Real Google/Apple provider and email delivery evidence",
+    "Remote CI of published commit"
+  ],
+  "reviewCorrections": [
+    "Preserve native credential replacements from #162/#163 during preparation",
+    "Reject ABORT after successful import",
+    "Restrict native actor to API context after activation",
+    "Reject premature retired runtime against legacy DB",
+    "Refresh PostgreSQL stats snapshot in OAuth concurrency observer"
+  ],
+  "scopeFilesSha256": {
+    "supabase/migrations/20261008060000_auth_cutover.sql": "e0b0292a51f3c5ffc33a74dc14a2eb9800d8ba1c642268e95ac8fcaccfb21788",
+    "supabase/tests/auth_cutover.test.sql": "2de074b6ef3c9afcbbeaefe8fafeacdf74c35b2fadfadbee129a55544e9bf2c5",
+    "apps/api/test/auth-cutover.integration.mjs": "de69b60c0e65fe79fc6dd190e929bb5e6dc29c2c52d40dd11886ac213cdc8231",
+    "apps/web/src/lib/supabase/server.ts": "a136245ea37c1d342ea97303fee30d37482925e92f5b911a2afe4c7c14ba7fc1"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "sourceCommit": "6427cfa10d723c9668310d911c2d60454e939998",
+  "environment": "github-actions-synthetic",
+  "phase": "next-ready",
+  "status": "FAIL",
+  "api": [],
+  "failure": "assertion",
+  "mailCount": 0,
+  "accountExists": false
+}

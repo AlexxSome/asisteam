@@ -1,0 +1,37 @@
+{
+  "sourceCommit": "local-pending-diff",
+  "environment": "local-synthetic",
+  "phase": "completed",
+  "status": "PASS",
+  "api": [
+    {
+      "operation": "register",
+      "status": 200
+    },
+    {
+      "operation": "login",
+      "status": 200
+    },
+    {
+      "operation": "refresh",
+      "status": 200
+    },
+    {
+      "operation": "logout",
+      "status": 200
+    },
+    {
+      "operation": "recovery",
+      "status": 200
+    },
+    {
+      "operation": "reset",
+      "status": 200
+    },
+    {
+      "operation": "login",
+      "status": 200
+    }
+  ],
+  "lastActionStatus": 303
+}

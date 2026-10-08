@@ -12,6 +12,7 @@ const configSchema = z.object({
     } catch { return false; }
   }),
   SUPABASE_AUTH_URL: z.string().url().optional(),
+  SUPABASE_AUTH_RETIRED: z.literal('1').optional(),
   SUPABASE_AUTH_PUBLIC_KEY: z.string().min(1).refine(value => {
     if (value.startsWith('sb_publishable_')) return true;
     try { return JSON.parse(Buffer.from(value.split('.')[1] ?? '', 'base64url').toString()).role === 'anon'; } catch { return false; }
@@ -66,6 +67,7 @@ export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
       if (provider==='APPLE' && id && !value.NATIVE_AUTH_WEB_URL?.startsWith('https://')) ctx.addIssue({code:'custom',path:['OAUTH_APPLE_CLIENT_ID'],message:'Apple requiere retorno HTTPS.'});
     }
     const native = [value.NATIVE_AUTH_DATABASE_URL,value.NATIVE_AUTH_SECRET,value.NATIVE_AUTH_ISSUER,value.NATIVE_AUTH_WEB_URL,value.NATIVE_AUTH_PROXY_SECRET];
+    if (value.SUPABASE_AUTH_RETIRED && (!native.every(Boolean) || value.SUPABASE_AUTH_URL || value.SUPABASE_AUTH_PUBLIC_KEY || value.INVITATION_AUTH_BRIDGE_SECRET)) ctx.addIssue({code:'custom',path:['SUPABASE_AUTH_RETIRED'],message:'Retiro requiere Auth propio y eliminar la configuración legacy.'});
     if (native.some(Boolean) && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Configura Auth independiente completo.'});
     if (value.NATIVE_AUTH_DATABASE_URL) {
       const a=new URL(value.DATABASE_URL),b=new URL(value.NATIVE_AUTH_DATABASE_URL);

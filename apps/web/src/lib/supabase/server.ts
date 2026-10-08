@@ -1,5 +1,6 @@
-import { nativeAuthEnabled, NATIVE_ACCESS_COOKIE, NATIVE_REFRESH_COOKIE } from '@/lib/api/native-auth-config';
+import { nativeAuthEnabled, NATIVE_ACCESS_COOKIE } from '@/lib/api/native-auth-config';
 import { nativeUser } from '@/lib/api/native-auth';
+import { ApiClientError } from '@asisteam/api-client';
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@asisteam/db";
@@ -14,6 +15,25 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  */
 export async function createClient({ requireCookieWrites = false } = {}) {
   const cookieStore = await cookies();
+
+  if (nativeAuthEnabled()) {
+    // Session compatibility only. Never initialize the retired SDK, even when
+    // the browser has no native cookies or still carries a legacy session.
+    const auth = {
+      getUser: async () => ({ data: { user: await nativeUser() }, error: null }),
+      getSession: async () => {
+        const user = await nativeUser();
+        return { data: { session: user ? { access_token: cookieStore.get(NATIVE_ACCESS_COOKIE)?.value, user } : null }, error: null };
+      },
+    };
+    return new Proxy({ auth }, {
+      get(target, property) {
+        if (property === 'then') return undefined;
+        if (property === 'auth') return target.auth;
+        throw new ApiClientError(503, 'native_auth_requires_nest');
+      },
+    }) as unknown as ReturnType<typeof createServerClient<Database>>;
+  }
 
   const client = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -38,11 +58,5 @@ export async function createClient({ requireCookieWrites = false } = {}) {
       },
     },
   );
-  if(nativeAuthEnabled()&&(cookieStore.get(NATIVE_ACCESS_COOKIE)||cookieStore.get(NATIVE_REFRESH_COOKIE))){
-    // Compatibility for consumers of getUser/getSession only; all domain calls
-    // are gated to Nest. Credentials remain exclusively in Server Actions.
-    client.auth.getUser=async()=>{const user=await nativeUser();return {data:{user},error:null} as Awaited<ReturnType<typeof client.auth.getUser>>;};
-    client.auth.getSession=async()=>{const user=await nativeUser();return {data:{session:user?{access_token:cookieStore.get(NATIVE_ACCESS_COOKIE)?.value,user}:null},error:null} as Awaited<ReturnType<typeof client.auth.getSession>>;};
-  }
   return client;
 }

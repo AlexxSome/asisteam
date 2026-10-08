@@ -16,7 +16,7 @@ const matches=(a:string,b:string)=>timingSafeEqual(Buffer.from(tokenHash(a),'hex
 const roleSql=`select current_user='asisteam_auth' and not r.rolsuper and not r.rolbypassrls and not r.rolcreatedb and not r.rolcreaterole
  and not exists(select 1 from pg_auth_members where member=r.oid)
  and not has_schema_privilege(current_user,'public','CREATE') and not has_schema_privilege(current_user,'app_private','CREATE')
- and not exists(select 1 from pg_class c where c.relnamespace in ('public'::regnamespace,'app_private'::regnamespace,'auth'::regnamespace)
+ and not exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname in ('public','app_private','auth')
    and (c.relowner=r.oid or has_table_privilege(current_user,c.oid,'SELECT,INSERT,UPDATE,DELETE')))
  and has_function_privilege(current_user,'app_private.auth_operation(text,jsonb)','EXECUTE') as safe from pg_roles r where rolname=current_user`;
 function parse<S extends z.ZodTypeAny>(schema:S,input:unknown):z.infer<S>{const p=schema.safeParse(input);if(!p.success)throw new BadRequestException();return p.data;}
@@ -32,6 +32,7 @@ export class NativeAuth implements OnApplicationShutdown {
   const client=await this.pool.connect().catch(()=>{throw new ServiceUnavailableException();});
   try{
    if((await client.query(roleSql)).rows[0]?.safe!==true)throw new ServiceUnavailableException();
+   if(this.config.SUPABASE_AUTH_RETIRED&&(await client.query('select app_private.auth_is_native() as native')).rows[0]?.native!==true)throw new ServiceUnavailableException();
    // RPC is a single transaction. Returned errors are interpreted AFTER commit
    // so replay revocation and rate counters survive denied requests.
    return (await client.query('select app_private.auth_operation($1,$2::jsonb) as data',[operation,JSON.stringify(data)])).rows[0]?.data;

@@ -1,5 +1,7 @@
 # 11. Consideraciones legales, seguridad y privacidad
 
+[Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) la importación conserva IDs y evidencia de consentimiento/historial; no otorga consentimiento por migrar ni credenciales a MANAGED. Hashes, ledger y backups son privados; sesiones/recovery antiguos se invalidan al activar. La recuperación hacia adelante preserva credenciales/vínculos y revocaciones posteriores. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
+
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 04-modelo-de-datos.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 10-historias-de-usuario.md
 
 Este documento define cómo Asisteam trata los datos personales de sus usuarios —con foco especial en menores de edad—, el marco legal chileno aplicable, las medidas técnicas de protección de la información y un checklist de cumplimiento previo al lanzamiento del MVP Web [P0].
