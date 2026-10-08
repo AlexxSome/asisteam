@@ -1,0 +1,55 @@
+{
+  "base": "482162718516ecc0474a09363a90880c429bf2c2",
+  "environment": "local-synthetic",
+  "scope": "uncommitted issue-163 implementation diff; SQL lock correction additionally verified with real HTTP/PostgreSQL",
+  "checks": [
+    {
+      "check": "oauth-and-native-pgtap",
+      "status": "PASS",
+      "tests": 51,
+      "omitted": 0
+    },
+    {
+      "check": "oauth-oidc-unit",
+      "status": "PASS",
+      "tests": 2
+    },
+    {
+      "check": "next-social-profile-availability",
+      "status": "PASS",
+      "tests": 14
+    },
+    {
+      "check": "oauth-http-postgres-lock-interleaving",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "final-lint-and-diff",
+      "status": "PASS"
+    },
+    {
+      "check": "baseline-invitations-file-unchanged",
+      "status": "PASS",
+      "base": "482162718516ecc0474a09363a90880c429bf2c2"
+    },
+    {
+      "check": "baseline-invitations-local-reproduction",
+      "status": "FAIL",
+      "file": "send_invitations.test.sql",
+      "case": 15,
+      "description": "rechazos no consumen cuota",
+      "have": 1,
+      "want": 0,
+      "tests": 51,
+      "failed": 1,
+      "introduced_by_issue": false
+    }
+  ],
+  "pending": [
+    "external-google-and-apple-exchange-with-configured-clients",
+    "external-apple-private-relay",
+    "remote-ci-on-published-commit"
+  ]
+}

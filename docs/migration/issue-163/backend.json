@@ -1,0 +1,153 @@
+{
+  "commit": "482162718516ecc0474a09363a90880c429bf2c2",
+  "sourceCommit": "482162718516ecc0474a09363a90880c429bf2c2",
+  "date": "2026-10-08T17:57:25.954Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.75
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.54
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 1.31
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 0.66
+    },
+    {
+      "check": "worker-two-replicas",
+      "status": "PASS",
+      "seconds": 0.46
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 1.42
+    },
+    {
+      "check": "api-private-storage-http",
+      "status": "PASS",
+      "seconds": 3.99
+    },
+    {
+      "check": "next-native-auth-browser",
+      "status": "PASS",
+      "seconds": 17.04
+    },
+    {
+      "check": "next-social-auth-browser",
+      "status": "PASS",
+      "seconds": 13.73
+    },
+    {
+      "check": "api-social-auth-http",
+      "status": "PASS",
+      "seconds": 0.81
+    },
+    {
+      "check": "api-native-auth-http",
+      "status": "PASS",
+      "seconds": 31.21
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.31
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.17
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 0.69
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.61
+    },
+    {
+      "check": "api-announcements-http",
+      "status": "PASS",
+      "seconds": 0.64
+    },
+    {
+      "check": "api-billing-http",
+      "status": "PASS",
+      "seconds": 0.72
+    },
+    {
+      "check": "api-reports-http",
+      "status": "PASS",
+      "seconds": 2.87
+    },
+    {
+      "check": "api-qr-http",
+      "status": "PASS",
+      "seconds": 0.63
+    },
+    {
+      "check": "api-attendance-http",
+      "status": "PASS",
+      "seconds": 1.69
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 5.19
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 18.48
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 4.84,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 2.63
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "FAIL",
+      "seconds": 4.2,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}

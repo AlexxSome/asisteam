@@ -1,3 +1,4 @@
+import { nativeAuthEnabled } from '@/lib/api/native-auth-config';
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { checkinPath, socialLoginContextSchema, SOCIAL_AUTH_ERROR } from "@asisteam/core";
@@ -12,6 +13,8 @@ export async function GET(request: Request) {
   const origin = socialAuthOrigin();
   const headers = { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" };
   if (!origin) return NextResponse.json({ error: { code: "social_auth_unavailable", message: SOCIAL_AUTH_ERROR, details: {} } }, { status: 503, headers });
+
+  if (nativeAuthEnabled()) return NextResponse.redirect(new URL("/login?social_error=1", origin), { status: 303, headers });
 
   const cookieStore = await cookies();
   const savedContext = cookieStore.get(SOCIAL_CONTEXT_COOKIE)?.value;

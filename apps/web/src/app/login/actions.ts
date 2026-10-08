@@ -92,7 +92,18 @@ export async function loginWithSocial(input: SocialLoginInput): Promise<LoginRes
   const origin = socialAuthOrigin();
   if (!parsed.success || !origin) return { error: SOCIAL_AUTH_ERROR };
 
-  if(nativeAuthEnabled()){await assertAuthOrigin();await clearNativeCookies();}
+  if (nativeAuthEnabled()) {
+    let url: string;
+    try {
+      await assertAuthOrigin();
+      const { provider, ...context } = parsed.data;
+      const result = await (await nativeAuthClient()).startSocialLogin({ body: { provider, context } });
+      const { saveSocialTransaction } = await import('@/lib/api/social-auth');
+      await saveSocialTransaction(provider, result.transaction);
+      url = result.authorization_url;
+    } catch { return { error: SOCIAL_AUTH_ERROR }; }
+    redirect(url);
+  }
   let destination: string;
   try {
     const supabase = await createClient();
@@ -111,4 +122,20 @@ export async function loginWithSocial(input: SocialLoginInput): Promise<LoginRes
     return { error: SOCIAL_AUTH_ERROR };
   }
   redirect(destination);
+}
+
+/** Explicit linking proves the current Nest session before redirecting. */
+export async function linkWithSocial(input: SocialLoginInput): Promise<LoginResult> {
+  const parsed = socialLoginSchema.safeParse(input);
+  if (!parsed.success) return { error: SOCIAL_AUTH_ERROR };
+  let url: string;
+  try {
+    if (!nativeAuthEnabled()) return { error: SOCIAL_AUTH_ERROR };
+    await assertAuthOrigin();
+    const result = await (await nativeAuthClient()).startSocialLink({ body: { provider: parsed.data.provider, context: {} } });
+    const { saveSocialTransaction } = await import('@/lib/api/social-auth');
+    await saveSocialTransaction(parsed.data.provider, result.transaction);
+    url = result.authorization_url;
+  } catch { return { error: SOCIAL_AUTH_ERROR }; }
+  redirect(url);
 }

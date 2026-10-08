@@ -1,5 +1,7 @@
 # API y backend
 
+[Seguro] **MIG-19 (#163, 2026-10-08):** [OAuth Nest y vinculación segura](migration/issue-163/README.md) incorpora AUT-07 con proveedores propios, callbacks Google GET/Apple form_post, state/nonce/JWKS y PKCE Google. PRF-01/CFG-01 ofrece vinculación explícita desde sesión propia con disponibilidad/procesamiento/error y retorno de éxito. Cuenta nueva pasa por aceptación vigente/ONB-01; email coincidente requiere autenticar y vincular sin fusión automática. `/auth/callback/[provider]` es handler; no añade páginas. El runbook distingue verificaciones locales y ensayo externo pendiente.
+
 [Seguro] **MIG-18 (#162, 2026-10-08):** [Auth propio de Nest](migration/issue-162/README.md) añade siete operaciones HTTP/OpenAPI/SDK de registro/login/recovery/reset/refresh/logout/password. Access JWT propio dura 15 min y valida familia vigente en SQL; refresh rotatorio hasheado revoca familia ante replay. Web Auth=nest exige todos los transportes de dominio Nest, cookies HttpOnly/Secure/Lax y Origin. GoTrue/OAuth siguen coexistiendo hasta #163/#164; configuración, consentimiento MANAGED, rollback y límites de evidencia están en el runbook. La sección Auth Supabase original de abajo describe el transporte anterior, conservado por defecto.
 
 [Seguro] **MIG-16 (#160, 2026-10-08):** [QR y llegada propia mediante Nest](migration/issue-160/README.md) añade cuatro operaciones HTTP/SDK y QR=nest sobre las mismas RPC/claves SQL. ASI-04 conserva emisión ADMIN, ajustes plegables/guardado explícito, renovación por reloj servidor, fragmento retirado, login, confirmación/registro anterior/vencido/no disponible y reintento manual. El transporte no amplía roles ni agrega pantallas; la evidencia local sintética se registra en el runbook.
@@ -64,6 +66,8 @@ Convenciones: rutas lógicas `/api/v1/`, recursos en plural. Rol requerido = rol
 | POST | /api/v1/auth/social/{google,apple} | Público | Login social | Supabase Auth OAuth nativo, PKCE con callback web `/auth/callback` | [P2 autorizado, #59] |
 
 #### Login Google/Apple (HU-GEN-08, #59)
+
+[Seguro] El detalle siguiente describe el transporte legacy `Auth=supabase`; `Auth=nest` usa proveedor/subject y vinculación explícita según [MIG-19](migration/issue-163/README.md), sin fusionar por email.
 
 - Web: botones en `/login`, `/register` y el acceso desde QR. La Server Action valida el proveedor (`google`/`apple`) e inicia `signInWithOAuth` con PKCE. El callback intercambia el código mediante `exchangeCodeForSession`, comprueba perfil `ACTIVE` y redirige a `/welcome`; esta pantalla envía a su grupo/selector a quien ya tenga membresías.
 - La vinculación por el mismo email la realiza Supabase Auth. Se conserva `auth.users.id` y, por tanto, el perfil, roles e historial; no hay upsert de `public.users` por email en el cliente ni en el callback. Un email nuevo usa el trigger `handle_new_user` existente. Las colisiones con perfiles MANAGED/INVITED sin credenciales siguen exigiendo sus flujos de invitación y consentimiento.

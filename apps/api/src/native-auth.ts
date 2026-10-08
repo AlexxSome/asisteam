@@ -71,7 +71,7 @@ export class NativeAuth implements OnApplicationShutdown {
   await this.call('rate_success',{key:tokenHash(`${this.config.NATIVE_AUTH_PROXY_SECRET}:login:email:${email.toLowerCase()}`)});
   return this.tokens(value,refresh);
  }
- private async tokens(value:Record<string,unknown>,refresh:string){
+ async tokens(value:Record<string,unknown>,refresh:string){
   if(!this.config.NATIVE_AUTH_SECRET||!this.config.NATIVE_AUTH_ISSUER||typeof value.subject_id!=='string'||typeof value.session_id!=='string')throw new ServiceUnavailableException();
   const access=await new SignJWT({session_id:value.session_id}).setProtectedHeader({alg:'HS256',typ:'JWT'}).setSubject(value.subject_id).setIssuer(this.config.NATIVE_AUTH_ISSUER).setAudience('asisteam-api').setIssuedAt().setExpirationTime('15m').sign(new TextEncoder().encode(this.config.NATIVE_AUTH_SECRET));
   return httpSchemas.AuthTokens.parse({access_token:access,refresh_token:refresh,expires_in:900});
