@@ -43,6 +43,7 @@ jobs:
           package-manager-cache: false
       - run: corepack enable && corepack prepare pnpm@10.33.2 --activate
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @asisteam/web exec playwright install --with-deps chromium
       - run: pnpm ci:backend
       - run: node scripts/ci/probe.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
