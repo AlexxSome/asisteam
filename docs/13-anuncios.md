@@ -75,3 +75,8 @@ RUN_ANNOUNCEMENT_INTEGRATION=1 pnpm --filter @asisteam/web exec vitest run annou
 La integración usa Auth/PostgREST/SQL reales y transporte Expo simulado para no enviar a dispositivos reales. Los fixtures sintéticos se eliminan al terminar. pgTAP verifica permisos, aislamiento, estados de membresía, idempotencia, versiones y cola; Vitest verifica schemas, acciones, XSS, formularios y errores/tickets/recibos de Expo.
 
 Fuente primaria del protocolo y sus límites: [Expo Push Service](https://docs.expo.dev/push-notifications/sending-notifications/).
+
+
+## MIG-15 (#159): transporte Nest y worker Expo
+
+[Seguro] [Contrato, handoff y evidencia](migration/issue-159/README.md) sustituyen el despliegue Edge descrito arriba al activar WORKER. La instalación mantiene LEGACY y sus firmas públicas; se exige retirar/drenar Edge y pg_net antes de constancia de operador y activación SQL. El consumidor web usa ANNOUNCEMENTS=nest y SDK; tokens Expo se registran/desregistran por `/api/v1/me/announcement-push/tokens`, opt-in por `/api/v1/me/announcement-push`, exclusivamente propia sesión. Worker usa asisteam_jobs sin tablas/BYPASSRLS y motor Expo compartido. Protocolo, límites y advertencia de timeout ambiguo se conservan; FCM/APNs nativos y dispositivos web continúan fuera del alcance. Expo real/corte externo requieren evidencia aparte.

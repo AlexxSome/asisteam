@@ -169,6 +169,9 @@ importers:
       '@asisteam/api':
         specifier: workspace:*
         version: link:../api
+      '@asisteam/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@nestjs/common':
         specifier: 12.1.2
         version: 12.1.2(reflect-metadata@0.2.2)(rxjs@7.8.2)

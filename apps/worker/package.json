@@ -15,6 +15,7 @@
     "test:integration": "node --test test/worker.integration.mjs"
   },
   "dependencies": {
+    "@asisteam/core": "workspace:*",
     "@asisteam/api": "workspace:*",
     "@nestjs/common": "12.1.2",
     "@nestjs/core": "12.1.2",

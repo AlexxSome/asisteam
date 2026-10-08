@@ -209,9 +209,17 @@ try {
   await check('nonportable-dispatch-and-extension-detection',async()=>{
     assert.equal((await sql(target,'postgres',"select count(*) from pg_extension where extname in ('pg_cron','pg_net','supabase_vault');")).trim(),'0');
     const functions=JSON.parse((await sql(target,'postgres',"select jsonb_agg(jsonb_build_object('signature',p.oid::regprocedure::text,'dependencies',array_remove(array[case when p.prosrc ~ '\\mnet\\.' then 'pg_net' end,case when p.prosrc ~ '\\mvault\\.' then 'vault' end,case when p.prosrc ~ '\\mcron\\.' then 'pg_cron' end],null))) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','app_private') and p.prosrc ~ '\\m(net|vault|cron)\\.';")).trim());
-    assert.deepEqual(functions.map(entry=>entry.signature).sort(), ['app_private.dispatch_announcement_push()', 'app_private.dispatch_guardianship_majority()', 'app_private.majority_handoff(text,boolean)'].sort());
+    assert.deepEqual(functions.map(entry=>entry.signature).sort(), ['app_private.dispatch_announcement_push()', 'app_private.dispatch_guardianship_majority()', 'app_private.majority_handoff(text,boolean)', 'app_private.announcement_handoff(text,boolean)'].sort());
     evidence.nonportable=functions;
     for(const entry of functions) {
+      if(entry.signature==='app_private.announcement_handoff(text,boolean)') {
+        await sql(target,'postgres',`insert into app_private.announcement_executor(singleton) values(true);
+          select app_private.announcement_handoff('DRAINING');
+          update app_private.announcement_executor set draining_since=now()-interval '4 minutes';
+          select app_private.announcement_handoff('WORKER',true);`);
+        assert.equal((await sql(target,'postgres',"select mode from app_private.announcement_executor;")).trim(),'WORKER');
+        continue;
+      }
       if(entry.signature==='app_private.majority_handoff(text,boolean)') {
         // MIG-13 handoff guards the optional cron catalog; it remains usable on standalone PostgreSQL.
         await sql(target,'postgres',`insert into app_private.majority_executor(singleton) values(true);

@@ -9,6 +9,10 @@ const roleSql = `select current_user='asisteam_jobs' and not r.rolsuper and not 
   and has_function_privilege(current_user,'app_private.worker_claim_transition()','EXECUTE') as safe
   from pg_roles r where rolname=current_user`;
 const operations = {
+  pushClaim: 'select delivery_id,claim_token,token,announcement_id,group_id,ticket_id from app_private.worker_claim_announcement_push($1::boolean)',
+  pushComplete: 'select app_private.worker_complete_announcement_push($1::uuid,$2::uuid,$3::text,$4::text)',
+  pushRun: 'select app_private.worker_record_announcement_push_run($1::integer)',
+  pushMetrics: 'select app_private.announcement_worker_metrics() as metrics',
   transition: 'select run_date::text,lease_token from app_private.worker_claim_transition()',
   complete: 'select app_private.worker_complete_transition($1::date,$2::uuid) as completed',
   email: 'select delivery_id,claim_token,email,full_name,audience,payload from app_private.worker_claim_email()',

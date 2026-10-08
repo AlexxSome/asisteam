@@ -175,3 +175,8 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de suscripción con Nest · MIG-14 (#158), 07-10-2026
 
 [Seguro] [MIG-14](migration/issue-158/README.md) conserva BillingPanel, catálogo, confirmación inline, estados CREATING/AUTHORIZED y ledger paginado. Error/timeout no anuncia pago ni éxito, no repite POST y no activa otro transporte; checkout_uncertain mantiene la consulta previa antes de reintentar. Un retorno web no acredita PAID; solo el pago consultado al proveedor habilita cupos. Sin cambios de tokens/componentes/disposición. Evidencia de consumidores y375px/teclado/axe y sus límites en el runbook.
+
+
+## Estados de anuncios con Nest · MIG-15 (#159), 07-10-2026
+
+[Seguro] [MIG-15](migration/issue-159/README.md) conserva AnnouncementComposer/Form/Management, WallSession/Refresh y AnnouncementPushPreference: borrador, pausa al editar, foco/teclado, confirmación de eliminación, feedback y refresh30s; opt-in global sin prometer dispositivo vinculado. Error/timeout no anuncia éxito ni activa fallback. Se conservan componentes/tokens/disposición; evidencia375px/axe acotada y validación humana/proveedor/corte pendientes en runbook.

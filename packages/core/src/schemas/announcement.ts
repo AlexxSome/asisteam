@@ -18,5 +18,8 @@ export const ANNOUNCEMENT_ERROR_MESSAGES: Record<string, string> = {
   announcement_changed: "Otro administrador cambió este anuncio. Actualiza el muro antes de volver a editarlo.",
   announcement_request_conflict: "No pudimos confirmar esta publicación. Actualiza el muro antes de reintentar.",
   announcement_save_failed: "No pudimos guardar el cambio. Vuelve a intentarlo.",
+  invalid_push_token: "El token del dispositivo no es válido.",
+  push_token_unavailable: "El dispositivo debe desregistrarse de su cuenta anterior.",
+  invalid_announcement_page: "Revisa la página de anuncios.",
   invalid_push_preference: "Elige si quieres recibir avisos de anuncios.",
 };
