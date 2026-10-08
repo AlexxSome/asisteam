@@ -8,6 +8,8 @@
     "typecheck": { "dependsOn": ["^typecheck"] },
     "test": { "dependsOn": ["^test"] },
     "dev": { "cache": false, "persistent": true },
+    "@asisteam/worker#test": { "dependsOn": ["build", "^test"] },
+    "@asisteam/worker#typecheck": { "dependsOn": ["^build", "^typecheck"] },
     "@asisteam/api#test": { "dependsOn": ["build", "^test"] },
     "@asisteam/api#typecheck": { "dependsOn": ["^build", "^typecheck"] },
     "@asisteam/api-client#test": { "dependsOn": ["build", "^test"] },
