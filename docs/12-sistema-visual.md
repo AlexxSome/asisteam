@@ -165,3 +165,8 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de asistencia con Nest · MIG-11 (#155), 07-10-2026
 
 [Seguro] [MIG-11](migration/issue-155/README.md) conserva AttendanceSheet, selección textual/check/aria-pressed, objetivos44px, confirmación inline y feedback por fila. Los lotes confirmados permanecen tras un error posterior; rollback afecta el pendiente y comunica resultado parcial. COACH no recibe notas ni controles de notas/desmarcado. No agrega componentes/tokens/estilos; no existe cola offline ni éxito antes de confirmar servidor. Evidencia375px/teclado/axe acotada en MIG-11.
+
+
+## Estados de historial/reportes con Nest · MIG-12 (#156), 07-10-2026
+
+[Seguro] [MIG-12](migration/issue-156/README.md) conserva ReportFilters, ReportTable/StatsTable y AttendanceHistoryContent: período/tipos/inactivos/orden/paginación, regiones de tabla enfocables y datos propios/pupilos disponibles sin estadísticas grupales. Denominador cero permanece «Sin datos»; errores no inventan métricas ni recuperan el otro transporte. La revocación de toggle oculta agregados al recargar. No añade componentes, tokens ni estilos; evidencia375px/teclado/axe acotada y revisión humana pendiente en MIG-12.

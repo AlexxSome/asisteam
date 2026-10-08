@@ -245,3 +245,6 @@ Supuestos de la columna de escala: 200 grupos × ~30 miembros ≈ 6.000 usuarios
 | Residencia de datos en sa-east-1 (Brasil), no en Chile | Declarado en política de privacidad; aceptable bajo Ley 19.628/21.719 con cláusulas adecuadas; evaluar residencia local solo si un cliente institucional la exige | 11-legal-seguridad-privacidad.md |
 | CI sobre Supabase CLI/Docker lento o frágil | Hardening del pipeline presupuestado dentro de las 9 semanas de [P0]; cache de imágenes Docker en Actions | Sección 7.2; 09-roadmap.md |
 | Deslizamiento de las 9 semanas por los 3 flujos no-CRUD complejos | Corte de alcance estricto a etiquetas [P0]; los flujos complejos se diseñan primero (semanas 1-3) | 09-roadmap.md |
+
+
+[Seguro] **MIG-12 (#156, 2026-10-07):** [historial/reportes por Nest](migration/issue-156/README.md) con cuatro lecturas HTTP/SDK y consumidores Next por REPORTS, sobre las mismas RPC/RLS canónicas. Mantiene permisos, filtros, métrica y cortes Chile sin caché adicional; evidencia de paridad y p95 exclusivamente local sintética.

@@ -25,7 +25,7 @@ export function document() {
       ...(operation.body ? { requestBody: { required: true, content: json(ref(operation.body)) } } : {}), responses,
     };
   }
-  return { openapi: '3.0.3', info: { title: 'Asisteam HTTP', version: '1.0.0', description: 'MIG-11. Asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema.' }, paths, components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } }, schemas } };
+  return { openapi: '3.0.3', info: { title: 'Asisteam HTTP', version: '1.0.0', description: 'MIG-12. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema.' }, paths, components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } }, schemas } };
 }
 
 export async function artifacts() {

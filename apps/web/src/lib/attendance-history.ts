@@ -1,4 +1,7 @@
 import { notFound } from "next/navigation";
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { attendanceHistorySchema, attendancePeriodFilterSchema, type AttendancePeriodFilter } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
@@ -26,6 +29,17 @@ export async function getWardAttendanceHistory(groupId: string, athleteUserId: s
   if (!isGroupId(athleteUserId)) notFound();
   const group = await getGroup(groupId);
   if (!group.roles.includes("GUARDIAN")) notFound();
+  if (moduleTransport("reports") === "nest") {
+    try {
+      const history = await createServerApiClient().getWardAttendanceHistory({ params: { groupId: group.id, athleteUserId },
+        query: { ...filter, activity_type_ids: filter.activity_type_ids.join(","), page_size: pageSize } });
+      return { history, error: null };
+    } catch (error) {
+      if (error instanceof ApiClientError && [401, 403, 404].includes(error.status)) notFound();
+      if (error instanceof ApiClientError && error.status === 400) return { history: null, error: "Revisa el período y los tipos de actividad seleccionados." };
+      throw error;
+    }
+  }
   const supabase = await createClient();
   // El vínculo, la edad y ambas membresías se verifican de nuevo en la base.
   const { data, error } = await supabase.rpc("get_ward_attendance_history", {
@@ -44,6 +58,17 @@ export async function getWardAttendanceHistory(groupId: string, athleteUserId: s
 export async function getMyAttendanceHistory(groupId: string, filter: AttendancePeriodFilter, pageSize = 50) {
   const group = await getGroup(groupId);
   if (!group.roles.includes("ATHLETE")) notFound();
+  if (moduleTransport("reports") === "nest") {
+    try {
+      const history = await createServerApiClient().getMyAttendanceHistory({ params: { groupId: group.id },
+        query: { ...filter, activity_type_ids: filter.activity_type_ids.join(","), page_size: pageSize } });
+      return { history, error: null };
+    } catch (error) {
+      if (error instanceof ApiClientError && [401, 403, 404].includes(error.status)) notFound();
+      if (error instanceof ApiClientError && error.status === 400) return { history: null, error: "Revisa el período y los tipos de actividad seleccionados." };
+      throw error;
+    }
+  }
   const supabase = await createClient();
   // La base resuelve la membership propia a partir del JWT en cada lectura.
   const { data, error } = await supabase.rpc("get_my_attendance_history", {

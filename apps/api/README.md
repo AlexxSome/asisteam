@@ -104,3 +104,8 @@ pnpm exec supabase test db supabase/tests/api_session_rls.test.sql
 [Seguro] Configurar INVITATION_DATABASE_URL del rol asisteam_invitation en el mismo host/puerto/base que DATABASE_URL; la migración lo crea NOLOGIN, sin password ni tablas/ownership/BYPASSRLS, con cinco RPC de registro/ratelimit. Provisionar LOGIN/password externos. INVITATION_PROXY_SECRET (≥32 caracteres) se comparte exclusivamente con Next; INVITATION_AUTH_BRIDGE_SECRET independiente (≥32) se comparte exclusivamente con la Edge invitation-auth. RESEND_API_KEY, INVITATION_EMAIL_FROM e INVITATION_WEB_URL configuran envío. HTTP_TIMEOUT_MS=30000 y ASISTEAM_API_TIMEOUT_MS=30000 permiten los deadlines externos de 10 s; un timeout no revierte efectos confirmados.
 
 [Seguro] La service_role sigue exclusivamente en Edge/CI, conforme AGENTS/doc07. El bridge temporal ejecuta solo createUser con secreto y nonce reservado por Nest; el trigger Auth consume la reserva y enlaza/acepta atómicamente. Su retirada corresponde a #162/#164: esta entrega no elimina Supabase Auth ni acredita envío externo Resend. Ausencia de configuración falla cerrado, sin fallback.
+
+
+## Historial/reportes · MIG-12 (#156)
+
+[Seguro] [Contrato, activación y evidencia](../../docs/migration/issue-156/README.md): cuatro GET de historial propio/pupilos, reporte ADMIN/COACH y stats del grupo con toggles. Usan Database.authenticated, sesión/consentimiento y membership ACTIVE, más RPC canónicas por operación. El rol asisteam_api ya dispone de grants: no se añade SQL/migración. API_RLS_TEST=1 habilita reports.integration.mjs; CI backend exige su ejecución sin omisiones. La medición p95 compara HTTP local con SQL autenticado sobre500 deportistas sintéticos.

@@ -73,3 +73,8 @@ const result = await runModuleOperation("groups", {
 ## Asistencia implementada · MIG-11 (#155)
 
 [Seguro] [MIG-11](../../docs/migration/issue-155/README.md) añade getAttendanceRoster/saveAttendance/updateAttendance/clearAttendance implementados. ATTENDANCE=nest activa loader/acciones; Supabase sigue default. Roster100 por página, lote1–500, corrección parcial y notas/desmarcado ADMIN; COACH obtiene notas nulas. Un error no invoca el segundo transporte ni reintenta automáticamente. Consultar tras resultado incierto antes de repetir.
+
+
+## Historial/reportes implementados · MIG-12 (#156)
+
+[Seguro] getMyAttendanceHistory/getWardAttendanceHistory/getGroupAttendanceReport/getGroupStats figuran implemented; [contrato y evidencia](../../docs/migration/issue-156/README.md). REPORTS=nest selecciona el ejecutor Next; Supabase sigue default. Filtros de fechas Chile, tipos UUID en CSV, página/tamaño1–100, inactivos/orden de reporte y proyecciones por rol son validados en servidor/SQL. Stats403 group_stats_disabled oculta agregados sin ocultar lo propio; otros fallos se propagan. Sin retry, fallback ni cache; volver a supabase consulta las mismas filas/IDs.

@@ -1,0 +1,33 @@
+{
+  "commit": "af09585c55962d7947cff83178181ce76e653c14",
+  "sourceCommit": "af09585c55962d7947cff83178181ce76e653c14",
+  "date": "2026-10-08T00:01:44.597Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 56.8,
+      "tests": 81,
+      "omitted": 0
+    },
+    {
+      "check": "baseline-pgtap-invitation-quota",
+      "status": "FAIL",
+      "seconds": 2.39,
+      "sqlFailures": [
+        {
+          "file": "send.test.sql",
+          "failed": 1
+        }
+      ]
+    },
+    {
+      "check": "baseline-test-unchanged",
+      "status": "FAIL"
+    }
+  ],
+  "testedWorkingTree": true,
+  "sourceBase": "af09585c55962d7947cff83178181ce76e653c14"
+}

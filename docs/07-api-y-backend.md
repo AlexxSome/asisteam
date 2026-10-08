@@ -583,3 +583,8 @@ Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-su
 ## Migración de asistencia · MIG-11 (#155), 07-10-2026
 
 [Seguro] [Contrato y evidencia MIG-11](migration/issue-155/README.md) implementan GET roster100/PUT lote1–500/PATCH parcial/DELETE desmarcado bajo /api/v1/groups/{groupId}/activities/{activityId}/attendance, seleccionados por ATTENDANCE=nest. Sesión/consentimiento/membership y tenant comprobados en transacción; vistas/RPC canónicas mantienen atomicidad, UNIQUE y privacidad COACH (estados sin notas/desmarcado). Solo el PUT admite2MiB para notas Unicode; no cambia SQL/RLS ni métricas. Next conserva éxitos de lotes previos y comunica fallo restante sin retry/fallback/cola offline.
+
+
+## Migración de historial/reportes · MIG-12 (#156), 07-10-2026
+
+[Seguro] [Contrato y evidencia MIG-12](migration/issue-156/README.md) implementan cuatro GET bajo /api/v1/groups/{groupId}: /me/history, /wards/{athleteUserId}/history, /reports y /stats. REPORTS=nest selecciona un ejecutor sobre las mismas RPC SQL con sesión/consentimiento/membership ACTIVE. Query de período/fechas, tipos UUID separados por coma y paginación1–100; reportes añaden include_inactive/sort. V1/V2/V4/V5 y cortes Chile se resuelven en SQL; Nest no copia fórmulas ni agrega caché. Respuestas no-store, DTO por rol, identidad propia de sesión y 404 anti-enumeración.

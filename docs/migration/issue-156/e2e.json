@@ -1,0 +1,58 @@
+{
+  "sourceCommit": "af09585c55962d7947cff83178181ce76e653c14",
+  "environment": "local-synthetic-Next-Nest-PostgreSQL17",
+  "check": "MIG-12-playwright",
+  "status": "PASS",
+  "tests": 3,
+  "omitted": 0,
+  "seconds": 21.7,
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "browser": "Chromium Playwright1.63.0",
+  "analyses": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": 0,
+      "incompleteRuleIds": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": 0,
+      "incompleteRuleIds": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": 0,
+      "incompleteRuleIds": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "violations": 0,
+      "incompleteRuleIds": [
+        "aria-valid-attr-value"
+      ]
+    }
+  ],
+  "humanScreenReader": "OMITTED",
+  "nativeZoom": "OMITTED"
+}

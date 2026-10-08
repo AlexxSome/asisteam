@@ -3,6 +3,10 @@ import { ATTENDANCE_ERROR_MESSAGES, ACTIVITY_ERROR_MESSAGES, ACTIVITY_TYPE_ERROR
 
 const memberMessages = { ...ATTENDANCE_ERROR_MESSAGES, ...ACTIVITY_ERROR_MESSAGES, ...ACTIVITY_TYPE_ERROR_MESSAGES, ...SEND_INVITATION_ERROR_MESSAGES, ...invitationErrorMessages, ...MEMBER_MANAGEMENT_ERRORS, ...MEMBERSHIP_REVIEW_ERROR_MESSAGES, ...MANAGED_MEMBER_ERROR_MESSAGES, ...GUARDIANSHIP_ERROR_MESSAGES, invalid_member_filters: 'Revisa los filtros de integrantes.' };
 const profileMessages: Record<string, string> = {
+  invalid_report_filters: 'Revisa el período y la página seleccionados.',
+  invalid_report_activity_type: 'Selecciona tipos de actividad del grupo.',
+  attendance_history_not_found: 'El historial no existe o no tienes acceso.',
+  group_stats_disabled: 'Las estadísticas del grupo no están habilitadas para tu rol.',
   account_consent_required: 'Acepta las condiciones vigentes para continuar.',
   athlete_birthdate_required: 'La fecha de nacimiento es obligatoria para deportistas.',
   minor_requires_guardian_consent: 'Necesitas un apoderado y su consentimiento vigente.',

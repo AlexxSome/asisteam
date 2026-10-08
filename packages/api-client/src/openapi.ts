@@ -840,6 +840,74 @@ export interface paths {
         patch: operations["updateOwnProfile"];
         trace?: never;
     };
+    "/api/v1/groups/{groupId}/me/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** V1: historial ATHLETE propio; identidad resuelta por SQL, período Chile y paginación */
+        get: operations["getMyAttendanceHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{groupId}/wards/{athleteUserId}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** V2/V3: pupilo vigente; vínculo, edad y membresías reevaluados en SQL */
+        get: operations["getWardAttendanceHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{groupId}/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ADMIN/COACH: agregados canónicos, inactivos opcionales y orden estable; sin PII ni notas */
+        get: operations["getGroupAttendanceReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/groups/{groupId}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** V4/V5: toggles por rol evaluados en SQL; solo nombre/avatar y métricas agregadas */
+        get: operations["getGroupStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1643,6 +1711,193 @@ export interface components {
         Ready: {
             /** @enum {string} */
             status: "ready";
+        };
+        WardHistoryParams: {
+            /** Format: uuid */
+            groupId: string;
+            /** Format: uuid */
+            athleteUserId: string;
+        };
+        HistoryQuery: {
+            /**
+             * @default month
+             * @enum {string}
+             */
+            period: "week" | "month" | "custom" | "season";
+            /** Format: date */
+            from?: string;
+            /** Format: date */
+            to?: string;
+            /** @default  */
+            activity_type_ids: string;
+            /** @default 1 */
+            page: number;
+            /** @default 50 */
+            page_size: number;
+        };
+        ReportQuery: {
+            /**
+             * @default month
+             * @enum {string}
+             */
+            period: "week" | "month" | "custom" | "season";
+            /** Format: date */
+            from?: string;
+            /** Format: date */
+            to?: string;
+            /** @default  */
+            activity_type_ids: string;
+            /** @default 1 */
+            page: number;
+            /** @default 50 */
+            page_size: number;
+            /** @default false */
+            include_inactive: boolean;
+            /**
+             * @default attendance
+             * @enum {string}
+             */
+            sort: "attendance" | "name";
+        };
+        StatsQuery: {
+            /** @default 1 */
+            page: number;
+            /** @default 50 */
+            page_size: number;
+        };
+        AttendanceHistory: {
+            /** Format: uuid */
+            group_id: string;
+            /** Format: uuid */
+            membership_id: string;
+            full_name: string;
+            period: {
+                /** @enum {string} */
+                type: "week" | "month" | "custom" | "season";
+                from: string;
+                to: string;
+                /** @enum {string} */
+                timezone: "America/Santiago";
+            };
+            totals: {
+                convened: number;
+                present: number;
+                late: number;
+                absent: number;
+                excused: number;
+                attendance_pct: number | null;
+                late_rate: number | null;
+            };
+            records: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                activity_id: string;
+                title: string;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                activity_type_name: string;
+                activity_type_color: string;
+                is_system_type: boolean;
+                /** @enum {string} */
+                status: "PRESENT" | "ABSENT" | "LATE" | "EXCUSED";
+                note: string | null;
+            }[];
+            page: number;
+            page_size: number;
+        };
+        GroupAttendanceReport: {
+            /** Format: uuid */
+            group_id: string;
+            period: {
+                /** @enum {string} */
+                type: "week" | "month" | "custom" | "season";
+                from: string;
+                to: string;
+                /** @enum {string} */
+                timezone: "America/Santiago";
+            };
+            has_activities: boolean;
+            totals: {
+                convened: number;
+                present: number;
+                late: number;
+                absent: number;
+                excused: number;
+                attendance_pct: number | null;
+                late_rate: number | null;
+                athletes: number;
+                activities: number;
+                average_attendance_pct: number | null;
+                best_full_name: string | null;
+            };
+            by_athlete: {
+                convened: number;
+                present: number;
+                late: number;
+                absent: number;
+                excused: number;
+                attendance_pct: number | null;
+                late_rate: number | null;
+                /** Format: uuid */
+                membership_id: string;
+                full_name: string;
+                /** @enum {string} */
+                membership_status: "ACTIVE" | "INACTIVE";
+            }[];
+            by_activity_type: {
+                convened: number;
+                present: number;
+                late: number;
+                absent: number;
+                excused: number;
+                attendance_pct: number | null;
+                late_rate: number | null;
+                /** Format: uuid */
+                activity_type_id: string;
+                name: string;
+                color: string;
+                is_system: boolean;
+                activities: number;
+            }[];
+            trend: {
+                week_from: string;
+                attendance_pct: number | null;
+                convened: number;
+            }[];
+            page: number;
+            page_size: number;
+        };
+        GroupStats: {
+            /** Format: uuid */
+            group_id: string;
+            members: {
+                convened: number;
+                present: number;
+                late: number;
+                absent: number;
+                excused: number;
+                attendance_pct: number | null;
+                late_rate: number | null;
+                /** Format: uuid */
+                membership_id: string;
+                full_name: string;
+                avatar_url: string | null;
+            }[];
+            totals: {
+                convened: number;
+                present: number;
+                late: number;
+                absent: number;
+                excused: number;
+                attendance_pct: number | null;
+                late_rate: number | null;
+                athletes: number;
+            };
+            page: number;
+            page_size: number;
         };
     };
     responses: never;
@@ -8561,6 +8816,517 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProfileUpdated"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    getMyAttendanceHistory: {
+        parameters: {
+            query?: {
+                period?: "week" | "month" | "custom" | "season";
+                from?: string;
+                to?: string;
+                activity_type_ids?: string;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttendanceHistory"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    getWardAttendanceHistory: {
+        parameters: {
+            query?: {
+                period?: "week" | "month" | "custom" | "season";
+                from?: string;
+                to?: string;
+                activity_type_ids?: string;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+                athleteUserId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttendanceHistory"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    getGroupAttendanceReport: {
+        parameters: {
+            query?: {
+                period?: "week" | "month" | "custom" | "season";
+                from?: string;
+                to?: string;
+                activity_type_ids?: string;
+                page?: number;
+                page_size?: number;
+                include_inactive?: boolean;
+                sort?: "attendance" | "name";
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupAttendanceReport"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    getGroupStats: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupStats"];
                 };
             };
             /** @description Error 400; sin SQL, tokens ni datos privados */
