@@ -1,72 +1,72 @@
 {
-  "sourceCommit": "57b3dbc575de9def7e5c8d10a27179d1d5dd3266",
+  "sourceCommit": "f0b51987b3b908baf3486a2db0a614cdd9e672a7",
   "environment": "local-synthetic",
-  "date": "2026-10-08T23:10:03.289Z",
+  "date": "2026-10-08T23:14:48.373Z",
   "checks": [
     {
       "check": "vanilla-postgres17-with-pgtap-fixture",
       "status": "PASS",
-      "seconds": 0.567
+      "seconds": 0.594
     },
     {
       "check": "isolated-destination-and-wal-archiving",
       "status": "PASS",
-      "seconds": 4.289
+      "seconds": 4.107
     },
     {
       "check": "clean-baseline-with-deploy-role-and-ledger",
       "status": "PASS",
-      "seconds": 0.078
+      "seconds": 0.08
     },
     {
       "check": "pgtap-destination-policies-and-invariants",
       "status": "PASS",
-      "seconds": 0.214
+      "seconds": 0.21
     },
     {
       "check": "persistence-types-and-migration-hashes-independent",
       "status": "PASS",
-      "seconds": 0.082
+      "seconds": 0.087
     },
     {
       "check": "native-identities-and-http-api-with-minimal-roles",
       "status": "PASS",
-      "seconds": 0.292
+      "seconds": 0.3
     },
     {
       "check": "canonical-history-minors-consents-metrics-and-rls",
       "status": "PASS",
-      "seconds": 0.071
+      "seconds": 0.067
     },
     {
       "check": "worker-native-claims-and-durable-ledger",
       "status": "PASS",
-      "seconds": 0.012
+      "seconds": 0.013
     },
     {
       "check": "next-chromium-native-auth-independent-database",
       "status": "PASS",
-      "seconds": 16.348
+      "seconds": 16.756
     },
     {
       "check": "pool-concurrency-and-connection-budget",
       "status": "PASS",
-      "seconds": 0.183
+      "seconds": 0.187
     },
     {
       "check": "logical-backup-restore-all-table-and-group-reconciliation",
       "status": "PASS",
-      "seconds": 0.545
+      "seconds": 0.528
     },
     {
       "check": "physical-basebackup-and-point-in-time-recovery",
       "status": "PASS",
-      "seconds": 3.886
+      "seconds": 4.322
     },
     {
       "check": "owned-resources-cleanup",
       "status": "PASS",
-      "seconds": 0.489
+      "seconds": 0.481
     }
   ],
   "pending": [
@@ -76,7 +76,7 @@
     "production-cutover-166-168"
   ],
   "targetPostgres": "17.9 (Debian 17.9-1.pgdg12+1)",
-  "targetImage": "sha256:b34cc0179befa68dbf08ee344e0fe2dd5ee4b8c7b220460387e8180530652ecc",
+  "targetImage": "sha256:d84881aa686ac4b121a7e2a58aef182012b217d3b7704522a9add343e663a657",
   "pgtapCases": 50,
   "canonicalMetricCases": 9,
   "catalogDifferences": [],
@@ -84,7 +84,7 @@
     "serverLimit": 40,
     "probeConcurrency": 12,
     "probePool": 2,
-    "probeSeconds": 0.182,
+    "probeSeconds": 0.187,
     "apiPerReplica": 2,
     "authPerReplica": 3,
     "invitationPerReplica": 3,
@@ -92,7 +92,7 @@
     "workerPerReplica": 2,
     "reservedSuperuser": 3
   },
-  "backupBytes": 430041,
+  "backupBytes": 430039,
   "reconciledTables": 45,
   "pitr": {
     "basebackup": true,

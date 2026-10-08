@@ -53,6 +53,7 @@ try {
   if(process.env.DB_GENERATE_TYPES==='1')await writeFile(path,output);else assert.equal(output,await readFile(path,'utf8'));
   assert.equal(digest(await readFile(new URL('migrations/0001_baseline.sql',root))),JSON.parse(await readFile(new URL('transformation.json',root),'utf8')).baselineSha256);
   const changed=new URL('changed/',new URL('file://'+dir+'/'));await mkdir(changed);await writeFile(new URL('0001_baseline.sql',changed),'-- tampered');await assert.rejects(migrate(deploy,changed),/migration_history_changed/);
+  const missing=new URL('missing/',new URL('file://'+dir+'/'));await mkdir(missing);await assert.rejects(migrate(deploy,missing),/migration_history_missing/);
   await owner.query('create database denied');const denied=await connect(port,'asisteam_api');await assert.rejects(migrate(denied),/deployment_role_required/);await denied.end();
  });
  const ids=Object.fromEntries(['admin','athlete','guardian','coach'].map(k=>[k,{subject:randomUUID(),profile:randomUUID()}]));

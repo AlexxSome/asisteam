@@ -19,12 +19,12 @@
 | ci:checks | [Seguro] PASS lint/OpenAPI/typecheck/build/core150/web932/API/worker/SDK; 81 integraciones web separadas de la fase unitaria |
 | PostgreSQL independiente | [Seguro] PASS inicial instalación/migrador/catalogue/tipos, pgTAP50, nueve métricas, roles/API/worker, R1/visibilidad/historia, pool y restauración lógica45 tablas |
 | PITR físico | [Seguro] PASS basebackup/WAL/punto nombrado; escritura posterior excluida |
-| Chromium contra destino independiente | [Seguro] PASS registro/perfil/CSRF/cookies/refresh/logout/recovery/reset/login; 16.3 s, sin URLs/keys Supabase |
+| Chromium contra destino independiente | [Seguro] PASS registro/perfil/CSRF/cookies/refresh/logout/recovery/reset/login; 16.8 s, sin URLs/keys Supabase |
 | ci:backend | [Seguro] PASS pgTAP1673/1673, 81/81 integraciones producto, cero omitidas; API/Auth/OAuth/worker/Storage/portabilidad PASS; fallo inyectado esperado y cleanup PASS |
 | ci:staging | [Seguro] PASS roles/deploy/rollback/DB; fallo de artefacto inyectado esperado y recuperación PASS |
 | CI remoto, proveedor, volumen, RPO/RTO y corte externos | [Seguro] PENDIENTE; no heredados de ensayos locales |
 
-[Seguro] La auto-revisión revisa únicamente el diff de #165 y sus efectos: owners/default privileges, claims/RLS, grants calificados, helpers PUBLIC, correspondencia de catálogo, migraciones inmutables, credenciales/artefactos y cleanup propio. Se corrigieron grants sin schema y USAGE/owner de extensions en restauración; dos AND asociativos de anuncios se normalizan por coincidencia exacta, sin ocultar cambios de condiciones. El cambio ajeno next-env.d.ts se conserva fuera del commit y se repone tras typegen/build.
+[Seguro] La auto-revisión revisa únicamente el diff de #165 y sus efectos: owners/default privileges, claims/RLS, grants calificados, helpers PUBLIC, correspondencia de catálogo, migraciones inmutables (también rechaza eliminar un SQL aplicado), credenciales/artefactos y cleanup propio. Se corrigieron grants sin schema y USAGE/owner de extensions en restauración; dos AND asociativos de anuncios se normalizan por coincidencia exacta, sin ocultar cambios de condiciones. El cambio ajeno next-env.d.ts se conserva fuera del commit y se repone tras typegen/build.
 
 [Seguro] El [runbook](../../../packages/db/README.md) especifica instalación/URLs/TLS, nuevos SQL/fixtures/types, presupuesto por réplica, backups/PITR y gates previos a mover filas existentes. La importación de datos/corte/rollback con deltas queda en #166; la provisión gestionada y mediciones con volumen real requieren decisiones/entorno externos ya pendientes. No se cierra el issue ni se mergea automáticamente.
 

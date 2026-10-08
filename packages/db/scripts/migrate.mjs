@@ -9,7 +9,10 @@ export async function migrate(client,directory=new URL('../migrations/',import.m
   if(!role?.safe)throw new Error('deployment_role_required');
   await client.query('create schema if not exists db_migrations authorization asisteam_migrator');
   await client.query('create table if not exists db_migrations.ledger(name text primary key,sha256 text not null,applied_at timestamptz not null default now())');
-  for(const name of (await readdir(directory)).filter(f=>/^\d+_[a-z0-9_]+\.sql$/.test(f)).sort()) {
+  const files=(await readdir(directory)).filter(f=>/^\d+_[a-z0-9_]+\.sql$/.test(f)).sort();
+  const applied=(await client.query('select name from db_migrations.ledger')).rows;
+  if(applied.some(({name})=>!files.includes(name)))throw new Error('migration_history_missing');
+  for(const name of files) {
    const content=await readFile(new URL(name,directory),'utf8'),hash=createHash('sha256').update(content).digest('hex');
    const row=(await client.query('select sha256 from db_migrations.ledger where name=$1',[name])).rows[0];
    if(row){if(row.sha256!==hash)throw new Error('migration_history_changed');continue;}
