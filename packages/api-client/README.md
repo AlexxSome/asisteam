@@ -78,3 +78,8 @@ const result = await runModuleOperation("groups", {
 ## Historial/reportes implementados · MIG-12 (#156)
 
 [Seguro] getMyAttendanceHistory/getWardAttendanceHistory/getGroupAttendanceReport/getGroupStats figuran implemented; [contrato y evidencia](../../docs/migration/issue-156/README.md). REPORTS=nest selecciona el ejecutor Next; Supabase sigue default. Filtros de fechas Chile, tipos UUID en CSV, página/tamaño1–100, inactivos/orden de reporte y proyecciones por rol son validados en servidor/SQL. Stats403 group_stats_disabled oculta agregados sin ocultar lo propio; otros fallos se propagan. Sin retry, fallback ni cache; volver a supabase consulta las mismas filas/IDs.
+
+
+## Billing implementado · MIG-14 (#158)
+
+[Seguro] getGroupBilling/manageSubscription figuran implemented; [runbook y evidencia](../../docs/migration/issue-158/README.md). BILLING=nest migra página y Server Action con schemas estrictos y sesión solo servidor. El webhook firmado se consume directamente por Mercado Pago y el relay antiguo, fuera del SDK Bearer. Configurar timeout60s en cliente/API. La reserva incierta se concilia sin POST automático. Una vez que el operador ejecuta handoff SQL a NEST, volver una bandera a supabase no restaura el ejecutor: rollback usa artefacto Nest compatible, misma DB/reservas/ledger.

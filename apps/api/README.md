@@ -109,3 +109,8 @@ pnpm exec supabase test db supabase/tests/api_session_rls.test.sql
 ## Historial/reportes · MIG-12 (#156)
 
 [Seguro] [Contrato, activación y evidencia](../../docs/migration/issue-156/README.md): cuatro GET de historial propio/pupilos, reporte ADMIN/COACH y stats del grupo con toggles. Usan Database.authenticated, sesión/consentimiento y membership ACTIVE, más RPC canónicas por operación. El rol asisteam_api ya dispone de grants: no se añade SQL/migración. API_RLS_TEST=1 habilita reports.integration.mjs; CI backend exige su ejecución sin omisiones. La medición p95 compara HTTP local con SQL autenticado sobre500 deportistas sintéticos.
+
+
+## Billing y webhook · MIG-14 (#158)
+
+[Seguro] [Contrato y runbook](../../docs/migration/issue-158/README.md) describen GET billing ADMIN, POST checkout/sync/cancel y webhook firmado. BILLING_DATABASE_URL usa asisteam_billing mínimo sobre la misma base; secretos MP y URLs HTTPS pertenecen al proceso Nest, sin service_role. Adaptadores SQL LEGACY/NEST impiden efectos por ambos transportes; handoff requiere quiescencia externa. Timeouts60s y recuperación de referencia para creación incierta; no repetir POST a ciegas. El antiguo webhook puede reenviar body/firma y esperar acuse persistido Nest. Sandbox real/corte externo siguen pendientes.

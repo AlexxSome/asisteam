@@ -24,7 +24,7 @@ do $$ declare v numeric; begin
     values(current_setting('test.admin')::uuid,'15000000-0000-4000-8000-000000000010','ATHLETE','ACTIVE',now());
     raise exception 'R1_not_enforced'; exception when check_violation then null; end;
   begin delete from public.consents; raise exception 'consent_history_not_enforced'; exception when check_violation then null; end;
-  if exists(select 1 from pg_roles where rolname in ('authenticated','asisteam_api','asisteam_jobs','asisteam_webhook') and (rolsuper or rolbypassrls or rolcreaterole or rolcreatedb)) then raise exception 'runtime_privilege'; end if;
+  if exists(select 1 from pg_roles where rolname in ('authenticated','asisteam_api','asisteam_jobs','asisteam_webhook','asisteam_billing') and (rolsuper or rolbypassrls or rolcreaterole or rolcreatedb)) then raise exception 'runtime_privilege'; end if;
 end $$;
 set local role asisteam_api;
 select set_config('request.jwt.claim.sub',:'athlete_auth',true);

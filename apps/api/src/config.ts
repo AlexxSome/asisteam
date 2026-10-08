@@ -17,6 +17,12 @@ const configSchema = z.object({
     try { return JSON.parse(Buffer.from(value.split('.')[1] ?? '', 'base64url').toString()).role === 'anon'; } catch { return false; }
   }).optional(),
   AUTH_TIMEOUT_MS: milliseconds(2000),
+  BILLING_DATABASE_URL: z.string().url().optional(),
+  MERCADOPAGO_ACCESS_TOKEN: z.string().min(1).optional(),
+  MERCADOPAGO_WEBHOOK_SECRET: z.string().min(1).optional(),
+  MERCADOPAGO_COLLECTOR_ID: z.string().regex(/^\d+$/).optional(),
+  BILLING_WEB_URL: z.string().url().optional(),
+  BILLING_WEBHOOK_URL: z.string().url().optional(),
   INVITATION_DATABASE_URL: z.string().url().optional(),
   INVITATION_PROXY_SECRET: z.string().min(32).optional(),
   INVITATION_AUTH_BRIDGE_SECRET: z.string().min(32).optional(),
@@ -40,6 +46,15 @@ export class ConfigurationError extends Error {
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
   const parsed = configSchema.superRefine((value, ctx) => {
     if (!!value.SUPABASE_AUTH_URL !== !!value.SUPABASE_AUTH_PUBLIC_KEY) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Configura el emisor y la clave pública juntos.' });
+    if (value.BILLING_DATABASE_URL) {
+      const main = new URL(value.DATABASE_URL), billing = new URL(value.BILLING_DATABASE_URL);
+      if (!['postgres:', 'postgresql:'].includes(billing.protocol) || main.hostname !== billing.hostname || main.port !== billing.port || main.pathname !== billing.pathname) ctx.addIssue({code:'custom',path:['BILLING_DATABASE_URL'],message:'Las conexiones deben usar la misma base.'});
+    }
+    for (const field of ['BILLING_WEB_URL', 'BILLING_WEBHOOK_URL'] as const) {
+      if (!value[field]) continue;
+      const url = new URL(value[field]);
+      if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash || (field === 'BILLING_WEB_URL' && url.pathname !== '/')) ctx.addIssue({code:'custom',path:[field],message:'URL HTTPS inválida.'});
+    }
     if (value.INVITATION_DATABASE_URL) {
       const main = new URL(value.DATABASE_URL), invitations = new URL(value.INVITATION_DATABASE_URL);
       if (!['postgres:', 'postgresql:'].includes(invitations.protocol) || main.hostname !== invitations.hostname || main.port !== invitations.port || main.pathname !== invitations.pathname) ctx.addIssue({code:"custom",path:["INVITATION_DATABASE_URL"],message:"Las conexiones deben usar la misma base."});

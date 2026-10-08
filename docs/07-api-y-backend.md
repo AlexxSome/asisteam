@@ -588,3 +588,8 @@ Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-su
 ## Migración de historial/reportes · MIG-12 (#156), 07-10-2026
 
 [Seguro] [Contrato y evidencia MIG-12](migration/issue-156/README.md) implementan cuatro GET bajo /api/v1/groups/{groupId}: /me/history, /wards/{athleteUserId}/history, /reports y /stats. REPORTS=nest selecciona un ejecutor sobre las mismas RPC SQL con sesión/consentimiento/membership ACTIVE. Query de período/fechas, tipos UUID separados por coma y paginación1–100; reportes añaden include_inactive/sort. V1/V2/V4/V5 y cortes Chile se resuelven en SQL; Nest no copia fórmulas ni agrega caché. Respuestas no-store, DTO por rol, identidad propia de sesión y 404 anti-enumeración.
+
+
+## Transporte billing · MIG-14 (#158)
+
+[Seguro] [Contrato MIG-14](migration/issue-158/README.md): GET `/api/v1/groups/:groupId/billing`, POST `/api/v1/billing/subscriptions` autenticado ADMIN y POST `/api/v1/billing/mercadopago-webhook` público firmado. API y rol billing se separan; SQL canónico conserva cupos/ledger/locks y executor LEGACY/NEST. Motor compartido y relay de URL antigua esperan persistencia antes de200. Configuración/sandbox/corte externo tienen límites explícitos en el runbook.

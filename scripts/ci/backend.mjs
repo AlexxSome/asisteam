@@ -12,6 +12,7 @@ await suite('backend', async () => {
   await check('api-groups-profile-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/groups-profile.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-members-consents-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/members-consents.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-activities-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/activities.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
+  await check('api-billing-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/billing.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-reports-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/reports.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-attendance-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/attendance.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-invitations-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/invitations.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });

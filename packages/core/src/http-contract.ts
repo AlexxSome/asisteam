@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { billingSummarySchema, subscriptionRequestSchema } from "./schemas/subscription";
+import { checkoutUrl } from "./billing/provider";
 import { reportHttpSchemas, reportHttpOperations } from "./http-reports-contract";
 import { attendanceHttpSchemas, attendanceHttpOperations } from "./http-attendance-contract";
 import { activityHttpSchemas, activityHttpOperations } from "./http-activities-contract";
@@ -36,6 +38,10 @@ export const httpOwnProfileSchema = z.object({
 }).strict();
 
 export const httpSchemas = {
+  BillingSummary: billingSummarySchema,
+  BillingRequest: subscriptionRequestSchema,
+  BillingQuery: z.object({ page: z.number().int().min(1).max(1000000).default(1) }).strict(),
+  BillingResult: z.object({ success: z.literal(true), checkout_url: z.string().refine(value => { try { checkoutUrl(value); return true; } catch { return false; } }).optional() }).strict(),
   ...activityHttpSchemas,
   ...attendanceHttpSchemas,
   ...memberHttpSchemas,
@@ -78,6 +84,8 @@ export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 410, 500,
 
 /** Only specified operations enter the generated SDK. Domain handlers arrive in #151 and following module issues. */
 export const httpOperations = {
+  getGroupBilling: { method: "GET", path: "/api/v1/groups/{groupId}/billing", module: "billing", authenticated: true, params: "GroupParams", query: "BillingQuery", response: "BillingSummary", status: 200, state: "implemented", summary: "Ledger y capacidad ADMIN; DTO sin datos privados del proveedor" },
+  manageSubscription: { method: "POST", path: "/api/v1/billing/subscriptions", module: "billing", authenticated: true, body: "BillingRequest", response: "BillingResult", status: 200, state: "implemented", summary: "Checkout, conciliación o cancelación; importe y cupos del servidor" },
   ...activityHttpOperations,
   ...attendanceHttpOperations,
   ...memberHttpOperations,
