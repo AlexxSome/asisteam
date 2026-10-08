@@ -3,7 +3,7 @@ import { nativeUser } from '@/lib/api/native-auth';
 import { ApiClientError } from '@asisteam/api-client';
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import type { Database } from "@asisteam/db";
+import type { PersistenceSchema } from "@asisteam/db";
 import { authCookieOptions } from "./cookie-options";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
@@ -32,10 +32,10 @@ export async function createClient({ requireCookieWrites = false } = {}) {
         if (property === 'auth') return target.auth;
         throw new ApiClientError(503, 'native_auth_requires_nest');
       },
-    }) as unknown as ReturnType<typeof createServerClient<Database>>;
+    }) as unknown as ReturnType<typeof createServerClient<PersistenceSchema>>;
   }
 
-  const client = createServerClient<Database>(
+  const client = createServerClient<PersistenceSchema>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {

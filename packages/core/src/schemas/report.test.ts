@@ -2,8 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { attendanceMetrics, reportAttendanceTone, reportFilterSchema, reportPercentage } from "./report";
 
-const sql = readFileSync(new URL("../../../../supabase/tests/report_metrics.test.sql", import.meta.url), "utf8");
-const cases = JSON.parse(sql.match(/jsonb_to_recordset\(\$cases\$([\s\S]*?)\$cases\$/)![1]!) as { name: string; present: number; late: number; absent: number; excused: number; convened: number; attendance_pct: number | null; late_rate: number | null }[];
+const cases = JSON.parse(readFileSync(new URL("../../../db/fixtures/attendance-cases.json", import.meta.url), "utf8")) as { name: string; present: number; late: number; absent: number; excused: number; convened: number; attendance_pct: number | null; late_rate: number | null }[];
 describe("métrica compartida SQL y core", () => {
   it.each(cases)("$name", ({ name: _name, ...expected }) => {
     const { present, late, absent, excused } = expected;

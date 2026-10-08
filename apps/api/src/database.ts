@@ -13,7 +13,7 @@ const runtimeRoleSql = `
   select current_user = 'asisteam_api'
     and not r.rolsuper and not r.rolbypassrls
     and not r.rolcreaterole and not r.rolcreatedb and not r.rolreplication
-    and not pg_has_role(current_user, 'service_role', 'MEMBER')
+    and not exists (select 1 from pg_roles forbidden where forbidden.rolname in ('service_role','asisteam_migrator') and pg_has_role(current_user, forbidden.oid, 'MEMBER'))
     and not has_schema_privilege(current_user, 'public', 'CREATE')
     and not has_schema_privilege(current_user, 'app_private', 'CREATE')
     and has_function_privilege(current_user, 'app_private.api_session_user_id(uuid)', 'EXECUTE')

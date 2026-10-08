@@ -564,3 +564,7 @@ Auditoría completa de cambios (hoy solo se conserva el último estado de asiste
 - `audit_log`: `id`, `actor_user_id` (FK users), `group_id` (FK groups), `entity` (text: `attendance_records`, `memberships`...), `entity_id` (uuid), `action` (`INSERT` | `UPDATE` | `DELETE`), `before` (jsonb), `after` (jsonb), `created_at`. Tabla append-only; candidata a particionado por mes si el volumen lo exige.
 
 Notas de compatibilidad: la exportación CSV [P1] no requiere tablas nuevas (consulta sobre el esquema [P0]); el rol COACH [P2] reutiliza `memberships.role` agregando el valor `COACH` al CHECK; el modo offline [P2] requerirá una columna `client_generated_id` (uuid, única) en `attendance_records` para idempotencia de sincronización.
+
+## Destino PostgreSQL independiente · MIG-21 (#165)
+
+[Seguro] [packages/db](../packages/db/README.md) incorpora un baseline PostgreSQL17 con las 44 tablas actuales de negocio de public/app_private, su catálogo reconciliado, roles de runtime propios y migrador separado. Las futuras migraciones/fixtures/tipos de destino se agregan en ese paquete; las migraciones Supabase y sus tipos quedan como historial de coexistencia. El FK de users.auth_user_id apunta al mapa de sujetos propio de #162/#164; el destino conserva ledger de importación, consentimientos, jobs, billing y manifiestos de archivos. No contiene esquemas auth/storage ni cron/net/Vault. Preparación y pruebas sintéticas: [MIG-21](migration/issue-165/README.md); mover filas existentes y ejecutar el corte externo requieren #166–#168.

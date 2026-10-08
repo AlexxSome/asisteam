@@ -5,7 +5,7 @@ import { moduleTransport } from "@/lib/api/config";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { canManageAttendance } from "@asisteam/core";
-import type { Database } from "@asisteam/db";
+import type { PersistenceSchema } from "@asisteam/db";
 import { isGroupId } from "@/lib/group-routing";
 import { resourceResponseHtml } from "@/lib/resource-state";
 import { authCookieOptions } from "@/lib/supabase/cookie-options";
@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
   if(nativeAuthEnabled())return nativeAuthMiddleware(request);
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient<Database>(
+  const supabase = createServerClient<PersistenceSchema>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
