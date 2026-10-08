@@ -6,6 +6,7 @@ import type { Request } from 'express';
 import { httpSchemas, invitationRegistrationSchema, INVITATION_TERMS_VERSION, MEMBERSHIP_ROLE_LABELS } from '@asisteam/core/runtime';
 import { SessionGuard, type AuthenticatedRequest } from './auth.js';
 import { Database, type AuthenticatedTransaction } from './database.js';
+import { TransactionalEmail } from './email.js';
 import { CONFIG, type RuntimeConfig } from './config.js';
 import { DomainException, domainSqlError } from './domain-errors.js';
 
@@ -52,7 +53,7 @@ export class InvitationRegistrationStore implements OnApplicationShutdown {
 
 @Controller('api/v1')
 export class InvitationsController {
-  constructor(@Inject(Database) private readonly database: Database, @Inject(InvitationRegistrationStore) private readonly registrations: InvitationRegistrationStore, @Inject(CONFIG) private readonly config: RuntimeConfig) {}
+  constructor(@Inject(Database) private readonly database: Database, @Inject(InvitationRegistrationStore) private readonly registrations: InvitationRegistrationStore, @Inject(CONFIG) private readonly config: RuntimeConfig, @Inject(TransactionalEmail) private readonly email: TransactionalEmail) {}
   private async run<T>(request: AuthenticatedRequest, operation: (tx: AuthenticatedTransaction) => Promise<T>) {
     try { return await this.database.authenticated(request.identity!, async tx => {
       if ((await tx.query('select public.has_account_consent() as accepted')).rows[0]?.accepted !== true) throw new DomainException(422, 'account_terms_required');
@@ -78,8 +79,7 @@ export class InvitationsController {
     const delivery = z.object({ id:z.string().uuid(),status:z.literal('PENDING'),expires_at:z.string(),email:z.string(),group_name:z.string(),role:z.enum(['ATHLETE','GUARDIAN']) }).parse(issued);
     const invitation = httpSchemas.InvitationSent.parse({invitation:{id:delivery.id,status:delivery.status,expires_at:delivery.expires_at}});
     try {
-      const response = await fetch('https://api.resend.com/emails',{method:'POST',redirect:'error',signal:AbortSignal.timeout(10000),headers:{authorization:'Bearer '+key,'content-type':'application/json','Idempotency-Key':'invitation-'+delivery.id},body:JSON.stringify({from,to:[delivery.email],subject:'Invitación a Asisteam',text:`Te invitaron al grupo ${delivery.group_name} como ${MEMBERSHIP_ROLE_LABELS[delivery.role]}.\n\nAcepta la invitación en este enlace:\n${new URL('/invitations/'+token,web).href}\n\nEl enlace vence en 7 días y es de un solo uso. Si recibiste un reenvío, el enlace anterior ya no funciona.\n\nSi no esperabas esta invitación, puedes ignorar este correo.`})});
-      if (!response.ok || !z.object({id:z.string()}).safeParse(await response.json()).success) throw new Error('delivery');
+      await this.email.send(this.email.payload(delivery.email, 'Invitación a Asisteam', `Te invitaron al grupo ${delivery.group_name} como ${MEMBERSHIP_ROLE_LABELS[delivery.role]}.\n\nAcepta la invitación en este enlace:\n${new URL('/invitations/'+token,web).href}\n\nEl enlace vence en 7 días y es de un solo uso. Si recibiste un reenvío, el enlace anterior ya no funciona.\n\nSi no esperabas esta invitación, puedes ignorar este correo.`), 'invitation-' + delivery.id);
     } catch { throw new DomainException(503,'email_delivery_failed'); }
     return invitation;
   }

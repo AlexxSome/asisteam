@@ -14,13 +14,14 @@ import { ReportsController } from './reports.js';
 import { AttendanceController } from './attendance.js';
 import { ActivitiesController } from './activities.js';
 import { HealthController } from './health.js';
+import { EMAIL_CONFIG, TransactionalEmail } from './email.js';
 import { SafeLogger } from './logger.js';
 import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
     controllers: [ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
-    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore],
+    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}
   const app = await NestFactory.create<NestExpressApplication>(RuntimeModule, { logger, abortOnError: false, bodyParser: false });

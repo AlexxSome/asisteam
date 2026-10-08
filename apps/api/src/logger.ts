@@ -1,7 +1,7 @@
 import type { LoggerService } from '@nestjs/common';
 
-type Event = 'runtime_started' | 'runtime_stopped' | 'startup_failed' | 'configuration_invalid' | 'shutdown_timeout' | 'database_unavailable' | 'request_completed' | 'request_failed' | 'framework';
-type Fields = { request_id?: string; status?: number; duration_ms?: number; fields?: string[] };
+type Event = 'runtime_started' | 'runtime_stopped' | 'startup_failed' | 'configuration_invalid' | 'shutdown_timeout' | 'database_unavailable' | 'request_completed' | 'request_failed' | 'framework' | 'worker_tick' | 'worker_failed' | 'worker_backlog';
+type Fields = { request_id?: string; status?: number; duration_ms?: number; fields?: string[]; pending?: number; blocked?: number; retries?: number; oldest_seconds?: number; transition_overdue?: boolean };
 
 /** Allowlist only: never serialize request, URL, exception, SQL or configuration values. */
 export class SafeLogger implements LoggerService {

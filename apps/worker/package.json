@@ -1,5 +1,5 @@
 {
-  "name": "@asisteam/api",
+  "name": "@asisteam/worker",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,27 +12,20 @@
     "start": "node dist/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test test/*.test.mjs",
-    "test:integration": "node --test test/postgres.integration.mjs"
+    "test:integration": "node --test test/worker.integration.mjs"
   },
   "dependencies": {
-    "@asisteam/core": "workspace:*",
+    "@asisteam/api": "workspace:*",
     "@nestjs/common": "12.1.2",
     "@nestjs/core": "12.1.2",
-    "@nestjs/platform-express": "12.1.2",
-    "jose": "6.2.2",
     "pg": "8.23.1",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "@asisteam/api-client": "workspace:*",
-    "@types/express": "5.0.6",
     "@types/node": "24.19.1",
     "@types/pg": "8.23.1",
     "typescript": "5.9.3"
-  },
-  "exports": {
-    "./worker-services": "./dist/worker-services.js"
   }
 }

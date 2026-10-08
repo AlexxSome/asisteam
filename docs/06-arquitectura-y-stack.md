@@ -248,3 +248,5 @@ Supuestos de la columna de escala: 200 grupos × ~30 miembros ≈ 6.000 usuarios
 
 
 [Seguro] **MIG-12 (#156, 2026-10-07):** [historial/reportes por Nest](migration/issue-156/README.md) con cuatro lecturas HTTP/SDK y consumidores Next por REPORTS, sobre las mismas RPC/RLS canónicas. Mantiene permisos, filtros, métrica y cortes Chile sin caché adicional; evidencia de paridad y p95 exclusivamente local sintética.
+
+[Seguro] **MIG-13 (#157, 2026-10-07):** [worker Nest y transición de mayoría](migration/issue-157/README.md), cola PostgreSQL con leases, ledger canónico y correo independiente con payload/clave estables. Instalación mantiene LEGACY; activar requiere handoff, retirada/drenaje de Edge y constancia del operador. Reintentos inciertos de correo se bloquean a las 23 h; corte y proveedores externos siguen pendientes.
