@@ -1,0 +1,51 @@
+{
+  "commit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "sourceCommit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "date": "2026-10-08T12:26:19.850Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "playwright-transport-faults",
+      "status": "PASS",
+      "seconds": 17.83,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-invitations",
+      "status": "PASS",
+      "seconds": 15.26,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-storage",
+      "status": "PASS",
+      "seconds": 11.28,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-qr",
+      "status": "PASS",
+      "seconds": 12.57,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-billing",
+      "status": "PASS",
+      "seconds": 9.29,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-groups-profile",
+      "status": "PASS",
+      "seconds": 22.81,
+      "tests": 8,
+      "omitted": 0
+    }
+  ]
+}

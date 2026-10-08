@@ -1,0 +1,23 @@
+{
+  "base": "80066d8",
+  "date": "2026-10-08T12:27:20.272034+00:00",
+  "environment": "local-synthetic-shared",
+  "fixtureSha256": "b661252f892b13d20156ecab1abcd16c7dd5b362b787e07b64d336d52fb91c1f",
+  "fixtureMatchesBase": true,
+  "sqlDiffBytes": 0,
+  "checks": [
+    {
+      "check": "base-identical-environment",
+      "status": "FAIL",
+      "case": 15,
+      "have": 1,
+      "want": 0
+    },
+    {
+      "check": "base-isolated-quota-transaction",
+      "status": "PASS",
+      "isolation": "counter rows removed only inside fixture transaction ending ROLLBACK"
+    }
+  ],
+  "persistentMutations": false
+}

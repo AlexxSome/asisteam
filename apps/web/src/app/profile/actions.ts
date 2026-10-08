@@ -64,6 +64,13 @@ export async function uploadAvatar(formData: FormData): Promise<ProfileResult> {
   const contentType = avatarContentType(bytes);
   if (contentType !== file.type) return { ok: false, message: "El contenido no corresponde a una imagen JPEG, PNG o WebP válida." };
 
+  if (moduleTransport("storage") === "nest") {
+    try {
+      await createServerApiClient().uploadAvatar({ body: { type: contentType, content_base64: Buffer.from(bytes).toString("base64") } });
+      revalidatePath("/profile");
+      return { ok: true, message: "Tu foto de perfil se actualizó." };
+    } catch (error) { return profileError(error instanceof ApiClientError ? error.error.code : undefined); }
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: "Inicia sesión para cambiar tu foto." };

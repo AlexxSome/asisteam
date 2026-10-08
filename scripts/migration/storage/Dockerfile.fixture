@@ -1,0 +1,6 @@
+# Synthetic tests only: official MinIO source, pinned after prebuilt images were withdrawn.
+FROM golang:1.24.9-bookworm@sha256:737b40b61ce956d738bed59f18ba854d8d67e7a4c4fa63f64437f4c70247ac5b AS build
+RUN go install github.com/minio/minio@9e49d5e7a648f00e26f2246f4dc28e6b07f8c84a
+FROM debian:bookworm-slim@sha256:7c7b2c966bc9ee8cedfeef67e0e279108992c77681fa595db4a9d65c06ccc587
+COPY --from=build /go/bin/minio /usr/local/bin/minio
+ENTRYPOINT ["minio"]

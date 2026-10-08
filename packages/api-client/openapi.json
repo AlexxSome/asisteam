@@ -3,7 +3,7 @@
   "info": {
     "title": "Asisteam HTTP",
     "version": "1.0.0",
-    "description": "MIG-16. QR/configuración/llegada propia implementados sobre firma, reloj y claves SQL existentes. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
+    "description": "MIG-17. Avatar privado S3 con validación y permisos SQL, URLs firmadas internas. MIG-16. QR/configuración/llegada propia implementados sobre firma, reloj y claves SQL existentes. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
   },
   "paths": {
     "/api/v1/groups/{groupId}/check-in-settings": {
@@ -10125,6 +10125,310 @@
         }
       }
     },
+    "/api/v1/me/avatar": {
+      "post": {
+        "operationId": "uploadAvatar",
+        "summary": "Imagen propia validada (2MiB); consentimiento SQL y bucket privado",
+        "tags": [
+          "storage"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AvatarUpload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/avatars/{ownerId}/{fileName}": {
+      "get": {
+        "operationId": "getAvatar",
+        "summary": "Imagen autorizada por SQL sin URLs S3 ni claves nuevas; no-store",
+        "tags": [
+          "storage"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "fileName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-f-]{36}\\.(jpg|png|webp)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvatarDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/me/profile-context": {
       "get": {
         "operationId": "getProfileContext",
@@ -15587,6 +15891,72 @@
         },
         "required": [
           "status"
+        ],
+        "additionalProperties": false
+      },
+      "AvatarParams": {
+        "type": "object",
+        "properties": {
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileName": {
+            "type": "string",
+            "pattern": "^[0-9a-f-]{36}\\.(jpg|png|webp)$"
+          }
+        },
+        "required": [
+          "ownerId",
+          "fileName"
+        ],
+        "additionalProperties": false
+      },
+      "AvatarUpload": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp"
+            ]
+          },
+          "content_base64": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 2796204,
+            "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+          }
+        },
+        "required": [
+          "type",
+          "content_base64"
+        ],
+        "additionalProperties": false
+      },
+      "AvatarDownload": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp"
+            ]
+          },
+          "content_base64": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 2796204,
+            "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+          }
+        },
+        "required": [
+          "type",
+          "content_base64"
         ],
         "additionalProperties": false
       },

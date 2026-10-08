@@ -197,6 +197,12 @@ export class ApiClient extends ApiTransport {
   joinByCode(input: { body: operations["joinByCode"]["requestBody"]["content"]["application/json"] }): Promise<operations["joinByCode"]["responses"][201]["content"]["application/json"]> {
     return this.execute("joinByCode", input ?? {});
   }
+  uploadAvatar(input: { body: operations["uploadAvatar"]["requestBody"]["content"]["application/json"] }): Promise<operations["uploadAvatar"]["responses"][201]["content"]["application/json"]> {
+    return this.execute("uploadAvatar", input ?? {});
+  }
+  getAvatar(input: { params: operations["getAvatar"]["parameters"]["path"] }): Promise<operations["getAvatar"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getAvatar", input ?? {});
+  }
   getProfileContext(): Promise<operations["getProfileContext"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getProfileContext", {});
   }

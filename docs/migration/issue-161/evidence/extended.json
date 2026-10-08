@@ -1,0 +1,31 @@
+{
+  "commit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "sourceCommit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "date": "2026-10-08T12:23:15.851Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.59
+    },
+    {
+      "check": "chromium-install",
+      "status": "PASS",
+      "seconds": 0.33
+    },
+    {
+      "check": "nest-domain-build",
+      "status": "PASS",
+      "seconds": 0.21
+    },
+    {
+      "check": "playwright-responsive-axe",
+      "status": "FAIL",
+      "seconds": 108.6,
+      "tests": 30,
+      "omitted": 9
+    }
+  ]
+}
