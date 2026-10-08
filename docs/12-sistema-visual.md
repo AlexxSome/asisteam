@@ -181,3 +181,8 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de anuncios con Nest · MIG-15 (#159), 07-10-2026
 
 [Seguro] [MIG-15](migration/issue-159/README.md) conserva AnnouncementComposer/Form/Management, WallSession/Refresh y AnnouncementPushPreference: borrador, pausa al editar, foco/teclado, confirmación de eliminación, feedback y refresh30s; opt-in global sin prometer dispositivo vinculado. Error/timeout no anuncia éxito ni activa fallback. Se conservan componentes/tokens/disposición; evidencia375px/axe acotada y validación humana/proveedor/corte pendientes en runbook.
+
+
+## Estados de avatar con Nest · MIG-17 (#161), 08-10-2026
+
+[Seguro] ProfileForm mantiene Seleccionar foto/preview/Subir foto, éxito tras confirmación y error con selección conservada. El proxy sigue autorizado y no-store; retirar permiso de imagen oculta lectura histórica. No se cambian componentes/tokens/disposición. [MIG-17](migration/issue-161/README.md) registra transporte S3 y E2E375px/axe; revisión humana de lector/zoom continúa pendiente.

@@ -1,0 +1,16 @@
+{
+  "commit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "sourceCommit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "date": "2026-10-08T12:19:37.723Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "profile-private-storage",
+      "status": "PASS",
+      "seconds": 13.46,
+      "tests": 1,
+      "omitted": 0
+    }
+  ]
+}

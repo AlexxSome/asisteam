@@ -252,3 +252,8 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Anuncios por Nest · MIG-15 (#159), 07-10-2026
 
 [Seguro] [MIG-15](migration/issue-159/README.md) conecta `/groups/:groupId/announcements` y cuatro acciones mediante ANNOUNCEMENTS=nest: muro por membresía ACTIVE, publicación/edición/borrado lógico ADMIN y preferencia propia global. Conserva39 páginas y la ruta de #57 sin código histórico nuevo. UUID idempotente y versión UTC completa mantienen reintento/409; error no confirma ni ejecuta otro transporte. La evidencia local y límites de Expo/corte se registran en el runbook.
+
+
+## Transporte de avatar · MIG-17 (#161), 08-10-2026
+
+[Seguro] PRF-01/CFG-01/CFG-03 en `/profile` conserva formulario/preview/Subir foto y proxy `/profile/avatar/:ownerId/:fileName`. STORAGE=nest dirige carga/lectura a Nest/S3 privado con permisos SQL y no-store, separado de PROFILE; no añade páginas. Contrato, delta/reversión y evidencia en [MIG-17](migration/issue-161/README.md). Los resultados E2E específicos se registran en ese informe.

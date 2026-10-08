@@ -16,6 +16,12 @@ const configSchema = z.object({
     if (value.startsWith('sb_publishable_')) return true;
     try { return JSON.parse(Buffer.from(value.split('.')[1] ?? '', 'base64url').toString()).role === 'anon'; } catch { return false; }
   }).optional(),
+  S3_LOCAL_POLICY_ONLY: z.literal('1').optional(),
+  S3_AVATAR_BUCKET: z.string().regex(/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/).optional(),
+  S3_REGION: z.string().min(1).default('sa-east-1'),
+  S3_ENDPOINT: z.string().url().optional(),
+  S3_ACCESS_KEY_ID: z.string().min(1).optional(),
+  S3_SECRET_ACCESS_KEY: z.string().min(1).optional(),
   AUTH_TIMEOUT_MS: milliseconds(2000),
   BILLING_DATABASE_URL: z.string().url().optional(),
   MERCADOPAGO_ACCESS_TOKEN: z.string().min(1).optional(),
@@ -45,6 +51,12 @@ export class ConfigurationError extends Error {
 }
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
   const parsed = configSchema.superRefine((value, ctx) => {
+    if (!!value.S3_ACCESS_KEY_ID !== !!value.S3_SECRET_ACCESS_KEY) ctx.addIssue({code:'custom',path:['S3_ACCESS_KEY_ID'],message:'Configura las credenciales juntas.'});
+    if(value.S3_LOCAL_POLICY_ONLY && (value.NODE_ENV === 'production' || !value.S3_ENDPOINT || !['127.0.0.1','localhost'].includes(new URL(value.S3_ENDPOINT).hostname))) ctx.addIssue({code:'custom',path:['S3_LOCAL_POLICY_ONLY'],message:'Solo admite un fixture local sin ACL.'});
+    if (value.S3_ENDPOINT) {
+      const url = new URL(value.S3_ENDPOINT);
+      if (url.username || url.password || url.search || url.hash || url.pathname !== '/' || !(url.protocol === 'https:' || value.NODE_ENV !== 'production' && url.protocol === 'http:' && ['127.0.0.1','localhost'].includes(url.hostname))) ctx.addIssue({code:'custom',path:['S3_ENDPOINT'],message:'Endpoint inválido.'});
+    }
     if (!!value.SUPABASE_AUTH_URL !== !!value.SUPABASE_AUTH_PUBLIC_KEY) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Configura el emisor y la clave pública juntos.' });
     if (value.BILLING_DATABASE_URL) {
       const main = new URL(value.DATABASE_URL), billing = new URL(value.BILLING_DATABASE_URL);

@@ -1,6 +1,6 @@
 import { ApiClientError, apiOrigin } from "@asisteam/api-client";
 
-export const TRANSPORT_MODULES = ["groups", "profile", "members", "invitations", "activities", "attendance", "reports", "billing", "announcements", "qr"] as const;
+export const TRANSPORT_MODULES = ["groups", "profile", "members", "invitations", "activities", "attendance", "reports", "billing", "announcements", "qr", "storage"] as const;
 export type TransportModule = typeof TRANSPORT_MODULES[number];
 export function moduleTransport(module: TransportModule): "supabase" | "nest" {
   if (!TRANSPORT_MODULES.includes(module)) throw new ApiClientError(400, "invalid_transport_configuration");

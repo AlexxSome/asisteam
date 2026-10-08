@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+import { AvatarStorage } from './storage.js';
+import { AvatarsController } from './avatars.js';
 import { randomUUID } from 'node:crypto';
 import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -23,8 +25,8 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
-    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
+    controllers: [AvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, AvatarStorage, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}
   const app = await NestFactory.create<NestExpressApplication>(RuntimeModule, { logger, abortOnError: false, bodyParser: false });
@@ -50,6 +52,7 @@ export async function createApplication(config: RuntimeConfig, logger = new Safe
   // Large notes remain bounded by the strict500-record attendance schema.
   app.useBodyParser('json', { limit: '2mb', type: request => request.method === 'PUT'
     && /^\/api\/v1\/groups\/[^/]+\/activities\/[^/]+\/attendance\/?$/.test(request.url ?? '') });
+  app.useBodyParser('json', { limit: '3mb', type: request => request.method === 'POST' && /^\/api\/v1\/me\/avatar\/?$/.test(request.url ?? '') });
   app.useBodyParser('json', { limit: '64kb' });
   app.useGlobalFilters(new SafeExceptionFilter(logger));
   const server: Server = app.getHttpServer();

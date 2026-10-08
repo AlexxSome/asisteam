@@ -1,0 +1,73 @@
+{
+  "commit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "sourceCommit": "80066d8f43165eb00500a7057ee5c81cfa9bb9c6",
+  "date": "2026-10-08T12:20:52.753Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "ci-runner-tests",
+      "status": "PASS",
+      "seconds": 0.16
+    },
+    {
+      "check": "lint",
+      "status": "PASS",
+      "seconds": 1.96
+    },
+    {
+      "check": "http-contract-generation",
+      "status": "PASS",
+      "seconds": 1.39
+    },
+    {
+      "check": "typecheck",
+      "status": "PASS",
+      "seconds": 2.13
+    },
+    {
+      "check": "api-contract-fixture-build",
+      "status": "PASS",
+      "seconds": 0.86
+    },
+    {
+      "check": "next-http-contract",
+      "status": "PASS",
+      "seconds": 7.75
+    },
+    {
+      "check": "build",
+      "status": "PASS",
+      "seconds": 0.69
+    },
+    {
+      "check": "core-unit",
+      "status": "PASS",
+      "seconds": 0.93,
+      "tests": 150,
+      "omitted": 0
+    },
+    {
+      "check": "web-unit",
+      "status": "PASS",
+      "seconds": 15.52,
+      "tests": 903,
+      "omitted": 81
+    },
+    {
+      "check": "worker-unit",
+      "status": "PASS",
+      "seconds": 0.27
+    },
+    {
+      "check": "api-unit",
+      "status": "PASS",
+      "seconds": 0.85
+    },
+    {
+      "check": "api-client-contract",
+      "status": "PASS",
+      "seconds": 0.6
+    }
+  ]
+}

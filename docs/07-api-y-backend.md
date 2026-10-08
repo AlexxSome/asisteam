@@ -599,3 +599,8 @@ Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-su
 ## Anuncios/preferencias/tokens · MIG-15 (#159)
 
 [Seguro] [Contrato MIG-15](migration/issue-159/README.md) implementa ocho operaciones HTTP/SDK por ANNOUNCEMENTS=nest. RPC/RLS conserva ADMIN/ACTIVE, publicación idempotente, versiones y cola; DTO omite autor/destinatario/tokens y proyecta preferencias/dispositivos propios. Worker Expo con asisteam_jobs solo puede reservar/confirmar por funciones privadas y modo SQL; servicio anterior cercado después de handoff. SQL transaccional y leases no acreditan exactly-once en un proveedor externo.
+
+
+## Avatar privado independiente · MIG-17 (#161)
+
+[Seguro] [MIG-17](migration/issue-161/README.md) añade POST `/api/v1/me/avatar` y GET `/api/v1/avatars/:ownerId/:fileName`; actor de sesión, byte/type2MiB, can_upload_avatar/can_read_avatar y bucket privado. STORAGE=nest conserva proxy web; URLs firmadas30s solo servidor, DTO no expone key nueva/URL S3. SQL/RLS/consentimiento canónicos permanecen; copy/delta/reverse separa rol operativo del API.
