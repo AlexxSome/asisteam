@@ -1,5 +1,7 @@
 # API y backend
 
+[Seguro] **MIG-18 (#162, 2026-10-08):** [Auth propio de Nest](migration/issue-162/README.md) añade siete operaciones HTTP/OpenAPI/SDK de registro/login/recovery/reset/refresh/logout/password. Access JWT propio dura 15 min y valida familia vigente en SQL; refresh rotatorio hasheado revoca familia ante replay. Web Auth=nest exige todos los transportes de dominio Nest, cookies HttpOnly/Secure/Lax y Origin. GoTrue/OAuth siguen coexistiendo hasta #163/#164; configuración, consentimiento MANAGED, rollback y límites de evidencia están en el runbook. La sección Auth Supabase original de abajo describe el transporte anterior, conservado por defecto.
+
 [Seguro] **MIG-16 (#160, 2026-10-08):** [QR y llegada propia mediante Nest](migration/issue-160/README.md) añade cuatro operaciones HTTP/SDK y QR=nest sobre las mismas RPC/claves SQL. ASI-04 conserva emisión ADMIN, ajustes plegables/guardado explícito, renovación por reloj servidor, fragmento retirado, login, confirmación/registro anterior/vencido/no disponible y reintento manual. El transporte no amplía roles ni agrega pantallas; la evidencia local sintética se registra en el runbook.
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 08-reportes-y-estadisticas.md, 11-legal-seguridad-privacidad.md
 

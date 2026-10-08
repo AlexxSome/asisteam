@@ -17,8 +17,19 @@ export class TokenVerifier {
   }
   async verify(authorization: string | undefined): Promise<VerifiedIdentity> {
     const match = authorization?.match(/^Bearer ([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)$/);
-    if (!match || match[1]!.length > 16_384 || !this.jwks || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new UnauthorizedException();
+    if (!match || match[1]!.length > 16_384) throw new UnauthorizedException();
     const token = match[1]!;
+    if (this.config.NATIVE_AUTH_SECRET && this.config.NATIVE_AUTH_ISSUER) {
+      try {
+        if (decodeJwt(token).iss === this.config.NATIVE_AUTH_ISSUER) {
+          const {payload}=await jwtVerify(token,new TextEncoder().encode(this.config.NATIVE_AUTH_SECRET),{issuer:this.config.NATIVE_AUTH_ISSUER,audience:'asisteam-api',algorithms:['HS256'],requiredClaims:['sub','session_id','iat','exp'],maxTokenAge:'15m'});
+          const claims=claimsSchema.parse(payload);
+          if(claims.iat>Math.floor(Date.now()/1000)||claims.exp<=claims.iat||claims.exp-claims.iat>900)throw new Error('Invalid claims');
+          return sealIdentity({authUserId:claims.sub,sessionId:claims.session_id,expiresAt:claims.exp,provider:'nest'});
+        }
+      } catch {throw new UnauthorizedException();}
+    }
+    if (!this.jwks || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new UnauthorizedException();
     let claims;
     try {
       const header = decodeProtectedHeader(token);

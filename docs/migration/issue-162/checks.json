@@ -1,0 +1,74 @@
+{
+  "commit": "5cfcb192b7f552ecb6e9ec09dab9717ef357ddbe",
+  "sourceCommit": "5cfcb192b7f552ecb6e9ec09dab9717ef357ddbe",
+  "date": "2026-10-08T15:02:22.872Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "ci-runner-tests",
+      "status": "PASS",
+      "seconds": 0.17
+    },
+    {
+      "check": "lint",
+      "status": "PASS",
+      "seconds": 2.06
+    },
+    {
+      "check": "http-contract-generation",
+      "status": "PASS",
+      "seconds": 1.37
+    },
+    {
+      "check": "typecheck",
+      "status": "PASS",
+      "seconds": 4.33
+    },
+    {
+      "check": "api-contract-fixture-build",
+      "status": "PASS",
+      "seconds": 0.83
+    },
+    {
+      "check": "next-http-contract",
+      "status": "PASS",
+      "seconds": 7.58
+    },
+    {
+      "check": "build",
+      "status": "PASS",
+      "seconds": 29.15
+    },
+    {
+      "check": "core-unit",
+      "status": "PASS",
+      "seconds": 1.41,
+      "tests": 150,
+      "omitted": 0
+    },
+    {
+      "check": "web-unit",
+      "status": "PASS",
+      "seconds": 16.12,
+      "tests": 907,
+      "omitted": 81
+    },
+    {
+      "check": "worker-unit",
+      "status": "PASS",
+      "seconds": 0.3
+    },
+    {
+      "check": "api-unit",
+      "status": "PASS",
+      "seconds": 1.81
+    },
+    {
+      "check": "api-client-contract",
+      "status": "PASS",
+      "seconds": 0.61
+    }
+  ],
+  "verificationScope": "#162 pending working diff on develop@5cfcb192; backend pgtap used temporary quota scoping, reverted before commit"
+}

@@ -1,5 +1,7 @@
 # Sistema visual web
 
+[Seguro] **MIG-18 (#162, 2026-10-08):** [Identidad y sesiones propias](migration/issue-162/README.md) incorpora Auth=nest en AUT-01…06 con cookies HttpOnly/Secure/Lax, Origin, refresh y logout; conserva consentimiento/claim MANAGED y OAuth legacy. AUT-04 conserva éxito tras retirar el token de la URL. ONB-01 lee perfil mediante el transporte elegido; cupos usan billing. No añade páginas ni cambia componentes visuales; evidencia Chromium local y límites de proveedores en el runbook.
+
 [Seguro] **MIG-16 (#160, 2026-10-08):** [QR y llegada propia mediante Nest](migration/issue-160/README.md) añade cuatro operaciones HTTP/SDK y QR=nest sobre las mismas RPC/claves SQL. ASI-04 conserva emisión ADMIN, ajustes plegables/guardado explícito, renovación por reloj servidor, fragmento retirado, login, confirmación/registro anterior/vencido/no disponible y reintento manual. El transporte no amplía roles ni agrega pantallas; la evidencia local sintética se registra en el runbook.
 Corte de contratos: **05-10-2026**, base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; reconciliación [#121](https://github.com/AlexxSome/asisteam/issues/121). El [inventario de pantallas](05-pantallas.md) distingue las rutas entregadas y las propuestas.
 

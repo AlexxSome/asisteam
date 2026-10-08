@@ -1,3 +1,4 @@
+import { NativeAuth } from './native-auth.js';
 import { BadRequestException, Body, Controller, Get, HttpCode, Inject, Injectable, Param, Post, Query, Req, ServiceUnavailableException, UnauthorizedException, UseGuards, type OnApplicationShutdown } from '@nestjs/common';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import pg from 'pg';
@@ -53,7 +54,7 @@ export class InvitationRegistrationStore implements OnApplicationShutdown {
 
 @Controller('api/v1')
 export class InvitationsController {
-  constructor(@Inject(Database) private readonly database: Database, @Inject(InvitationRegistrationStore) private readonly registrations: InvitationRegistrationStore, @Inject(CONFIG) private readonly config: RuntimeConfig, @Inject(TransactionalEmail) private readonly email: TransactionalEmail) {}
+  constructor(@Inject(NativeAuth) private readonly nativeAuth: NativeAuth, @Inject(Database) private readonly database: Database, @Inject(InvitationRegistrationStore) private readonly registrations: InvitationRegistrationStore, @Inject(CONFIG) private readonly config: RuntimeConfig, @Inject(TransactionalEmail) private readonly email: TransactionalEmail) {}
   private async run<T>(request: AuthenticatedRequest, operation: (tx: AuthenticatedTransaction) => Promise<T>) {
     try { return await this.database.authenticated(request.identity!, async tx => {
       if ((await tx.query('select public.has_account_consent() as accepted')).rows[0]?.accepted !== true) throw new DomainException(422, 'account_terms_required');
@@ -103,6 +104,9 @@ export class InvitationsController {
   private async createAccount(request: Request,input:unknown,claim:boolean) {
     const body=parse(claim?httpSchemas.InvitationClaim:httpSchemas.InvitationRegistration,input);
     await this.attempt(request,'accept');
+    if (this.config.NATIVE_AUTH_SECRET && request.headers['x-asisteam-native-auth'] === '1') {
+      return httpSchemas.InvitationAccepted.parse(await this.nativeAuth.register(body.registration,{token:body.token,claim}));
+    }
     if (!this.config.INVITATION_AUTH_BRIDGE_SECRET || !this.config.SUPABASE_AUTH_URL || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new ServiceUnavailableException();
     const tokenHash=hash(body.token),context=z.object({email:z.string().nullable(),account_status:z.string().nullable(),managed_activation:z.boolean().optional()}).parse(result(await this.registrations.call('context',[tokenHash])));
     if (!context.email || body.registration.email.toLowerCase()!==context.email.toLowerCase() || (claim ? context.account_status!=='MANAGED'||context.managed_activation!==true : context.account_status!=='INVITED'||context.managed_activation===true)) throw new DomainException(422,'registration_failed');

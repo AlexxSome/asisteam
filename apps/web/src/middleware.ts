@@ -1,3 +1,5 @@
+import { nativeAuthEnabled, NATIVE_ACCESS_COOKIE, NATIVE_REFRESH_COOKIE } from '@/lib/api/native-auth-config';
+import { nativeAuthMiddleware } from '@/lib/api/native-auth-middleware';
 import { ApiClient, ApiClientError } from "@asisteam/api-client";
 import { moduleTransport } from "@/lib/api/config";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
@@ -16,6 +18,7 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  * escribir cookies, así que la rotación del refresh token ocurre aquí.
  */
 export async function middleware(request: NextRequest) {
+  if(nativeAuthEnabled()&&(request.cookies.has(NATIVE_ACCESS_COOKIE)||request.cookies.has(NATIVE_REFRESH_COOKIE)))return nativeAuthMiddleware(request);
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient<Database>(

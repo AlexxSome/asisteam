@@ -1,5 +1,7 @@
 # Modelo de datos
 
+[Seguro] **MIG-18 (#162, 2026-10-08):** [Identidad y sesiones propias](migration/issue-162/README.md) conserva `public.users.id` y cambia la FK opcional `users.auth_user_id` a `app_private.auth_subjects`, mapa compatible con UUID GoTrue existentes y sujetos Nest nuevos. Se añaden credenciales, familias, hashes refresh/recovery y límites privados con RLS; MANAGED permanece sin credenciales hasta claim dirigido con consentimiento canónico. Esta migración no importa contraseñas/sesiones ni elimina `auth.users`; el DDL MVP de abajo se conserva como referencia histórica.
+
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 06-arquitectura-y-stack.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 11-legal-seguridad-privacidad.md
 
 Este documento define el esquema PostgreSQL del MVP [P0], sus constraints, índices y DDL de ejemplo, más las reglas de integridad que se validan en la capa de aplicación y el esbozo de tablas futuras [P1]/[P2].
