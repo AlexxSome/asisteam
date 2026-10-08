@@ -1,0 +1,201 @@
+{
+  "sourceCommit": "57b3dbc575de9def7e5c8d10a27179d1d5dd3266",
+  "sourceMigrations": [
+    {
+      "file": "20260709150000_create_users.sql",
+      "sha256": "4ff9085e37de6539bcd4fbafaa388f923f26d8f7480814e78673d556bf2166b1"
+    },
+    {
+      "file": "20260710040000_add_users_managed_no_auth_constraint.sql",
+      "sha256": "0069e6195c6a264f911587954fc9c2ea7f326e19997fb62a3f4a36ae381be78b"
+    },
+    {
+      "file": "20260921010000_profile_and_birthdate_approvals.sql",
+      "sha256": "49ee8e524cdf3c066dd0953f9135fbe435e1b02a806a62cc11635ac07d9501d2"
+    },
+    {
+      "file": "20260921020000_multi_group_views.sql",
+      "sha256": "f446fe7d3eba30818921d26f62a11f7cdf93a0359f5b701bddfa8cba414ecff8"
+    },
+    {
+      "file": "20260921030000_accept_invitations.sql",
+      "sha256": "fd5bbc08e6029d80f773aa8e82583f0af853742403e4d50ff7e33fea30c7ce8c"
+    },
+    {
+      "file": "20260921040000_create_activities.sql",
+      "sha256": "6a3f373cf22204cf57d9441aa9920655738d4a8986dee58c88281183762df2c2"
+    },
+    {
+      "file": "20260922010000_record_attendance.sql",
+      "sha256": "6e2c766e4a203088f4b4d2f85fce6f2a67912dbf5bdbd716207843059a36b0a8"
+    },
+    {
+      "file": "20260922020000_create_groups.sql",
+      "sha256": "b0082de08b0b104f4852b56f3075737380b9884133154a188c885609a7e323a1"
+    },
+    {
+      "file": "20260922030000_configure_groups.sql",
+      "sha256": "53d6e43ebebedddfa5ff70d75b0173c1c12caf110b0090cd66a9615f078f4575"
+    },
+    {
+      "file": "20260922040000_join_group_by_code.sql",
+      "sha256": "6d301da46af65165518a828586a458ee4d51817f92e3ee684ad946d8ed148b98"
+    },
+    {
+      "file": "20260922050000_send_invitations.sql",
+      "sha256": "3263ca274d6df2f944857126f633aff247dbdc066fb3d349cd58e8b45b9cced7"
+    },
+    {
+      "file": "20260922060000_create_managed_members.sql",
+      "sha256": "f859a5cf005952a2a7eebecfb5bc7bc694eb1118490754968ef4ef69fbcec443"
+    },
+    {
+      "file": "20260922070000_create_guardianships.sql",
+      "sha256": "5e7e6bd61a8624c0748b0f6feb18ccba2d2d0047fa6beae49d92eeb4b7693d02"
+    },
+    {
+      "file": "20260922080000_membership_approvals.sql",
+      "sha256": "b3b930e2a7e4b68ccf689b481a50974ad145b1ad3474827b8c23841416646ed2"
+    },
+    {
+      "file": "20260922090000_weekly_activities.sql",
+      "sha256": "1e4831fd69316cb59c6920bcb95a8e39ae4b3e9f41b7dd8315d3a376ebb362d2"
+    },
+    {
+      "file": "20260922100000_manage_activity_types.sql",
+      "sha256": "e88175967cb4d4283c40bcc773c06b0ea17f8a3daaa46b7dd4677c8497ccd54d"
+    },
+    {
+      "file": "20260922110000_update_attendance_record.sql",
+      "sha256": "280ce12964c086fb3ee1010c1330215c7fd4b3b975eeefe5c3d8e0d31bb70dec"
+    },
+    {
+      "file": "20260922120000_group_attendance_reports.sql",
+      "sha256": "87b0fd8bcb24e98ce86acf4d2e2bd70f3a0e16209a78afc94d58ddfe4a06e0f8"
+    },
+    {
+      "file": "20260923010000_group_stats_visibility.sql",
+      "sha256": "73fe4beff43c3c5f5e8aaaedb132e226951e714c07f6ef354c0f7c14a5c4871e"
+    },
+    {
+      "file": "20260923020000_manage_members.sql",
+      "sha256": "ffe1cb0165da72ce00093f3911bbd974d7e64087a9cd0626d562aa0d56da2495"
+    },
+    {
+      "file": "20260925010000_activate_managed_accounts.sql",
+      "sha256": "cd2d40e056ad7b065accf95be83848873c780c545f39f0e4c5a882c0ef66769a"
+    },
+    {
+      "file": "20260925020000_own_attendance_history.sql",
+      "sha256": "39515e838dbd0a0678c759e9a64652dbf447a5fe8698e8d78d9654c3f60f7c8a"
+    },
+    {
+      "file": "20260926020000_claim_managed_accounts.sql",
+      "sha256": "64173d7b325431dba8ecd263b178b37c1486bd4c29d2167b7971db12191d8d77"
+    },
+    {
+      "file": "20260928010000_my_wards.sql",
+      "sha256": "78938fbb9821076ad625a8b169c740a92a71186a0f50b19b3ddeeeeb062e3e14"
+    },
+    {
+      "file": "20260928020000_ward_attendance_history.sql",
+      "sha256": "28992c434daf45a4099a4fe9005511272b498cc431a02b44b5b5679c62da7b14"
+    },
+    {
+      "file": "20261001010000_coach_role.sql",
+      "sha256": "ddfb2c93eb4f61d246afc876b90686b083ddfb233c539917e2218c688e65c135"
+    },
+    {
+      "file": "20261003010000_group_subscriptions.sql",
+      "sha256": "a6881af0215c9641546fc28ab1dd29f1c66070f0e3d7a8ce353b253dbfdcc62b"
+    },
+    {
+      "file": "20261003020000_subscription_membership_capacity.sql",
+      "sha256": "57be22a28930265a7902987f9edb11b67fb0276e36f24a0350025820d08b9ac9"
+    },
+    {
+      "file": "20261003030000_group_announcements.sql",
+      "sha256": "ab357b2df7024f5274c25a4dbcf48dcec0778a2a64f55a0d0c2be7c1c2339f99"
+    },
+    {
+      "file": "20261003040000_qr_attendance.sql",
+      "sha256": "996d4fc743d395a5be87a5bec0483589f458bfa9364ba8c3790eea9bf9ddb541"
+    },
+    {
+      "file": "20261004000000_account_consents.sql",
+      "sha256": "0b442d99e2c3fedcae6219beb6f5ef386b1401c608bbbba33dbedcff7f3a2e66"
+    },
+    {
+      "file": "20261004010000_member_roster_search.sql",
+      "sha256": "85bb9f5b6a41236d6c8c5a2db85e7bf56915fcf4e9228b83ce96b72ca99bb85f"
+    },
+    {
+      "file": "20261004030000_membership_onboarding.sql",
+      "sha256": "278b1659458116f2d581ca0ccd57d9f478a6a13fdb28069c2a4012538ccea622"
+    },
+    {
+      "file": "20261007010000_api_session_rls.sql",
+      "sha256": "491d7c27f7504b836ec583d542505086e00e7265df79c0e378a2b5b98c1f28a0"
+    },
+    {
+      "file": "20261007050000_api_invitations.sql",
+      "sha256": "ef739515e5506b9a53cb0cf6474bb2fdbb1ddb902e601df5897a01a6ab98bf1d"
+    },
+    {
+      "file": "20261008010000_majority_worker.sql",
+      "sha256": "17787209e560052c8f7e5bad1d7883f0912ce0b57eb6ce13704e850057d03579"
+    },
+    {
+      "file": "20261008020000_billing_nest.sql",
+      "sha256": "5b1457f765785431a0e4c360ff72375a3245c25f8a5a20939235395686fed25f"
+    },
+    {
+      "file": "20261008030000_announcement_worker.sql",
+      "sha256": "d2023362152e0de5983d6f4400af2c918ce2ce11e943ac56460e9348f53f5bfd"
+    },
+    {
+      "file": "20261008040000_native_auth.sql",
+      "sha256": "b92803944d7774535999dc67011fff627d80540795a75ab3dc96891b6664b00f"
+    },
+    {
+      "file": "20261008050000_social_auth.sql",
+      "sha256": "d6b149c4e6fee711eeb9c434e2a818f9df6004f2648f783c70ed806309234b80"
+    },
+    {
+      "file": "20261008060000_auth_cutover.sql",
+      "sha256": "eec5308b1a5a17b3463bf679063624e42144960dbc211d4d472a55f9ac49d255"
+    }
+  ],
+  "removedFunctions": [
+    "app_private.dispatch_announcement_push()",
+    "app_private.dispatch_guardianship_majority()",
+    "app_private.majority_handoff(text,boolean)",
+    "app_private.announcement_handoff(text,boolean)",
+    "app_private.import_auth_identities()",
+    "app_private.import_social_identities()",
+    "app_private.legacy_session_user_id(uuid)",
+    "app_private.guard_legacy_identity()",
+    "app_private.sync_auth_subject()",
+    "public.handle_new_user()"
+  ],
+  "removedSchemas": [
+    "auth",
+    "storage"
+  ],
+  "retainedSchemas": [
+    "public",
+    "app_private"
+  ],
+  "retainedBusinessTables": "all, including auth import ledger, jobs, push, billing and avatar manifests",
+  "policyRole": {
+    "authenticated": "asisteam_member"
+  },
+  "runtimeRoles": [
+    "asisteam_api",
+    "asisteam_jobs",
+    "asisteam_auth",
+    "asisteam_invitation",
+    "asisteam_billing"
+  ],
+  "baselineSha256": "4cd17dcc871ae63ed4f893cf6dfc310d84b84b2eaefe95aa0594c0e6b1b88a98"
+}

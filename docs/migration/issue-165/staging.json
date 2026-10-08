@@ -1,0 +1,114 @@
+{
+  "commit": "57b3dbc575de9def7e5c8d10a27179d1d5dd3266",
+  "sourceCommit": "57b3dbc575de9def7e5c8d10a27179d1d5dd3266",
+  "date": "2026-10-08T23:07:02.917Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "synthetic-external-secrets",
+      "status": "PASS",
+      "seconds": 0.03
+    },
+    {
+      "check": "api-container-build",
+      "status": "PASS",
+      "seconds": 21.2
+    },
+    {
+      "check": "api-image-id",
+      "status": "PASS",
+      "seconds": 0.05
+    },
+    {
+      "check": "staging-deploy",
+      "status": "PASS",
+      "seconds": 6.45
+    },
+    {
+      "check": "staging-role-query",
+      "status": "PASS",
+      "seconds": 0.12
+    },
+    {
+      "check": "staging-role-separation",
+      "status": "PASS"
+    },
+    {
+      "check": "second-artifact-build",
+      "status": "PASS",
+      "seconds": 0.66
+    },
+    {
+      "check": "second-image-id",
+      "status": "PASS",
+      "seconds": 0.06
+    },
+    {
+      "check": "distinct-artifacts",
+      "status": "PASS"
+    },
+    {
+      "check": "staging-deploy",
+      "status": "PASS",
+      "seconds": 4.33
+    },
+    {
+      "check": "staging-deploy",
+      "status": "PASS",
+      "seconds": 4.37
+    },
+    {
+      "check": "rollback-release-state",
+      "status": "PASS"
+    },
+    {
+      "check": "staging-deploy",
+      "status": "FAIL",
+      "seconds": 0.88,
+      "expected": true
+    },
+    {
+      "check": "staging-automatic-rollback",
+      "status": "PASS",
+      "seconds": 1.74
+    },
+    {
+      "check": "automatic-rollback-release-state",
+      "status": "PASS"
+    },
+    {
+      "check": "rollback-container-id",
+      "status": "PASS",
+      "seconds": 0.07
+    },
+    {
+      "check": "rollback-artifact-query",
+      "status": "PASS",
+      "seconds": 0.02
+    },
+    {
+      "check": "rollback-artifact-identity",
+      "status": "PASS"
+    },
+    {
+      "check": "staging-log-read",
+      "status": "PASS",
+      "seconds": 0.04
+    },
+    {
+      "check": "staging-log-privacy",
+      "status": "PASS"
+    },
+    {
+      "check": "api-real-postgres-integration",
+      "status": "PASS",
+      "seconds": 1.09
+    },
+    {
+      "check": "staging-owned-cleanup",
+      "status": "PASS",
+      "seconds": 0.68
+    }
+  ]
+}

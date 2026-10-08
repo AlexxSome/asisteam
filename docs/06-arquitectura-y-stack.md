@@ -255,3 +255,7 @@ Supuestos de la columna de escala: 200 grupos × ~30 miembros ≈ 6.000 usuarios
 ## Almacenamiento independiente · MIG-17 (#161)
 
 [Seguro] [MIG-17](migration/issue-161/README.md) implementa adaptador privado S3 en Nest y transporte de avatar compatible con la URL web, herramientas de copia/checksum/delta/reversión y ensayo S3 real local. Storage deja de ser dependencia de avatar al activar STORAGE=nest tras conciliación; Auth/DB siguen temporales. Provisión/corte cloud pendientes; MinIO se usa únicamente como fixture.
+
+## PostgreSQL independiente · MIG-21 (#165)
+
+[Seguro] [MIG-21](migration/issue-165/README.md) prepara el esquema completo sin dependencias SQL/roles internos de Supabase y ensaya Nest/worker/Next sobre PostgreSQL17 independiente. Ownership se reserva al migrador; API/jobs/Auth/invitaciones/billing mantienen roles mínimos, RLS y RPC canónicas. Tipos PostgreSQL y contrato OpenAPI se comprueban por separado. [Runbook](../packages/db/README.md) y evidencia distinguen conexión/backup/restauración/PITR sintéticos de provisión/volumen/RPO/RTO externos pendientes. Next selecciona `ASISTEAM_DATABASE_MODE=independent` solo con Auth y todos los módulos Nest, prescindiendo de URLs/keys Supabase. El corte externo y la retirada final siguen en #166–#168.

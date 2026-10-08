@@ -9,7 +9,11 @@ import {chromium} from '@playwright/test';
 import {createApplication} from '../../api/dist/application.js';
 import {loadConfig} from '../../api/dist/config.js';
 const {Client}=createRequire(new URL('../../api/package.json',import.meta.url))('pg');
-const db=new Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});
+const databaseUrl=process.env.INDEPENDENT_PG_TEST_URL??'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
+const databaseTarget=new URL(databaseUrl);
+assert.equal(databaseTarget.hostname,'127.0.0.1');assert.equal(databaseTarget.pathname,'/postgres');assert.ok(['postgres:','postgresql:'].includes(databaseTarget.protocol));
+const databaseConnection=(role,password)=>{const url=new URL(databaseUrl);url.username=role;url.password=password;return url.toString();};
+const db=new Client({connectionString:databaseUrl});
 const run=randomUUID(),password='Synthetic-browser-'+run,email='mig162-browser-'+run+'@example.test',secret=randomBytes(32).toString('hex'),rolePassword=randomUUID();
 const fixture=new URL('../src/app/native-auth-fixture/',import.meta.url),nextEnv=new URL('../next-env.d.ts',import.meta.url),previousEnv=readFileSync(nextEnv,'utf8');
 const originalFetch=globalThis.fetch,mail=[];let previous=[],app,next,browser,owns=false;
@@ -25,7 +29,7 @@ try{
   if(String(url)==='https://api.resend.com/emails'){mail.push(JSON.parse(init.body));return new Response(JSON.stringify({id:randomUUID()}));}
   return originalFetch(url,init);
  };
- app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_DATABASE_URL:'postgresql://asisteam_auth:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://synthetic-auth.example.test',NATIVE_AUTH_WEB_URL:webOrigin,RESEND_API_KEY:'synthetic',INVITATION_EMAIL_FROM:'auth@example.test',HTTP_TIMEOUT_MS:'30000'}),{log(){},error(){},warn(){},debug(){},verbose(){},fatal(){},event(){}});await app.listen(0,'127.0.0.1');
+ app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:databaseConnection('asisteam_api',rolePassword),NATIVE_AUTH_DATABASE_URL:databaseConnection('asisteam_auth',rolePassword),NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://synthetic-auth.example.test',NATIVE_AUTH_WEB_URL:webOrigin,RESEND_API_KEY:'synthetic',INVITATION_EMAIL_FROM:'auth@example.test',HTTP_TIMEOUT_MS:'30000'}),{log(){},error(){},warn(){},debug(){},verbose(){},fatal(){},event(){}});await app.listen(0,'127.0.0.1');
  const observed=new Set(['register','login','refresh','logout','recovery','reset']);
  app.getHttpServer().on('request',(request,response)=>{
   const operation=request.url?.match(/^\/api\/v1\/auth\/([a-z]+)$/)?.[1];
@@ -35,7 +39,7 @@ try{
  mkdirSync(new URL('csrf/',fixture));writeFileSync(new URL('csrf/route.ts',fixture),'import {assertAuthOrigin} from "@/lib/api/native-auth"; export async function POST(){try{await assertAuthOrigin();return new Response(null,{status:204});}catch{return new Response(null,{status:403});}}');
  writeFileSync(new URL('page.tsx',fixture),'import {signOutUser} from "@/app/login/actions";export default function Fixture(){return <form action={async()=>{"use server";await signOutUser();}}><button>Cerrar sesión sintética</button></form>;}');
  // Empty explicitly: deleting the key lets Next refill it from .env.local.
- const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),NEXT_PUBLIC_SUPABASE_URL:'http://127.0.0.1:54321',NEXT_PUBLIC_SUPABASE_ANON_KEY:'',ASISTEAM_API_SUPABASE_URL:'http://127.0.0.1:54321',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
+ const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),ASISTEAM_DATABASE_MODE:'independent',NEXT_PUBLIC_SUPABASE_URL:'',NEXT_PUBLIC_SUPABASE_ANON_KEY:'',ASISTEAM_API_SUPABASE_URL:'',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
  for(const module of ['groups','profile','members','invitations','activities','attendance','reports','billing','announcements','qr','storage'])env['ASISTEAM_TRANSPORT_'+module.toUpperCase()]='nest';
  next=spawn(process.execPath,['node_modules/next/dist/bin/next','dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd:new URL('..',import.meta.url),env,stdio:'ignore'});
  phase('next-ready');let ready=false;for(let n=0;n<120;n++){try{if((await originalFetch(webOrigin+'/login',{signal:AbortSignal.timeout(15000)})).ok){ready=true;break;}}catch{/* Next is still starting. */}if(next.exitCode!==null)throw Error('Next terminó antes del smoke nativo');await delay(250);}assert.ok(ready);

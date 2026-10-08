@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "types": "./src/database.types.ts",
-  "exports": { ".": { "types": "./src/database.types.ts" } }
+  "types": "./src/persistence.types.ts",
+  "exports": { ".": { "types": "./src/persistence.types.ts" }, "./legacy": {"types":"./src/database.types.ts"} },
+  "scripts": {"migrate":"node scripts/migrate.mjs", "types:generate":"node scripts/types.mjs", "types:check":"node scripts/types.mjs --check"},
+  "dependencies": {"pg":"8.23.1"}
 }

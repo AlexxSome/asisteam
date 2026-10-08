@@ -20,7 +20,7 @@ const operations: Record<string, {sql:string; args:string[]}> = {
 const safeRole = `select current_user='asisteam_billing' and not r.rolsuper and not r.rolbypassrls and not r.rolcreaterole and not r.rolcreatedb and not r.rolreplication
   and not exists(select 1 from pg_auth_members where member=r.oid)
   and not has_schema_privilege(current_user,'public','CREATE') and not has_schema_privilege(current_user,'app_private','CREATE')
-  and not exists(select 1 from pg_class c where c.relnamespace in ('public'::regnamespace,'app_private'::regnamespace,'auth'::regnamespace)
+  and not exists(select 1 from pg_class c where c.relnamespace in ('public'::regnamespace,'app_private'::regnamespace,to_regnamespace('auth'))
     and (c.relowner=r.oid or has_table_privilege(current_user,c.oid,'SELECT,INSERT,UPDATE,DELETE')))
   and has_function_privilege(current_user,'app_private.claim_subscription_creation(uuid)','EXECUTE') as safe from pg_roles r where rolname=current_user`;
 

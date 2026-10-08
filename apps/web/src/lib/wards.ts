@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
-import type { Database } from "@asisteam/db";
+import type { PersistenceSchema } from "@asisteam/db";
 import { moduleTransport } from "@/lib/api/config";
 import { createServerApiClient } from "@/lib/api/server";
 import { ApiClientError } from "@asisteam/api-client";
@@ -9,8 +9,8 @@ import { createClient } from "@/lib/supabase/server";
 import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
 
-type WardRow = Database["public"]["Views"]["v_my_wards"]["Row"];
-type WardGroupRow = Database["public"]["Views"]["v_my_ward_groups"]["Row"];
+type WardRow = PersistenceSchema["public"]["Views"]["v_my_wards"]["Row"];
+type WardGroupRow = PersistenceSchema["public"]["Views"]["v_my_ward_groups"]["Row"];
 export type Ward = WardRow & { athlete_user_id: string; full_name: string; groups: WardGroupRow[] };
 const wardColumns = "athlete_user_id, full_name, avatar_url, age, days_until_majority";
 const loadError = () => new Error("No pudimos cargar tus pupilos. Vuelve a intentarlo.");
