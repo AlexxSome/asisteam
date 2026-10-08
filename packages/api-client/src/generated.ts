@@ -2,6 +2,30 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  getAnnouncements(input: { params: operations["getAnnouncements"]["parameters"]["path"]; query?: operations["getAnnouncements"]["parameters"]["query"] }): Promise<operations["getAnnouncements"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getAnnouncements", input ?? {});
+  }
+  publishAnnouncement(input: { params: operations["publishAnnouncement"]["parameters"]["path"]; body: operations["publishAnnouncement"]["requestBody"]["content"]["application/json"] }): Promise<operations["publishAnnouncement"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("publishAnnouncement", input ?? {});
+  }
+  updateAnnouncement(input: { params: operations["updateAnnouncement"]["parameters"]["path"]; body: operations["updateAnnouncement"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateAnnouncement"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("updateAnnouncement", input ?? {});
+  }
+  deleteAnnouncement(input: { params: operations["deleteAnnouncement"]["parameters"]["path"]; body: operations["deleteAnnouncement"]["requestBody"]["content"]["application/json"] }): Promise<operations["deleteAnnouncement"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("deleteAnnouncement", input ?? {});
+  }
+  getAnnouncementPush(): Promise<operations["getAnnouncementPush"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getAnnouncementPush", {});
+  }
+  setAnnouncementPush(input: { body: operations["setAnnouncementPush"]["requestBody"]["content"]["application/json"] }): Promise<operations["setAnnouncementPush"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("setAnnouncementPush", input ?? {});
+  }
+  registerAnnouncementToken(input: { body: operations["registerAnnouncementToken"]["requestBody"]["content"]["application/json"] }): Promise<operations["registerAnnouncementToken"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("registerAnnouncementToken", input ?? {});
+  }
+  unregisterAnnouncementToken(input: { body: operations["unregisterAnnouncementToken"]["requestBody"]["content"]["application/json"] }): Promise<operations["unregisterAnnouncementToken"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("unregisterAnnouncementToken", input ?? {});
+  }
   getGroupBilling(input: { params: operations["getGroupBilling"]["parameters"]["path"]; query?: operations["getGroupBilling"]["parameters"]["query"] }): Promise<operations["getGroupBilling"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getGroupBilling", input ?? {});
   }

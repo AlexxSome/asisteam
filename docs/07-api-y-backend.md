@@ -593,3 +593,8 @@ Contrato completo, errores, moneda, estados, reglas de mora y despliegue: [12-su
 ## Transporte billing · MIG-14 (#158)
 
 [Seguro] [Contrato MIG-14](migration/issue-158/README.md): GET `/api/v1/groups/:groupId/billing`, POST `/api/v1/billing/subscriptions` autenticado ADMIN y POST `/api/v1/billing/mercadopago-webhook` público firmado. API y rol billing se separan; SQL canónico conserva cupos/ledger/locks y executor LEGACY/NEST. Motor compartido y relay de URL antigua esperan persistencia antes de200. Configuración/sandbox/corte externo tienen límites explícitos en el runbook.
+
+
+## Anuncios/preferencias/tokens · MIG-15 (#159)
+
+[Seguro] [Contrato MIG-15](migration/issue-159/README.md) implementa ocho operaciones HTTP/SDK por ANNOUNCEMENTS=nest. RPC/RLS conserva ADMIN/ACTIVE, publicación idempotente, versiones y cola; DTO omite autor/destinatario/tokens y proyecta preferencias/dispositivos propios. Worker Expo con asisteam_jobs solo puede reservar/confirmar por funciones privadas y modo SQL; servicio anterior cercado después de handoff. SQL transaccional y leases no acreditan exactly-once en un proveedor externo.

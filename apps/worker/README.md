@@ -25,3 +25,8 @@ pnpm exec supabase test db supabase/tests/majority_worker.test.sql supabase/test
 ```
 
 [Seguro] La integración usa exclusivamente PostgreSQL loopback del stack Supabase sintético y un proveedor HTTP local, dos contextos Nest y un proceso separado que cae tras reclamar. Restaura modo/cron/roles/ledger y limpia solo sus fixtures. No ejecutarla en paralelo con suites que modifiquen esos recursos operativos. No sustituye una entrega Resend real.
+
+
+## Anuncios Expo · MIG-15 (#159)
+
+[Seguro] El mismo proceso ejecuta AnnouncementWorker tras MajorityWorker; ambos tienen modos SQL independientes. EXPO_ACCESS_TOKEN opcional privado habilita la seguridad mejorada Expo; no usar service_role. Cola/leases/recibos y handoff LEGACY→DRAINING→WORKER de anuncios en [MIG-15](../../docs/migration/issue-159/README.md). Compilar/iniciar no activa el ejecutor. Monitorizar push_tick/push_failed/push_backlog sin payloads/tokens.

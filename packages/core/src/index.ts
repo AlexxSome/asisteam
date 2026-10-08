@@ -1,3 +1,4 @@
+export { runAnnouncementPush } from "./announcement-push";
 export * from "./enums";
 export * from "./schemas/account-consent";
 export * from "./schemas/register";

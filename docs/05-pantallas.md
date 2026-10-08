@@ -246,3 +246,8 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Suscripción por Nest · MIG-14 (#158), 07-10-2026
 
 [Seguro] [MIG-14](migration/issue-158/README.md) conecta `/groups/:groupId/billing` y sus acciones mediante BILLING=nest: DTO ADMIN, ledger paginado y checkout/conciliación/cancelación con precios/cupos de servidor. Conserva39 páginas y la ruta de la extensión #56, que no tiene código de pantalla histórico. Mantiene tabla enfocada por teclado, fechas Chile, confirmación y error sin éxito. El retorno con query de checkout no altera estados. La continuidad firmada por URL antigua y los límites de sandbox/corte se registran en el runbook; no acredita deploy cloud.
+
+
+## Anuncios por Nest · MIG-15 (#159), 07-10-2026
+
+[Seguro] [MIG-15](migration/issue-159/README.md) conecta `/groups/:groupId/announcements` y cuatro acciones mediante ANNOUNCEMENTS=nest: muro por membresía ACTIVE, publicación/edición/borrado lógico ADMIN y preferencia propia global. Conserva39 páginas y la ruta de #57 sin código histórico nuevo. UUID idempotente y versión UTC completa mantienen reintento/409; error no confirma ni ejecuta otro transporte. La evidencia local y límites de Expo/corte se registran en el runbook.

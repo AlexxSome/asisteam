@@ -1,0 +1,118 @@
+{
+  "commit": "3e96b76f5ac631a532fe71d3ca12d936a9c15c7b",
+  "sourceCommit": "3e96b76f5ac631a532fe71d3ca12d936a9c15c7b",
+  "date": "2026-10-08T02:28:35.650Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 2.93
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.44
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 0.22
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 0.18
+    },
+    {
+      "check": "worker-two-replicas",
+      "status": "PASS",
+      "seconds": 0.41
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.03
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.28
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 0.7
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.6
+    },
+    {
+      "check": "api-announcements-http",
+      "status": "PASS",
+      "seconds": 0.64
+    },
+    {
+      "check": "api-billing-http",
+      "status": "PASS",
+      "seconds": 0.72
+    },
+    {
+      "check": "api-reports-http",
+      "status": "PASS",
+      "seconds": 2.89
+    },
+    {
+      "check": "api-attendance-http",
+      "status": "PASS",
+      "seconds": 1.68
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 5.22
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 17.22
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 4.96,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 2.66
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "FAIL",
+      "seconds": 4.15,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}
