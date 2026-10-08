@@ -1,0 +1,89 @@
+{
+  "sourceCommit": "c0b77320979af0abbb307ec3f18c55374a9ded70",
+  "date": "2026-10-08T21:16:24.600Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "executionScope": "local synthetic environment with pending implementation diff; not remote CI",
+  "checks": [
+    {
+      "check": "local-only-source-and-versions",
+      "status": "PASS",
+      "seconds": 1.372
+    },
+    {
+      "check": "export-schema-without-existing-data",
+      "status": "PASS",
+      "seconds": 0.128
+    },
+    {
+      "check": "owned-empty-source-clone",
+      "status": "PASS",
+      "seconds": 0.719
+    },
+    {
+      "check": "gotrue-synthetic-credential-export",
+      "status": "PASS",
+      "seconds": 1.6
+    },
+    {
+      "check": "domain-and-oauth-transport-fixtures",
+      "status": "PASS",
+      "seconds": 0.064
+    },
+    {
+      "check": "local-storage-export",
+      "status": "PASS",
+      "seconds": 0.262
+    },
+    {
+      "check": "synthetic-dump-export",
+      "status": "PASS",
+      "seconds": 0.111
+    },
+    {
+      "check": "standalone-postgres-start",
+      "status": "PASS",
+      "seconds": 1.074
+    },
+    {
+      "check": "clean-restore-with-explicit-compatibility",
+      "status": "PASS",
+      "seconds": 0.407
+    },
+    {
+      "check": "all-table-counts-and-content-reconciliation",
+      "status": "PASS",
+      "seconds": 9.71
+    },
+    {
+      "check": "catalog-constraints-policies-and-current-grants",
+      "status": "PASS",
+      "seconds": 0.138
+    },
+    {
+      "check": "restored-constraints-rls-roles-and-canonical-metrics",
+      "status": "PASS",
+      "seconds": 0.066
+    },
+    {
+      "check": "imported-bcrypt-verification-and-recovery-cases",
+      "status": "PASS",
+      "seconds": 1.027
+    },
+    {
+      "check": "nonportable-dispatch-and-extension-detection",
+      "status": "PASS",
+      "seconds": 0.597
+    },
+    {
+      "check": "object-import-manifest-and-checksums",
+      "status": "PASS",
+      "seconds": 0.284
+    },
+    {
+      "check": "owned-resource-cleanup",
+      "status": "PASS",
+      "seconds": 0.494
+    }
+  ]
+}

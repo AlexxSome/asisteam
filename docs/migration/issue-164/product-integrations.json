@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "c0b77320979af0abbb307ec3f18c55374a9ded70",
+  "date": "2026-10-08T21:18:03.006Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "executionScope": "local synthetic environment with pending implementation diff; not remote CI",
+  "checks": [
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 54.33,
+      "tests": 81,
+      "omitted": 0
+    }
+  ]
+}

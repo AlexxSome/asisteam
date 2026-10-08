@@ -29,7 +29,7 @@ export class TokenVerifier {
         }
       } catch {throw new UnauthorizedException();}
     }
-    if (!this.jwks || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new UnauthorizedException();
+    if (this.config.SUPABASE_AUTH_RETIRED || !this.jwks || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new UnauthorizedException();
     let claims;
     try {
       const header = decodeProtectedHeader(token);

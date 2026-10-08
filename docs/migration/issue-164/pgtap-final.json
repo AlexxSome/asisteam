@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "c0b77320979af0abbb307ec3f18c55374a9ded70",
+  "date": "2026-10-08T21:19:52.650Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "executionScope": "local synthetic environment with pending implementation diff; not remote CI",
+  "checks": [
+    {
+      "check": "pgtap-all-final",
+      "status": "FAIL",
+      "seconds": 5.67,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}

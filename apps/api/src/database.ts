@@ -49,6 +49,7 @@ export class Database implements OnApplicationShutdown {
     let active = false;
     try {
       await client.query('BEGIN');
+      if (this.config.SUPABASE_AUTH_RETIRED && (await client.query('select app_private.auth_is_native() as native')).rows[0]?.native !== true) throw new ServiceUnavailableException();
       const { rows: [role] } = await client.query<{ safe: boolean }>(runtimeRoleSql);
       if (!role?.safe) throw new ServiceUnavailableException();
       // Erase legacy per-claim GUCs too: auth.uid() prefers claim.sub over JSON.
@@ -76,6 +77,7 @@ export class Database implements OnApplicationShutdown {
   async ready(): Promise<boolean> {
     if (this.draining) return false;
     try {
+      if (this.config.SUPABASE_AUTH_RETIRED && (await this.pool.query('select app_private.auth_is_native() as native')).rows[0]?.native !== true) return false;
       const { rows: [role] } = await this.pool.query<{ safe: boolean }>((this.config.SUPABASE_AUTH_URL || this.config.NATIVE_AUTH_SECRET) ? runtimeRoleSql : 'SELECT true as safe');
       return !!role?.safe && !this.draining;
     } catch {

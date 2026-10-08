@@ -67,7 +67,8 @@ test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent
   }
   assert.deepEqual((await db.query('select to_jsonb(a) as data from public.attendance_records a where activity_id=$1',[activity])).rows[0].data,history);
   assert.equal((await db.query('select count(*)::int as n from public.users where email=$1',[emails.legacy])).rows[0].n,1);
-  await db.query('delete from auth.users where id=$1',[legacy]);assert.deepEqual(await client(session.access_token).getSession(),{user_id:profile});
+  // MIG-20: native-owned pairs cannot be deleted by the legacy authority.
+  await assert.rejects(db.query('delete from auth.users where id=$1',[legacy]),error=>error.code==='PT503');assert.deepEqual(await client(session.access_token).getSession(),{user_id:profile});
   assert.equal((await db.query('select auth_user_id from public.users where id=$1',[profile])).rows[0].auth_user_id,legacy);
   const fresh=await client().completeSocialLogin({body:await flow('apple',providerSub('fresh'),emails.fresh,{context:{invite_code:'ABCD1234'}})});
   assert.equal(fresh.context.invite_code,'ABCD1234');assert.equal((await client(fresh.tokens.access_token).getCurrentAccountConsent()).accepted,false);
@@ -90,6 +91,8 @@ test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent
    const completing=client().completeSocialLogin({body:revokedLink}).then(value=>({value}),error=>({error}));
    let waiting=false;
    for(let n=0;n<200;n++){
+    // Statistics are cached for this observer transaction; refresh each poll.
+    await db.query('select pg_stat_clear_snapshot()');
     waiting=(await db.query("select exists(select 1 from pg_stat_activity where usename='asisteam_auth' and wait_event_type='Lock' and query='select app_private.auth_operation($1,$2::jsonb) as data') as waiting")).rows[0].waiting;
     if(waiting)break;await delay(5);
    }

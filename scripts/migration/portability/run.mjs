@@ -88,6 +88,9 @@ try {
     const compatible = schema.replace(/^ALTER DEFAULT PRIVILEGES FOR ROLE (supabase_admin|supabase_auth_admin) [^\n]+;$/gm, '');
     evidence.omittedProviderDefaultAcls = [...schema.matchAll(/^ALTER DEFAULT PRIVILEGES FOR ROLE (supabase_admin|supabase_auth_admin) [^\n]+;$/gm)].length;
     await sql(source,database,compatible);
+    // Operational control is schema data, not a user identity. Empty synthetic
+    // clones must explicitly start in the compatibility phase before fixtures.
+    await sql(source,database,'insert into app_private.auth_authority(singleton) values(true);');
     assert.equal((await sql(source,database,'select count(*) from public.users;')).trim(),'0');
   });
   const variables = {};

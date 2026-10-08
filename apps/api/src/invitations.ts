@@ -26,7 +26,7 @@ function result(value: unknown) {
 const serviceRoleSql = `select current_user='asisteam_invitation' and not r.rolsuper and not r.rolbypassrls and not r.rolcreaterole and not r.rolcreatedb
   and not exists(select 1 from pg_auth_members where member=r.oid)
   and not has_schema_privilege(current_user,'public','CREATE') and not has_schema_privilege(current_user,'app_private','CREATE')
-  and not exists(select 1 from pg_class c where c.relnamespace in ('public'::regnamespace,'app_private'::regnamespace,'auth'::regnamespace)
+  and not exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname in ('public','app_private','auth')
     and (c.relowner=r.oid or has_table_privilege(current_user,c.oid,'SELECT,INSERT,UPDATE,DELETE')))
   and has_function_privilege(current_user,'public.invitation_context(text)','EXECUTE') as safe from pg_roles r where rolname=current_user`;
 
@@ -104,7 +104,7 @@ export class InvitationsController {
   private async createAccount(request: Request,input:unknown,claim:boolean) {
     const body=parse(claim?httpSchemas.InvitationClaim:httpSchemas.InvitationRegistration,input);
     await this.attempt(request,'accept');
-    if (this.config.NATIVE_AUTH_SECRET && request.headers['x-asisteam-native-auth'] === '1') {
+    if (this.config.NATIVE_AUTH_SECRET && (this.config.SUPABASE_AUTH_RETIRED || request.headers['x-asisteam-native-auth'] === '1')) {
       return httpSchemas.InvitationAccepted.parse(await this.nativeAuth.register(body.registration,{token:body.token,claim}));
     }
     if (!this.config.INVITATION_AUTH_BRIDGE_SECRET || !this.config.SUPABASE_AUTH_URL || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new ServiceUnavailableException();

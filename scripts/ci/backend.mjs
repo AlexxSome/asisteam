@@ -14,6 +14,7 @@ await suite('backend', async () => {
   await check('next-social-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:social-contract']);
   await check('api-social-auth-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/social-auth.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-native-auth-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/native-auth.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
+  await check('api-auth-cutover-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/auth-cutover.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-session-rls-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/session-rls.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-groups-profile-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/groups-profile.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-members-consents-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/members-consents.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
