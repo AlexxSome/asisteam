@@ -1,0 +1,24 @@
+{
+  "commit": "35c0520eb6484014a55802ddd9c21e588994fa83",
+  "sourceCommit": "35c0520eb6484014a55802ddd9c21e588994fa83",
+  "date": "2026-10-08T03:30:48.084Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "baseline-pgtap",
+      "status": "FAIL",
+      "seconds": 2.19,
+      "sqlFailures": [
+        {
+          "file": "group_subscriptions.test.sql",
+          "failed": 2
+        },
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}

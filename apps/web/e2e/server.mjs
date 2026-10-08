@@ -100,7 +100,7 @@ for (const [index, status] of ['PRESENT','PRESENT','PRESENT','PRESENT','PRESENT'
 // Start this owned cache fresh; never touch .next/dev or another server.
 rmSync('.next/qa-app', { recursive: true, force: true });
 mkdirSync('.next/qa', { recursive: true });
-const status = { loginPost: false, registerPost: false, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false, requests: 0 };
+const status = { loginPost: false, registerPost: false, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false, qrPayload: false, requests: 0 };
 const persist = () => {
   // next build clears .next; a supervised QA server must not crash on logging.
   mkdirSync('.next/qa', { recursive: true });
@@ -121,6 +121,7 @@ function inspect(chunk) {
   status.registerPost ||= /POST \/register\b/.test(text);
   status.actionArguments ||= /ƒ\s*(?:loginUser|registerUser)\s*\(/.test(text);
   status.sensitivePayload ||= text.includes(password) || /qa(?:100|120)-[\w-]+@qa(?:100|120)\.example\.test/.test(text) || text.includes('QA120 Log Probe');
+  status.qrPayload ||= /(?:[0-9a-f]{64}|activity_id=[0-9a-f-]+&token=)/i.test(text);
   status.token ||= /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/.test(text);
   status.sensitiveUrl ||= /(?:GET|POST) \/(?:invitations\/[0-9a-f]{32,}|[^\s]*\?[^\s]*(?:token|token_hash|code|search|next)=)/.test(text);
   status.requests += (chunk.toString().match(/(?:GET|POST) \/[^\s]* \d{3}/g) ?? []).length;
@@ -140,6 +141,6 @@ for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, async () => {
 });
 child.on('exit', async code => {
   if(nest)await nest.stop();
-  if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
+  if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl && !status.qrPayload) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
   process.exit(code ?? 1);
 });

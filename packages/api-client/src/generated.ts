@@ -2,6 +2,18 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  getQrSettings(input: { params: operations["getQrSettings"]["parameters"]["path"] }): Promise<operations["getQrSettings"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getQrSettings", input ?? {});
+  }
+  setQrSettings(input: { params: operations["setQrSettings"]["parameters"]["path"]; body: operations["setQrSettings"]["requestBody"]["content"]["application/json"] }): Promise<operations["setQrSettings"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("setQrSettings", input ?? {});
+  }
+  issueCheckinQr(input: { params: operations["issueCheckinQr"]["parameters"]["path"] }): Promise<operations["issueCheckinQr"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("issueCheckinQr", input ?? {});
+  }
+  selfCheckin(input: { body: operations["selfCheckin"]["requestBody"]["content"]["application/json"] }): Promise<operations["selfCheckin"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("selfCheckin", input ?? {});
+  }
   getAnnouncements(input: { params: operations["getAnnouncements"]["parameters"]["path"]; query?: operations["getAnnouncements"]["parameters"]["query"] }): Promise<operations["getAnnouncements"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getAnnouncements", input ?? {});
   }

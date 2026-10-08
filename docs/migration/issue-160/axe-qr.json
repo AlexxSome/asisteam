@@ -1,0 +1,192 @@
+{
+  "route": "/groups/00186087-0dfe-4662-94cf-7b2552f3693f/activities/9b026884-0d48-44fe-a763-1271fbbf8ea1/qr",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": [
+        {
+          "target": [
+            ".lg\\:hidden"
+          ],
+          "checks": [
+            {
+              "id": "aria-valid-attr-value",
+              "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_R_abn5rlb_\""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "contrast": [
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.57,
+      "foreground": "#475569",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {},
+    {
+      "ratio": 6.4,
+      "foreground": "#1d4ed8",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.24,
+      "foreground": "#475569",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.06,
+      "foreground": "#0f172a",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.06,
+      "foreground": "#0f172a",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.06,
+      "foreground": "#0f172a",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.06,
+      "foreground": "#0f172a",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.24,
+      "foreground": "#475569",
+      "background": "#f8fafc",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.57,
+      "foreground": "#475569",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.49,
+      "foreground": "#166534",
+      "background": "#dcfce7",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.57,
+      "foreground": "#475569",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.57,
+      "foreground": "#475569",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 17.85,
+      "foreground": "#0f172a",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 7.57,
+      "foreground": "#475569",
+      "background": "#ffffff",
+      "expected": "4.5:1"
+    },
+    {
+      "ratio": 6.7,
+      "foreground": "#ffffff",
+      "background": "#1d4ed8",
+      "expected": "4.5:1"
+    },
+    {}
+  ]
+}

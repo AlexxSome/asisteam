@@ -14,6 +14,7 @@ import { MembersConsentsController } from './members-consents.js';
 import { GroupsProfileController } from './groups-profile.js';
 import { ReportsController } from './reports.js';
 import { AttendanceController } from './attendance.js';
+import { QrController } from './qr.js';
 import { ActivitiesController } from './activities.js';
 import { HealthController } from './health.js';
 import { EMAIL_CONFIG, TransactionalEmail } from './email.js';
@@ -22,7 +23,7 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    controllers: [QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
     providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}

@@ -1,5 +1,6 @@
 # API y backend
 
+[Seguro] **MIG-16 (#160, 2026-10-08):** [QR y llegada propia mediante Nest](migration/issue-160/README.md) añade cuatro operaciones HTTP/SDK y QR=nest sobre las mismas RPC/claves SQL. ASI-04 conserva emisión ADMIN, ajustes plegables/guardado explícito, renovación por reloj servidor, fragmento retirado, login, confirmación/registro anterior/vencido/no disponible y reintento manual. El transporte no amplía roles ni agrega pantallas; la evidencia local sintética se registra en el runbook.
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 08-reportes-y-estadisticas.md, 11-legal-seguridad-privacidad.md
 
 [Seguro] **MIG-01 (#145, 2026-10-06):** [matriz de contratos y destinos Nest propuestos](migration/issue-145/contracts.md), con consumidor, firma vigente, permiso, efecto, prueba y responsable. En el corte MIG-01 aún no había rutas Nest de producto; el contrato actual y las historias pendientes se distinguen en el [registro de decisiones](migration/issue-145/README.md).

@@ -1,0 +1,35 @@
+{
+  "commit": "6f54213b5dea8773dd14cf70e45c9fb741e7b3e2",
+  "sourceCommit": "6f54213b5dea8773dd14cf70e45c9fb741e7b3e2",
+  "date": "2026-10-08T10:16:04.503Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "baseline-midnight-expected-failure",
+      "status": "FAIL",
+      "seconds": 2.42,
+      "sqlFailures": [
+        {
+          "file": "midnight.test.sql",
+          "failed": 2
+        }
+      ],
+      "expected": true
+    },
+    {
+      "check": "baseline-only-report-44-45",
+      "status": "PASS"
+    },
+    {
+      "check": "fixed-midnight-academy",
+      "status": "PASS",
+      "seconds": 2.05
+    },
+    {
+      "check": "fixed-current-clock-academy",
+      "status": "PASS",
+      "seconds": 2.14
+    }
+  ]
+}

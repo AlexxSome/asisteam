@@ -114,3 +114,7 @@ pnpm exec supabase test db supabase/tests/api_session_rls.test.sql
 ## Billing y webhook · MIG-14 (#158)
 
 [Seguro] [Contrato y runbook](../../docs/migration/issue-158/README.md) describen GET billing ADMIN, POST checkout/sync/cancel y webhook firmado. BILLING_DATABASE_URL usa asisteam_billing mínimo sobre la misma base; secretos MP y URLs HTTPS pertenecen al proceso Nest, sin service_role. Adaptadores SQL LEGACY/NEST impiden efectos por ambos transportes; handoff requiere quiescencia externa. Timeouts60s y recuperación de referencia para creación incierta; no repetir POST a ciegas. El antiguo webhook puede reenviar body/firma y esperar acuse persistido Nest. Sandbox real/corte externo siguen pendientes.
+
+## QR y llegada propia · MIG-16 (#160)
+
+[Seguro] [Contrato, compatibilidad y evidencia](../../docs/migration/issue-160/README.md) implementa getQrSettings/setQrSettings/issueCheckinQr/selfCheckin. QR=nest selecciona las cuatro acciones web sobre la misma DB. Sesión/consentimiento vigentes y permisos SQL canónicos; HMAC-SHA256, claves privadas, reloj, ventana y locks permanecen en PostgreSQL. Token solo en body HTTP y fragmento web retirado; errores/logs sin payloads reutilizables. Códigos emitidos por el transporte anterior siguen válidos hasta su límite original sobre la misma base; no hay rotación/retirada de claves en este entregable.

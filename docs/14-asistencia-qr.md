@@ -82,3 +82,11 @@ Estados adicionales: [renovación sin código vencido](qa/issue-119/after-renewi
 La auto-revisión se limita al diff de #119 y sus efectos. Las reglas y límites del QR del contrato anterior se mantienen.
 
 [Zoom nativo 200 %](qa/issue-119/zoom-200.json): Chrome configurado desde Apariencia en un perfil temporal aislado; ventana 1440 px → viewport CSS 720 px, DPR 2 y escala visual 1. QR, ajustes abiertos y recuperación de un código vencido no desbordan. Tab/Enter siguen operativos en los ajustes. Capturas del viewport físico mediante CDP sin recorte: [QR](qa/issue-119/zoom-200-qr.png), [ajustes](qa/issue-119/zoom-200-settings.png), [vencido](qa/issue-119/zoom-200-expired.png).
+
+## Transporte Nest y compatibilidad — MIG-16 (#160)
+
+[Seguro] [Runbook y evidencia](migration/issue-160/README.md) añade GET/PUT `/api/v1/groups/:groupId/check-in-settings`, POST `/api/v1/activities/:activityId/check-in-qr` y POST `/api/v1/me/check-in`. OpenAPI/SDK valida los mismos schemas canónicos; el token se envía exclusivamente en JSON. Sesión temporal, perfil ACTIVE, consentimiento vigente y transacción del rol mínimo `asisteam_api`; las cuatro RPC conservan la autorización en SQL.
+
+[Seguro] `ASISTEAM_TRANSPORT_QR=nest` elige un único ejecutor en las cuatro Server Actions; `supabase` sigue default. Error/timeout no dispara fallback ni reenvío. La página ADMIN reutiliza detalle/grupo migrados según sus propias banderas; `/check-in` mantiene Auth SSR temporal. Una respuesta incierta permite reintento explícito con QR vigente: la RPC preserva el registro anterior.
+
+[Seguro] Los códigos anteriores al cambio de transporte son compatibles directamente, con los mismos UUID, base, clave y tramo UTC. La firma y claves permanecen en PostgreSQL; este entregable no elimina/rota claves. Si un corte futuro mueve PostgreSQL, debe transferir íntegro `app_private.qr_checkin_keys` en backup cifrado/acceso operador o detener emisión de ambos transportes y agotar 60 segundos desde la última emisión confirmada antes de retirar claves antiguas; nunca aceptar tramo anterior/futuro ni alargar ventana. Verificar drenaje de peticiones en curso y una única base escritora según #166 antes de activar destino.
