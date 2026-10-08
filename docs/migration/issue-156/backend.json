@@ -1,0 +1,98 @@
+{
+  "commit": "af09585c55962d7947cff83178181ce76e653c14",
+  "sourceCommit": "af09585c55962d7947cff83178181ce76e653c14",
+  "date": "2026-10-07T23:59:40.713Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.57
+    },
+    {
+      "check": "database-migrations",
+      "status": "PASS",
+      "seconds": 1.6
+    },
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 2.67
+    },
+    {
+      "check": "api-session-rls-http",
+      "status": "PASS",
+      "seconds": 2.31
+    },
+    {
+      "check": "api-groups-profile-http",
+      "status": "PASS",
+      "seconds": 2.5
+    },
+    {
+      "check": "api-members-consents-http",
+      "status": "PASS",
+      "seconds": 0.87
+    },
+    {
+      "check": "api-activities-http",
+      "status": "PASS",
+      "seconds": 0.67
+    },
+    {
+      "check": "api-reports-http",
+      "status": "PASS",
+      "seconds": 3.91
+    },
+    {
+      "check": "api-attendance-http",
+      "status": "PASS",
+      "seconds": 1.89
+    },
+    {
+      "check": "api-invitations-http",
+      "status": "PASS",
+      "seconds": 5.87
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 17.35
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 5.3,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "database-types-generation",
+      "status": "PASS",
+      "seconds": 3.32
+    },
+    {
+      "check": "database-types-match",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-all",
+      "status": "FAIL",
+      "seconds": 4.96,
+      "sqlFailures": [
+        {
+          "file": "send_invitations.test.sql",
+          "failed": 1
+        }
+      ]
+    }
+  ]
+}

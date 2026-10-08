@@ -1,4 +1,7 @@
 import { notFound } from "next/navigation";
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { canManageAttendance, groupAttendanceReportSchema, groupStatsSchema, reportFilterSchema, type ReportFilter } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
 import { createClient } from "@/lib/supabase/server";
@@ -26,6 +29,17 @@ export function reportPageHref(groupId: string, filter: ReportFilter, page: numb
 export async function getGroupAttendanceReport(groupId: string, filter: ReportFilter) {
   const group = await getGroup(groupId);
   if (!canManageAttendance(group.roles)) notFound();
+  if (moduleTransport("reports") === "nest") {
+    try {
+      const report = await createServerApiClient().getGroupAttendanceReport({ params: { groupId: group.id },
+        query: { ...filter, activity_type_ids: filter.activity_type_ids.join(","), page_size: 50 } });
+      return { report, error: null };
+    } catch (error) {
+      if (error instanceof ApiClientError && [401, 403, 404].includes(error.status)) notFound();
+      if (error instanceof ApiClientError && error.status === 400) return { report: null, error: "Revisa el período y los tipos de actividad seleccionados." };
+      throw error;
+    }
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_group_attendance_report", {
     p_group_id: group.id, p_period: filter.period, p_from: filter.from, p_to: filter.to,
@@ -42,6 +56,16 @@ export async function getGroupAttendanceReport(groupId: string, filter: ReportFi
 
 export async function getGroupStats(groupId: string, page = 1, pageSize = 50) {
   await getGroup(groupId);
+  if (moduleTransport("reports") === "nest") {
+    try {
+      return { report: await createServerApiClient().getGroupStats({ params: { groupId }, query: { page, page_size: pageSize } }), error: null };
+    } catch (error) {
+      if (error instanceof ApiClientError && [401, 404].includes(error.status)) notFound();
+      if (error instanceof ApiClientError && error.status === 403 && error.error.code === "group_stats_disabled") return { report: null, error: null };
+      if (error instanceof ApiClientError && error.status === 400) return { report: null, error: "Revisa la página seleccionada." };
+      throw error;
+    }
+  }
   const supabase = await createClient();
   // La RPC reevalúa el permiso en cada consulta, incluida una revocación
   // posterior a la lectura del layout. No se cachean reportes entre peticiones.

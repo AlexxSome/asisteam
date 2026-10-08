@@ -10,6 +10,7 @@ import { Database } from './database.js';
 import { InvitationsController, InvitationRegistrationStore } from './invitations.js';
 import { MembersConsentsController } from './members-consents.js';
 import { GroupsProfileController } from './groups-profile.js';
+import { ReportsController } from './reports.js';
 import { AttendanceController } from './attendance.js';
 import { ActivitiesController } from './activities.js';
 import { HealthController } from './health.js';
@@ -18,7 +19,7 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    controllers: [ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
     providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore],
   })
   class RuntimeModule {}

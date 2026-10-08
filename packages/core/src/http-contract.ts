@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { reportHttpSchemas, reportHttpOperations } from "./http-reports-contract";
 import { attendanceHttpSchemas, attendanceHttpOperations } from "./http-attendance-contract";
 import { activityHttpSchemas, activityHttpOperations } from "./http-activities-contract";
 import { invitationHttpSchemas, invitationHttpOperations } from "./http-invitations-contract";
@@ -70,6 +71,7 @@ export const httpSchemas = {
   ApiError: apiErrorResponseSchema,
   Health: z.object({ status: z.literal("ok") }).strict(),
   Ready: z.object({ status: z.literal("ready") }).strict(),
+  ...reportHttpSchemas,
 } as const;
 
 export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 410, 500, 503, 504] as const;
@@ -97,4 +99,5 @@ export const httpOperations = {
   setAvatarPermission: { method: "PATCH", path: "/api/v1/me/avatar-permissions/{guardianshipId}", module: "profile", authenticated: true, params: "AvatarPermissionParams", body: "AvatarPermissionChange", response: "Success", status: 200, state: "implemented", summary: "Apoderado vigente autoriza o retira imagen; historia conservada" },
   getOwnProfile: { method: "GET", path: "/api/v1/me", module: "profile", authenticated: true, response: "OwnProfile", status: 200, state: "implemented", summary: "Datos propios; no sirve para perfiles de terceros" },
   updateOwnProfile: { method: "PATCH", path: "/api/v1/me", module: "profile", authenticated: true, body: "UpdateOwnProfile", response: "ProfileUpdated", status: 200, state: "implemented", summary: "Editar perfil conservando revisión de birthdate y consentimiento" },
+  ...reportHttpOperations,
 } as const;

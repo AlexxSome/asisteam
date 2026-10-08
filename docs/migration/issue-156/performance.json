@@ -1,0 +1,16 @@
+{
+  "environment": "local-synthetic-postgresql17",
+  "fixture": {
+    "activeAthletes": 500,
+    "metricCases": 9,
+    "pageSize": 100
+  },
+  "samples": 20,
+  "baseline": "authenticated canonical SQL including BEGIN/ROLLBACK",
+  "sqlP95Ms": 27.29,
+  "nestHttpP95Ms": 32.98,
+  "status": "PASS",
+  "cache": false,
+  "testedWorkingTree": true,
+  "sourceBase": "af09585c55962d7947cff83178181ce76e653c14"
+}

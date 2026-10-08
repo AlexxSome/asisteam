@@ -173,4 +173,16 @@ export class ApiClient extends ApiTransport {
   updateOwnProfile(input: { body: operations["updateOwnProfile"]["requestBody"]["content"]["application/json"] }): Promise<operations["updateOwnProfile"]["responses"][200]["content"]["application/json"]> {
     return this.execute("updateOwnProfile", input ?? {});
   }
+  getMyAttendanceHistory(input: { params: operations["getMyAttendanceHistory"]["parameters"]["path"]; query?: operations["getMyAttendanceHistory"]["parameters"]["query"] }): Promise<operations["getMyAttendanceHistory"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getMyAttendanceHistory", input ?? {});
+  }
+  getWardAttendanceHistory(input: { params: operations["getWardAttendanceHistory"]["parameters"]["path"]; query?: operations["getWardAttendanceHistory"]["parameters"]["query"] }): Promise<operations["getWardAttendanceHistory"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getWardAttendanceHistory", input ?? {});
+  }
+  getGroupAttendanceReport(input: { params: operations["getGroupAttendanceReport"]["parameters"]["path"]; query?: operations["getGroupAttendanceReport"]["parameters"]["query"] }): Promise<operations["getGroupAttendanceReport"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getGroupAttendanceReport", input ?? {});
+  }
+  getGroupStats(input: { params: operations["getGroupStats"]["parameters"]["path"]; query?: operations["getGroupStats"]["parameters"]["query"] }): Promise<operations["getGroupStats"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getGroupStats", input ?? {});
+  }
 }

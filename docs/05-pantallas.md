@@ -236,3 +236,8 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Asistencia por Nest · MIG-11 (#155), 07-10-2026
 
 [Seguro] [MIG-11](migration/issue-155/README.md) reconcilia ASI-01 mediante ATTENDANCE=nest: roster completo paginado, guardado por fila/lote, corrección parcial y desmarcado ADMIN. Conserva39 páginas, rutas/códigos, botones44px, confirmación/guardado/error, privacidad COACH y éxitos parciales entre lotes. La evidencia local375px/teclado/recarga/fallo de red y sus límites figuran en el runbook; no acredita deploy cloud ni revisión humana completa.
+
+
+## Historial/reportes por Nest · MIG-12 (#156), 07-10-2026
+
+[Seguro] [MIG-12](migration/issue-156/README.md) conecta historial propio/de pupilos, reportes ADMIN/COACH y estadísticas con REPORTS=nest sobre las cuatro RPC canónicas. Conserva rutas/códigos y 39 páginas; filtros de período/tipos/inactivos/orden, paginación y tablas accesibles siguen usando los DTO SQL autorizados. V1/V2 permanecen con toggles apagados y V4/V5 se reevalúan en servidor. Evidencia local por rol, Chile/métricas, teclado375px/axe y límites en el runbook; no acredita despliegue cloud ni lector humano.

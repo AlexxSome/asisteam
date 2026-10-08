@@ -218,3 +218,8 @@ Reglas adicionales:
 - Permisos y toggles de visibilidad: ver 02-roles-y-permisos.md.
 - Endpoints, latencias y serialización por rol: ver 07-api-y-backend.md.
 - Retención y minimización de datos en reportes (menores de edad, Ley 19.628 y Ley 21.719): ver 11-legal-seguridad-privacidad.md.
+
+
+## Transporte Nest · MIG-12 (#156), 07-10-2026
+
+[Seguro] [MIG-12](migration/issue-156/README.md) sirve las mismas cuatro RPC canónicas desde Nest y conecta sus consumidores Next mediante REPORTS=nest. SQL/core conservan la batería compartida, medio hacia arriba, 77.8 %, EXCUSED/LATE, convocatoria, exclusión de futuras/pre-ingreso y porcentajes null. La integración compara DTO completos con SQL bajo rol authenticated, períodos Chile y proyecciones por rol/toggle; registra p95 local con500 ATHLETE sin cache. No modifica SQL/RLS, métrica ni esquema; el baseline local no representa carga/latencia de producción.
