@@ -71,6 +71,17 @@ do $$ declare r record; definition text; expression text; check_expression text;
  end loop;
 end $$;
 
+-- A SQL predicate can re-evaluate the authority lookup for every candidate
+-- profile when fresh statistics choose a sequential scan. Resolve the subject
+-- once per invocation; retain the same profile mapping and transaction claims.
+create or replace function public.auth_user_id() returns uuid
+language plpgsql stable security definer set search_path='' as $$
+declare v_subject uuid:=app_private.actor_subject_id(); v_id uuid;
+begin
+ select id into v_id from public.users where auth_user_id=v_subject;
+ return v_id;
+end $$;
+
 create function app_private.auth_is_native() returns boolean language sql stable security definer set search_path='' as $$
  select mode='NATIVE' from app_private.auth_authority where singleton
 $$;

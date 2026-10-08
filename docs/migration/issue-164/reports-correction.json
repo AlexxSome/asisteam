@@ -1,0 +1,91 @@
+{
+  "sourceCommit": "9a1fb57352d119153d82f6f4187241e7330ac6a5",
+  "environment": "local-synthetic-postgresql17-isolated-schema-only",
+  "date": "2026-10-08T22:22:09.323360+00:00",
+  "sourceFiles": {
+    "supabase/migrations/20261008060000_auth_cutover.sql": "eec5308b1a5a17b3463bf679063624e42144960dbc211d4d472a55f9ac49d255",
+    "apps/api/test/reports.integration.mjs": "e9ef892437c4ce2bfbb8903eab620f8ff2ecabf1df182e8528e81dab6b563195",
+    "scripts/ci/run.mjs": "be14c46c02a9d9ae12b4eda8b3c23766dc37c25c6087d25d5ff27deb8240b60a",
+    "scripts/ci/run.test.mjs": "7beb6dc6245372f087e6db5c98f63f03e3093352570adaf0d3455c16e5c5bf43"
+  },
+  "diagnosis": {
+    "originalColdStatus": "FAIL",
+    "operation": "getGroupStats",
+    "httpStatus": 500,
+    "errorCode": "internal_error",
+    "baselineSeconds": 5.109,
+    "previousIdentityHelperColdStatus": "PASS"
+  },
+  "verification": {
+    "reportsCold": {
+      "status": "PASS",
+      "milliseconds": 6317.657,
+      "athletes": 500,
+      "omitted": 0
+    },
+    "authCutover": {
+      "status": "PASS",
+      "milliseconds": 3558.48,
+      "omitted": 0
+    },
+    "pgtap": {
+      "status": "PASS",
+      "files": 41,
+      "tests": 1673
+    },
+    "ciRunner": {
+      "status": "PASS",
+      "tests": 3
+    },
+    "databaseTypes": {
+      "status": "PASS",
+      "diff": false
+    }
+  },
+  "performance": {
+    "environment": "local-synthetic-postgresql17",
+    "fixture": {
+      "activeAthletes": 500,
+      "metricCases": 9,
+      "pageSize": 100
+    },
+    "samples": 20,
+    "baseline": "authenticated canonical SQL including BEGIN/ROLLBACK",
+    "sqlP95Ms": 6.01,
+    "nestHttpP95Ms": 11.94,
+    "status": "PASS",
+    "cache": false
+  },
+  "remoteCi": "Consult current PR202 head checks; this file records local synthetic verification only.",
+  "remoteDiagnosis": {
+    "runId": 37852142347,
+    "sourceCommit": "9a1fb57352d119153d82f6f4187241e7330ac6a5",
+    "failedCheck": {
+      "check": "api-reports-http",
+      "status": "FAIL",
+      "seconds": 5.02,
+      "failureLocations": [
+        {
+          "file": "apps/api/test/reports.integration.mjs",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "file": "packages/api-client/dist/transport.js",
+          "line": 119,
+          "column": 23
+        },
+        {
+          "file": "packages/api-client/dist/transport.js",
+          "line": 126,
+          "column": 20
+        },
+        {
+          "file": "apps/api/test/reports.integration.mjs",
+          "line": 144,
+          "column": 23
+        }
+      ]
+    }
+  }
+}
