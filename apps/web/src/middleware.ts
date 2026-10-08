@@ -18,6 +18,9 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  * escribir cookies, así que la rotación del refresh token ocurre aquí.
  */
 export async function middleware(request: NextRequest) {
+  // Provider callbacks must reach their browser-bound validation even when the
+  // old session lacks consent or cannot refresh on Apple's cross-site POST.
+  if (request.nextUrl.pathname.startsWith('/auth/callback/')) return NextResponse.next();
   if(nativeAuthEnabled()&&(request.cookies.has(NATIVE_ACCESS_COOKIE)||request.cookies.has(NATIVE_REFRESH_COOKIE)))return nativeAuthMiddleware(request);
   let response = NextResponse.next({ request });
 

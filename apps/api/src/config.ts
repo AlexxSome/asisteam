@@ -22,6 +22,10 @@ const configSchema = z.object({
   S3_ENDPOINT: z.string().url().optional(),
   S3_ACCESS_KEY_ID: z.string().min(1).optional(),
   S3_SECRET_ACCESS_KEY: z.string().min(1).optional(),
+  OAUTH_GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+  OAUTH_GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
+  OAUTH_APPLE_CLIENT_ID: z.string().min(1).optional(),
+  OAUTH_APPLE_CLIENT_SECRET: z.string().min(1).optional(),
   NATIVE_AUTH_DATABASE_URL: z.string().url().optional(),
   NATIVE_AUTH_SECRET: z.string().min(32).optional(),
   NATIVE_AUTH_ISSUER: z.string().url().optional(),
@@ -56,6 +60,11 @@ export class ConfigurationError extends Error {
 }
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
   const parsed = configSchema.superRefine((value, ctx) => {
+    for (const provider of ['GOOGLE','APPLE'] as const) {
+      const id=value[`OAUTH_${provider}_CLIENT_ID`],secret=value[`OAUTH_${provider}_CLIENT_SECRET`];
+      if (!!id !== !!secret || id && !value.NATIVE_AUTH_SECRET) ctx.addIssue({code:'custom',path:[`OAUTH_${provider}_CLIENT_ID`],message:'OAuth requiere cliente y Auth propio completos.'});
+      if (provider==='APPLE' && id && !value.NATIVE_AUTH_WEB_URL?.startsWith('https://')) ctx.addIssue({code:'custom',path:['OAUTH_APPLE_CLIENT_ID'],message:'Apple requiere retorno HTTPS.'});
+    }
     const native = [value.NATIVE_AUTH_DATABASE_URL,value.NATIVE_AUTH_SECRET,value.NATIVE_AUTH_ISSUER,value.NATIVE_AUTH_WEB_URL,value.NATIVE_AUTH_PROXY_SECRET];
     if (native.some(Boolean) && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Configura Auth independiente completo.'});
     if (value.NATIVE_AUTH_DATABASE_URL) {

@@ -17,7 +17,8 @@
     "test:e2e:full": "playwright test",
     "test:e2e:faults": "playwright test -c playwright.fault.config.ts",
     "test:e2e:report": "playwright show-report .next/qa/report",
-    "test:auth-contract": "node scripts/native-auth-smoke.mjs"
+    "test:auth-contract": "node scripts/native-auth-smoke.mjs",
+    "test:social-contract": "node scripts/social-auth-smoke.mjs"
   },
   "dependencies": {
     "@asisteam/api-client": "workspace:*",

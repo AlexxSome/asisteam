@@ -3,14 +3,15 @@
 import { useRef, useState, useTransition } from "react";
 import { unstable_rethrow } from "next/navigation";
 import { SOCIAL_AUTH_ERROR, SOCIAL_PROVIDERS, SOCIAL_PROVIDER_LABELS, type SocialLoginContext } from "@asisteam/core";
-import { loginWithSocial } from "@/app/login/actions";
+import { loginWithSocial, linkWithSocial } from "@/app/login/actions";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import type { SocialProviderAvailability } from "@/lib/social-auth";
 
 type Provider = (typeof SOCIAL_PROVIDERS)[number];
 
-export function SocialLoginButtons({ context = {}, disabled = false, providers, onPendingChange }: {
+export function SocialLoginButtons({ context = {}, disabled = false, providers, onPendingChange, intent = "login" }: {
+  intent?: "login" | "link";
   context?: SocialLoginContext;
   disabled?: boolean;
   providers?: SocialProviderAvailability;
@@ -21,7 +22,7 @@ export function SocialLoginButtons({ context = {}, disabled = false, providers, 
   const pendingRef = useRef(false);
   const [activeProvider, setActiveProvider] = useState<Provider | null>(null);
   return (
-    <div role="group" className="space-y-3" aria-label="Acceso con cuenta social">
+    <div role="group" className="space-y-3" aria-label={intent === "link" ? "Vincular cuenta social" : "Acceso con cuenta social"}>
       {SOCIAL_PROVIDERS.map(provider => (
         <div key={provider} className="space-y-1">
           <Button type="button" variant="secondary" className="w-full" loading={pending && provider === activeProvider}
@@ -34,7 +35,7 @@ export function SocialLoginButtons({ context = {}, disabled = false, providers, 
               onPendingChange?.(true);
               startTransition(async () => {
                 try {
-                  const result = await loginWithSocial({ ...context, provider });
+                  const result = await (intent === "link" ? linkWithSocial : loginWithSocial)({ ...context, provider });
                   if (result?.error) setError(result.error);
                 } catch (error) {
                   unstable_rethrow(error);
@@ -45,7 +46,7 @@ export function SocialLoginButtons({ context = {}, disabled = false, providers, 
                 }
               });
             }}>
-            Continuar con {SOCIAL_PROVIDER_LABELS[provider]}
+            {intent === "link" ? "Vincular" : "Continuar con"} {SOCIAL_PROVIDER_LABELS[provider]}
           </Button>
           {providers?.[provider] === false && <p id={`${provider}-unavailable`} className="text-small text-muted-foreground">
             {SOCIAL_PROVIDER_LABELS[provider]} no está disponible en este momento. Puedes usar tu email.

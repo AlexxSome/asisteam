@@ -2,6 +2,18 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  getSocialProviders(): Promise<operations["getSocialProviders"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getSocialProviders", {});
+  }
+  startSocialLogin(input: { body: operations["startSocialLogin"]["requestBody"]["content"]["application/json"] }): Promise<operations["startSocialLogin"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("startSocialLogin", input ?? {});
+  }
+  startSocialLink(input: { body: operations["startSocialLink"]["requestBody"]["content"]["application/json"] }): Promise<operations["startSocialLink"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("startSocialLink", input ?? {});
+  }
+  completeSocialLogin(input: { body: operations["completeSocialLogin"]["requestBody"]["content"]["application/json"] }): Promise<operations["completeSocialLogin"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("completeSocialLogin", input ?? {});
+  }
   loginPassword(input: { body: operations["loginPassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["loginPassword"]["responses"][200]["content"]["application/json"]> {
     return this.execute("loginPassword", input ?? {});
   }

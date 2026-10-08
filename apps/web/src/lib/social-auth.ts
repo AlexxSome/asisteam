@@ -1,3 +1,5 @@
+import { nativeAuthEnabled } from './api/native-auth-config';
+import { ApiClient } from '@asisteam/api-client';
 import type { SOCIAL_PROVIDERS } from "@asisteam/core";
 
 export type SocialProviderAvailability = Record<(typeof SOCIAL_PROVIDERS)[number], boolean | null>;
@@ -26,6 +28,7 @@ export async function getSocialProviderAvailability(): Promise<SocialProviderAva
   if (!socialAuthOrigin()) return { google: false, apple: false };
   const unknown = { google: null, apple: null };
   try {
+    if (nativeAuthEnabled()) return await new ApiClient({origin:process.env.ASISTEAM_API_ORIGIN??'',timeoutMs:3000}).getSocialProviders();
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!url || !key) return unknown;

@@ -11,6 +11,8 @@ await suite('backend', async () => {
   await check('private-storage-fixture-build', 'docker', ['build', '-f', 'scripts/migration/storage/Dockerfile.fixture', '-t', 'asisteam-storage-fixture:161', '.']);
   await check('api-private-storage-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/storage.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('next-native-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:auth-contract']);
+  await check('next-social-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:social-contract']);
+  await check('api-social-auth-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/social-auth.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-native-auth-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/native-auth.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-session-rls-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/session-rls.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('api-groups-profile-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/groups-profile.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });

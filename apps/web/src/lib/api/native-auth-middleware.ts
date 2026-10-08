@@ -33,7 +33,7 @@ export async function nativeAuthMiddleware(request:NextRequest){
    }catch(error){if(!(error instanceof ApiClientError)||error.status!==401)throw error;for(const name of [NATIVE_ACCESS_COOKIE,NATIVE_REFRESH_COOKIE])response.cookies.set(name,'',authCookieSettings(0));}
   }
   const pathname=request.nextUrl.pathname,segments=pathname.split('/');
-  const publicRoute=['/accept-terms','/login','/register','/forgot-password','/reset-password','/auth/callback'].includes(pathname)||pathname.startsWith('/legal/')||pathname.startsWith('/invitations/');
+  const publicRoute=['/accept-terms','/login','/register','/forgot-password','/reset-password','/auth/callback'].includes(pathname)||pathname.startsWith('/auth/callback/')||pathname.startsWith('/legal/')||pathname.startsWith('/invitations/');
   if(user&&!publicRoute&&!(await client().getCurrentAccountConsent()).accepted)return finalize(NextResponse.redirect(new URL(accountConsentPath(pathname+request.nextUrl.search),request.url),303));
   if(segments[1]==='wards'&&segments[2]){
    if(!user||!isGroupId(segments[2]))return deny(404);

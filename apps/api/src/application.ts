@@ -1,3 +1,4 @@
+import { SocialAuth, SocialAuthController } from './social-auth.js';
 import { NativeAuth, NativeAuthController } from './native-auth.js';
 import { Passwords } from './passwords.js';
 import 'reflect-metadata';
@@ -27,8 +28,8 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [NativeAuthController,AvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
-    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, NativeAuth, Passwords, AvatarStorage, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
+    controllers: [SocialAuthController,NativeAuthController,AvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, SocialAuth, NativeAuth, Passwords, AvatarStorage, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}
   const app = await NestFactory.create<NestExpressApplication>(RuntimeModule, { logger, abortOnError: false, bodyParser: false });
