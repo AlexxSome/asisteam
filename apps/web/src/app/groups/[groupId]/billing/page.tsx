@@ -6,6 +6,9 @@ import { Pagination } from "@/components/ui/pagination";
 import { notFound } from "next/navigation";
 import { billingSummarySchema, formatClp, INVOICE_STATUS_LABELS, SUBSCRIPTION_STATUS_LABELS } from "@asisteam/core";
 import { getGroup } from "@/lib/groups";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
+import { ApiClientError } from "@asisteam/api-client";
 import { createClient } from "@/lib/supabase/server";
 import { BillingPanel } from "./billing-panel";
 import { ActionLink } from "@/components/ui/button";
@@ -22,8 +25,14 @@ export default async function BillingPage({ params, searchParams }: {
   const raw = (await searchParams).page;
   const page = raw && /^\d+$/.test(raw) ? Number(raw) : 1;
   if (!Number.isSafeInteger(page) || page < 1 || page > 1_000_000) notFound();
-  const client = await createClient();
-  const result = await client.rpc("get_group_billing", { p_group_id: groupId, p_page: page });
+  let result;
+  if (moduleTransport("billing") === "nest") {
+    try { result = { data: await createServerApiClient().getGroupBilling({ params: { groupId }, query: { page } }), error: null }; }
+    catch (error) { result = { data: null, error: { message: error instanceof ApiClientError ? error.error.code : "billing_unavailable" } }; }
+  } else {
+    const client = await createClient();
+    result = await client.rpc("get_group_billing", { p_group_id: groupId, p_page: page });
+  }
   if (result.error?.message === "group_not_found" || result.error?.message === "admin_required") notFound();
   const parsed = billingSummarySchema.safeParse(result.data);
   if (result.error || !parsed.success) return <Alert>No pudimos cargar la suscripción. Recarga la página.</Alert>;

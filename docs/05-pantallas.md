@@ -241,3 +241,8 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Historial/reportes por Nest · MIG-12 (#156), 07-10-2026
 
 [Seguro] [MIG-12](migration/issue-156/README.md) conecta historial propio/de pupilos, reportes ADMIN/COACH y estadísticas con REPORTS=nest sobre las cuatro RPC canónicas. Conserva rutas/códigos y 39 páginas; filtros de período/tipos/inactivos/orden, paginación y tablas accesibles siguen usando los DTO SQL autorizados. V1/V2 permanecen con toggles apagados y V4/V5 se reevalúan en servidor. Evidencia local por rol, Chile/métricas, teclado375px/axe y límites en el runbook; no acredita despliegue cloud ni lector humano.
+
+
+## Suscripción por Nest · MIG-14 (#158), 07-10-2026
+
+[Seguro] [MIG-14](migration/issue-158/README.md) conecta `/groups/:groupId/billing` y sus acciones mediante BILLING=nest: DTO ADMIN, ledger paginado y checkout/conciliación/cancelación con precios/cupos de servidor. Conserva39 páginas y la ruta de la extensión #56, que no tiene código de pantalla histórico. Mantiene tabla enfocada por teclado, fechas Chile, confirmación y error sin éxito. El retorno con query de checkout no altera estados. La continuidad firmada por URL antigua y los límites de sandbox/corte se registran en el runbook; no acredita deploy cloud.

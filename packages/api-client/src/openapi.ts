@@ -1,4 +1,38 @@
 export interface paths {
+    "/api/v1/groups/{groupId}/billing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ledger y capacidad ADMIN; DTO sin datos privados del proveedor */
+        get: operations["getGroupBilling"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Checkout, conciliación o cancelación; importe y cupos del servidor */
+        post: operations["manageSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/groups/{groupId}/activities": {
         parameters: {
             query?: never;
@@ -912,6 +946,71 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        BillingSummary: {
+            plans: {
+                /** @enum {string} */
+                code: "TEAM" | "CLUB" | "ACADEMY";
+                name: string;
+                amount_clp: number;
+                athlete_limit: number;
+                /** @enum {string} */
+                currency: "CLP";
+            }[];
+            active_athletes: number;
+            athlete_limit: number | null;
+            subscription: {
+                /** Format: uuid */
+                id: string;
+                /** @enum {string} */
+                plan_code: "TEAM" | "CLUB" | "ACADEMY";
+                amount_clp: number;
+                /** @enum {string} */
+                status: "CREATING" | "PENDING" | "AUTHORIZED" | "PAUSED" | "CANCELLED" | "FAILED";
+                next_payment_at: string | null;
+                activated_at: string | null;
+            } | null;
+            invoices: {
+                id: string;
+                plan_name: string;
+                due_at: string;
+                amount_clp: number;
+                /** @enum {string} */
+                status: "PENDING" | "PAID" | "OVERDUE" | "CANCELLED" | "REFUNDED";
+                paid_at: string | null;
+            }[];
+            overdue_amount_clp: number;
+            total_invoices: number;
+            page: number;
+        };
+        BillingRequest: {
+            /** @enum {string} */
+            action: "checkout";
+            /** Format: uuid */
+            group_id: string;
+            /** @enum {string} */
+            plan_code: "TEAM" | "CLUB" | "ACADEMY";
+            /** Format: email */
+            payer_email: string;
+        } | {
+            /** @enum {string} */
+            action: "sync";
+            /** Format: uuid */
+            group_id: string;
+        } | {
+            /** @enum {string} */
+            action: "cancel";
+            /** Format: uuid */
+            group_id: string;
+        };
+        BillingQuery: {
+            /** @default 1 */
+            page: number;
+        };
+        BillingResult: {
+            /** @enum {boolean} */
+            success: true;
+            checkout_url?: string;
+        };
         ActivityParams: {
             /** Format: uuid */
             groupId: string;
@@ -1908,6 +2007,252 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getGroupBilling: {
+        parameters: {
+            query?: {
+                page?: number;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BillingSummary"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    manageSubscription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BillingRequest"];
+            };
+        };
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BillingResult"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     listGroupActivities: {
         parameters: {
             query?: {

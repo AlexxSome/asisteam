@@ -39,7 +39,13 @@ Eventos repetidos o antiguos no duplican ni regresan facturas, gracias a IDs ún
 
 Errores usan `{error:{code,message,details:{}}}` y mensajes públicos en español. Los fallos de persistencia/proveedor retornan error para permitir reintento; no se confirma recepción exitosa antes de guardar.
 
-## Despliegue y verificación del operador
+## Migración de transporte · MIG-14 (#158)
+
+[Seguro] [Contrato, handoff, continuidad y evidencia](migration/issue-158/README.md) migran página/acciones con BILLING=nest, checkout/conciliación/cancelación y receptor firmado a Nest sobre la misma base. Motor de proveedor compartido con Edge; ledger/cupos permanecen en SQL. La migración inicia LEGACY y habilita adaptadores privados mediante rol mínimo asisteam_billing solo tras quiescencia/handoff operativo. La URL anterior puede permanecer como relay que espera persistencia del único destino Nest. Retorno web/AUTHORIZED no acreditan PAID; reserva incierta no repite POST. Sandbox real y corte externo permanecen pendientes.
+
+[Seguro] Variables privadas del runtime Nest y selector Next se documentan en ese runbook; las instrucciones Edge siguientes corresponden al ejecutor LEGACY. Tras el handoff no basta volver la bandera web a supabase: el gate SQL bloquea ese ejecutor. Mantener receptor antiguo mientras existan contratos que lo utilicen impide acreditar retiro completo de Supabase.
+
+## Despliegue LEGACY y verificación del operador
 
 Variables **exclusivamente en Supabase Edge secrets**, nunca `NEXT_PUBLIC_*` ni archivos versionados:
 

@@ -2,6 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { BILLING_ERROR_MESSAGES, subscriptionRequestSchema } from "@asisteam/core";
+import { ApiClientError } from "@asisteam/api-client";
+import { moduleTransport } from "@/lib/api/config";
+import { createServerApiClient } from "@/lib/api/server";
 import { createClient } from "@/lib/supabase/server";
 
 export type BillingResult = { success: true; checkout_url?: string } | { error: { code: string; message: string; details: Record<string, never> } };
@@ -10,6 +13,11 @@ export async function manageSubscription(input: unknown): Promise<BillingResult>
   const parsed = subscriptionRequestSchema.safeParse(input);
   if (!parsed.success) return fail("invalid_billing_request");
   try {
+    if (moduleTransport("billing") === "nest") {
+      const data = await createServerApiClient().manageSubscription({ body: parsed.data });
+      revalidatePath(`/groups/${parsed.data.group_id}/billing`);
+      return data;
+    }
     const client = await createClient();
     if (!(await client.auth.getUser()).data.user) return fail("authentication_required");
     const { data, error } = await client.functions.invoke("subscription-billing", { body: parsed.data });
@@ -26,5 +34,5 @@ export async function manageSubscription(input: unknown): Promise<BillingResult>
     }
     revalidatePath(`/groups/${parsed.data.group_id}/billing`);
     return { success: true, ...(data.checkout_url ? { checkout_url: data.checkout_url as string } : {}) };
-  } catch { return fail("billing_unavailable"); }
+  } catch (error) { return fail(error instanceof ApiClientError ? error.error.code : "billing_unavailable"); }
 }

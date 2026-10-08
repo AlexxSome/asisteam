@@ -13,3 +13,4 @@ create role asisteam_webhook nologin nosuperuser nobypassrls noinherit;
 create role asisteam_invitation nologin nosuperuser nocreatedb nocreaterole nobypassrls noinherit;
 grant authenticated to asisteam_api with inherit true, set false;
 grant asisteam_api to postgres with inherit false, set true;
+create role asisteam_billing nologin nosuperuser nocreatedb nocreaterole noreplication nobypassrls noinherit;

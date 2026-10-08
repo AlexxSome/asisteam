@@ -3,7 +3,8 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { BillingSummary } from "@asisteam/core";
-const mock = vi.hoisted(() => ({ manage: vi.fn(), refresh: vi.fn(), group: vi.fn(), rpc: vi.fn() }));
+const mock = vi.hoisted(() => ({ manage: vi.fn(), refresh: vi.fn(), group: vi.fn(), rpc: vi.fn(), api: vi.fn() }));
+vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => ({ getGroupBilling: mock.api }) }));
 vi.mock("./actions", () => ({ manageSubscription: mock.manage }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mock.refresh }), notFound: () => { throw new Error("not-found"); } }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
@@ -28,7 +29,7 @@ beforeEach(() => {
   mock.group.mockResolvedValue({ roles: ["ADMIN"] });
   mock.rpc.mockResolvedValue({ data: billing, error: null });
 });
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+afterEach(() => { vi.unstubAllEnvs(); cleanup(); vi.unstubAllGlobals(); });
 
 async function reviewCheckout(plan = "Equipo") {
   await userEvent.click(screen.getByRole("button", { name: `Seleccionar ${plan}` }));
@@ -232,4 +233,16 @@ it("un fallo al conciliar mantiene el bloqueo, pero la ausencia confirmada permi
   expect((screen.getByRole("button", { name: "Revisar y continuar" }) as HTMLButtonElement).disabled).toBe(false);
   expect(screen.getByText(/No hay una suscripción para actualizar/)).toBeTruthy();
   expect(mock.manage.mock.calls.filter(([input]) => input.action === "checkout")).toHaveLength(1);
+});
+
+
+it("la página billing Nest carga DTO por SDK y preserva retorno sin confirmar pago", async () => {
+  vi.stubEnv("ASISTEAM_TRANSPORT_BILLING", "nest");
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
+  vi.stubEnv("ASISTEAM_API_SUPABASE_URL", "http://127.0.0.1:54321");
+  mock.api.mockResolvedValue(billing);
+  render(await BillingPage({ params: Promise.resolve({ groupId: group }), searchParams: Promise.resolve({ page: "2" }) }));
+  expect(mock.api).toHaveBeenCalledExactlyOnceWith({ params: { groupId: group }, query: { page: 2 } });
+  expect(mock.rpc).not.toHaveBeenCalled();
+  expect(screen.getByText(/Volver del checkout no confirma un pago/)).toBeTruthy();
 });

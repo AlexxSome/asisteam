@@ -2,6 +2,12 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  getGroupBilling(input: { params: operations["getGroupBilling"]["parameters"]["path"]; query?: operations["getGroupBilling"]["parameters"]["query"] }): Promise<operations["getGroupBilling"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getGroupBilling", input ?? {});
+  }
+  manageSubscription(input: { body: operations["manageSubscription"]["requestBody"]["content"]["application/json"] }): Promise<operations["manageSubscription"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("manageSubscription", input ?? {});
+  }
   listGroupActivities(input: { params: operations["listGroupActivities"]["parameters"]["path"]; query?: operations["listGroupActivities"]["parameters"]["query"] }): Promise<operations["listGroupActivities"]["responses"][200]["content"]["application/json"]> {
     return this.execute("listGroupActivities", input ?? {});
   }

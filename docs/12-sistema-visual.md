@@ -170,3 +170,8 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de historial/reportes con Nest · MIG-12 (#156), 07-10-2026
 
 [Seguro] [MIG-12](migration/issue-156/README.md) conserva ReportFilters, ReportTable/StatsTable y AttendanceHistoryContent: período/tipos/inactivos/orden/paginación, regiones de tabla enfocables y datos propios/pupilos disponibles sin estadísticas grupales. Denominador cero permanece «Sin datos»; errores no inventan métricas ni recuperan el otro transporte. La revocación de toggle oculta agregados al recargar. No añade componentes, tokens ni estilos; evidencia375px/teclado/axe acotada y revisión humana pendiente en MIG-12.
+
+
+## Estados de suscripción con Nest · MIG-14 (#158), 07-10-2026
+
+[Seguro] [MIG-14](migration/issue-158/README.md) conserva BillingPanel, catálogo, confirmación inline, estados CREATING/AUTHORIZED y ledger paginado. Error/timeout no anuncia pago ni éxito, no repite POST y no activa otro transporte; checkout_uncertain mantiene la consulta previa antes de reintentar. Un retorno web no acredita PAID; solo el pago consultado al proveedor habilita cupos. Sin cambios de tokens/componentes/disposición. Evidencia de consumidores y375px/teclado/axe y sus límites en el runbook.
