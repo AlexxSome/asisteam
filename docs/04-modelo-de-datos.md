@@ -1,5 +1,8 @@
 # Modelo de datos
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 [Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) conserva UUID/perfil/hash/OAuth mediante ledger e importación congelada; añade autoridad persistente, propiedad por sujeto y restricciones de acceso importadas. Los helpers de actor y RLS ya no llaman auth.uid()/auth.jwt(); MANAGED mantiene cero credenciales hasta claim dirigido. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
 
 [Seguro] **MIG-18 (#162, 2026-10-08):** [Identidad y sesiones propias](migration/issue-162/README.md) conserva `public.users.id` y cambia la FK opcional `users.auth_user_id` a `app_private.auth_subjects`, mapa compatible con UUID GoTrue existentes y sujetos Nest nuevos. Se añaden credenciales, familias, hashes refresh/recovery y límites privados con RLS; MANAGED permanece sin credenciales hasta claim dirigido con consentimiento canónico. Esta migración no importa contraseñas/sesiones ni elimina `auth.users`; el DDL MVP de abajo se conserva como referencia histórica.

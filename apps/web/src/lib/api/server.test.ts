@@ -36,33 +36,22 @@ describe("adaptador exclusivo servidor Next", () => {
     await expect(createServerApiClient().getOwnProfile()).rejects.toMatchObject({ status: 401 });
     expect(mock.fetch).not.toHaveBeenCalled();
   });
-  it("rollback de bandera usa exactamente un ejecutor por write sobre fixture común", async () => {
-    const store: string[] = [];
-    const supabase = vi.fn(async () => { store.push("supabase"); return "ok"; });
-    const nest = vi.fn(async () => { store.push("nest"); return "ok"; });
-    expect(await runModuleOperation("groups", { supabase, nest })).toBe("ok");
-    vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "nest");
-    expect(await runModuleOperation("groups", { supabase, nest })).toBe("ok");
+  it("producto usa un ejecutor Nest y rechaza configuración legacy", async () => {
+    const nest = vi.fn(async () => "ok");
+    expect(await runModuleOperation("groups", { nest })).toBe("ok");
+    expect(moduleTransport("profile")).toBe("nest");
     vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "supabase");
-    expect(await runModuleOperation("groups", { supabase, nest })).toBe("ok");
-    expect(store).toEqual(["supabase", "nest", "supabase"]);
-    expect(moduleTransport("profile")).toBe("supabase");
+    await expect(runModuleOperation("groups", { nest })).rejects.toMatchObject({ status: 400 });
+    expect(nest).toHaveBeenCalledTimes(1);
   });
   it("timeout o error de Nest nunca ejecuta fallback/segundo write", async () => {
     vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "nest");
     vi.stubEnv("ASISTEAM_API_TIMEOUT_MS", "10");
     mock.fetch.mockImplementation(() => new Promise(() => {}));
     const supabase = vi.fn(async () => ({ group_id: "never" }));
-    await expect(runModuleOperation("groups", { supabase, nest: client => client.createGroup({ body: { name: "Equipo", sport: "Fútbol" } }) })).rejects.toMatchObject({ status: 504 });
+    await expect(runModuleOperation("groups", { nest: client => client.createGroup({ body: { name: "Equipo", sport: "Fútbol" } }) })).rejects.toMatchObject({ status: 504 });
     expect(supabase).not.toHaveBeenCalled();
     expect(mock.fetch).toHaveBeenCalledTimes(1);
-  });
-  it.each(["https://other.supabase.co", ""])("base de coexistencia distinta/ausente falla antes de escribir", async target => {
-    vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "nest");
-    vi.stubEnv("ASISTEAM_API_SUPABASE_URL", target);
-    const supabase = vi.fn(async () => "unexpected"); const nest = vi.fn(async () => "unexpected");
-    await expect(runModuleOperation("groups", { supabase, nest })).rejects.toMatchObject({ status: 400 });
-    expect(supabase).not.toHaveBeenCalled(); expect(nest).not.toHaveBeenCalled();
   });
   it("valor de bandera desconocido falla cerrado", () => {
     vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "nesst");

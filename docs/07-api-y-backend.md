@@ -1,5 +1,8 @@
 # API y backend
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 [Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) incorpora corte LEGACY→FROZEN→NATIVE, guardas de identidad/sesiones y API SUPABASE_AUTH_RETIRED=1. Auth=nest evita instanciar SDK/fallback Supabase, conserva invitaciones emitidas y rechaza sesiones/enlaces Auth antiguos. La recuperación postcorte conserva las escrituras en Nest. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
 
 [Seguro] **MIG-19 (#163, 2026-10-08):** [OAuth Nest y vinculación segura](migration/issue-163/README.md) incorpora AUT-07 con proveedores propios, callbacks Google GET/Apple form_post, state/nonce/JWKS y PKCE Google. PRF-01/CFG-01 ofrece vinculación explícita desde sesión propia con disponibilidad/procesamiento/error y retorno de éxito. Cuenta nueva pasa por aceptación vigente/ONB-01; email coincidente requiere autenticar y vincular sin fusión automática. `/auth/callback/[provider]` es handler; no añade páginas. El runbook distingue verificaciones locales y ensayo externo pendiente.

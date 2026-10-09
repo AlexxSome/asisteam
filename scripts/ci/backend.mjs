@@ -43,5 +43,5 @@ await suite('backend', async () => {
   const generated = await check('database-types-generation', 'pnpm', ['exec', 'supabase', 'gen', 'types', 'typescript', '--local']);
   verify('database-types-match', () => assert.equal(generated.trim(), readFileSync('packages/db/src/database.types.ts', 'utf8').trim()));
   await check('pgtap-all', 'pnpm', ['exec', 'supabase', 'test', 'db']);
-  await withEdge(secret => check('product-integrations', 'pnpm', ['--filter', '@asisteam/web', 'test:integration:modules', '--reporter=json', '--outputFile=.ci-integration.json'], { env: { INVITATION_PROXY_SECRET: secret }, report: 'apps/web/.ci-integration.json', requireAll: true }));
+  await withEdge(secret => check('origin-sql-integrations', 'pnpm', ['--filter', '@asisteam/web', 'test:integration:modules', '--reporter=json', '--outputFile=.ci-integration.json'], { env: { INVITATION_PROXY_SECRET: secret }, report: 'apps/web/.ci-integration.json', requireAll: true }));
 });

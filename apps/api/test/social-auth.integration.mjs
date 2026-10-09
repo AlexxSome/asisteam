@@ -4,8 +4,8 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {generateKeyPair,exportJWK,SignJWT,jwtDecrypt} from 'jose';
 import pg from 'pg';
-import {createApplication} from '../dist/application.js';
-import {loadConfig} from '../dist/config.js';
+import {createApplication} from './legacy-application.mjs';
+import {loadConfig} from './legacy-application.mjs';
 import {SafeLogger} from '../dist/logger.js';
 import {ApiClient} from '../../../packages/api-client/dist/index.js';
 test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent, replay and concurrency',{skip:process.env.API_RLS_TEST!=='1',timeout:90000},async()=>{

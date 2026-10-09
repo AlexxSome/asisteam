@@ -1,5 +1,8 @@
 # Arquitectura y stack tecnológico
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 04-modelo-de-datos.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 09-roadmap.md, 11-legal-seguridad-privacidad.md
 
 [Seguro] **MIG-01 (#145, 2026-10-06):** [inventario, ADR e infraestructura propuestos](migration/issue-145/README.md) para la épica #144. Producción, usuarios, capacidad del equipo, proveedor, presupuesto y continuidad siguen PENDIENTES de confirmación o aceptación. La arquitectura de producto sigue en Supabase; MIG-02 añade solo su runtime de transición.

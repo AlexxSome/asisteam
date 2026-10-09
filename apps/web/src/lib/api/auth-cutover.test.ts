@@ -18,7 +18,7 @@ afterEach(()=>vi.unstubAllEnvs());
 it('anonymous native mode never falls back to legacy cookies or SDK',async()=>{
  const client=await createClient();expect(await client.auth.getUser()).toEqual({data:{user:null},error:null});
  expect(await client.auth.getSession()).toEqual({data:{session:null},error:null});expect(fixture.client).not.toHaveBeenCalled();
- expect(()=>client.from('users')).toThrow(ApiClientError);expect(()=>client.rpc('has_account_consent')).toThrow(ApiClientError);
+ expect('from' in client).toBe(false);expect('rpc' in client).toBe(false);
 });
 it('verified native session exposes only server compatibility identity',async()=>{
  fixture.user.mockResolvedValue({id:'synthetic-subject'});fixture.values.set('asisteam-access','synthetic-access');

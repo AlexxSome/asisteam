@@ -1,5 +1,7 @@
 # AGENTS.md — Asisteam
 
+[Seguro] **Actualización MIG-24 (#168):** el candidato ejecuta web/API/worker con Nest, PostgreSQL17 independiente, Auth propio y S3; SDK Supabase solo en fixtures/dev, sin runtime ni fallback de producto. Referencias Supabase de esta guía se conservan como historia de origen; para trabajo nuevo manda [inventario vigente](docs/migration/issue-168/README.md). No ejecutar corte/deploy real, apagar receptores Mercado Pago ni cerrar #168: producción sigue NO-GO por gates externos #166/#167.
+
 Guía para agentes de IA (Claude Code, Cursor, Copilot, Codex, Windsurf, etc.) que trabajen en este repositorio. Sintetiza la documentación canónica de `docs/`; ante cualquier conflicto, **los documentos de `docs/` mandan**.
 
 ## 1. Qué es Asisteam

@@ -1,5 +1,8 @@
 # Anuncios de grupo — HU-ADM-22 / #57
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 El alcance autorizado (#57) incluye muro y gestión web más infraestructura de notificaciones Expo ya implementada. No incluye la app móvil, Web Push, comentarios, adjuntos, recordatorios de actividades ni avisos de ausencias. **Cambio de planificación 2026-10-05:** el cliente futuro será nativo (Java/Android y Swift/iOS), así que recibir anuncios requiere migrar el registro de tokens y el envío Expo a FCM/APNs. Este documento describe la implementación actual mientras no se completa esa migración.
 
 ## Muro y permisos

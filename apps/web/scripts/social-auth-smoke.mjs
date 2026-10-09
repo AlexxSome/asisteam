@@ -12,7 +12,8 @@ import {loadConfig} from '../../api/dist/config.js';
 import {ApiClient} from '../../../packages/api-client/dist/index.js';
 const apiRequire=createRequire(new URL('../../api/package.json',import.meta.url)),{Client}=apiRequire('pg');
 const {generateKeyPair,exportJWK,SignJWT,jwtDecrypt}=await import(apiRequire.resolve('jose'));
-const db=new Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});
+const isolated=await (await import('../../api/test/native-browser-database.mjs')).nativeBrowserDatabase();
+const db=new Client({connectionString:isolated.url});
 const run=randomUUID(),email='mig163-browser-'+run+'@example.test',ownerEmail='mig163-browser-'+run+'-owner@example.test',secret=randomBytes(32).toString('hex'),rolePassword=randomUUID();
 const originalFetch=globalThis.fetch,nextEnv=new URL('../next-env.d.ts',import.meta.url),previousEnv=readFileSync(nextEnv,'utf8'),codes=new Map(),transactionIds=[];
 const {publicKey,privateKey}=await generateKeyPair('RS256'),jwk={...await exportJWK(publicKey),kid:'browser163',alg:'RS256',use:'sig'};
@@ -32,7 +33,7 @@ try{
   }
   return originalFetch(url,init);
  };
- app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_DATABASE_URL:'postgresql://asisteam_auth:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://synthetic-auth.example.test',NATIVE_AUTH_WEB_URL:webOrigin,OAUTH_GOOGLE_CLIENT_ID:'synthetic-google-client',OAUTH_GOOGLE_CLIENT_SECRET:'synthetic-google-secret',HTTP_TIMEOUT_MS:'30000'}),{log(){},error(){},warn(){},debug(){},verbose(){},fatal(){},event(){}});await app.listen(0,'127.0.0.1');
+ app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/'+new URL(isolated.url).pathname.slice(1),NATIVE_AUTH_DATABASE_URL:'postgresql://asisteam_auth:'+rolePassword+'@127.0.0.1:54322/'+new URL(isolated.url).pathname.slice(1),NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://synthetic-auth.example.test',NATIVE_AUTH_WEB_URL:webOrigin,OAUTH_GOOGLE_CLIENT_ID:'synthetic-google-client',OAUTH_GOOGLE_CLIENT_SECRET:'synthetic-google-secret',HTTP_TIMEOUT_MS:'30000'}),{log(){},error(){},warn(){},debug(){},verbose(){},fatal(){},event(){}});await app.listen(0,'127.0.0.1');
  const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),NEXT_PUBLIC_SUPABASE_URL:'http://127.0.0.1:54321',NEXT_PUBLIC_SUPABASE_ANON_KEY:'synthetic-build-fixture',ASISTEAM_API_SUPABASE_URL:'http://127.0.0.1:54321',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,ASISTEAM_SITE_URL:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
  for(const module of ['groups','profile','members','invitations','activities','attendance','reports','billing','announcements','qr','storage'])env['ASISTEAM_TRANSPORT_'+module.toUpperCase()]='nest';
  next=spawn(process.execPath,['node_modules/next/dist/bin/next','dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd:new URL('..',import.meta.url),env,stdio:'ignore'});
@@ -66,5 +67,5 @@ try{
   await db.query('delete from app_private.auth_oauth_transactions where id=any($1::uuid[]) or link_subject_id=any($2::uuid[])',[transactionIds,subjects]);await db.query('delete from app_private.auth_social_identities where subject_id=any($1::uuid[])',[subjects]);
   for(const table of ['auth_refresh','auth_recovery','auth_families','auth_credentials'])await db.query('delete from app_private.'+table+(table==='auth_refresh'?' where family_id in(select id from app_private.auth_families where subject_id=any($1::uuid[]))':' where subject_id=any($1::uuid[])'),[subjects]);await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[ids]);await db.query('delete from public.users where id=any($1::uuid[])',[ids]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[subjects]);
   for(const row of previous)await db.query('alter role '+row.rolname+' '+(row.rolcanlogin?'login':'nologin')+' password '+(row.rolpassword===null?'null':"'"+row.rolpassword.replaceAll("'","''")+"'"));await db.query('commit');
- }finally{await db.end();}
+ }finally{await db.end();await isolated.cleanup();}
 }

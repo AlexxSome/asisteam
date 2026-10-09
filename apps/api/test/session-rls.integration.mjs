@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { createApplication } from '../dist/application.js';
-import { loadConfig } from '../dist/config.js';
+import { createApplication } from './legacy-application.mjs';
+import { loadConfig, OriginDatabase } from './legacy-application.mjs';
 import { Database } from '../dist/database.js';
 import { TokenVerifier } from '../dist/auth.js';
 import { requireMembership, projectGroupDetail } from '../dist/authorization.js';
@@ -80,7 +80,7 @@ test('Nest HTTP, runtime role, V1–V6/COACH/multirol, revocation and reused poo
       const visible = (await tx.query('select id from public.v_my_groups')).rows.map(r=>r.id);assert.deepEqual(visible,[groups[i===5?1:0]]);
     });
     assert.equal(pids.size,1);
-    const wrongRole = new Database(loadConfig({ DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres', SUPABASE_AUTH_URL: fixture.issuer, SUPABASE_AUTH_PUBLIC_KEY: 'sb_publishable_synthetic' }),new SafeLogger(()=>{}));
+    const wrongRole = new OriginDatabase(loadConfig({ DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres', SUPABASE_AUTH_URL: fixture.issuer, SUPABASE_AUTH_PUBLIC_KEY: 'sb_publishable_synthetic' }),new SafeLogger(()=>{}));
     try { assert.equal(await wrongRole.ready(),false);await assert.rejects(wrongRole.authenticated(await identity(0),async()=>true),error=>error.getStatus()===503); }finally{await wrongRole.onApplicationShutdown();}
     const originalName=(await admin.query('select full_name from public.users where id=$1',[profiles[0]])).rows[0].full_name;
     await assert.rejects(db.authenticated(await identity(0),async tx=>{
@@ -89,7 +89,7 @@ test('Nest HTTP, runtime role, V1–V6/COACH/multirol, revocation and reused poo
     }),error=>error.getStatus()===401);
     assert.equal((await admin.query('select full_name from public.users where id=$1',[profiles[0]])).rows[0].full_name,originalName);
     await admin.query("update auth.sessions set not_after=now()+interval '1 hour' where id=$1",[sessions[0]]);
-    const concurrent = new Database(loadConfig({ DATABASE_URL: 'postgresql://asisteam_api:' + password + '@127.0.0.1:54322/postgres', PG_POOL_MAX: '2' }),new SafeLogger(()=>{}));
+    const concurrent = new OriginDatabase(loadConfig({ DATABASE_URL: 'postgresql://asisteam_api:' + password + '@127.0.0.1:54322/postgres', PG_POOL_MAX: '2' }),new SafeLogger(()=>{}));
     let entered=0,release;
     const barrier=new Promise(resolve=>{release=resolve;});
     try { await Promise.all([0,1].map(async()=>concurrent.authenticated(await identity(0),async tx=>{

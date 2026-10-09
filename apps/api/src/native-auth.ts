@@ -32,7 +32,7 @@ export class NativeAuth implements OnApplicationShutdown {
   const client=await this.pool.connect().catch(()=>{throw new ServiceUnavailableException();});
   try{
    if((await client.query(roleSql)).rows[0]?.safe!==true)throw new ServiceUnavailableException();
-   if(this.config.SUPABASE_AUTH_RETIRED&&(await client.query('select app_private.auth_is_native() as native')).rows[0]?.native!==true)throw new ServiceUnavailableException();
+   if((await client.query('select app_private.auth_is_native() as native')).rows[0]?.native!==true)throw new ServiceUnavailableException();
    // RPC is a single transaction. Returned errors are interpreted AFTER commit
    // so replay revocation and rate counters survive denied requests.
    return (await client.query('select app_private.auth_operation($1,$2::jsonb) as data',[operation,JSON.stringify(data)])).rows[0]?.data;

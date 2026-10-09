@@ -19,7 +19,8 @@
     "ci:staging": "node scripts/ci/staging.mjs",
     "ci:extended": "node scripts/ci/extended.mjs",
     "ci:qualification": "node scripts/ci/qualification.mjs",
-    "migration:portability": "node scripts/migration/portability/run.mjs"
+    "migration:portability": "node scripts/migration/portability/run.mjs",
+    "ci:retirement": "node scripts/ci/retirement.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

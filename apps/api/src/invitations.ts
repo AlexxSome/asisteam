@@ -104,25 +104,8 @@ export class InvitationsController {
   private async createAccount(request: Request,input:unknown,claim:boolean) {
     const body=parse(claim?httpSchemas.InvitationClaim:httpSchemas.InvitationRegistration,input);
     await this.attempt(request,'accept');
-    if (this.config.NATIVE_AUTH_SECRET && (this.config.SUPABASE_AUTH_RETIRED || request.headers['x-asisteam-native-auth'] === '1')) {
-      return httpSchemas.InvitationAccepted.parse(await this.nativeAuth.register(body.registration,{token:body.token,claim}));
-    }
-    if (!this.config.INVITATION_AUTH_BRIDGE_SECRET || !this.config.SUPABASE_AUTH_URL || !this.config.SUPABASE_AUTH_PUBLIC_KEY) throw new ServiceUnavailableException();
-    const tokenHash=hash(body.token),context=z.object({email:z.string().nullable(),account_status:z.string().nullable(),managed_activation:z.boolean().optional()}).parse(result(await this.registrations.call('context',[tokenHash])));
-    if (!context.email || body.registration.email.toLowerCase()!==context.email.toLowerCase() || (claim ? context.account_status!=='MANAGED'||context.managed_activation!==true : context.account_status!=='INVITED'||context.managed_activation===true)) throw new DomainException(422,'registration_failed');
-    const profile=claim?{managed_claim:true,terms_version:INVITATION_TERMS_VERSION}:(()=>{const p=invitationRegistrationSchema.parse(body.registration);return {full_name:p.full_name,birthdate:p.birthdate,phone:p.phone??null,terms_version:INVITATION_TERMS_VERSION};})();
-    const nonce=randomBytes(32).toString('hex'),nonceHash=hash(nonce);
-    await this.registrations.call('prepare',[tokenHash,nonceHash,body.registration.email,JSON.stringify(profile)]);
-    let created: { id:string } | undefined;
-    try {
-      // Temporary Auth boundary: service_role remains inside Edge; no authorization/SQL/email there.
-      const bridge = new URL(this.config.SUPABASE_AUTH_URL);bridge.pathname='/functions/v1/invitation-auth';
-      const response=await fetch(bridge,{method:'POST',redirect:'error',signal:AbortSignal.timeout(10000),headers:{'content-type':'application/json',apikey:this.config.SUPABASE_AUTH_PUBLIC_KEY,'x-asisteam-auth-bridge':this.config.INVITATION_AUTH_BRIDGE_SECRET},body:JSON.stringify({email:body.registration.email,password:body.registration.password,nonce})});
-      if(response.ok)created=z.object({id:z.string().uuid()}).strict().parse(await response.json());
-    } catch { throw new ServiceUnavailableException(); }
-    finally { await this.registrations.call('cancel',[nonceHash]); }
-    if(!created){const current=await this.registrations.call('context',[tokenHash]);result(current);throw new DomainException(422,'registration_failed');}
-    return httpSchemas.InvitationAccepted.parse(result(await this.registrations.call('registrationResult',[tokenHash,created.id])));
+    if (!this.config.NATIVE_AUTH_SECRET) throw new ServiceUnavailableException();
+    return httpSchemas.InvitationAccepted.parse(await this.nativeAuth.register(body.registration, { token: body.token, claim }));
   }
   @Get('groups/:groupId/invitations') @UseGuards(SessionGuard)
   async list(@Req() request:AuthenticatedRequest,@Param() params:unknown,@Query() query:Record<string,unknown>) {

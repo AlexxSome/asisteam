@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { TokenVerifier } from '../dist/auth.js';
-import { loadConfig } from '../dist/config.js';
+import { TokenVerifier } from './legacy-application.mjs';
+import { loadConfig } from './legacy-application.mjs';
 import { isVerifiedIdentity } from '../dist/identity.js';
 import { projectGroupDetail } from '../dist/authorization.js';
-import { createApplication } from '../dist/application.js';
+import { createApplication } from './legacy-application.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 

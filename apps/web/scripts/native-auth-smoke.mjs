@@ -9,9 +9,10 @@ import {chromium} from '@playwright/test';
 import {createApplication} from '../../api/dist/application.js';
 import {loadConfig} from '../../api/dist/config.js';
 const {Client}=createRequire(new URL('../../api/package.json',import.meta.url))('pg');
-const databaseUrl=process.env.INDEPENDENT_PG_TEST_URL??'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
+const isolated = process.env.INDEPENDENT_PG_TEST_URL ? null : await (await import('../../api/test/native-browser-database.mjs')).nativeBrowserDatabase();
+const databaseUrl=process.env.INDEPENDENT_PG_TEST_URL??isolated.url;
 const databaseTarget=new URL(databaseUrl);
-assert.equal(databaseTarget.hostname,'127.0.0.1');assert.equal(databaseTarget.pathname,'/postgres');assert.ok(['postgres:','postgresql:'].includes(databaseTarget.protocol));
+assert.equal(databaseTarget.hostname,'127.0.0.1');assert.ok(/^\/(?:postgres|native_browser_[a-f0-9]+)$/.test(databaseTarget.pathname));assert.ok(['postgres:','postgresql:'].includes(databaseTarget.protocol));
 const databaseConnection=(role,password)=>{const url=new URL(databaseUrl);url.username=role;url.password=password;return url.toString();};
 const db=new Client({connectionString:databaseUrl});
 const run=randomUUID(),password='Synthetic-browser-'+run,email='mig162-browser-'+run+'@example.test',secret=randomBytes(32).toString('hex'),rolePassword=randomUUID();
@@ -94,5 +95,5 @@ try{
 }finally{
  mkdirSync(reportDir,{recursive:true});writeFileSync(new URL('native-auth-browser.json',reportDir),JSON.stringify(report,null,2)+'\n');
  globalThis.fetch=originalFetch;if(browser)await browser.close();if(next){next.kill('SIGTERM');if(next.exitCode===null)await Promise.race([new Promise(r=>next.once('exit',r)),delay(5000)]);if(next.exitCode===null)next.kill('SIGKILL');}if(owns)rmSync(fixture,{recursive:true,force:true});writeFileSync(nextEnv,previousEnv);if(app)await app.close();
- try{await db.query('begin');await db.query("set local session_replication_role='replica'");const own=(await db.query('select id,auth_user_id from public.users where email=$1',[email])).rows[0];if(own){for(const table of ['auth_refresh','auth_recovery','auth_families','auth_credentials'])await db.query('delete from app_private.'+table+(table==='auth_refresh'?' where family_id in(select id from app_private.auth_families where subject_id=$1)':' where subject_id=$1'),[own.auth_user_id]);await db.query('delete from public.account_consents where user_id=$1',[own.id]);await db.query('delete from public.users where id=$1',[own.id]);await db.query('delete from app_private.auth_subjects where id=$1',[own.auth_user_id]);}for(const row of previous)await db.query('alter role '+row.rolname+' '+(row.rolcanlogin?'login':'nologin')+' password '+(row.rolpassword===null?'null':"'"+row.rolpassword.replaceAll("'","''")+"'"));await db.query('commit');}finally{await db.end();}
+ try{await db.query('begin');await db.query("set local session_replication_role='replica'");const own=(await db.query('select id,auth_user_id from public.users where email=$1',[email])).rows[0];if(own){for(const table of ['auth_refresh','auth_recovery','auth_families','auth_credentials'])await db.query('delete from app_private.'+table+(table==='auth_refresh'?' where family_id in(select id from app_private.auth_families where subject_id=$1)':' where subject_id=$1'),[own.auth_user_id]);await db.query('delete from public.account_consents where user_id=$1',[own.id]);await db.query('delete from public.users where id=$1',[own.id]);await db.query('delete from app_private.auth_subjects where id=$1',[own.auth_user_id]);}for(const row of previous)await db.query('alter role '+row.rolname+' '+(row.rolcanlogin?'login':'nologin')+' password '+(row.rolpassword===null?'null':"'"+row.rolpassword.replaceAll("'","''")+"'"));await db.query('commit');}finally{await db.end();await isolated?.cleanup();}
 }

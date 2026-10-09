@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
 import { AccountTermsField } from "@/components/account-terms-field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
+import { useState } from "react";
 import { acceptInvitation } from "./actions";
 
-export function InvitationForm({ token, signedInEmail, managedActivation = false }: { token: string; signedInEmail?: string; managedActivation?: boolean }) {
-  const [mode, setMode] = useState<"session" | "login" | "register" | "claim">(managedActivation ? "claim" : signedInEmail ? "session" : "login");
+export function InvitationForm({ token, signedInUser, managedActivation = false }: { token: string; signedInUser?: boolean; managedActivation?: boolean }) {
+  const [mode, setMode] = useState<"session" | "login" | "register" | "claim">(managedActivation ? "claim" : signedInUser ? "session" : "login");
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
   const [pending, setPending] = useState(false);
@@ -20,7 +20,7 @@ export function InvitationForm({ token, signedInEmail, managedActivation = false
   return <div className="space-y-5">
     {managedActivation ? <p className="text-sm">Crea tu contraseña para acceder al perfil que gestiona tu ADMIN. Si eres menor de edad, tu apoderado debe mantener vigente su autorización para activar la cuenta.</p> :
     <div className="flex flex-wrap gap-2" role="group" aria-label="Cómo aceptar la invitación">
-      {signedInEmail && <Button type="button" variant={mode === "session" ? "default" : "outline"} disabled={busy}
+      {signedInUser && <Button type="button" variant={mode === "session" ? "default" : "outline"} disabled={busy}
         onClick={() => { setMode("session"); setError(undefined); }}>Usar mi sesión</Button>}
       <Button type="button" variant={mode === "login" ? "default" : "outline"} disabled={busy}
         onClick={() => { setMode("login"); setError(undefined); }}>Ya tengo cuenta</Button>
@@ -42,7 +42,7 @@ export function InvitationForm({ token, signedInEmail, managedActivation = false
         if (result && "pending" in result) setPending(true);
       } finally { setBusy(false); }
     }}>
-      {mode === "session" ? <p className="break-words text-sm">Sesión actual: {signedInEmail}</p> : <>
+      {mode === "session" ? <p className="break-words text-sm">Usar la sesión iniciada en este navegador</p> : <>
         <div className="space-y-2"><Label htmlFor="email">Email que recibió la invitación</Label>
           <Input id="email" name="email" type="email" autoComplete="email" required maxLength={254} /></div>
         {mode === "register" && <>

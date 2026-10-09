@@ -1,5 +1,8 @@
 # Sistema visual web
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 [Seguro] **MIG-23 (#167):** [calificación actual](migration/issue-167/README.md) verifica teclado, guardando/guardado/error/offline y axe sobre los transportes Nest, con 320/375/768/1024/1440 px. Conserva componentes/tokens/estados; no añade páginas. Los casos axe incomplete y la revisión humana con lector/zoom nativo y teléfono mantienen su gate explícito.
 
 [Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) AUT-01…07 conserva componentes y textos; congelación/indisponibilidad usa el error compartido sin anunciar éxito ni recuperar sesión legacy. Recovery antiguo exige pedir enlace nuevo; invitaciones previas conservan su flujo. No se agregan componentes ni páginas. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
