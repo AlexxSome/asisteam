@@ -35,6 +35,7 @@ pnpm api:check
 ```sh
 pnpm install --frozen-lockfile
 pnpm exec turbo run build --filter @asisteam/api --filter @asisteam/worker
+docker build -f scripts/migration/storage/Dockerfile.fixture -t asisteam-storage-fixture:161 .
 node apps/api/test/independent-postgres.integration.mjs
 pnpm ci:checks
 pnpm ci:backend
@@ -43,3 +44,7 @@ pnpm ci:backend
 [Seguro] Docker/Node24/Chromium requeridos. El ensayo crea y elimina únicamente dos contenedores/volúmenes propios y un directorio temporal 0700. La imagen postgres17.9 añade pgTAP solo como dependencia de pruebas. Usa puertos loopback aleatorios y nunca recibe una DB externa. Chromium recorre Next→Nest→PostgreSQL independiente, con URLs/keys Supabase explícitamente vacías; HIBP/Resend se simulan. No ejecutar simultáneamente con otro smoke Next ni build/typegen. `DB_GENERATE_TYPES=1` es una operación de desarrollo deliberada para regenerar el archivo desde ese destino; las corridas normales exigen igualdad y no escriben tipos.
 
 [Seguro] Evidencia sanitizada en `.ci-results/independent-postgres.json`: fases/tiempos/versiones/conteos, presupuesto y resultado PITR. pgTAP de destino (23 permisos + 27 métricas), fixtures de V1–V6/R1/historia y comparación de catálogo cubren el cambio; las suites legacy completas siguen en ci:backend mientras dure coexistencia. Los checks de OpenAPI, tipos legacy, tipos PostgreSQL y ledger son independientes. Resultados y límites de la entrega: [MIG-21](../../docs/migration/issue-165/README.md).
+
+## Snapshot y recuperación · MIG-22 (#166)
+
+[Seguro] `scripts/cutover.mjs export|restore|verify` requiere conexiones escritoras bloqueadas y drenadas, autoridad propia y catálogo portable exacto. Copia las 44 tablas de negocio completas a una DB nueva sin historia, con operador administrativo aislado; no modifica el baseline ni otorga permisos de runtime. Restore verifica hashes/catálogo/ledger, todos los FK y R1/asistencia antes del commit. Snapshot contiene credenciales/PII: mantener directorio 0700/archivo 0600 cifrados fuera del repo; lectura limitada a 64 MB. No es CDC ni restauración sobre una base escritora. El [runbook MIG-22](../../docs/migration/issue-166/runbook.md) detalla admisión/drenaje, Storage, eventos de contratos MP, scheduler y NO-GO externos. El ensayo incluido en `independent-postgres.integration.mjs` demuestra aborto previo y recuperación hacia adelante con deltas; volver a Supabase Auth/Edge requiere otra migración explícita.

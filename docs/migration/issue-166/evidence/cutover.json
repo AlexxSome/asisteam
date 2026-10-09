@@ -1,0 +1,100 @@
+{
+  "sourceCommit": "40da9a6ad187e358020f4021f5feab446bab85f5",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "freeze-every-db-writer-and-abort-before-first-write",
+      "status": "PASS",
+      "seconds": 0.396
+    },
+    {
+      "check": "snapshot-maintenance-cutover-and-destination-writes",
+      "status": "PASS",
+      "seconds": 0.269
+    },
+    {
+      "check": "single-job-executor-concurrent-replicas-and-persist-before-ack",
+      "status": "PASS",
+      "seconds": 0.014
+    },
+    {
+      "check": "post-write-failure-freeze-and-complete-delta-reconciliation",
+      "status": "PASS",
+      "seconds": 0.621
+    },
+    {
+      "check": "forward-recovery-login-history-consent-files-provider-retry-and-jobs",
+      "status": "PASS",
+      "seconds": 0.123
+    }
+  ],
+  "pending": [
+    "production-volume",
+    "named-operators-and-approved-RPO-RTO",
+    "MP-sandbox-contract-URL-and-retry",
+    "managed-provider-maintenance-controls"
+  ],
+  "syntheticJobClock": "Chile-noon",
+  "singleWriterAtAbort": true,
+  "activeJobLeasePreserved": true,
+  "failedEventAck": 503,
+  "changedTables": [
+    {
+      "table": "app_private.auth_attempts",
+      "rows": 18
+    },
+    {
+      "table": "app_private.auth_credentials",
+      "rows": 5
+    },
+    {
+      "table": "app_private.auth_families",
+      "rows": 8
+    },
+    {
+      "table": "app_private.auth_refresh",
+      "rows": 8
+    },
+    {
+      "table": "app_private.auth_subjects",
+      "rows": 5
+    },
+    {
+      "table": "app_private.majority_tasks",
+      "rows": 2
+    },
+    {
+      "table": "public.account_consents",
+      "rows": 5
+    },
+    {
+      "table": "public.attendance_records",
+      "rows": 10
+    },
+    {
+      "table": "public.consents",
+      "rows": 2
+    },
+    {
+      "table": "public.group_subscriptions",
+      "rows": 1
+    },
+    {
+      "table": "public.subscription_invoices",
+      "rows": 1
+    },
+    {
+      "table": "public.users",
+      "rows": 6
+    }
+  ],
+  "rejectedCorruptSnapshot": true,
+  "foreignKeyAndMinorFailureAtomic": true,
+  "reconciledTables": 44,
+  "reconciledForeignKeys": 59,
+  "reconciledObjects": 2,
+  "providerReplayInvoices": 2,
+  "rpoCommittedWrites": 0,
+  "recoverySeconds": 0.745,
+  "syntheticBudgetSeconds": 60
+}

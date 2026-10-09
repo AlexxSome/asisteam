@@ -16,10 +16,10 @@ const databaseConnection=(role,password)=>{const url=new URL(databaseUrl);url.us
 const db=new Client({connectionString:databaseUrl});
 const run=randomUUID(),password='Synthetic-browser-'+run,email='mig162-browser-'+run+'@example.test',secret=randomBytes(32).toString('hex'),rolePassword=randomUUID();
 const fixture=new URL('../src/app/native-auth-fixture/',import.meta.url),nextEnv=new URL('../next-env.d.ts',import.meta.url),previousEnv=readFileSync(nextEnv,'utf8');
-const originalFetch=globalThis.fetch,mail=[];let previous=[],app,next,browser,owns=false;
+const originalFetch=globalThis.fetch,mail=[];let previous=[],app,next,browser,page,owns=false;
 const report={sourceCommit:process.env.SOURCE_COMMIT??'local-pending-diff',environment:process.env.GITHUB_ACTIONS?'github-actions-synthetic':'local-synthetic',phase:'setup',status:'RUNNING',api:[]};
 const reportDir=new URL('../../../.ci-results/',import.meta.url);
-const phase=name=>{report.phase=name;};
+const phase=name=>{report.phase=name;delete report.lastActionStatus;delete report.actionOriginMatches;report.actionRequests=0;};
 try{
  await db.connect();previous=(await db.query("select rolname,rolcanlogin,rolpassword from pg_authid where rolname in ('asisteam_api','asisteam_auth')")).rows;
  for(const role of ['asisteam_api','asisteam_auth'])await db.query("alter role "+role+" login password '"+rolePassword+"'");
@@ -46,24 +46,48 @@ try{
  phase('csrf');
  assert.equal((await originalFetch(webOrigin+'/native-auth-fixture/csrf',{method:'POST',headers:{origin:'https://attacker.example.test'}})).status,403);
  assert.equal((await originalFetch(webOrigin+'/native-auth-fixture/csrf',{method:'POST',headers:{origin:webOrigin}})).status,204);
- phase('chromium');browser=await chromium.launch({headless:true});const context=await browser.newContext(),page=await context.newPage();page.setDefaultTimeout(30000);
+ phase('chromium');browser=await chromium.launch({headless:true});const context=await browser.newContext();page=await context.newPage();page.setDefaultTimeout(30000);
+ if(process.env.AUTH_SMOKE_SLOW_BROWSER==='1'){const cdp=await context.newCDPSession(page);await cdp.send('Emulation.setCPUThrottlingRate',{rate:6});await context.route('**/_next/static/**/*.js',async route=>{await delay(500);await route.continue();});report.browserCpuRate=6;}
+ // SSR inputs can be visible before React attaches their submit handler.
+ // This harness targets pinned React 19 and fails closed if its DOM marker
+ // changes. Wait for the actual form commit, then allow passive RHF
+ // effects to run across two frames. No fixed sleep or repeated submission.
+ const formReady=input=>{
+  const form=input.closest('form');if(!form)return false;
+  const key=Object.keys(form).find(name=>name.startsWith('__reactProps$'));
+  const props=key&&form[key];return typeof props?.onSubmit==='function'||typeof props?.action==='function';
+ };
+ const readyForm=async locator=>{
+  await locator.waitFor();const element=await locator.elementHandle(),started=performance.now();
+  const initiallyReady=await element.evaluate(formReady);
+  await page.waitForFunction(formReady,element);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  (report.formsReady??=[]).push({phase:report.phase,initiallyReady,seconds:Number(((performance.now()-started)/1000).toFixed(3))});
+ };
+ page.on('request',request=>{if(request.method()==='POST'&&request.headers()['next-action']){report.actionRequests++;report.actionOriginMatches=request.headers().origin===webOrigin;}});
+ page.on('pageerror',()=>{report.pageErrors=(report.pageErrors??0)+1;});
  page.on('response',response=>{if(response.request().method()==='POST'&&response.request().headers()['next-action'])report.lastActionStatus=response.status();});
  phase('register');
- await page.goto(webOrigin+'/register');await page.getByLabel('Nombre completo',{exact:true}).fill('Perfil navegador');await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Fecha de nacimiento',{exact:true}).fill('1990-01-01');await page.getByLabel('Contraseña',{exact:true}).fill(password);await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Crear cuenta',exact:true}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Perfil!'}).waitFor();
+ await page.goto(webOrigin+'/register',{waitUntil:'commit'});await readyForm(page.getByLabel('Nombre completo',{exact:true}));await page.getByLabel('Nombre completo',{exact:true}).fill('Perfil navegador');await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Fecha de nacimiento',{exact:true}).fill('1990-01-01');await page.getByLabel('Contraseña',{exact:true}).fill(password);await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Crear cuenta',exact:true}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Perfil!'}).waitFor();
  phase('cookies');let tokens=await context.cookies();const access=tokens.find(c=>c.name==='asisteam-access'),refresh=tokens.find(c=>c.name==='asisteam-refresh');assert.ok(access?.httpOnly&&refresh?.httpOnly);assert.equal(access.sameSite,'Lax');assert.ok(!tokens.some(c=>c.name.startsWith('sb-')&&c.name.includes('-auth-token')));assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
  phase('refresh');
  await context.clearCookies({name:'asisteam-access'});await page.reload();await page.waitForURL('**/welcome');tokens=await context.cookies();assert.notEqual(tokens.find(c=>c.name==='asisteam-refresh').value,refresh.value);assert.ok(tokens.find(c=>c.name==='asisteam-access'));
- phase('logout');await page.goto(webOrigin+'/native-auth-fixture');await page.getByRole('button',{name:'Cerrar sesión sintética'}).click();await page.waitForURL('**/login');assert.ok(!(await context.cookies()).some(c=>c.name==='asisteam-access'||c.name==='asisteam-refresh'));
+ phase('logout');await page.goto(webOrigin+'/native-auth-fixture',{waitUntil:'commit'});await readyForm(page.getByRole('button',{name:'Cerrar sesión sintética'}));await page.getByRole('button',{name:'Cerrar sesión sintética'}).click();await page.waitForURL('**/login');assert.ok(!(await context.cookies()).some(c=>c.name==='asisteam-access'||c.name==='asisteam-refresh'));
  phase('recovery');
- await page.goto(webOrigin+'/forgot-password');await page.getByLabel('Email',{exact:true}).fill(email);await page.getByRole('button',{name:/enviar/i}).click();await page.getByText(/Si el email/).waitFor();assert.equal(mail.length,1);
- phase('reset');const link=mail[0].text.match(/http:\/\/\S+/)[0],newPassword='Changed-browser-'+run;await page.goto(link);await page.getByLabel('Nueva contraseña',{exact:true}).fill(newPassword);await page.getByLabel('Confirmar nueva contraseña',{exact:true}).fill(newPassword);await page.getByRole('button',{name:'Guardar nueva contraseña'}).click();await page.getByText('Tu contraseña fue actualizada. Ya puedes iniciar sesión con ella.').waitFor();assert.equal(new URL(page.url()).searchParams.get('token'),null);
+ await page.goto(webOrigin+'/forgot-password',{waitUntil:'commit'});await readyForm(page.getByLabel('Email',{exact:true}));await page.getByLabel('Email',{exact:true}).fill(email);await page.getByRole('button',{name:/enviar/i}).click();await page.getByText(/Si el email/).waitFor();assert.equal(mail.length,1);
+ phase('reset');const link=mail[0].text.match(/http:\/\/\S+/)[0],newPassword='Changed-browser-'+run;await page.goto(link,{waitUntil:'commit'});await readyForm(page.getByLabel('Nueva contraseña',{exact:true}));await page.getByLabel('Nueva contraseña',{exact:true}).fill(newPassword);await page.getByLabel('Confirmar nueva contraseña',{exact:true}).fill(newPassword);await page.getByRole('button',{name:'Guardar nueva contraseña'}).click();await page.getByText('Tu contraseña fue actualizada. Ya puedes iniciar sesión con ella.').waitFor();assert.equal(new URL(page.url()).searchParams.get('token'),null);
  phase('login');
- await page.goto(webOrigin+'/login');await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Contraseña',{exact:true}).fill(newPassword);await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click();await page.waitForURL('**/welcome');
+ await page.goto(webOrigin+'/login',{waitUntil:'commit'});await readyForm(page.getByLabel('Email',{exact:true}));await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Contraseña',{exact:true}).fill(newPassword);await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click();await page.waitForURL('**/welcome');
  console.log('PASS: Chromium + Next real + Nest/PostgreSQL: registro/perfil, cookies HttpOnly/Lax, Origin/CSRF, refresh, logout, recovery/reset y login; proveedores HIBP/Resend simulados.');
  report.status='PASS';phase('completed');
 }catch(error){
  report.status='FAIL';report.failure=error?.name==='TimeoutError'?'timeout':error?.code==='ERR_ASSERTION'?'assertion':'runtime';
  // Store counts/booleans only. No page text, URLs, credentials or exception.
+ if(page)try{
+  report.invalidFields=await page.locator('input[aria-invalid="true"]').evaluateAll(inputs=>inputs.map(input=>input.name).filter(name=>['full_name','email','birthdate','password','confirmPassword','terms_accepted'].includes(name)));
+  const alerts=await page.getByRole('alert').allTextContents();
+  report.alertKind=alerts.some(text=>text.includes('El enlace es inválido'))?'invalid-link':alerts.some(text=>text.includes('No pudimos conectar'))?'connection':alerts.length?'other':'none';
+ }catch{/* Page itself may have closed; never publish raw page/errors. */}
  report.mailCount=mail.length;
  try{report.accountExists=(await db.query('select exists(select 1 from public.users where email=$1) as present',[email])).rows[0].present;}catch{/* Setup failed before DB was available. */}
  throw error; // The CI runner retains raw diagnostics in memory only.

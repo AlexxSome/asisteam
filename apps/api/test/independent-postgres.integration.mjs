@@ -14,6 +14,7 @@ import {attendanceMetrics} from '../../../packages/core/dist/index.js';
 import {migrate} from '../../../packages/db/scripts/migrate.mjs';
 import {persistenceTypes} from '../../../packages/db/scripts/types.mjs';
 import {command,sql,normalizeDump,quote} from '../../../packages/db/scripts/local.mjs';
+import {rehearseCutover} from './cutover-rehearsal.mjs';
 const root=new URL('../../../packages/db/',import.meta.url),name='asisteam-db165-'+randomUUID().replaceAll('-','');
 const password=randomBytes(32).toString('hex'),secret=randomBytes(32).toString('hex'),dir=await mkdtemp(join(tmpdir(),'asisteam-db165-'));
 await chmod(dir,0o700);
@@ -121,8 +122,12 @@ try {
    for(const {name} of tables){assert.match(name,/^(public|app_private|db_migrations)\.[a-z_0-9]+$/);result.push((await client.query("select count(*)::int as n,md5(coalesce(string_agg(to_jsonb(t)::text,E'\\n' order by to_jsonb(t)::text),'')) as digest from "+name+' t')).rows[0]);}return result;
   }finally{await client.end();}
  };
- await check('logical-backup-restore-all-table-and-group-reconciliation',async()=>{
+ await check('cutover-abort-post-write-reconciliation-and-forward-recovery',async()=>{
   await app.close();app=undefined;await worker.onApplicationShutdown();worker=undefined;await billing.onApplicationShutdown();billing=undefined;
+  await deploy.end();deploy=undefined;
+  report.cutover=await rehearseCutover({owner,connect,port,config:runtimeConfig,ids,group,passwordLogin,command});
+ });
+ await check('logical-backup-restore-all-table-and-group-reconciliation',async()=>{
   const before=await snapshot('postgres'),catalog="select jsonb_agg(jsonb_build_array(n.nspname,c.relname,x.conname,pg_get_constraintdef(x.oid)) order by n.nspname,c.relname,x.conname) as data from pg_constraint x join pg_class c on c.oid=x.conrelid join pg_namespace n on n.oid=c.relnamespace where n.nspname in ('public','app_private')";
   const constraints=(await owner.query(catalog)).rows[0].data;
   const backup=normalizeDump(await command('docker',['exec',name,'pg_dump','-U','postgres','--no-owner','-n','public','-n','app_private','-n','db_migrations']));report.backupBytes=Buffer.byteLength(backup);

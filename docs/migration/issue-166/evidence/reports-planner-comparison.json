@@ -1,0 +1,48 @@
+{
+  "sourceCommit": "bde3341ec08f6076801a59de53043c3810a2c0c4",
+  "environment": "local-synthetic",
+  "sequence": "isolated-before-then-after",
+  "beforeAnalyze": {
+    "environment": "local-synthetic-postgresql17",
+    "fixture": {
+      "activeAthletes": 500,
+      "metricCases": 9,
+      "pageSize": 100
+    },
+    "samples": 20,
+    "baseline": "authenticated canonical SQL including BEGIN/ROLLBACK",
+    "statsMs": [
+      1416.12,
+      34.24,
+      35.88,
+      1392.31
+    ],
+    "sqlP95Ms": 5.18,
+    "nestHttpP95Ms": 10.32,
+    "status": "PASS",
+    "cache": false
+  },
+  "afterAnalyze": {
+    "environment": "local-synthetic-postgresql17",
+    "fixture": {
+      "activeAthletes": 500,
+      "metricCases": 9,
+      "pageSize": 100
+    },
+    "samples": 20,
+    "baseline": "authenticated canonical SQL including BEGIN/ROLLBACK",
+    "statsMs": [
+      55.69,
+      22.44,
+      23.29,
+      54.79
+    ],
+    "sqlP95Ms": 6.56,
+    "nestHttpP95Ms": 9.9,
+    "status": "PASS",
+    "cache": false
+  },
+  "apiStatementTimeoutMs": 3000,
+  "httpClientTimeoutMs": 10000,
+  "productSqlChanged": false
+}

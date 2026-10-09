@@ -259,3 +259,7 @@ Supuestos de la columna de escala: 200 grupos × ~30 miembros ≈ 6.000 usuarios
 ## PostgreSQL independiente · MIG-21 (#165)
 
 [Seguro] [MIG-21](migration/issue-165/README.md) prepara el esquema completo sin dependencias SQL/roles internos de Supabase y ensaya Nest/worker/Next sobre PostgreSQL17 independiente. Ownership se reserva al migrador; API/jobs/Auth/invitaciones/billing mantienen roles mínimos, RLS y RPC canónicas. Tipos PostgreSQL y contrato OpenAPI se comprueban por separado. [Runbook](../packages/db/README.md) y evidencia distinguen conexión/backup/restauración/PITR sintéticos de provisión/volumen/RPO/RTO externos pendientes. Next selecciona `ASISTEAM_DATABASE_MODE=independent` solo con Auth y todos los módulos Nest, prescindiendo de URLs/keys Supabase. El corte externo y la retirada final siguen en #166–#168.
+
+## Corte y recuperación · MIG-22 (#166)
+
+[Seguro] [MIG-22](migration/issue-166/README.md) añade snapshot privado de 44 tablas durante mantenimiento, restauración atómica en DB vacía con reconciliación de SHA/FK/R1 y [runbook](migration/issue-166/runbook.md) para congelar todos los escritores, abortar antes de escrituras y recuperar hacia adelante después de ellas. El ensayo usa PostgreSQL/S3 locales, HTTP Nest, jobs concurrentes y MP simulado con 503/replay; no acredita proveedores externos. Volumen, responsables nominados, mantenimiento y RPO/RTO acordados permanecen gates previos a #168; si snapshot no cabe, se replanifica antes de producción. El origen nunca se reabre con datos viejos tras nuevas escrituras en destino.

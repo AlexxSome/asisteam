@@ -1,0 +1,64 @@
+{
+  "baseCommit": "4b9a8afe5524359afaa27ec0dcaf3a72181afbeb",
+  "date": "2026-10-08",
+  "timezone": "America/Santiago",
+  "environment": "local-synthetic",
+  "localGates": "PASS",
+  "remoteCI": "pending-publication",
+  "productionCutover": "NO-GO-external-acceptance-pending",
+  "reviewScope": "issue-166-diff-only",
+  "files": [
+    {
+      "path": "packages/db/scripts/cutover.mjs",
+      "sha256": "040053ffeae95b1648c1693eb4c5e098a39d5c589c68bac91d3a5caf87f65288"
+    },
+    {
+      "path": "apps/api/test/cutover-rehearsal.mjs",
+      "sha256": "064cb51ed8643034550d07542fcb1f221803b92efee67512708a0630cbdcccdf"
+    },
+    {
+      "path": "apps/api/test/independent-postgres.integration.mjs",
+      "sha256": "61e52d4350425a6768946e8f4a913b4cfdc688fb9e9bb2118eb98a442e5d32c1"
+    },
+    {
+      "path": "docs/migration/issue-166/README.md",
+      "sha256": "64fd0d59df3db430d17b2d78309b0ee1a1bd50eadfa7d1859feaedf5cf559c1d"
+    },
+    {
+      "path": "docs/migration/issue-166/runbook.md",
+      "sha256": "7033f994f9b9a11744150d0d82f8227f93318b00c85665bec0e168e363c3fdd7"
+    },
+    {
+      "path": "docs/06-arquitectura-y-stack.md",
+      "sha256": "0b1316dd6979ceb1ba448f8cd778d78ce219fca61143e993df0d1d8eebaaef04"
+    },
+    {
+      "path": "packages/db/README.md",
+      "sha256": "4d81def2b1636ba5ff3c359b2d7586aa01f37d17b481b95aec3fc0789652c2c0"
+    },
+    {
+      "path": "scripts/ci/backend.mjs",
+      "sha256": "13c2d6070363ad6d6f0abde2e7cc501070e5283172f9144714552e7706692a1d"
+    },
+    {
+      "path": "apps/web/scripts/native-auth-smoke.mjs",
+      "sha256": "d876a16962b591d32f14408f30f4a23f2dbb63008aedbd15a950adfd04b43416"
+    },
+    {
+      "path": "apps/api/test/reports.integration.mjs",
+      "sha256": "e80129a75acc9143993ff4b4186e795787a425afc264fde267ece2e3989943ae"
+    }
+  ],
+  "correctedFromCommit": "40da9a6ad187e358020f4021f5feab446bab85f5",
+  "recheckedAfterFixtureCorrection": [
+    "eslint-cutover-and-backend-runner",
+    "ci:backend"
+  ],
+  "ciHarnessFollowupBaseCommit": "bde3341ec08f6076801a59de53043c3810a2c0c4",
+  "recheckedAfterCIHarnessCorrection": [
+    "eslint-native-auth-smoke-and-reports",
+    "auth-smoke-cpu6-delayed-chunks",
+    "reports-isolated-planner-comparison",
+    "ci:backend"
+  ]
+}
