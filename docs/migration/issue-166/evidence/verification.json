@@ -1,0 +1,40 @@
+{
+  "baseCommit": "4b9a8afe5524359afaa27ec0dcaf3a72181afbeb",
+  "date": "2026-10-08",
+  "timezone": "America/Santiago",
+  "environment": "local-synthetic",
+  "localGates": "PASS",
+  "remoteCI": "pending-publication",
+  "productionCutover": "NO-GO-external-acceptance-pending",
+  "reviewScope": "issue-166-diff-only",
+  "files": [
+    {
+      "path": "packages/db/scripts/cutover.mjs",
+      "sha256": "040053ffeae95b1648c1693eb4c5e098a39d5c589c68bac91d3a5caf87f65288"
+    },
+    {
+      "path": "apps/api/test/cutover-rehearsal.mjs",
+      "sha256": "9c201cac39753a462236015a340575a364ef7090bdd8cc51fcf6b4849d796be5"
+    },
+    {
+      "path": "apps/api/test/independent-postgres.integration.mjs",
+      "sha256": "61e52d4350425a6768946e8f4a913b4cfdc688fb9e9bb2118eb98a442e5d32c1"
+    },
+    {
+      "path": "docs/migration/issue-166/README.md",
+      "sha256": "9f9d26f5287bdc3183029a9243edb551fe38ce91ec55e55da9d915a32e8c1ba2"
+    },
+    {
+      "path": "docs/migration/issue-166/runbook.md",
+      "sha256": "7033f994f9b9a11744150d0d82f8227f93318b00c85665bec0e168e363c3fdd7"
+    },
+    {
+      "path": "docs/06-arquitectura-y-stack.md",
+      "sha256": "0b1316dd6979ceb1ba448f8cd778d78ce219fca61143e993df0d1d8eebaaef04"
+    },
+    {
+      "path": "packages/db/README.md",
+      "sha256": "8ffe7d5397f436778ac0b28088e17bf88859fdb19866a93455de3aaf170c9701"
+    }
+  ]
+}
