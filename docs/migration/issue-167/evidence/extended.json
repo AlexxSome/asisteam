@@ -1,0 +1,85 @@
+{
+  "commit": "26a1d8a3ac61f48e7cda957436b9faadb657d892",
+  "sourceCommit": "26a1d8a3ac61f48e7cda957436b9faadb657d892",
+  "date": "2026-10-09T02:28:53.212Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "supabase-local-start",
+      "status": "PASS",
+      "seconds": 1.44
+    },
+    {
+      "check": "chromium-install",
+      "status": "PASS",
+      "seconds": 0.32
+    },
+    {
+      "check": "nest-domain-build",
+      "status": "PASS",
+      "seconds": 0.19
+    },
+    {
+      "check": "playwright-responsive-axe",
+      "status": "PASS",
+      "seconds": 93.51,
+      "tests": 33,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-transport-faults",
+      "status": "PASS",
+      "seconds": 16.82,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-invitations",
+      "status": "PASS",
+      "seconds": 14.17,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 0.3
+    },
+    {
+      "check": "playwright-nest-storage",
+      "status": "PASS",
+      "seconds": 10.44,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-qr",
+      "status": "PASS",
+      "seconds": 12.62,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-billing",
+      "status": "PASS",
+      "seconds": 9.24,
+      "tests": 1,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-groups-profile",
+      "status": "PASS",
+      "seconds": 21.58,
+      "tests": 8,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-nest-domain-responsive-axe",
+      "status": "PASS",
+      "seconds": 176,
+      "tests": 46,
+      "omitted": 0
+    }
+  ]
+}

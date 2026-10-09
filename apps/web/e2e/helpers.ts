@@ -50,7 +50,7 @@ export async function screenshot(page: Page, info: TestInfo, name: string) {
   // Explicit capture after login only. Never include URL bars, QR or secrets.
   const path = info.outputPath(`${name}.png`);
   await page.screenshot({ path, fullPage: !name.startsWith('attendance'), animations: 'disabled', style: 'nextjs-portal { visibility: hidden !important; }',
-    mask: [page.locator('input[type="password"]'), page.locator('input[type="email"]'), page.locator('svg:visible'), page.getByText(/^QA12000[0-3]$/)],
+    mask: [page.locator('input[type="password"]'), page.locator('input[type="email"]'), page.locator('svg:visible'), page.locator('output'), page.getByText(/^QA12000[0-3]$/)],
   });
   await info.attach(name, { path, contentType: 'image/png' });
 }

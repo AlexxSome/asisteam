@@ -1,5 +1,8 @@
 import { check, suite } from './run.mjs';
 import { withEdge } from './edge.mjs';
+import { randomBytes } from 'node:crypto';
+// Each full runner owns its namespace; preserve old QA/manual history untouched.
+process.env.ASISTEAM_QA_NAMESPACE ??= randomBytes(4).toString('hex');
 await suite('extended', async () => {
   await check('supabase-local-start', 'pnpm', ['exec', 'supabase', 'start']);
   await check('chromium-install', 'pnpm', ['--filter', '@asisteam/web', 'exec', 'playwright', 'install', '--with-deps', 'chromium']);
@@ -14,4 +17,7 @@ await suite('extended', async () => {
   await check('playwright-nest-qr', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--grep', 'MIG-16', '--reporter=json'], { env: { ASISTEAM_QA_NEST: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-nest-qr.json' }, report: 'apps/web/.ci-nest-qr.json', playwright: true, requireAll: true });
   await check('playwright-nest-billing', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--grep', 'MIG-14', '--reporter=json'], { env: { ASISTEAM_QA_NEST: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-nest-billing.json' }, report: 'apps/web/.ci-nest-billing.json', playwright: true, requireAll: true });
   await check('playwright-nest-groups-profile', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--grep', 'MIG-07|rol .*:|cambio de grupo|restricciones reales', '--reporter=json'], { env: { ASISTEAM_QA_NEST: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-nest-playwright.json' }, report: 'apps/web/.ci-nest-playwright.json', playwright: true, requireAll: true });
+  // Full domain/QA120 matrix on Nest, including both opt-in adapters. No
+  // filtered/excluded integration is promoted to PASS in this destination run.
+  await check('playwright-nest-domain-responsive-axe', 'pnpm', ['--filter', '@asisteam/web', 'test:e2e:full', '--reporter=json'], { env: { ASISTEAM_QA_NEST: '1', ASISTEAM_QA_INVITATIONS: '1', ASISTEAM_QA_STORAGE: '1', RUN_INVITATION_E2E: '1', PLAYWRIGHT_JSON_OUTPUT_NAME: '.ci-nest-domain.json' }, report: 'apps/web/.ci-nest-domain.json', playwright: true, requireAll: true });
 });

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { groups } from './data.mjs';
 import { checkAccessibility, checkLayout, login, visit } from './helpers';
+import { quote, sql } from './local-fixtures.mjs';
 
 test('MIG-07 Next→Nest→PostgreSQL: configuración y perfil a 375px', async ({ page }, info) => {
   await login(page,'admin');
@@ -35,9 +36,10 @@ test('MIG-07 Next→Nest→PostgreSQL: configuración y perfil a 375px', async (
 });
 
 test('MIG-08 Next→Nest→PostgreSQL: nómina, edición y roles conservan historia a 375px', async ({ page }, info) => {
+  const name=`Adulto MIG08 ${Date.now()}`;
+  try {
   await login(page,'admin');
   await visit(page,`/groups/${groups.single}/members/new`);
-  const name=`Adulto MIG08 ${Date.now()}`;
   await page.getByLabel('Nombre completo',{exact:true}).fill(name);
   await page.getByLabel('Fecha de nacimiento',{exact:true}).fill('1990-01-01');
   await page.getByRole('button',{name:'Crear cuenta gestionada',exact:true}).click();
@@ -65,4 +67,8 @@ test('MIG-08 Next→Nest→PostgreSQL: nómina, edición y roles conservan histo
   await visit(page,`/groups/${groups.single}/members?search=${encodeURIComponent(name)}&page=100`);
   await expect(page.getByRole('heading',{name:'No hay integrantes en esta página'})).toBeVisible();
   await expect(page.getByRole('status')).toContainText('2 membresías encontradas');
+  } finally {
+    // Only the profile created by this test; retain history and other fixtures.
+    sql(`update public.memberships set status='INACTIVE' where group_id='${groups.single}' and user_id in(select id from public.users where full_name in(${quote(name)},${quote(name+' editado')}))`);
+  }
 });

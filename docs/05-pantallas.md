@@ -1,5 +1,7 @@
 # Pantallas web y móvil
 
+[Seguro] **MIG-23 (#167):** [calificación de seguridad, paridad y QA](migration/issue-167/README.md) vuelve a ejecutar los recorridos existentes sobre Nest, incluidos ASI-01 a 375 px y estados de error/recuperación. El inventario y sus 39 páginas se conservan; cobertura técnica y límites por entorno se registran en la matriz. Lector, zoom nativo, uso real a una mano e integraciones de proveedores siguen como gates de aceptación pendientes.
+
 [Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) AUT-01…07 y PRF-01 mantienen formularios/rutas/estados Nest; sesiones/callbacks/recovery legacy requieren nuevo acceso/enlace tras el corte. AUT-05/06 conserva tokens de invitación y claim MANAGED con sus IDs. El cliente de sesión propio funciona sin SDK/anon key; no incorpora páginas. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
 
 [Seguro] **MIG-19 (#163, 2026-10-08):** [OAuth Nest y vinculación segura](migration/issue-163/README.md) incorpora AUT-07 con proveedores propios, callbacks Google GET/Apple form_post, state/nonce/JWKS y PKCE Google. PRF-01/CFG-01 ofrece vinculación explícita desde sesión propia con disponibilidad/procesamiento/error y retorno de éxito. Cuenta nueva pasa por aceptación vigente/ONB-01; email coincidente requiere autenticar y vincular sin fusión automática. `/auth/callback/[provider]` es handler; no añade páginas. El runbook distingue verificaciones locales y ensayo externo pendiente.

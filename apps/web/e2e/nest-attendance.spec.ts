@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-import { email, groups, activity, rosterName } from './data.mjs';
+import { email, groups, activity, rosterName, id } from './data.mjs';
 import { checkAccessibility, checkLayout, login, screenshot, visit } from './helpers';
 import { activityType, quote, sql } from './local-fixtures.mjs';
 
@@ -26,14 +26,14 @@ test('MIG-11 guardado, recarga, corrección ADMIN y COACH por teclado a375px', a
   await page.getByRole('textbox',{name:`Nota de ${rosterName(1)}`}).fill('Nota sintética MIG11');await page.getByRole('button',{name:'Guardar nota',exact:true}).click();
   await expect(page.getByRole('status',{name:`Guardado de ${rosterName(1)}`})).toContainText('Guardado');
   await page.reload();await expect(late).toHaveAttribute('aria-pressed','true');
-  expect(sql(`select status||':'||note from public.attendance_records where activity_id='${activity(groups.single)}' and membership_id=(select id from public.memberships where group_id='${groups.single}' and role='ATHLETE' and user_id=(select id from public.users where full_name=${quote(rosterName(1))}))`)).toBe('LATE:Nota sintética MIG11');
+  expect(sql(`select status||':'||note from public.attendance_records where activity_id='${activity(groups.single)}' and membership_id=(select id from public.memberships where group_id='${groups.single}' and role='ATHLETE' and user_id='${id(1001)}')`)).toBe('LATE:Nota sintética MIG11');
   await checkLayout(page);await checkAccessibility(page,info);await screenshot(page,info,'attendance-mig11-375');
   await context.clearCookies();await login(page,'coach');await visit(page,path);
   await expect(page.getByRole('button',{name:/^Nota de /})).toHaveCount(0);
   await late.focus();await page.keyboard.press('Enter');await expect(late).toBeEnabled();
-  expect(sql(`select status||':'||note from public.attendance_records where activity_id='${activity(groups.single)}' and membership_id=(select id from public.memberships where group_id='${groups.single}' and role='ATHLETE' and user_id=(select id from public.users where full_name=${quote(rosterName(1))}))`)).toBe('LATE:Nota sintética MIG11');
+  expect(sql(`select status||':'||note from public.attendance_records where activity_id='${activity(groups.single)}' and membership_id=(select id from public.memberships where group_id='${groups.single}' and role='ATHLETE' and user_id='${id(1001)}')`)).toBe('LATE:Nota sintética MIG11');
   const absent=row.getByRole('button',{name:'Ausente',exact:true});await absent.click();await expect(absent).toBeEnabled();await page.reload();await expect(absent).toHaveAttribute('aria-pressed','true');
-  expect(sql(`select note from public.attendance_records where activity_id='${activity(groups.single)}' and membership_id=(select id from public.memberships where group_id='${groups.single}' and role='ATHLETE' and user_id=(select id from public.users where full_name=${quote(rosterName(1))}))`)).toBe('Nota sintética MIG11');
+  expect(sql(`select note from public.attendance_records where activity_id='${activity(groups.single)}' and membership_id=(select id from public.memberships where group_id='${groups.single}' and role='ATHLETE' and user_id='${id(1001)}')`)).toBe('Nota sintética MIG11');
   } finally {if(previous==='0')sql(`delete from public.memberships where user_id='${coach}' and group_id='${groups.single}' and role='COACH'`);}
 });
 

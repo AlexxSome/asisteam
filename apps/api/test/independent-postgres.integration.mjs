@@ -15,6 +15,7 @@ import {migrate} from '../../../packages/db/scripts/migrate.mjs';
 import {persistenceTypes} from '../../../packages/db/scripts/types.mjs';
 import {command,sql,normalizeDump,quote} from '../../../packages/db/scripts/local.mjs';
 import {rehearseCutover} from './cutover-rehearsal.mjs';
+import {qualifyDestination} from './destination-qualification.mjs';
 const root=new URL('../../../packages/db/',import.meta.url),name='asisteam-db165-'+randomUUID().replaceAll('-','');
 const password=randomBytes(32).toString('hex'),secret=randomBytes(32).toString('hex'),dir=await mkdtemp(join(tmpdir(),'asisteam-db165-'));
 await chmod(dir,0o700);
@@ -108,6 +109,9 @@ try {
  });
  await check('worker-native-claims-and-durable-ledger',async()=>{
   await worker.call('metrics');const claimed=await worker.call('transition');if(claimed.length)await worker.call('complete',[claimed[0].run_date,claimed[0].lease_token]);await worker.call('pushClaim',[true]);await worker.call('pushMetrics');
+ });
+ await check('destination-security-parity-concurrent-load-500ms',async()=>{
+  report.qualification=await qualifyDestination({owner,app,config:runtimeConfig,ids,sessions,group,worker,wardId:managed,evidence:report});
  });
  await check('next-chromium-native-auth-independent-database',async()=>{
   const output=await command(process.execPath,['apps/web/scripts/native-auth-smoke.mjs'],undefined,{INDEPENDENT_PG_TEST_URL:'postgresql://postgres:'+password+'@127.0.0.1:'+port+'/postgres'});

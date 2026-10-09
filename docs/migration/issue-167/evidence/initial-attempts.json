@@ -1,0 +1,48 @@
+{
+  "sourceCommit": "26a1d8a3ac61f48e7cda957436b9faadb657d892",
+  "environment": "local-synthetic",
+  "date": "2026-10-09",
+  "attempts": [
+    {
+      "gate": "destination-qualification",
+      "status": "FAIL",
+      "httpStatus": 400,
+      "cause": "extra attendance path parameters in new harness",
+      "correction": "separate activity params from membership params",
+      "subsequentDirectedRun": "PASS"
+    },
+    {
+      "gate": "playwright-responsive-axe",
+      "status": "FAIL",
+      "passed": 30,
+      "failed": 3,
+      "omitted": 9,
+      "causes": [
+        "persistent QA single roster had foreign synthetic additions",
+        "Nest-only files included in legacy plan as skips"
+      ],
+      "corrections": [
+        "fresh namespace/accounts/IDs/codes for the current runner",
+        "explicit Nest-file selection for legacy vs complete destination run",
+        "MIG08 retires only memberships it creates; preserves history"
+      ]
+    },
+    {
+      "gate": "playwright-nest-domain-responsive-axe",
+      "status": "FAIL",
+      "passed": 45,
+      "failed": 1,
+      "omitted": 0,
+      "cause": "attendance test SQL matched global nonunique fixture names across namespaces",
+      "correction": "bind namespace-scoped fixture UUID; preserve status/note assertions"
+    },
+    {
+      "gate": "destination-V3-fixture",
+      "status": "FAIL",
+      "code": "P0001",
+      "cause": "canonical birthdate immutability rejected direct fixture UPDATE",
+      "correction": "advance business clock only in disposable destination and restore exact function; retain constraints"
+    }
+  ],
+  "rawLogsRetained": false
+}
