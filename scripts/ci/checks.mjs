@@ -1,6 +1,6 @@
 import { check, suite } from './run.mjs';
 await suite('checks', async () => {
-  await check('ci-runner-tests', 'node', ['--test', 'scripts/ci/run.test.mjs'], { noSkip: true });
+  await check('ci-runner-tests', 'node', ['--test', 'scripts/ci/run.test.mjs', 'scripts/ci/qualification.test.mjs'], { noSkip: true });
   await check('lint', 'pnpm', ['lint']);
   await check('http-contract-generation', 'pnpm', ['api:check']);
   await check('typecheck', 'pnpm', ['typecheck']);

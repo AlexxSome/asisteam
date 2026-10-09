@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { createClient } from '@supabase/supabase-js';
-import { email, id, password } from './data.mjs';
+import { email, id, password, fixtureFlowCode } from './data.mjs';
 
 // Server-side test utilities only: no credentials in browser, logs or reports.
 /** @param {string} statement */
@@ -16,7 +16,7 @@ export function sql(statement) {
 /** @param {string} value */
 export const quote = (value) => `'${value.replaceAll("'", "''")}'`;
 export const flowGroup = id(5000);
-export const flowCode = 'QA100E2E';
+export const flowCode = fixtureFlowCode;
 export const activityType = 'b2c3d4e5-0001-4b3c-8d4e-111111111111';
 
 export function localConfig() {

@@ -1,5 +1,7 @@
 # Sistema visual web
 
+[Seguro] **MIG-23 (#167):** [calificación actual](migration/issue-167/README.md) verifica teclado, guardando/guardado/error/offline y axe sobre los transportes Nest, con 320/375/768/1024/1440 px. Conserva componentes/tokens/estados; no añade páginas. Los casos axe incomplete y la revisión humana con lector/zoom nativo y teléfono mantienen su gate explícito.
+
 [Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) AUT-01…07 conserva componentes y textos; congelación/indisponibilidad usa el error compartido sin anunciar éxito ni recuperar sesión legacy. Recovery antiguo exige pedir enlace nuevo; invitaciones previas conservan su flujo. No se agregan componentes ni páginas. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
 
 [Seguro] **MIG-19 (#163, 2026-10-08):** [OAuth Nest y vinculación segura](migration/issue-163/README.md) incorpora AUT-07 con proveedores propios, callbacks Google GET/Apple form_post, state/nonce/JWKS y PKCE Google. PRF-01/CFG-01 ofrece vinculación explícita desde sesión propia con disponibilidad/procesamiento/error y retorno de éxito. Cuenta nueva pasa por aceptación vigente/ONB-01; email coincidente requiere autenticar y vincular sin fusión automática. `/auth/callback/[provider]` es handler; no añade páginas. El runbook distingue verificaciones locales y ensayo externo pendiente.

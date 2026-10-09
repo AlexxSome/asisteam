@@ -1,0 +1,43 @@
+{
+  "baseCommit": "26a1d8a3ac61f48e7cda957436b9faadb657d892",
+  "environment": "local-synthetic-with-issue-changes",
+  "sourceFiles": {
+    ".github/workflows/extended.yml": "9f6ff970c20cb28afe031b9b1707897593049400e4f01c651e948d0335cd8c62",
+    "apps/api/test/independent-postgres.integration.mjs": "0ae48c2d38adb82da7393fbe7d4d350b187a5b8ad6537a0d2d01c6057221e930",
+    "apps/web/e2e/data.mjs": "afc897e81b79c7f7fc93f9a237d4bfcf864fd6a4ffdef5b45db2b2af208b0fc0",
+    "apps/web/e2e/helpers.ts": "6a0124b2458fd7785a95bf0f75183427e222484ac2b7eb4371d8eb897a06950b",
+    "apps/web/e2e/local-fixtures.mjs": "4f78aec42a1d88d04b7c80199d251484d657798190e3ea66239322fe1be2144d",
+    "apps/web/e2e/nest-attendance.spec.ts": "2037616145407a79b104ed0a8c96ca4355ab98aac88f5cd4c66aa94a9f1fc000",
+    "apps/web/e2e/nest-groups-profile.spec.ts": "c8ceb5d9ed58f5859f50179ec4b311e21b6fbcdf0c704d1a4ace0cd62a0f2ea0",
+    "apps/web/e2e/server.mjs": "fc3d2e8bf86254568e446b15e3024eb19e95ae3949542ecaad2db464ac9ceacb",
+    "apps/web/playwright.config.ts": "53daddca784acc6e9245efa499529d58148443c4f8d3f39baa8c1a20620d4e62",
+    "docs/05-pantallas.md": "39a1a9cc2e794f4431a81866b2e130c35deb368a4f426d04eb3745a060015976",
+    "docs/12-sistema-visual.md": "0627879c535f087bae4d282f9a65f18be3883310aa004461cb9cfe84b6a1851a",
+    "docs/qa/issue-120/README.md": "044fe3b5daf6e7b981347d43b46d4735e33473cbe28d119fcdaa5869161901a3",
+    "package.json": "54de36ca514d08801d5f869e3928d8852cbe1aebf1c5eec3e0c491431bd49a1d",
+    "scripts/ci/checks.mjs": "2b77a9fab1bb82daa950325afff09d01ee42364d527bbd570604f04ee6ef4a43",
+    "scripts/ci/extended.mjs": "69086033ed7ed710c13b32c2b3e0ebfeb88df94eec502f2e4e49ad6a98245d68",
+    "apps/api/test/destination-qualification.mjs": "38d7f8bfa75b8986b46104b13ded06adc8ae13a0bafa3ff3f7701705e9c71926",
+    "scripts/ci/qualification.mjs": "a94249468fb8ad635db874fec44e5e9df3b6021ae0989be6430d69eda6a20fe6",
+    "scripts/ci/qualification.test.mjs": "be7b0a954b6f99f70df312f8db70610b38c5918fe5bda752bbcc2defc9c9bd93"
+  },
+  "evidenceFiles": {
+    "independent-postgres.json": "47700a94fa66dad71879cad37e0b3f5fbf11ea52caf6b631621347bb782c53e1",
+    "staging.json": "6e540e5fc6b5005caaa19cecfa092bedd5818cb0c3cc1d03fbb970df6fdbc414",
+    "qualification.json": "5bd935a9b62b880675e589eef1f3134b416f87f9fecbabef1dff9942ad2fe3b5",
+    "extended.json": "8da13b9afe70d597e4af66727f11c88f6b356a64121692f30ac5829e1078cbb0",
+    "checks.json": "c3136499500398e1c48b0f65223cf3a78b26f8635e3d119ef0851ffaa64d8a2c",
+    "initial-attempts.json": "bf5b3b681417c3abc6b879f382697f2e315c20fb6a23648ffe5c4b01e1a52466",
+    "backend.json": "6be1605056d0b252bc425769c395bf4cd9d9ffb64e6da5e6c05b60fd5813404a",
+    "accessibility.json": "f1ba0015331d394d47f5fe17d66263a95e9a2f5e82439e6e67e5e77143bf79e9",
+    "attendance-mig11-375.png": "f2344eb4780f8fafe7e99e0c541722bab3885b90d278d4babcf83a4884105df2",
+    "reports-mig12-375.png": "355541363235ff034d3980e4e0a1136454a3ed79fea0c8789bd2819a004d8c43"
+  },
+  "additionalFinalChecks": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "runnerAndQualificationTests": "4 PASS;0 omitted",
+    "destinationV3AndFullIndependentRehearsal": "PASS"
+  },
+  "acceptance": "NO-GO"
+}

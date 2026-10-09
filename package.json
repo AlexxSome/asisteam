@@ -18,6 +18,7 @@
     "ci:backend": "node scripts/ci/backend.mjs",
     "ci:staging": "node scripts/ci/staging.mjs",
     "ci:extended": "node scripts/ci/extended.mjs",
+    "ci:qualification": "node scripts/ci/qualification.mjs",
     "migration:portability": "node scripts/migration/portability/run.mjs"
   },
   "devDependencies": {

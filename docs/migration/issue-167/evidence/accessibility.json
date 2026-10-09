@@ -1,0 +1,10 @@
+{
+  "analyses": 58,
+  "violations": 0,
+  "incompleteRules": {
+    "aria-valid-attr-value": 44,
+    "color-contrast": 3
+  },
+  "nativeZoom": "PENDIENTE",
+  "screenReader": "PENDIENTE"
+}

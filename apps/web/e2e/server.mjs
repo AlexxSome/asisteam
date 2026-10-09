@@ -2,7 +2,7 @@ import { startQaNest } from './nest-runtime.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
-import { roles, email, password, id, groups, activity, rosterName, pendingName, wardName } from './data.mjs';
+import { roles, email, password, id, groups, activity, rosterName, pendingName, wardName, inviteCode } from './data.mjs';
 
 // Never read .env credentials: the CLI supplies the running local stack only.
 const config = JSON.parse(execFileSync('../../node_modules/.bin/supabase', ['status', '-o', 'json'], {
@@ -42,7 +42,7 @@ if (sql(`select count(*) from public.groups where id in (${Object.values(groups)
 }
 for (const [index, [kind, group]] of Object.entries(groups).entries()) {
   sql(`insert into public.groups(id,name,sport,invite_code,created_by)
-    values('${group}','Club QA ${kind}','Tenis','QA12000${index}','${profiles.admin}') on conflict(id) do nothing;
+    values('${group}','Club QA ${kind}','Tenis','${inviteCode(index)}','${profiles.admin}') on conflict(id) do nothing;
     update public.groups set created_at=now()-interval '100 days' where id='${group}';
     insert into public.memberships(user_id,group_id,role,status,joined_at)
     values('${profiles.admin}','${group}','ADMIN','ACTIVE',now()-interval '90 days') on conflict(user_id,group_id,role) do nothing;

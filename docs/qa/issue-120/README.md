@@ -1,5 +1,7 @@
 # QA visual, accesible y responsive — #120
 
+[Seguro] **MIG-23 (#167):** [matriz de calificación actual](../../migration/issue-167/README.md) ejecuta nuevamente los recorridos sobre los transportes Nest, con invitaciones/Storage opt-in explícitos, carga de 500 atletas y gates de aceptación humana/proveedores separados. Los resultados históricos de este documento no acreditan esa corrida; lector/zoom nativo y prueba a una mano siguen bloqueando el cierre de aceptación.
+
 Método reproducible sobre Next y Supabase **locales**, con datos sintéticos. Establece la infraestructura al inicio; la matriz completa de la épica #100 es el gate final. No certifica WCAG completa, lector de pantalla ni producción.
 
 ## Preparación y ejecución
