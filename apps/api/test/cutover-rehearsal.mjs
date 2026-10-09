@@ -78,7 +78,9 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
   await owner.query(fixtureClock);const preparation=new WorkerStore({DATABASE_URL:config.DATABASE_URL.replace('asisteam_api:','asisteam_jobs:')});
   try{const tasks=await preparation.call('transition');for(const task of tasks)await preparation.call('complete',[task.run_date,task.lease_token]);}finally{await preparation.onApplicationShutdown();}
   result.syntheticJobClock='Chile-noon';
-  await command('docker',['build','-f','scripts/migration/storage/Dockerfile.fixture','-t','asisteam-storage-fixture:161','.']);
+  // Compile the shared fixture in its dedicated CI build gate, before this
+  // rehearsal. Cold Go compilation can exceed the DB helper's 120s limit.
+  await command('docker',['image','inspect','asisteam-storage-fixture:161']);
   firstStorage=await storageFixture();secondStorage=await storageFixture();
   const initialKey=ids.admin.subject+'/'+randomUUID()+'.png';await firstStorage.storage.put(initialKey,png,'image/png');
   await owner.query('update public.users set avatar_url=$1 where id=$2',['/profile/avatar/'+initialKey,ids.admin.profile]);

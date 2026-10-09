@@ -14,7 +14,7 @@
     },
     {
       "path": "apps/api/test/cutover-rehearsal.mjs",
-      "sha256": "9c201cac39753a462236015a340575a364ef7090bdd8cc51fcf6b4849d796be5"
+      "sha256": "064cb51ed8643034550d07542fcb1f221803b92efee67512708a0630cbdcccdf"
     },
     {
       "path": "apps/api/test/independent-postgres.integration.mjs",
@@ -22,7 +22,7 @@
     },
     {
       "path": "docs/migration/issue-166/README.md",
-      "sha256": "9f9d26f5287bdc3183029a9243edb551fe38ce91ec55e55da9d915a32e8c1ba2"
+      "sha256": "b8bacee090b7d4b9b8b67a9bb197fcb2e8733bbf448d98a3889d152883181f7a"
     },
     {
       "path": "docs/migration/issue-166/runbook.md",
@@ -34,7 +34,16 @@
     },
     {
       "path": "packages/db/README.md",
-      "sha256": "8ffe7d5397f436778ac0b28088e17bf88859fdb19866a93455de3aaf170c9701"
+      "sha256": "4d81def2b1636ba5ff3c359b2d7586aa01f37d17b481b95aec3fc0789652c2c0"
+    },
+    {
+      "path": "scripts/ci/backend.mjs",
+      "sha256": "13c2d6070363ad6d6f0abde2e7cc501070e5283172f9144714552e7706692a1d"
     }
+  ],
+  "correctedFromCommit": "40da9a6ad187e358020f4021f5feab446bab85f5",
+  "recheckedAfterFixtureCorrection": [
+    "eslint-cutover-and-backend-runner",
+    "ci:backend"
   ]
 }

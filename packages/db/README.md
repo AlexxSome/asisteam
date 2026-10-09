@@ -35,6 +35,7 @@ pnpm api:check
 ```sh
 pnpm install --frozen-lockfile
 pnpm exec turbo run build --filter @asisteam/api --filter @asisteam/worker
+docker build -f scripts/migration/storage/Dockerfile.fixture -t asisteam-storage-fixture:161 .
 node apps/api/test/independent-postgres.integration.mjs
 pnpm ci:checks
 pnpm ci:backend

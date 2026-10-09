@@ -1,31 +1,31 @@
 {
-  "sourceCommit": "4b9a8afe5524359afaa27ec0dcaf3a72181afbeb",
+  "sourceCommit": "40da9a6ad187e358020f4021f5feab446bab85f5",
   "environment": "local-synthetic",
   "checks": [
     {
       "check": "freeze-every-db-writer-and-abort-before-first-write",
       "status": "PASS",
-      "seconds": 0.323
+      "seconds": 0.396
     },
     {
       "check": "snapshot-maintenance-cutover-and-destination-writes",
       "status": "PASS",
-      "seconds": 0.273
+      "seconds": 0.269
     },
     {
       "check": "single-job-executor-concurrent-replicas-and-persist-before-ack",
       "status": "PASS",
-      "seconds": 0.011
+      "seconds": 0.014
     },
     {
       "check": "post-write-failure-freeze-and-complete-delta-reconciliation",
       "status": "PASS",
-      "seconds": 0.578
+      "seconds": 0.621
     },
     {
       "check": "forward-recovery-login-history-consent-files-provider-retry-and-jobs",
       "status": "PASS",
-      "seconds": 0.144
+      "seconds": 0.123
     }
   ],
   "pending": [
@@ -95,6 +95,6 @@
   "reconciledObjects": 2,
   "providerReplayInvoices": 2,
   "rpoCommittedWrites": 0,
-  "recoverySeconds": 0.722,
+  "recoverySeconds": 0.745,
   "syntheticBudgetSeconds": 60
 }

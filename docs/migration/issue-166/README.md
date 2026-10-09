@@ -13,6 +13,7 @@
 ```sh
 pnpm install --frozen-lockfile
 pnpm exec turbo run build --filter @asisteam/api --filter @asisteam/worker
+docker build -f scripts/migration/storage/Dockerfile.fixture -t asisteam-storage-fixture:161 .
 node apps/api/test/independent-postgres.integration.mjs
 pnpm ci:checks
 pnpm ci:backend
@@ -23,7 +24,7 @@ pnpm ci:staging
 
 ## Verificación local final
 
-[Seguro] Corrida del 2026-10-08 (America/Santiago), contra la base indicada y los cambios de este issue. Los JSON conservan el SHA base; `evidence/verification.json` identifica los archivos verificados por SHA-256. Fallos con `expected: true` son inyecciones deliberadas cuyos gates de recuperación terminaron PASS.
+[Seguro] Corrida del 2026-10-08 (America/Santiago), contra la base indicada y los cambios de este issue. Los JSON conservan el SHA del checkout de cada corrida; `evidence/verification.json` identifica los archivos verificados por SHA-256. Fallos con `expected: true` son inyecciones deliberadas cuyos gates de recuperación terminaron PASS.
 
 | Verificación | Resultado y evidencia |
 | --- | --- |
@@ -31,8 +32,9 @@ pnpm ci:staging
 | `pnpm ci:backend` | [Seguro] PASS: pgTAP completo, tipos, HTTP/browser nativos, 81/81 integraciones de producto sin omisiones; [reporte](evidence/backend.json) |
 | `pnpm ci:staging` | [Seguro] PASS en contenedores locales, incluida recuperación automática ante fallo inyectado; [reporte](evidence/staging.json) |
 | PostgreSQL independiente | [Seguro] PASS: 50 casos pgTAP destino, 9 casos canónicos, Chromium, backup y PITR; [reporte](evidence/independent-postgres.json) |
-| Corte MIG-22 | [Seguro] Cinco fases PASS; 44 tablas, 59 FK, dos objetos, cero escrituras confirmadas perdidas y recuperación sintética de 0.722 s; [reporte](evidence/cutover.json) |
-| Auto-revisión | [Seguro] Se revisó exclusivamente el diff del issue; las correcciones de drenaje, atomicidad, manejo de sesiones y reloj del fixture quedaron verificadas en la corrida final. No se modifica esquema, tipos ni UI. |
+| Corte MIG-22 | [Seguro] Cinco fases PASS; 44 tablas, 59 FK, dos objetos, cero escrituras confirmadas perdidas y recuperación sintética de 0.745 s; [reporte](evidence/cutover.json) |
+| Primer CI remoto | [Seguro] Checks/staging PASS; backend falló antes de las fases MIG-22. [Probable] Build MinIO en frío excedió 120 s. Se movió al gate de compilación dedicado y se revalidó backend local; [evidencia](evidence/remote-first-attempt.json). Resultado remoto de corrección pendiente de publicar. |
+| Auto-revisión | [Seguro] Se revisó exclusivamente el diff del issue; CI prepara MinIO en su gate dedicado antes del ensayo, evitando compilar Go dentro del límite de 120 s del helper DB; las correcciones de drenaje, atomicidad, manejo de sesiones y reloj del fixture quedaron verificadas en la corrida final. No se modifica esquema, tipos ni UI. |
 
 ## Evidencia y aceptación externa
 

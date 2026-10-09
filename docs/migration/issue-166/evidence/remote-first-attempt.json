@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "40da9a6ad187e358020f4021f5feab446bab85f5",
+  "run": "https://github.com/AlexxSome/asisteam/actions/runs/37864485820",
+  "environment": "github-actions-synthetic",
+  "checks": "PASS",
+  "staging": "PASS",
+  "backend": "FAIL",
+  "failedGate": "independent-postgres-api-worker-types-backup-pitr",
+  "cutoverPhasesCompleted": 0,
+  "cutoverGateSeconds": 125.112,
+  "helperCommandDeadlineSeconds": 120,
+  "diagnosis": "cold-MinIO-build-inside-bounded-DB-command-helper",
+  "diagnosisConfidence": "probable",
+  "correction": "prepare-shared-MinIO-in-dedicated-CI-build-before-independent-gate",
+  "reverification": "pending-new-published-SHA"
+}
