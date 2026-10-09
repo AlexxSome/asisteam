@@ -22,7 +22,7 @@
     },
     {
       "path": "docs/migration/issue-166/README.md",
-      "sha256": "b8bacee090b7d4b9b8b67a9bb197fcb2e8733bbf448d98a3889d152883181f7a"
+      "sha256": "64fd0d59df3db430d17b2d78309b0ee1a1bd50eadfa7d1859feaedf5cf559c1d"
     },
     {
       "path": "docs/migration/issue-166/runbook.md",
@@ -39,11 +39,26 @@
     {
       "path": "scripts/ci/backend.mjs",
       "sha256": "13c2d6070363ad6d6f0abde2e7cc501070e5283172f9144714552e7706692a1d"
+    },
+    {
+      "path": "apps/web/scripts/native-auth-smoke.mjs",
+      "sha256": "d876a16962b591d32f14408f30f4a23f2dbb63008aedbd15a950adfd04b43416"
+    },
+    {
+      "path": "apps/api/test/reports.integration.mjs",
+      "sha256": "e80129a75acc9143993ff4b4186e795787a425afc264fde267ece2e3989943ae"
     }
   ],
   "correctedFromCommit": "40da9a6ad187e358020f4021f5feab446bab85f5",
   "recheckedAfterFixtureCorrection": [
     "eslint-cutover-and-backend-runner",
+    "ci:backend"
+  ],
+  "ciHarnessFollowupBaseCommit": "bde3341ec08f6076801a59de53043c3810a2c0c4",
+  "recheckedAfterCIHarnessCorrection": [
+    "eslint-native-auth-smoke-and-reports",
+    "auth-smoke-cpu6-delayed-chunks",
+    "reports-isolated-planner-comparison",
     "ci:backend"
   ]
 }

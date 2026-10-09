@@ -51,3 +51,13 @@ pnpm ci:staging
 | CI remoto del SHA publicado y QA/carga #167 | Desarrollador + QA | PENDIENTE a publicación |
 
 [Seguro] Estos pendientes replanifican explícitamente el corte productivo de #168: no hay fecha ni autorización de gasto nueva. Si el volumen/SLA no admite la copia completa dentro del mantenimiento acordado, detener el plan snapshot y abrir una decisión de CDC específica que incluya identidad, objetos y efectos externos; este cambio no implementa CDC genérico ni declara esa estrategia ensayada.
+
+## Corrección del CI del PR #204
+
+[Seguro] El SHA `bde3341` aprobó MIG-22 en GitHub dos veces, pero el backend completo falló en un smoke nativo y una corrida de reportes. El usuario solicitó corregir el CI, incluyendo sus harness existentes. Se preservan todos los gates, datos de negocio, assertions y timeouts; no se cambia SQL ni comportamiento de producto.
+
+[Seguro] El smoke sincroniza cada formulario con el commit de su handler React 19 antes de llenar/enviar y deja ejecutar los efectos de react-hook-form durante dos frames. El marcador DOM se usa solo en este harness del stack fijado; si cambia, la espera falla en lugar de saltar validación. El estrés `AUTH_SMOKE_SLOW_BROWSER=1 node apps/web/scripts/native-auth-smoke.mjs` retarda chunks 500 ms y aplica CPU ×6: observó los cinco formularios inicialmente sin handler y pasó el flujo completo. [Evidencia](evidence/native-auth-stress.json). [Probable] Esa ventana explica los clicks perdidos antes de llegar a Nest; no se atribuye el antiguo `lastActionStatus` a la fase siguiente, porque antes quedaba obsoleto. El diagnóstico ahora limpia estado por fase y publica solo counts/booleans/códigos, nunca texto/URLs/credenciales de página.
+
+[Seguro] Reportes carga 500 atletas en una DB sintética nueva y ahora ejecuta `ANALYZE` antes de iniciar mediciones; antes dependía de estadísticas/autovacuum asíncronos. Comparación secuencial: llamadas `getGroupStats` de 1416.12/1392.31 ms sin estadísticas pasan a 55.69/54.79 ms con ellas. PG conserva límite de 3000 ms y cliente de 10000 ms; mismas comparaciones SQL/HTTP, V1–V6, métricas y paginación. [Evidencia](evidence/reports-planner-comparison.json). [Probable] Los planes sin estadísticas acercaban el runner lento al límite; el ensayo no redefine un SLA productivo.
+
+[Seguro] ESLint, estrés de navegador, comparación secuencial de reportes y backend completo posterior a ambas correcciones PASS, incluidas 81/81 integraciones sin omisiones; [corrida final local](evidence/backend-ci-fix.json). Los resultados anteriores permanecen fechados; la aprobación del SHA publicado se comprueba por separado en GitHub.

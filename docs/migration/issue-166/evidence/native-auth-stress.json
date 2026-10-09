@@ -1,0 +1,66 @@
+{
+  "sourceCommit": "bde3341ec08f6076801a59de53043c3810a2c0c4",
+  "environment": "local-synthetic",
+  "phase": "completed",
+  "status": "PASS",
+  "api": [
+    {
+      "operation": "register",
+      "status": 200
+    },
+    {
+      "operation": "login",
+      "status": 200
+    },
+    {
+      "operation": "refresh",
+      "status": 200
+    },
+    {
+      "operation": "logout",
+      "status": 200
+    },
+    {
+      "operation": "recovery",
+      "status": 200
+    },
+    {
+      "operation": "reset",
+      "status": 200
+    },
+    {
+      "operation": "login",
+      "status": 200
+    }
+  ],
+  "actionRequests": 0,
+  "browserCpuRate": 6,
+  "formsReady": [
+    {
+      "phase": "register",
+      "initiallyReady": false,
+      "seconds": 0.197
+    },
+    {
+      "phase": "logout",
+      "initiallyReady": false,
+      "seconds": 0.922
+    },
+    {
+      "phase": "recovery",
+      "initiallyReady": false,
+      "seconds": 1.017
+    },
+    {
+      "phase": "reset",
+      "initiallyReady": false,
+      "seconds": 1.068
+    },
+    {
+      "phase": "login",
+      "initiallyReady": false,
+      "seconds": 1.094
+    }
+  ],
+  "testedFromCommit": "bde3341ec08f6076801a59de53043c3810a2c0c4"
+}

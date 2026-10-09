@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import pg from 'pg';
 import { createApplication } from '../dist/application.js';
 import { loadConfig } from '../dist/config.js';
@@ -27,8 +27,9 @@ test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections
   const groups=[randomUUID(),randomUUID()], password=randomUUID(), logs=[];
   let previous, created=false, connected=false;
   const type='b2c3d4e5-0001-4b3c-8d4e-111111111111', otherType='b2c3d4e5-0003-4b3c-8d4e-333333333333';
-  let app, fixture;
+  let app, fixture;const statsMs=[];
   try {
+    rmSync(new URL('../../../.ci-results/reports-failure.json',import.meta.url),{force:true});
     await root.connect();
     const schema=(await execute('docker',['exec','supabase_db_asisteam','pg_dump','-U','postgres','--schema-only','--no-owner',...['public','app_private','auth','storage'].flatMap(s=>['-n',s])],{maxBuffer:64000000})).stdout.replace(/^ALTER DEFAULT PRIVILEGES FOR ROLE (supabase_admin|supabase_auth_admin) [^\n]+;$/gm,'').replace(/^\\(?:un)?restrict .*$/gm,'');
     await root.query('create database '+name+' template template0');created=true;
@@ -98,6 +99,9 @@ test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections
       const user=randomUUID();managed.push(user);await admin.query("insert into public.users(id,full_name,birthdate,account_status) values($1,'Fuera de nómina','1990-01-01','MANAGED')",[user]);
       nonactive.push((await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,'ATHLETE',$3,'2026-01-01') returning id",[user,groups[0],status])).rows[0].id);
     }
+    // Load representative planner statistics after the complete 500-athlete
+    // fixture. Autovacuum ANALYZE is asynchronous and not a readiness gate.
+    await admin.query('analyze');
     app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+password+'@127.0.0.1:54322/'+name,SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'2'}),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');
     const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i]))),clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token,timeoutMs:10000}));
@@ -158,7 +162,7 @@ test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections
       for(const [i,allowed] of [[1,athletes],[4,guardians]]) {
         if(!allowed)await assert.rejects(clients[i].getGroupStats({params}),error=>error.status===403&&error.error.code==='group_stats_disabled');
         else {
-          const stats=await clients[i].getGroupStats({params,query:{page_size:100}});
+          const statsStart=performance.now();const stats=await clients[i].getGroupStats({params,query:{page_size:100}});statsMs.push(performance.now()-statsStart);
           assert.deepEqual(stats,await baseline(i,'select public.get_group_stats($1,$2,$3) as result',[groups[0],1,100]));
           assert.ok(!/email|phone|birthdate|note|records|guardian/.test(JSON.stringify(stats)));
         }
@@ -184,11 +188,16 @@ test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections
     }
     if(process.env.API_REPORT_EVIDENCE==='1') {
       const dir=new URL('../../../.ci-results/',import.meta.url);mkdirSync(dir,{recursive:true});
-      writeFileSync(new URL('reports-performance.json',dir),JSON.stringify({environment:'local-synthetic-postgresql17',fixture:{activeAthletes:500,metricCases:cases.length,pageSize:100},samples:20,baseline:'authenticated canonical SQL including BEGIN/ROLLBACK',sqlP95Ms:Number(p95(sqlMs).toFixed(2)),nestHttpP95Ms:Number(p95(httpMs).toFixed(2)),status:'PASS',cache:false},null,2)+'\n');
+      writeFileSync(new URL('reports-performance.json',dir),JSON.stringify({environment:'local-synthetic-postgresql17',fixture:{activeAthletes:500,metricCases:cases.length,pageSize:100},samples:20,baseline:'authenticated canonical SQL including BEGIN/ROLLBACK',statsMs:statsMs.map(value=>Number(value.toFixed(2))),sqlP95Ms:Number(p95(sqlMs).toFixed(2)),nestHttpP95Ms:Number(p95(httpMs).toFixed(2)),status:'PASS',cache:false},null,2)+'\n');
     }
     await admin.query("update public.guardianships set status='INACTIVE',deactivated_at=now() where id=$1",[guardianship]);await assert.rejects(clients[4].getWardAttendanceHistory({params:wardParams}),{status:404});
     await admin.query("update public.memberships set status='INACTIVE' where user_id=$1 and group_id=$2 and role='COACH'",[profiles[2],groups[0]]);await assert.rejects(clients[2].getGroupAttendanceReport({params}),{status:404});
     for(const token of tokens)assert.ok(!logs.join('\n').includes(token));assert.ok(!logs.join('\n').includes(password));assert.ok(!logs.join('\n').includes('Nota privada sintética'));
+  } catch(error) {
+    const dir=new URL('../../../.ci-results/',import.meta.url);mkdirSync(dir,{recursive:true});
+    // Only stable status/codes/timings: no response bodies, SQL, UUIDs or PII.
+    writeFileSync(new URL('reports-failure.json',dir),JSON.stringify({status:'FAIL',httpStatus:error.status,code:/^[a-z_]+$/.test(error.error?.code??'')?error.error.code:undefined,sqlState:/^[A-Z0-9]{5}$/.test(error.code??'')?error.code:undefined,statsMs:statsMs.map(value=>Number(value.toFixed(2)))},null,2)+'\n');
+    throw error;
   } finally {
     try {
       try {if(app)await app.close();} finally {if(fixture)await fixture.close();}
