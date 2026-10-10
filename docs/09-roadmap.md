@@ -1,12 +1,11 @@
 # Roadmap de desarrollo
 
-[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+[Seguro] Vigencia MIG-24 (#168, 2026-10-10): Nest/Node24, PostgreSQL17 independiente, Auth propio y S3 privado son el único stack del repositorio. Dominio, RLS/V1–V6, menores, consentimientos y métricas se mantienen. [Evidencia y aceptación externa](migration/issue-168/README.md). Producción continúa NO-GO; no ejecutar corte/deploy real ni apagar receptores remotos.
 
 
 **Proyecto:** Asisteam | **Fecha:** 2026-07-03 | **Documentos relacionados:** 01-vision-y-alcance.md, 03-modulos-y-flujos.md, 04-modelo-de-datos.md, 06-arquitectura-y-stack.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 10-historias-de-usuario.md, 11-legal-seguridad-privacidad.md
 
 
-[Seguro] **MIG-06 (#150, 2026-10-07):** [compatibilidad y recalibración de corte](migration/issue-150/README.md#cronograma-y-ventana-recalibrados). PostgreSQL17.9 restaura el fixture con auth/storage de compatibilidad; dos dispatchers net/Vault requieren worker antes de retirar origen. [Probable] Camino crítico: #157/#159, #161 antes de #164, #162–#164 antes de salida final #165, luego #166. La ventana de dos horas se sustituye por medición de congelación/drenado/export-import/reconciliación/objetos/smoke/admisión; volumen/proveedor/equipo impiden fijar fechas comprometidas.
 
 ---
 
@@ -29,9 +28,9 @@ El calendario de 19 semanas se basaba en Expo y ya no es una fecha comprometida 
 **Objetivo:** dejar operativa toda la base técnica y de diseño para que la Fase 1 produzca features de negocio desde el primer día, y desactivar temprano los tres flujos de mayor riesgo del canon.
 
 **Entregables:**
-- Monorepo pnpm + Turborepo con paquetes `apps/web` (Next.js 16), `packages/core` (schemas Zod, métrica canónica, tipos de dominio) y `supabase/` (migraciones, seeds, funciones). Estructura según 06-arquitectura-y-stack.md.
-- Proyecto Supabase Cloud (región `sa-east-1`) con entornos dev/staging/prod; Vercel Pro conectado con preview deployments por PR; Resend y Sentry configurados.
-- CI en GitHub Actions: lint + typecheck + tests unitarios de `packages/core` + `supabase start` (CLI/Docker) con pgTAP y seeds por rol. Hardening del pipeline presupuestado aquí (ver riesgo R11).
+- Monorepo pnpm + Turborepo con paquetes `apps/web` (Next.js 16), `packages/core` (schemas Zod, métrica canónica, tipos de dominio) y `packages/db/` (migraciones, fixtures, tipos) + apps/api y apps/worker. Estructura según 06-arquitectura-y-stack.md.
+- Proyecto PostgreSQL independiente (región `sa-east-1`) con entornos dev/staging/prod; Vercel Pro conectado con preview deployments por PR; Resend y Sentry configurados.
+- CI en GitHub Actions: lint + typecheck + tests unitarios de `packages/core` + fixtures PostgreSQL/S3 propios (CLI/Docker) con pgTAP y seeds por rol. Hardening del pipeline presupuestado aquí (ver riesgo R11).
 - Migración inicial del esquema canónico completo (ver 04-modelo-de-datos.md): `users`, `groups`, `memberships`, `guardianships`, `activity_types` (con los 4 tipos de sistema sembrados), `activities`, `attendance_records`, `invitations`, `consents`, enums implementados como `text` + `CHECK` (sin `CREATE TYPE`, según 04-modelo-de-datos.md §1) y únicos compuestos.
 - Funciones helper de RLS `is_member`, `is_group_admin`, `is_guardian_of` (SECURITY DEFINER) con sus primeros tests pgTAP.
 - Diseño UX: sistema de diseño sobre shadcn/ui + Tailwind CSS 4 y wireframes aprobados de las ~12 pantallas clave de 05-pantallas.md (login, dashboard multi-grupo, integrantes, actividad, toma de asistencia, reportes).
@@ -41,8 +40,8 @@ El calendario de 19 semanas se basaba en Expo y ya no es una fecha comprometida 
 
 **Criterios de salida (verificables):**
 1. Un PR de ejemplo pasa el pipeline completo (lint, typecheck, tests de `packages/core`, pgTAP) en < 12 minutos y despliega preview en Vercel.
-2. `supabase db reset` levanta el esquema canónico con seeds y los 4 `activity_types` de sistema en dev y staging.
-3. Los 3 spikes tienen decisión técnica escrita (secuencia de RPC/Edge Function, tablas afectadas, casos borde) revisada por todo el equipo.
+2. fixtures únicos de `pnpm ci:backend` levanta el esquema canónico con seeds y los 4 `activity_types` de sistema en dev y staging.
+3. Los 3 spikes tienen decisión técnica escrita (secuencia de RPC/servicio Nest, tablas afectadas, casos borde) revisada por todo el equipo.
 4. Wireframes de las pantallas clave aprobados y respaldados por 05-pantallas.md.
 5. Cuentas Apple Developer y Google Play activas.
 
@@ -52,7 +51,7 @@ El calendario de 19 semanas se basaba en Expo y ya no es una fecha comprometida 
 
 **Objetivo:** entregar la primera versión utilizable por un club real: web responsive donde un ADMIN gestiona su grupo, toma asistencia y ve reportes, y donde ATHLETE/GUARDIAN consultan lo que las reglas de visibilidad les permiten.
 
-**Entregables:** la totalidad del alcance [P0] del canon, desplegado en producción (Vercel + Supabase Pro).
+**Entregables:** la totalidad del alcance [P0] del canon, desplegado en producción (stack Next/Nest/PostgreSQL/S3).
 
 ### 3.1 Orden de implementación de módulos y dependencias
 
@@ -60,9 +59,9 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 
 | Semana | Módulo | Contenido [P0] | Por qué en este punto |
 |---|---|---|---|
-| S1 | **M1 Auth y perfil** | Registro/login email+contraseña, recuperación de contraseña, perfil básico (`full_name`, `phone`, `birthdate`, `avatar_url` con Supabase Storage). Wiring `auth.users` ↔ `public.users`. Pantalla CFG-03 [P0] de 05-pantallas.md: solicitud de eliminación de cuenta y de copia de datos personales vía soporte (derechos Ley 19.628/21.719). | Todo lo demás necesita `auth.uid()` y la tabla de perfiles desacoplada (base del patrón MANAGED). |
+| S1 | **M1 Auth y perfil** | Registro/login email+contraseña, recuperación de contraseña, perfil básico (`full_name`, `phone`, `birthdate`, `avatar_url` con S3 privado). Wiring `app_private.auth_subjects` ↔ `public.users`. Pantalla CFG-03 [P0] de 05-pantallas.md: solicitud de eliminación de cuenta y de copia de datos personales vía soporte (derechos Ley 19.628/21.719). | Todo lo demás necesita `app_private.actor_subject_id()` y la tabla de perfiles desacoplada (base del patrón MANAGED). |
 | S2 | **M2 Grupos** | CRUD de `groups`, `invite_code` único, `settings` JSONB (toggles en `false` por defecto), logo, membership ADMIN del creador, selector multi-grupo. | Los memberships, actividades y RLS por grupo dependen de que exista `groups`. |
-| S3-S4 | **M3 Integrantes y apoderados** | Incorporación por código/enlace (solo ATHLETE; menor queda PENDING), invitación dirigida por email vía Edge Function + Resend (`invitations`, estado INVITED), cuentas gestionadas MANAGED, CRUD de integrantes, `guardianships`, validación transaccional "menor requiere apoderado" al crear/activar, conversión MANAGED→ACTIVE con consentimiento del apoderado. | Es el módulo más complejo (3 flujos de incorporación + regla de menores); va temprano porque la asistencia referencia `memberships` y porque su riesgo debe quemarse pronto (riesgo R12). 2 semanas. |
+| S3-S4 | **M3 Integrantes y apoderados** | Incorporación por código/enlace (solo ATHLETE; menor queda PENDING), invitación dirigida por email vía servicio Nest + Resend (`invitations`, estado INVITED), cuentas gestionadas MANAGED, CRUD de integrantes, `guardianships`, validación transaccional "menor requiere apoderado" al crear/activar, conversión MANAGED→ACTIVE con consentimiento del apoderado. | Es el módulo más complejo (3 flujos de incorporación + regla de menores); va temprano porque la asistencia referencia `memberships` y porque su riesgo debe quemarse pronto (riesgo R12). 2 semanas. |
 | S5 | **M4 Actividades** | CRUD de `activities`, tipos de sistema y personalizados (`activity_types`), recurrencia semanal simple (días de semana + fecha fin) expandida server-side por RPC, agenda del grupo con hora America/Santiago sobre `timestamptz` UTC. | Requiere grupo y ADMIN; la asistencia referencia `activity_id`. |
 | S6 | **M5 Toma de asistencia** | Lista de deportistas ACTIVE del grupo con los 4 estados (PRESENT/ABSENT/LATE/EXCUSED) + nota opcional, guardado por lote idempotente (upsert sobre el único `(activity_id, membership_id)`), edición posterior por ADMIN con `recorded_by`/`recorded_at`. | Corazón del producto; requiere M3 (memberships ATHLETE) y M4 (activities). |
 | S7 | **M6 Historial individual** | Historial de asistencia propio (ATHLETE), de pupilos (GUARDIAN vía `is_guardian_of`), y de cualquier deportista del grupo (ADMIN); filtros semana/mes/rango/temporada. | Primera lectura agregada sobre `attendance_records`; valida las vistas por rol con columnas explícitas antes de los reportes. |
@@ -73,7 +72,7 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 
 | Módulo | Depende de | Naturaleza de la dependencia |
 |---|---|---|
-| M1 Auth y perfil | Fase 0 (esquema, helpers RLS) | `public.users` y wiring con `auth.users` deben existir |
+| M1 Auth y perfil | Fase 0 (esquema, helpers RLS) | `public.users` y wiring con `app_private.auth_subjects` deben existir |
 | M2 Grupos | M1 | `groups.created_by` referencia `users`; el creador necesita sesión |
 | M3 Integrantes y apoderados | M1, M2 | `memberships` y `invitations` referencian `users` y `groups`; MANAGED usa el desacople de M1 |
 | M4 Actividades | M2 | `activities.group_id` y `activity_types.group_id`; solo ADMIN del grupo crea |
@@ -81,7 +80,7 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 | M6 Historial individual | M5, M3 | Lee `attendance_records`; GUARDIAN requiere `guardianships` |
 | M7 Reportes ADMIN | M5, M6 | Vistas agregadas sobre asistencia; reutiliza filtros de período de M6 |
 | M8 Visibilidad | M7, M2 | Los toggles de `groups.settings` condicionan las vistas de M7 para no-ADMIN |
-| Fase 2 (móvil [P1]) | Fase 1 completa | Reutiliza backend, RLS y RPC/Edge Functions; implementa dos clientes nativos y verifica contratos/casos canónicos por plataforma |
+| Fase 2 (móvil [P1]) | Fase 1 completa | Reutiliza backend, RLS y RPC/servicios Nest/Node; implementa dos clientes nativos y verifica contratos/casos canónicos por plataforma |
 | Push notifications [P1] | M4, M3 | Recordatorios usan `activities.starts_at`; aviso de ausencia usa `guardianships` |
 | Export CSV [P1] | M7 | Exporta los mismos datasets de las vistas de reportes |
 
@@ -91,7 +90,7 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 3. La misma batería de casos canónicos de la métrica pasa contra la vista SQL y contra `packages/core` (incluye casos con EXCUSED, LATE y denominador cero).
 4. Es imposible crear o activar un ATHLETE menor de 18 años sin `guardianship` (test de integración sobre la RPC y constraint de respaldo).
 5. Web responsive verificada en viewport 375 px; flujo de toma de asistencia usable con una mano en navegador móvil.
-6. Desplegado en producción con Sentry activo y backup `pg_dump` automatizado fuera de Supabase.
+6. Desplegado en producción con Sentry activo y backup `pg_dump` automatizado externo cifrado.
 
 ---
 
@@ -103,10 +102,10 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 
 | Semana | Entregable |
 |---|---|
-| S1-S2 | Bases de los dos proyectos nativos, identidad visual, autenticación/sesión segura, selector multi-grupo y capa HTTP/DTO; alinear respuestas con PostgREST/RPC. |
+| S1-S2 | Bases de los dos proyectos nativos, identidad visual, autenticación/sesión segura, selector multi-grupo y capa HTTP/DTO; alinear respuestas con Nest → SQL/RLS/RPC. |
 | S3-S5 | Consulta multirol: agenda, historial propio/de pupilos y reportes desde vistas/RPC; pruebas de permisos y casos canónicos en Android e iOS. |
 | S6-S7 | Toma/edición de asistencia para ADMIN, optimizada para cancha; lista táctil, cuatro estados, nota opcional y recuperación visible de errores. Builds internos tempranos por plataforma. |
-| S8-S9 | Migrar push: registro de tokens FCM/APNs, proveedor/transporte de Edge Function, opt-in, baja al cerrar sesión y pruebas físicas; mantener compatibilidad durante transición con los tokens Expo de anuncios ya existentes. |
+| S8-S9 | Migrar push: registro de tokens FCM/APNs, proveedor/transporte del Worker de anuncios, opt-in, baja al cerrar sesión y pruebas físicas; mantener compatibilidad durante transición con los tokens Expo de anuncios ya existentes. |
 | S10 | Exportación CSV; QA en dispositivos físicos; accesibilidad, privacidad, firma, fichas y envío a revisión de Google Play y App Store. Reserva de 1–2 semanas si la integración nativa o tiendas la requieren. |
 
 **Criterios de salida (verificables):**
@@ -128,7 +127,7 @@ El orden sigue la cadena de dependencias del dominio: no se puede tomar asistenc
 - 3-5 clubes piloto operando: onboarding asistido, grupos reales creados, asistencia tomada en entrenamientos reales durante ≥ 4 semanas.
 - Instrumentación de activación con las métricas de 01-vision-y-alcance.md §2.5: grupos activos (E1: ≥ 1 actividad con asistencia tomada en los últimos 14 días), adopción del flujo central (E2: asistencia tomada en ≥ 3 actividades en los primeros 14 días), retención semanal de ADMIN, tasa de error en flujos de incorporación.
 - Backlog de fixes de beta triado y resuelto (bugs P0/P1 del piloto).
-- Hardening: revisión de índices y planes de consulta de reportes con datos reales, rate limiting en Edge Functions, revisión de políticas RLS post-cambios, pruebas de restauración de backup.
+- Hardening: revisión de índices y planes de consulta de reportes con datos reales, rate limiting en servicios Nest/Node, revisión de políticas RLS post-cambios, pruebas de restauración de backup.
 - Cumplimiento (con 11-legal-seguridad-privacidad.md): política de privacidad publicada declarando residencia de datos en `sa-east-1`, flujo de consentimiento de apoderados auditado, checklist Ley 19.628 / Ley 21.719 (vigencia diciembre 2026 — v1.0 sale un mes antes, debe nacer conforme).
 - Incorporación de los clubes piloto a las apps móviles (TestFlight/Play) apenas la Fase 2 las libera.
 
@@ -149,7 +148,7 @@ Sin fechas firmes: el orden se re-prioriza con el feedback de la beta y las mét
 | Ola | Tema | Alcance [P2] | Duración estimada |
 |---|---|---|---|
 | Ola 1 | Operación en cancha | Modo offline con sincronización para la toma de asistencia; justificación de inasistencias con flujo solicitud/aprobación; rol COACH con permisos limitados | 6 semanas |
-| Ola 2 | Comunicación y adopción | Anuncios/mensajería interna; login social Google/Apple (nativo en Supabase Auth, sin cambiar proveedor); ranking gamificado | 5 semanas |
+| Ola 2 | Comunicación y adopción | Anuncios/mensajería interna; login social Google/Apple (OAuth nativo Google/Apple autorizado en #59); ranking gamificado | 5 semanas |
 | Ola 3 | Gestión del club | Gestión de pagos/cuotas; auditoría completa de cambios; multi-idioma | 6 semanas |
 | Ola 4 | Plataforma y escala | Autoregistro de asistencia con QR o geocerca; API pública/integraciones; panel multi-club para federaciones | 6 semanas |
 
@@ -165,7 +164,7 @@ gantt
     dateFormat YYYY-MM-DD
     axisFormat %d-%m
     section Fase 0 Preparacion
-    Setup monorepo, Supabase, CI/CD, disenio UX, spikes :f0, 2026-07-06, 2w
+    Setup monorepo y stack original, CI/CD, disenio UX, spikes :f0, 2026-07-06, 2w
     section Fase 1 MVP Web [P0]
     M1 Auth y perfil            :f1a, 2026-07-20, 1w
     M2 Grupos                   :f1b, after f1a, 1w
@@ -204,10 +203,10 @@ El calendario anterior de 19 semanas (2026-07-06 → 2026-11-13) dejó de ser v�
 1. Equipo de 2-3 devs full-stack TypeScript/React/SQL disponibles desde el 2026-07-06, sin ausencias prolongadas; con 2 devs, sumar ~3 semanas al total.
 2. No hay diseñador dedicado: el diseño UX se resuelve en Fase 0 con shadcn/ui y wireframes hechos por el equipo; un rediseño visual profundo no está presupuestado.
 3. Los 3 flujos no-CRUD complejos (menor-requiere-apoderado, MANAGED→ACTIVE con consentimiento, recurrencia semanal) no crecen más allá de lo diseñado en los spikes de Fase 0; cualquier extensión se corta al alcance etiquetado (riesgo R12).
-4. La estimación de ~9 semanas del MVP Web proviene de la decisión de arquitectura (06-arquitectura-y-stack.md) y asume auth, CRUD, storage y email resueltos por Supabase/Resend.
+4. La estimación histórica de ~9 semanas suponía servicios BaaS/Resend. La migración a Nest/Auth/PostgreSQL/S3 exige replanificación; no se extrapola esa fecha ni presupuesto al stack actual.
 5. Builds internos Android/iOS se distribuyen temprano para descubrir problemas de firma, permisos y tiendas; no se presupone OTA. La duración de revisión de tiendas se confirma durante la Fase 2.
 6. Los clubes piloto se reclutan durante la Fase 1 (gestión comercial en paralelo, no consume capacidad dev).
-7. Costos de infraestructura según 06-arquitectura-y-stack.md: ~USD 45-70/mes estimados en [P0]; el costo de builds nativos, firma y publicación [P1] queda por estimar.
+7. Costos de infraestructura según 06-arquitectura-y-stack.md: costos del stack actual pendientes de cotización/provisión externa en [P0]; el costo de builds nativos, firma y publicación [P1] queda por estimar.
 8. Corte de alcance estricto: solo entra a v1.0 lo etiquetado [P0]/[P1]; todo lo demás va al backlog de Fase 4 [P2].
 
 ---
@@ -220,15 +219,15 @@ El calendario anterior de 19 semanas (2026-07-06 → 2026-11-13) dejó de ser v�
 | R2 | **Datos de menores**: el flujo MANAGED + consentimiento del apoderado incumple Ley 19.628/21.719 (vigente dic 2026) o filtra datos sensibles | Legal/técnico | Media | Crítico | Revisión legal temprana del diseño en Fase 0-1 (11-legal-seguridad-privacidad.md); checklist de cumplimiento como criterio de salida de Fase 3; regla de visibilidad 5 aplicada con vistas de columnas explícitas, nunca `SELECT *` sobre `users`; minimización de datos de menores |
 | R3 | **Complejidad de la recurrencia**: la expansión de `recurrence_rule` genera actividades duplicadas o con horas corridas por DST | Técnico | Alta | Medio | Alcance cerrado a la regla canónica (días de semana + fecha fin, nada más en [P0]); expansión server-side en una sola RPC idempotente; tests con casos de cambio de hora de America/Santiago; spike dedicado en Fase 0 |
 | R4 | **Asistencia sin conectividad**: canchas y gimnasios con señal pobre impiden guardar la toma de asistencia | Funcional | Alta | Medio | En [P0]/[P1]: guardado por lote idempotente, estados visibles y reintento acotado implementado por cada cliente; medir % de fallos de red en beta; el modo offline completo con sincronización es [P2] y sigue diferido |
-| R5 | **Calidad de datos**: emails mal escritos, deportistas duplicados, `birthdate` faltante que rompe la regla de menores | Funcional | Alta | Medio | Zod en web/Edge Functions, validación local nativa Java/Swift contra el mismo contrato, y CHECK/UNIQUE/RPC en backend; `birthdate` obligatoria para rol ATHLETE; auditoría con clubes piloto |
+| R5 | **Calidad de datos**: emails mal escritos, deportistas duplicados, `birthdate` faltante que rompe la regla de menores | Funcional | Alta | Medio | Zod en web/servicios Nest/Node, validación local nativa Java/Swift contra el mismo contrato, y CHECK/UNIQUE/RPC en backend; `birthdate` obligatoria para rol ATHLETE; auditoría con clubes piloto |
 | R6 | **Scope creep**: pedidos de la beta (pagos, mensajería, QR) se cuelan en v1.0 | Gestión | Alta | Alto | Toda funcionalidad lleva etiqueta [P0]/[P1]/[P2] y no cambia de prioridad sin decisión explícita registrada; lo nuevo entra por defecto al backlog [P2] de Fase 4; revisión de alcance semanal contra el checklist del canon |
 | R7 | **Dependencia de tiendas y toolchains nativas**: firma, certificados, provisioning o revisión demoran el lanzamiento | Externo/técnico | Media | Alto | Configurar Gradle/Android Studio y Xcode, certificados y cuentas temprano; publicar builds internos en TestFlight/Play internal desde las primeras semanas; la beta web no depende de las tiendas |
 | R8 | **Rendimiento de reportes**: agregaciones por período degradan con grupos grandes o temporadas largas | Técnico | Media | Medio | Vistas SQL con índices sobre `attendance_records(activity_id, membership_id)` y `activities(group_id, starts_at)`; `EXPLAIN ANALYZE` con seeds de volumen (100 grupos, 50 deportistas, 1 año de actividades) en CI; criterio de salida Fase 3: P95 < 2 s; materialización de vistas solo si el dato real lo exige |
 | R9 | **Dispersión de la lógica de dominio** entre SQL, TypeScript, Java y Swift | Técnico | Alta | Alto | Permisos/métricas/reglas sensibles viven en RLS + vistas/RPC; clientes nativos presentan DTOs del backend; compartir fixtures de contrato y probar Android/iOS contra casos canónicos en CI |
 | R10 | **Regresión de RLS**: un cambio mal probado filtra datos entre grupos o expone contacto/`birthdate`/notas de terceros | Técnico | Media | Crítico | pgTAP + seeds por rol en CI como gate obligatorio de merge; tests negativos por cada una de las 6 reglas de visibilidad; prohibición de `SELECT *` sobre `users` hacia no-ADMIN; revisión RLS dedicada en el hardening de Fase 3 |
-| R11 | **CI frágil**: los tests de integración sobre supabase CLI/Docker se vuelven lentos e intermitentes y el equipo deja de correrlos | Técnico | Media | Medio | Hardening del pipeline presupuestado dentro de la Fase 0; cache de imágenes Docker y de dependencias; presupuesto de duración (< 12 min) monitoreado; tests pgTAP particionados por módulo |
+| R11 | **CI frágil**: los tests de integración sobre PostgreSQL17/S3 propios se vuelven lentos e intermitentes y el equipo deja de correrlos | Técnico | Media | Medio | Hardening del pipeline presupuestado dentro de la Fase 0; cache de imágenes Docker y de dependencias; presupuesto de duración (< 12 min) monitoreado; tests pgTAP particionados por módulo |
 | R12 | **Deslizamiento de las 9 semanas**: los flujos no-CRUD (M3) crecen y erosionan la ventaja del stack elegido | Gestión/técnico | Media | Alto | Spikes de diseño en Fase 0 con decisión escrita; M3 va temprano (S3-S4) para quemar el riesgo con margen de reacción; corte estricto al alcance [P0]; checkpoint de mitad de Fase 1 (fin de S4): si M3 no cerró, se replanifica antes de tocar M5-M8 |
-| R13 | **Dependencia de proveedor único** (Supabase): incidente, cambio de pricing o de hoja de ruta | Externo | Baja | Alto | Esquema SQL y `packages/core` portables; backups `pg_dump` automatizados fuera de Supabase desde Fase 1; ruta de salida documentada (backend propio tipo propuesta B, reescribiendo solo la capa API/Auth) |
+| R13 | **Dependencia de proveedor único** (hosting PostgreSQL): incidente, cambio de pricing o de hoja de ruta | Externo | Baja | Alto | Esquema SQL y `packages/core` portables; backups `pg_dump` externos cifrados y verificación de restauración/PITR; esquema y contratos propios permiten cambiar hosting sin reescribir dominio |
 
 ---
 

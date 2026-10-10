@@ -4,7 +4,18 @@
   "private": true,
   "type": "module",
   "types": "./src/persistence.types.ts",
-  "exports": { ".": { "types": "./src/persistence.types.ts" }, "./legacy": {"types":"./src/database.types.ts"} },
-  "scripts": {"migrate":"node scripts/migrate.mjs", "types:generate":"node scripts/types.mjs", "types:check":"node scripts/types.mjs --check"},
-  "dependencies": {"pg":"8.23.1"}
+  "exports": {
+    ".": {
+      "types": "./src/persistence.types.ts"
+    }
+  },
+  "scripts": {
+    "migrate": "node scripts/migrate.mjs",
+    "types:generate": "node scripts/types.mjs",
+    "types:check": "node scripts/types.mjs --check",
+    "test": "node scripts/test.mjs"
+  },
+  "dependencies": {
+    "pg": "8.23.1"
+  }
 }

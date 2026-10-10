@@ -5,7 +5,7 @@ vi.mock("react",async original=>({...await original<typeof import("react")>(),ca
 vi.mock("next/headers",()=>({cookies:async()=>({get:mock.cookie})}));
 vi.mock("next/navigation",()=>({redirect:(path:string)=>{throw new Error('redirect:'+path);},notFound:()=>{throw new Error('404');},forbidden:()=>{throw new Error('403');}}));
 vi.mock("next/cache",()=>({revalidatePath:mock.revalidate}));
-vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({auth:{getUser:mock.getUser},from:mock.from,rpc:mock.rpc})}));
+vi.mock("@/lib/api/session",()=>({createSessionClient:async()=>({auth:{getUser:mock.getUser},from:mock.from,rpc:mock.rpc})}));
 vi.mock("./server",()=>({createServerApiClient:()=>mock}));
 import { getMyGroups, getGroup, groupHomePath } from "../groups";
 import { getProfilePageData } from "../profile";
@@ -16,11 +16,11 @@ const id='17000000-0000-4000-8000-000000000201';
 const group={id,name:'Grupo sintético',sport:'Tenis',logo_url:null,roles:['ADMIN' as const,'ATHLETE' as const]};
 const profile={id,full_name:'Persona sintética',email:null,phone:null,birthdate:'2014-01-01',avatar_url:null};
 beforeEach(()=>{
-  vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_GROUPS','nest');vi.stubEnv('ASISTEAM_TRANSPORT_PROFILE','nest');vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');
+  vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_GROUPS','nest');vi.stubEnv('ASISTEAM_TRANSPORT_PROFILE','nest');
   mock.getUser.mockResolvedValue({data:{user:{id}}});mock.listMyGroups.mockResolvedValue({data:[group],pagination:{page:1,page_size:100,total:1}});mock.getGroup.mockResolvedValue({...group,access:'admin',invite_code:'CODE0001',description:null,settings:{athletes_can_view_group_stats:false,guardians_can_view_group_stats:false},can_view_group_stats:true,settings_updated_at:null,settings_updated_by_name:null});
 });
 afterEach(()=>vi.unstubAllEnvs());
-it('selector conserva cookie y grupo autorizado usando SDK; no consulta PostgREST',async()=>{
+it('selector conserva cookie y grupo autorizado usando SDK; no consulta SQL de origen',async()=>{
   mock.cookie.mockReturnValue({value:id});expect(await groupHomePath()).toBe('/groups/'+id);expect((await getMyGroups()).groups).toEqual([group]);expect((await getGroup(id)).roles).toEqual(group.roles);expect(mock.from).not.toHaveBeenCalled();
 });
 it('membresía revocada entre lista y detalle mantiene404',async()=>{

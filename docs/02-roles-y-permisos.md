@@ -213,7 +213,7 @@ Puntos verificables: (a) el `user.id` no cambia, por lo que todo el historial (`
 
 ## Suscripción del club a Asisteam [P2 autorizado, #56]
 
-Solo ADMIN ACTIVE del grupo puede consultar su facturación, iniciar checkout recurrente o cancelar renovación. ATHLETE, GUARDIAN y COACH reciben 403 en su grupo; otro tenant recibe 404. No hay rol global de usuario ni confirmación manual de pago por el ADMIN: únicamente Edge concilia evidencia consultada al proveedor con RPC service_role. Los toggles de estadísticas no afectan estos permisos. Ver [contrato SaaS](12-suscripciones-saas.md).
+Solo ADMIN ACTIVE del grupo puede consultar su facturación, iniciar checkout recurrente o cancelar renovación. ATHLETE, GUARDIAN y COACH reciben 403 en su grupo; otro tenant recibe 404. No hay rol global de usuario ni confirmación manual de pago por el ADMIN: únicamente Nest concilia evidencia consultada al proveedor con RPC de asisteam_billing. Los toggles de estadísticas no afectan estos permisos. Ver [contrato SaaS](12-suscripciones-saas.md).
 
 ## Anuncios del grupo [P2 autorizado, #57]
 

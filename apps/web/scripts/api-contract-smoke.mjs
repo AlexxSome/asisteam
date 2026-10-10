@@ -24,7 +24,7 @@ try {
   await new Promise(resolve => probe.close(resolve));
   next = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '--webpack', '--hostname', '127.0.0.1', '--port', String(port)], {
     cwd: new URL('..', import.meta.url),
-    env: { ...process.env, NODE_ENV: 'development', ASISTEAM_API_ORIGIN: await app.getUrl(), NEXT_PUBLIC_SUPABASE_URL: 'http://127.0.0.1:54321', NEXT_PUBLIC_SUPABASE_ANON_KEY: 'synthetic-build-fixture', NEXT_TELEMETRY_DISABLED: '1' },
+    env: { ...process.env, NODE_ENV: 'development', ASISTEAM_API_ORIGIN: await app.getUrl(), NEXT_TELEMETRY_DISABLED: '1' },
     stdio: ['ignore', 'ignore', 'ignore'],
   });
   let result;

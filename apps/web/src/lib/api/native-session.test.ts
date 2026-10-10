@@ -5,7 +5,7 @@ vi.mock("next/headers", () => ({ cookies: async () => mock, headers: async () =>
 import { clearNativeCookies, nativeAuthClient, nativeUser, setNativeCookies } from "./native-auth";
 import { NATIVE_ACCESS_COOKIE, NATIVE_REFRESH_COOKIE, authCookieSettings } from "./native-auth-config";
 import { saveSocialTransaction, SOCIAL_TRANSACTION_COOKIE } from "./social-auth";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 const access = `header.${Buffer.from(JSON.stringify({ sub: "synthetic-subject" })).toString("base64url")}.signature`;
 beforeEach(() => {
   vi.resetAllMocks();
@@ -30,7 +30,7 @@ describe("cookies y sesión SSR del stack independiente", () => {
     await expect(clearNativeCookies()).rejects.toThrow("read-only cookies");
     await expect(setNativeCookies({ access_token: access, refresh_token: "r".repeat(64) })).rejects.toThrow("read-only cookies");
     mock.set.mockClear();
-    expect((await (await createClient()).auth.getUser()).data.user?.id).toBe("synthetic-subject");
+    expect((await (await createSessionClient()).auth.getUser()).data.user?.id).toBe("synthetic-subject");
     expect(mock.set).not.toHaveBeenCalled();
   });
   it("recuperación en otro navegador usa el token explícito sin almacenar ni sustituir una sesión", async () => {
@@ -55,7 +55,7 @@ describe("cookies y sesión SSR del stack independiente", () => {
   it("no confía en un sub decodificado si la API rechaza la firma o la familia", async () => {
     vi.spyOn(ApiClient.prototype, "getSession").mockRejectedValue(new ApiClientError(401, "authentication_required"));
     expect(await nativeUser()).toBeNull();
-    expect((await (await createClient()).auth.getSession()).data.session).toBeNull();
+    expect((await (await createSessionClient()).auth.getSession()).data.session).toBeNull();
     expect(mock.set).not.toHaveBeenCalled();
   });
   it("no convierte una indisponibilidad de autenticación en un usuario anónimo", async () => {

@@ -3,7 +3,7 @@ import { Alert } from "@/components/ui/alert";
 import { ActionLink } from "@/components/ui/button";
 import { authPath,invitationDestination,parseInviteCode,type AuthSearchParams } from "@/lib/auth-context";
 import { getSocialProviderAvailability } from "@/lib/social-auth";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { SOCIAL_AUTH_ERROR } from "@asisteam/core";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -17,8 +17,8 @@ export default async function LoginPage({ searchParams }: {
 }) {
     const params = await searchParams;
     const inviteCode = parseInviteCode(params.invite_code);
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (user && !params.social_error)
         redirect(invitationDestination(inviteCode));
     const providers = await getSocialProviderAvailability();

@@ -2,7 +2,7 @@ import { createServerApiClient } from "@/lib/api/server";
 import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { ApiClientError } from "@asisteam/api-client";
 import type { PersistenceSchema } from "@asisteam/db";
 import { notFound,redirect } from "next/navigation";
@@ -20,7 +20,7 @@ export function parseWardsPage(value: string | string[] | undefined) {
     return Number.isSafeInteger(page) && page > 0 && page <= 1000000 ? page : 1;
 }
 export async function getMyWards(page = 1, pageSize = 50) {
-    const client = await createClient();
+    const client = await createSessionClient();
     const { data: { user } } = await client.auth.getUser();
     if (!user)
         redirect("/login");
@@ -38,7 +38,7 @@ export async function getMyWards(page = 1, pageSize = 50) {
 export async function getGroupWards(groupId: string, page = 1) {
     if (!isGroupId(groupId))
         notFound();
-    const client = await createClient();
+    const client = await createSessionClient();
     const { data: { user } } = await client.auth.getUser();
     if (!user)
         redirect("/login");
@@ -52,7 +52,7 @@ export async function getGroupWards(groupId: string, page = 1) {
 export async function getWard(athleteUserId: string) {
     if (!isGroupId(athleteUserId))
         notFound();
-    const client = await createClient();
+    const client = await createSessionClient();
     const { data: { user } } = await client.auth.getUser();
     if (!user)
         notFound();

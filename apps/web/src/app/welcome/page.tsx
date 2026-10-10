@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card,CardContent,CardDescription,CardHeader,CardTitle,} from "@/components/ui/card";
 import { createServerApiClient } from '@/lib/api/server';
 import { getMyPendingMemberships,groupHomePath } from "@/lib/groups";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
  * Pantalla ONB-01: bienvenida para usuarios sin membresías ACTIVE.
  */
 export default async function WelcomePage() {
-    const supabase = await createClient();
-    const { data: { user }, } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user }, } = await sessionClient.auth.getUser();
     if (!user)
         redirect("/register");
     const home = await groupHomePath();

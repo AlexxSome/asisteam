@@ -1,91 +1,17 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createGuardianshipMajorityHandler } from "../../../../supabase/functions/guardianship-majority/handler";
-
-const deliveries = ["ATHLETE", "GUARDIAN", "ADMIN"].map((audience, index) => ({
-  delivery_id: `delivery-${index}`, claim_token: `lease-${index}`, email: `synthetic-${index}@example.test`,
-  full_name: "Deportista sintético", audience,
-}));
-const rpc = vi.fn();
-const sendEmail = vi.fn<typeof fetch>();
-const wait = vi.fn(async () => {});
-const options = { client: { rpc }, serviceRoleKey: "synthetic-service", resendApiKey: "synthetic-resend",
-  emailFrom: "Asisteam <test@example.test>", sendEmail, wait };
-const request = (token = options.serviceRoleKey, method = "POST") => new Request("http://localhost/job", {
-  method, headers: { Authorization: `Bearer ${token}` },
-});
-beforeEach(() => {
-  vi.resetAllMocks();
-  rpc.mockImplementation(async (name: string) => ({
-    data: name === "run_guardianship_majority" ? 1 : name === "claim_guardianship_majority_emails" ? deliveries : null,
-    error: null,
-  }));
-  sendEmail.mockImplementation(async () => Response.json({ id: "synthetic-receipt" }));
-});
-
-describe("job privado de mayoría de edad", () => {
-  it("rechaza visitantes y JWT de usuario antes de consultar datos", async () => {
-    for (const token of ["", "user-jwt", "anon-key"]) {
-      expect((await createGuardianshipMajorityHandler(options)(request(token))).status).toBe(401);
-    }
-    expect((await createGuardianshipMajorityHandler(options)(request(undefined, "GET"))).status).toBe(405);
-    expect(rpc).not.toHaveBeenCalled();
-    expect(sendEmail).not.toHaveBeenCalled();
-  });
-  it("persiste transición y avisa a las tres audiencias sin PII en la respuesta", async () => {
-    const response = await createGuardianshipMajorityHandler(options)(request());
-    expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ processed: 1, delivered: 3 });
-    expect(rpc.mock.calls[0]).toEqual(["run_guardianship_majority"]);
-    expect(sendEmail).toHaveBeenCalledTimes(3);
-    for (const [index, item] of deliveries.entries()) {
-      const [url, init] = sendEmail.mock.calls[index]!;
-      expect(url).toBe("https://api.resend.com/emails");
-      expect(init?.headers).toMatchObject({ "Idempotency-Key": `guardianship-majority-${item.delivery_id}` });
-      const mail = JSON.parse(init?.body as string);
-      expect(mail.to).toEqual([item.email]);
-      expect(mail.text).toContain("18 años");
-      expect(mail.html).toBeUndefined();
-      expect(rpc).toHaveBeenCalledWith("complete_guardianship_majority_email", { p_delivery_id: item.delivery_id, p_claim_token: item.claim_token });
-    }
-    expect(wait).toHaveBeenCalledTimes(2);
-  });
-  it("falta de correo no impide la baja ni consume los avisos", async () => {
-    const response = await createGuardianshipMajorityHandler({ ...options, resendApiKey: undefined })(request());
-    expect(response.status).toBe(503);
-    expect(rpc.mock.calls).toEqual([["run_guardianship_majority"]]);
-    expect(sendEmail).not.toHaveBeenCalled();
-  });
-  it("fallo del proveedor conserva recibo pendiente y oculta sus detalles", async () => {
-    sendEmail.mockResolvedValueOnce(Response.json({ error: "secret@example.test" }, { status: 429 }));
-    const response = await createGuardianshipMajorityHandler(options)(request());
-    expect(response.status).toBe(503);
-    expect(await response.text()).not.toContain("secret");
-    expect(rpc).not.toHaveBeenCalledWith("complete_guardianship_majority_email", {
-      p_delivery_id: deliveries[0]!.delivery_id, p_claim_token: deliveries[0]!.claim_token,
-    });
-    expect(sendEmail).toHaveBeenCalledTimes(3);
-  });
-  it("si falla la confirmación, el siguiente intento usa la misma clave de idempotencia", async () => {
-    rpc.mockImplementation(async (name: string) => ({ data: name === "run_guardianship_majority" ? 0 : [deliveries[0]],
-      error: name === "complete_guardianship_majority_email" ? { message: "internal" } : null }));
-    const handler = createGuardianshipMajorityHandler(options);
-    expect((await handler(request())).status).toBe(503);
-    expect((await handler(request())).status).toBe(503);
-    expect(sendEmail.mock.calls[0]![1]?.headers).toEqual(sendEmail.mock.calls[1]![1]?.headers);
-  });
-  it("no envía correos si la transacción falla o la respuesta de la cola es inválida", async () => {
-    rpc.mockResolvedValueOnce({ data: null, error: { message: "internal PII" } });
-    let response = await createGuardianshipMajorityHandler(options)(request());
-    expect(response.status).toBe(503);
-    expect(await response.text()).not.toContain("PII");
-    rpc.mockResolvedValueOnce({ data: 0, error: null }).mockResolvedValueOnce({ data: [{}], error: null });
-    response = await createGuardianshipMajorityHandler(options)(request());
-    expect(response.status).toBe(503);
-    expect(sendEmail).not.toHaveBeenCalled();
-  });
-  it("no vuelve a enviar un lote que la base ya completó", async () => {
-    rpc.mockResolvedValueOnce({ data: 0, error: null }).mockResolvedValueOnce({ data: [], error: null });
-    expect(await (await createGuardianshipMajorityHandler(options)(request())).json()).toEqual({ processed: 0, delivered: 0 });
-    expect(sendEmail).not.toHaveBeenCalled();
-  });
+import {beforeEach,describe,expect,it,vi} from 'vitest';
+import {MajorityWorker,majorityText} from '../../../worker/dist/worker.js';
+import {SafeLogger} from '../../../api/dist/logger.js';
+const deliveries=['ATHLETE','GUARDIAN','ADMIN'].map((audience,index)=>({delivery_id:`delivery-${index}`,claim_token:`lease-${index}`,email:`synthetic-${index}@example.test`,full_name:'Deportista sintético',audience}));
+const call=vi.fn(),send=vi.fn(),logs:string[]=[];
+const email={payload:(to:string,subject:string,text:string)=>({from:'fixture',to:[to],subject,text}),send};
+const worker=()=>new MajorityWorker({call},email,new SafeLogger((line:string)=>logs.push(line)));
+beforeEach(()=>{vi.resetAllMocks();logs.length=0;call.mockImplementation(async(operation,values)=>operation==='transition'?[{run_date:'2026-10-09',lease_token:'lease'}]:operation==='email'?[deliveries[0]]:operation==='payload'?[{payload:JSON.parse(values[2])}]:operation==='metrics'?[{metrics:{pending:0,blocked:0,retries:0,oldest_seconds:0,transition_overdue:false}}]:[]);send.mockResolvedValue(undefined);});
+describe('worker nativo de mayoría de edad',()=>{
+ it('capacidad SQL inválida no consulta correo ni registra PII',async()=>{call.mockRejectedValue(new Error('denied-private'));await worker().tick();expect(call).toHaveBeenCalledOnce();expect(send).not.toHaveBeenCalled();expect(logs.join()).not.toContain('private');expect(logs.join()).toContain('worker_failed');});
+ it('persiste transición y avisa a las tres audiencias con payload durable',async()=>{for(const delivery of deliveries){call.mockImplementation(async(op,values)=>op==='transition'?[{run_date:'2026-10-09',lease_token:'lease'}]:op==='email'?[delivery]:op==='payload'?[{payload:JSON.parse(values[2])}]:[]);await worker().tick();const [payload,key]=send.mock.calls.at(-1)!;expect(payload.to).toEqual([delivery.email]);expect(payload.text).toContain('18 años');expect(payload.html).toBeUndefined();expect(key).toBe('guardianship-majority-'+delivery.delivery_id);expect(call).toHaveBeenCalledWith('finish',[delivery.delivery_id,delivery.claim_token,true]);}expect(send).toHaveBeenCalledTimes(3);expect(call.mock.calls[0]![0]).toBe('transition');expect(call.mock.calls[1]![0]).toBe('complete');expect(logs.join()).not.toContain('synthetic-');});
+ it('falta de correo no impide transición ni confirma entrega',async()=>{send.mockRejectedValue(new Error('not configured'));await worker().tick();expect(call.mock.calls[1]![0]).toBe('complete');expect(call).toHaveBeenCalledWith('finish',['delivery-0','lease-0',false]);expect(logs.join()).not.toContain('configured');});
+ it('fallo del proveedor mantiene reintento y oculta detalles',async()=>{send.mockRejectedValue(new Error('secret@example.test'));await worker().tick();expect(call).toHaveBeenCalledWith('finish',['delivery-0','lease-0',false]);expect(logs.join()).not.toContain('secret');expect(send).toHaveBeenCalledOnce();});
+ it('reintento utiliza misma clave y payload persistido antes de ACK',async()=>{const payload=email.payload('original@example.test','Fixed','Fixed');call.mockImplementation(async(op,values)=>op==='email'?[{...deliveries[0],payload}]:op==='payload'?[{payload}]:op==='finish'?Promise.reject(new Error('private ACK')):[]);await worker().tick();await worker().tick();expect(send.mock.calls[0]).toEqual(send.mock.calls[1]);expect(send.mock.calls[0]![1]).toBe('guardianship-majority-delivery-0');expect(call).toHaveBeenCalledWith('payload',['delivery-0','lease-0',JSON.stringify(payload)]);expect(logs.join()).not.toContain('private');});
+ it('lease expirado o respuesta DB inválida no envía',async()=>{call.mockImplementation(async(op)=>op==='email'?[deliveries[0]]:[]);await worker().tick();expect(send).not.toHaveBeenCalled();expect(call).toHaveBeenCalledWith('finish',['delivery-0','lease-0',false]);expect(majorityText('ATHLETE','Fixture')).toContain('cuenta aún es gestionada');});
+ it('cola completada no vuelve a enviar',async()=>{call.mockResolvedValue([]);await worker().tick();expect(send).not.toHaveBeenCalled();expect(call.mock.calls.map(([op])=>op)).toEqual(['transition','email','metrics']);expect(logs).toEqual([]);});
 });

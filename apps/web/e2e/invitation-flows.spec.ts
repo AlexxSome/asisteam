@@ -1,12 +1,11 @@
-import { test, expect } from '@playwright/test';
-import { createClient } from '@supabase/supabase-js';
+import { test, expect } from './test';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { password, email } from './data.mjs';
+import { password } from './data.mjs';
 import { checkAccessibility, login } from './helpers';
-import { flowGroup, localConfig, prepareFlowGroup, quote, sql } from './local-fixtures.mjs';
+import { flowGroup, localConfig, prepareFlowGroup, quote, sql, actor, lastEmail } from './local-fixtures.mjs';
 
-// Requires the real local Edge runtime with the same proxy secret as Next.
-test.skip(process.env.RUN_INVITATION_E2E !== '1', 'Activar RUN_INVITATION_E2E=1 con accept-invitation local');
+// Uses the actual Nest invitation controller and synthetic email transport.
+test.skip(process.env.RUN_INVITATION_E2E !== '1', 'Activar RUN_INVITATION_E2E=1 con Nest local');
 test.beforeAll(() => prepareFlowGroup());
 test.beforeEach(async ({ context }) => {
   localConfig(); // Guard: synthetic proxy identities are only sent to the local stack.
@@ -16,14 +15,11 @@ test.beforeEach(async ({ context }) => {
 });
 
 async function issue(address: string) {
-  const config = localConfig();
-  const service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-  const owner = sql(`select auth_user_id from public.users where email=${quote(email('admin'))}`);
-  const token = randomBytes(32).toString('hex');
-  const hash = createHash('sha256').update(token).digest('hex');
-  const result = await service.rpc('issue_invitation', { p_auth_user_id: owner, p_group_id: flowGroup,
-    p_token_hash: hash, p_email: address, p_role: 'ATHLETE' });
-  if (result.error) throw new Error(`No se pudo emitir invitación sintética: ${result.error.code}`);
+  const service=await actor('admin');
+  const result=await service.http('invitations/send',{action:'send',group_id:flowGroup,email:address,role:'ATHLETE'});
+  if(result.error)throw new Error('native_invitation_send_failed');
+  const token=lastEmail().text.match(/\/invitations\/([a-f0-9]{64})/)[1];
+  const hash=createHash('sha256').update(token).digest('hex');
   return { token, hash };
 }
 

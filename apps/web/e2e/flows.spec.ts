@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { email, password, groups, activity, rosterName } from './data.mjs';
 import { checkAccessibility, checkLayout, login, visit } from './helpers';
@@ -116,7 +116,7 @@ test('@extended serie: crear, editar futuras y preservar ocurrencia con asistenc
 
 test('@extended asistencia: lote y paginación conservan estados existentes', async ({ page }) => {
   const admin = await actor('admin');
-  const created = await admin.rpc('create_activity', { p_group_id: groups.large, p_activity_type_id: activityType,
+  const created = await admin.operation('create_activity', { p_group_id: groups.large, p_activity_type_id: activityType,
     p_title: 'Lote QA final', p_starts_at: new Date(Date.now()-3600000).toISOString(), p_ends_at: new Date().toISOString() });
   expect(created.error).toBeNull();
   const activityId = created.data;

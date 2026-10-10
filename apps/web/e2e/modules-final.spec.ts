@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { email, groups, id } from './data.mjs';
 import { checkAccessibility, checkLayout, login, visit } from './helpers';
@@ -11,11 +11,11 @@ test('@extended QR: vencimiento, recuperación, éxito y segundo escaneo idempot
     select id,'${flowGroup}','ATHLETE','ACTIVE',now()-interval '1 day' from public.users where email=${quote(email('athlete'))}
     on conflict(user_id,group_id,role) do nothing;`);
   const admin = await actor('admin');
-  const created = await admin.rpc('create_activity', { p_group_id: flowGroup, p_activity_type_id: activityType,
+  const created = await admin.operation('create_activity', { p_group_id: flowGroup, p_activity_type_id: activityType,
     p_title: 'QR QA final', p_starts_at: new Date(Date.now()-60000).toISOString(), p_ends_at: new Date(Date.now()+3600000).toISOString() });
   expect(created.error).toBeNull();
   const activityId = created.data;
-  expect((await admin.rpc('issue_activity_checkin_qr', { p_activity_id: activityId })).error).toBeNull();
+  expect((await admin.operation('issue_activity_checkin_qr', { p_activity_id: activityId })).error).toBeNull();
   // Produce a correctly signed token for a past minute; never export the key.
   const expired = sql(`select app_private.qr_checkin_token(activity_id,secret,now()-interval '2 minutes') from app_private.qr_checkin_keys where activity_id='${activityId}'`);
   await login(page, 'athlete');
@@ -25,7 +25,7 @@ test('@extended QR: vencimiento, recuperación, éxito y segundo escaneo idempot
   expect(sql(`select count(*) from public.attendance_records where activity_id='${activityId}'`)).toBe('0');
   let token = '';
   await expect.poll(async () => {
-    const result = await admin.rpc('issue_activity_checkin_qr', { p_activity_id: activityId });
+    const result = await admin.operation('issue_activity_checkin_qr', { p_activity_id: activityId });
     if (result.error) return false;
     token = result.data.token;
     return Date.parse(result.data.expires_at)-Date.parse(result.data.server_time)>5000;

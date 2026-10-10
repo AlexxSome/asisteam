@@ -3,7 +3,7 @@ import { ApiClientError } from "@asisteam/api-client";
 import { attendancePeriodFilterSchema, reportFilterSchema } from "@asisteam/core";
 const mock=vi.hoisted(()=>({getGroup:vi.fn(),rpc:vi.fn(),getGroupAttendanceReport:vi.fn(),getGroupStats:vi.fn(),getMyAttendanceHistory:vi.fn(),getWardAttendanceHistory:vi.fn()}));
 vi.mock("@/lib/groups",()=>({getGroup:mock.getGroup}));
-vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({rpc:mock.rpc})}));
+vi.mock("@/lib/api/session",()=>({createSessionClient:async()=>({rpc:mock.rpc})}));
 vi.mock("./server",()=>({createServerApiClient:()=>mock}));
 vi.mock("next/navigation",()=>({notFound:()=>{throw new Error('404');}}));
 import {reportFixture} from "@/lib/reports.test-fixture";
@@ -11,7 +11,7 @@ import {historyFixture} from "@/lib/attendance-history.test-fixture";
 import {getGroupAttendanceReport,getGroupStats} from "../reports";
 import {getMyAttendanceHistory,getWardAttendanceHistory} from "../attendance-history";
 const id='17000000-0000-4000-8000-000000000201', ward='17000000-0000-4000-8000-000000000202';
-beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_REPORTS','nest');vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');mock.getGroup.mockResolvedValue({id,roles:['ADMIN','ATHLETE','GUARDIAN']});});
+beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_REPORTS','nest');mock.getGroup.mockResolvedValue({id,roles:['ADMIN','ATHLETE','GUARDIAN']});});
 afterEach(()=>vi.unstubAllEnvs());
 it('reporte envía rango, tipos CSV, inactivos, orden/página y conserva el DTO SQL',async()=>{
  const report=reportFixture;mock.getGroupAttendanceReport.mockResolvedValue(report);

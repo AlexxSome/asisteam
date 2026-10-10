@@ -7,8 +7,8 @@ import {command,quote} from '../../../packages/db/scripts/local.mjs';
 import {migrate} from '../../../packages/db/scripts/migrate.mjs';
 export async function nativeBrowserDatabase(){
  const name='asisteam-native-'+randomUUID().replaceAll('-',''),password=randomBytes(32).toString('hex');
- let created=false,owner,deploy;
- const cleanup=async()=>{if(created){await command('docker',['rm','-fv',name]);created=false}};
+ let created=false,owner,deploy,cleanupPromise;
+ const cleanup=()=>cleanupPromise??=(async()=>{if(created){await command('docker',['rm','-fv',name]);created=false}})();
  try{
   await command('docker',['build','-f',new URL('../../../packages/db/Dockerfile.test',import.meta.url).pathname,'-t','asisteam-db165-test',new URL('../../../',import.meta.url).pathname]);
   await command('docker',['run','-d','--name',name,'-p','127.0.0.1::5432','-e','POSTGRES_PASSWORD='+password,'asisteam-db165-test']);created=true;
@@ -20,7 +20,7 @@ export async function nativeBrowserDatabase(){
   deploy=new pg.Client({connectionString:url.replace('postgres:','asisteam_migrator:')});await deploy.connect();await migrate(deploy);
   assert.equal((await owner.query('select app_private.auth_is_native() as native')).rows[0].native,true);
   return {url,name,password,cleanup};
- }catch(error){await cleanup();throw error}finally{await deploy?.end();await owner?.end()}
+ }catch(error){await deploy?.end();deploy=undefined;await owner?.end();owner=undefined;await cleanup();throw error}finally{await deploy?.end();await owner?.end()}
 }
 export function fixtureConnection(role='postgres',password,database='postgres'){
  const result=new URL(process.env.TEST_DATABASE_URL);result.username=role;if(password)result.password=password;result.pathname='/'+database;return result.toString();

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiClientError } from "@asisteam/api-client";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), getSession: vi.fn(), review: vi.fn(), send: vi.fn(), revalidate: vi.fn() }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser, getSession: mock.getSession } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser, getSession: mock.getSession } }) }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => ({ reviewManagedActivation:mock.review,sendInvitation:mock.send }) }));
 import { sendInvitation } from "@/app/groups/[groupId]/invitations/new/actions";
 import { reviewManagedActivation } from "@/app/groups/[groupId]/members/consent/actions";

@@ -5,7 +5,7 @@ const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), order: vi.fn()
 vi.mock("react", async (original) => ({ ...await original<typeof import("react")>(), cache: (fn: unknown) => fn }));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); }, forbidden: () => { throw new Error("403"); }, useRouter: () => ({ refresh: vi.fn() }), usePathname: () => "/groups" }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => ({ listMyGroups: mock.listMyGroups, getGroup: mock.getGroup, getGroupBilling: mock.getGroupBilling, getPendingSummary: mock.getPendingSummary }) }));
 import { ApiClientError } from "@asisteam/api-client";
 import { getGroup, getGroupCapacity, getMyGroups, groupHomePath } from "@/lib/groups";

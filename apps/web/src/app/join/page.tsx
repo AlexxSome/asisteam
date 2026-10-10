@@ -2,7 +2,7 @@ import { joinByCode } from "@/app/groups/[groupId]/actions";
 import { PendingJoinRequests } from "@/app/groups/[groupId]/members/pending/membership-review";
 import { AppShell } from "@/components/app-shell";
 import { getMyPendingMemberships } from "@/lib/groups";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { GROUP_ERROR_MESSAGES,joinCodeSchema } from "@asisteam/core";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -18,8 +18,8 @@ export default async function JoinPage({ searchParams }: {
     }>;
 }) {
     const { code, error } = await searchParams;
-    const supabase = await createClient();
-    const { data: { user }, } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user }, } = await sessionClient.auth.getUser();
     if (!user) {
         const inviteCode = joinCodeSchema.safeParse(code);
         redirect(inviteCode.success ? `/login?invite_code=${inviteCode.data}` : "/login");

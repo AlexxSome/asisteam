@@ -1,7 +1,7 @@
 import { AuthLayout } from "@/components/auth-layout";
 import { consentReturnPath } from "@/lib/account-consent-routing";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AcceptTermsForm } from "./accept-terms-form";
@@ -12,8 +12,8 @@ export default async function AcceptTermsPage({ searchParams }: {
     }>;
 }) {
     const returnTo = consentReturnPath((await searchParams).return_to);
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         redirect("/login");
     const { data: accepted, error } = await memberOperation(async (api) => (await api.getCurrentAccountConsent()).accepted);

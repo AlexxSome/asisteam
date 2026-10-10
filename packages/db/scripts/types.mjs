@@ -1,5 +1,5 @@
 // Persistence types come from PostgreSQL catalogs, independently of HTTP DTOs
-// and the archived Supabase generator. No data rows are read.
+// and HTTP contracts. No data rows are read.
 import pg from 'pg';
 import {readFile,writeFile} from 'node:fs/promises';
 const scalars={bool:'boolean',int2:'number',int4:'number',int8:'number',float4:'number',float8:'number',numeric:'number',json:'Json',jsonb:'Json',void:'undefined'};

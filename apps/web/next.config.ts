@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
     incomingRequests: { ignore: [/\?/, /^\/invitations\//] },
   },
   // QA owns its build directory and never reuses a developer's running server.
-  distDir: process.env.ASISTEAM_QA === "faults" ? ".next/qa-fault-app"
-    : process.env.ASISTEAM_QA === "1" ? ".next/qa-app" : ".next",
+  distDir: process.env.ASISTEAM_QA === "faults" ? ".qa/fault-app"
+    : process.env.ASISTEAM_QA === "1" ? ".qa/app" : ".next",
   transpilePackages: ["@asisteam/core"],
   experimental: { serverActions: { bodySizeLimit: "3mb" }, authInterrupts: true },
   async headers() {

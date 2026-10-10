@@ -1,17 +1,15 @@
 import { startQaNest } from './nest-runtime.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import { createClient } from '@supabase/supabase-js';
+import {nativeBrowserDatabase} from '../../api/test/native-browser-database.mjs';
+import {randomUUID} from 'node:crypto';
 import { roles, email, password, id, groups, activity, rosterName, pendingName, wardName, inviteCode } from './data.mjs';
 
-// Never read .env credentials: the CLI supplies the running local stack only.
-const config = JSON.parse(execFileSync('../../node_modules/.bin/supabase', ['status', '-o', 'json'], {
-  encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
-}));
-if (!['127.0.0.1', 'localhost'].includes(new URL(config.API_URL).hostname)) throw new Error('QA solo admite Supabase local');
+// Every run owns a fresh database; never reads deployment credentials.
+const config=await nativeBrowserDatabase();
 const sql = statement => {
   try {
-    return execFileSync('docker', ['exec', '-i', 'supabase_db_asisteam', 'psql', '-U', 'postgres', '-d', 'postgres', '-At', '-v', 'ON_ERROR_STOP=1'], {
+    return execFileSync('docker', ['exec', '-i', config.name, 'psql', '-U', 'postgres', '-d', 'postgres', '-At', '-v', 'ON_ERROR_STOP=1'], {
       input: statement, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'],
     }).trim();
   } catch (error) {
@@ -19,17 +17,12 @@ const sql = statement => {
     throw new Error(`Fixture QA local: ${code}`);
   }
 };
-const service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
 const profiles = {};
 for (const role of roles) {
-  const existing = sql(`select auth_user_id from public.users where email='${email(role)}';`);
-  if (!existing) {
-    const result = await service.auth.admin.createUser({ email: email(role), password, email_confirm: true,
-      user_metadata: { full_name: `Persona QA ${role}`, birthdate: '1990-01-01' } });
-    if (result.error) throw new Error(`No se pudo preparar el rol ${role}`);
-  } else if ((await service.auth.admin.updateUserById(existing, { password })).error) {
-    throw new Error(`No se pudo preparar el acceso ${role}`);
-  }
+  const subject=randomUUID();
+  sql(`insert into app_private.auth_subjects(id,email,native_owned) values('${subject}','${email(role)}',true);
+    insert into app_private.auth_credentials(subject_id,password_hash) values('${subject}',extensions.crypt('${password}',extensions.gen_salt('bf',4)));
+    insert into public.users(auth_user_id,email,full_name,birthdate,account_status) values('${subject}','${email(role)}','Persona QA ${role}','1990-01-01','ACTIVE');`);
   profiles[role] = sql(`select id from public.users where email='${email(role)}';`);
   // Version is the same as the legal notice rendered by the existing app.
   sql(`insert into public.account_consents(user_id,terms_version,channel)
@@ -96,15 +89,15 @@ for (const [index, status] of ['PRESENT','PRESENT','PRESENT','PRESENT','PRESENT'
     on conflict(activity_id,membership_id) do update set status=excluded.status;`);
 }
 
-// A production build can invalidate a dev cache nested under .next.
-// Start this owned cache fresh; never touch .next/dev or another server.
-rmSync('.next/qa-app', { recursive: true, force: true });
-mkdirSync('.next/qa', { recursive: true });
+// QA caches/metadata are outside .next, isolated from production builds.
+// Start only this owned cache fresh.
+rmSync('.qa/app', { recursive: true, force: true });
+mkdirSync('.qa', { recursive: true, mode:0o700 });
 const status = { loginPost: false, registerPost: false, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false, qrPayload: false, requests: 0 };
 const persist = () => {
   // next build clears .next; a supervised QA server must not crash on logging.
-  mkdirSync('.next/qa', { recursive: true });
-  writeFileSync('.next/qa/log-check.json', JSON.stringify(status, null, 2));
+  mkdirSync('.qa', { recursive: true, mode:0o700 });
+  writeFileSync('.qa/log-check.json', JSON.stringify(status, null, 2));
 };
 persist();
 // Capture raw output only in memory. Reports retain booleans, never payloads.
@@ -128,19 +121,22 @@ function inspect(chunk) {
   tail = text.slice(-4096);
   persist();
 }
-const nest = process.env.ASISTEAM_QA_NEST === '1' ? await startQaNest(config) : null;
+const nest = await startQaNest(config);
+writeFileSync('.qa/native-runtime.json',JSON.stringify(nest.runtime),{mode:0o600});
 const child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '--hostname', '127.0.0.1', '--port', '3120'], {
-  env: { ...process.env, ...nest?.env, NEXT_PUBLIC_SUPABASE_URL: config.API_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY: config.ANON_KEY,
+  env: { ...process.env, ...nest.env,
     NEXT_PUBLIC_APP_URL: 'http://127.0.0.1:3120', ASISTEAM_SITE_URL: 'http://127.0.0.1:3120', NEXT_TELEMETRY_DISABLED: '1', ASISTEAM_QA: '1' }, stdio: ['ignore', 'pipe', 'pipe'],
 });
 child.stdout.on('data', inspect); child.stderr.on('data', inspect);
 console.log('QA: fixtures locales listos; diagnósticos privados reducidos a indicadores.');
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, async () => {
-  if(nest)await nest.stop();
+  await nest.stop();
+  await config.cleanup();
   child.kill(signal);
 });
 child.on('exit', async code => {
-  if(nest)await nest.stop();
+  await nest.stop();
+  await config.cleanup();
   if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl && !status.qrPayload) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
   process.exit(code ?? 1);
 });

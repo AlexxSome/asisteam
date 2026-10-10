@@ -1,0 +1,1031 @@
+{
+  "date": "2026-10-10",
+  "testedScope": "working-tree diff before publication, not base-only code",
+  "baseCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+  "branch": "codex/168-retiro-completo-supabase",
+  "acceptance": "NO-GO",
+  "nextEnvPreservedSha256": "7ad303e40d4fddf44f156129e397511953a71481c5cfd86b1862649aaaf240cc",
+  "reports": {
+    "checks": {
+      "commit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:09:53.894Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.45
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 7.23
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 2.83
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.9
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 2.38
+        },
+        {
+          "check": "next-http-contract",
+          "status": "PASS",
+          "seconds": 7.75
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 35.57
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.51,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 17.77,
+          "tests": 950,
+          "omitted": 84
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.29
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.85
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.62
+        }
+      ]
+    },
+    "backend": {
+      "commit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:02:20.904Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.81
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.53
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 45.93
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 46.52
+        },
+        {
+          "check": "next-social-auth-browser",
+          "status": "PASS",
+          "seconds": 15.02
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 1.64,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 6.76
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 50.63,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:09:25.845Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 21.23
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 7.31
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.11
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 1.33
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.15
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 9.03
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.94
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.9,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.72
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 2.2
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 1.68
+        }
+      ]
+    },
+    "extended": {
+      "commit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:17:21.404Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.35
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.4
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 122.78,
+          "tests": 46,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 13.91,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "controlled-failure": {
+      "commit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:14:16.183Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.55
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.55,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.56,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.37,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "retirement": {
+      "commit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:10:51.208Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "product-dependencies-without-supabase",
+          "status": "PASS"
+        },
+        {
+          "check": "product-source-without-sdk-provider-http-or-fixtures",
+          "status": "PASS"
+        },
+        {
+          "check": "test-and-tooling-without-provider-imports-or-cli",
+          "status": "PASS"
+        },
+        {
+          "check": "compiled-product-artifacts-required",
+          "status": "PASS"
+        },
+        {
+          "check": "next-traces-without-sdk-or-origin-harness",
+          "status": "PASS"
+        },
+        {
+          "check": "production-routes-without-synthetic-fixtures",
+          "status": "PASS"
+        },
+        {
+          "check": "server-browser-api-worker-bundles-without-provider-client",
+          "status": "PASS"
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "checkoutCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "date": "2026-10-10T03:20:41.878Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 1100,
+          "omitted": 84
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 47,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 160.33
+      }
+    },
+    "independent-postgres": {
+      "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+      "environment": "local-synthetic",
+      "date": "2026-10-10T03:22:20.888Z",
+      "checks": [
+        {
+          "check": "vanilla-postgres17-with-pgtap-fixture",
+          "status": "PASS",
+          "seconds": 0.52
+        },
+        {
+          "check": "isolated-destination-and-wal-archiving",
+          "status": "PASS",
+          "seconds": 3.992
+        },
+        {
+          "check": "clean-baseline-with-deploy-role-and-ledger",
+          "status": "PASS",
+          "seconds": 0.084
+        },
+        {
+          "check": "pgtap-destination-policies-and-invariants",
+          "status": "PASS",
+          "seconds": 0.196
+        },
+        {
+          "check": "persistence-types-and-migration-hashes-independent",
+          "status": "PASS",
+          "seconds": 0.078
+        },
+        {
+          "check": "native-identities-and-http-api-with-minimal-roles",
+          "status": "PASS",
+          "seconds": 0.268
+        },
+        {
+          "check": "canonical-history-minors-consents-metrics-and-rls",
+          "status": "PASS",
+          "seconds": 0.074
+        },
+        {
+          "check": "worker-native-claims-and-durable-ledger",
+          "status": "PASS",
+          "seconds": 0.009
+        },
+        {
+          "check": "destination-security-parity-concurrent-load-500ms",
+          "status": "PASS",
+          "seconds": 5.717
+        },
+        {
+          "check": "next-chromium-native-auth-independent-database",
+          "status": "PASS",
+          "seconds": 17.897
+        },
+        {
+          "check": "pool-concurrency-and-connection-budget",
+          "status": "PASS",
+          "seconds": 0.174
+        },
+        {
+          "check": "cutover-abort-post-write-reconciliation-and-forward-recovery",
+          "status": "PASS",
+          "seconds": 2.833
+        },
+        {
+          "check": "logical-backup-restore-all-table-and-group-reconciliation",
+          "status": "PASS",
+          "seconds": 0.512
+        },
+        {
+          "check": "physical-basebackup-and-point-in-time-recovery",
+          "status": "PASS",
+          "seconds": 5.227
+        },
+        {
+          "check": "owned-resources-cleanup",
+          "status": "PASS",
+          "seconds": 0.576
+        }
+      ],
+      "pending": [
+        "managed-provider-provisioning",
+        "production-volume-and-connection-budget",
+        "external-backup-encryption-retention-and-RPO-RTO",
+        "production-cutover-166-168"
+      ],
+      "targetPostgres": "17.9 (Debian 17.9-1.pgdg12+1)",
+      "targetImage": "sha256:a6566cb463d174498aec83b903e2890ba7d7841d4beb8ba6a3605f0fbfd269a3",
+      "pgtapCases": 50,
+      "canonicalMetricCases": 9,
+      "catalogDifferences": [],
+      "qualification": {
+        "status": "PASS",
+        "fixture": {
+          "activeAthletes": 500,
+          "newAttendanceRecords": 5000,
+          "pageSize": 100
+        },
+        "workload": {
+          "requestsPerCell": 24,
+          "concurrency": [
+            1,
+            4
+          ],
+          "apiPool": 2,
+          "referencePool": 2,
+          "workerPool": 2,
+          "reportBudgetMs": 500
+        },
+        "reference": "canonical SQL on identical destination fixture; not legacy HTTP or production",
+        "rows": [
+          {
+            "operation": "report",
+            "transport": "canonical-sql",
+            "concurrency": 1,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 37.16,
+            "workerP95Ms": 1.77,
+            "seconds": 0.797
+          },
+          {
+            "operation": "report",
+            "transport": "nest-http",
+            "concurrency": 1,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 46.89,
+            "workerP95Ms": 2.74,
+            "seconds": 0.99
+          },
+          {
+            "operation": "report",
+            "transport": "canonical-sql",
+            "concurrency": 4,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 69.53,
+            "workerP95Ms": 1.65,
+            "seconds": 0.415
+          },
+          {
+            "operation": "report",
+            "transport": "nest-http",
+            "concurrency": 4,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 81.47,
+            "workerP95Ms": 4.12,
+            "seconds": 0.49
+          },
+          {
+            "operation": "stats",
+            "transport": "canonical-sql",
+            "concurrency": 1,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 46.04,
+            "workerP95Ms": 2.32,
+            "seconds": 0.68
+          },
+          {
+            "operation": "stats",
+            "transport": "nest-http",
+            "concurrency": 1,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 50.06,
+            "workerP95Ms": 2.25,
+            "seconds": 0.778
+          },
+          {
+            "operation": "stats",
+            "transport": "canonical-sql",
+            "concurrency": 4,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 70.43,
+            "workerP95Ms": 2.58,
+            "seconds": 0.416
+          },
+          {
+            "operation": "stats",
+            "transport": "nest-http",
+            "concurrency": 4,
+            "requests": 24,
+            "errors": 0,
+            "p95Ms": 79.3,
+            "workerP95Ms": 3.96,
+            "seconds": 0.475
+          }
+        ],
+        "pending": [
+          "representative-production-volume-and-agreed-load",
+          "provider-sandbox",
+          "human-reader-native-zoom-and-axe-incomplete"
+        ],
+        "connections": [
+          {
+            "application_name": "asisteam-api",
+            "n": 2
+          },
+          {
+            "application_name": "asisteam-worker",
+            "n": 1
+          },
+          {
+            "application_name": "mig23-reference",
+            "n": 2
+          }
+        ],
+        "security": [
+          "native-auth",
+          "guardian-eighteenth-birthday-immediate-denial",
+          "multirol",
+          "coach-no-notes-or-clear",
+          "concurrent-upsert",
+          "pooled-identity-isolation",
+          "third-party-projection"
+        ]
+      },
+      "connections": {
+        "serverLimit": 40,
+        "probeConcurrency": 12,
+        "probePool": 2,
+        "probeSeconds": 0.173,
+        "apiPerReplica": 2,
+        "authPerReplica": 3,
+        "invitationPerReplica": 3,
+        "billingPerReplica": 3,
+        "workerPerReplica": 2,
+        "reservedSuperuser": 3
+      },
+      "cutover": {
+        "sourceCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+        "environment": "local-synthetic",
+        "checks": [
+          {
+            "check": "freeze-every-db-writer-and-abort-before-first-write",
+            "status": "PASS",
+            "seconds": 0.335
+          },
+          {
+            "check": "snapshot-maintenance-cutover-and-destination-writes",
+            "status": "PASS",
+            "seconds": 0.247
+          },
+          {
+            "check": "single-job-executor-concurrent-replicas-and-persist-before-ack",
+            "status": "PASS",
+            "seconds": 0.011
+          },
+          {
+            "check": "post-write-failure-freeze-and-complete-delta-reconciliation",
+            "status": "PASS",
+            "seconds": 0.601
+          },
+          {
+            "check": "forward-recovery-login-history-consent-files-provider-retry-and-jobs",
+            "status": "PASS",
+            "seconds": 0.127
+          }
+        ],
+        "pending": [
+          "production-volume",
+          "named-operators-and-approved-RPO-RTO",
+          "MP-sandbox-contract-URL-and-retry",
+          "managed-provider-maintenance-controls"
+        ],
+        "syntheticJobClock": "Chile-noon",
+        "singleWriterAtAbort": true,
+        "activeJobLeasePreserved": true,
+        "failedEventAck": 503,
+        "changedTables": [
+          {
+            "table": "app_private.auth_attempts",
+            "rows": 20
+          },
+          {
+            "table": "app_private.auth_credentials",
+            "rows": 5
+          },
+          {
+            "table": "app_private.auth_families",
+            "rows": 8
+          },
+          {
+            "table": "app_private.auth_refresh",
+            "rows": 8
+          },
+          {
+            "table": "app_private.auth_subjects",
+            "rows": 5
+          },
+          {
+            "table": "app_private.majority_tasks",
+            "rows": 2
+          },
+          {
+            "table": "public.account_consents",
+            "rows": 5
+          },
+          {
+            "table": "public.attendance_records",
+            "rows": 10
+          },
+          {
+            "table": "public.consents",
+            "rows": 2
+          },
+          {
+            "table": "public.group_subscriptions",
+            "rows": 1
+          },
+          {
+            "table": "public.subscription_invoices",
+            "rows": 1
+          },
+          {
+            "table": "public.users",
+            "rows": 6
+          }
+        ],
+        "rejectedCorruptSnapshot": true,
+        "foreignKeyAndMinorFailureAtomic": true,
+        "reconciledTables": 44,
+        "reconciledForeignKeys": 59,
+        "reconciledObjects": 2,
+        "providerReplayInvoices": 2,
+        "rpoCommittedWrites": 0,
+        "recoverySeconds": 0.728,
+        "syntheticBudgetSeconds": 60
+      },
+      "backupBytes": 415601,
+      "reconciledTables": 45,
+      "pitr": {
+        "basebackup": true,
+        "archivedWal": true,
+        "recoveredToNamedPoint": true,
+        "postPointWriteExcluded": true
+      }
+    },
+    "domain-sql": {
+      "checks": [
+        {
+          "file": "packages/db/tests/domain/account_consents.test.sql",
+          "status": "PASS",
+          "cases": 32,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/activities.test.sql",
+          "status": "PASS",
+          "cases": 48,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/activity_types.test.sql",
+          "status": "PASS",
+          "cases": 40,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/announcement_worker.test.sql",
+          "status": "PASS",
+          "cases": 29,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/api_invitations.test.sql",
+          "status": "PASS",
+          "cases": 11,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/api_session_rls.test.sql",
+          "status": "PASS",
+          "cases": 16,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/attendance.test.sql",
+          "status": "PASS",
+          "cases": 60,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/attendance_edit.test.sql",
+          "status": "PASS",
+          "cases": 44,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/attendance_history.test.sql",
+          "status": "PASS",
+          "cases": 54,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/auth_cutover.test.sql",
+          "status": "PASS",
+          "cases": 16,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/billing_nest.test.sql",
+          "status": "PASS",
+          "cases": 17,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/coach_role.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/configure_groups.test.sql",
+          "status": "PASS",
+          "cases": 31,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/create_groups.test.sql",
+          "status": "PASS",
+          "cases": 58,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/group_announcements.test.sql",
+          "status": "PASS",
+          "cases": 73,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/group_reports.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/group_stats_visibility.test.sql",
+          "status": "PASS",
+          "cases": 84,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/group_subscriptions.test.sql",
+          "status": "PASS",
+          "cases": 53,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/groups.test.sql",
+          "status": "PASS",
+          "cases": 27,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/guardianships.test.sql",
+          "status": "PASS",
+          "cases": 42,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/invitations.test.sql",
+          "status": "PASS",
+          "cases": 53,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/join_group_by_code.test.sql",
+          "status": "PASS",
+          "cases": 28,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/majority_worker.test.sql",
+          "status": "PASS",
+          "cases": 46,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/manage_members.test.sql",
+          "status": "PASS",
+          "cases": 59,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/managed_activation.test.sql",
+          "status": "PASS",
+          "cases": 61,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/managed_members.test.sql",
+          "status": "PASS",
+          "cases": 49,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/member_roster_search.test.sql",
+          "status": "PASS",
+          "cases": 24,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/membership_approvals.test.sql",
+          "status": "PASS",
+          "cases": 62,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/membership_onboarding.test.sql",
+          "status": "PASS",
+          "cases": 37,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/my_wards.test.sql",
+          "status": "PASS",
+          "cases": 45,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/native_auth.test.sql",
+          "status": "PASS",
+          "cases": 20,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/profile.test.sql",
+          "status": "PASS",
+          "cases": 72,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/qr_attendance.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/send_invitations.test.sql",
+          "status": "PASS",
+          "cases": 51,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/social_auth.test.sql",
+          "status": "PASS",
+          "cases": 15,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/social_auth_native.test.sql",
+          "status": "PASS",
+          "cases": 31,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/users_managed_no_auth.test.sql",
+          "status": "PASS",
+          "cases": 2,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/users_rls.test.sql",
+          "status": "PASS",
+          "cases": 14,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/ward_attendance_history.test.sql",
+          "status": "PASS",
+          "cases": 44,
+          "failures": []
+        },
+        {
+          "file": "packages/db/tests/domain/weekly_activities.test.sql",
+          "status": "PASS",
+          "cases": 48,
+          "failures": []
+        }
+      ],
+      "totalCases": 1646
+    }
+  }
+}

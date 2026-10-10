@@ -1,0 +1,28 @@
+begin;
+\i packages/db/fixtures/domain.sql
+select plan(16);
+select is((select mode from app_private.auth_authority where singleton),'NATIVE','solo autoridad nativa instalada');
+select ok(not pg_temp.can_execute('asisteam_api','app_private.auth_cutover(text)','EXECUTE'),'API cannot switch authority');
+select ok(not pg_temp.can_execute('asisteam_auth','app_private.import_auth_identities()','EXECUTE'),'Auth cannot import identities');
+select ok(not has_table_privilege('asisteam_auth','app_private.auth_import_ledger','SELECT'),'import ledger is private');
+select ok(not has_table_privilege('asisteam_member','app_private.auth_authority','UPDATE'),'clients cannot switch authority');
+select is((select count(*)::int from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','app_private') and p.prosrc ~ 'auth\.(uid|jwt|role)\('),0,'product helpers have no provider claim dependency');
+select is((select count(*)::int from pg_policies where schemaname in ('public','app_private','storage') and (coalesce(qual,'')||coalesce(with_check,'')) ~ 'auth\.(uid|jwt|role)\('),0,'RLS has no provider claim dependency');
+select is((select count(*)::int from pg_constraint where conrelid='public.users'::regclass and confrelid='pg_temp.fixture_accounts'::regclass),0,'profile FK is independent');
+select set_config('request.jwt.claims',(('{"sub":"64000000-0000-4000-8000-000000000001","role":"authenticated","auth_provider":"nest"}')::jsonb||'{"auth_provider":"nest"}'::jsonb)::text,true);
+set local role asisteam_api;
+select is(app_private.actor_subject_id(),'64000000-0000-4000-8000-000000000001'::uuid,'actor nativo conserva sujeto');
+reset role;
+select is(app_private.auth_cutover('FREEZE')->>'mode','FROZEN','freeze is durable');
+select is(app_private.actor_subject_id(),null::uuid,'freeze hides the actor');
+select throws_ok($$select app_private.auth_operation('lookup','{}')$$,'PT503','identity_authority_frozen','freeze blocks native identity boundary');
+select is(app_private.auth_cutover('ABORT')->>'mode','NATIVE','abortar mantenimiento reabre autoridad nativa');
+update app_private.auth_authority set mode='NATIVE',activated_at=now() where singleton;
+select ok(to_regprocedure('app_private.api_session_user_id(uuid)') is null,'adaptador proveedor retirado');
+select set_config('request.jwt.claims',(('{"sub":"64000000-0000-4000-8000-000000000001","role":"authenticated","auth_provider":"nest","auth_provider":"nest"}')::jsonb||'{"auth_provider":"nest"}'::jsonb)::text,true);
+set local role asisteam_member;
+select is(app_private.actor_subject_id(),null::uuid,'rol SQL cannot forge a native actor');
+reset role;
+select throws_ok($$select app_private.auth_cutover('ABORT')$$,'P0001','Native authority required','post-write rollback requires forward recovery');
+select * from finish();
+rollback;

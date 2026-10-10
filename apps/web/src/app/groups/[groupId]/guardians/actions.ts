@@ -1,7 +1,7 @@
 "use server";
 import { isGroupId } from "@/lib/group-routing";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { GUARDIANSHIP_ERROR_MESSAGES,guardianshipIdSchema,guardianshipSchema } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 import { sendInvitation } from "../invitations/new/actions";
@@ -24,8 +24,8 @@ export async function createGuardianship(groupId: string, input: unknown): Promi
     const parsed = guardianshipSchema.safeParse(input);
     if (!parsed.success)
         return { error: { code: "invalid_guardianship", message: GUARDIANSHIP_ERROR_MESSAGES.invalid_guardianship!, details: parsed.error.flatten().fieldErrors } };
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         return fail("authentication_required");
     try {

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiClientError } from "@asisteam/api-client";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), operation: vi.fn(), revalidate: vi.fn() }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser } }) }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient:()=>({approveMembership:(request:unknown)=>mock.operation("approveMembership",request),rejectMembership:(request:unknown)=>mock.operation("rejectMembership",request)}) }));
 import { reviewMembership } from "@/app/groups/[groupId]/members/pending/actions";
 const input = { group_id: "26000000-0000-4000-8000-000000000201", membership_id: "26000000-0000-4000-8000-000000000311", decision: "approve" };

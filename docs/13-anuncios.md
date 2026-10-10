@@ -1,6 +1,6 @@
 # Anuncios de grupo — HU-ADM-22 / #57
 
-[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+[Seguro] Vigencia MIG-24 (#168, 2026-10-10): Nest/Node24, PostgreSQL17 independiente, Auth propio y S3 privado son el único stack del repositorio. Dominio, RLS/V1–V6, menores, consentimientos y métricas se mantienen. [Evidencia y aceptación externa](migration/issue-168/README.md). Producción continúa NO-GO; no ejecutar corte/deploy real ni apagar receptores remotos.
 
 
 El alcance autorizado (#57) incluye muro y gestión web más infraestructura de notificaciones Expo ya implementada. No incluye la app móvil, Web Push, comentarios, adjuntos, recordatorios de actividades ni avisos de ausencias. **Cambio de planificación 2026-10-05:** el cliente futuro será nativo (Java/Android y Swift/iOS), así que recibir anuncios requiere migrar el registro de tokens y el envío Expo a FCM/APNs. Este documento describe la implementación actual mientras no se completa esa migración.
@@ -29,7 +29,7 @@ La pantalla bloqueada recibe un texto genérico. El título/cuerpo redactados po
 
 ## Cola y garantías
 
-`app_private.announcement_push_deliveries` no está expuesta por PostgREST. Las RPC de worker se conceden exclusivamente a service_role.
+`app_private.announcement_push_deliveries` no está expuesta por Nest → SQL/RLS. Las RPC de worker se conceden exclusivamente a asisteam_jobs.
 
 - `PENDING` → `AWAITING_RECEIPT` cuando Expo devuelve ticket.
 - `AWAITING_RECEIPT` → `DELIVERED` cuando APNs/FCM acepta según el recibo Expo. Esto no prueba lectura ni recepción física en el dispositivo.
@@ -42,44 +42,18 @@ La unicidad y los leases evitan duplicados por reintentos de publicación y work
 
 `job_runs` registra las ejecuciones completadas por día chileno y la cantidad de transiciones aceptadas/confirmadas, sin PII. Un mismo aviso puede aportar dos transiciones (ticket y recibo); no es una métrica de usuarios ni de lecturas. Los fallos terminales quedan en la cola para diagnóstico del operador; no se reactivan automáticamente.
 
-## Despliegue
+## Runtime y operación vigente
 
-1. Aplicar migraciones y regenerar tipos con el flujo habitual del entorno. La migración registra `pg_cron` cada minuto; sin secretos Vault permanece inactivo.
-2. Desplegar `supabase functions deploy send-announcement-push`. El handler exige `SUPABASE_SERVICE_ROLE_KEY` aunque el gateway tenga `verify_jwt=false`; nunca compartir esa clave con clientes.
-3. Configurar en Vault, mediante el dashboard/gestor de secretos del entorno:
-   - `announcement_push_url`: URL HTTPS del proyecto + `/functions/v1/send-announcement-push`.
-   - `announcement_push_key`: clave service_role del mismo proyecto.
-4. Configurar el proyecto Expo y credenciales APNs/FCM. Si se habilita la seguridad mejorada de Expo Push, establecer `EXPO_ACCESS_TOKEN` como secreto de la Edge Function.
-5. Con un dispositivo de prueba vinculado y opt-in, publicar en un grupo sintético, verificar ticket/recibo, navegación, desregistro y opt-out. No usar información real de menores para pruebas.
+[Seguro] Worker Node/asisteam_jobs es el único ejecutor, con leases/ledger durables y motor Expo canónico. API propia registra/desregistra token y opt-in de la sesión; no hay cron/Vault/Edge del origen. Se conserva retry/recibos/device-not-registered/privacidad; reintento de ACK no reenvía mensajes aceptados.
 
-No se despliegan funciones ni secretos en producción como parte de este PR. El muro web puede utilizarse tras desplegar aplicación/migración; para recibir push se necesita el cliente Expo que registre dispositivos y las credenciales anteriores. No hay alta de dispositivos ni notificaciones de navegador en esta entrega.
-
-Consulta operativa sin PII (solo SQL de operador):
-
-```sql
-select status, failure_code, count(*)
-from app_private.announcement_push_deliveries
-group by status, failure_code;
-select job_name, run_date, completed_at, affected_count
-from public.job_runs where job_name = 'send-announcement-push';
-```
+[Seguro] EXPO_ACCESS_TOKEN es secreto del Worker si el entorno lo requiere. Expo es transporte transitorio autorizado #57; Java/Swift/FCM/APNs y dispositivos reales siguen fuera del retiro técnico. Recibos/provisión externa pendientes según matriz #168; no ejecutar deploy real ni habilitar notificaciones a dispositivos por inferencia.
 
 ## Validación local
 
-```sh
-pnpm exec supabase migration up --local
-pnpm exec supabase test db
-pnpm test
-pnpm typecheck
-pnpm --filter @asisteam/web build
-RUN_ANNOUNCEMENT_INTEGRATION=1 pnpm --filter @asisteam/web exec vitest run announcements.integration.test.ts
+```bash
+pnpm ci:checks
+pnpm ci:backend
+pnpm ci:extended
 ```
 
-La integración usa Auth/PostgREST/SQL reales y transporte Expo simulado para no enviar a dispositivos reales. Los fixtures sintéticos se eliminan al terminar. pgTAP verifica permisos, aislamiento, estados de membresía, idempotencia, versiones y cola; Vitest verifica schemas, acciones, XSS, formularios y errores/tickets/recibos de Expo.
-
-Fuente primaria del protocolo y sus límites: [Expo Push Service](https://docs.expo.dev/push-notifications/sending-notifications/).
-
-
-## MIG-15 (#159): transporte Nest y worker Expo
-
-[Seguro] [Contrato, handoff y evidencia](migration/issue-159/README.md) sustituyen el despliegue Edge descrito arriba al activar WORKER. La instalación mantiene LEGACY y sus firmas públicas; se exige retirar/drenar Edge y pg_net antes de constancia de operador y activación SQL. El consumidor web usa ANNOUNCEMENTS=nest y SDK; tokens Expo se registran/desregistran por `/api/v1/me/announcement-push/tokens`, opt-in por `/api/v1/me/announcement-push`, exclusivamente propia sesión. Worker usa asisteam_jobs sin tablas/BYPASSRLS y motor Expo compartido. Protocolo, límites y advertencia de timeout ambiguo se conservan; FCM/APNs nativos y dispositivos web continúan fuera del alcance. Expo real/corte externo requieren evidencia aparte.
+[Seguro] Pruebas HTTP/SQL nativas y dos workers concurrentes preservan permisos, tenant, versiones, cola, crash/lease/ACK/retry/recibos. Unitarias conservan los15 casos del motor. Solo transporte Expo es sintético; bases propias se desechan al finalizar. [Evidencia #168](migration/issue-168/README.md).

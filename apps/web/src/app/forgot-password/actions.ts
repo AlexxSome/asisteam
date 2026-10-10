@@ -1,7 +1,7 @@
 "use server";
 import { assertAuthOrigin,nativeAuthClient } from '@/lib/api/native-auth';
 import { parseInviteCode,RECOVERY_INVITE_COOKIE } from "@/lib/auth-context";
-import { authCookieOptions } from "@/lib/supabase/cookie-options";
+import { authCookieOptions } from "@/lib/api/cookie-options";
 import { passwordRecoverySchema,type PasswordRecoveryInput } from "@asisteam/core";
 import { cookies } from "next/headers";
 export async function requestPasswordRecovery(input: PasswordRecoveryInput, inviteCode?: string) {

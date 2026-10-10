@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ signIn: vi.fn(), getUser: vi.fn(), getSession: vi.fn(), consent: vi.fn(),fetch: vi.fn(),cookie: vi.fn() }));
 vi.mock("next/headers", () => ({ headers: async () => new Headers({ "x-forwarded-for": "192.0.2.18" }) }));
 vi.mock("next/navigation", () => ({ redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: {
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: {
   getUser: mock.getUser, getSession: mock.getSession,
 } }) }));
 vi.mock("@/lib/api/native-auth",()=>({nativeAuthClient:async()=>({loginPassword:mock.signIn}),setNativeCookies:mock.cookie,assertAuthOrigin:vi.fn()}));

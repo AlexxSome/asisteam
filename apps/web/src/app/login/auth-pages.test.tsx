@@ -5,7 +5,7 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), signUp: vi.fn(), signIn: vi.fn(), cookie: vi.fn() }));
-vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({auth:{getUser:mock.getUser}})}));
+vi.mock("@/lib/api/session",()=>({createSessionClient:async()=>({auth:{getUser:mock.getUser}})}));
 vi.mock("@/lib/api/native-auth",()=>({assertAuthOrigin:async()=>{},setNativeCookies:async()=>{},nativeAuthClient:async()=>({registerPassword:mock.signUp,loginPassword:mock.signIn})}));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
 vi.mock("@/lib/groups", () => ({ getMyPendingMemberships: async () => [] }));

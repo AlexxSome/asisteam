@@ -1,11 +1,10 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { email, password } from './data.mjs';
 import { activityType, quote, sql } from './local-fixtures.mjs';
 import { checkAccessibility, checkLayout, login, screenshot, visit } from './helpers';
 
-test.skip(process.env.ASISTEAM_QA_NEST !== '1', 'Requiere Next→Nest→PostgreSQL local');
 test('MIG-16 QR emisión/llegada/errores y login a375px con evidencia enmascarada', async ({ page, context }, info) => {
   const groupId=randomUUID(), activityId=randomUUID();
   const owner=sql(`select id from public.users where email=${quote(email('admin'))}`),athlete=sql(`select id from public.users where email=${quote(email('athlete'))}`);
@@ -53,7 +52,7 @@ test('MIG-16 QR emisión/llegada/errores y login a375px con evidencia enmascarad
     sql(`update public.memberships set status='INACTIVE' where user_id='${athlete}' and group_id='${groupId}' and role='ATHLETE'`);
     await scan(repeat);await expect(page.getByRole('heading',{name:'Registro no disponible'})).toBeVisible();
     expect(await page.evaluate(()=>Array.from(document.querySelectorAll('a')).every(link=>!link.href.includes('#')&&!link.href.includes('token=')))).toBe(true);
-    const logCheck=JSON.parse(readFileSync('.next/qa/log-check.json','utf8'));for(const key of ['token','sensitivePayload','sensitiveUrl','qrPayload'])expect(logCheck[key],key).toBe(false);
+    const logCheck=JSON.parse(readFileSync('.qa/log-check.json','utf8'));for(const key of ['token','sensitivePayload','sensitiveUrl','qrPayload'])expect(logCheck[key],key).toBe(false);
   } finally {
     sql(`delete from public.attendance_records where activity_id='${activityId}';delete from public.activities where id='${activityId}';delete from app_private.qr_checkin_settings where group_id='${groupId}';delete from public.memberships where group_id='${groupId}';delete from app_private.billing_legacy_groups where group_id='${groupId}';delete from public.groups where id='${groupId}';`);
   }

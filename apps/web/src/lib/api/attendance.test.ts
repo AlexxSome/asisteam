@@ -3,7 +3,7 @@ import { ApiClientError } from "@asisteam/api-client";
 const mock = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), revalidate: vi.fn(), getAttendanceRoster: vi.fn(), saveAttendance: vi.fn(), updateAttendance: vi.fn(), clearAttendance: vi.fn(), getGroup: vi.fn() }));
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); } }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ from: mock.from, rpc: mock.rpc }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ from: mock.from, rpc: mock.rpc }) }));
 vi.mock("./server", () => ({ createServerApiClient: () => mock }));
 vi.mock("../groups", () => ({ getGroup: mock.getGroup }));
 vi.mock("../activities", () => ({ getActivity: async () => ({ id: activityId }) }));
@@ -14,8 +14,6 @@ const record = { membership_id: membershipId, status: "PRESENT" as const };
 beforeEach(() => {
   vi.resetAllMocks();
   vi.stubEnv("ASISTEAM_TRANSPORT_ATTENDANCE", "nest");
-  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
-  vi.stubEnv("ASISTEAM_API_SUPABASE_URL", "http://127.0.0.1:54321");
   mock.getGroup.mockResolvedValue({ roles: ["COACH"] });
 });
 afterEach(() => vi.unstubAllEnvs());

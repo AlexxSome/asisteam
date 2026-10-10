@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { ApiClientError } from "@asisteam/api-client";
 const mock = vi.hoisted(() => ({ rpc: vi.fn(), getUser: vi.fn(), revalidate: vi.fn(), getQrSettings: vi.fn(), setQrSettings: vi.fn(), issueCheckinQr: vi.fn(), selfCheckin: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, rpc: mock.rpc }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser }, rpc: mock.rpc }) }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
 vi.mock("./server", () => ({ createServerApiClient: () => mock }));
 import { loadQrSettings, saveQrSettings, issueCheckinQr, redeemCheckin } from "@/app/check-in/actions";
@@ -12,7 +12,6 @@ const qr = { ...input, server_time: "2026-10-08T12:00:00Z", expires_at: "2026-10
 const receipt = { activity_id: activityId, group_id: groupId, activity_title: "Entrenamiento", status: "PRESENT", recorded_at: qr.server_time, created: true };
 beforeEach(() => {
   vi.resetAllMocks(); vi.stubEnv("ASISTEAM_TRANSPORT_QR", "nest");
-  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321"); vi.stubEnv("ASISTEAM_API_SUPABASE_URL", "http://127.0.0.1:54321");
 });
 afterEach(() => vi.unstubAllEnvs());
 it("las cuatro operaciones usan Nest, sin RPC ni autorización de cliente", async () => {

@@ -8,14 +8,11 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# Entornos (secretos por entorno en Vercel/Supabase/GitHub Actions, nunca en el repo)
+# Entornos (secretos por entorno en gestores externos/GitHub Actions, nunca en el repo)
 .env
 .env.*
 !.env.example
 
-# Supabase local
-supabase/.temp/
-supabase/.branches/
 
 # Cobertura y logs
 coverage/
@@ -32,5 +29,5 @@ graphify-out/
 .ci-results/
 .ci-*.json
 
-# Transpiled historical origin harness (never part of product)
-apps/api/test/.ci-legacy/
+# Synthetic QA owns its isolated caches and private metadata
+.qa/

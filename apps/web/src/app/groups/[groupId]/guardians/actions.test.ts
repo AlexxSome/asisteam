@@ -3,7 +3,7 @@ import { ApiClientError } from "@asisteam/api-client";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), operation: vi.fn(), revalidate: vi.fn(), send: vi.fn() }));
 vi.mock("@/app/groups/[groupId]/invitations/new/actions", () => ({ sendInvitation: mock.send }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser } }) }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient:()=>({createGuardianship:mock.operation}) }));
 import { createGuardianship } from "@/app/groups/[groupId]/guardians/actions";
 const groupId = "25000000-0000-4000-8000-000000000201";

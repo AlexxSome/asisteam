@@ -21,10 +21,10 @@ pnpm --filter @asisteam/worker test
 WORKER_TEST=1 pnpm --filter @asisteam/worker test:integration
 # Tras construir asisteam-worker:issue157 y sin otra suite que cambie el rol jobs:
 pnpm --filter @asisteam/worker exec node test/container-smoke.mjs
-pnpm exec supabase test db supabase/tests/majority_worker.test.sql supabase/tests/my_wards.test.sql
+pnpm --filter @asisteam/db test
 ```
 
-[Seguro] La integración usa exclusivamente PostgreSQL loopback del stack Supabase sintético y un proveedor HTTP local, dos contextos Nest y un proceso separado que cae tras reclamar. Restaura modo/cron/roles/ledger y limpia solo sus fixtures. No ejecutarla en paralelo con suites que modifiquen esos recursos operativos. No sustituye una entrega Resend real.
+[Seguro] La integración usa exclusivamente PostgreSQL17 independiente propio del ensayo y transporte HTTP sintético, dos contextos Nest y un proceso separado que cae tras reclamar. Ejercita roles mínimos, leases, concurrencia, reintentos y ledger; dispone la base desechable al terminar. No ejecutarla en paralelo con suites que modifiquen esos recursos operativos. No sustituye una entrega Resend real.
 
 
 ## Anuncios Expo · MIG-15 (#159)

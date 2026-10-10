@@ -8,18 +8,27 @@ const files=(root,predicate)=>readdirSync(root,{withFileTypes:true}).flatMap(ent
 const sdk=/(?:@supabase\/(?:ssr|supabase-js)|node_modules\/(?:\.pnpm\/)?@?supabase(?:\+|\/))/;
 const providerHttp=/(?:\/functions\/v1(?:\/|["'])|\/rest\/v1(?:\/|["'])|\/auth\/v1(?:\/|["']))/;
 const productSource=path=>/\.(?:ts|tsx|mjs)$/.test(path)&&!path.includes('.test.');
-await suite('retirement',async()=>{
+const reportName=process.env.CI_RETIREMENT_REPORT_NAME??'retirement';
+if(!/^[a-z-]+$/.test(reportName))throw new Error('invalid_report_name');
+await suite(reportName,async()=>{
  verify('product-dependencies-without-supabase',()=>{
-  for(const root of ['apps/web','apps/api','apps/worker']){
+  for(const root of ['.','apps/web','apps/api','apps/worker','packages/db']){
    const manifest=JSON.parse(readFileSync(join(root,'package.json'),'utf8'));
-   assert.ok(!Object.keys(manifest.dependencies??{}).some(name=>name.startsWith('@supabase/')),root);
+   assert.ok(!Object.keys({...manifest.dependencies,...manifest.devDependencies}).some(name=>name==='supabase'||name.startsWith('@supabase/')),root);
   }
+  assert.ok(!/supabase(?:-js|\/ssr|:|@|\+)/.test(readFileSync('pnpm-lock.yaml','utf8')));
+  assert.ok(!existsSync('supabase')&&!existsSync('apps/api/test/legacy-src')&&!existsSync('apps/api/test/legacy-application.mjs'));
  });
  verify('product-source-without-sdk-provider-http-or-fixtures',()=>{
   for(const root of ['apps/web/src','apps/api/src','apps/worker/src','packages/api-client/src'])for(const path of files(root,productSource)){
    const content=readFileSync(path,'utf8');assert.ok(!sdk.test(content)&&!providerHttp.test(content),path);
    if(root==='apps/web/src') assert.ok(!/\.rpc\(|(?:supabase|client)\.from\(|process\.env\.(?:NEXT_PUBLIC_SUPABASE|ASISTEAM_API_SUPABASE)/.test(content),path);
    assert.ok(!/(?:from\s*['"][^'"]*(?:@legacy|test\/legacy|legacy-application)|import\s*\(['"][^'"]*(?:@legacy|test\/legacy|legacy-application))/.test(content),path);
+  }
+ });
+ verify('test-and-tooling-without-provider-imports-or-cli',()=>{
+  for(const root of ['apps/web/e2e','apps/web/test','apps/web/tests','scripts/migration'])for(const path of files(root,productSource)){
+   const content=readFileSync(path,'utf8');assert.ok(!sdk.test(content)&&!providerHttp.test(content)&&!/supabase_db_|exec.*supabase|SUPABASE_/i.test(content),path);
   }
  });
  verify('compiled-product-artifacts-required',()=>{

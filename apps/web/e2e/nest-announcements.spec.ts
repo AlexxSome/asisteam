@@ -1,9 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { email } from './data.mjs';
 import { checkAccessibility, checkLayout, login, visit } from './helpers';
 import { quote, sql } from './local-fixtures.mjs';
-test.skip(process.env.ASISTEAM_QA_NEST !== '1', 'Requiere Next→Nest→PostgreSQL local');
 test('MIG-15 muro: publicar editar borrar, preferencia y permisos a375px', async ({ page, context }, info) => {
   const groupId=randomUUID(), admin=sql(`select id from public.users where email=${quote(email('admin'))}`),athlete=sql(`select id from public.users where email=${quote(email('athlete'))}`);
   const preference=sql(`select coalesce((select enabled::text from public.announcement_push_preferences where user_id='${athlete}'),'missing')`);

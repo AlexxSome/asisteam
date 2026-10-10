@@ -2,7 +2,7 @@
 import { accountConsentPath } from "@/lib/account-consent-routing";
 import { assertAuthOrigin,nativeAuthClient,setNativeCookies } from '@/lib/api/native-auth';
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { ApiClient,ApiClientError } from "@asisteam/api-client";
 import { invitationErrorMessages,invitationRegistrationSchema,invitationTokenSchema,loginSchema,managedClaimSchema,type InvitationAcceptance,type InvitationPreview } from "@asisteam/core";
 import { headers } from "next/headers";
@@ -89,10 +89,10 @@ export async function acceptInvitation(token: string, mode: "session" | "login" 
             }
         }
     }
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user) return { error: invitationErrorMessages.authentication_required! };
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await sessionClient.auth.getSession();
     if (!session || session.user.id !== user.id) return { error: invitationErrorMessages.authentication_required! };
     const { data: acceptedTerms, error: consentError } = await memberOperation(async api => (await api.getCurrentAccountConsent()).accepted);
     if (consentError) return { error: invitationErrorMessages.unavailable! };

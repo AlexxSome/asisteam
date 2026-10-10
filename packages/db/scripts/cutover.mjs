@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {readFile,writeFile,stat} from 'node:fs/promises';
+import {readFile,writeFile,stat,readdir} from 'node:fs/promises';
 import {dirname,resolve} from 'node:path';
 import pg from 'pg';
 
@@ -10,14 +10,14 @@ const identifier=value=>{assert.match(value,/^[a-z_][a-z_0-9]*$/);return '"'+val
 const tableName=value=>value.split('.').map(identifier).join('.');
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const catalogSql=await readFile(new URL('./catalog.sql',import.meta.url),'utf8');
-const expectedCatalog=JSON.parse(await readFile(new URL('../source-catalog.json',import.meta.url),'utf8'));
+const expectedCatalog=JSON.parse(await readFile(new URL('../catalog.json',import.meta.url),'utf8'));
 const expectedTables=expectedCatalog.rls.map(([schema,table])=>schema+'.'+table).sort();
 
 export async function assertFrozen(client) {
  const db=(await client.query('select current_database() as name')).rows[0].name;
  const grants=(await client.query("select rolname,has_database_privilege(rolname,$1,'CONNECT') as allowed from pg_roles where rolname=any($2::text[])",[db,writers])).rows;
  const additional=(await client.query("select count(*)::int as n from pg_roles where rolcanlogin and not rolsuper and rolname<>current_user and has_database_privilege(rolname,$1,'CONNECT')",[db])).rows[0].n;
- if(grants.length!==writers.length||grants.some(row=>row.allowed)||additional|| (await client.query("select count(*)::int as n from pg_stat_activity where datname=$1 and pid<>pg_backend_pid()",[db])).rows[0].n!==0)throw new Error('writers_not_frozen');
+ if(grants.length!==writers.length||grants.some(row=>row.allowed)||additional|| (await client.query("select count(*)::int as n from pg_stat_activity where datname=$1 and pid<>pg_backend_pid()",[db])).rows[0].n!==0){const error=new Error('writers_not_frozen');error.freeze={grants:grants.filter(row=>row.allowed).map(row=>row.rolname),additional,connections:(await client.query("select usename,count(*)::int as n from pg_stat_activity where datname=$1 and pid<>pg_backend_pid() group by usename",[db])).rows};throw error;}
 }
 
 async function authorities(client) {
@@ -88,7 +88,10 @@ export async function restoreFrozen(client,snapshot) {
   if((await client.query('select rolsuper from pg_roles where rolname=current_user')).rows[0]?.rolsuper!==true)throw new Error('isolated_restore_operator_required');
   assert.deepEqual((await client.query(catalogSql)).rows[0].jsonb_build_object,expectedCatalog,'target_catalog_changed');
   const ledger=(await client.query('select name,sha256 from db_migrations.ledger order by name')).rows;
-  if(ledger.length!==1||ledger[0].name!=='0001_baseline.sql'||ledger[0].sha256!==hash(await readFile(new URL('../migrations/0001_baseline.sql',import.meta.url))))throw new Error('target_migrations_changed');
+  const migrations=new URL('../migrations/',import.meta.url);
+  const names=(await readdir(migrations)).filter(name=>name.endsWith('.sql')).sort();
+  const expectedLedger=await Promise.all(names.map(async name=>({name,sha256:hash(await readFile(new URL(name,migrations)))})));
+  if(JSON.stringify(ledger)!==JSON.stringify(expectedLedger))throw new Error('target_migrations_changed');
   const seedCounts=new Map([['public.activity_types',4],['public.billing_plans',3],['app_private.auth_authority',1],['app_private.billing_transport',1],['app_private.majority_executor',1],['app_private.announcement_executor',1]]);
   const before=await rowsSnapshot(client);
   if(before.some(table=>table.rows.length!==(seedCounts.get(table.name)??0)))throw new Error('target_has_business_history');

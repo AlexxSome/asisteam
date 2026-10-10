@@ -9,12 +9,11 @@ import {nativeAuthMiddleware} from './native-auth-middleware';
 import {NextRequest} from 'next/server';
 beforeEach(()=>{
  vi.stubEnv('ASISTEAM_TRANSPORT_AUTH','nest');for(const module of TRANSPORT_MODULES)vi.stubEnv('ASISTEAM_TRANSPORT_'+module.toUpperCase(),'nest');
- vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');
  vi.stubEnv('ASISTEAM_API_ORIGIN','https://api.example.test');vi.stubEnv('ASISTEAM_AUTH_WEB_ORIGIN','https://web.example.test');vi.stubEnv('NATIVE_AUTH_PROXY_SECRET','synthetic-only-secret-'.repeat(3));
  fixture.origin='https://web.example.test';fixture.values.clear();fixture.set.mockReset();
 });
 afterEach(()=>{vi.unstubAllEnvs();vi.restoreAllMocks();});
-it('mixed configuration fails closed before domain calls',()=>{expect(enabled()).toBe(true);vi.stubEnv('ASISTEAM_TRANSPORT_STORAGE','supabase');expect(enabled).toThrow();});
+it('mixed configuration fails closed before domain calls',()=>{expect(enabled()).toBe(true);vi.stubEnv('ASISTEAM_TRANSPORT_STORAGE','unsupported');expect(enabled).toThrow();});
 it('cookie attributes, provider replacement and origin protect server credentials',async()=>{
  vi.stubEnv('NODE_ENV','production');fixture.values.set('sb-fixture-auth-token','old');
  await setNativeCookies({access_token:'synthetic-access',refresh_token:'a'.repeat(64)});

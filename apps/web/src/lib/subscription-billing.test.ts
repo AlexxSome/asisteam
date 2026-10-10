@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { createSubscriptionBillingHandler, createMercadoPagoWebhookHandler } from "../../../../supabase/functions/subscription-billing/handler";
-import { checkoutUrl, createMercadoPago, verifyMercadoPagoSignature, type RemoteSubscription, type RemoteInvoice } from "../../../../supabase/functions/subscription-billing/provider";
+import { createSubscriptionBillingHandler, createMercadoPagoWebhookHandler } from "@asisteam/core";
+import { checkoutUrl, createMercadoPago, verifyMercadoPagoSignature, type RemoteSubscription, type RemoteInvoice } from "@asisteam/core";
 const group = "30000000-0000-4000-8000-000000000201", reference = "30000000-0000-4000-8000-000000000901", now = "2026-10-03T12:00:00.000Z";
 const remote: RemoteSubscription = { id: "remote1", external_reference: reference, collector_id: "123", status: "authorized", last_modified: now, init_point: "https://www.mercadopago.cl/subscriptions/checkout?preapproval_id=remote1", auto_recurring: { frequency: 1, frequency_type: "months", transaction_amount: 4990, currency_id: "CLP" } };
 const invoice: RemoteInvoice = { id: "100", preapproval_id: remote.id, transaction_amount: 4990, currency_id: "CLP", debit_date: now, last_modified: now, status: "scheduled", payment: { id: "200", status: "approved" } };
