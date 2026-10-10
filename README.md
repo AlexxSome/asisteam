@@ -48,6 +48,8 @@ corepack pnpm ci:qualification
 
 Los runners de integración crean PostgreSQL/Auth/S3 sintéticos propios y los eliminan al terminar. `ci:backend` exige 40 suites SQL/1646 aserciones, 50 guards nativas, las 80 integraciones originales/628 aserciones y cuatro casos de recuperación; ninguna omisión acredita PASS. `ci:checks` inspecciona también los artefactos productivos para impedir el retorno del proveedor o fixtures a runtime. [API](apps/api/README.md) y [DB](packages/db/README.md) documentan configuración y comandos individuales.
 
+[Seguro] [Estado y criterios de cierre de la épica #144](docs/migration/issue-144/README.md) relaciona los 24 hitos con su evidencia técnica y aceptación pendiente.
+
 [QA #120](docs/qa/issue-120/README.md) conserva el método y sus evidencias históricas. La [aceptación operacional](docs/migration/issue-168/operational-acceptance.md) registra inputs externos que aún impiden el corte real. No se despliega ni se apagan recursos remotos con estos comandos.
 
 ## Documentación

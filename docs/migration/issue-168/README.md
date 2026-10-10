@@ -2,6 +2,8 @@
 
 [Seguro] El candidato usa exclusivamente Next → Nest/Auth nativo → PostgreSQL17/RLS y Worker/S3 privados. Se retiran SDK/CLI/dependencias, configuración, Edge Functions, fixtures y tooling del proveedor, incluidos sus imports de desarrollo y CI. Las reglas de dominio y cobertura vigente se trasladan; no se declara el corte real completado.
 
+[Seguro] La [reconciliación de la épica #144](../issue-144/README.md) relaciona los 24 hitos y criterios de cierre con esta entrega y los gates de aceptación externa pendientes.
+
 ## Base y entrega
 
 Rama `codex/168-retiro-completo-supabase`, base sincronizada `develop@13a0a643431f480e1ddf4c83022c8083c31beb68`. Esa base incorpora PR [#206](https://github.com/AlexxSome/asisteam/pull/206): su CI rojo inicial `6ffbf2d` se reparó en `402036c10af8dc1a506e4e183a389b618946ba3c`, con [CI verde](https://github.com/AlexxSome/asisteam/actions/runs/38013511084), antes del merge. El retiro final se entrega en [PR207](https://github.com/AlexxSome/asisteam/pull/207). La evidencia de ese hito es histórica; los informes del nuevo PR corresponden al retiro final y se verifican en su propio SHA.

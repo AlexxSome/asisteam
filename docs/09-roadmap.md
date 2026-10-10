@@ -237,3 +237,12 @@ El calendario anterior de 19 semanas (2026-07-06 → 2026-11-13) dejó de ser v�
 - **Control de cambios:** cualquier movimiento de una funcionalidad entre [P0]/[P1]/[P2] requiere acuerdo explícito del equipo y actualización simultánea de 01-vision-y-alcance.md, este roadmap y 10-historias-de-usuario.md.
 - **Checkpoints de decisión:** fin de S4 de Fase 1 (M3 cerrado, ver R12); fin de Fase 1 (go/no-go de beta); semana 4 de Fase 2 (estado de revisión de tiendas, ver R7); fin de Fase 3 (declaración de v1.0 solo si los 6 criterios de salida se cumplen).
 - **Métricas del roadmap:** velocidad real vs. planificada por módulo, bugs P0/P1 abiertos, duración del pipeline CI, y las métricas de activación de la beta (sección 5).
+
+
+## 11. Migración Nest — épica #144
+
+[Seguro] Al 10-10-2026, los 24 hitos de la migración tienen entregables técnicos integrados en develop, incluido el retiro del repositorio de MIG-24/PR207. La [matriz consolidada](migration/issue-144/README.md) distingue estado administrativo, evidencia sintética y los seis criterios de cierre. #144 y #168 siguen abiertos; producción continúa **NO-GO**.
+
+[Seguro] La [aceptación operacional](migration/issue-168/operational-acceptance.md) exige provisión/residencia/capacidad, responsables, presupuesto, proveedores reales de prueba, QA humana/legal, carga acordada, RPO/RTO, observación y ventana. Los ensayos locales y CI no fijan fecha de lanzamiento ni autorizan corte o apagado de receptores remotos.
+
+[Seguro] Las ventanas originales de este documento permanecen como antecedente de planificación. La referencia inicial de 12–16 semanas de migración (dos desarrolladores) o 20–28 (uno) tampoco es un compromiso: faltan capacidad y aceptación externas. No se reactiva la meta móvil de 2026-11-13; Java/Swift, FCM/APNs, CSV, beta y v1.0 requieren replanificar tras esos acuerdos.
