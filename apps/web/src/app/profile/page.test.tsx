@@ -6,7 +6,7 @@ import ProfilePage from "@/app/profile/page";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), profile: vi.fn() }));
 vi.mock("next/navigation", () => ({ redirect: (url: string) => { throw new Error(url); } }));
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }) => <main>{children}</main> }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser } }) }));
 vi.mock("@/lib/profile",()=>({getProfilePageData:mock.profile}));
 vi.mock("@/lib/social-auth",()=>({getSocialProviderAvailability:async()=>({google:false,apple:false})}));
 vi.mock("@/app/profile/profile-form", () => ({ ProfileForm: () => <div>Formulario de perfil</div> }));

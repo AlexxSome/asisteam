@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { groups } from './data.mjs';
 import { checkAccessibility, checkLayout, login, visit } from './helpers';
 import { quote, sql } from './local-fixtures.mjs';

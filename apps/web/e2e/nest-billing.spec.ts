@@ -1,8 +1,7 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './test';
 import {groups} from './data.mjs';
 import {checkAccessibility,checkLayout,login,visit} from './helpers';
 
-test.skip(process.env.ASISTEAM_QA_NEST!=='1','Requiere Next→Nest→PostgreSQL local');
 test('MIG-14 billing ADMIN a375px: DTO, retorno sin pago, teclado y error de proveedor sin éxito',async({page},info)=>{
  await page.setViewportSize({width:375,height:812});await login(page,'admin');
  await visit(page,`/groups/${groups.fifty}/billing?status=approved`);

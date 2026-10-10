@@ -1,5 +1,5 @@
 import { Card,CardContent,CardDescription,CardHeader,CardTitle } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -13,8 +13,8 @@ export default async function InvitationPage({ params }: {
 }) {
     const { token } = await params;
     const preview = await previewInvitation(token);
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     return <main className="flex min-h-screen items-center justify-center p-4">
     <Card className="w-full max-w-lg">
       <CardHeader><CardTitle as="h1">{preview.data?.managed_activation ? "Activar mi cuenta" : "Aceptar invitación"}</CardTitle>

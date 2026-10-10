@@ -2,7 +2,7 @@ import { AuthLayout } from "@/components/auth-layout";
 import { ActionLink } from "@/components/ui/button";
 import { authPath,invitationDestination,parseInviteCode,type AuthSearchParams } from "@/lib/auth-context";
 import { getSocialProviderAvailability } from "@/lib/social-auth";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { RegisterForm } from "./register-form";
@@ -12,8 +12,8 @@ export default async function RegisterPage({ searchParams }: {
     searchParams: Promise<AuthSearchParams>;
 }) {
     const inviteCode = parseInviteCode((await searchParams).invite_code);
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (user)
         redirect(invitationDestination(inviteCode));
     const providers = await getSocialProviderAvailability();

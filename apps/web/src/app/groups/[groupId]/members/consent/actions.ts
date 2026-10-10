@@ -1,7 +1,7 @@
 "use server";
 import { invitationOperation } from "@/lib/invitations";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { activationReviewSchema,MANAGED_MEMBER_ERROR_MESSAGES,managedActivationSchema,managedConsentSchema,MEMBER_MANAGEMENT_ERRORS } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 import { sendInvitation } from "../../invitations/new/actions";
@@ -24,7 +24,7 @@ export async function reviewManagedActivation(input: unknown): Promise<{
     if (!parsed.success)
         return fail("invalid_activation_request");
     try {
-        const client = await createClient();
+        const client = await createSessionClient();
         if (!(await client.auth.getUser()).data.user)
             return fail("authentication_required");
         const { data, error } = await invitationOperation(api => api.reviewManagedActivation({ params: { requestId: parsed.data.request_id }, body: { accepted: parsed.data.accepted } }));
@@ -61,8 +61,8 @@ export async function consentManagedMember(input: unknown): Promise<{
     const parsed = managedConsentSchema.safeParse(input);
     if (!parsed.success)
         return fail("consent_required");
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         return fail("authentication_required");
     try {

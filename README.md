@@ -1,27 +1,24 @@
 # Asisteam
 
-[Seguro] Candidato MIG-24 (#168): web/API/worker nativos sin SDK Supabase de producto. [Arquitectura vigente, pruebas, inventario y handoff](docs/migration/issue-168/README.md). Producción continúa NO-GO; este retiro técnico no ejecuta corte real ni apaga receptores Mercado Pago.
+[Seguro] Candidato MIG-24 (#168): web/API/worker y tooling nativos, sin SDK/CLI/fixtures Supabase. [Arquitectura vigente, pruebas, inventario y handoff](docs/migration/issue-168/README.md). Producción continúa NO-GO; este retiro técnico no ejecuta corte real ni apaga receptores Mercado Pago.
 
 Aplicación web responsive para gestionar la asistencia de deportistas en clubes y equipos. Un usuario puede pertenecer a varios grupos con roles distintos; los datos y permisos se resuelven por grupo.
 
-## Estado verificado
+## Estado y arquitectura vigente
 
-Corte documental: **05-10-2026**, base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b` de `develop`, reconciliación [#121](https://github.com/AlexxSome/asisteam/issues/121). El repositorio ya contiene el monorepo y la aplicación web: **39 páginas App Router**, módulos de dominio compartidos, migraciones/RPC/RLS, Edge Functions y pruebas. El [inventario de pantallas](docs/05-pantallas.md) enlaza cada página y diferencia implementación, rutas lógicas, objetivos UX y pendientes.
-
-Las 37 páginas citadas por la auditoría del 03-10-2026 corresponden a su base `d7dff870f2b2`; el corte actual añade `/accept-terms` y `/legal/2026-09-21` por [#107](https://github.com/AlexxSome/asisteam/issues/107). La existencia de código no acredita despliegue, configuración de proveedores ni cierre de QA de todos los recorridos.
-
-## Monorepo
+Retiro de repositorio MIG-24 (#168), actualizado el **10-10-2026**, sobre `develop@13a0a643431f480e1ddf4c83022c8083c31beb68` (merge PR206). Las **39 páginas App Router** y capacidades autorizadas conservan sus contratos. El [inventario de pantallas](docs/05-pantallas.md) diferencia implementación, rutas lógicas y pendientes; código o CI verde no acreditan despliegue ni aceptación operacional.
 
 | Ubicación | Contenido actual |
 |---|---|
-| `apps/api/` | NestJS 12.1.2/Node 24: runtime de migración, health/readiness y pool pg; [runbook MIG-02](apps/api/README.md), sin operaciones de producto migradas |
-| `apps/web/` | Next.js 16, React 19 y TypeScript; Tailwind 4, componentes compartidos, Vitest y Playwright/axe |
-| `packages/core/` | Métrica canónica, schemas Zod, enums, etiquetas en español y reglas compartidas |
-| `packages/db/` | Tipos generados de Supabase |
-| `supabase/` | Migraciones, RLS, vistas/RPC, Edge Functions, seeds y pruebas de backend |
-| `docs/` | Contratos de producto, inventario y evidencia de QA |
+| `apps/api/` | NestJS/Node 24, HTTP de producto, Auth nativo, JWT, roles PostgreSQL mínimos y S3 privado |
+| `apps/web/` | Next.js 16/React 19, sesión nativa del servidor, DTO HTTP, Vitest y Playwright/axe |
+| `apps/worker/` | Jobs idempotentes, mayoría de edad y cola duradera de anuncios/recibos |
+| `packages/core/` | Métrica canónica, schemas Zod, enums, etiquetas y contrato HTTP |
+| `packages/api-client/` | Cliente y OpenAPI generados del contrato de core |
+| `packages/db/` | Migraciones PostgreSQL propias, RLS/RPC, catálogo, tipos, fixtures sintéticos y pgTAP |
+| `docs/` | Contratos de producto, cobertura y evidencia histórica fechada |
 
-pnpm **10.33.2** y Turborepo coordinan el monorepo; Node **24.16.0 LTS** (línea 24). El backend usa Supabase/PostgreSQL: PostgREST con RLS para lecturas y RPC/Edge Functions para escrituras con invariantes. La app Expo/React Native sigue planificada: no hay cliente móvil implementado en este corte; web responsive no equivale a app nativa.
+pnpm **10.33.2**, Turborepo y Node **24.16.0 LTS** coordinan el monorepo. Next consume Nest; Nest instala la identidad verificada dentro de la transacción SQL. Las invariantes permanecen en PostgreSQL 17 con RLS. SDK, CLI, configuración y fixtures Supabase se retiraron; el historial versionado se conserva como antecedente, sin runtime del proveedor. La app móvil sigue planificada en Java/Android y Swift/iOS.
 
 ## Módulos y alcance existente
 
@@ -34,24 +31,24 @@ pnpm **10.33.2** y Turborepo coordinan el monorepo; Node **24.16.0 LTS** (línea
 
 La [referencia de permisos](docs/02-roles-y-permisos.md) manda: ADMIN gestiona el grupo; COACH toma/corrige estados sin acceder a notas privadas ni gestión; ATHLETE consulta lo propio y GUARDIAN lo de sus pupilos vigentes. Los toggles no abren datos privados de terceros. Un menor no se activa sin apoderado y consentimiento vigente. La métrica conserva `(PRESENT + LATE) / (convocadas − EXCUSED) × 100`, un decimal y «Sin datos» cuando no hay denominador.
 
-**Límites reconciliados:** billing cobra al club, no cuotas de deportistas; QR no incluye geocerca; anuncios tiene backend de push pero requiere un cliente Expo y credenciales para recibirlos. CSV, recordatorios, avisos de ausencia y justificaciones tienen historias cerradas sin UI verificada en este corte. Offline fue pospuesto expresamente en #54; no se reactiva la planificación móvil con esta auditoría. El [registro de decisiones y discrepancias](docs/05-pantallas.md#7-reconciliación-de-historias-y-alcance) conserva responsable, historial y siguiente decisión, sin cerrar ni reabrir issues automáticamente.
+**Límites reconciliados:** billing cobra al club, no cuotas de deportistas; QR no incluye geocerca; anuncios tiene backend de push pero requiere cliente compatible y credenciales; la migración móvil a FCM/APNs continúa pendiente. CSV, recordatorios, avisos de ausencia y justificaciones tienen historias cerradas sin UI verificada en este corte. Offline fue pospuesto expresamente en #54; no se reactiva la planificación móvil con esta auditoría. El [registro de decisiones y discrepancias](docs/05-pantallas.md#7-reconciliación-de-historias-y-alcance) conserva responsable, historial y siguiente decisión, sin cerrar ni reabrir issues automáticamente.
 
 ## Desarrollo y validación
 
-Desde la raíz, con dependencias instaladas y Supabase local configurado:
+Desde la raíz, con Node/pnpm y Docker disponibles:
 
 ```sh
 corepack pnpm install --frozen-lockfile
-corepack pnpm exec supabase start
-corepack pnpm --filter @asisteam/web dev
-corepack pnpm --filter @asisteam/core test
-corepack pnpm --filter @asisteam/web test
-corepack pnpm --filter @asisteam/core typecheck
-corepack pnpm --filter @asisteam/web typecheck
-corepack pnpm --filter @asisteam/web build
+corepack pnpm ci:checks
+corepack pnpm ci:backend
+corepack pnpm ci:staging
+corepack pnpm ci:extended
+corepack pnpm ci:qualification
 ```
 
-El [método QA de #120](docs/qa/issue-120/README.md) detalla fixtures sintéticos, Playwright, roles, teclado, viewports y límites de la evidencia. Las integraciones de backend son opt-in; una suite unitaria verde no las sustituye. Toda modificación DB/RLS/RPC requiere sus pruebas, pgTAP y regeneración de tipos cuando corresponda. Los gates remotos del roadmap son objetivos: MIG-03 (#147) añade workflow CI y lint; ver [evidencia y límites](docs/migration/issue-147/README.md).
+Los runners de integración crean PostgreSQL/Auth/S3 sintéticos propios y los eliminan al terminar. `ci:backend` exige 40 suites SQL/1646 aserciones, 50 guards nativas, las 80 integraciones originales/628 aserciones y cuatro casos de recuperación; ninguna omisión acredita PASS. `ci:checks` inspecciona también los artefactos productivos para impedir el retorno del proveedor o fixtures a runtime. [API](apps/api/README.md) y [DB](packages/db/README.md) documentan configuración y comandos individuales.
+
+[QA #120](docs/qa/issue-120/README.md) conserva el método y sus evidencias históricas. La [aceptación operacional](docs/migration/issue-168/operational-acceptance.md) registra inputs externos que aún impiden el corte real. No se despliega ni se apagan recursos remotos con estos comandos.
 
 ## Documentación
 

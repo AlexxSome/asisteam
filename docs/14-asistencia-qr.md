@@ -1,6 +1,6 @@
 # Autoasistencia con QR — HU-DEP-10 / #58
 
-[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+[Seguro] Vigencia MIG-24 (#168, 2026-10-10): Nest/Node24, PostgreSQL17 independiente, Auth propio y S3 privado son el único stack del repositorio. Dominio, RLS/V1–V6, menores, consentimientos y métricas se mantienen. [Evidencia y aceptación externa](migration/issue-168/README.md). Producción continúa NO-GO; no ejecutar corte/deploy real ni apagar receptores remotos.
 
 
 Alcance P2 autorizado: web responsive. ADMIN muestra el QR desde el detalle de una actividad; ATHLETE lo escanea con la cámara del teléfono y abre el enlace web. No requiere app Expo ni acceso a la cámara desde el navegador. No incluye geocerca.
@@ -38,22 +38,17 @@ Las tablas privadas tienen RLS y no conceden lectura/escritura al cliente. Los t
 
 Errores: 401 sin sesión; 404 `checkin_not_available` para actividad inexistente, ajena o sin ATHLETE ACTIVE propio; 403 `admin_required` en administración del QR; 400 `invalid_qr_settings`; 422 `checkin_qr_expired` para token inválido/vencido y `checkin_window_closed` fuera de ventana. Las Server Actions traducen códigos conocidos al sobre uniforme de error en español y ocultan errores internos.
 
-## Validación y despliegue
+## Validación vigente
 
-Aplicar `20261003040000_qr_attendance.sql` antes de desplegar la web; no requiere Edge Function, cron ni secretos nuevos de entorno. Las claves operativas se generan dentro de la base al emitir el primer QR válido.
+[Seguro] Emisión/check-in/configuración pasan por Nest y RPC canónicas; claves operativas permanecen privadas en PostgreSQL. Aplicar migraciones de packages/db con rol migrador antes de un deploy autorizado; tests locales no despliegan.
 
-```sh
-pnpm install --frozen-lockfile --prod=false
-pnpm exec supabase migration up --local
-pnpm exec supabase test db
-pnpm test
-pnpm typecheck
-pnpm --filter @asisteam/web build
-RUN_CHECKIN_INTEGRATION=1 pnpm --filter @asisteam/web exec vitest run src/lib/check-in.integration.test.ts
-pnpm exec supabase gen types typescript --local
+```bash
+pnpm ci:checks
+pnpm ci:backend
+pnpm ci:extended
 ```
 
-pgTAP comprueba límites exactos, permisos, aislamiento, revocación, caducidad e idempotencia. Vitest cubre payloads estrictos, login, errores, reescaneo en la misma pestaña y rotación en pantalla. La integración utiliza Auth/PostgREST reales y verifica ocho escaneos simultáneos y asistencia manual concurrente con fixtures sintéticos propios que elimina al terminar.
+[Seguro] SQL mantiene límites exactos/permisos/aislamiento/revocación/caducidad/idempotencia. Integración Auth/Nest/PostgreSQL prueba8escaneos concurrentes y asistencia manual; navegador cubre ADMIN/ATHLETE/login/QR sin tokens en links/logs. Fixtures propios sintéticos se destruyen completos.
 
 ## UX y recuperación — #119
 
@@ -90,6 +85,6 @@ La auto-revisión se limita al diff de #119 y sus efectos. Las reglas y límites
 
 [Seguro] [Runbook y evidencia](migration/issue-160/README.md) añade GET/PUT `/api/v1/groups/:groupId/check-in-settings`, POST `/api/v1/activities/:activityId/check-in-qr` y POST `/api/v1/me/check-in`. OpenAPI/SDK valida los mismos schemas canónicos; el token se envía exclusivamente en JSON. Sesión temporal, perfil ACTIVE, consentimiento vigente y transacción del rol mínimo `asisteam_api`; las cuatro RPC conservan la autorización en SQL.
 
-[Seguro] `ASISTEAM_TRANSPORT_QR=nest` elige un único ejecutor en las cuatro Server Actions; `supabase` sigue default. Error/timeout no dispara fallback ni reenvío. La página ADMIN reutiliza detalle/grupo migrados según sus propias banderas; `/check-in` mantiene Auth SSR temporal. Una respuesta incierta permite reintento explícito con QR vigente: la RPC preserva el registro anterior.
+[Seguro] Next utiliza exclusivamente Nest; errores/timeout no disparan fallback ni reenvío automático. Reintento explícito con QR vigente conserva el registro anterior en la RPC.
 
 [Seguro] Los códigos anteriores al cambio de transporte son compatibles directamente, con los mismos UUID, base, clave y tramo UTC. La firma y claves permanecen en PostgreSQL; este entregable no elimina/rota claves. Si un corte futuro mueve PostgreSQL, debe transferir íntegro `app_private.qr_checkin_keys` en backup cifrado/acceso operador o detener emisión de ambos transportes y agotar 60 segundos desde la última emisión confirmada antes de retirar claves antiguas; nunca aceptar tramo anterior/futuro ni alargar ventana. Verificar drenaje de peticiones en curso y una única base escritora según #166 antes de activar destino.

@@ -1,6 +1,6 @@
 "use server";
 import { createServerApiClient } from "@/lib/api/server";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { ApiClientError } from "@asisteam/api-client";
 import { SEND_INVITATION_ERROR_MESSAGES,sendInvitationRequestSchema,sentInvitationSchema,type SentInvitation } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
@@ -20,11 +20,11 @@ export async function sendInvitation(input: unknown): Promise<SendInvitationResu
     const parsed = sendInvitationRequestSchema.safeParse(input);
     if (!parsed.success)
         return fail("invalid_invitation");
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         return fail("authentication_required");
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await sessionClient.auth.getSession();
     if (!session)
         return fail("authentication_required");
     try {

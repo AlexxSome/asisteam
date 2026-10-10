@@ -7,7 +7,6 @@ import {TRANSPORT_MODULES} from './config';
 import {completeSocialCallback,saveSocialTransaction,SOCIAL_TRANSACTION_COOKIE} from './social-auth';
 beforeEach(()=>{
  vi.stubEnv('ASISTEAM_TRANSPORT_AUTH','nest');for(const module of TRANSPORT_MODULES)vi.stubEnv('ASISTEAM_TRANSPORT_'+module.toUpperCase(),'nest');
- vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');
  vi.stubEnv('ASISTEAM_API_ORIGIN','https://api.example.test');vi.stubEnv('ASISTEAM_SITE_URL','https://web.example.test');vi.stubEnv('NATIVE_AUTH_PROXY_SECRET','synthetic-only-secret-'.repeat(3));vi.stubEnv('NODE_ENV','production');
  fixture.transaction='synthetic-encrypted-transaction';fixture.set.mockReset();fixture.tokens.mockReset();
  vi.spyOn(ApiClient.prototype,'completeSocialLogin').mockResolvedValue({tokens:{access_token:'synthetic-access',refresh_token:'a'.repeat(64),expires_in:900},context:{},linked:false});

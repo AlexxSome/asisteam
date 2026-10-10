@@ -9,14 +9,14 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:api-contract": "node scripts/api-contract-smoke.mjs",
-    "test:integration": "RUN_SUPABASE_INTEGRATION=1 vitest run",
+    "test:integration": "node e2e/run-integrations.mjs",
     "test:integration:modules": "node e2e/run-integrations.mjs",
-    "test:invitations": "RUN_INVITATION_INTEGRATION=1 vitest run invitation.integration.test.ts",
-    "test:send-invitations": "RUN_SEND_INVITATION_INTEGRATION=1 vitest run send-invitation.integration.test.ts",
+    "test:invitations": "node e2e/run-integrations.mjs src/app/invitations/[token]/invitation.integration.test.ts",
+    "test:send-invitations": "node e2e/run-integrations.mjs send-invitation.integration.test.ts",
     "test:e2e": "playwright test --grep-invert @extended",
     "test:e2e:full": "playwright test",
     "test:e2e:faults": "playwright test -c playwright.fault.config.ts",
-    "test:e2e:report": "playwright show-report .next/qa/report",
+    "test:e2e:report": "playwright show-report .qa/report",
     "test:auth-contract": "node scripts/native-auth-smoke.mjs",
     "test:social-contract": "node scripts/social-auth-smoke.mjs"
   },
@@ -48,8 +48,6 @@
     "jsdom": "^26.1.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0",
-    "vitest": "^3.2.7",
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.47.0"
+    "vitest": "^3.2.7"
   }
 }

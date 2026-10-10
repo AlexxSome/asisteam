@@ -2,15 +2,13 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), getSession: vi.fn(), fetch: vi.fn() }));
 vi.mock("server-only", () => ({}));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser, getSession: mock.getSession } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser, getSession: mock.getSession } }) }));
 import { createServerApiClient } from "./server";
 import { moduleTransport, runModuleOperation } from "./transport";
 
 beforeEach(() => {
   vi.resetAllMocks();
   vi.stubEnv("ASISTEAM_API_ORIGIN", "http://127.0.0.1:3001");
-  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://synthetic.supabase.co");
-  vi.stubEnv("ASISTEAM_API_SUPABASE_URL", "https://synthetic.supabase.co/");
   vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", undefined);
   vi.stubEnv("ASISTEAM_TRANSPORT_PROFILE", undefined);
   vi.stubEnv("ASISTEAM_API_TIMEOUT_MS", "5000");
@@ -40,7 +38,7 @@ describe("adaptador exclusivo servidor Next", () => {
     const nest = vi.fn(async () => "ok");
     expect(await runModuleOperation("groups", { nest })).toBe("ok");
     expect(moduleTransport("profile")).toBe("nest");
-    vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "supabase");
+    vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "session");
     await expect(runModuleOperation("groups", { nest })).rejects.toMatchObject({ status: 400 });
     expect(nest).toHaveBeenCalledTimes(1);
   });
@@ -48,9 +46,9 @@ describe("adaptador exclusivo servidor Next", () => {
     vi.stubEnv("ASISTEAM_TRANSPORT_GROUPS", "nest");
     vi.stubEnv("ASISTEAM_API_TIMEOUT_MS", "10");
     mock.fetch.mockImplementation(() => new Promise(() => {}));
-    const supabase = vi.fn(async () => ({ group_id: "never" }));
+    const session = vi.fn(async () => ({ group_id: "never" }));
     await expect(runModuleOperation("groups", { nest: client => client.createGroup({ body: { name: "Equipo", sport: "Fútbol" } }) })).rejects.toMatchObject({ status: 504 });
-    expect(supabase).not.toHaveBeenCalled();
+    expect(session).not.toHaveBeenCalled();
     expect(mock.fetch).toHaveBeenCalledTimes(1);
   });
   it("valor de bandera desconocido falla cerrado", () => {

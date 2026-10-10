@@ -1,7 +1,7 @@
 import { beforeEach, expect, it, vi } from "vitest";
 import { ACCOUNT_TERMS_VERSION } from "@asisteam/core";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), accept: vi.fn(), revalidate: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser } }) }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => ({ acceptAccountTerms: mock.accept }) }));
 vi.mock("next/cache", () => ({ revalidatePath: mock.revalidate }));
 import { acceptAccountTerms } from "@/app/accept-terms/actions";

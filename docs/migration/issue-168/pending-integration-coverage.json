@@ -4,10 +4,6 @@
   "mapping": [
     {
       "source": "apps/web/src/lib/announcements.integration.test.ts",
-      "cases": [
-        "publica/editable/borrado visible por HTTP, aislamiento y error 409",
-        "fanout opt-in → worker → ticket → recibo, sin duplicar publicación ni trabajo completado"
-      ],
       "assertions": 35,
       "sqlRpcNames": [
         "claim_announcement_push",
@@ -19,17 +15,33 @@
         "set_announcement_push_enabled",
         "update_group_announcement"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "publica/editable/borrado visible por HTTP, aislamiento y error 409",
+        "fanout opt-in → worker → ticket → recibo, sin duplicar publicación ni trabajo completado"
+      ],
+      "nativeCases": [
+        "publica/editable/borrado visible por HTTP, aislamiento y error 409",
+        "fanout opt-in → worker → ticket → recibo, sin duplicar publicación ni trabajo completado"
+      ],
+      "nativeAssertions": 35,
+      "nativeSha256": "d1810d4dd42b0258a1644bcd7b1fd28e478a32ecc9f8c69db70120129c22d90f",
+      "nativeHttpOperations": [
+        "create_group",
+        "delete_group_announcement",
+        "list_group_announcements",
+        "publish_group_announcement",
+        "register_announcement_push_token",
+        "set_announcement_push_enabled",
+        "update_group_announcement"
+      ],
+      "nativeSqlAssertions": [
+        "claim_announcement_push"
+      ],
+      "sourceSha256": "8d7365f8a065f31e6e8a7f9c478893305983ad2d7c14b7b65d1151488fee29a0"
     },
     {
       "source": "apps/web/src/lib/check-in.integration.test.ts",
-      "cases": [
-        "concurrencia de escaneos crea una sola fila, actor JWT y respuesta sin PII",
-        "una toma manual concurrente conserva el resultado del ADMIN",
-        "aplica permisos HTTP, no acepta identidad ajena y mantiene protegidas las tablas",
-        "rechaza tokens vencidos/futuros y un cambio de horario aunque el token siga vigente",
-        "la configuración guardada cambia el cálculo de atraso del grupo"
-      ],
       "assertions": 27,
       "sqlRpcNames": [
         "create_activity",
@@ -39,16 +51,36 @@
         "self_checkin",
         "set_qr_checkin_settings"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "concurrencia de escaneos crea una sola fila, actor JWT y respuesta sin PII",
+        "una toma manual concurrente conserva el resultado del ADMIN",
+        "aplica permisos HTTP, no acepta identidad ajena y mantiene protegidas las tablas",
+        "rechaza tokens vencidos/futuros y un cambio de horario aunque el token siga vigente",
+        "la configuración guardada cambia el cálculo de atraso del grupo"
+      ],
+      "nativeCases": [
+        "concurrencia de escaneos crea una sola fila, actor JWT y respuesta sin PII",
+        "una toma manual concurrente conserva el resultado del ADMIN",
+        "aplica permisos HTTP, no acepta identidad ajena y mantiene protegidas las tablas",
+        "rechaza tokens vencidos/futuros y un cambio de horario aunque el token siga vigente",
+        "la configuración guardada cambia el cálculo de atraso del grupo"
+      ],
+      "nativeAssertions": 27,
+      "nativeSha256": "c8ce4dfbeb8fea230fe8be42c737f9c96436d04e4676951fb530faea4db92cdb",
+      "nativeHttpOperations": [
+        "create_activity",
+        "create_group",
+        "issue_activity_checkin_qr",
+        "record_attendance_bulk",
+        "self_checkin",
+        "set_qr_checkin_settings"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "d6608f833142bd7b87c058b6c08d67606380554ed0b511ceffaf63b22b091466"
     },
     {
       "source": "apps/web/src/lib/subscription-billing.integration.test.ts",
-      "cases": [
-        "un JWT real ajeno recibe 404 y el propio no puede auto-pagarse",
-        "dos requests concurrentes reservan una única suscripción y solo un POST remoto",
-        "autorización sin pago no abre cupos; conciliación aprobada sí",
-        "dos altas compiten por el último cupo y no pasan de 50"
-      ],
       "assertions": 17,
       "sqlRpcNames": [
         "create_managed_member",
@@ -56,43 +88,112 @@
         "join_group_as_athlete",
         "sync_group_subscription"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "un JWT real ajeno recibe 404 y el propio no puede auto-pagarse",
+        "dos requests concurrentes reservan una única suscripción y solo un POST remoto",
+        "autorización sin pago no abre cupos; conciliación aprobada sí",
+        "dos altas compiten por el último cupo y no pasan de 50"
+      ],
+      "nativeCases": [
+        "un JWT real ajeno recibe 404 y el propio no puede auto-pagarse",
+        "dos requests concurrentes reservan una única suscripción y solo un POST remoto",
+        "autorización sin pago no abre cupos; conciliación aprobada sí",
+        "dos altas compiten por el último cupo y no pasan de 50"
+      ],
+      "nativeAssertions": 17,
+      "nativeSha256": "48a34170c0bff7215a2ca159188e4ef435c59053a2fcac85938fc249b3fa9f9c",
+      "nativeHttpOperations": [
+        "create_managed_member",
+        "get_group_billing",
+        "join_group_as_athlete"
+      ],
+      "nativeSqlAssertions": [
+        "sync_group_subscription"
+      ],
+      "sourceSha256": "50f1a9083bf823ecfda88c195be7ca3064a9f6a9130dc007e753d6115c016608"
     },
     {
       "source": "apps/web/src/app/accept-terms/account-consent.integration.test.ts",
-      "cases": [
-        "email captura evidencia de servidor y un login/reintento conserva la misma fila",
-        "una aceptación inválida en Auth revierte perfil y credenciales",
-        "una cuenta sin evidencia no consume la invitación hasta aceptar explícitamente",
-        "invitación rechaza versión antigua y registra la aceptación nueva una sola vez"
-      ],
       "assertions": 27,
       "sqlRpcNames": [
         "accept_account_terms",
         "has_account_consent"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "email captura evidencia de servidor y un login/reintento conserva la misma fila",
+        "una aceptación inválida en Auth revierte perfil y credenciales",
+        "una cuenta sin evidencia no consume la invitación hasta aceptar explícitamente",
+        "invitación rechaza versión antigua y registra la aceptación nueva una sola vez"
+      ],
+      "nativeCases": [
+        "email captura evidencia de servidor y un login/reintento conserva la misma fila",
+        "una aceptación inválida en Auth revierte perfil y credenciales",
+        "una cuenta sin evidencia no consume la invitación hasta aceptar explícitamente",
+        "invitación rechaza versión antigua y registra la aceptación nueva una sola vez"
+      ],
+      "nativeAssertions": 27,
+      "nativeSha256": "d9c248e0733a34a4664623df94bd27b8997353d3aad714aeb694735414cd5670",
+      "nativeHttpOperations": [
+        "accept_account_terms",
+        "has_account_consent"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "aa0fe3895cb9d6260cdc960d277ddf85fca7a27b1a3b02f5b2aba6a9b9cbfc4d"
     },
     {
       "source": "apps/web/src/app/groups/new/group.integration.test.ts",
-      "cases": [
-        "crea grupo por JWT real, deja ADMIN y oculta el nuevo grupo al ajeno",
-        "dos auto-incorporaciones simultáneas devuelven la misma segunda membresía",
-        "R1 se cumple también al invocar directamente por HTTP como menor",
-        "edita por PostgREST y rota por RPC con permisos reales",
-        "creaciones simultáneas no superan 30 grupos ni duplican códigos"
-      ],
       "assertions": 31,
       "sqlRpcNames": [
         "create_group",
         "join_group_as_athlete",
         "rotate_invite_code"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "crea grupo por JWT real, deja ADMIN y oculta el nuevo grupo al ajeno",
+        "dos auto-incorporaciones simultáneas devuelven la misma segunda membresía",
+        "R1 se cumple también al invocar directamente por HTTP como menor",
+        "edita por PostgREST y rota por RPC con permisos reales",
+        "creaciones simultáneas no superan 30 grupos ni duplican códigos"
+      ],
+      "nativeCases": [
+        "crea grupo por JWT real, deja ADMIN y oculta el nuevo grupo al ajeno",
+        "dos auto-incorporaciones simultáneas devuelven la misma segunda membresía",
+        "R1 se cumple también al invocar directamente por HTTP como menor",
+        "edita por SQL/RLS y rota por RPC con permisos reales",
+        "creaciones simultáneas no superan 30 grupos ni duplican códigos"
+      ],
+      "nativeAssertions": 31,
+      "nativeSha256": "52fbc0c921603f40a9a71fac8b6e932384df02140c3ebb49bea5f051969d020a",
+      "nativeHttpOperations": [
+        "create_group",
+        "join_group_as_athlete",
+        "rotate_invite_code"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "3ad4e417999d17c1d18229fe3a2f990d3ea61a9d72118c5b81763ca7497bc4df"
     },
     {
       "source": "apps/web/src/app/invitations/[token]/invitation.integration.test.ts",
-      "cases": [
+      "assertions": 135,
+      "sqlRpcNames": [
+        "accept_account_terms",
+        "create_group",
+        "create_managed_member",
+        "get_my_attendance_history",
+        "is_guardian_of",
+        "issue_invitation",
+        "issue_managed_activation",
+        "join_group_by_code",
+        "list_managed_activation_requests",
+        "list_managed_member_consents",
+        "request_managed_activation",
+        "review_managed_activation"
+      ],
+      "status": "NATIVE_PASS",
+      "originalCases": [
         "preview no revela email, ID de usuario ni si ya existe cuenta",
         "el reclamo no convierte una invitación de registro normal en activación gestionada",
         "rechaza proxy falso y sesión de otra persona sin consumir invitación",
@@ -110,30 +211,46 @@
         "HU-APO-07: rechazo autenticado registra timestamp y bloquea un enlace previo sin alterar historial",
         "HU-APO-07: apoderado aprueba, recibe confirmación de envío y el menor activa conservando historial y vínculo"
       ],
-      "assertions": 135,
-      "sqlRpcNames": [
+      "nativeCases": [
+        "preview no revela email, ID de usuario ni si ya existe cuenta",
+        "el reclamo no convierte una invitación de registro normal en activación gestionada",
+        "rechaza proxy falso y sesión de otra persona sin consumir invitación",
+        "cuenta existente conserva ADMIN y agrega únicamente el rol invitado",
+        "registro Auth nativo vincula INVITED sin duplicado y permite contraseña propia",
+        "Auth nativo no deja credenciales ni consume token de menor sin consentimiento",
+        "abrir enlace vencido persiste EXPIRED sin iniciar sesión",
+        "aceptaciones simultáneas consumen el token una sola vez",
+        "registros Auth nativo simultáneos crean una sola cuenta y limpian ambas pruebas",
+        "HU-APO-01: apoderado nuevo acepta por Nest y conserva el vínculo sin consentir por el menor",
+        "HU-APO-01: cuenta de otro grupo acepta como GUARDIAN sin duplicar identidad ni perder sus roles",
+        "limita intentos a 10 por hora e IP entre peticiones Nest",
+        "HU-DEP-07: adulto reclama por Nest, conserva todos sus grupos y consulta su historial al iniciar sesión",
+        "HU-DEP-07: menor queda bloqueado por consentimiento revocado y puede reclamar tras nueva autorización",
+        "HU-APO-07: rechazo autenticado registra timestamp y bloquea un enlace previo sin alterar historial",
+        "HU-APO-07: apoderado aprueba, recibe confirmación de envío y el menor activa conservando historial y vínculo"
+      ],
+      "nativeAssertions": 135,
+      "nativeSha256": "35ed64fda646897b0f3dedffa582a5eb0e7d6b9fd4f983feedf34133c09a1a32",
+      "nativeHttpOperations": [
         "accept_account_terms",
         "create_group",
         "create_managed_member",
         "get_my_attendance_history",
-        "is_guardian_of",
-        "issue_invitation",
-        "issue_managed_activation",
         "join_group_by_code",
         "list_managed_activation_requests",
         "list_managed_member_consents",
         "request_managed_activation",
         "review_managed_activation"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "nativeSqlAssertions": [
+        "is_guardian_of",
+        "issue_invitation",
+        "issue_managed_activation"
+      ],
+      "sourceSha256": "8a105d1ae8453dc6a98d16b733478ea621bfad6fef911ec8efeeeeb089d0837e"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/activity-types/activity-types.integration.test.ts",
-      "cases": [
-        "crea tipo y actividad; desactivarlo conserva historial y asistencia y bloquea usos nuevos",
-        "PostgREST aplica unicidad/validación y no permite editar sistema, mover identidad ni borrar",
-        "ATHLETE y ajeno no pueden crear ni editar; ajeno no enumera tipos privados"
-      ],
       "assertions": 21,
       "sqlRpcNames": [
         "create_activity",
@@ -141,17 +258,30 @@
         "record_attendance_bulk",
         "update_activity"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "crea tipo y actividad; desactivarlo conserva historial y asistencia y bloquea usos nuevos",
+        "PostgREST aplica unicidad/validación y no permite editar sistema, mover identidad ni borrar",
+        "ATHLETE y ajeno no pueden crear ni editar; ajeno no enumera tipos privados"
+      ],
+      "nativeCases": [
+        "crea tipo y actividad; desactivarlo conserva historial y asistencia y bloquea usos nuevos",
+        "SQL/RLS aplica unicidad/validación y no permite editar sistema, mover identidad ni borrar",
+        "ATHLETE y ajeno no pueden crear ni editar; ajeno no enumera tipos privados"
+      ],
+      "nativeAssertions": 21,
+      "nativeSha256": "76b6a3a122ca68e2260a21b8d5d4c07d05160308679ae3138927f29cffc0ae24",
+      "nativeHttpOperations": [
+        "create_activity",
+        "create_group",
+        "record_attendance_bulk",
+        "update_activity"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "6d5c8bb1247fd4a3588b52784b8caf1d1d5b03881fe18cfb07a3afaf15a6d6e2"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/guardians/guardianship.integration.test.ts",
-      "cases": [
-        "registra cuenta nueva y completa invitación sin duplicar membership ni activar pupilo",
-        "reutiliza cuenta y rechaza duplicado, adulto, no ADMIN y grupo ajeno por HTTP",
-        "dos registros simultáneos del mismo par crean un solo vínculo",
-        "no incorpora un grupo número 31 para el apoderado",
-        "registros concurrentes respetan el último cupo del grupo"
-      ],
       "assertions": 28,
       "sqlRpcNames": [
         "create_group",
@@ -162,16 +292,38 @@
         "list_guardianship_athletes",
         "prepare_invitation_registration"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "registra cuenta nueva y completa invitación sin duplicar membership ni activar pupilo",
+        "reutiliza cuenta y rechaza duplicado, adulto, no ADMIN y grupo ajeno por HTTP",
+        "dos registros simultáneos del mismo par crean un solo vínculo",
+        "no incorpora un grupo número 31 para el apoderado",
+        "registros concurrentes respetan el último cupo del grupo"
+      ],
+      "nativeCases": [
+        "registra cuenta nueva y completa invitación sin duplicar membership ni activar pupilo",
+        "reutiliza cuenta y rechaza duplicado, adulto, no ADMIN y grupo ajeno por HTTP",
+        "dos registros simultáneos del mismo par crean un solo vínculo",
+        "no incorpora un grupo número 31 para el apoderado",
+        "registros concurrentes respetan el último cupo del grupo"
+      ],
+      "nativeAssertions": 28,
+      "nativeSha256": "8e28693e48f306d248b23a841341d809c67e6ff23e2d2684a7f864c7d08030b7",
+      "nativeHttpOperations": [
+        "create_group",
+        "create_guardianship",
+        "create_managed_member",
+        "list_guardianship_athletes"
+      ],
+      "nativeSqlAssertions": [
+        "is_guardian_of",
+        "issue_invitation",
+        "prepare_invitation_registration"
+      ],
+      "sourceSha256": "cb30b58a0bbbfbe9305b37d970adb602965ecf1df97b41495045fb47e069adc7"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/me/history/history.integration.test.ts",
-      "cases": [
-        "consulta propia pagina, filtra y serializa notas/métricas sin terceros",
-        "HU-DEP-06: la misma sesión ATHLETE alterna grupos sin mezclar membresías, notas ni porcentajes",
-        "HU-DEP-06: ADMIN en A y ATHLETE en B conserva permisos independientes por HTTP",
-        "HTTP aplica aislamiento y valida filtros; correcciones se reflejan en la misma sesión"
-      ],
       "assertions": 51,
       "sqlRpcNames": [
         "create_group",
@@ -179,16 +331,32 @@
         "rotate_invite_code",
         "update_attendance_record"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "consulta propia pagina, filtra y serializa notas/métricas sin terceros",
+        "HU-DEP-06: la misma sesión ATHLETE alterna grupos sin mezclar membresías, notas ni porcentajes",
+        "HU-DEP-06: ADMIN en A y ATHLETE en B conserva permisos independientes por HTTP",
+        "HTTP aplica aislamiento y valida filtros; correcciones se reflejan en la misma sesión"
+      ],
+      "nativeCases": [
+        "consulta propia pagina, filtra y serializa notas/métricas sin terceros",
+        "HU-DEP-06: la misma sesión ATHLETE alterna grupos sin mezclar membresías, notas ni porcentajes",
+        "HU-DEP-06: ADMIN en A y ATHLETE en B conserva permisos independientes por HTTP",
+        "HTTP aplica aislamiento y valida filtros; correcciones se reflejan en la misma sesión"
+      ],
+      "nativeAssertions": 51,
+      "nativeSha256": "9dbd37329e1bf9d4c3748d9e3fec119f74b09ce4c7dc3a3886b952a99b827154",
+      "nativeHttpOperations": [
+        "create_group",
+        "get_my_attendance_history",
+        "rotate_invite_code",
+        "update_attendance_record"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "20f93fd270956d1cc91ab05ba1d59487f76edef335f809244e0b5d34880b7dc9"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/members/member-management.integration.test.ts",
-      "cases": [
-        "dos bajas simultáneas conservan al menos un ADMIN y revalidan autorización",
-        "HTTP bloquea grupo ajeno y edición de cuenta propia por ADMIN",
-        "HTTP admite búsqueda y devuelve identidad, roles y bloqueo sin abrir acceso ajeno",
-        "dos reactivaciones disputan el último cupo sin exceder 500"
-      ],
       "assertions": 18,
       "sqlRpcNames": [
         "create_group",
@@ -197,15 +365,33 @@
         "reactivate_membership",
         "update_managed_member"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "dos bajas simultáneas conservan al menos un ADMIN y revalidan autorización",
+        "HTTP bloquea grupo ajeno y edición de cuenta propia por ADMIN",
+        "HTTP admite búsqueda y devuelve identidad, roles y bloqueo sin abrir acceso ajeno",
+        "dos reactivaciones disputan el último cupo sin exceder 500"
+      ],
+      "nativeCases": [
+        "dos bajas simultáneas conservan al menos un ADMIN y revalidan autorización",
+        "HTTP bloquea grupo ajeno y edición de cuenta propia por ADMIN",
+        "HTTP admite búsqueda y devuelve identidad, roles y bloqueo sin abrir acceso ajeno",
+        "dos reactivaciones disputan el último cupo sin exceder 500"
+      ],
+      "nativeAssertions": 18,
+      "nativeSha256": "761efd11cde7ba97464a55dd392039109095cff6709808a2b0db3dc9337d7be7",
+      "nativeHttpOperations": [
+        "create_group",
+        "deactivate_membership",
+        "list_group_members",
+        "reactivate_membership",
+        "update_managed_member"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "2e9b55a739f5432d75a2b34bcff58879446afd53035f029b11aaaf73c911bdd1"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/activities/new/weekly-activities.integration.test.ts",
-      "cases": [
-        "crea tres ocurrencias por JWT, oculta serie a ajeno y conserva hermanas al editar/eliminar raíz",
-        "edición de serie espera una toma de asistencia concurrente y luego excluye esa ocurrencia",
-        "agenda ATHLETE consolida grupos activos una sola vez y RLS excluye membresías no activas"
-      ],
       "assertions": 27,
       "sqlRpcNames": [
         "create_activity",
@@ -214,11 +400,39 @@
         "join_group_as_athlete",
         "update_activity"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "crea tres ocurrencias por JWT, oculta serie a ajeno y conserva hermanas al editar/eliminar raíz",
+        "edición de serie espera una toma de asistencia concurrente y luego excluye esa ocurrencia",
+        "agenda ATHLETE consolida grupos activos una sola vez y RLS excluye membresías no activas"
+      ],
+      "nativeCases": [
+        "crea tres ocurrencias por JWT, oculta serie a ajeno y conserva hermanas al editar/eliminar raíz",
+        "edición de serie espera una toma de asistencia concurrente y luego excluye esa ocurrencia",
+        "agenda ATHLETE consolida grupos activos una sola vez y RLS excluye membresías no activas"
+      ],
+      "nativeAssertions": 27,
+      "nativeSha256": "39690f2fe3ea5e9f986153ca2a49e4bfa75d83936edeeb2a353cf1f36bb1ce3d",
+      "nativeHttpOperations": [
+        "create_activity",
+        "create_group",
+        "delete_activity",
+        "join_group_as_athlete",
+        "update_activity"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "ac65c68e8bc18b4f7d44ab269005c62c2c67840c13a305978f6a8d71b90d8f05"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/invitations/new/send-invitation.integration.test.ts",
-      "cases": [
+      "assertions": 38,
+      "sqlRpcNames": [
+        "accept_invitation",
+        "invitation_context",
+        "prepare_invitation_registration"
+      ],
+      "status": "NATIVE_PASS",
+      "originalCases": [
         "Auth real rechaza JWT falso y SQL limita a ADMIN de ese grupo",
         "envía el enlace y persiste hash, perfil INVITED y siete días",
         "reenvío invalida token anterior y renueva vigencia sin duplicar perfil",
@@ -228,22 +442,28 @@
         "fallo de correo es recuperable y no devuelve detalles del proveedor",
         "cuota compartida impide que dos solicitudes consuman el último cupo"
       ],
-      "assertions": 38,
-      "sqlRpcNames": [
+      "nativeCases": [
+        "Auth real rechaza JWT falso y SQL limita a ADMIN de ese grupo",
+        "envía el enlace y persiste hash, perfil INVITED y siete días",
+        "reenvío invalida token anterior y renueva vigencia sin duplicar perfil",
+        "el enlace emitido completa registro Auth nativo sobre el mismo perfil",
+        "cuenta existente recibe GUARDIAN sin filtrar su existencia ni cambiar ATHLETE",
+        "reenvíos simultáneos sustituyen una invitación una sola vez",
+        "fallo de correo es recuperable y no devuelve detalles del proveedor",
+        "cuota compartida impide que dos solicitudes consuman el último cupo"
+      ],
+      "nativeAssertions": 38,
+      "nativeSha256": "ec5f99ff00fce0f09a4d7aeee70d166b5f18196a8f5e6295ab4209dd1beb68b3",
+      "nativeHttpOperations": [],
+      "nativeSqlAssertions": [
         "accept_invitation",
         "invitation_context",
         "prepare_invitation_registration"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "sourceSha256": "2e265813a791aa98bed64ffbc1f6ab4c894c2f805f4ea98ce0833fb4f1deb038"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/reports/reports.integration.test.ts",
-      "cases": [
-        "RPC serializa conteos y porcentajes como números y refleja correcciones",
-        "HTTP aplica 403/404 y vista no expone datos a no-ADMIN",
-        "toggle habilita y revoca agregados con el mismo JWT, sin revelar campos privados",
-        "COACH opera por HTTP sin notas ni administración y pierde permisos con el mismo JWT"
-      ],
       "assertions": 68,
       "sqlRpcNames": [
         "assign_member_coach",
@@ -258,16 +478,39 @@
         "update_attendance_record",
         "update_group_settings"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "RPC serializa conteos y porcentajes como números y refleja correcciones",
+        "HTTP aplica 403/404 y vista no expone datos a no-ADMIN",
+        "toggle habilita y revoca agregados con el mismo JWT, sin revelar campos privados",
+        "COACH opera por HTTP sin notas ni administración y pierde permisos con el mismo JWT"
+      ],
+      "nativeCases": [
+        "RPC serializa conteos y porcentajes como números y refleja correcciones",
+        "HTTP aplica 403/404 y vista no expone datos a no-ADMIN",
+        "toggle habilita y revoca agregados con el mismo JWT, sin revelar campos privados",
+        "COACH opera por HTTP sin notas ni administración y pierde permisos con el mismo JWT"
+      ],
+      "nativeAssertions": 68,
+      "nativeSha256": "9957ab4d8996ee2066a72f4cebed299757174070f304b7e927403cc7e4737bfd",
+      "nativeHttpOperations": [
+        "assign_member_coach",
+        "clear_attendance_record",
+        "create_group",
+        "deactivate_membership",
+        "get_group_attendance_report",
+        "get_group_stats",
+        "get_my_attendance_history",
+        "list_group_members",
+        "record_attendance_bulk",
+        "update_attendance_record",
+        "update_group_settings"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "f4cf3567154f9daebaa95ea97af50c10b4007805deebbb6ab258a084ec463d25"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/members/new/managed-member.integration.test.ts",
-      "cases": [
-        "menor no se activa hasta registrar e identificar al apoderado y consentir",
-        "HTTP niega grupo ajeno y pupilo de otro GUARDIAN",
-        "ADMIN solicita y apoderado autoriza envío; GoTrue activa sin alterar historial",
-        "altas simultáneas no superan 500 membresías ACTIVE"
-      ],
       "assertions": 41,
       "sqlRpcNames": [
         "consent_managed_member",
@@ -281,16 +524,39 @@
         "request_managed_activation",
         "review_managed_activation"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "menor no se activa hasta registrar e identificar al apoderado y consentir",
+        "HTTP niega grupo ajeno y pupilo de otro GUARDIAN",
+        "ADMIN solicita y apoderado autoriza envío; GoTrue activa sin alterar historial",
+        "altas simultáneas no superan 500 membresías ACTIVE"
+      ],
+      "nativeCases": [
+        "menor no se activa hasta registrar e identificar al apoderado y consentir",
+        "HTTP niega grupo ajeno y pupilo de otro GUARDIAN",
+        "ADMIN solicita y apoderado autoriza envío; Auth nativo activa sin alterar historial",
+        "altas simultáneas no superan 500 membresías ACTIVE"
+      ],
+      "nativeAssertions": 41,
+      "nativeSha256": "cde8bb6a2cc89b7b436be37ed42354a2101f0ccfdce433bdd8fde2adfc352d46",
+      "nativeHttpOperations": [
+        "consent_managed_member",
+        "create_group",
+        "create_managed_member",
+        "list_managed_activation_requests",
+        "list_managed_member_consents",
+        "request_managed_activation",
+        "review_managed_activation"
+      ],
+      "nativeSqlAssertions": [
+        "invitation_registration_result",
+        "issue_invitation",
+        "prepare_invitation_registration"
+      ],
+      "sourceSha256": "b6f2e46f9a965786b68e9e231953e629ef1d42a19485829c9e5d759019ec68bf"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/ward-history.integration.test.ts",
-      "cases": [
-        "JWT del apoderado devuelve solo pupilo, métricas completas y página solicitada",
-        "rechaza identidades ajenas y mantiene la proyección directa cerrada a terceros",
-        "HU-APO-05 evalúa ambos toggles independientemente y revoca agregados sin ocultar al pupilo",
-        "revoca el vínculo y la misma sesión pierde acceso a RPC y vista"
-      ],
       "assertions": 42,
       "sqlRpcNames": [
         "create_group",
@@ -299,17 +565,33 @@
         "get_ward_attendance_history",
         "update_group_settings"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "JWT del apoderado devuelve solo pupilo, métricas completas y página solicitada",
+        "rechaza identidades ajenas y mantiene la proyección directa cerrada a terceros",
+        "HU-APO-05 evalúa ambos toggles independientemente y revoca agregados sin ocultar al pupilo",
+        "revoca el vínculo y la misma sesión pierde acceso a RPC y vista"
+      ],
+      "nativeCases": [
+        "JWT del apoderado devuelve solo pupilo, métricas completas y página solicitada",
+        "rechaza identidades ajenas y mantiene la proyección directa cerrada a terceros",
+        "HU-APO-05 evalúa ambos toggles independientemente y revoca agregados sin ocultar al pupilo",
+        "revoca el vínculo y la misma sesión pierde acceso a RPC y vista"
+      ],
+      "nativeAssertions": 42,
+      "nativeSha256": "6e7caf935586b95c9a0eccc20fdee83cb1755a8f5fd0be5266898ff95ebbf743",
+      "nativeHttpOperations": [
+        "create_group",
+        "get_group_attendance_report",
+        "get_group_stats",
+        "get_ward_attendance_history",
+        "update_group_settings"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "b062fc5e2dfc69de3229979e2c444e106246bb55fd8d6136d46cd3d436a1589f"
     },
     {
       "source": "apps/web/src/app/groups/[groupId]/members/pending/membership-review.integration.test.ts",
-      "cases": [
-        "R1 bloquea por HTTP hasta tener consentimiento y la activación abre asistencia",
-        "rechaza acceso ajeno, no ADMIN y falsificación del grupo",
-        "aprobar y rechazar simultáneamente conserva una sola decisión",
-        "dos aprobaciones en grupos distintos no llevan al apoderado del grupo 29 al 31",
-        "aprobaciones concurrentes respetan el último cupo del grupo"
-      ],
       "assertions": 22,
       "sqlRpcNames": [
         "approve_membership",
@@ -317,7 +599,45 @@
         "list_pending_memberships",
         "reject_pending_membership"
       ],
-      "status": "NATIVE_EQUIVALENCE_NOT_FULLY_RECONCILED_SQL_DISCOVERY_BLOCKED"
+      "status": "NATIVE_PASS",
+      "originalCases": [
+        "R1 bloquea por HTTP hasta tener consentimiento y la activación abre asistencia",
+        "rechaza acceso ajeno, no ADMIN y falsificación del grupo",
+        "aprobar y rechazar simultáneamente conserva una sola decisión",
+        "dos aprobaciones en grupos distintos no llevan al apoderado del grupo 29 al 31",
+        "aprobaciones concurrentes respetan el último cupo del grupo"
+      ],
+      "nativeCases": [
+        "R1 bloquea por HTTP hasta tener consentimiento y la activación abre asistencia",
+        "rechaza acceso ajeno, no ADMIN y falsificación del grupo",
+        "aprobar y rechazar simultáneamente conserva una sola decisión",
+        "dos aprobaciones en grupos distintos no llevan al apoderado del grupo 29 al 31",
+        "aprobaciones concurrentes respetan el último cupo del grupo"
+      ],
+      "nativeAssertions": 22,
+      "nativeSha256": "9765946d042b32062edcf97872494d73c7f868c3696c47459d8b05d6e06c5326",
+      "nativeHttpOperations": [
+        "approve_membership",
+        "create_group",
+        "list_pending_memberships",
+        "reject_pending_membership"
+      ],
+      "nativeSqlAssertions": [],
+      "sourceSha256": "ef55a3e222611fedb44be41424d1af849b46706d7d7f52a5cf1dfa9f9db4d3eb"
     }
+  ],
+  "date": "2026-10-10",
+  "status": "NATIVE_PASS",
+  "baseCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+  "assertions": 628,
+  "additionalRecoveryCases": 4,
+  "environment": "local-synthetic-working-tree",
+  "evidence": ".ci-results/backend.json",
+  "fixture": "apps/web/test/native-persistence.mjs",
+  "runner": "apps/web/e2e/run-integrations.mjs",
+  "notes": [
+    "Original cases and assertion counts remain traceable; provider transport names in originalCases are historical.",
+    "Auth/register/claim/invitation and domain writes invoke actual Nest endpoints. Internal SQL assertions verify JWT and install the native actor with minimum-role RLS.",
+    "Resend/Mercado Pago/Expo transport responses are synthetic; PostgreSQL, Auth, Nest and Worker are real."
   ]
 }

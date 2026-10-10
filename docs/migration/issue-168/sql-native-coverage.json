@@ -1,0 +1,332 @@
+{
+  "mapping": [
+    {
+      "source": "supabase/tests/account_consents.test.sql",
+      "target": "packages/db/tests/domain/account_consents.test.sql",
+      "sourceSha256": "7dbb4e3b4a0fa09a32131b99d8be45a106d91b2a8194f0c70b8acca9b18411bb",
+      "status": "NATIVE_PASS",
+      "assertions": 32,
+      "targetSha256": "1d5e346e72f6b5bb78928d5fa03985c39d31f81b2d06e748034ed0b3e37df54b"
+    },
+    {
+      "source": "supabase/tests/activities.test.sql",
+      "target": "packages/db/tests/domain/activities.test.sql",
+      "sourceSha256": "f9d250dd0d4fe16b9e0310fd133ab8102f06266217a6ee10586dcc2672c68ec1",
+      "status": "NATIVE_PASS",
+      "assertions": 48,
+      "targetSha256": "494a42b43f7042e689833aa2cbe185c30a222cdeb36f9ae1bcc652cf31034e20"
+    },
+    {
+      "source": "supabase/tests/activity_types.test.sql",
+      "target": "packages/db/tests/domain/activity_types.test.sql",
+      "sourceSha256": "ea31a6c8dba9efdad557adb9f3a518d8042b199bf0ff25ce42815692c9b34c3e",
+      "status": "NATIVE_PASS",
+      "assertions": 40,
+      "targetSha256": "5088a2be9e13acaa61edcf274d11b1d15a840e8a4be0b3a24798bf90431e619f"
+    },
+    {
+      "source": "supabase/tests/announcement_worker.test.sql",
+      "target": "packages/db/tests/domain/announcement_worker.test.sql",
+      "sourceSha256": "0461b139f4d3dc53b282c6ab2ba28ab1bd793b5b4fc2ac32a3185918a61f4765",
+      "status": "NATIVE_PASS",
+      "assertions": 29,
+      "targetSha256": "85ddd61eb3a38a5c41de8528737c317f3a6ea8fac9b2a136dbe8b57ef7b491f7"
+    },
+    {
+      "source": "supabase/tests/api_invitations.test.sql",
+      "target": "packages/db/tests/domain/api_invitations.test.sql",
+      "sourceSha256": "774bbaf7c430cd0c0cb5fb4810d4010f046ed1fd16df408fa3645d81c3cf747e",
+      "status": "NATIVE_PASS",
+      "assertions": 11,
+      "targetSha256": "794b1dcb3d28a3e90e279464fc6fb986f9d76d2aacb25e33620c5dd00af08a68"
+    },
+    {
+      "source": "supabase/tests/api_session_rls.test.sql",
+      "target": "packages/db/tests/domain/api_session_rls.test.sql",
+      "sourceSha256": "896fd8758f8339e63dcd73e6edac633fa437aa32f2f646d86faf00b8640e09ad",
+      "status": "NATIVE_PASS",
+      "assertions": 16,
+      "targetSha256": "889748551cf2193bbd1e1a8239941f499b771c717f504c868a9f3bea9ee0430d"
+    },
+    {
+      "source": "supabase/tests/attendance.test.sql",
+      "target": "packages/db/tests/domain/attendance.test.sql",
+      "sourceSha256": "e4237146d57f2893cd36ff3a16d1b1e0a5ef8f26a571c25732fe7024543a94b2",
+      "status": "NATIVE_PASS",
+      "assertions": 60,
+      "targetSha256": "307337a106a96886ae490cb563510e27585a34cb142f80357afea81a5badc919"
+    },
+    {
+      "source": "supabase/tests/attendance_edit.test.sql",
+      "target": "packages/db/tests/domain/attendance_edit.test.sql",
+      "sourceSha256": "94c2228bfa7ef7f72fade4152d0e528c6289dc2f5f4050d6618ff53dc7120b91",
+      "status": "NATIVE_PASS",
+      "assertions": 44,
+      "targetSha256": "99f5ac5a0a9c5c99ef1a05348fb3196733db3752ce428694951f9bdeaba03682"
+    },
+    {
+      "source": "supabase/tests/attendance_history.test.sql",
+      "target": "packages/db/tests/domain/attendance_history.test.sql",
+      "sourceSha256": "fa505b2b13d40c954cfab51bae7e8adffe2912f67fcc1306a0639e9904233b08",
+      "status": "NATIVE_PASS",
+      "assertions": 54,
+      "targetSha256": "2f6dfa25194f34ef2d7fc6163b010aa453ebe871223e975b951957f2ddfc1fc1"
+    },
+    {
+      "source": "supabase/tests/auth_cutover.test.sql",
+      "target": "packages/db/tests/domain/auth_cutover.test.sql",
+      "sourceSha256": "2de074b6ef3c9afcbbeaefe8fafeacdf74c35b2fadfadbee129a55544e9bf2c5",
+      "status": "NATIVE_PASS",
+      "assertions": 16,
+      "targetSha256": "a28dfee811641f19c1ea551dad749683d5f2781e28e7a4ac79156b5a062d6e72"
+    },
+    {
+      "source": "supabase/tests/billing_nest.test.sql",
+      "target": "packages/db/tests/domain/billing_nest.test.sql",
+      "sourceSha256": "d9cdb1ca577da869c24108207cdb955b5e03b7c3c841796c77eb6d8f390b82ab",
+      "status": "NATIVE_PASS",
+      "assertions": 17,
+      "targetSha256": "ac6af21a80b03618b47c647709d833775f7c3fac5d3ef5512ea585f241132ecb"
+    },
+    {
+      "source": "supabase/tests/coach_role.test.sql",
+      "target": "packages/db/tests/domain/coach_role.test.sql",
+      "sourceSha256": "00802d8c7eb35cb23c8e262a8b3b9d54f5cb03a171203beea59bc4b688bad66c",
+      "status": "NATIVE_PASS",
+      "assertions": 50,
+      "targetSha256": "283b5c0cde86b3cc22e72336ee4d17c6d5e705248a1e7df44446f7c03f158839"
+    },
+    {
+      "source": "supabase/tests/configure_groups.test.sql",
+      "target": "packages/db/tests/domain/configure_groups.test.sql",
+      "sourceSha256": "8ff8f357595975f432292ca6699a07137253893df51813ceb5db2473a650a0da",
+      "status": "NATIVE_PASS",
+      "assertions": 31,
+      "targetSha256": "cb324897403a9f2a7c9cf643e04dcb23f4426f1b03b10db0f77764af57a8915e"
+    },
+    {
+      "source": "supabase/tests/create_groups.test.sql",
+      "target": "packages/db/tests/domain/create_groups.test.sql",
+      "sourceSha256": "3c0862aae0e77e83a7e91754e92367ea9b95af9e45c3dcd612d7ad50e3273e79",
+      "status": "NATIVE_PASS",
+      "assertions": 58,
+      "targetSha256": "0f61cd37c6d4c6e88c6ce789508a612d932d78eeea51110bbd787d7b5d25a953"
+    },
+    {
+      "source": "supabase/tests/group_announcements.test.sql",
+      "target": "packages/db/tests/domain/group_announcements.test.sql",
+      "sourceSha256": "0fb29ed0891e045689a15784335a4f6083db75ca612f1a67d4488172257eb670",
+      "status": "NATIVE_PASS",
+      "assertions": 73,
+      "targetSha256": "7d3d53ec5dc1eb1a170655108c98980880f15d7f3a8ec6a969ac608264622de2"
+    },
+    {
+      "source": "supabase/tests/group_reports.test.sql",
+      "target": "packages/db/tests/domain/group_reports.test.sql",
+      "sourceSha256": "1fb6d4659a8857f77766c66da05881b25d7d8094d083b59d64e6d274f8e50060",
+      "status": "NATIVE_PASS",
+      "assertions": 50,
+      "targetSha256": "bbdd88680ef6e98f9b415c1743127415c032cbadf9dbb022382b8562e955047c"
+    },
+    {
+      "source": "supabase/tests/group_stats_visibility.test.sql",
+      "target": "packages/db/tests/domain/group_stats_visibility.test.sql",
+      "sourceSha256": "8996252e4702fd88d33b943f8d889f9bda051a79e2b97d8236fcbdc034a86514",
+      "status": "NATIVE_PASS",
+      "assertions": 84,
+      "targetSha256": "39ed53490234e54cf58083bbf7aab5aab6b858640a745944f3f51d9939d617d3"
+    },
+    {
+      "source": "supabase/tests/group_subscriptions.test.sql",
+      "target": "packages/db/tests/domain/group_subscriptions.test.sql",
+      "sourceSha256": "762a8c91ff2212bcef2c5e5e590c4477c25e1b20ad83e57b179737ce3031493f",
+      "status": "NATIVE_PASS",
+      "assertions": 53,
+      "targetSha256": "bae4ed42779f0c8582c9a412d6539153d617b343fe656da3a9725e0271d94a57"
+    },
+    {
+      "source": "supabase/tests/groups.test.sql",
+      "target": "packages/db/tests/domain/groups.test.sql",
+      "sourceSha256": "d09007fe6b00aa016f8835f5796753c42088cc5765bad41c0d29ee6d66cbb8b5",
+      "status": "NATIVE_PASS",
+      "assertions": 27,
+      "targetSha256": "4f9c0d327cd0b257063e6e7a0cf8ff86b5b91da04023f4aaca44d36087ba72cd"
+    },
+    {
+      "source": "supabase/tests/guardianships.test.sql",
+      "target": "packages/db/tests/domain/guardianships.test.sql",
+      "sourceSha256": "c481b07e48a536e34850276c99ac8cacf31d638fa69d01dd337cb187302bfd33",
+      "status": "NATIVE_PASS",
+      "assertions": 42,
+      "targetSha256": "c9283a0035aa3debf9c0f77167be0961e8bf1cbb31afab87cc274f2ad3cb9179"
+    },
+    {
+      "source": "supabase/tests/invitations.test.sql",
+      "target": "packages/db/tests/domain/invitations.test.sql",
+      "sourceSha256": "0d148d0145782caed98679ece6d19bbe4920dfce79575f61de85e49dd5a911eb",
+      "status": "NATIVE_PASS",
+      "assertions": 53,
+      "targetSha256": "f87d3a0c46f85e072cb9555d5e1ff21b3e508951455a375a0a93021a1de5c215"
+    },
+    {
+      "source": "supabase/tests/join_group_by_code.test.sql",
+      "target": "packages/db/tests/domain/join_group_by_code.test.sql",
+      "sourceSha256": "3565ac25e8192e224881f9627359ae88f0ca40725a91851031acbd6df2f2b5db",
+      "status": "NATIVE_PASS",
+      "assertions": 28,
+      "targetSha256": "d256a895128cfa5145ac34ce38b1f648dbc6ada49216c349d7cdff0a28ac3aa6"
+    },
+    {
+      "source": "supabase/tests/majority_worker.test.sql",
+      "target": "packages/db/tests/domain/majority_worker.test.sql",
+      "sourceSha256": "a806f300868c0eec82ce9aa6ae2b518a987590b8deb0417c3a7eda7ab9505007",
+      "status": "NATIVE_PASS",
+      "assertions": 46,
+      "targetSha256": "72252e8f88a4f20759f59adef030533c4567b1c4585e7b4592708e7b8266a7f8"
+    },
+    {
+      "source": "supabase/tests/manage_members.test.sql",
+      "target": "packages/db/tests/domain/manage_members.test.sql",
+      "sourceSha256": "3ec0dda814b594326a210febb3b47f191fd14384c19705772c2108a40cb4cc67",
+      "status": "NATIVE_PASS",
+      "assertions": 59,
+      "targetSha256": "b65bca49c3331f4de76f928caa9f823204fe21600651c6659bd0ab78a6a39424"
+    },
+    {
+      "source": "supabase/tests/managed_activation.test.sql",
+      "target": "packages/db/tests/domain/managed_activation.test.sql",
+      "sourceSha256": "d2e854b5d4fa23d30c110b495e37fa11c82cea618a1fdc871251997d4f1f2c1c",
+      "status": "NATIVE_PASS",
+      "assertions": 61,
+      "targetSha256": "46ce4b3c058f495646ad37b8ee6f9802f045a437993ce0c5daaf37eb2cfb9c66"
+    },
+    {
+      "source": "supabase/tests/managed_members.test.sql",
+      "target": "packages/db/tests/domain/managed_members.test.sql",
+      "sourceSha256": "98e87153d3a8f19ef827500f99d5788f3b4a59ff58fab4215adaaa8e58c73b7a",
+      "status": "NATIVE_PASS",
+      "assertions": 49,
+      "targetSha256": "9693c5907adc5edf7ed7f47e8b4002167e4a02302bfadc3408c4779e381cdd0c"
+    },
+    {
+      "source": "supabase/tests/member_roster_search.test.sql",
+      "target": "packages/db/tests/domain/member_roster_search.test.sql",
+      "sourceSha256": "6a0e42ca742618ad26be41c423cf0aefcd29b8d901c3f5c0e5dfabadab68017f",
+      "status": "NATIVE_PASS",
+      "assertions": 24,
+      "targetSha256": "e7912b7fb4bb6405d6de2c83baaf00f7cb56e7e42a4c35f4a2adae6b40baf197"
+    },
+    {
+      "source": "supabase/tests/membership_approvals.test.sql",
+      "target": "packages/db/tests/domain/membership_approvals.test.sql",
+      "sourceSha256": "d5d9535feaf633a75d3afe0b9477b354fd98d2948b474a726a00c939e1c06eca",
+      "status": "NATIVE_PASS",
+      "assertions": 62,
+      "targetSha256": "df9deba19620021fe2dc6f95c3f533abd6cdbb637d2f8da5d107a3ee6d402284"
+    },
+    {
+      "source": "supabase/tests/membership_onboarding.test.sql",
+      "target": "packages/db/tests/domain/membership_onboarding.test.sql",
+      "sourceSha256": "305a7996c0ed8c0d0e98ce21cba35cda040a35ece03cf02028559995ea5052eb",
+      "status": "NATIVE_PASS",
+      "assertions": 37,
+      "targetSha256": "3c0d377811fa6f87a476f5bfa3d0a42b8c3cf282e9db20023b84f5c0fbf10bd9"
+    },
+    {
+      "source": "supabase/tests/my_wards.test.sql",
+      "target": "packages/db/tests/domain/my_wards.test.sql",
+      "sourceSha256": "6d7e1732668d1a1ec36b2f3d4440761f5008379363e150ffa57a1ade836e205c",
+      "status": "NATIVE_PASS",
+      "assertions": 45,
+      "targetSha256": "a755e48aced886984fea4159401f6a67f0aa758a48e360c560aef663d6d697a1"
+    },
+    {
+      "source": "supabase/tests/native_auth.test.sql",
+      "target": "packages/db/tests/domain/native_auth.test.sql",
+      "sourceSha256": "1e9cfc2de8709f1fd3baf269ab666b503b6776e0c511977f3a822a64669d0a1c",
+      "status": "NATIVE_PASS",
+      "assertions": 20,
+      "targetSha256": "d207513cc19249236c8f3c6c93a94955bb41453aae180eabb675d0673e820ece"
+    },
+    {
+      "source": "supabase/tests/profile.test.sql",
+      "target": "packages/db/tests/domain/profile.test.sql",
+      "sourceSha256": "d78c1e7bc3f7885708077852b40dabed015ecd8f37284b98126865216e86a531",
+      "status": "NATIVE_PASS",
+      "assertions": 72,
+      "targetSha256": "ce3bfe4c99a81e48e8d28ce5f8c57e62f3fc59b9daebd8ed62189ef8800f699a"
+    },
+    {
+      "source": "supabase/tests/qr_attendance.test.sql",
+      "target": "packages/db/tests/domain/qr_attendance.test.sql",
+      "sourceSha256": "62e0ea9f9c3593bb8fff5145122f9561fa145bd64d60d8b55129158542960445",
+      "status": "NATIVE_PASS",
+      "assertions": 50,
+      "targetSha256": "b637404c53cfd726ec5371183bc689cd309aa6ccf69656b3da45d0f2c9ea0e9a"
+    },
+    {
+      "source": "supabase/tests/send_invitations.test.sql",
+      "target": "packages/db/tests/domain/send_invitations.test.sql",
+      "sourceSha256": "ae772aad13ce0cec446dacdac15de72cc7ce577c59cb9415e8b9d892f36626e6",
+      "status": "NATIVE_PASS",
+      "assertions": 51,
+      "targetSha256": "ebcdcd5ad965de2cce82d66d4b86e6d9cfcb1eff3d08c39f9418a21f2c229fab"
+    },
+    {
+      "source": "supabase/tests/social_auth.test.sql",
+      "target": "packages/db/tests/domain/social_auth.test.sql",
+      "sourceSha256": "9a252847fffe029834c56b842c4065c2786701ed8b01a8699cb213a642fe4e97",
+      "status": "NATIVE_PASS",
+      "assertions": 15,
+      "targetSha256": "1ac37e5e382d558ff5d30770b45a1c812693268461be99814d201128299356e8"
+    },
+    {
+      "source": "supabase/tests/social_auth_native.test.sql",
+      "target": "packages/db/tests/domain/social_auth_native.test.sql",
+      "sourceSha256": "24596c8a48953e4ef3245fd6b1186ec52dfddc13bf26855384ee18359ae06072",
+      "status": "NATIVE_PASS",
+      "assertions": 31,
+      "targetSha256": "5ea0c4c1a3e287066e39a04c719556d9b92cc6c6585a508069d2c8d6705b0de6"
+    },
+    {
+      "source": "supabase/tests/users_managed_no_auth.test.sql",
+      "target": "packages/db/tests/domain/users_managed_no_auth.test.sql",
+      "sourceSha256": "693a643dc82514b674fcf4eff2330ebcf0f7d9ed89b7b09383a340fca1540d54",
+      "status": "NATIVE_PASS",
+      "assertions": 2,
+      "targetSha256": "b96d91a6642f6c3e2fe21fb602149d0708cc5928a3ef771bdfe0fe3cf654f465"
+    },
+    {
+      "source": "supabase/tests/users_rls.test.sql",
+      "target": "packages/db/tests/domain/users_rls.test.sql",
+      "sourceSha256": "2b98652f55b71073295b2e96ca89b8729ba76c6831d96f05307af4dda366102d",
+      "status": "NATIVE_PASS",
+      "assertions": 14,
+      "targetSha256": "1bcbe8af40f606cbeeb513df55158ca89236ab76407d75f739e804b7473a8c1d"
+    },
+    {
+      "source": "supabase/tests/ward_attendance_history.test.sql",
+      "target": "packages/db/tests/domain/ward_attendance_history.test.sql",
+      "sourceSha256": "06f794b545de8fe9d89ff3496a84303c0c5b1fe3e5488fc38801a58dead899d6",
+      "status": "NATIVE_PASS",
+      "assertions": 44,
+      "targetSha256": "e1a12cd2b7beb36e233b6664574657fdedc821eb865a2c4487fdb1756af47d93"
+    },
+    {
+      "source": "supabase/tests/weekly_activities.test.sql",
+      "target": "packages/db/tests/domain/weekly_activities.test.sql",
+      "sourceSha256": "905f110b4dfcd67f72ad8e09d4f93214552ec8d69492e2ca4c36b3b5baf94e4d",
+      "status": "NATIVE_PASS",
+      "assertions": 48,
+      "targetSha256": "aeb0eae25696a8e556497742a7a8ca57d635f52f5e2f7a44abf85a28ca41b8d8"
+    }
+  ],
+  "date": "2026-10-10",
+  "baseCommit": "13a0a643431f480e1ddf4c83022c8083c31beb68",
+  "status": "PASS",
+  "suites": 40,
+  "assertions": 1646,
+  "nativeGuards": 50,
+  "evidence": ".ci-results/domain-sql.json",
+  "environment": "local-synthetic-working-tree"
+}

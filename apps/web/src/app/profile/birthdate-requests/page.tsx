@@ -1,13 +1,13 @@
 import { AppShell } from "@/components/app-shell";
 import { createServerApiClient } from "@/lib/api/server";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BirthdateReviews,type BirthdateReview } from "./reviews";
 export const metadata = { title: "Correcciones de fecha de nacimiento" };
 export default async function BirthdateRequestsPage() {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         redirect("/login");
     let data: BirthdateReview[] | null = null;

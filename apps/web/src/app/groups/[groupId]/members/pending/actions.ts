@@ -1,6 +1,6 @@
 "use server";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { MEMBERSHIP_REVIEW_ERROR_MESSAGES,membershipReviewSchema } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 export type MembershipReviewResult = {
@@ -20,8 +20,8 @@ export async function reviewMembership(input: unknown): Promise<MembershipReview
     if (!parsed.success)
         return fail("invalid_membership_review");
     try {
-        const supabase = await createClient();
-        const { data: { user } } = await supabase.auth.getUser();
+        const sessionClient = await createSessionClient();
+        const { data: { user } } = await sessionClient.auth.getUser();
         if (!user)
             return fail("authentication_required");
         const { group_id, membership_id, decision } = parsed.data;

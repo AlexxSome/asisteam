@@ -3,8 +3,8 @@ await suite('checks', async () => {
   await check('ci-runner-tests', 'node', ['--test', 'scripts/ci/run.test.mjs', 'scripts/ci/qualification.test.mjs'], { noSkip: true });
   await check('lint', 'pnpm', ['lint']);
   await check('http-contract-generation', 'pnpm', ['api:check']);
+  await check('native-test-fixture-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/api', '--filter', '@asisteam/worker']);
   await check('typecheck', 'pnpm', ['typecheck']);
-  await check('api-contract-fixture-build', 'pnpm', ['--filter', '@asisteam/api', 'build']);
   await check('next-http-contract', 'pnpm', ['--filter', '@asisteam/web', 'test:api-contract']);
   await check('build', 'pnpm', ['build'], { env: { ASISTEAM_DATABASE_MODE: 'independent', NEXT_TELEMETRY_DISABLED: '1' } });
   await check('product-runtime-retirement', 'pnpm', ['ci:retirement']);

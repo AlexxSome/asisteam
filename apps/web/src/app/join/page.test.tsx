@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiClientError } from "@asisteam/api-client";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), pending: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({
-  createClient: async () => ({ auth: { getUser: mock.getUser } }),
+vi.mock("@/lib/api/session", () => ({
+  createSessionClient: async () => ({ auth: { getUser: mock.getUser } }),
 }));
 vi.mock("@/lib/api/server",()=>({createServerApiClient:()=>({listMembershipOnboarding:mock.pending})}));
 vi.mock("@/app/groups/[groupId]/actions", () => ({ joinByCode: vi.fn() }));

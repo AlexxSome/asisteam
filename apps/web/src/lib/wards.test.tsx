@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), listMyWards: vi.fn(), getWard: vi.fn(), listActivities: vi.fn(), getHomeActivities: vi.fn(), home: vi.fn(), history: vi.fn(), group: vi.fn(), listMembershipOnboarding: vi.fn(), listManagedActivations: vi.fn() }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => mock }));
 import { ApiClientError } from "@asisteam/api-client";
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser } }) }));
+vi.mock("@/lib/api/session", () => ({ createSessionClient: async () => ({ auth: { getUser: mock.getUser } }) }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/wards", redirect: (path: string) => { throw new Error(`redirect:${path}`); }, notFound: () => { throw new Error("404"); } }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
 vi.mock("@/lib/activities", async original => ({ ...await original<typeof import("@/lib/activities")>(), getWardHomeActivities: mock.home }));

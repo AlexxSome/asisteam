@@ -3,7 +3,7 @@ import { SocialLoginButtons } from '@/components/social-login-buttons';
 import { ActionLink } from "@/components/ui/button";
 import { getProfilePageData } from "@/lib/profile";
 import { getSocialProviderAvailability } from '@/lib/social-auth';
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { SUPPORT_EMAIL,SUPPORT_REQUEST_URLS } from "@/lib/support";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -13,8 +13,8 @@ export const metadata = { title: "Mi perfil" };
 export default async function ProfilePage({ searchParams }: {
     searchParams?: Promise<Record<string, string | string[] | undefined>>;
 } = {}) {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         redirect("/login");
     let data;

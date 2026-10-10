@@ -10,7 +10,6 @@
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "supabase": "supabase",
     "lint": "eslint . --max-warnings=0",
     "ci:checks": "node scripts/ci/checks.mjs",
     "api:generate": "pnpm --filter @asisteam/core build && pnpm --filter @asisteam/api-client generate",
@@ -26,7 +25,6 @@
     "@eslint/js": "10.0.1",
     "eslint": "10.12.0",
     "globals": "17.4.0",
-    "supabase": "^2.0.0",
     "turbo": "^2.3.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.71.1"
@@ -35,8 +33,7 @@
     "onlyBuiltDependencies": [
       "argon2",
       "esbuild",
-      "sharp",
-      "supabase"
+      "sharp"
     ]
   }
 }

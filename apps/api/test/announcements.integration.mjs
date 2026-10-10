@@ -91,7 +91,7 @@ test('MIG-15 Nest HTTP/SQL and two Expo workers: roles, opt-in, retries, tokens,
     try{await assert.rejects(control.query("update app_private.announcement_executor set mode='WORKER'"),{code:'42501'})}finally{await control.end()}
     await db.query("update app_private.announcement_executor set mode='WORKER',draining_since=null,activated_at=now()");
     assert.equal((await db.query("select mode from app_private.announcement_executor")).rows[0].mode,'WORKER');
-    await assert.rejects(db.query('select public.claim_announcement_push(false)'),{code:'55000'});
+    assert.equal((await db.query("select to_regprocedure('public.claim_announcement_push(boolean)') as retired")).rows[0].retired,null);
     // Two simultaneous workers accept once and receipts never resend the message.
     await Promise.all(apps.map(instance=>instance.get(AnnouncementWorker).tick()));assert.equal(requests.length,1);
     assert.ok(!requests[0].body.includes('privado')); assert.equal(JSON.parse(requests[0].body).to,token);

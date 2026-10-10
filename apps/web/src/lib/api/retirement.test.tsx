@@ -10,7 +10,7 @@ vi.mock('next/navigation',()=>({RedirectType:{replace:'replace'},redirect:(path:
 vi.mock('next/cache',()=>({revalidatePath:f.revalidate}));
 vi.mock('./native-auth',()=>({assertAuthOrigin:f.origin,clearNativeCookies:f.clear,setNativeCookies:f.tokens,nativeAuthClient:async()=>({loginPassword:f.login,logoutSession:f.logout,refreshSession:f.refresh})}));
 vi.mock('./server',()=>({createServerApiClient:()=>({getOwnProfile:f.profile,listMembershipOnboarding:f.onboarding,listManagedActivations:f.activations,getCurrentAccountConsent:f.consent})}));
-vi.mock('@/lib/supabase/server',()=>({createClient:async()=>({auth:{getUser:f.user,getSession:async()=>({data:{session:{user:{id:'synthetic'},access_token:'synthetic'}}})}})}));
+vi.mock('@/lib/api/session',()=>({createSessionClient:async()=>({auth:{getUser:f.user,getSession:async()=>({data:{session:{user:{id:'synthetic'},access_token:'synthetic'}}})}})}));
 vi.mock('@/lib/groups',()=>({groupHomePath:f.home,getMyPendingMemberships:f.pending,getGroup:f.group}));
 vi.mock('@/components/app-shell',()=>({AppShell:({children}:{children:React.ReactNode})=><main>{children}</main>}));
 vi.mock('@/app/groups/[groupId]/members/pending/membership-review',()=>({PendingJoinRequests:()=>null}));

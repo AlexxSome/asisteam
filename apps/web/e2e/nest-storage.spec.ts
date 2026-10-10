@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { readFileSync } from 'node:fs';
 import { email } from './data.mjs';
 import { quote, sql } from './local-fixtures.mjs';
@@ -21,6 +21,6 @@ test('MIG-17 perfil375px: subir foto→proxy autorizado y errores sin revelar S3
     await expect(page.getByRole('alert').filter({hasText:'El contenido no corresponde'})).toBeVisible();
     await checkLayout(page);await checkAccessibility(page,info);
     await page.context().clearCookies();expect((await page.request.get(reference)).status()).toBe(404);
-    const report=JSON.parse(readFileSync('.next/qa/log-check.json','utf8'));for(const key of ['token','sensitivePayload','sensitiveUrl'])expect(report[key],key).toBe(false);
+    const report=JSON.parse(readFileSync('.qa/log-check.json','utf8'));for(const key of ['token','sensitivePayload','sensitiveUrl'])expect(report[key],key).toBe(false);
   }finally{sql(`update public.users set avatar_url=${previous?quote(previous):'null'} where email=${quote(email('athlete'))}`);}
 });

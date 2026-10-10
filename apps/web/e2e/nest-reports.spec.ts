@@ -1,9 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { email, groups, rosterName } from './data.mjs';
 import { checkAccessibility, checkLayout, login, screenshot, visit } from './helpers';
 import { quote, sql } from './local-fixtures.mjs';
 
-test.skip(process.env.ASISTEAM_QA_NEST !== '1', 'Requiere Next→Nest→PostgreSQL local');
 test('MIG-12 ADMIN filtros, paginación y tabla accesible por teclado a375px',async({page},info)=>{
  await page.setViewportSize({width:375,height:812});await login(page,'admin');
  await visit(page,`/groups/${groups.large}/reports?period=season`);

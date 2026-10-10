@@ -4,7 +4,7 @@ const mock=vi.hoisted(()=>({ from:vi.fn(),rpc:vi.fn(),getGroup:vi.fn(),listGroup
 vi.mock("react",async original=>({...await original<typeof import("react")>(),cache:(fn:unknown)=>fn}));
 vi.mock("next/navigation",()=>({notFound:()=>{throw new Error('404');}}));
 vi.mock("next/cache",()=>({revalidatePath:mock.revalidate}));
-vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({from:mock.from,rpc:mock.rpc})}));
+vi.mock("@/lib/api/session",()=>({createSessionClient:async()=>({from:mock.from,rpc:mock.rpc})}));
 vi.mock("./server",()=>({createServerApiClient:()=>mock}));
 vi.mock("../groups",()=>({getGroup:mock.getGroup,getMyGroups:async()=>({groups:[{id,name:'Club'}]})}));
 vi.mock("../wards",()=>({getWard:async()=>({groups:[{group_id:id,name:'Club',membership_status:'ACTIVE'},{group_id:other,name:'Otro',membership_status:'PENDING'}]})}));
@@ -13,7 +13,7 @@ import {createActivity,updateActivity,deleteActivity} from "@/app/groups/[groupI
 import {createActivityType,updateActivityType} from "@/app/groups/[groupId]/activity-types/actions";
 const id='17000000-0000-4000-8000-000000000201',other='17000000-0000-4000-8000-000000000202';
 const form={title:'Actividad sintética',activity_type_id:id,description:'',location:'',starts_at:'2026-09-05T18:30',ends_at:'2026-09-05T20:00',recurrence_rule:null};
-beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_ACTIVITIES','nest');vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');mock.listGroupActivities.mockResolvedValue({activities:[],hasNext:false});mock.listActivities.mockResolvedValue({activities:[{id,group_id:id}],hasNext:false});});
+beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_ACTIVITIES','nest');mock.listGroupActivities.mockResolvedValue({activities:[],hasNext:false});mock.listActivities.mockResolvedValue({activities:[{id,group_id:id}],hasNext:false});});
 afterEach(()=>vi.unstubAllEnvs());
 it('agendas mantienen página/período y filtran grupos ACTIVE del pupilo',async()=>{
   await getActivities(id,2,'past');expect(mock.listGroupActivities).toHaveBeenLastCalledWith({params:{groupId:id},query:{page:2,period:'past'}});

@@ -302,7 +302,7 @@ Alcance confirmado para #58: web, cámara del teléfono y apertura del enlace; h
 1. **Dado** que elijo "Continuar con Google" con un email ya registrado en `users`, **cuando** autorizo, **entonces** inicio sesión en la cuenta existente sin crear duplicados.
 2. **Dado** un email nuevo, **cuando** completo el login social, **entonces** se crea la cuenta ACTIVE y sigo el onboarding estándar (HU-GEN-01, criterio 3).
 
-Implementación web: Supabase Auth OAuth con PKCE; configuración y validación por entorno en [doc 07 §2.1](07-api-y-backend.md#21-auth). Se conserva la fecha obligatoria antes de incorporarse como ATHLETE y el flujo de consentimiento para cuentas MANAGED.
+Implementación web: Auth propio de Nest OAuth con PKCE; configuración y validación por entorno en [doc 07 §2.1](07-api-y-backend.md#21-auth). Se conserva la fecha obligatoria antes de incorporarse como ATHLETE y el flujo de consentimiento para cuentas MANAGED.
 
 ## 4. Tabla resumen
 

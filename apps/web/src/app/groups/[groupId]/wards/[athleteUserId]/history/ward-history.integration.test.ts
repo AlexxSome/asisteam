@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createNativeClient, nativeIntegrationConfig, nativeSql, nativeInvitationRequest, type NativePersistenceClient } from "../../../../../../../test/native-persistence.mjs";
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { attendanceHistorySchema, groupStatsSchema } from "@asisteam/core";
@@ -7,33 +7,30 @@ import { attendanceHistorySchema, groupStatsSchema } from "@asisteam/core";
 const suite = describe.skipIf(process.env.RUN_WARD_HISTORY_INTEGRATION !== "1");
 const run = randomUUID().replaceAll("-", "");
 const email = (name: string) => `issue47-${run}-${name}@example.test`;
-const clients: Record<string, SupabaseClient> = {};
+const clients: Record<string, NativePersistenceClient> = {};
 const authIds: string[] = [];
 const athleteUserId = randomUUID();
 const otherAthleteId = randomUUID();
 const membershipId = randomUUID();
 const guardianshipId = randomUUID();
-let service: SupabaseClient;
+let service: NativePersistenceClient;
 let groupId: string;
-function sql(query: string) {
-  return execFileSync("docker", ["exec", "-i", "supabase_db_asisteam", "psql", "-U", "postgres", "-d", "postgres", "-At", "-v", "ON_ERROR_STOP=1"], { input: query, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }).trim();
-}
-suite("historial del pupilo con Auth y PostgREST reales", () => {
+const sql = nativeSql;
+suite("historial del pupilo con Auth y SQL/RLS reales", () => {
   beforeAll(async () => {
-    const config = JSON.parse(execFileSync("../../node_modules/.bin/supabase", ["status", "-o", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }));
-    if (!["127.0.0.1", "localhost"].includes(new URL(config.API_URL).hostname)) throw new Error("Solo se admite Supabase local");
-    const options = { auth: { persistSession: false, autoRefreshToken: false } };
-    service = createClient(config.API_URL, config.SERVICE_ROLE_KEY, options);
+    const config = await nativeIntegrationConfig();
+    if (!["127.0.0.1", "localhost"].includes(new URL(config.API_ORIGIN).hostname)) throw new Error("Solo se admite PostgreSQL/Nest local");
+      service = createNativeClient(config.API_ORIGIN, config.OPERATOR_TOKEN);
     for (const name of ["owner", "guardian", "outsider"]) {
       const password = `Synthetic-${randomUUID()}!`;
-      const created = await service.auth.admin.createUser({ email: email(name), password, email_confirm: true, user_metadata: { full_name: "Persona sintética", birthdate: "1990-01-01" } });
+      const created = await service.fixtureAccount({ email: email(name), password,  profile: { account_terms: { accepted: true, version: "2026-09-21" }, full_name: "Persona sintética", birthdate: "1990-01-01" } });
       if (created.error) throw new Error("No se pudo preparar cuenta sintética");
       authIds.push(created.data.user.id);
-      const client = createClient(config.API_URL, config.ANON_KEY, options);
+      const client = createNativeClient(config.API_ORIGIN, config.GUEST_TOKEN);
       if ((await client.auth.signInWithPassword({ email: email(name), password })).error) throw new Error("No se pudo iniciar sesión sintética");
       clients[name] = client;
     }
-    const group = await clients.owner!.rpc("create_group", { p_name: "Historial pupilo integración", p_sport: "Tenis" });
+    const group = await clients.owner!.operation("create_group", { p_name: "Historial pupilo integración", p_sport: "Tenis" });
     expect(group.error).toBeNull(); groupId = group.data;
     // Estos contratos anteriores a billing ejercitan clubes legacy (límite 500).
     sql(`insert into app_private.billing_legacy_groups(group_id) values('${groupId}');`);
@@ -62,59 +59,47 @@ suite("historial del pupilo con Auth y PostgREST reales", () => {
         from public.activities a join public.groups g on g.id=a.group_id
         join public.memberships m on m.group_id=g.id and m.role='ATHLETE' where g.id='${groupId}';`);
   }, 30000);
-  afterAll(async () => {
-    if (!service) return;
-    const users = `select id from public.users where email like 'issue47-${run}-%@example.test' or id in ('${athleteUserId}','${otherAthleteId}')`;
-    const groups = `select id from public.groups where created_by in (${users})`;
-    // Solo fixtures sintéticos de esta ejecución; nunca se admite una URL remota.
-    sql(`begin; set local session_replication_role=replica;
-      delete from public.attendance_records where activity_id in (select id from public.activities where group_id in (${groups}));
-      delete from public.activities where group_id in (${groups});
-      delete from public.consents where guardianship_id in (select id from public.guardianships where athlete_user_id='${athleteUserId}');
-      delete from public.guardianships where athlete_user_id='${athleteUserId}';
-      delete from public.memberships where group_id in (${groups});
-      delete from app_private.billing_legacy_groups where group_id in (select id from public.groups where id in (${groups})); delete from public.groups where id in (${groups}); delete from public.users where id in (${users}); commit;`);
-    for (const id of authIds) await service.auth.admin.deleteUser(id);
-  });
+  // The runner disposes its entire uniquely owned synthetic database; no
+  // delete/trigger-bypass cleanup is exposed to product credentials.
   it("JWT del apoderado devuelve solo pupilo, métricas completas y página solicitada", async () => {
-    const response = await clients.guardian!.rpc("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId, p_period: "month", p_from: "2026-03-01", p_page: 2, p_page_size: 2 });
+    const response = await clients.guardian!.operation("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId, p_period: "month", p_from: "2026-03-01", p_page: 2, p_page_size: 2 });
     expect(response.error).toBeNull();
     const history = attendanceHistorySchema.parse(response.data);
     expect(history.membership_id).toBe(membershipId);
     expect(history.records.map((record) => record.title)).toEqual(["Pupilo 2", "Pupilo 1"]);
     expect(history.records.every((record) => record.note === "Nota del pupilo")).toBe(true);
     expect(history.totals).toMatchObject({ convened: 4, present: 1, late: 1, absent: 1, excused: 1, attendance_pct: 66.7 });
-    const filtered = await clients.guardian!.rpc("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId, p_period: "custom", p_from: "2026-03-04", p_to: "2026-03-04" });
+    const filtered = await clients.guardian!.operation("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId, p_period: "custom", p_from: "2026-03-04", p_to: "2026-03-04" });
     expect(filtered.error).toBeNull();
     expect(attendanceHistorySchema.parse(filtered.data).totals).toMatchObject({ convened: 1, excused: 1, attendance_pct: null });
   });
   it("rechaza identidades ajenas y mantiene la proyección directa cerrada a terceros", async () => {
     for (const client of [clients.guardian!, clients.outsider!]) {
-      const response = await client.rpc("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: otherAthleteId });
-      expect(response.error?.code).toBe("PT404");
+      const response = await client.operation("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: otherAthleteId });
+      expect(response.status).toBe(404);
     }
-    const outsider = await clients.outsider!.rpc("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId });
-    expect(outsider.error?.code).toBe("PT404");
-    const view = await clients.guardian!.from("v_ward_attendance_history").select("athlete_user_id,note").eq("group_id", groupId);
+    const outsider = await clients.outsider!.operation("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId });
+    expect(outsider.status).toBe(404);
+    const view = await clients.guardian!.sqlTable("v_ward_attendance_history").select("athlete_user_id,note").eq("group_id", groupId);
     expect(view.error).toBeNull(); expect(view.data).toHaveLength(4);
     expect(view.data!.every((row) => row.athlete_user_id === athleteUserId && row.note === "Nota del pupilo")).toBe(true);
-    expect((await clients.guardian!.from("v_ward_attendance_history").select("phone")).error).not.toBeNull();
+    expect((await clients.guardian!.sqlTable("v_ward_attendance_history").select("phone")).error).not.toBeNull();
   });
   it("HU-APO-05 evalúa ambos toggles independientemente y revoca agregados sin ocultar al pupilo", async () => {
     const guardian = clients.guardian!;
     const token = (await guardian.auth.getSession()).data.session!.access_token;
     const ownArgs = { p_group_id: groupId, p_athlete_user_id: athleteUserId, p_period: "season" };
-    const own = await guardian.rpc("get_ward_attendance_history", ownArgs);
+    const own = await guardian.operation("get_ward_attendance_history", ownArgs);
     expect(own.error).toBeNull();
     expect(own.data.totals.attendance_pct).toBe(66.7);
     for (const athletes of [false, true]) {
       for (const guardians of [false, true]) {
-        const settings = await clients.owner!.rpc("update_group_settings", {
+        const settings = await clients.owner!.operation("update_group_settings", {
           p_group_id: groupId, p_changes: { athletes_can_view_group_stats: athletes, guardians_can_view_group_stats: guardians },
         });
         expect(settings.error).toBeNull();
-        const response = await guardian.rpc("get_group_stats", { p_group_id: groupId });
-        const direct = await guardian.from("v_group_stats_members").select("*").eq("group_id", groupId);
+        const response = await guardian.operation("get_group_stats", { p_group_id: groupId });
+        const direct = await guardian.sqlTable("v_group_stats_members").select("*").eq("group_id", groupId);
         expect(direct.error).toBeNull();
         if (guardians) {
           expect(response.error).toBeNull();
@@ -132,26 +117,26 @@ suite("historial del pupilo con Auth y PostgREST reales", () => {
           expect(response.data).toBeNull();
           expect(direct.data).toEqual([]);
         }
-        const stillOwn = await guardian.rpc("get_ward_attendance_history", ownArgs);
+        const stillOwn = await guardian.operation("get_ward_attendance_history", ownArgs);
         expect(stillOwn.error).toBeNull();
         expect(stillOwn.data).toEqual(own.data);
       }
     }
-    expect((await guardian.rpc("get_group_attendance_report", { p_group_id: groupId })).status).toBe(403);
-    expect((await guardian.rpc("get_ward_attendance_history", { ...ownArgs, p_athlete_user_id: otherAthleteId })).status).toBe(404);
-    expect((await clients.outsider!.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(404);
-    expect((await guardian.from("v_my_ward_groups").select("athlete_user_id").eq("group_id", groupId).eq("membership_status", "ACTIVE")).data).toEqual([{ athlete_user_id: athleteUserId }]);
-    expect((await clients.owner!.rpc("update_group_settings", { p_group_id: groupId, p_changes: { guardians_can_view_group_stats: false } })).error).toBeNull();
-    expect((await guardian.rpc("get_group_stats", { p_group_id: groupId })).status).toBe(403);
-    expect((await guardian.rpc("get_ward_attendance_history", ownArgs)).data).toEqual(own.data);
+    expect((await guardian.operation("get_group_attendance_report", { p_group_id: groupId })).status).toBe(403);
+    expect((await guardian.operation("get_ward_attendance_history", { ...ownArgs, p_athlete_user_id: otherAthleteId })).status).toBe(404);
+    expect((await clients.outsider!.operation("get_group_stats", { p_group_id: groupId })).status).toBe(404);
+    expect((await guardian.sqlTable("v_my_ward_groups").select("athlete_user_id").eq("group_id", groupId).eq("membership_status", "ACTIVE")).data).toEqual([{ athlete_user_id: athleteUserId }]);
+    expect((await clients.owner!.operation("update_group_settings", { p_group_id: groupId, p_changes: { guardians_can_view_group_stats: false } })).error).toBeNull();
+    expect((await guardian.operation("get_group_stats", { p_group_id: groupId })).status).toBe(403);
+    expect((await guardian.operation("get_ward_attendance_history", ownArgs)).data).toEqual(own.data);
     expect((await guardian.auth.getSession()).data.session!.access_token).toBe(token);
   });
 
   it("revoca el vínculo y la misma sesión pierde acceso a RPC y vista", async () => {
     sql(`update public.guardianships set status='INACTIVE',deactivated_at=now() where id='${guardianshipId}';`);
-    const response = await clients.guardian!.rpc("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId });
-    expect(response.error?.code).toBe("PT404");
-    const view = await clients.guardian!.from("v_ward_attendance_history").select("id").eq("group_id", groupId);
+    const response = await clients.guardian!.operation("get_ward_attendance_history", { p_group_id: groupId, p_athlete_user_id: athleteUserId });
+    expect(response.status).toBe(404);
+    const view = await clients.guardian!.sqlTable("v_ward_attendance_history").select("id").eq("group_id", groupId);
     expect(view.error).toBeNull(); expect(view.data).toEqual([]);
   });
 });

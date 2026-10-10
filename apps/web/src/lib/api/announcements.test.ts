@@ -3,13 +3,13 @@ import { ApiClientError } from "@asisteam/api-client";
 const mock=vi.hoisted(()=>({rpc:vi.fn(),from:vi.fn(),getAnnouncements:vi.fn(),publishAnnouncement:vi.fn(),updateAnnouncement:vi.fn(),deleteAnnouncement:vi.fn(),setAnnouncementPush:vi.fn(),revalidate:vi.fn()}));
 vi.mock("next/navigation",()=>({notFound:()=>{throw new Error('404');}}));
 vi.mock("next/cache",()=>({revalidatePath:mock.revalidate}));
-vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({rpc:mock.rpc,from:mock.from})}));
+vi.mock("@/lib/api/session",()=>({createSessionClient:async()=>({rpc:mock.rpc,from:mock.from})}));
 vi.mock("@/lib/groups",()=>({getGroup:async(id:string)=>({id,roles:['ADMIN']})}));
 vi.mock("./server",()=>({createServerApiClient:()=>mock}));
 import { getAnnouncements } from "../announcements";
 import { publishAnnouncement,updateAnnouncement,deleteAnnouncement,setAnnouncementPush } from "@/app/groups/[groupId]/announcements/actions";
 const group='15900000-0000-4000-8000-000000000201',id='15900000-0000-4000-8000-000000000301',version='2026-10-07T15:00:00.123456Z',input={title:' Aviso ',body:' Texto '};
-beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_ANNOUNCEMENTS','nest');vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','http://127.0.0.1:54321');vi.stubEnv('ASISTEAM_API_SUPABASE_URL','http://127.0.0.1:54321');});
+beforeEach(()=>{vi.resetAllMocks();vi.stubEnv('ASISTEAM_TRANSPORT_ANNOUNCEMENTS','nest');});
 afterEach(()=>vi.unstubAllEnvs());
 it('muro/preferencias utiliza únicamente SDK y conserva página',async()=>{
  mock.getAnnouncements.mockResolvedValue({announcements:[],page:2,pushEnabled:false,hasDevices:true});expect(await getAnnouncements(group,'2')).toMatchObject({page:2,hasDevices:true});expect(mock.getAnnouncements).toHaveBeenCalledWith({params:{groupId:group},query:{page:2}});expect(mock.rpc).not.toHaveBeenCalled();expect(mock.from).not.toHaveBeenCalled();

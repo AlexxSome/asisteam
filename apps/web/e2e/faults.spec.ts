@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { checkAccessibility, checkLayout, login, screenshot } from './helpers';
 import { flowGroup } from './local-fixtures.mjs';
 

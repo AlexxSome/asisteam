@@ -1,10 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { email } from './data.mjs';
 import { checkAccessibility, checkLayout, login, visit } from './helpers';
 import { activityType, flowGroup, prepareFlowGroup, quote, sql } from './local-fixtures.mjs';
 
-test.skip(process.env.ASISTEAM_QA_NEST !== '1', 'Requiere Next→Nest→PostgreSQL local');
 test.beforeAll(() => prepareFlowGroup());
 test('MIG-10 formulario: fechas Chile/DST, serie futura, historial y tipos a375px', async ({ page }, info) => {
   const name = `MIG10 ${randomUUID().slice(0, 8)}`, typeName=`Tipo ${name}`;

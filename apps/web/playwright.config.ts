@@ -2,15 +2,15 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  testIgnore: [...(process.env.ASISTEAM_QA_STORAGE === '1' ? [] : ['**/nest-storage.spec.ts']), ...(process.env.ASISTEAM_QA_NEST === '1' ? ['**/faults.spec.ts'] : ['**/faults.spec.ts', '**/nest-*.spec.ts']), ...(process.env.ASISTEAM_QA_INVITATIONS === '1' ? [] : ['**/nest-invitations.spec.ts'])],
+  testIgnore: ['**/faults.spec.ts', ...(process.env.ASISTEAM_QA_STORAGE === '1' ? [] : ['**/nest-storage.spec.ts']), ...(process.env.ASISTEAM_QA_INVITATIONS === '1' ? [] : ['**/nest-invitations.spec.ts'])],
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: 0,
   timeout: 60_000,
   expect: { timeout: 10_000 },
-  outputDir: '.next/qa/results',
-  reporter: [['list'], ['html', { outputFolder: '.next/qa/report', open: 'never' }]],
+  outputDir: '.qa/results',
+  reporter: [['list'], ['html', { outputFolder: '.qa/report', open: 'never' }]],
   use: {
     baseURL: 'http://127.0.0.1:3120', browserName: 'chromium',
     viewport: { width: 375, height: 812 }, locale: 'es-CL', timezoneId: 'America/Santiago',

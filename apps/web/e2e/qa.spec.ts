@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { readFileSync } from 'node:fs';
 import { activity, email, groups, password, pendingName, roles, rosterName, wardName } from './data.mjs';
 import { checkAccessibility, checkLayout, focusIsVisible, login, screenshot, visit } from './helpers';
@@ -158,8 +158,8 @@ test('@smoke logs: login y registro reales sin argumentos privados', async ({ pa
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   // Existing synthetic account exercises the real action without sending email.
-  await expect(page.getByRole('main').getByRole('alert')).toContainText('ya está registrado');
-  await expect.poll(() => JSON.parse(readFileSync('.next/qa/log-check.json', 'utf8'))).toMatchObject({
+  await expect(page.getByRole('main').getByRole('alert')).toContainText('No pudimos crear tu cuenta. Revisa los datos y la contraseña o inicia sesión si ya tienes acceso.');
+  await expect.poll(() => JSON.parse(readFileSync('.qa/log-check.json', 'utf8'))).toMatchObject({
     loginPost: true, registerPost: true, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false,
   });
 });

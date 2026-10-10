@@ -1,10 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { email, groups, activity, rosterName, id } from './data.mjs';
 import { checkAccessibility, checkLayout, login, screenshot, visit } from './helpers';
 import { activityType, quote, sql } from './local-fixtures.mjs';
 
-test.skip(process.env.ASISTEAM_QA_NEST !== '1', 'Requiere Next→Nest→PostgreSQL local');
 test('MIG-11 guardado, recarga, corrección ADMIN y COACH por teclado a375px', async ({ page, context }, info) => {
   const coach=sql(`select id from public.users where email=${quote(email('coach'))}`);
   const previous=sql(`select count(*) from public.memberships where user_id='${coach}' and group_id='${groups.single}' and role='COACH'`);

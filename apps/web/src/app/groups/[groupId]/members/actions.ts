@@ -1,7 +1,7 @@
 "use server";
 import { invitationOperation } from "@/lib/invitations";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { MEMBER_MANAGEMENT_ERRORS,coachAssignmentSchema,managedActivationSchema,managedMemberUpdateSchema,memberStatusSchema } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 import { sendInvitation } from "../invitations/new/actions";
@@ -24,7 +24,7 @@ export async function requestManagedActivation(input: unknown): Promise<MemberRe
     if (!parsed.success)
         return fail("invalid_activation_request");
     try {
-        const client = await createClient();
+        const client = await createSessionClient();
         if (!(await client.auth.getUser()).data.user)
             return fail("authentication_required");
         const { group_id, membership_id } = parsed.data;
@@ -48,7 +48,7 @@ export async function updateManagedMember(input: unknown): Promise<MemberResult>
     if (!parsed.success)
         return fail("invalid_managed_member");
     try {
-        const client = await createClient();
+        const client = await createSessionClient();
         if (!(await client.auth.getUser()).data.user)
             return fail("authentication_required");
         const { group_id, membership_id, profile } = parsed.data;
@@ -69,7 +69,7 @@ export async function changeMemberStatus(input: unknown): Promise<MemberResult> 
     if (!parsed.success)
         return fail("invalid_member_request");
     try {
-        const client = await createClient();
+        const client = await createSessionClient();
         if (!(await client.auth.getUser()).data.user)
             return fail("authentication_required");
         const { group_id, membership_id, action } = parsed.data;
@@ -88,7 +88,7 @@ export async function assignMemberCoach(input: unknown): Promise<MemberResult> {
     if (!parsed.success)
         return fail("invalid_member_request");
     try {
-        const client = await createClient();
+        const client = await createSessionClient();
         if (!(await client.auth.getUser()).data.user)
             return fail("authentication_required");
         const { group_id, membership_id } = parsed.data;

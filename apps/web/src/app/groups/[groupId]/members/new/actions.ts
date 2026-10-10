@@ -1,7 +1,7 @@
 "use server";
 import { isGroupId } from "@/lib/group-routing";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { MANAGED_MEMBER_ERROR_MESSAGES,managedMemberResultSchema,managedMemberSchema,type ManagedMemberResult } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 import { sendInvitation } from "../../invitations/new/actions";
@@ -24,8 +24,8 @@ export async function createManagedMember(groupId: string, input: unknown): Prom
     const parsed = managedMemberSchema.safeParse(input);
     if (!parsed.success)
         return { error: { code: "invalid_managed_member", message: "Revisa los campos indicados.", details: parsed.error.flatten().fieldErrors } };
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         return fail("authentication_required");
     try {

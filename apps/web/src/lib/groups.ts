@@ -1,7 +1,7 @@
 import { createServerApiClient } from "@/lib/api/server";
 import { activeGroupCookie,isGroupId } from "@/lib/group-routing";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { ApiClientError } from "@asisteam/api-client";
 import { groupCapacitySchema,type MembershipRole } from "@asisteam/core";
 import { cookies } from "next/headers";
@@ -15,8 +15,8 @@ export type MyGroup = {
     roles: MembershipRole[];
 };
 export const getMyGroups = cache(async () => {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user } } = await sessionClient.auth.getUser();
     if (!user)
         redirect("/login");
     {

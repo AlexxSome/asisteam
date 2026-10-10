@@ -1,28 +1,31 @@
-# MIG-24 (#168): retiro completo del repositorio, en reparación
+# MIG-24 (#168): retiro completo del repositorio
 
-[Seguro] El alcance vigente exige retirar código, SDK, configuración, fixtures, tooling y CI Supabase del repositorio, conservando las reglas y cobertura del producto en PostgreSQL/Nest/Next independientes. La instrucción anterior de conservar receptores Mercado Pago y pruebas de origen quedó sustituida por «ci con error y no es necesario dejar cosas de supabase». No se autoriza destruir recursos remotos, borrar datos ni ejecutar el corte real.
+[Seguro] El candidato usa exclusivamente Next → Nest/Auth nativo → PostgreSQL17/RLS y Worker/S3 privados. Se retiran SDK/CLI/dependencias, configuración, Edge Functions, fixtures y tooling del proveedor, incluidos sus imports de desarrollo y CI. Las reglas de dominio y cobertura vigente se trasladan; no se declara el corte real completado.
 
-[Seguro] El retiro todavía está incompleto. El CI inicial del PR [#206](https://github.com/AlexxSome/asisteam/pull/206), commit `6ffbf2d5e3b40b550b33d9c69047e9945d71869d`, falló. Las reparaciones incrementales siguientes se verifican y publican en el mismo PR; los resultados locales no acreditan CI remoto verde.
+## Base y entrega
 
-## Reparaciones verificables
+Rama `codex/168-retiro-completo-supabase`, base sincronizada `develop@13a0a643431f480e1ddf4c83022c8083c31beb68`. Esa base incorpora PR [#206](https://github.com/AlexxSome/asisteam/pull/206): su CI rojo inicial `6ffbf2d` se reparó en `402036c10af8dc1a506e4e183a389b618946ba3c`, con [CI verde](https://github.com/AlexxSome/asisteam/actions/runs/38013511084), antes del merge. El retiro final se entrega en [PR207](https://github.com/AlexxSome/asisteam/pull/207). La evidencia de ese hito es histórica; los informes del nuevo PR corresponden al retiro final y se verifican en su propio SHA.
 
-- Se reemplazaron las 39 suites web archivadas (466 casos) por 472 casos del producto nativo, sin omisiones. El [mapa de equivalencia](native-web-coverage.md) registra origen, reemplazo y alcance. Los snapshots, alias y manifest del archivo web se retiraron después de probar la equivalencia.
-- Las integraciones API y worker usan PostgreSQL independiente con fixture desechable, JWT y familias nativas. Las pruebas mantienen permisos, concurrencia, menores/consentimientos, historial, métricas, invitaciones, Google/Apple, archivos privados, facturas y persistencia tras reinicio.
-- El relay Mercado Pago de core y su receptor Edge del repositorio se retiraron. Billing prueba directamente HTTP Nest, firma/replay, fallo de escritura antes del ACK y reintento duradero. No se conserva código del receptor anterior por hipótesis de reintentos externos.
-- El reconciliador de archivos utiliza S3 privado en ambos extremos, verifica referencias, contenido, checksum, privacidad y delta final. No necesita CLI/SDK/Storage Supabase.
-- La batería SQL canónica de métrica pasó a `packages/db/tests/report_metrics.test.sql` sin eliminar sus assertions. El esquema canónico y las reglas RLS no se modificaron en esta reparación.
-- El smoke Chromium verifica logout de la familia actual, revocación de su refresh, conservación de otra sesión/dispositivo y logout anónimo idempotente.
+## Cobertura y retiro
 
-## Trabajo que bloquea la entrega
+| Requisito | Implementación y evidencia |
+|---|---|
+| Retirar runtime/dev/CLI/fixtures | Manifests y lockfile sin proveedor; `supabase/`, fixture de origen API y tipos/tooling de origen retirados. [Inventario histórico con hashes](source-retirement-manifest.json) |
+| Mantener SQL/RLS/domain | 40 suites/1646 aserciones en `packages/db/tests/domain`; [equivalencia SQL](sql-native-coverage.json). Fixture propio PostgreSQL, sin schemas/servicios del proveedor |
+| Mantener métrica/guards | 50 guards independientes, incluidas las 27 métricas originales trasladadas; casos canónicos compartidos con core |
+| Mantener integraciones | 16 archivos, 80 casos y **628 aserciones originales**, invocan Nest/Auth y SQL/RLS real; [mapa reconciliado](pending-integration-coverage.json). Cuatro casos adicionales conservan recuperación ACTIVE/INVITED, expiración, reset/login/replay/logout |
+| Mantener unidades y UI | 39 suites web portadas en el hito anterior ([mapa](native-web-coverage.md)); handlers vigentes prueban controladores Nest y motor Worker/core, sin importar código retirado |
+| Evitar retorno a producto | `ci:retirement`: manifests/lock, fuentes y tooling, 39 trazas Next, rutas y bundles server/browser/API/Worker; siete gates. Probe verifica detección del SDK prohibido |
+| Catálogo y recuperación | Migración incremental 0002 retira entrypoints/autoridades anteriores; generador propio, catálogo actual, freeze/delta/forward recovery, backup/PITR. Baseline0001 inmutable conserva historial de migración; un guard inspecciona todas las rutinas instaladas tras 0002 y exige ausencia de branches/entrypoints del proveedor |
 
-[Seguro] Graphify no identifica íntegramente los archivos SQL, fixtures y consumidores de tooling restantes. La skill requiere autorización antes de usar una navegación alternativa. Está pendiente la excepción acotada solicitada por el coordinador; no se ejecutó ese inventario por otros medios.
+[Seguro] Auth/register/claim/emisión de invitaciones y writes de dominio pasan por endpoints reales Nest, con JWT/cookies, actor transaccional y roles mínimos. SQL directo se usa solo para fixtures/aserciones internas bajo contexto nativo. Las respuestas externas Resend/Mercado Pago/Expo son sintéticas; no acreditan sus contratos remotos. Las fixtures se eliminan como una base completa de propiedad del ensayo, sin borrar historia del producto.
 
-[Seguro] Hay 80 casos web de integración condicionados por flags cuyos contratos todavía deben reconciliarse íntegramente con pruebas nativas. Tampoco se acreditó equivalencia de toda la batería SQL/RLS de origen. Las pruebas actuales aprobadas no justifican eliminar esos gates. La propuesta de reemplazo completo de backend CI está preparada pero no aplicada: sustituir esos gates sin esta evidencia reduciría cobertura. La reparación incremental sí ejecuta las suites portadas en PostgreSQL desechable y mantiene obligatorios los gates existentes de SQL, tipos, portabilidad y las 80 integraciones, con guards de cobertura.
+## Verificación y límites
 
-[Seguro] Por tanto, siguen pendientes el retiro restante de SDK/dependencias/configuración/tooling/SQL y fixtures identificados, actualización coherente de lockfile/CI/documentación canónica y auto-revisión del retiro final. La publicación incremental corrige CI sin representar ese retiro completo; verificar checks remotos del head publicado. No se declara repositorio libre de Supabase ni #168 completo.
+[Resultados del retiro final](rework-evidence.md) registra comandos, PASS/FAIL/omisiones y el alcance. CI exige los gates existentes y la cobertura íntegra; las 84 integraciones omitidas en unidades se ejecutan obligatoriamente sin omisiones en backend. Los reportes `.ci-results` generados por runners identifican SHA/fecha/entorno; una ejecución local con diff conserva su base y se identifica como working tree, no como commit publicado.
 
-## Evidencia y límite operativo
+[Seguro] La navegación alternativa acotada fue autorizada mediante «has lo que falta»; la restricción anterior ya no bloquea el inventario final. Los archivos locales ignorados del proveedor se conservaron fuera del repositorio sin revelar sus valores; no entran al commit. El cambio ajeno `apps/web/next-env.d.ts` se preserva byte a byte y se excluye del commit.
 
-[Seguro] La [evidencia inicial](evidence.md) registra el alcance anterior y sus verificaciones; sus PASS no corresponden a las reparaciones pendientes actuales. El mapa web enlazado acredita solo sus casos identificados. Los [resultados locales actuales](rework-evidence.md) y su [JSON saneado](rework-results.json) indican omisiones y fallos.
+[Seguro] Producción continúa **NO-GO**. La [matriz de aceptación y runbook](operational-acceptance.md) identifica responsables/ventana, destino, carga acordada, contratos reales, observabilidad, legal/QA humano y RPO/RTO que faltan. #166/#167 cerrados administrativamente no acreditan esa aceptación. No se ejecuta corte/deploy, apagado remoto, merge ni cierre de #168.
 
-[Seguro] Producción continúa **NO-GO**: #166/#167 requieren aceptación operativa, responsables, ventana, carga/proveedores/observabilidad reales y RPO/RTO aprobados. Estas condiciones externas no son motivo para retener código Supabase en el repositorio. El PR no ejecuta corte, merge ni cierre del issue.
+[Seguro] `billing_legacy_groups` conserva grupos con cupos anteriores por la decisión de negocio de #56 (doc12); no representa un transporte ni una autoridad del proveedor. Las claves de configuración retiradas solo aparecen en guards que rechazan usarlas y en pruebas negativas; no habilitan runtime.

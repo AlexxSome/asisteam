@@ -1,11 +1,9 @@
 # Modelo de datos
 
-[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+[Seguro] Vigencia MIG-24 (#168, 2026-10-10): Nest/Node24, PostgreSQL17 independiente, Auth propio y S3 privado son el único stack del repositorio. Dominio, RLS/V1–V6, menores, consentimientos y métricas se mantienen. [Evidencia y aceptación externa](migration/issue-168/README.md). Producción continúa NO-GO; no ejecutar corte/deploy real ni apagar receptores remotos.
 
 
-[Seguro] **MIG-20 (#164, 2026-10-08):** [Importación y retiro Auth](migration/issue-164/README.md) conserva UUID/perfil/hash/OAuth mediante ledger e importación congelada; añade autoridad persistente, propiedad por sujeto y restricciones de acceso importadas. Los helpers de actor y RLS ya no llaman auth.uid()/auth.jwt(); MANAGED mantiene cero credenciales hasta claim dirigido. El corte externo y proveedores reales permanecen pendientes de sus gates operativos.
 
-[Seguro] **MIG-18 (#162, 2026-10-08):** [Identidad y sesiones propias](migration/issue-162/README.md) conserva `public.users.id` y cambia la FK opcional `users.auth_user_id` a `app_private.auth_subjects`, mapa compatible con UUID GoTrue existentes y sujetos Nest nuevos. Se añaden credenciales, familias, hashes refresh/recovery y límites privados con RLS; MANAGED permanece sin credenciales hasta claim dirigido con consentimiento canónico. Esta migración no importa contraseñas/sesiones ni elimina `auth.users`; el DDL MVP de abajo se conserva como referencia histórica.
 
 **Proyecto:** Asisteam · **Fecha:** 2026-07-03 · **Documentos relacionados:** 02-roles-y-permisos.md, 03-modulos-y-flujos.md, 06-arquitectura-y-stack.md, 07-api-y-backend.md, 08-reportes-y-estadisticas.md, 11-legal-seguridad-privacidad.md
 
@@ -558,7 +556,7 @@ La decisión del usuario reemplaza las cuotas por integrante por una suscripció
 - `subscription_invoices`: una fila por factura remota, importe, vencimiento, estado, ID de pago y fechas; sincronización idempotente/ordenada, sin borrado de historia.
 - `app_private.billing_legacy_groups`: snapshot de grupos existentes al despliegue, sin permisos de clientes; conserva el límite previo hasta primer pago.
 
-RLS deny-by-default, DTO ADMIN por RPC y escrituras solo Edge/service_role. Detalle de límites, DDL versionado y estados: [12-suscripciones-saas.md](12-suscripciones-saas.md).
+RLS deny-by-default, DTO ADMIN por RPC y escrituras solo Nest/asisteam_billing. Detalle de límites, DDL versionado y estados: [12-suscripciones-saas.md](12-suscripciones-saas.md).
 
 ### 7.4 audit_log [P2]
 
@@ -570,4 +568,4 @@ Notas de compatibilidad: la exportación CSV [P1] no requiere tablas nuevas (con
 
 ## Destino PostgreSQL independiente · MIG-21 (#165)
 
-[Seguro] [packages/db](../packages/db/README.md) incorpora un baseline PostgreSQL17 con las 44 tablas actuales de negocio de public/app_private, su catálogo reconciliado, roles de runtime propios y migrador separado. Las futuras migraciones/fixtures/tipos de destino se agregan en ese paquete; las migraciones Supabase y sus tipos quedan como historial de coexistencia. El FK de users.auth_user_id apunta al mapa de sujetos propio de #162/#164; el destino conserva ledger de importación, consentimientos, jobs, billing y manifiestos de archivos. No contiene esquemas auth/storage ni cron/net/Vault. Preparación y pruebas sintéticas: [MIG-21](migration/issue-165/README.md); mover filas existentes y ejecutar el corte externo requieren #166–#168.
+[Seguro] [packages/db](../packages/db/README.md) contiene el esquema vigente, catálogo y tipos propios. Baseline0001 inmutable +0002 retiro; historial de importación, consentimiento, jobs, billing y archivos se conserva. Toda migración futura pertenece a este paquete. Corte externo pendiente según matriz #168.

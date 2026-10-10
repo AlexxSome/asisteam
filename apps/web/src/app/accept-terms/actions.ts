@@ -1,6 +1,6 @@
 "use server";
 import { memberOperation } from "@/lib/members";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import { accountConsentSchema } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 export async function acceptAccountTerms(input: unknown): Promise<{
@@ -12,8 +12,8 @@ export async function acceptAccountTerms(input: unknown): Promise<{
     if (!parsed.success)
         return { error: parsed.error.issues[0]?.message ?? "Revisa las condiciones antes de aceptar." };
     try {
-        const supabase = await createClient();
-        const { data: { user } } = await supabase.auth.getUser();
+        const sessionClient = await createSessionClient();
+        const { data: { user } } = await sessionClient.auth.getUser();
         if (!user)
             return { error: "Tu sesión terminó. Inicia sesión para aceptar las condiciones." };
         const { error } = await memberOperation(async (api) => { await api.acceptAccountTerms({ body: parsed.data }); return null; });

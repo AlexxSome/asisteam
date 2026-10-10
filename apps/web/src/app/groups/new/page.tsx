@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/app-shell";
-import { createClient } from "@/lib/supabase/server";
+import { createSessionClient } from "@/lib/api/session";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -8,8 +8,8 @@ export const metadata: Metadata = {
     title: "Crear grupo",
 };
 export default async function NewGroupPage() {
-    const supabase = await createClient();
-    const { data: { user }, } = await supabase.auth.getUser();
+    const sessionClient = await createSessionClient();
+    const { data: { user }, } = await sessionClient.auth.getUser();
     if (!user)
         redirect("/register");
     return (<AppShell><div className="mx-auto max-w-xl space-y-6">

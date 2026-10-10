@@ -39,7 +39,7 @@ try {
   await owner.query(await readFile(new URL('bootstrap.sql',root),'utf8'));
   for(const role of ['asisteam_migrator','asisteam_api','asisteam_jobs','asisteam_auth','asisteam_invitation','asisteam_billing'])await owner.query('alter role '+role+' login password '+quote(password));
   deploy=await connect(port,'asisteam_migrator');await migrate(deploy);await migrate(deploy);
-  assert.equal((await owner.query('select count(*)::int as n from db_migrations.ledger')).rows[0].n,1);
+  assert.equal((await owner.query('select count(*)::int as n from db_migrations.ledger')).rows[0].n,2);
  });
  await check('pgtap-destination-policies-and-invariants',async()=>{
   const output=await sql(name,'postgres',await readFile(new URL('tests/independent.sql',root),'utf8'));assert.doesNotMatch(output,/not ok|Looks like you failed/);assert.match(output,/1\.\.23/);
@@ -49,12 +49,16 @@ try {
   for(const {name:_name,...expected} of cases){assert.deepEqual(attendanceMetrics(expected),expected);const actual=(await owner.query('select * from app_private.attendance_metrics($1,$2,$3,$4)',[expected.present,expected.late,expected.absent,expected.excused])).rows[0];assert.equal(actual.attendance_pct===null?null:Number(actual.attendance_pct),expected.attendance_pct);}
   report.pgtapCases=50;report.canonicalMetricCases=cases.length;
  });
- await check('persistence-types-and-migration-hashes-independent',async()=>{
-  const actualCatalog=(await owner.query(await readFile(new URL('scripts/catalog.sql',root),'utf8'))).rows[0].jsonb_build_object,expectedCatalog=JSON.parse(await readFile(new URL('source-catalog.json',root),'utf8'));report.catalogDifferences=Object.keys(expectedCatalog).filter(key=>JSON.stringify(actualCatalog[key])!==JSON.stringify(expectedCatalog[key]));if(report.catalogDifferences.length){await mkdir('.ci-results',{recursive:true});await writeFile('.ci-results/catalog-difference.json',JSON.stringify(Object.fromEntries(report.catalogDifferences.map(key=>[key,{actual:actualCatalog[key],expected:expectedCatalog[key]}])),null,2));}assert.deepEqual(actualCatalog,expectedCatalog);
+  await check('persistence-types-and-migration-hashes-independent',async()=>{
+  // The immutable baseline remains historical. Check the installed routines,
+  // not merely a mode flag, so retired provider branches cannot survive 0002.
+  const routines=(await owner.query("select pg_get_functiondef(p.oid) as body from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','app_private') and p.prokind='f'")).rows.map(row=>row.body).join('\n');
+  assert.doesNotMatch(routines,/invalidate_legacy_subject|legacy_majority_|'LEGACY'|auth\.uid\(|auth\.jwt\(|service_role/);
+  const actualCatalog=(await owner.query(await readFile(new URL('scripts/catalog.sql',root),'utf8'))).rows[0].jsonb_build_object,expectedCatalog=JSON.parse(await readFile(new URL('catalog.json',root),'utf8'));report.catalogDifferences=Object.keys(expectedCatalog).filter(key=>JSON.stringify(actualCatalog[key])!==JSON.stringify(expectedCatalog[key]));if(report.catalogDifferences.length){await mkdir('.ci-results',{recursive:true});await writeFile('.ci-results/catalog-difference.json',JSON.stringify(Object.fromEntries(report.catalogDifferences.map(key=>[key,{actual:actualCatalog[key],expected:expectedCatalog[key]}])),null,2));}assert.deepEqual(actualCatalog,expectedCatalog);
   const output=await persistenceTypes(owner),path=new URL('src/persistence.types.ts',root);
   if(process.env.DB_GENERATE_TYPES==='1')await writeFile(path,output);else assert.equal(output,await readFile(path,'utf8'));
   assert.equal(digest(await readFile(new URL('migrations/0001_baseline.sql',root))),JSON.parse(await readFile(new URL('transformation.json',root),'utf8')).baselineSha256);
-  const changed=new URL('changed/',new URL('file://'+dir+'/'));await mkdir(changed);await writeFile(new URL('0001_baseline.sql',changed),'-- tampered');await assert.rejects(migrate(deploy,changed),/migration_history_changed/);
+  const changed=new URL('changed/',new URL('file://'+dir+'/'));await mkdir(changed);await writeFile(new URL('0001_baseline.sql',changed),'-- tampered');await writeFile(new URL('0002_retire_provider_entrypoints.sql',changed),await readFile(new URL('migrations/0002_retire_provider_entrypoints.sql',root)));await assert.rejects(migrate(deploy,changed),/migration_history_changed/);
   const missing=new URL('missing/',new URL('file://'+dir+'/'));await mkdir(missing);await assert.rejects(migrate(deploy,missing),/migration_history_missing/);
   await owner.query('create database denied');const denied=await connect(port,'asisteam_api');await assert.rejects(migrate(denied),/deployment_role_required/);await denied.end();
  });
@@ -69,7 +73,7 @@ try {
    await owner.query("insert into app_private.auth_import_ledger(subject_id,profile_id,source_digest,recovery_required) values($1,$2,'synthetic-import-digest',false)",[id.subject,id.profile]);
   }
   const url=role=>'postgresql://'+role+':'+password+'@127.0.0.1:'+port+'/postgres';
-  const config=loadConfig({NODE_ENV:'test',DATABASE_URL:url('asisteam_api'),NATIVE_AUTH_DATABASE_URL:url('asisteam_auth'),NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://auth.example.invalid',NATIVE_AUTH_WEB_URL:'http://127.0.0.1:3120',SUPABASE_AUTH_RETIRED:'1',INVITATION_DATABASE_URL:url('asisteam_invitation'),INVITATION_PROXY_SECRET:secret,BILLING_DATABASE_URL:url('asisteam_billing'),PG_POOL_MAX:'2'});
+  const config=loadConfig({NODE_ENV:'test',DATABASE_URL:url('asisteam_api'),NATIVE_AUTH_DATABASE_URL:url('asisteam_auth'),NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://auth.example.invalid',NATIVE_AUTH_WEB_URL:'http://127.0.0.1:3120',INVITATION_DATABASE_URL:url('asisteam_invitation'),INVITATION_PROXY_SECRET:secret,BILLING_DATABASE_URL:url('asisteam_billing'),PG_POOL_MAX:'2'});
   runtimeConfig=config;
   app=await createApplication(config,new SafeLogger(line=>logs.push(line)));await app.listen(0,'127.0.0.1');origin=await app.getUrl();
   const api=token=>new ApiClient({origin,accessToken:async()=>token??null,nativeAuth:true,authProxy:{secret,clientIp:randomUUID()}});

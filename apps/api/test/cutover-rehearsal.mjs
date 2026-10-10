@@ -18,11 +18,13 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
  let activeOrigin,remote,invoiceIds=['166001'],modified=Date.now();
  const secret='synthetic-mig22-webhook',newPassword='After166-'+randomUUID(),newEmail='after166-'+randomUUID()+'@example.invalid';
  const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6rGQAAAAASUVORK5CYII=','base64');
- const timed=async(name,fn)=>{const start=performance.now();try{await fn();result.checks.push({check:name,status:'PASS',seconds:Number(((performance.now()-start)/1000).toFixed(3))});console.log(JSON.stringify(result.checks.at(-1)));}catch(error){result.checks.push({check:name,status:'FAIL',location:error.stack?.match(/cutover-rehearsal\.mjs:\d+:\d+/)?.[0],httpStatus:error.status,phase:error.cutoverPhase,field:error.message?.match(/column "?([a-z_0-9.]+)"? does not exist/)?.[1],reason:/^[a-z][a-z_]+$/.test(error.message??'')?error.message:undefined,code:/^[A-Z0-9_]+$/.test(error.code??'')?error.code:undefined,seconds:Number(((performance.now()-start)/1000).toFixed(3))});throw error;}};
+ const timed=async(name,fn)=>{const start=performance.now();try{await fn();result.checks.push({check:name,status:'PASS',seconds:Number(((performance.now()-start)/1000).toFixed(3))});console.log(JSON.stringify(result.checks.at(-1)));}catch(error){result.checks.push({check:name,status:'FAIL',location:error.stack?.match(/cutover-rehearsal\.mjs:\d+:\d+/)?.[0],httpStatus:error.status,freeze:error.freeze,phase:error.cutoverPhase,field:error.message?.match(/column "?([a-z_0-9.]+)"? does not exist/)?.[1],reason:/^[a-z][a-z_]+$/.test(error.message??'')?error.message:undefined,code:/^[A-Z0-9_]+$/.test(error.code??'')?error.code:undefined,seconds:Number(((performance.now()-start)/1000).toFixed(3))});throw error;}};
  const freeze=async client=>{
   const db=(await client.query('select current_database() as name')).rows[0].name;
   await client.query('revoke connect on database '+quote(db)+' from public,'+writers.join(','));
   await client.query('select pg_terminate_backend(pid) from pg_stat_activity where datname=$1 and usename=any($2::text[]) and pid<>pg_backend_pid()',[db,writers]);
+  // Termination is asynchronous; do not snapshot until every writer has exited.
+  for(let attempt=0;attempt<20;attempt++){if((await client.query('select count(*)::int as n from pg_stat_activity where datname=$1 and usename=any($2::text[]) and pid<>pg_backend_pid()',[db,writers])).rows[0].n===0)break;await new Promise(resolve=>setTimeout(resolve,50));}
  };
  const open=async(client,roles=writers.filter(role=>role!=='asisteam_migrator'))=>{
   const db=(await client.query('select current_database() as name')).rows[0].name;
