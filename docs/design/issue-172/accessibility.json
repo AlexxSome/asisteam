@@ -1,0 +1,719 @@
+{
+  "environment": "local-synthetic",
+  "analyses": 63,
+  "reports": [
+    {
+      "incomplete": [],
+      "route": "/invitations/[token]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/invitations/[token]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/me/history",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/me/history",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/check-in",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/check-in",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/check-in",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/reports",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/reports",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/groups/[id]/reports",
+      "viewport": {
+        "height": 1000,
+        "width": 1440
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/profile",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/profile",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/announcements",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/announcements",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/announcements",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/settings",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/login",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/wards/[id]/history",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/members",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/members",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 900,
+        "width": 768
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 900,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 900,
+        "width": 1024
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]/attendance",
+      "viewport": {
+        "height": 900,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/billing",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/billing",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/forgot-password",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/register",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/accept-terms",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/legal/2026-09-21",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/reset-password",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/welcome",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "route": "/login",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]/qr",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]/edit",
+      "viewport": {
+        "height": 812,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/wards/[id]/history",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/wards/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/me/history",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/members/consent",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/me/history",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/wards",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/join",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]/edit",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/new",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/settings",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/members/pending",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/guardians",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/profile/birthdate-requests",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activity-types",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/settings/visibility",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/invitations/[token]",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "route": "/groups/[id]/activities/[id]",
+      "viewport": {
+        "height": 812,
+        "width": 320
+      },
+      "violations": []
+    }
+  ],
+  "finalShell": [
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "viewport": {
+        "height": 900,
+        "width": 768
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "viewport": {
+        "height": 900,
+        "width": 375
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [],
+      "viewport": {
+        "height": 900,
+        "width": 1024
+      },
+      "violations": []
+    },
+    {
+      "incomplete": [
+        "aria-valid-attr-value"
+      ],
+      "viewport": {
+        "height": 900,
+        "width": 320
+      },
+      "violations": []
+    }
+  ],
+  "note": "Each original report counted once; Playwright attachment copies excluded."
+}
