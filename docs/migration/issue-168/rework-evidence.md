@@ -11,7 +11,7 @@
 | `node scripts/ci/probe.mjs` | PASS (tres fallos esperados detectados) | Exige detectar fallo SQL, TS2322 y SDK prohibido; informes separados de los gates positivos |
 | `pnpm ci:extended` | 46 + 1 PASS / 0 omitidas | Matriz completa con IP sintética por contexto y caché .qa aislada; capacidades, roles, viewports, axe/teclado y fallos transporte |
 | `pnpm ci:qualification` | PASS técnico / NO-GO operacional | Exige suites y métricas del mismo SHA; carga sintética no acredita volumen externo acordado |
-| CI remoto final | En ejecución en PR207 | Checks/backend/staging y QA extendida son gates obligatorios de required; verificar su head final |
+| CI remoto final | Resultado autoritativo en [checks del head de PR207](https://github.com/AlexxSome/asisteam/pull/207/checks) | Checks/backend/staging y QA extendida son gates obligatorios de required; la evidencia local no los sustituye |
 | Corte real | NO-GO | [Inputs externos exactos](operational-acceptance.md); no autorizado ni ejecutado |
 
 [Seguro] [Informes locales saneados](full-retirement-results.json) registran el diff verificado, la base y cada gate. El SHA final y su CI se verifican en el nuevo PR.
