@@ -4,7 +4,7 @@
 
 ## Base y entrega
 
-Rama `codex/168-retiro-completo-supabase`, base sincronizada `develop@13a0a643431f480e1ddf4c83022c8083c31beb68`. Esa base incorpora PR [#206](https://github.com/AlexxSome/asisteam/pull/206): su CI rojo inicial `6ffbf2d` se reparó en `402036c10af8dc1a506e4e183a389b618946ba3c`, con [CI verde](https://github.com/AlexxSome/asisteam/actions/runs/38013511084), antes del merge. La evidencia de ese hito es histórica; los informes del nuevo PR corresponden al retiro final y se verifican en su propio SHA.
+Rama `codex/168-retiro-completo-supabase`, base sincronizada `develop@13a0a643431f480e1ddf4c83022c8083c31beb68`. Esa base incorpora PR [#206](https://github.com/AlexxSome/asisteam/pull/206): su CI rojo inicial `6ffbf2d` se reparó en `402036c10af8dc1a506e4e183a389b618946ba3c`, con [CI verde](https://github.com/AlexxSome/asisteam/actions/runs/38013511084), antes del merge. El retiro final se entrega en [PR207](https://github.com/AlexxSome/asisteam/pull/207). La evidencia de ese hito es histórica; los informes del nuevo PR corresponden al retiro final y se verifican en su propio SHA.
 
 ## Cobertura y retiro
 

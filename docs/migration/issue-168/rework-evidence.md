@@ -11,7 +11,7 @@
 | `node scripts/ci/probe.mjs` | PASS (tres fallos esperados detectados) | Exige detectar fallo SQL, TS2322 y SDK prohibido; informes separados de los gates positivos |
 | `pnpm ci:extended` | 46 + 1 PASS / 0 omitidas | Matriz completa con IP sintética por contexto y caché .qa aislada; capacidades, roles, viewports, axe/teclado y fallos transporte |
 | `pnpm ci:qualification` | PASS técnico / NO-GO operacional | Exige suites y métricas del mismo SHA; carga sintética no acredita volumen externo acordado |
-| CI remoto final | Pendiente de publicación/verificación | Solo su head final verde acredita entrega técnica |
+| CI remoto final | En ejecución en PR207 | Checks/backend/staging y QA extendida son gates obligatorios de required; verificar su head final |
 | Corte real | NO-GO | [Inputs externos exactos](operational-acceptance.md); no autorizado ni ejecutado |
 
 [Seguro] [Informes locales saneados](full-retirement-results.json) registran el diff verificado, la base y cada gate. El SHA final y su CI se verifican en el nuevo PR.
@@ -32,3 +32,5 @@
 [Seguro] Carga sintética final: 500 ATHLETE, 5000 registros nuevos, 192 solicitudes en ocho celdas, p95 máximo local 160.33 ms (umbral 500 ms). Es una medición del ensayo, no una garantía para el destino externo.
 
 [Seguro] Auto-revisión del diff: se corrigieron scripts individuales de invitaciones para crear su propia fixture, selección de integraciones cuando se pasan solo flags, limpieza idempotente, aislamiento QA/IP y separación de informes negativos. `test:invitations` pasó sus 16 casos con cero omisiones. La comprobación del esquema instalado tras0002 impide rutinas con autoridad LEGACY, helpers o roles del proveedor.
+
+[Seguro] QA extendida se integra al workflow de PR y al agregador required. GitHub no permite dispatch del antiguo workflow extended.yml porque aún no existe en la rama predeterminada; el nuevo gate verifica un checkout limpio de este PR sin merge ni cambios a la rama base.

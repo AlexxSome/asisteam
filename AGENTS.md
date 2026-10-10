@@ -148,7 +148,7 @@ El contrato HTTP generado de packages/core/api-client es consumido por Next → 
 
 **Estado del corte:** existen suites locales Vitest, pgTAP/integraciones y Playwright/axe; MIG-03 (#147) añade workflow CI y `lint`; su evidencia está en `docs/migration/issue-147/README.md`. Los workflows remotos ejecutan gates sintéticos; no acreditan despliegue real. Ejecutar los scripts reales y registrar PASS/FAIL/omitido según [QA #120](docs/qa/issue-120/README.md).
 
-1. **En cada PR:** ci:checks (lint/contratos/tipos/build/unidades/artefacto), ci:backend (1646 aserciones SQL de 40 suites + 50 guards nativas/métrica, 80 casos originales + 4 recuperación, API/Worker/backup/PITR) y ci:staging (ensayo Docker local propio).
+1. **En cada PR:** ci:checks (lint/contratos/tipos/build/unidades/artefacto), ci:backend (1646 aserciones SQL de 40 suites + 50 guards nativas/métrica, 80 casos originales + 4 recuperación, API/Worker/backup/PITR) ci:staging (ensayo Docker local propio) y ci:extended (QA completa). Los cuatro bloquean required.
 2. **QA extendida:** ci:extended ejecuta matriz nativa completa Playwright/axe, todas las capacidades y fallos de transporte; ci:qualification reconcilia evidencia.
 3. **Deploy/corte reales:** requieren aceptación externa documentada; un merge/CI verde no los autoriza.
 4. Gates innegociables: SQL/RLS en verde, misma batería métrica SQL/core, ningún menor activo sin guardianship+consentimiento. Ningún caso vigente se elimina para obtener verde.
