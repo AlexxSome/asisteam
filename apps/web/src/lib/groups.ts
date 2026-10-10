@@ -1,105 +1,90 @@
-import { ApiClientError } from "@asisteam/api-client";
-import { moduleTransport } from "@/lib/api/config";
 import { createServerApiClient } from "@/lib/api/server";
-import { cache } from "react";
-import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
-import { groupCapacitySchema, MEMBERSHIP_ROLES, type MembershipRole } from "@asisteam/core";
+import { activeGroupCookie,isGroupId } from "@/lib/group-routing";
 import { memberOperation } from "@/lib/members";
 import { createClient } from "@/lib/supabase/server";
-import { activeGroupCookie, isGroupId } from "@/lib/group-routing";
-
+import { ApiClientError } from "@asisteam/api-client";
+import { groupCapacitySchema,type MembershipRole } from "@asisteam/core";
+import { cookies } from "next/headers";
+import { notFound,redirect } from "next/navigation";
+import { cache } from "react";
 export type MyGroup = {
-  id: string;
-  name: string;
-  sport: string | null;
-  logo_url: string | null;
-  roles: MembershipRole[];
+    id: string;
+    name: string;
+    sport: string | null;
+    logo_url: string | null;
+    roles: MembershipRole[];
 };
-
 export const getMyGroups = cache(async () => {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (moduleTransport("groups") === "nest") {
-    try {
-      const result = await createServerApiClient().listMyGroups({ query: { page: 1, page_size: 100 } });
-      return { userId: user.id, groups: result.data as MyGroup[] };
-    } catch (error) {
-      if (error instanceof ApiClientError && error.status === 401) redirect("/login");
-      throw new Error("No pudimos cargar tus grupos. Vuelve a intentarlo.", { cause: error });
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user)
+        redirect("/login");
+    {
+        try {
+            const result = await createServerApiClient().listMyGroups({ query: { page: 1, page_size: 100 } });
+            return { userId: user.id, groups: result.data as MyGroup[] };
+        }
+        catch (error) {
+            if (error instanceof ApiClientError && error.status === 401)
+                redirect("/login");
+            throw new Error("No pudimos cargar tus grupos. Vuelve a intentarlo.", { cause: error });
+        }
     }
-  }
-  const { data, error } = await supabase.from("v_my_groups")
-    .select("id, name, sport, logo_url, roles").order("name").order("id");
-  if (error) throw new Error("No pudimos cargar tus grupos. Vuelve a intentarlo.");
-  const groups: MyGroup[] = (data ?? []).flatMap((group) => {
-    if (!group.id || !group.name) return [];
-    const roles = MEMBERSHIP_ROLES.filter((role) => group.roles?.includes(role));
-    return [{ ...group, id: group.id, name: group.name, roles }];
-  });
-  return { userId: user.id, groups };
 });
-
 export const getGroup = cache(async (groupId: string) => {
-  if (!isGroupId(groupId)) notFound();
-  const { groups } = await getMyGroups();
-  const membership = groups.find((group) => group.id === groupId.toLowerCase());
-  if (!membership) notFound();
-  if (moduleTransport("groups") === "nest") {
-    try {
-      const data = await createServerApiClient().getGroup({ params: { groupId } });
-      return { invite_code: null, settings: null, settings_updated_at: null, settings_updated_by_name: null, ...data, roles: [...data.roles] };
-    } catch (error) {
-      if (error instanceof ApiClientError && error.status === 404) notFound();
-      if (error instanceof ApiClientError && error.status === 401) redirect("/login");
-      throw new Error("No pudimos cargar el grupo. Vuelve a intentarlo.", { cause: error });
+    if (!isGroupId(groupId))
+        notFound();
+    const { groups } = await getMyGroups();
+    const membership = groups.find((group) => group.id === groupId.toLowerCase());
+    if (!membership)
+        notFound();
+    {
+        try {
+            const data = await createServerApiClient().getGroup({ params: { groupId } });
+            return { invite_code: null, settings: null, settings_updated_at: null, settings_updated_by_name: null, ...data, roles: [...data.roles] };
+        }
+        catch (error) {
+            if (error instanceof ApiClientError && error.status === 404)
+                notFound();
+            if (error instanceof ApiClientError && error.status === 401)
+                redirect("/login");
+            throw new Error("No pudimos cargar el grupo. Vuelve a intentarlo.", { cause: error });
+        }
     }
-  }
-  const supabase = await createClient();
-  const { data, error } = await supabase.from("v_group_detail")
-    .select("id, name, sport, description, logo_url, roles, invite_code, settings, can_view_group_stats, settings_updated_at, settings_updated_by_name")
-    .eq("id", groupId).maybeSingle();
-  if (error) throw new Error("No pudimos cargar el grupo. Vuelve a intentarlo.");
-  if (!data) notFound();
-  return { ...data, id: membership.id, name: data.name ?? membership.name,
-    roles: MEMBERSHIP_ROLES.filter((role) => data.roles?.includes(role)) };
 });
-
 // Request-scoped only. Never infer capacity from checkout parameters or status.
 export const getGroupCapacity = cache(async (groupId: string) => {
-  const group = await getGroup(groupId);
-  if (!group.roles.includes("ADMIN")) return null;
-  try {
-    if (moduleTransport("billing") === "nest") {
-      const data = await createServerApiClient().getGroupBilling({ params: { groupId: group.id }, query: { page: 1 } });
-      const parsed = groupCapacitySchema.safeParse(data);
-      return parsed.success ? parsed.data : null;
+    const group = await getGroup(groupId);
+    if (!group.roles.includes("ADMIN"))
+        return null;
+    try {
+        {
+            const data = await createServerApiClient().getGroupBilling({ params: { groupId: group.id }, query: { page: 1 } });
+            const parsed = groupCapacitySchema.safeParse(data);
+            return parsed.success ? parsed.data : null;
+        }
     }
-    const client = await createClient();
-    const { data, error } = await client.rpc("get_group_billing", { p_group_id: group.id, p_page: 1 });
-    const parsed = groupCapacitySchema.safeParse(data);
-    // A failed read is unknown, never zero capacity or a free plan.
-    return !error && parsed.success ? parsed.data : null;
-  } catch {
-    return null;
-  }
+    catch {
+        return null;
+    }
 });
-
 export async function groupHomePath() {
-  const { userId, groups } = await getMyGroups();
-  if (!groups.length) return "/welcome";
-  const saved = (await cookies()).get(activeGroupCookie(userId))?.value;
-  const group = groups.find((item) => item.id === saved);
-  if (group) return `/groups/${group.id}`;
-  if (groups.length === 1) return `/groups/${groups[0]!.id}`;
-  return "/groups";
+    const { userId, groups } = await getMyGroups();
+    if (!groups.length)
+        return "/welcome";
+    const saved = (await cookies()).get(activeGroupCookie(userId))?.value;
+    const group = groups.find((item) => item.id === saved);
+    if (group)
+        return `/groups/${group.id}`;
+    if (groups.length === 1)
+        return `/groups/${groups[0]!.id}`;
+    return "/groups";
 }
-
 /** A pending athlete sees only their request, never the group's private detail. */
 export const getMyPendingMemberships = cache(async () => {
-  const client = await createClient();
-  const { data, error } = await memberOperation(() => client.rpc("list_membership_onboarding", {}), async api => (await api.listMembershipOnboarding()).data);
-  if (error) throw new Error("No pudimos cargar tus solicitudes pendientes. Vuelve a intentarlo.");
-  return data ?? [];
+
+    const { data, error } = await memberOperation(async (api) => (await api.listMembershipOnboarding()).data);
+    if (error)
+        throw new Error("No pudimos cargar tus solicitudes pendientes. Vuelve a intentarlo.");
+    return data ?? [];
 });

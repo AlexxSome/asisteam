@@ -1,0 +1,695 @@
+{
+  "checks": {
+    "commit": "847a666b081353382cf60550030660db4821b43c",
+    "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+    "date": "2026-10-09T06:19:51.602Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "ci-runner-tests",
+        "status": "PASS",
+        "seconds": 0.24
+      },
+      {
+        "check": "lint",
+        "status": "PASS",
+        "seconds": 2.4
+      },
+      {
+        "check": "http-contract-generation",
+        "status": "PASS",
+        "seconds": 1.43
+      },
+      {
+        "check": "typecheck",
+        "status": "PASS",
+        "seconds": 2.22
+      },
+      {
+        "check": "api-contract-fixture-build",
+        "status": "PASS",
+        "seconds": 0.87
+      },
+      {
+        "check": "next-http-contract",
+        "status": "PASS",
+        "seconds": 7.38
+      },
+      {
+        "check": "build",
+        "status": "PASS",
+        "seconds": 30.7
+      },
+      {
+        "check": "product-runtime-retirement",
+        "status": "PASS",
+        "seconds": 0.23
+      },
+      {
+        "check": "core-unit",
+        "status": "PASS",
+        "seconds": 1.14,
+        "tests": 150,
+        "omitted": 0
+      },
+      {
+        "check": "web-unit",
+        "status": "PASS",
+        "seconds": 17.97,
+        "tests": 943,
+        "omitted": 81
+      },
+      {
+        "check": "worker-unit",
+        "status": "PASS",
+        "seconds": 0.29
+      },
+      {
+        "check": "api-unit",
+        "status": "PASS",
+        "seconds": 1.85
+      },
+      {
+        "check": "api-client-contract",
+        "status": "PASS",
+        "seconds": 0.62
+      }
+    ]
+  },
+  "staging": {
+    "commit": "847a666b081353382cf60550030660db4821b43c",
+    "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+    "date": "2026-10-09T06:16:52.776Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "synthetic-external-secrets",
+        "status": "PASS",
+        "seconds": 0.02
+      },
+      {
+        "check": "api-container-build",
+        "status": "PASS",
+        "seconds": 22.09
+      },
+      {
+        "check": "api-image-id",
+        "status": "PASS",
+        "seconds": 0.06
+      },
+      {
+        "check": "staging-deploy",
+        "status": "PASS",
+        "seconds": 6.4
+      },
+      {
+        "check": "staging-role-query",
+        "status": "PASS",
+        "seconds": 0.14
+      },
+      {
+        "check": "staging-role-separation",
+        "status": "PASS"
+      },
+      {
+        "check": "second-artifact-build",
+        "status": "PASS",
+        "seconds": 0.91
+      },
+      {
+        "check": "second-image-id",
+        "status": "PASS",
+        "seconds": 0.21
+      },
+      {
+        "check": "distinct-artifacts",
+        "status": "PASS"
+      },
+      {
+        "check": "staging-deploy",
+        "status": "PASS",
+        "seconds": 5.59
+      },
+      {
+        "check": "staging-deploy",
+        "status": "PASS",
+        "seconds": 4.57
+      },
+      {
+        "check": "rollback-release-state",
+        "status": "PASS"
+      },
+      {
+        "check": "staging-deploy",
+        "status": "FAIL",
+        "seconds": 0.9,
+        "expected": true
+      },
+      {
+        "check": "staging-automatic-rollback",
+        "status": "PASS",
+        "seconds": 1.72
+      },
+      {
+        "check": "automatic-rollback-release-state",
+        "status": "PASS"
+      },
+      {
+        "check": "rollback-container-id",
+        "status": "PASS",
+        "seconds": 0.07
+      },
+      {
+        "check": "rollback-artifact-query",
+        "status": "PASS",
+        "seconds": 0.02
+      },
+      {
+        "check": "rollback-artifact-identity",
+        "status": "PASS"
+      },
+      {
+        "check": "staging-log-read",
+        "status": "PASS",
+        "seconds": 0.05
+      },
+      {
+        "check": "staging-log-privacy",
+        "status": "PASS"
+      },
+      {
+        "check": "api-real-postgres-integration",
+        "status": "PASS",
+        "seconds": 1.19
+      },
+      {
+        "check": "staging-owned-cleanup",
+        "status": "PASS",
+        "seconds": 0.77
+      }
+    ]
+  },
+  "retirement": {
+    "commit": "847a666b081353382cf60550030660db4821b43c",
+    "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+    "date": "2026-10-09T06:30:08.456Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "product-dependencies-without-supabase",
+        "status": "PASS"
+      },
+      {
+        "check": "product-source-without-sdk-provider-http-or-fixtures",
+        "status": "PASS"
+      },
+      {
+        "check": "compiled-product-artifacts-required",
+        "status": "PASS"
+      },
+      {
+        "check": "next-traces-without-sdk-or-origin-harness",
+        "status": "PASS"
+      },
+      {
+        "check": "production-routes-without-synthetic-fixtures",
+        "status": "PASS"
+      },
+      {
+        "check": "server-browser-api-worker-bundles-without-provider-client",
+        "status": "PASS"
+      }
+    ]
+  },
+  "independent-postgres": {
+    "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+    "environment": "local-synthetic",
+    "date": "2026-10-09T06:27:23.180Z",
+    "checks": [
+      {
+        "check": "vanilla-postgres17-with-pgtap-fixture",
+        "status": "PASS",
+        "seconds": 0.563
+      },
+      {
+        "check": "isolated-destination-and-wal-archiving",
+        "status": "PASS",
+        "seconds": 4.631
+      },
+      {
+        "check": "clean-baseline-with-deploy-role-and-ledger",
+        "status": "PASS",
+        "seconds": 0.079
+      },
+      {
+        "check": "pgtap-destination-policies-and-invariants",
+        "status": "PASS",
+        "seconds": 0.206
+      },
+      {
+        "check": "persistence-types-and-migration-hashes-independent",
+        "status": "PASS",
+        "seconds": 0.078
+      },
+      {
+        "check": "native-identities-and-http-api-with-minimal-roles",
+        "status": "PASS",
+        "seconds": 0.269
+      },
+      {
+        "check": "canonical-history-minors-consents-metrics-and-rls",
+        "status": "PASS",
+        "seconds": 0.064
+      },
+      {
+        "check": "worker-native-claims-and-durable-ledger",
+        "status": "PASS",
+        "seconds": 0.011
+      },
+      {
+        "check": "destination-security-parity-concurrent-load-500ms",
+        "status": "PASS",
+        "seconds": 5.696
+      },
+      {
+        "check": "next-chromium-native-auth-independent-database",
+        "status": "PASS",
+        "seconds": 16.383
+      },
+      {
+        "check": "pool-concurrency-and-connection-budget",
+        "status": "PASS",
+        "seconds": 0.19
+      },
+      {
+        "check": "cutover-abort-post-write-reconciliation-and-forward-recovery",
+        "status": "PASS",
+        "seconds": 3.251
+      },
+      {
+        "check": "logical-backup-restore-all-table-and-group-reconciliation",
+        "status": "PASS",
+        "seconds": 0.493
+      },
+      {
+        "check": "physical-basebackup-and-point-in-time-recovery",
+        "status": "PASS",
+        "seconds": 4.981
+      },
+      {
+        "check": "owned-resources-cleanup",
+        "status": "PASS",
+        "seconds": 0.542
+      }
+    ],
+    "pending": [
+      "managed-provider-provisioning",
+      "production-volume-and-connection-budget",
+      "external-backup-encryption-retention-and-RPO-RTO",
+      "production-cutover-166-168"
+    ],
+    "targetPostgres": "17.9 (Debian 17.9-1.pgdg12+1)",
+    "targetImage": "sha256:10887b013dc1721d5cb7c05c333944da421d75e4d9989fa1f9e7ba2f4cefafbe",
+    "pgtapCases": 50,
+    "canonicalMetricCases": 9,
+    "catalogDifferences": [],
+    "qualification": {
+      "status": "PASS",
+      "fixture": {
+        "activeAthletes": 500,
+        "newAttendanceRecords": 5000,
+        "pageSize": 100
+      },
+      "workload": {
+        "requestsPerCell": 24,
+        "concurrency": [
+          1,
+          4
+        ],
+        "apiPool": 2,
+        "referencePool": 2,
+        "workerPool": 2,
+        "reportBudgetMs": 500
+      },
+      "reference": "canonical SQL on identical destination fixture; not legacy HTTP or production",
+      "rows": [
+        {
+          "operation": "report",
+          "transport": "canonical-sql",
+          "concurrency": 1,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 34.2,
+          "workerP95Ms": 2.4,
+          "seconds": 0.797
+        },
+        {
+          "operation": "report",
+          "transport": "nest-http",
+          "concurrency": 1,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 41.75,
+          "workerP95Ms": 4.43,
+          "seconds": 0.943
+        },
+        {
+          "operation": "report",
+          "transport": "canonical-sql",
+          "concurrency": 4,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 70.94,
+          "workerP95Ms": 2.37,
+          "seconds": 0.421
+        },
+        {
+          "operation": "report",
+          "transport": "nest-http",
+          "concurrency": 4,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 84.46,
+          "workerP95Ms": 3.2,
+          "seconds": 0.497
+        },
+        {
+          "operation": "stats",
+          "transport": "canonical-sql",
+          "concurrency": 1,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 46.89,
+          "workerP95Ms": 2.33,
+          "seconds": 0.675
+        },
+        {
+          "operation": "stats",
+          "transport": "nest-http",
+          "concurrency": 1,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 51.48,
+          "workerP95Ms": 2.12,
+          "seconds": 0.788
+        },
+        {
+          "operation": "stats",
+          "transport": "canonical-sql",
+          "concurrency": 4,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 72.58,
+          "workerP95Ms": 2.43,
+          "seconds": 0.431
+        },
+        {
+          "operation": "stats",
+          "transport": "nest-http",
+          "concurrency": 4,
+          "requests": 24,
+          "errors": 0,
+          "p95Ms": 78.91,
+          "workerP95Ms": 2.42,
+          "seconds": 0.468
+        }
+      ],
+      "pending": [
+        "representative-production-volume-and-agreed-load",
+        "provider-sandbox",
+        "human-reader-native-zoom-and-axe-incomplete"
+      ],
+      "connections": [
+        {
+          "application_name": "asisteam-api",
+          "n": 2
+        },
+        {
+          "application_name": "asisteam-worker",
+          "n": 1
+        },
+        {
+          "application_name": "mig23-reference",
+          "n": 2
+        }
+      ],
+      "security": [
+        "native-auth",
+        "guardian-eighteenth-birthday-immediate-denial",
+        "multirol",
+        "coach-no-notes-or-clear",
+        "concurrent-upsert",
+        "pooled-identity-isolation",
+        "third-party-projection"
+      ]
+    },
+    "connections": {
+      "serverLimit": 40,
+      "probeConcurrency": 12,
+      "probePool": 2,
+      "probeSeconds": 0.189,
+      "apiPerReplica": 2,
+      "authPerReplica": 3,
+      "invitationPerReplica": 3,
+      "billingPerReplica": 3,
+      "workerPerReplica": 2,
+      "reservedSuperuser": 3
+    },
+    "cutover": {
+      "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "freeze-every-db-writer-and-abort-before-first-write",
+          "status": "PASS",
+          "seconds": 0.377
+        },
+        {
+          "check": "snapshot-maintenance-cutover-and-destination-writes",
+          "status": "PASS",
+          "seconds": 0.298
+        },
+        {
+          "check": "single-job-executor-concurrent-replicas-and-persist-before-ack",
+          "status": "PASS",
+          "seconds": 0.012
+        },
+        {
+          "check": "post-write-failure-freeze-and-complete-delta-reconciliation",
+          "status": "PASS",
+          "seconds": 0.603
+        },
+        {
+          "check": "forward-recovery-login-history-consent-files-provider-retry-and-jobs",
+          "status": "PASS",
+          "seconds": 0.156
+        }
+      ],
+      "pending": [
+        "production-volume",
+        "named-operators-and-approved-RPO-RTO",
+        "MP-sandbox-contract-URL-and-retry",
+        "managed-provider-maintenance-controls"
+      ],
+      "syntheticJobClock": "Chile-noon",
+      "singleWriterAtAbort": true,
+      "activeJobLeasePreserved": true,
+      "failedEventAck": 503,
+      "changedTables": [
+        {
+          "table": "app_private.auth_attempts",
+          "rows": 18
+        },
+        {
+          "table": "app_private.auth_credentials",
+          "rows": 5
+        },
+        {
+          "table": "app_private.auth_families",
+          "rows": 8
+        },
+        {
+          "table": "app_private.auth_refresh",
+          "rows": 8
+        },
+        {
+          "table": "app_private.auth_subjects",
+          "rows": 5
+        },
+        {
+          "table": "app_private.majority_tasks",
+          "rows": 2
+        },
+        {
+          "table": "public.account_consents",
+          "rows": 5
+        },
+        {
+          "table": "public.attendance_records",
+          "rows": 10
+        },
+        {
+          "table": "public.consents",
+          "rows": 2
+        },
+        {
+          "table": "public.group_subscriptions",
+          "rows": 1
+        },
+        {
+          "table": "public.subscription_invoices",
+          "rows": 1
+        },
+        {
+          "table": "public.users",
+          "rows": 6
+        }
+      ],
+      "rejectedCorruptSnapshot": true,
+      "foreignKeyAndMinorFailureAtomic": true,
+      "reconciledTables": 44,
+      "reconciledForeignKeys": 59,
+      "reconciledObjects": 2,
+      "providerReplayInvoices": 2,
+      "rpoCommittedWrites": 0,
+      "recoverySeconds": 0.759,
+      "syntheticBudgetSeconds": 60
+    },
+    "backupBytes": 430206,
+    "reconciledTables": 45,
+    "pitr": {
+      "basebackup": true,
+      "archivedWal": true,
+      "recoveredToNamedPoint": true,
+      "postPointWriteExcluded": true
+    }
+  },
+  "origin-integrations": {
+    "commit": "847a666b081353382cf60550030660db4821b43c",
+    "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+    "date": "2026-10-09T06:25:22.252Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "origin-sql-integrations",
+        "status": "PASS",
+        "seconds": 53.43,
+        "tests": 81,
+        "omitted": 0
+      }
+    ]
+  },
+  "controlled-failure": {
+    "commit": "847a666b081353382cf60550030660db4821b43c",
+    "sourceCommit": "847a666b081353382cf60550030660db4821b43c",
+    "date": "2026-10-09T06:28:08.429Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "probe-type-baseline",
+        "status": "PASS",
+        "seconds": 1.91
+      },
+      {
+        "check": "controlled-pgtap-failure",
+        "status": "FAIL",
+        "seconds": 2.22,
+        "sqlFailures": [
+          {
+            "file": "authorization.test.sql",
+            "failed": 1
+          }
+        ],
+        "expected": true
+      },
+      {
+        "check": "controlled-type-failure",
+        "status": "FAIL",
+        "seconds": 1.05,
+        "errorCodes": [
+          "TS2322"
+        ],
+        "expected": true
+      },
+      {
+        "check": "controlled-runtime-retirement-failure",
+        "status": "FAIL",
+        "seconds": 0.46,
+        "expected": true
+      },
+      {
+        "check": "controlled-failure-detected",
+        "status": "PASS"
+      }
+    ]
+  },
+  "native-auth-browser": {
+    "sourceCommit": "local-pending-diff",
+    "environment": "local-synthetic",
+    "phase": "completed",
+    "status": "PASS",
+    "api": [
+      {
+        "operation": "register",
+        "status": 200
+      },
+      {
+        "operation": "login",
+        "status": 200
+      },
+      {
+        "operation": "refresh",
+        "status": 200
+      },
+      {
+        "operation": "logout",
+        "status": 200
+      },
+      {
+        "operation": "recovery",
+        "status": 200
+      },
+      {
+        "operation": "reset",
+        "status": 200
+      },
+      {
+        "operation": "login",
+        "status": 200
+      }
+    ],
+    "actionRequests": 0,
+    "formsReady": [
+      {
+        "phase": "register",
+        "initiallyReady": false,
+        "seconds": 0.337
+      },
+      {
+        "phase": "logout",
+        "initiallyReady": false,
+        "seconds": 0.274
+      },
+      {
+        "phase": "recovery",
+        "initiallyReady": false,
+        "seconds": 0.303
+      },
+      {
+        "phase": "reset",
+        "initiallyReady": false,
+        "seconds": 0.307
+      },
+      {
+        "phase": "login",
+        "initiallyReady": false,
+        "seconds": 0.322
+      }
+    ]
+  }
+}

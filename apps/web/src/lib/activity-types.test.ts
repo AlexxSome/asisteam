@@ -2,11 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PassThrough } from "node:stream";
 import { createElement, type ReactNode } from "react";
 import { renderToPipeableStream, renderToStaticMarkup } from "react-dom/server";
-const mock = vi.hoisted(() => ({ group: vi.fn(), groups: vi.fn(), range: vi.fn(), eq: vi.fn(), or: vi.fn(), from: vi.fn(), select: vi.fn(), in: vi.fn(), order: vi.fn(), gte: vi.fn(), lt: vi.fn(), limit: vi.fn() }));
+const mock = vi.hoisted(() => ({ group: vi.fn(), groups: vi.fn(), listActivityTypes: vi.fn(), listActivities: vi.fn(), listGroupActivities: vi.fn(), getHomeActivities: vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group, getMyGroups: mock.groups }));
+vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => mock }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/groups", notFound: () => { throw new Error("404"); }, redirect: (path: string) => { throw new Error(`redirect:${path}`); } }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ from: mock.from }) }));
-import { ACTIVITY_PAGE_SIZE, getActivities, getMyActivities, getActivityTypes, parseActivitySearch, getHomeActivities, homeActivityLabel } from "./activities";
+import { ACTIVITY_PAGE_SIZE, getActivities, getMyActivities, getActivityTypes, parseActivitySearch, getHomeActivities, homeActivityLabel } from "@/lib/activities";
 import GroupsPage from "@/app/groups/page";
 import ActivitiesPage from "@/app/groups/[groupId]/activities/page";
 const groupId = "29000000-0000-4000-8000-000000000201";
@@ -19,74 +19,67 @@ beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-01-15T12:00:00Z"));
-  const query = { select: mock.select, eq: mock.eq, or: mock.or, in: mock.in, gte: mock.gte, lt: mock.lt, order: mock.order, range: mock.range, limit: mock.limit };
-  for (const method of [mock.select, mock.eq, mock.or, mock.in, mock.gte, mock.lt, mock.order, mock.from]) method.mockReturnValue(query);
   mock.group.mockResolvedValue(groups[0]);
   mock.groups.mockResolvedValue({ groups });
-  mock.range.mockResolvedValue({ data: [], error: null });
-  mock.limit.mockResolvedValue({ data: [], error: null });
+  mock.listActivityTypes.mockResolvedValue({ data: [], hasNext: false });
+  mock.listActivities.mockResolvedValue({ activities: [], hasNext: false });
+  mock.listGroupActivities.mockResolvedValue({ activities: [], hasNext: false });
+  mock.getHomeActivities.mockResolvedValue({ next: null, previous: null, now: "2026-01-15T12:00:00.000Z" });
+
 });
 afterEach(() => vi.useRealTimers());
 it("selector pide solo activos del grupo y sistema", async () => {
   await getActivityTypes(groupId);
   expect(mock.group).toHaveBeenCalledWith(groupId);
-  expect(mock.eq).toHaveBeenCalledWith("is_active", true);
-  expect(mock.or).toHaveBeenCalledWith(`group_id.is.null,group_id.eq.${groupId}`);
+  expect(mock.listActivityTypes).toHaveBeenCalledWith({ params: { groupId }, query: { page: 1, include_inactive: false } });
 });
 it("gestión incluye inactivos y pagina más allá de cien filas", async () => {
   const page = Array.from({ length: 100 }, (_, n) => ({ id: `type-${n}`, name: `Tipo ${n}`, group_id: groupId, color: "#123ABC", is_active: false }));
-  mock.range.mockResolvedValueOnce({ data: page, error: null }).mockResolvedValueOnce({ data: [{ ...page[0], id: "last" }], error: null });
+  mock.listActivityTypes.mockResolvedValueOnce({ data: page, hasNext: true }).mockResolvedValueOnce({ data: [{ ...page[0], id: "last" }], hasNext: false });
   expect(await getActivityTypes(groupId, true)).toHaveLength(101);
-  expect(mock.eq).not.toHaveBeenCalled();
-  expect(mock.range.mock.calls).toEqual([[0, 99], [100, 199]]);
+  expect(mock.listActivityTypes.mock.calls).toEqual([[{ params: { groupId }, query: { page: 1, include_inactive: true } }], [{ params: { groupId }, query: { page: 2, include_inactive: true } }]]);
 });
 
 describe("agenda de actividades", () => {
   it("consulta solo la vista autorizada, ordena próximas cronológicamente y pagina todos los grupos juntos", async () => {
     const rows = Array.from({ length: ACTIVITY_PAGE_SIZE + 1 }, (_, n) => ({ ...activity, id: `activity-${n}`, group_id: n % 2 ? otherGroupId : groupId }));
-    mock.range.mockResolvedValue({ data: rows, error: null });
+    mock.listActivities.mockResolvedValue({ activities: rows.slice(0, 50), hasNext: rows.length > 50 });
     const result = await getMyActivities(2);
-    expect(mock.from).toHaveBeenCalledWith("v_group_activities");
-    expect(mock.select.mock.calls[0]?.[0]).not.toContain("*");
-    expect(mock.in).toHaveBeenCalledWith("group_id", [groupId, otherGroupId]);
-    expect(mock.gte).toHaveBeenCalledWith("starts_at", "2026-01-15T12:00:00.000Z");
-    expect(mock.lt).not.toHaveBeenCalled();
-    expect(mock.order.mock.calls).toEqual([["starts_at", { ascending: true }], ["id"]]);
-    expect(mock.range).toHaveBeenCalledWith(50, 100);
+    expect(mock.listActivities).toHaveBeenCalledWith({ query: { group_ids: `${groupId},${otherGroupId}`, page: 2, period: "upcoming" } });
     expect(result.activities).toHaveLength(50);
     expect(result.activities.slice(0, 2).map((item) => item.group_name)).toEqual(["Equipo A", "Equipo B"]);
     expect(result.hasNext).toBe(true);
   });
 
   it("muestra las pasadas desde la más reciente y conserva el límite de página", async () => {
-    mock.range.mockResolvedValue({ data: Array.from({ length: 50 }, () => activity), error: null });
+    mock.listGroupActivities.mockResolvedValue({ activities: Array.from({ length: 50 }, () => activity), hasNext: false });
     const result = await getActivities(groupId, 1, "past");
     expect(mock.group).toHaveBeenCalledWith(groupId);
-    expect(mock.in).toHaveBeenCalledWith("group_id", [groupId]);
-    expect(mock.lt).toHaveBeenCalledWith("starts_at", "2026-01-15T12:00:00.000Z");
-    expect(mock.gte).not.toHaveBeenCalled();
-    expect(mock.order.mock.calls).toEqual([["starts_at", { ascending: false }], ["id"]]);
+    expect(mock.listGroupActivities).toHaveBeenCalledWith({ params: { groupId }, query: { page: 1, period: "past" } });
     expect(result.hasNext).toBe(false);
   });
 
   it("no consulta actividades sin grupos activos", async () => {
     mock.groups.mockResolvedValue({ groups: [] });
     expect(await getMyActivities()).toEqual({ activities: [], hasNext: false });
-    expect(mock.from).not.toHaveBeenCalled();
+    expect(mock.listActivities).not.toHaveBeenCalled();
+    expect(mock.listGroupActivities).not.toHaveBeenCalled();
     await expect(GroupsPage({ searchParams: Promise.resolve({}) })).rejects.toThrow("redirect:/welcome");
   });
 
   it("un grupo no visible responde 404 antes de consultar actividades", async () => {
     mock.group.mockRejectedValue(new Error("404"));
     await expect(getActivities(otherGroupId)).rejects.toThrow("404");
-    expect(mock.from).not.toHaveBeenCalled();
+    expect(mock.listActivities).not.toHaveBeenCalled();
+    expect(mock.listGroupActivities).not.toHaveBeenCalled();
   });
 
   it("propaga fallos de sesión y lectura sin mostrarlos como agenda vacía", async () => {
     mock.groups.mockRejectedValueOnce(new Error("redirect:/login"));
     await expect(getMyActivities()).rejects.toThrow("redirect:/login");
-    expect(mock.from).not.toHaveBeenCalled();
-    mock.range.mockResolvedValue({ data: null, error: { message: "private database detail" } });
+    expect(mock.listActivities).not.toHaveBeenCalled();
+    expect(mock.listGroupActivities).not.toHaveBeenCalled();
+    mock.listActivities.mockRejectedValue(new Error("private database detail"));
     await expect(getMyActivities()).rejects.toThrow("No pudimos cargar las actividades");
   });
 
@@ -95,7 +88,7 @@ describe("agenda de actividades", () => {
   });
 
   it("identifica grupos sin duplicar actividades por multi-rol y muestra tipo, color, lugar y hora chilena", async () => {
-    mock.range.mockResolvedValue({ data: [activity, { ...activity, id: "second", group_id: otherGroupId, starts_at: "2026-07-15T22:00:00Z", ends_at: "2026-07-15T23:30:00Z" }], error: null });
+    mock.listActivities.mockResolvedValue({ activities: [activity, { ...activity, id: "second", group_id: otherGroupId, starts_at: "2026-07-15T22:00:00Z", ends_at: "2026-07-15T23:30:00Z" }], hasNext: false });
     const html = renderToStaticMarkup(await GroupsPage({ searchParams: Promise.resolve({}) }));
     expect(html).toContain("Mi agenda");
     expect(html).toContain(`/groups/${groupId}/activities/${activity.id}`);
@@ -108,7 +101,8 @@ describe("agenda de actividades", () => {
   });
 
   it("ambas agendas conservan el período al paginar y reinician la página al cambiarlo", async () => {
-    mock.range.mockResolvedValue({ data: Array.from({ length: 51 }, (_, n) => ({ ...activity, id: `activity-${n}` })), error: null });
+    mock.listActivities.mockResolvedValue({ activities: Array.from({ length: 50 }, (_, n) => ({ ...activity, id: `activity-${n}` })), hasNext: true });
+    mock.listGroupActivities.mockResolvedValue({ activities: Array.from({ length: 50 }, (_, n) => ({ ...activity, id: `activity-${n}` })), hasNext: true });
     const searchParams = Promise.resolve({ period: "past", page: "2" });
     const agendaHtml = renderToStaticMarkup(await GroupsPage({ searchParams }));
     expect(agendaHtml).toContain('/groups?period=past&amp;page=1#agenda');
@@ -121,7 +115,7 @@ describe("agenda de actividades", () => {
   });
 
   it("agrupa una sola vez por día chileno incluso cuando UTC cruza medianoche", async () => {
-    mock.range.mockResolvedValue({ data: [activity, { ...activity, id: "night", starts_at: "2026-01-16T02:00:00Z", ends_at: "2026-01-16T04:00:00Z", location: null }], error: null });
+    mock.listActivities.mockResolvedValue({ activities: [activity, { ...activity, id: "night", starts_at: "2026-01-16T02:00:00Z", ends_at: "2026-01-16T04:00:00Z", location: null }], hasNext: false });
     const html = renderToStaticMarkup(await GroupsPage({ searchParams: Promise.resolve({}) }));
     expect(html.match(/<h3 /g)).toHaveLength(1);
     expect(html).toContain("jueves, 15 de enero de 2026");
@@ -156,15 +150,17 @@ it("una página vacía conserva período y ofrece volver a la primera", async ()
 });
 it("valida acceso y parámetros antes de crear el límite de carga", async () => {
   await expect(ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({ period: "invalid" }) })).rejects.toThrow("404");
-  expect(mock.from).not.toHaveBeenCalled();
+  expect(mock.listActivities).not.toHaveBeenCalled();
+    expect(mock.listGroupActivities).not.toHaveBeenCalled();
   mock.group.mockRejectedValue(new Error("404"));
   await expect(ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({}) })).rejects.toThrow("404");
-  expect(mock.from).not.toHaveBeenCalled();
+  expect(mock.listActivities).not.toHaveBeenCalled();
+    expect(mock.listGroupActivities).not.toHaveBeenCalled();
 });
 it("streaming anuncia carga real y luego entrega la lista sin datos ficticios", async () => {
   vi.useRealTimers();
   let finish!: (value: unknown) => void;
-  mock.range.mockReturnValue(new Promise(resolve => { finish = resolve; }));
+  mock.listGroupActivities.mockReturnValue(new Promise(resolve => { finish = resolve; }));
   const node = await ActivitiesPage({ params: Promise.resolve({ groupId }), searchParams: Promise.resolve({}) });
   const output = new PassThrough();
   let html = "";
@@ -177,7 +173,7 @@ it("streaming anuncia carga real y luego entrega la lista sin datos ficticios", 
   expect(html).toContain('aria-busy="true"');
   expect(html).toContain("Cargando actividades…");
   expect(html).not.toContain(activity.title);
-  finish({ data: [activity], error: null });
+  finish({ activities: [activity], hasNext: false });
   await complete;
   expect(html).toContain(activity.title);
 });
@@ -185,22 +181,19 @@ it("streaming anuncia carga real y luego entrega la lista sin datos ficticios", 
 
 describe("lecturas acotadas del inicio", () => {
   it("incluye una actividad en curso, separa la última terminada y proyecta columnas mínimas", async () => {
-    mock.limit.mockResolvedValueOnce({ data: [activity], error: null }).mockResolvedValueOnce({ data: [{ ...activity, id: "previous" }], error: null });
+    mock.getHomeActivities.mockResolvedValue({ next: activity, previous: { ...activity, id: "previous" }, now: "2026-01-15T12:00:00.000Z" });
     const result = await getHomeActivities(groupId);
     expect(result.next?.id).toBe(activity.id);
     expect(result.previous?.id).toBe("previous");
     expect(mock.group).toHaveBeenCalledWith(groupId);
-    expect(mock.in.mock.calls).toEqual([["group_id", [groupId]], ["group_id", [groupId]]]);
-    expect(mock.select).toHaveBeenCalledWith("id, group_id, title, location, starts_at, ends_at");
-    expect(mock.gte).toHaveBeenCalledWith("ends_at", "2026-01-15T12:00:00.000Z");
-    expect(mock.lt).toHaveBeenCalledWith("ends_at", "2026-01-15T12:00:00.000Z");
-    expect(mock.limit.mock.calls).toEqual([[1], [1]]);
+    expect(mock.getHomeActivities).toHaveBeenCalledWith({ query: { group_ids: groupId } });
   });
   it("rechaza el grupo ajeno antes de consultar y no disfraza errores como vacío", async () => {
     mock.group.mockRejectedValueOnce(new Error("404"));
     await expect(getHomeActivities(otherGroupId)).rejects.toThrow("404");
-    expect(mock.from).not.toHaveBeenCalled();
-    mock.limit.mockResolvedValue({ data: null, error: { message: "private" } });
+    expect(mock.listActivities).not.toHaveBeenCalled();
+    expect(mock.listGroupActivities).not.toHaveBeenCalled();
+    mock.getHomeActivities.mockRejectedValue(new Error("private"));
     await expect(getHomeActivities(groupId)).rejects.toThrow("No pudimos cargar las actividades");
   });
   it.each([

@@ -7,8 +7,6 @@ export default defineConfig({
   test: {
     environment: "node",
     setupFiles: ["./vitest.setup.ts"],
-    include: process.env.RUN_SUPABASE_INTEGRATION === "1"
-      ? ["tests/**/*.integration.ts"]
-      : ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}"],
   },
 });

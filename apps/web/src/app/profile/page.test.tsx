@@ -2,22 +2,19 @@
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
-import ProfilePage from "./page";
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn(), rpc: vi.fn() }));
+import ProfilePage from "@/app/profile/page";
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), profile: vi.fn() }));
 vi.mock("next/navigation", () => ({ redirect: (url: string) => { throw new Error(url); } }));
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }) => <main>{children}</main> }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser }, from: mock.from, rpc: mock.rpc }) }));
-vi.mock("./profile-form", () => ({ ProfileForm: () => <div>Formulario de perfil</div> }));
-vi.mock("./avatar-permissions", () => ({ AvatarPermissions: () => null }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: { getUser: mock.getUser } }) }));
+vi.mock("@/lib/profile",()=>({getProfilePageData:mock.profile}));
+vi.mock("@/lib/social-auth",()=>({getSocialProviderAvailability:async()=>({google:false,apple:false})}));
+vi.mock("@/app/profile/profile-form", () => ({ ProfileForm: () => <div>Formulario de perfil</div> }));
+vi.mock("@/app/profile/avatar-permissions", () => ({ AvatarPermissions: () => null }));
 beforeEach(() => {
   vi.clearAllMocks();
   mock.getUser.mockResolvedValue({ data: { user: { id: "test-auth" } } });
-  mock.rpc.mockImplementation(async (name: string) => ({ data: name === "can_upload_avatar" ? true : [] }));
-  mock.from.mockImplementation((table: string) => {
-    const chain = { select: () => chain, eq: () => chain, order: () => chain, limit: async () => ({ data: [] }),
-      single: async () => ({ data: table === "users" ? { id: "test-profile", full_name: "Ana Prueba", birthdate: null, phone: null, email: "ana@example.test", avatar_url: null } : null }) };
-    return chain;
-  });
+  mock.profile.mockResolvedValue({profile:{id:"test-profile",full_name:"Ana Prueba",birthdate:null,phone:null,email:"ana@example.test",avatar_url:null},allowed:true,request:null,hasAdminRole:false,avatarPermissions:[]});
 });
 afterEach(cleanup);
 it("ofrece recuperación existente y solicitudes al canal confirmado sin precargar PII", async () => {
@@ -37,5 +34,5 @@ it("ofrece recuperación existente y solicitudes al canal confirmado sin precarg
 it("exige sesión para mostrar el perfil", async () => {
   mock.getUser.mockResolvedValueOnce({ data: { user: null } });
   await expect(ProfilePage()).rejects.toThrow("/login");
-  expect(mock.from).not.toHaveBeenCalled();
+  expect(mock.profile).not.toHaveBeenCalled();
 });

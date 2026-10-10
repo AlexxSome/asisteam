@@ -2,15 +2,15 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { createApplication } from '../dist/application.js';
-import { loadConfig } from '../dist/config.js';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
 
 const enabled = process.env.API_RLS_TEST === '1';
 test('MIG-07 real PostgreSQL/HTTP: four roles, multirol, tenant isolation, consent, groups, profile, age review and code quota', { skip: !enabled }, async () => {
-  const admin = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' });
+  const admin = new pg.Client({ connectionString: fixtureConnection() });
   await admin.connect();
   const fixture = await authFixture();
   const auth = Array.from({ length: 7 }, () => randomUUID()), sessions = auth.map(() => randomUUID());
@@ -23,9 +23,9 @@ test('MIG-07 real PostgreSQL/HTTP: four roles, multirol, tenant isolation, conse
   try {
     await admin.query("alter role asisteam_api login password '"+rolePassword+"'");
     for (const [i,id] of auth.entries()) {
-      await admin.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)', [id,'mig151-'+id+'@example.test',JSON.stringify({ full_name:'Persona sintética '+i,birthdate:i===3?'2014-01-01':'1990-01-01' })]);
+      await admin.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject", [id,'mig151-'+id+'@example.test',JSON.stringify({ full_name:'Persona sintética '+i,birthdate:i===3?'2014-01-01':'1990-01-01' })]);
       profiles.push((await admin.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id);
-      await admin.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
+      await admin.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
       if(i!==6)await admin.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profiles[i]]);
     }
     for(const [i,id] of groupIds.entries()) {
@@ -35,7 +35,7 @@ test('MIG-07 real PostgreSQL/HTTP: four roles, multirol, tenant isolation, conse
     guardianship=(await admin.query("insert into public.guardianships(guardian_user_id,athlete_user_id,relationship) values($1,$2,'Apoderado') returning id",[profiles[2],profiles[3]])).rows[0].id;
     await admin.query("insert into public.consents(guardianship_id,consent_type,terms_version,allows_avatar) values($1,'DATA_PROCESSING_MINOR','synthetic',false)",[guardianship]);
     for (const [i,g,role] of [[0,0,'ADMIN'],[0,0,'ATHLETE'],[1,0,'ATHLETE'],[3,0,'ATHLETE'],[4,0,'COACH'],[5,1,'ADMIN']]) await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,$3,'ACTIVE',now())",[profiles[i],groupIds[g],role]);
-    app=await createApplication(loadConfig({ DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'1' }),new SafeLogger(line=>logs.push(line)));
+    app=await createApplication(loadConfig({ DATABASE_URL:fixtureConnection('asisteam_api',rolePassword),PG_POOL_MAX:'1' }),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');
     const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i])));
     const clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token}));
@@ -137,50 +137,42 @@ test('MIG-07 real PostgreSQL/HTTP: four roles, multirol, tenant isolation, conse
       await admin.query('delete from app_private.join_code_attempts where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.users where id=any($1::uuid[])',[profiles]);
-      await admin.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth]);
-      await admin.query('delete from auth.users where id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
       const oldPassword=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";
       await admin.query('alter role asisteam_api '+(previous.rolcanlogin?'login':'nologin')+' password '+oldPassword);
     } finally { await admin.query("set session_replication_role='origin'");await admin.end(); }
   }
 });
 
-test('MIG-07 GoTrue/PostgREST→Nest same database: rollback transport preserves group/profile writes without duplication', { skip: !enabled }, async () => {
-  const { execFileSync } = await import('node:child_process');
-  const config=JSON.parse(execFileSync('pnpm',['-w','exec','supabase','status','-o','json'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
-  assert.equal(config.API_URL,'http://127.0.0.1:54321');
-  const admin=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});await admin.connect();
-  const password=randomUUID(),email='mig151-parity-'+randomUUID()+'@example.test',runtimePassword=randomUUID();
-  const previous=(await admin.query("select rolcanlogin,rolpassword from pg_authid where rolname='asisteam_api'")).rows[0];
-  let app,authId,profileId,groupId;
-  try {
-    await admin.query("alter role asisteam_api login password '"+runtimePassword+"'");
-    const signup=await fetch(config.API_URL+'/auth/v1/signup',{method:'POST',headers:{apikey:config.ANON_KEY,'content-type':'application/json'},body:JSON.stringify({email,password,data:{full_name:'Persona sintética paridad',birthdate:'1990-01-01',account_terms:{accepted:true,version:'2026-09-21'}}})});
-    assert.equal(signup.status,200);const session=await signup.json();authId=session.user.id;assert.ok(session.access_token);
-    profileId=(await admin.query('select id from public.users where auth_user_id=$1',[authId])).rows[0].id;
-    app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+runtimePassword+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:config.API_URL+'/auth/v1',SUPABASE_AUTH_PUBLIC_KEY:config.ANON_KEY}),new SafeLogger(()=>{}));await app.listen(0,'127.0.0.1');
-    const client=new ApiClient({origin:await app.getUrl(),accessToken:async()=>session.access_token});
-    const rest=(path,method='GET',body)=>fetch(config.API_URL+'/rest/v1/'+path,{method,headers:{apikey:config.ANON_KEY,authorization:'Bearer '+session.access_token,'content-type':'application/json',prefer:'return=representation'},...(body===undefined?{}:{body:JSON.stringify(body)})});
-    const created=await rest('rpc/create_group','POST',{p_name:'Grupo vía Supabase',p_sport:'Tenis'});assert.equal(created.status,200);groupId=await created.json();
-    const params={groupId};assert.equal((await client.getGroup({params})).name,'Grupo vía Supabase');
-    await client.updateGroup({params,body:{name:'Grupo vía Nest',sport:'Tenis'}});
-    const read=await rest('v_group_detail?id=eq.'+groupId+'&select=id,name');assert.equal(read.status,200);assert.deepEqual(await read.json(),[{id:groupId,name:'Grupo vía Nest'}]);
-    const reverted=await rest('groups?id=eq.'+groupId+'&select=id','PATCH',{name:'Grupo tras rollback'});assert.equal(reverted.status,200);assert.equal((await client.getGroup({params})).name,'Grupo tras rollback');
-    assert.equal((await admin.query('select count(*)::int as n from public.groups where created_by=$1',[profileId])).rows[0].n,1);
-    await client.updateOwnProfile({body:{full_name:'Nombre desde Nest',phone:null,birthdate:'1990-01-01'}});
-    const update=await rest('users?id=eq.'+profileId+'&select=id,full_name','PATCH',{full_name:'Nombre tras rollback'});assert.equal(update.status,200);
-    assert.equal((await client.getOwnProfile()).full_name,'Nombre tras rollback');
-    assert.equal((await admin.query('select count(*)::int as n from public.users where auth_user_id=$1',[authId])).rows[0].n,1);
-    const logout=await fetch(config.API_URL+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:config.ANON_KEY,authorization:'Bearer '+session.access_token}});assert.equal(logout.status,204);
-    await assert.rejects(client.getOwnProfile(),{status:401});
-  } finally {
-    if(app)await app.close();await admin.query("set session_replication_role='replica'");
-    try {
-      if(groupId){await admin.query('delete from public.memberships where group_id=$1',[groupId]);await admin.query('delete from public.groups where id=$1',[groupId]);}
-      if(profileId){await admin.query('delete from public.account_consents where user_id=$1',[profileId]);await admin.query('delete from public.users where id=$1',[profileId]);}
-      if(authId){await admin.query('delete from auth.refresh_tokens where user_id=$1',[authId]);await admin.query('delete from auth.sessions where user_id=$1',[authId]);await admin.query('delete from auth.identities where user_id=$1',[authId]);await admin.query('delete from auth.users where id=$1',[authId]);}
-      const old=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";
-      await admin.query('alter role asisteam_api '+(previous.rolcanlogin?'login':'nologin')+' password '+old);
-    } finally {await admin.query("set session_replication_role='origin'");await admin.end();}
-  }
+test('native HTTP and canonical RLS SQL preserve group/profile writes across service restart without duplication',{skip:!enabled},async()=>{
+ const db=new pg.Client({connectionString:fixtureConnection()});await db.connect();
+ const rolePassword=new URL(fixtureConnection()).password,password='Synthetic-native-'+randomUUID(),email='restart-'+randomUUID()+'@example.test',realFetch=globalThis.fetch;
+ let app;const configuration=loadConfig({DATABASE_URL:fixtureConnection('asisteam_api',rolePassword)});
+ try{
+  globalThis.fetch=async(url,options)=>String(url).startsWith('https://api.pwnedpasswords.com/range/')?new Response('A'.repeat(35)+':0'):realFetch(url,options);
+  app=await createApplication(configuration,new SafeLogger(()=>{}));await app.listen(0,'127.0.0.1');
+  const {fixtureSecret}=await import('./fixture-config.mjs'),{Database}=await import('../dist/database.js'),{TokenVerifier}=await import('../dist/auth.js');
+  let anonymous=new ApiClient({origin:await app.getUrl(),nativeAuth:true,authProxy:{secret:fixtureSecret,clientIp:randomUUID()}});
+  await anonymous.registerPassword({body:{email,password,full_name:'Persona sintética paridad',birthdate:'1990-01-01',terms_accepted:true,terms_version:'2026-09-21'}});
+  const session=await anonymous.loginPassword({body:{email,password}});assert.ok(session.access_token);
+  const claims=JSON.parse(Buffer.from(session.access_token.split('.')[1],'base64url')),profile=(await db.query('select id from public.users where auth_user_id=$1',[claims.sub])).rows[0].id;
+  let client=new ApiClient({origin:await app.getUrl(),accessToken:async()=>session.access_token});
+  const identity=await app.get(TokenVerifier).verify('Bearer '+session.access_token),database=app.get(Database);
+  const groupId=await database.authenticated(identity,async tx=>(await tx.query("select public.create_group('Grupo vía SQL','Tenis') as id")).rows[0].id),params={groupId};assert.ok(groupId);
+  assert.equal((await client.getGroup({params})).name,'Grupo vía SQL');
+  await client.updateGroup({params,body:{name:'Grupo vía Nest',sport:'Tenis'}});
+  assert.deepEqual(await database.authenticated(identity,async tx=>(await tx.query('select id,name from public.v_group_detail where id=$1',[groupId])).rows),[{id:groupId,name:'Grupo vía Nest'}]);
+  await database.authenticated(identity,tx=>tx.query("update public.groups set name='Grupo tras reinicio' where id=$1 returning id",[groupId]));
+  assert.equal((await client.getGroup({params})).name,'Grupo tras reinicio');
+  assert.equal((await db.query('select count(*)::int as n from public.groups where created_by=$1',[profile])).rows[0].n,1);
+  await client.updateOwnProfile({body:{full_name:'Nombre desde Nest',phone:null,birthdate:'1990-01-01'}});
+  await database.authenticated(identity,tx=>tx.query("update public.users set full_name='Nombre tras reinicio' where id=$1 returning id",[profile]));
+  assert.equal((await client.getOwnProfile()).full_name,'Nombre tras reinicio');
+  assert.equal((await db.query('select count(*)::int as n from public.users where auth_user_id=$1',[claims.sub])).rows[0].n,1);
+  await app.close();app=await createApplication(configuration,new SafeLogger(()=>{}));await app.listen(0,'127.0.0.1');
+  client=new ApiClient({origin:await app.getUrl(),accessToken:async()=>session.access_token});
+  assert.equal((await client.getGroup({params})).name,'Grupo tras reinicio');assert.equal((await client.getOwnProfile()).full_name,'Nombre tras reinicio');
+  await client.logoutSession();await assert.rejects(client.getOwnProfile(),{status:401});
+ }finally{globalThis.fetch=realFetch;if(app)await app.close();await db.end()}
 });

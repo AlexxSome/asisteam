@@ -1,33 +1,34 @@
 import { beforeEach, expect, it, vi } from "vitest";
+import {ApiClientError} from "@asisteam/api-client";
 import { reportFilterSchema } from "@asisteam/core";
-import { reportFixture } from "./reports.test-fixture";
-const mock = vi.hoisted(() => ({ group: vi.fn(), rpc: vi.fn() }));
+import { reportFixture } from "@/lib/reports.test-fixture";
+const mock = vi.hoisted(() => ({ group: vi.fn(), operation:vi.fn() }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ rpc: mock.rpc }) }));
+vi.mock("@/lib/api/server",()=>({createServerApiClient:()=>({getGroupAttendanceReport:(request:unknown)=>mock.operation("getGroupAttendanceReport",request),getGroupStats:(request:unknown)=>mock.operation("getGroupStats",request)})}));
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("404"); } }));
-import { getGroupAttendanceReport, getGroupStats, parseReportFilters, reportPageHref } from "./reports";
+import { getGroupAttendanceReport, getGroupStats, parseReportFilters, reportPageHref } from "@/lib/reports";
 const groupId = reportFixture.group_id;
 beforeEach(() => {
   vi.resetAllMocks(); mock.group.mockResolvedValue({ id: groupId, roles: ["ADMIN"] });
-  mock.rpc.mockResolvedValue({ data: reportFixture, error: null });
+  mock.operation.mockResolvedValue(reportFixture);
 });
 it("envía todos los filtros, sin calcular métricas en la página", async () => {
   const filter = reportFilterSchema.parse({ period: "custom", from: "2026-03-01", to: "2026-03-31", include_inactive: true, activity_type_ids: [reportFixture.by_activity_type[0]!.activity_type_id], page: 2, sort: "name" });
   expect((await getGroupAttendanceReport(groupId, filter)).report).toEqual(reportFixture);
-  expect(mock.rpc).toHaveBeenCalledWith("get_group_attendance_report", { p_group_id: groupId, p_period: "custom", p_from: "2026-03-01", p_to: "2026-03-31", p_include_inactive: true, p_activity_type_ids: filter.activity_type_ids, p_page: 2, p_page_size: 50, p_sort: "name" });
+  expect(mock.operation).toHaveBeenCalledWith("getGroupAttendanceReport",{params:{groupId},query:{...filter,activity_type_ids:filter.activity_type_ids.join(","),page_size:50}});
 });
 it("no llama la RPC para roles sin permiso y revocación del permiso produce 404", async () => {
   mock.group.mockResolvedValue({ id: groupId, roles: ["ATHLETE"] });
   await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("404");
-  expect(mock.rpc).not.toHaveBeenCalled();
+  expect(mock.operation).not.toHaveBeenCalled();
   mock.group.mockResolvedValue({ id: groupId, roles: ["ADMIN"] });
-  mock.rpc.mockResolvedValue({ data: null, error: { code: "PT403" } });
+  mock.operation.mockRejectedValue(new ApiClientError(403,"domain_rejected"));
   await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("404");
 });
 it("filtro inválido ofrece corrección y fallo de lectura nunca se presenta como cero", async () => {
-  mock.rpc.mockResolvedValue({ data: null, error: { code: "PT400" } });
+  mock.operation.mockRejectedValue(new ApiClientError(400,"domain_rejected"));
   expect((await getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).error).toContain("Revisa");
-  mock.rpc.mockResolvedValue({ data: {}, error: null });
+  mock.operation.mockResolvedValue({});
   await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("leer el reporte");
 });
 it("URL de paginación mantiene fechas, tipos, inactivos y orden", () => {
@@ -50,20 +51,20 @@ it("estadísticas consulta autorización actual y muestra revocación sin usar d
   const stats = { group_id: groupId, members: [{ ...metrics, avatar_url: null }], page: 1, page_size: 50,
     totals: { athletes: 1, convened: 8, present: 5, late: 1, absent: 1, excused: 1, attendance_pct: 85.7, late_rate: 16.7 } };
   mock.group.mockResolvedValue({ id: groupId, roles: ["ATHLETE"] });
-  mock.rpc.mockResolvedValueOnce({ data: stats, error: null }).mockResolvedValueOnce({ data: null, error: { code: "PT403" } });
+  mock.operation.mockResolvedValueOnce(stats).mockRejectedValueOnce(new ApiClientError(403,"group_stats_disabled"));
   expect((await getGroupStats(groupId)).report).toEqual(stats);
   expect(await getGroupStats(groupId)).toEqual({ report: null, error: null });
-  expect(mock.rpc).toHaveBeenCalledTimes(2);
-  mock.rpc.mockResolvedValueOnce({ data: { ...stats, members: [{ ...stats.members[0], email: "private@example.test" }] }, error: null });
+  expect(mock.operation).toHaveBeenCalledTimes(2);
+  mock.operation.mockResolvedValueOnce({...stats,members:[{...stats.members[0],email:"private@example.test"}]});
   await expect(getGroupStats(groupId)).rejects.toThrow("leer las estadísticas");
-  mock.rpc.mockResolvedValueOnce({ data: null, error: { code: "PT404" } });
+  mock.operation.mockRejectedValueOnce(new ApiClientError(404,"domain_rejected"));
   await expect(getGroupStats(groupId)).rejects.toThrow("404");
 });
 
 it("COACH consulta el reporte agregado y una revocación se vuelve a verificar", async () => {
   mock.group.mockResolvedValue({ id: groupId, roles: ["COACH"] });
   expect((await getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).report).toEqual(reportFixture);
-  mock.rpc.mockResolvedValue({ data: null, error: { code: "PT403" } });
+  mock.operation.mockRejectedValue(new ApiClientError(403,"domain_rejected"));
   await expect(getGroupAttendanceReport(groupId, reportFilterSchema.parse({}))).rejects.toThrow("404");
 });
 

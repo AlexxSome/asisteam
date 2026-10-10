@@ -9,23 +9,28 @@ await suite('backend', async () => {
   await check('worker-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/worker']);
   await check('private-storage-fixture-build', 'docker', ['build', '-f', 'scripts/migration/storage/Dockerfile.fixture', '-t', 'asisteam-storage-fixture:161', '.']);
   await check('independent-postgres-api-worker-types-backup-pitr', 'node', ['apps/api/test/independent-postgres.integration.mjs']);
-  await check('worker-two-replicas', 'pnpm', ['--filter', '@asisteam/worker', 'test:integration'], { env: { WORKER_TEST: '1' }, noSkip: true });
-  await check('api-private-storage-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/storage.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('next-native-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:auth-contract']);
+  // Native HTTP/SQL suites own an independent disposable PostgreSQL.
+  // Origin SQL and module assertions below remain mandatory until their
+  // complete native replacements are implemented and reviewed.
+  await check('native-api-worker-all-integrations', 'node', [
+    'apps/api/test/native-suite.mjs',
+    'apps/api/test/auth-cutover.integration.mjs',
+    'apps/api/test/activities.integration.mjs',
+    'apps/api/test/announcements.integration.mjs',
+    'apps/api/test/attendance.integration.mjs',
+    'apps/api/test/billing.integration.mjs',
+    'apps/api/test/groups-profile.integration.mjs',
+    'apps/api/test/invitations.integration.mjs',
+    'apps/api/test/members-consents.integration.mjs',
+    'apps/api/test/native-auth.integration.mjs',
+    'apps/api/test/qr.integration.mjs',
+    'apps/api/test/reports.integration.mjs',
+    'apps/api/test/session-rls.integration.mjs',
+    'apps/api/test/social-auth.integration.mjs',
+    'apps/api/test/storage.integration.mjs',
+    'apps/worker/test/worker.integration.mjs',
+  ], { noSkip: true });
   await check('next-social-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:social-contract']);
-  await check('api-social-auth-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/social-auth.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-native-auth-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/native-auth.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-auth-cutover-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/auth-cutover.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-session-rls-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/session-rls.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-groups-profile-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/groups-profile.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-members-consents-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/members-consents.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-activities-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/activities.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-announcements-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/announcements.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-billing-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/billing.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-reports-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/reports.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-qr-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/qr.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-attendance-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/attendance.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
-  await check('api-invitations-http', 'pnpm', ['--filter', '@asisteam/api', 'exec', 'node', '--test', '--test-reporter=tap', 'test/invitations.integration.mjs'], { env: { API_RLS_TEST: '1' }, noSkip: true });
   await check('portability-rehearsal', 'pnpm', ['migration:portability']);
   verify('portability-no-omissions', () => {
     const report = JSON.parse(readFileSync('.ci-results/portability.json', 'utf8'));
@@ -42,6 +47,22 @@ await suite('backend', async () => {
   });
   const generated = await check('database-types-generation', 'pnpm', ['exec', 'supabase', 'gen', 'types', 'typescript', '--local']);
   verify('database-types-match', () => assert.equal(generated.trim(), readFileSync('packages/db/src/database.types.ts', 'utf8').trim()));
-  await check('pgtap-all', 'pnpm', ['exec', 'supabase', 'test', 'db']);
-  await withEdge(secret => check('product-integrations', 'pnpm', ['--filter', '@asisteam/web', 'test:integration:modules', '--reporter=json', '--outputFile=.ci-integration.json'], { env: { INVITATION_PROXY_SECRET: secret }, report: 'apps/web/.ci-integration.json', requireAll: true }));
+  const pgtap = await check('pgtap-all', 'pnpm', ['exec', 'supabase', 'test', 'db']);
+  verify('sql-coverage-preserved', () => {
+    const count = /Tests=(\d+)/.exec(pgtap)?.[1];
+    const native = JSON.parse(readFileSync('.ci-results/independent-postgres.json', 'utf8'));
+    // Only the unchanged 27 metric assertions moved to independent Postgres;
+    // its additional 23 native checks cannot replace missing origin cases.
+    assert.ok(Number(count) >= 1646 && native.pgtapCases >= 50, 'Original SQL coverage must remain exercised');
+  });
+  await withEdge(secret => check('origin-sql-integrations', 'pnpm', ['--filter', '@asisteam/web', 'test:integration:modules', '--reporter=json', '--outputFile=.ci-integration.json'], { env: { INVITATION_PROXY_SECRET: secret }, report: 'apps/web/.ci-integration.json', requireAll: true }));
+
+  verify('module-coverage-preserved', () => {
+    const report = JSON.parse(readFileSync('apps/web/.ci-integration.json', 'utf8'));
+    assert.equal(report.numTotalTests, 80);
+    assert.equal(report.numPendingTests, 0);
+    const browser = JSON.parse(readFileSync('.ci-results/native-auth-browser.json', 'utf8'));
+    assert.equal(browser.status, 'PASS');
+    assert.ok(Object.values(browser.logout).every(value => value === true));
+  });
 });

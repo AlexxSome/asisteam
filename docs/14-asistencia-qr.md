@@ -1,5 +1,8 @@
 # Autoasistencia con QR — HU-DEP-10 / #58
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 Alcance P2 autorizado: web responsive. ADMIN muestra el QR desde el detalle de una actividad; ATHLETE lo escanea con la cámara del teléfono y abre el enlace web. No requiere app Expo ni acceso a la cámara desde el navegador. No incluye geocerca.
 
 ## Horario y permisos

@@ -43,7 +43,7 @@ try {
  });
  await check('pgtap-destination-policies-and-invariants',async()=>{
   const output=await sql(name,'postgres',await readFile(new URL('tests/independent.sql',root),'utf8'));assert.doesNotMatch(output,/not ok|Looks like you failed/);assert.match(output,/1\.\.23/);
-  const legacy=await readFile(new URL('../../../supabase/tests/report_metrics.test.sql',import.meta.url),'utf8'),cases=JSON.parse(await readFile(new URL('fixtures/attendance-cases.json',root),'utf8'));
+  const legacy=await readFile(new URL('../../../packages/db/tests/report_metrics.test.sql',import.meta.url),'utf8'),cases=JSON.parse(await readFile(new URL('fixtures/attendance-cases.json',root),'utf8'));
   assert.deepEqual(cases,JSON.parse(legacy.match(/jsonb_to_recordset\(\$cases\$([\s\S]*?)\$cases\$/)[1]));
   const canonical=await sql(name,'postgres','set search_path=public,extensions;'+legacy);assert.doesNotMatch(canonical,/not ok|Looks like you failed/);
   for(const {name:_name,...expected} of cases){assert.deepEqual(attendanceMetrics(expected),expected);const actual=(await owner.query('select * from app_private.attendance_metrics($1,$2,$3,$4)',[expected.present,expected.late,expected.absent,expected.excused])).rows[0];assert.equal(actual.attendance_pct===null?null:Number(actual.attendance_pct),expected.attendance_pct);}

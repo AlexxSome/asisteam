@@ -6,7 +6,8 @@ await suite('checks', async () => {
   await check('typecheck', 'pnpm', ['typecheck']);
   await check('api-contract-fixture-build', 'pnpm', ['--filter', '@asisteam/api', 'build']);
   await check('next-http-contract', 'pnpm', ['--filter', '@asisteam/web', 'test:api-contract']);
-  await check('build', 'pnpm', ['build'], { env: { NEXT_PUBLIC_SUPABASE_URL: 'http://127.0.0.1:54321', NEXT_PUBLIC_SUPABASE_ANON_KEY: 'synthetic-build-fixture', NEXT_TELEMETRY_DISABLED: '1' } });
+  await check('build', 'pnpm', ['build'], { env: { ASISTEAM_DATABASE_MODE: 'independent', NEXT_TELEMETRY_DISABLED: '1' } });
+  await check('product-runtime-retirement', 'pnpm', ['ci:retirement']);
   await check('core-unit', 'pnpm', ['--filter', '@asisteam/core', 'exec', 'vitest', 'run', '--reporter=json', '--outputFile=.ci-unit.json'], { cwd: undefined, report: 'packages/core/.ci-unit.json', requireAll: true });
   await check('web-unit', 'pnpm', ['--filter', '@asisteam/web', 'exec', 'vitest', 'run', '--maxWorkers=2', '--testTimeout=10000', '--reporter=json', '--outputFile=.ci-unit.json'], { report: 'apps/web/.ci-unit.json' });
   await check('worker-unit', 'pnpm', ['--filter', '@asisteam/worker', 'test'], { noSkip: true });

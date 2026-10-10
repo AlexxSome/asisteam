@@ -1,20 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ApiClientError } from "@asisteam/api-client";
 
-const mock = vi.hoisted(() => ({ getUser: vi.fn(), rpc: vi.fn() }));
+const mock = vi.hoisted(() => ({ getUser: vi.fn(), pending: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({
-  createClient: async () => ({ auth: { getUser: mock.getUser }, rpc: mock.rpc }),
+  createClient: async () => ({ auth: { getUser: mock.getUser } }),
 }));
+vi.mock("@/lib/api/server",()=>({createServerApiClient:()=>({listMembershipOnboarding:mock.pending})}));
 vi.mock("@/app/groups/[groupId]/actions", () => ({ joinByCode: vi.fn() }));
 vi.mock("next/navigation", () => ({
   redirect: (path: string) => { throw new Error(`redirect:${path}`); },
 }));
 vi.mock("@/components/app-shell", () => ({ AppShell: ({ children }: { children: import("react").ReactNode }) => children }));
 import { renderToStaticMarkup } from "react-dom/server";
-import JoinPage from "./page";
+import JoinPage from "@/app/join/page";
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mock.rpc.mockResolvedValue({ data: [], error: null });
+  mock.pending.mockResolvedValue({data:[]});
   mock.getUser.mockResolvedValue({ data: { user: null } });
 });
 
@@ -31,9 +33,9 @@ describe("enlace compartido sin sesión", () => {
 
 it("recupera la solicitud persistida al volver sin pending=1 y no declara un alta inexistente", async () => {
   mock.getUser.mockResolvedValue({ data: { user: { id: "athlete" } } });
-  mock.rpc.mockResolvedValue({ data: [{ membership_id: "membership", group_id: "group", group_name: "Club sintético",
+  mock.pending.mockResolvedValue({ data: [{ membership_id: "membership", group_id: "group", group_name: "Club sintético",
     full_name: "Menor por código", is_minor: true, guardian_linked: true, guardian_ready: false, requires_managed_consent: false,
-    membership_status: "PENDING", account_status: "ACTIVE" }], error: null });
+    membership_status: "PENDING", account_status: "ACTIVE" }] });
   const html = renderToStaticMarkup(await JoinPage({ searchParams: Promise.resolve({}) }));
   expect(html).toContain("Mis solicitudes guardadas");
   expect(html).toContain("Club sintético");
@@ -45,6 +47,6 @@ it("un error de lectura no se disfraza de solicitud inexistente ni usa el querys
   mock.getUser.mockResolvedValue({ data: { user: { id: "athlete" } } });
   let html = renderToStaticMarkup(await JoinPage({ searchParams: Promise.resolve({ pending: "1" }) }));
   expect(html).not.toContain("Mis solicitudes guardadas");
-  mock.rpc.mockResolvedValue({ data: null, error: { message: "secret" } });
+  mock.pending.mockRejectedValue(new ApiClientError(503,"unavailable","secret"));
   await expect(JoinPage({ searchParams: Promise.resolve({}) })).rejects.toThrow("No pudimos cargar tus solicitudes pendientes");
 });

@@ -31,3 +31,6 @@ graphify-out/
 # CI sanitized results and transient Vitest reports
 .ci-results/
 .ci-*.json
+
+# Transpiled historical origin harness (never part of product)
+apps/api/test/.ci-legacy/

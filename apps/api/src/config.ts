@@ -11,12 +11,6 @@ const configSchema = z.object({
       return ['postgres:', 'postgresql:'].includes(url.protocol) && !!url.hostname && !!url.pathname.slice(1);
     } catch { return false; }
   }),
-  SUPABASE_AUTH_URL: z.string().url().optional(),
-  SUPABASE_AUTH_RETIRED: z.literal('1').optional(),
-  SUPABASE_AUTH_PUBLIC_KEY: z.string().min(1).refine(value => {
-    if (value.startsWith('sb_publishable_')) return true;
-    try { return JSON.parse(Buffer.from(value.split('.')[1] ?? '', 'base64url').toString()).role === 'anon'; } catch { return false; }
-  }).optional(),
   S3_LOCAL_POLICY_ONLY: z.literal('1').optional(),
   S3_AVATAR_BUCKET: z.string().regex(/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/).optional(),
   S3_REGION: z.string().min(1).default('sa-east-1'),
@@ -41,7 +35,6 @@ const configSchema = z.object({
   BILLING_WEBHOOK_URL: z.string().url().optional(),
   INVITATION_DATABASE_URL: z.string().url().optional(),
   INVITATION_PROXY_SECRET: z.string().min(32).optional(),
-  INVITATION_AUTH_BRIDGE_SECRET: z.string().min(32).optional(),
   INVITATION_WEB_URL: z.string().url().optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
   INVITATION_EMAIL_FROM: z.string().min(1).optional(),
@@ -60,6 +53,9 @@ export class ConfigurationError extends Error {
   }
 }
 export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
+  const retired = ['SUPABASE_AUTH_URL', 'SUPABASE_AUTH_PUBLIC_KEY', 'INVITATION_AUTH_BRIDGE_SECRET'];
+  const configured = retired.filter(name => environment[name]);
+  if (configured.length) throw new ConfigurationError(configured);
   const parsed = configSchema.superRefine((value, ctx) => {
     for (const provider of ['GOOGLE','APPLE'] as const) {
       const id=value[`OAUTH_${provider}_CLIENT_ID`],secret=value[`OAUTH_${provider}_CLIENT_SECRET`];
@@ -67,7 +63,7 @@ export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
       if (provider==='APPLE' && id && !value.NATIVE_AUTH_WEB_URL?.startsWith('https://')) ctx.addIssue({code:'custom',path:['OAUTH_APPLE_CLIENT_ID'],message:'Apple requiere retorno HTTPS.'});
     }
     const native = [value.NATIVE_AUTH_DATABASE_URL,value.NATIVE_AUTH_SECRET,value.NATIVE_AUTH_ISSUER,value.NATIVE_AUTH_WEB_URL,value.NATIVE_AUTH_PROXY_SECRET];
-    if (value.SUPABASE_AUTH_RETIRED && (!native.every(Boolean) || value.SUPABASE_AUTH_URL || value.SUPABASE_AUTH_PUBLIC_KEY || value.INVITATION_AUTH_BRIDGE_SECRET)) ctx.addIssue({code:'custom',path:['SUPABASE_AUTH_RETIRED'],message:'Retiro requiere Auth propio y eliminar la configuración legacy.'});
+    if (value.NODE_ENV === 'production' && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Producción requiere identidad propia completa.'});
     if (native.some(Boolean) && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Configura Auth independiente completo.'});
     if (value.NATIVE_AUTH_DATABASE_URL) {
       const a=new URL(value.DATABASE_URL),b=new URL(value.NATIVE_AUTH_DATABASE_URL);
@@ -84,7 +80,6 @@ export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
       const url = new URL(value.S3_ENDPOINT);
       if (url.username || url.password || url.search || url.hash || url.pathname !== '/' || !(url.protocol === 'https:' || value.NODE_ENV !== 'production' && url.protocol === 'http:' && ['127.0.0.1','localhost'].includes(url.hostname))) ctx.addIssue({code:'custom',path:['S3_ENDPOINT'],message:'Endpoint inválido.'});
     }
-    if (!!value.SUPABASE_AUTH_URL !== !!value.SUPABASE_AUTH_PUBLIC_KEY) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Configura el emisor y la clave pública juntos.' });
     if (value.BILLING_DATABASE_URL) {
       const main = new URL(value.DATABASE_URL), billing = new URL(value.BILLING_DATABASE_URL);
       if (!['postgres:', 'postgresql:'].includes(billing.protocol) || main.hostname !== billing.hostname || main.port !== billing.port || main.pathname !== billing.pathname) ctx.addIssue({code:'custom',path:['BILLING_DATABASE_URL'],message:'Las conexiones deben usar la misma base.'});
@@ -98,11 +93,7 @@ export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
       const main = new URL(value.DATABASE_URL), invitations = new URL(value.INVITATION_DATABASE_URL);
       if (!['postgres:', 'postgresql:'].includes(invitations.protocol) || main.hostname !== invitations.hostname || main.port !== invitations.port || main.pathname !== invitations.pathname) ctx.addIssue({code:"custom",path:["INVITATION_DATABASE_URL"],message:"Las conexiones deben usar la misma base."});
     }
-    if (value.SUPABASE_AUTH_URL) {
-      let url: URL;
-      try { url = new URL(value.SUPABASE_AUTH_URL); } catch { return; }
-      if (url.username || url.password || url.search || url.hash || url.pathname !== '/auth/v1' || (url.protocol !== 'https:' && !(value.NODE_ENV !== 'production' && url.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(url.hostname)))) ctx.addIssue({ code: 'custom', path: ['SUPABASE_AUTH_URL'], message: 'Emisor inválido.' });
-    }
+
   }).safeParse(environment);
   if (!parsed.success) throw new ConfigurationError([...new Set(parsed.error.issues.map((issue) => String(issue.path[0])))]);
   return parsed.data;

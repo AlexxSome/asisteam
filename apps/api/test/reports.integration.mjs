@@ -5,24 +5,24 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import pg from 'pg';
-import { createApplication } from '../dist/application.js';
-import { loadConfig } from '../dist/config.js';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
 import { attendanceMetrics } from '../../../packages/core/dist/index.js';
 
 const enabled = process.env.API_RLS_TEST === '1';
-const source = readFileSync(new URL('../../../supabase/tests/report_metrics.test.sql', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../../../packages/db/tests/report_metrics.test.sql', import.meta.url), 'utf8');
 const cases = JSON.parse(source.match(/jsonb_to_recordset\(\$cases\$([\s\S]*?)\$cases\$/)[1]);
 const p95 = samples => samples.toSorted((a,b)=>a-b)[Math.ceil(samples.length * .95)-1];
 const execute = promisify(execFile);
 test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections, pagination and p95 baseline', { skip: !enabled }, async () => {
   // A schema-only clone keeps this 500-athlete scenario independent of prior
   // integration data and ANALYZE statistics, as on a fresh CI database.
-  const name = 'reports_'+randomUUID().replaceAll('-','');
-  const root = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' });
-  const admin = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/'+name });
+  const name = 'postgres';
+  const root = new pg.Client({ connectionString: fixtureConnection() });
+  const admin = new pg.Client({ connectionString: fixtureConnection('postgres',undefined,name) });
   const auth=Array.from({length:6},()=>randomUUID()), sessions=auth.map(()=>randomUUID()), profiles=[], managed=[];
   const groups=[randomUUID(),randomUUID()], password=randomUUID(), logs=[];
   let previous, created=false, connected=false;
@@ -31,22 +31,14 @@ test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections
   try {
     rmSync(new URL('../../../.ci-results/reports-failure.json',import.meta.url),{force:true});
     await root.connect();
-    const schema=(await execute('docker',['exec','supabase_db_asisteam','pg_dump','-U','postgres','--schema-only','--no-owner',...['public','app_private','auth','storage'].flatMap(s=>['-n',s])],{maxBuffer:64000000})).stdout.replace(/^ALTER DEFAULT PRIVILEGES FOR ROLE (supabase_admin|supabase_auth_admin) [^\n]+;$/gm,'').replace(/^\\(?:un)?restrict .*$/gm,'');
-    await root.query('create database '+name+' template template0');created=true;
     await admin.connect();connected=true;
-    await admin.query('drop schema public;create schema extensions;create extension pgcrypto with schema extensions;');
-    await admin.query(schema);
-    await admin.query('insert into app_private.auth_authority(singleton) values(true)');
-    await admin.query("begin;set local session_replication_role='replica'");
-    for(const row of (await root.query('select id,name from public.activity_types where group_id is null')).rows)await admin.query('insert into public.activity_types(id,name) values($1,$2)',[row.id,row.name]);
-    await admin.query('commit');
     previous=(await root.query("select rolcanlogin,rolpassword from pg_authid where rolname='asisteam_api'")).rows[0];
     fixture=await authFixture();
     await admin.query("alter role asisteam_api login password '"+password+"'");
     for(const [i,id] of auth.entries()) {
-      await admin.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)',[id,'mig156-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética',birthdate:'1990-01-01'})]);
+      await admin.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[id,'mig156-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética',birthdate:'1990-01-01'})]);
       profiles.push((await admin.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id);
-      await admin.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
+      await admin.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
       if(i!==5)await admin.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profiles[i]]);
     }
     for(const [i,id] of groups.entries())await admin.query("insert into public.groups(id,name,sport,invite_code,created_by,created_at) values($1,'Club sintético','Tenis',$2,$3,'2026-01-01')",[id,randomUUID().replaceAll('-','').slice(0,8),profiles[i===0?0:3]]);
@@ -102,16 +94,16 @@ test('MIG-12 HTTP/SQL: canonical metrics, Chile periods, role/toggle projections
     // Load representative planner statistics after the complete 500-athlete
     // fixture. Autovacuum ANALYZE is asynchronous and not a readiness gate.
     await admin.query('analyze');
-    app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+password+'@127.0.0.1:54322/'+name,SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'2'}),new SafeLogger(line=>logs.push(line)));
+    app=await createApplication(loadConfig({DATABASE_URL:fixtureConnection('asisteam_api',password,name),PG_POOL_MAX:'2'}),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');
     const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i]))),clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token,timeoutMs:10000}));
     const params={groupId:groups[0]}, query={period:'month',from:'2026-03-01',activity_type_ids:type,page_size:100,sort:'name'};
-    // Baseline is the same canonical SQL, under the legacy authenticated role.
+    // Baseline is the same canonical SQL, under the native member role.
     const baseline=async (i,statement,values)=>{
       await admin.query('begin');
       try {
-        await admin.query('set local role authenticated');
-        await admin.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:auth[i],role:'authenticated',session_id:sessions[i]})]);
+        await admin.query('set local role asisteam_api');
+        await admin.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:auth[i],role:'authenticated',auth_provider:'nest',session_id:sessions[i]})]);
         return (await admin.query(statement,values)).rows[0].result;
       } finally {await admin.query('rollback');}
     };

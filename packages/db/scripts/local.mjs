@@ -8,7 +8,7 @@ export function command(program, args, input, environment = {}) {
     child.stderr.on('data',chunk=>{if(diagnostic.length<64000)diagnostic+=chunk;});
     child.stdin.on('error',()=>{});
     child.once('error',()=>{clearTimeout(timer);reject(new Error('command_unavailable'));});
-    child.once('close',code=>{clearTimeout(timer);if(code===0)resolve(Buffer.concat(chunks).toString());else {const error=new Error('command_failed');error.code=diagnostic.match(/ERROR:\s+([A-Z0-9]{5})\b/)?.[1];error.sqlLine=diagnostic.match(/psql:<stdin>:(\d+):/)?.[1];reject(error);}});
+    child.once('close',code=>{clearTimeout(timer);if(code===0)resolve(Buffer.concat(chunks).toString());else {const error=new Error('command_failed');error.diagnostic=diagnostic+'\n'+Buffer.concat(chunks).toString();error.code=diagnostic.match(/ERROR:\s+([A-Z0-9]{5})\b/)?.[1];error.sqlLine=diagnostic.match(/psql:<stdin>:(\d+):/)?.[1];reject(error);}});
     child.stdin.end(input);
   });
 }

@@ -1,30 +1,28 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mock = vi.hoisted(() => ({ signIn: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({
-  createClient: async () => ({ auth: { signInWithPassword: mock.signIn } }),
-}));
+vi.mock("@/lib/api/native-auth",()=>({assertAuthOrigin:async()=>{},setNativeCookies:async()=>{},nativeAuthClient:async()=>({loginPassword:mock.signIn})}));
 vi.mock("next/navigation", () => ({
   redirect: (path: string) => { throw new Error(`redirect:${path}`); },
 }));
-import { loginUser } from "./actions";
+import { loginUser } from "@/app/login/actions";
 
 const credentials = { email: "ana@example.com", password: "una-clave-segura" };
 beforeEach(() => {
   vi.clearAllMocks();
-  mock.signIn.mockResolvedValue({ error: null });
+  mock.signIn.mockResolvedValue({access_token:"synthetic-access",refresh_token:"a".repeat(64)});
 });
 
 describe("continuar invitación por código tras iniciar sesión", () => {
   it("conserva el código válido en la navegación", async () => {
     await expect(loginUser(credentials, "CODE0001")).rejects.toThrow("redirect:/join?code=CODE0001");
-    expect(mock.signIn).toHaveBeenCalledWith(credentials);
+    expect(mock.signIn).toHaveBeenCalledWith({body:credentials});
   });
   it("ignora destinos no válidos y evita redirecciones externas", async () => {
     await expect(loginUser(credentials, "//otro-sitio.example")).rejects.toThrow("redirect:/");
   });
   it("no continúa si fallan las credenciales", async () => {
-    mock.signIn.mockResolvedValue({ error: { status: 400 } });
+    mock.signIn.mockRejectedValue(new Error("invalid_credentials"));
     expect(await loginUser(credentials, "CODE0001")).toEqual({ error: "Email o contraseña incorrectos" });
   });
   it("retorna a la llegada QR con payload estricto en fragmento", async () => {

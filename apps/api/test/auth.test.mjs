@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { TokenVerifier } from '../dist/auth.js';
-import { loadConfig } from '../dist/config.js';
+import { loadFixtureConfig as loadConfig } from './fixture-config.mjs';
 import { isVerifiedIdentity } from '../dist/identity.js';
 import { projectGroupDetail } from '../dist/authorization.js';
 import { createApplication } from '../dist/application.js';
@@ -9,11 +9,11 @@ import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 
 const database = 'postgresql://fixture:synthetic@127.0.0.1:1/test';
-test('signature, issuer, audience, expiry, session and online user verification fail closed', async () => {
+test('native signature, issuer, audience, expiry and claims fail closed', async () => {
   const fixture = await authFixture();
   try {
-    const verifier = new TokenVerifier(loadConfig({ DATABASE_URL: database, SUPABASE_AUTH_URL: fixture.issuer, SUPABASE_AUTH_PUBLIC_KEY: 'sb_publishable_synthetic', AUTH_TIMEOUT_MS: '1000' }));
-    for (const alg of ['ES256', 'HS256']) {
+    const verifier = new TokenVerifier(loadConfig({ DATABASE_URL: database, NATIVE_AUTH_ISSUER: fixture.issuer, NATIVE_AUTH_SECRET: fixture.secret }));
+    for (const alg of ['HS256']) {
       const identity = await verifier.verify('Bearer ' + await fixture.token(undefined, undefined, {}, alg));
       assert.equal(isVerifiedIdentity(identity), true);
       assert.equal(Object.hasOwn(identity, 'role'), false);
@@ -29,10 +29,8 @@ test('signature, issuer, audience, expiry, session and online user verification 
     pieces[1] = Buffer.from(JSON.stringify({ ...JSON.parse(Buffer.from(pieces[1], 'base64url')), sub: '55000000-0000-4000-8000-000000000001' })).toString('base64url');
     await assert.rejects(verifier.verify('Bearer ' + pieces.join('.')), error => error.getStatus() === 401);
     for (const header of [undefined, 'Basic abc', 'Bearer bad', 'Bearer ' + token + ', Bearer ' + token]) await assert.rejects(verifier.verify(header), error => error.getStatus() === 401);
-    fixture.mismatch(true);
-    await assert.rejects(verifier.verify('Bearer ' + token), error => error.getStatus() === 401);
-    fixture.mismatch(false); fixture.unavailable(true);
-    await assert.rejects(verifier.verify('Bearer ' + token), error => error.getStatus() === 503);
+    const foreign = new TokenVerifier(loadConfig({ DATABASE_URL: database, NATIVE_AUTH_SECRET: '4'.repeat(64) }));
+    await assert.rejects(foreign.verify('Bearer ' + token), error => error.getStatus() === 401);
   } finally { await fixture.close(); }
 });
 test('member projection discards privileged fields; multirol ADMIN preserves permission union', () => {
@@ -55,7 +53,6 @@ test('unconfigured auth HTTP denies session while probes remain available; logs 
   } finally { await app.close(); }
 });
 
-test('configuration rejects privileged API keys, partial auth config and insecure remote issuer',()=>{
-  const key=Buffer.from('{}').toString('base64url')+'.'+Buffer.from(JSON.stringify({role:'service_role'})).toString('base64url')+'.synthetic';
-  for(const extra of [{SUPABASE_AUTH_URL:'not-a-url',SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic'},{SUPABASE_AUTH_URL:'https://fixture.invalid/auth/v1'},{SUPABASE_AUTH_URL:'http://fixture.invalid/auth/v1',SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic'},{SUPABASE_AUTH_URL:'https://fixture.invalid/auth/v1',SUPABASE_AUTH_PUBLIC_KEY:key}]) assert.throws(()=>loadConfig({DATABASE_URL:database,...extra}));
+test('production requires complete native configuration and rejects invalid issuer',()=>{
+  for(const extra of [{NODE_ENV:'production'}, {NATIVE_AUTH_ISSUER:'not-a-url'}, {NATIVE_AUTH_SECRET:'short'}]) assert.throws(()=>loadConfig({DATABASE_URL:database,...extra}));
 });

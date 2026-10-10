@@ -5,7 +5,6 @@ import {createApplication} from '../dist/application.js';
 import {SafeLogger} from '../dist/logger.js';
 import {WorkerStore} from '../../worker/dist/store.js';
 import {ApiClient} from '../../../packages/api-client/dist/index.js';
-import {createBillingWebhookRelay} from '../../../packages/core/dist/index.js';
 import {ListObjectsV2Command} from '@aws-sdk/client-s3';
 import {storageFixture} from './storage-fixture.mjs';
 import {migrate} from '../../../packages/db/scripts/migrate.mjs';
@@ -52,9 +51,13 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
  const client=token=>new ApiClient({origin:activeOrigin,nativeAuth:true,accessToken:async()=>token,timeoutMs:60000});
  const signed=(id='166001')=>{
   const ts=String(Date.now()),requestId='synthetic166',signature=createHmac('sha256',secret).update(`id:${id};request-id:${requestId};ts:${ts};`).digest('hex');
-  return new Request('https://old.example.invalid/functions/v1/mercadopago-webhook?data.id='+id,{method:'POST',headers:{'x-signature':`ts=${ts},v1=${signature}`,'x-request-id':requestId},body:JSON.stringify({type:'subscription_authorized_payment',data:{id}})});
+  return new Request('https://new.example.invalid/api/v1/billing/mercadopago-webhook?data.id='+id,{method:'POST',headers:{'x-signature':`ts=${ts},v1=${signature}`,'x-request-id':requestId},body:JSON.stringify({type:'subscription_authorized_payment',data:{id}})});
  };
- const relay=createBillingWebhookRelay('https://new.example.invalid/api/v1/billing/mercadopago-webhook',async(url,options)=>realFetch(activeOrigin+new URL(url).pathname+new URL(url).search,options));
+  const deliverWebhook=async request=>{
+   const headers=new Headers(request.headers);headers.set('content-type','application/json');
+   try{return await realFetch(activeOrigin+'/api/v1/billing/mercadopago-webhook'+new URL(request.url).search,{method:'POST',headers,body:await request.text(),redirect:'error'});}
+  catch{return new Response(null,{status:503});}
+ };
  const copyObjects=async(database,from,to)=>{
   const objects=[];let continuation;
   const profiles=(await database.query('select id,auth_user_id,avatar_url from public.users')).rows;
@@ -129,7 +132,7 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
    await client(adminToken).saveAttendance({params:{groupId:group.group_id,activityId:activity},body:{records:[{membership_id:membership,status:'LATE',note:'Cambio posterior sintético'}]}});
    await client(adminToken).manageSubscription({body:{action:'checkout',group_id:group.group_id,plan_code:'TEAM',payer_email:'synthetic@example.invalid'}});
    remote={...remote,status:'authorized',last_modified:new Date(++modified).toISOString()};
-   assert.equal((await relay(signed())).status,200);
+   assert.equal((await deliverWebhook(signed())).status,200);
    assert.equal((await destination.query("select count(*)::int as n from public.subscription_invoices where status='PAID'")).rows[0].n,1);
   });
   await timed('single-job-executor-concurrent-replicas-and-persist-before-ack',async()=>{
@@ -142,7 +145,7 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
    invoiceIds.push('166002');modified++;
    await destination.query('revoke connect on database cutover_destination from asisteam_billing');
    await destination.query("select pg_terminate_backend(pid) from pg_stat_activity where datname='cutover_destination' and usename='asisteam_billing'");
-   assert.equal((await relay(signed('166002'))).status,503);
+   assert.equal((await deliverWebhook(signed('166002'))).status,503);
    assert.equal((await destination.query("select count(*)::int as n from public.subscription_invoices where provider_invoice_id='166002'")).rows[0].n,0);
    result.failedEventAck=503;
   });
@@ -156,7 +159,7 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
    assert.ok(result.changedTables.some(row=>row.table==='public.consents'));
    assert.ok(result.changedTables.some(row=>row.table==='public.attendance_records'));
    assert.ok(result.changedTables.some(row=>row.table==='public.subscription_invoices'));
-   assert.equal((await relay(signed('166002'))).status,503);
+   assert.equal((await deliverWebhook(signed('166002'))).status,503);
    recovered=await empty('cutover_recovery');
    const corrupt=structuredClone(after);corrupt.tables[0].sha256='0'.repeat(64);await assert.rejects(restoreFrozen(recovered,corrupt),/snapshot_checksum_changed/);
    const pristine=await snapshotFrozen(recovered);
@@ -184,7 +187,7 @@ export async function rehearseCutover({owner,connect,port,config,ids,group,passw
    const saved=(await recovered.query('select id,status,note from public.attendance_records where activity_id=$1 and membership_id=$2',[activity,membership])).rows[0];assert.equal(saved.id,recordId);assert.equal(saved.status,'LATE');assert.equal(saved.note,'Cambio posterior sintético');
    const key=(await recovered.query('select avatar_url from public.users where id=$1',[ids.admin.profile])).rows[0].avatar_url.slice('/profile/avatar/'.length);
    const avatar=await client(session.access_token).getAvatar({params:{ownerId:key.split('/')[0],fileName:key.split('/')[1]}});assert.equal(sha(Buffer.from(avatar.content_base64,'base64')),sha(png));
-   assert.equal((await relay(signed('166002'))).status,200);assert.equal((await relay(signed('166002'))).status,200);
+   assert.equal((await deliverWebhook(signed('166002'))).status,200);assert.equal((await deliverWebhook(signed('166002'))).status,200);
    assert.equal((await recovered.query("select count(*)::int as n from public.subscription_invoices where status='PAID'")).rows[0].n,2);
    const store=new WorkerStore({DATABASE_URL:runtime('cutover_recovery').DATABASE_URL.replace('asisteam_api:','asisteam_jobs:')});jobStores.push(store);
    assert.equal((await store.call('transition')).length,0);

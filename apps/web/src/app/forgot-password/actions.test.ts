@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { resetPasswordForEmail, createRecoveryClient, setCookie } = vi.hoisted(() => ({
+const { requestRecovery, nativeAuthClient, setCookie } = vi.hoisted(() => ({
   setCookie: vi.fn(),
-  resetPasswordForEmail: vi.fn(),
-  createRecoveryClient: vi.fn(),
+  requestRecovery: vi.fn(),
+  nativeAuthClient: vi.fn(),
 }));
 
 vi.mock("next/headers", () => ({ cookies: async () => ({ set: setCookie }) }));
-vi.mock("@/lib/supabase/recovery", () => ({ createRecoveryClient }));
-import { requestPasswordRecovery } from "./actions";
+vi.mock("@/lib/api/native-auth", () => ({ nativeAuthClient, assertAuthOrigin: vi.fn() }));
+import { requestPasswordRecovery } from "@/app/forgot-password/actions";
 
 describe("requestPasswordRecovery", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    createRecoveryClient.mockReturnValue({ auth: { resetPasswordForEmail } });
+    nativeAuthClient.mockResolvedValue({ requestRecovery });
   });
 
   it.each([
@@ -23,14 +23,15 @@ describe("requestPasswordRecovery", () => {
     ["limitado por email", { data: null, error: { status: 429 } }],
     ["fallo de envío", { data: null, error: { status: 500 } }],
   ])("mantiene la misma respuesta pública para %s", async (_scenario, response) => {
-    resetPasswordForEmail.mockResolvedValue(response);
+    if (response.error) requestRecovery.mockRejectedValue(new Error("fallo privado"));
+    else requestRecovery.mockResolvedValue({ message: "Si el email existe, enviamos instrucciones" });
     expect(await requestPasswordRecovery({ email: " atleta@example.cl " }))
       .toEqual({ message: "Si el email existe, enviamos instrucciones" });
-    expect(resetPasswordForEmail).toHaveBeenCalledWith("atleta@example.cl");
+    expect(requestRecovery).toHaveBeenCalledWith({ body: { email: "atleta@example.cl" } });
   });
 
   it("no revela excepciones del proveedor", async () => {
-    resetPasswordForEmail.mockRejectedValue(new Error("detalle privado"));
+    requestRecovery.mockRejectedValue(new Error("detalle privado"));
     expect(await requestPasswordRecovery({ email: "atleta@example.cl" }))
       .toEqual({ message: "Si el email existe, enviamos instrucciones" });
   });
@@ -38,7 +39,7 @@ describe("requestPasswordRecovery", () => {
   it("valida nuevamente en servidor sin llamar a Auth para datos inválidos", async () => {
     expect(await requestPasswordRecovery({ email: "inválido" }))
       .toEqual({ message: "Si el email existe, enviamos instrucciones" });
-    expect(createRecoveryClient).not.toHaveBeenCalled();
+    expect(nativeAuthClient).not.toHaveBeenCalled();
   });
 });
 

@@ -1,5 +1,7 @@
 # API · MIG-02/MIG-05/MIG-07/MIG-08/MIG-09 (#146, #149, #151, #152, #153)
 
+[Seguro] MIG-24 (#168): runtime JWT nativo únicamente, configuración Auth propia completa obligatoria en producción, sin GoTrue/JWKS ni puente de invitaciones. [Inventario y evidencia](../../docs/migration/issue-168/README.md). Los fixtures `test/legacy-src` no entran en dist ni Docker. Producción continúa NO-GO.
+
 [Seguro] Runtime independiente NestJS **12.1.2**, adaptador Express **12.1.2**, Node **24.16.0 LTS**, TypeScript 5.9.3 y pg 8.23.1. La API expone sondas operativas y `GET /api/v1/auth/session` con sesión/RLS temporal de [MIG-05](../../docs/migration/issue-149/README.md); grupos/perfil tienen handlers reales en [MIG-07](../../docs/migration/issue-151/README.md); integrantes/apoderados/consentimientos tienen handlers reales en [MIG-08](../../docs/migration/issue-152/README.md); invitaciones/activación tienen handlers reales en [MIG-09](../../docs/migration/issue-153/README.md); otros dominios siguen #154–#160. [OpenAPI/cliente #148](../../packages/api-client/README.md) y [CI/staging #147](../../docs/migration/issue-147/README.md) tienen infraestructura entregada y evidencia separada; no acreditan migración de tráfico.
 
 ## Build y arranque

@@ -2,23 +2,22 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { createApplication } from '../dist/application.js';
-import { loadConfig } from '../dist/config.js';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
 
 import { storageFixture } from './storage-fixture.mjs';
-import { PutObjectCommand, PutBucketPolicyCommand, DeleteBucketPolicyCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand, PutBucketPolicyCommand, DeleteBucketPolicyCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { sha256 } from '../dist/storage.js';
 import { reconcile, avatarReference } from '../../../scripts/migration/storage/reconcile.mjs';
-import { execFileSync } from 'node:child_process';
 import { mkdtempSync, rmSync, statSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 const enabled=process.env.API_RLS_TEST==='1';
 test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/tenant, consent/revocation, validation and signed expiry', {skip:!enabled},async()=>{
-  const admin = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' });
+  const admin = new pg.Client({ connectionString: fixtureConnection() });
   await admin.connect();
   const fixture = await authFixture();
   const s3 = await storageFixture();
@@ -32,9 +31,9 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
   try {
     await admin.query("alter role asisteam_api login password '"+rolePassword+"'");
     for (const [i,id] of auth.entries()) {
-      await admin.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)', [id,'mig161-'+id+'@example.test',JSON.stringify({ full_name:'Persona sintética '+i,birthdate:i===3?'2014-01-01':'1990-01-01' })]);
+      await admin.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject", [id,'mig161-'+id+'@example.test',JSON.stringify({ full_name:'Persona sintética '+i,birthdate:i===3?'2014-01-01':'1990-01-01' })]);
       profiles.push((await admin.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id);
-      await admin.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
+      await admin.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
       if(i!==6)await admin.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profiles[i]]);
     }
     for(const [i,id] of groupIds.entries()) {
@@ -44,7 +43,7 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
     guardianship=(await admin.query("insert into public.guardianships(guardian_user_id,athlete_user_id,relationship) values($1,$2,'Apoderado') returning id",[profiles[2],profiles[3]])).rows[0].id;
     await admin.query("insert into public.consents(guardianship_id,consent_type,terms_version,allows_avatar) values($1,'DATA_PROCESSING_MINOR','synthetic',false)",[guardianship]);
     for (const [i,g,role] of [[0,0,'ADMIN'],[0,0,'ATHLETE'],[1,0,'ATHLETE'],[3,0,'ATHLETE'],[4,0,'COACH'],[5,1,'ADMIN']]) await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,$3,'ACTIVE',now())",[profiles[i],groupIds[g],role]);
-    app=await createApplication(loadConfig({ DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'1',...s3.config }),new SafeLogger(line=>logs.push(line)));
+    app=await createApplication(loadConfig({ DATABASE_URL:fixtureConnection('asisteam_api',rolePassword),PG_POOL_MAX:'1',...s3.config }),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');
     const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i])));
     const clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token}));
@@ -91,6 +90,25 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
     await assert.rejects(upload(1),{status:503}); // Bucket misconfiguration fails before a new object is written.
     await assert.rejects(download(1,key),{status:404});
     await s3.storage.client.send(new DeleteBucketPolicyCommand({Bucket:s3.storage.bucket}));
+    // A denied profile commit leaves an unreferenced private object for
+    // reconciliation. Never delete a possibly committed object from the client.
+    const listing=()=>s3.storage.client.send(new ListObjectsV2Command({Bucket:s3.storage.bucket,Prefix:auth[1]+'/'}));
+    const beforeKeys=new Set((await listing()).Contents.map(row=>row.Key));
+    const oldReference=(await admin.query('select avatar_url from public.users where id=$1',[profiles[1]])).rows[0].avatar_url;
+    await admin.query("create function public.synthetic_avatar_commit_denied() returns trigger language plpgsql as $$ begin raise exception 'avatar_consent_required' using errcode='PT422'; end $$");
+    await admin.query("create trigger synthetic_avatar_commit_denied before update of avatar_url on public.users for each row when (new.id='"+profiles[1]+"'::uuid) execute function public.synthetic_avatar_commit_denied()");
+    try {
+      await assert.rejects(upload(1),error=>error.status===422&&error.error.code==='avatar_consent_required');
+      assert.equal((await admin.query('select avatar_url from public.users where id=$1',[profiles[1]])).rows[0].avatar_url,oldReference);
+      const orphan=(await listing()).Contents.map(row=>row.Key).filter(value=>!beforeKeys.has(value));
+      assert.equal(orphan.length,1);
+      for(const i of [0,2,3,4,5])await assert.rejects(download(i,orphan[0]),{status:404});
+      const orphanSigned=await s3.storage.signedRead(orphan[0]),orphanAnonymous=new URL(orphanSigned);orphanAnonymous.search='';
+      assert.equal((await fetch(orphanAnonymous)).status,403);
+    } finally {
+      await admin.query('drop trigger synthetic_avatar_commit_denied on public.users');
+      await admin.query('drop function public.synthetic_avatar_commit_denied()');
+    }
     for(const token of tokens)assert.ok(!logs.join('\n').includes(token));assert.ok(!logs.join('\n').includes(s3.config.S3_SECRET_ACCESS_KEY));
     assert.ok(!logs.join('\n').includes(key));
   } finally {
@@ -108,33 +126,26 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
       await admin.query('delete from app_private.join_code_attempts where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.users where id=any($1::uuid[])',[profiles]);
-      await admin.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth]);
-      await admin.query('delete from auth.users where id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
       const oldPassword=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";
       await admin.query('alter role asisteam_api '+(previous.rolcanlogin?'login':'nologin')+' password '+oldPassword);
     } finally { await admin.query("set session_replication_role='origin'");await admin.end(); }
   }
 });
 
-test('MIG-17 Storage HTTP→S3 copy, final coexistence delta and post-cut reverse reconcile private manifests/checksums', {skip:!enabled},async()=>{
-  const local=JSON.parse(execFileSync('pnpm',['-w','exec','supabase','status','-o','json'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
-  assert.equal(local.API_URL,'http://127.0.0.1:54321');
-  const database=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});await database.connect();
-  const s3=await storageFixture(), auth=randomUUID(), keys=[],directory=mkdtempSync(join(tmpdir(),'mig161-manifest-'));
+test('private S3 copy, final snapshot delta and forward recovery reconcile private manifests/checksums', {skip:!enabled},async()=>{
+  const database=new pg.Client({connectionString:fixtureConnection()});await database.connect();
+  const s3=await storageFixture(), source=await storageFixture(), auth=randomUUID(), keys=[],directory=mkdtempSync(join(tmpdir(),'mig161-manifest-'));
   let profile;
   const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6rGQAAAAASUVORK5CYII=','base64');
-  const http=(path,options={})=>fetch(local.API_URL+path,{...options,headers:{apikey:local.SERVICE_ROLE_KEY,authorization:'Bearer '+local.SERVICE_ROLE_KEY,...options.headers}});
-  const options={database,storage:s3.storage,origin:local.API_URL,secret:local.SERVICE_ROLE_KEY,scope:[auth]};
-  const addSource=async()=>{const key=auth+'/'+randomUUID()+'.png';keys.push(key);assert.equal((await http('/storage/v1/object/avatars/'+key,{method:'POST',headers:{'content-type':'image/png','x-upsert':'false'},body:png})).status,200);return key;};
+  const options={database,storage:s3.storage,source:source.storage,scope:[auth]};
+  const addSource=async()=>{const key=auth+'/'+randomUUID()+'.png';keys.push(key);await source.storage.put(key,png,'image/png');return key;};
   try{
-    await database.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)',[auth,'mig161-copy-'+auth+'@example.test',JSON.stringify({full_name:'Persona sintética copia',birthdate:'1990-01-01'})]);
+    await database.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[auth,'mig161-copy-'+auth+'@example.test',JSON.stringify({full_name:'Persona sintética copia',birthdate:'1990-01-01'})]);
     profile=(await database.query('select id from public.users where auth_user_id=$1',[auth])).rows[0].id;
     for(let n=0;n<3;n++)await addSource();
     await database.query('update public.users set avatar_url=$1 where id=$2',['/profile/avatar/'+keys[0],profile]);
-    // Model an old external Storage URL on this owned fixture only, then restore all triggers before migration.
-    await database.query("set session_replication_role='replica'");
-    try{await database.query('update public.users set avatar_url=$1 where id=$2',[local.API_URL+'/storage/v1/object/sign/avatars/'+keys[0]+'?token=synthetic',profile]);}
-    finally{await database.query("set session_replication_role='origin'");}
     const manifestPath=join(directory,'initial.json');
     let result=await reconcile({...options,manifestPath}).catch(error=>{throw new Error('initial-copy',{cause:error});});assert.equal(result.objects,3);assert.equal(result.checksums,true);assert.equal((await database.query('select avatar_url from public.users where id=$1',[profile])).rows[0].avatar_url,'/profile/avatar/'+keys[0]);
     assert.equal(statSync(manifestPath).mode&0o777,0o600);assert.equal(statSync(directory).mode&0o777,0o700);
@@ -144,17 +155,16 @@ test('MIG-17 Storage HTTP→S3 copy, final coexistence delta and post-cut revers
     const after=auth+'/'+randomUUID()+'.png';keys.push(after);await s3.storage.put(after,png,'image/png');await database.query('update public.users set avatar_url=$1 where id=$2',['/profile/avatar/'+after,profile]);
     await assert.rejects(reconcile(options),{message:'active_avatar_missing'}); // A forward recopy cannot hide destination-only writes.
     result=await reconcile({...options,direction:'reverse',manifestPath:join(directory,'reverse.json')}).catch(error=>{throw new Error('postcut-reverse',{cause:error});});assert.equal(result.objects,5);
-    for(const key of keys){const response=await http('/storage/v1/object/avatars/'+key);assert.equal(response.status,200);assert.equal(sha256(Buffer.from(await response.arrayBuffer())),sha256(png));}
+    for(const key of keys)assert.equal(sha256((await source.storage.read(key)).bytes),sha256(png));
     assert.equal((await database.query('select avatar_url from public.users where id=$1',[profile])).rows[0].avatar_url,'/profile/avatar/'+after);
-    assert.equal(avatarReference(local.API_URL+'/storage/v1/object/sign/avatars/'+after+'?token=synthetic',local.API_URL),after);
-    assert.throws(()=>avatarReference('https://foreign.test/storage/v1/object/avatars/'+after,local.API_URL));
+    assert.equal(avatarReference('/profile/avatar/'+after),after);
+    assert.throws(()=>avatarReference('https://foreign.test/profile/avatar/'+after));
     // A dangling reference or corrupted copy blocks the cutover gate.
     const missing=auth+'/'+randomUUID()+'.png';await database.query('update public.users set avatar_url=$1 where id=$2',['/profile/avatar/'+missing,profile]);
     await assert.rejects(reconcile({...options,direction:'reverse'}),{message:'active_avatar_missing'});
     await database.query('update public.users set avatar_url=$1 where id=$2',['/profile/avatar/'+after,profile]);
   }finally{
-    await http('/storage/v1/object/avatars',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({prefixes:keys})});
-    if(profile)await database.query('delete from public.users where id=$1',[profile]);await database.query('delete from auth.users where id=$1',[auth]);
-    await database.end();s3.storage.client.destroy();s3.stop();rmSync(directory,{recursive:true,force:true});
+    if(profile)await database.query('delete from public.users where id=$1',[profile]);await database.query('delete from app_private.auth_subjects where id=$1',[auth]);
+    await database.end();s3.storage.client.destroy();s3.stop();source.storage.client.destroy();source.stop();rmSync(directory,{recursive:true,force:true});
   }
 });

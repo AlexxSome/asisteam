@@ -1,72 +1,73 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { verifyOtp, updateUser, signOut, createRecoveryClient } = vi.hoisted(() => ({
-  verifyOtp: vi.fn(), updateUser: vi.fn(), signOut: vi.fn(), createRecoveryClient: vi.fn(),
+const { reset, clearNativeCookies, nativeAuthClient } = vi.hoisted(() => ({
+  reset: vi.fn(), clearNativeCookies: vi.fn(), nativeAuthClient: vi.fn(),
 }));
+vi.mock("@/lib/api/native-auth", () => ({ nativeAuthClient, clearNativeCookies, assertAuthOrigin: vi.fn() }));
+import { resetPassword } from "@/app/reset-password/actions";
 
-vi.mock("@/lib/supabase/recovery", () => ({ createRecoveryClient }));
-import { resetPassword } from "./actions";
-
+const token = "a".repeat(64);
 const input = { password: "mi nueva clave segura", confirmPassword: "mi nueva clave segura" };
 
-describe("resetPassword", () => {
+describe("resetPassword nativo", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    createRecoveryClient.mockReturnValue({ auth: { verifyOtp, updateUser, signOut } });
-    verifyOtp.mockResolvedValue({ data: { session: { access_token: "synthetic" } }, error: null });
-    updateUser.mockResolvedValue({ data: {}, error: null });
-    signOut.mockResolvedValue({ error: null });
+    nativeAuthClient.mockResolvedValue({ resetPassword: reset });
+    reset.mockResolvedValue({ success: true });
+    clearNativeCookies.mockResolvedValue(undefined);
   });
 
-  it("requiere token recovery, cambia la clave y cierra su sesión efímera", async () => {
-    expect(await resetPassword("token-del-email", input)).toEqual({ success: true });
-    expect(verifyOtp).toHaveBeenCalledWith({ token_hash: "token-del-email", type: "recovery" });
-    expect(updateUser).toHaveBeenCalledWith({ password: input.password });
-    expect(signOut).toHaveBeenCalledWith({ scope: "local" });
-    expect(verifyOtp.mock.invocationCallOrder[0]).toBeLessThan(updateUser.mock.invocationCallOrder[0]!);
+  it("requiere el token recovery y limpia las cookies después del cambio", async () => {
+    expect(await resetPassword(token, input)).toEqual({ success: true });
+    expect(reset).toHaveBeenCalledWith({ body: { token, password: input.password } });
+    expect(clearNativeCookies).toHaveBeenCalled();
+    expect(reset.mock.invocationCallOrder[0]).toBeLessThan(clearNativeCookies.mock.invocationCallOrder[0]!);
   });
 
-  it.each(["vencido", "reutilizado", "otro-tipo", "inexistente"])("rechaza token %s aunque el navegador tenga sesión", async (token) => {
-    verifyOtp.mockResolvedValue({ data: { session: null }, error: { code: "otp_expired" } });
+  it.each(["vencido", "reutilizado", "otro-tipo", "inexistente"])("rechaza token %s sin autorizarlo mediante la sesión del navegador", async () => {
+    reset.mockRejectedValue(new Error("token inválido"));
     expect(await resetPassword(token, input)).toEqual({ error: "El enlace es inválido, ya fue utilizado o venció. Solicita uno nuevo." });
-    expect(updateUser).not.toHaveBeenCalled();
+    expect(clearNativeCookies).not.toHaveBeenCalled();
   });
 
-  it("rechaza respuestas sin sesión incluso si no hay error", async () => {
-    verifyOtp.mockResolvedValue({ data: { session: null }, error: null });
-    expect(await resetPassword("token", input)).toHaveProperty("error");
-    expect(updateUser).not.toHaveBeenCalled();
+  it("rechaza respuesta de API inválida sin limpiar una sesión existente", async () => {
+    // El cliente HTTP valida el DTO y rechaza una respuesta sin success.
+    reset.mockRejectedValue(new Error("invalid_response"));
+    expect(await resetPassword(token, input)).toHaveProperty("error");
+    expect(clearNativeCookies).not.toHaveBeenCalled();
   });
 
   it("rechaza token vacío sin usar la sesión existente", async () => {
     expect(await resetPassword("", input)).toHaveProperty("error");
-    expect(createRecoveryClient).not.toHaveBeenCalled();
+    expect(nativeAuthClient).not.toHaveBeenCalled();
   });
 
   it.each([
     { password: "corta", confirmPassword: "corta" },
     { password: input.password, confirmPassword: "distinta" },
   ])("valida antes de consumir el enlace", async (invalidInput) => {
-    expect(await resetPassword("token", invalidInput)).toHaveProperty("error");
-    expect(verifyOtp).not.toHaveBeenCalled();
+    expect(await resetPassword(token, invalidInput)).toHaveProperty("error");
+    expect(reset).not.toHaveBeenCalled();
   });
 
-  it.each(["weak_password", "same_password", "unexpected_failure"])("maneja %s y revoca la sesión", async (code) => {
-    updateUser.mockResolvedValue({ error: { code } });
-    expect(await resetPassword("token", input)).toHaveProperty("error");
-    expect(signOut).toHaveBeenCalledWith({ scope: "local" });
+  it.each(["weak_password", "same_password", "unexpected_failure"])("maneja %s sin detalles privados", async (code) => {
+    reset.mockRejectedValue(new Error(code));
+    const result = await resetPassword(token, input);
+    expect(result).toHaveProperty("error");
+    expect(JSON.stringify(result)).not.toContain(code);
+    expect(clearNativeCookies).not.toHaveBeenCalled();
   });
 
-  it("no muestra detalles privados y revoca la sesión si falla updateUser", async () => {
-    updateUser.mockRejectedValue(new Error("detalle privado"));
-    const result = await resetPassword("token", input);
+  it("no muestra detalles privados ante una excepción del API", async () => {
+    reset.mockRejectedValue(new Error("detalle privado"));
+    const result = await resetPassword(token, input);
     expect(result).toHaveProperty("error");
     expect(JSON.stringify(result)).not.toContain("detalle privado");
-    expect(signOut).toHaveBeenCalled();
+    expect(clearNativeCookies).not.toHaveBeenCalled();
   });
 
-  it("un fallo al cerrar sesión no oculta un cambio exitoso", async () => {
-    signOut.mockRejectedValue(new Error("red"));
-    expect(await resetPassword("token", input)).toEqual({ success: true });
+  it("un fallo al limpiar cookies no oculta un cambio exitoso", async () => {
+    clearNativeCookies.mockRejectedValue(new Error("cookie"));
+    expect(await resetPassword(token, input)).toEqual({ success: true });
   });
 });

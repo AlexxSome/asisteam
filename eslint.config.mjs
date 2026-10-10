@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import globals from 'globals';
 export default [
-  { ignores: ['**/node_modules/**', '**/.next/**', '**/dist/**', '**/.turbo/**', 'graphify-out/**', '.pnpm-store/**', '**/coverage/**', 'packages/db/src/database.types.ts', 'supabase/functions/**'] },
+  { ignores: ['**/node_modules/**', '**/.next/**', '**/dist/**', 'apps/api/test/.ci-legacy/**', '**/.turbo/**', 'graphify-out/**', '.pnpm-store/**', '**/coverage/**', 'packages/db/src/database.types.ts', 'supabase/functions/**'] },
   js.configs.recommended,
   { files: ['**/*.{js,mjs,ts,tsx}'], languageOptions: { globals: { ...globals.node, ...globals.browser } }, rules: { 'no-unused-vars': 'off' } },
   // These fixtures intentionally discard private SQL/configuration diagnostics.

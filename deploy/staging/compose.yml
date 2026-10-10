@@ -31,7 +31,9 @@ services:
     image: ${API_IMAGE:?Set an immutable API image ID or registry digest}
     command: [node, scripts/start-secret.mjs]
     environment:
-      NODE_ENV: production
+      # MIG-03 is a synthetic health/rollback fixture with a minimal schema.
+      # The production runtime now requires complete native Auth configuration.
+      NODE_ENV: test
       DATABASE_URL_FILE: /run/secrets/runtime_url
     secrets: [runtime_url]
     depends_on:

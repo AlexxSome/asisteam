@@ -5,9 +5,8 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 const mock = vi.hoisted(() => ({ getUser: vi.fn(), signUp: vi.fn(), signIn: vi.fn(), cookie: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ auth: {
-  getUser: mock.getUser, signUp: mock.signUp, signInWithPassword: mock.signIn,
-} }) }));
+vi.mock("@/lib/supabase/server",()=>({createClient:async()=>({auth:{getUser:mock.getUser}})}));
+vi.mock("@/lib/api/native-auth",()=>({assertAuthOrigin:async()=>{},setNativeCookies:async()=>{},nativeAuthClient:async()=>({registerPassword:mock.signUp,loginPassword:mock.signIn})}));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: mock.cookie }) }));
 vi.mock("@/lib/groups", () => ({ getMyPendingMemberships: async () => [] }));
 vi.mock("@/lib/social-auth", () => ({ getSocialProviderAvailability: async () => ({ google: true, apple: false }) }));
@@ -18,13 +17,13 @@ vi.mock("next/navigation", async importOriginal => ({
   ...await importOriginal<typeof import("next/navigation")>(),
   redirect: (path: string) => { throw new Error(`redirect:${path}`); },
 }));
-import LoginPage from "./page";
-import RegisterPage from "../register/page";
-import ForgotPasswordPage from "../forgot-password/page";
-import ResetPasswordPage from "../reset-password/page";
-import JoinPage from "../join/page";
-import { registerUser } from "../register/actions";
-import { loginUser } from "./actions";
+import LoginPage from "@/app/login/page";
+import RegisterPage from "@/app/register/page";
+import ForgotPasswordPage from "@/app/forgot-password/page";
+import ResetPasswordPage from "@/app/reset-password/page";
+import JoinPage from "@/app/join/page";
+import { registerUser } from "@/app/register/actions";
+import { loginUser } from "@/app/login/actions";
 
 const profile = { terms_accepted: true as const, terms_version: ACCOUNT_TERMS_VERSION as typeof ACCOUNT_TERMS_VERSION, full_name: "Persona Sintética", email: "persona@example.test", password: "test-password-123", birthdate: "2000-01-01" };
 beforeEach(() => {
@@ -46,7 +45,7 @@ it("invitación → login → crear cuenta → retorno al código, también con 
   expect(screen.getByTestId("social-context").textContent).toBe("ABCD1234");
   expect(screen.getByRole("link", { name: "Inicia sesión" }).getAttribute("href")).toBe("/login?invite_code=ABCD1234");
   await expect(registerUser(profile, invite_code)).rejects.toThrow("redirect:/join?code=ABCD1234");
-  expect(mock.signUp.mock.calls[0]![0].options.data).not.toHaveProperty("invite_code");
+  expect(mock.signUp.mock.calls[0]![0].body).not.toHaveProperty("invite_code");
   await expect(loginUser(profile, invite_code)).rejects.toThrow("redirect:/join?code=ABCD1234");
 });
 
@@ -106,7 +105,7 @@ it("registro valida aceptación y versión en servidor, y no recibe una fecha de
   }
   expect(mock.signUp).not.toHaveBeenCalled();
   await expect(registerUser(profile)).rejects.toThrow("redirect:/welcome");
-  expect(mock.signUp.mock.calls[0]![0].options.data.account_terms).toEqual({ accepted: true, version: ACCOUNT_TERMS_VERSION });
+  expect(mock.signUp.mock.calls[0]![0].body).toEqual(expect.objectContaining({terms_accepted:true,terms_version:ACCOUNT_TERMS_VERSION}));
 });
 
 it("deportista sin cupos recibe contacto con administrador sin enlace a facturación", async () => {

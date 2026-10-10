@@ -1,5 +1,8 @@
 # Suscripciones SaaS por club — HU-ADM-21 / #56 [P2 autorizado]
 
+[Seguro] **Vigencia del candidato MIG-24 (#168, 2026-10-09):** web/API/worker usan Nest + PostgreSQL17 independiente + Auth propio + S3 privado; SDK/rutas Supabase de producto retirados. [Inventario, contratos, evidencia y pendientes del corte real](migration/issue-168/README.md). Las referencias posteriores a Supabase/GoTrue/PostgREST/Edge/banderas describen la arquitectura de origen y los hitos históricos, no un fallback del candidato. Las reglas SQL/RLS, permisos, menores, métrica, consentimiento e historial se conservan. **Producción NO-GO; corte real y aceptación de #168 pendientes.**
+
+
 Decisión de producto del 03-10-2026: **el club paga a Asisteam**, mediante Mercado Pago. Esta decisión sustituye el alcance original de #56 sobre cuotas de deportistas. Un club/equipo/academia es el tenant `groups.id` actual; no se agrega una organización global ni cobros a integrantes.
 
 ## Catálogo y capacidad

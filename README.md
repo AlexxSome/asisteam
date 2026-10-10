@@ -1,5 +1,7 @@
 # Asisteam
 
+[Seguro] Candidato MIG-24 (#168): web/API/worker nativos sin SDK Supabase de producto. [Arquitectura vigente, pruebas, inventario y handoff](docs/migration/issue-168/README.md). Producción continúa NO-GO; este retiro técnico no ejecuta corte real ni apaga receptores Mercado Pago.
+
 Aplicación web responsive para gestionar la asistencia de deportistas en clubes y equipos. Un usuario puede pertenecer a varios grupos con roles distintos; los datos y permisos se resuelven por grupo.
 
 ## Estado verificado

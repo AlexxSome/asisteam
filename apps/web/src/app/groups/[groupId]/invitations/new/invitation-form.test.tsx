@@ -7,10 +7,7 @@ const mock = vi.hoisted(() => ({ send: vi.fn(), refresh: vi.fn(), group: vi.fn()
 vi.mock("./actions", () => ({ sendInvitation: mock.send }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mock.refresh }), notFound: () => { throw new Error("404"); } }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => {
-  const query = { select: () => query, eq: () => query, order: () => query, range: mock.range };
-  return { from: () => query };
-} }));
+vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => ({ listInvitations: mock.range }) }));
 import InvitationPage from "./page";
 import { InvitationFeedback, InvitationForm, ResendInvitationButton } from "./invitation-form";
 const groupId = "23000000-0000-4000-8000-000000000201";
@@ -90,7 +87,7 @@ it("separa alta e historial con estados, vencimientos y paginación", async () =
   mock.range.mockResolvedValue({ data: [
     { id: invitationId, email: "expired@example.test", role: "ATHLETE", status: "PENDING", expires_at: "2020-01-01T12:00:00Z" },
     { id: "accepted", email: "accepted@example.test", role: "GUARDIAN", status: "ACCEPTED", expires_at: "2020-01-01T12:00:00Z" },
-  ], count: 11, error: null });
+  ], total: 11 });
   const params = Promise.resolve({ groupId });
   const view = render(await InvitationPage({ params, searchParams: Promise.resolve({}) }));
   expect(screen.getByLabelText("Email")).toBeTruthy();
@@ -103,9 +100,9 @@ it("separa alta e historial con estados, vencimientos y paginación", async () =
   expect(screen.getAllByRole("button", { name: "Reenviar invitación" })).toHaveLength(1);
   expect(screen.getAllByText(/Vence:/)).toHaveLength(2);
   expect(screen.getByRole("link", { name: "Siguiente" }).getAttribute("href")).toBe("?view=history&page=2");
-  expect(mock.range).toHaveBeenLastCalledWith(0, 9);
+  expect(mock.range).toHaveBeenLastCalledWith({ params: { groupId }, query: { page: 1 } });
   view.rerender(await InvitationPage({ params, searchParams: Promise.resolve({ page: "2" }) }));
-  expect(mock.range).toHaveBeenLastCalledWith(10, 19);
+  expect(mock.range).toHaveBeenLastCalledWith({ params: { groupId }, query: { page: 2 } });
   expect(screen.queryByLabelText("Email")).toBeNull();
   expect(screen.getByRole("link", { name: "Anterior" }).getAttribute("href")).toBe("?view=history&page=1");
 });

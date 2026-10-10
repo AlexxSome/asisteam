@@ -3,12 +3,12 @@ import {test} from 'node:test';
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import pg from 'pg';
 import {createApplication} from '../dist/application.js';
-import {loadConfig} from '../dist/config.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import {SafeLogger} from '../dist/logger.js';
 import {ApiClient} from '../../../packages/api-client/dist/index.js';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 test('MIG-18 real HTTP/PostgreSQL: register/identity, RLS, refresh replay/concurrency, recovery, logout, claim and rate limits',{skip:process.env.API_RLS_TEST!=='1',timeout:120000},async()=>{
- const db=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres',statement_timeout:10000});
+ const db=new pg.Client({connectionString:fixtureConnection(),statement_timeout:10000});
  const run=randomUUID(),rolePassword=randomUUID(),secret=randomBytes(32).toString('hex'),issuer='https://synthetic-auth.example.test',password='Synthetic-162-password!'+run;
  const emails=['adult','missing','managed','invited','minor','guardian','limits'].map(n=>'mig162-'+run+'-'+n+'@example.test'),logs=[],mail=[];
  const subjects=[],profiles=[],groups=[],activityIds=[];let app,previous=[],connected=false;
@@ -24,7 +24,7 @@ test('MIG-18 real HTTP/PostgreSQL: register/identity, RLS, refresh replay/concur
    if(String(url)==='https://api.resend.com/emails'){mail.push(JSON.parse(init.body));return new Response(JSON.stringify({id:randomUUID()}));}
    return originalFetch(url,init);
   };
-  app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_DATABASE_URL:'postgresql://asisteam_auth:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:issuer,NATIVE_AUTH_WEB_URL:'http://127.0.0.1:3120',INVITATION_DATABASE_URL:'postgresql://asisteam_invitation:'+rolePassword+'@127.0.0.1:54322/postgres',INVITATION_PROXY_SECRET:secret,RESEND_API_KEY:'synthetic',INVITATION_EMAIL_FROM:'auth@example.test',HTTP_TIMEOUT_MS:'30000',PG_STATEMENT_TIMEOUT_MS:'10000'}),new SafeLogger(line=>logs.push(line)));
+  app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:fixtureConnection('asisteam_api',rolePassword),NATIVE_AUTH_DATABASE_URL:fixtureConnection('asisteam_auth',rolePassword),NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:issuer,NATIVE_AUTH_WEB_URL:'http://127.0.0.1:3120',INVITATION_DATABASE_URL:fixtureConnection('asisteam_invitation',rolePassword),INVITATION_PROXY_SECRET:secret,RESEND_API_KEY:'synthetic',INVITATION_EMAIL_FROM:'auth@example.test',HTTP_TIMEOUT_MS:'30000',PG_STATEMENT_TIMEOUT_MS:'10000'}),new SafeLogger(line=>logs.push(line)));
   await app.listen(0,'127.0.0.1');const origin=await app.getUrl();
   const client=(access,ip=randomUUID())=>new ApiClient({origin,accessToken:async()=>access??null,authProxy:{secret,clientIp:ip},invitationProxy:{secret,clientIp:ip},nativeAuth:true,timeoutMs:30000});
   const raw=(path,body,extra={})=>originalFetch(origin+'/api/v1/auth/'+path,{method:'POST',headers:{'content-type':'application/json',...extra},body:JSON.stringify(body)});
@@ -33,7 +33,7 @@ test('MIG-18 real HTTP/PostgreSQL: register/identity, RLS, refresh replay/concur
   assert.equal((await raw('login',{email:emails[0],password},{'x-asisteam-auth-proxy':'forged','x-asisteam-client-ip':'forged'})).status,401);
   await client().registerPassword({body:registration(emails[0])});
   const account=(await db.query('select id,auth_user_id from public.users where email=$1',[emails[0]])).rows[0];profiles.push(account.id);subjects.push(account.auth_user_id);
-  assert.equal((await db.query('select count(*)::int as n from auth.users where id=$1',[account.auth_user_id])).rows[0].n,0);
+  assert.equal((await db.query('select count(*)::int as n from app_private.auth_subjects where id=$1 and native_owned',[account.auth_user_id])).rows[0].n,1);
   assert.equal((await db.query('select count(*)::int as n from public.account_consents where user_id=$1',[account.id])).rows[0].n,1);
   const stored=(await db.query('select password_hash from app_private.auth_credentials where subject_id=$1',[account.auth_user_id])).rows[0].password_hash;assert.match(stored,/^\$argon2id\$/);
   await assert.rejects(client().registerPassword({body:registration(emails[0])}),error=>error.status===422);
@@ -71,11 +71,12 @@ test('MIG-18 real HTTP/PostgreSQL: register/identity, RLS, refresh replay/concur
   await client().requestRecovery({body:{email:emails[0]}});const expired=new URL(mail.at(-1).text.match(/http:\/\/\S+/)[0]).searchParams.get('token');await db.query("update app_private.auth_recovery set expires_at=now()-interval '1 minute' where token_hash=$1",[hash(expired)]);await assert.rejects(client().resetPassword({body:{token:expired,password}}),{status:401});
   // A migrated legacy hash keeps the subject/profile and rehashes only on success.
   const legacyId=randomUUID();subjects.push(legacyId);
-  await db.query("insert into auth.users(id,email,encrypted_password,raw_user_meta_data) values($1,$2,extensions.crypt($3,extensions.gen_salt('bf',12)),$4)",[legacyId,emails[6],password,JSON.stringify({full_name:'Legacy sintético',birthdate:'1990-01-01'})]);
+  await db.query("insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true)",[legacyId,emails[6]]);
+  await db.query("insert into public.users(auth_user_id,email,full_name,birthdate,account_status) values($1,$2,'Cuenta importada sintética','1990-01-01','ACTIVE')",[legacyId,emails[6]]);
   const legacyProfile=(await db.query('select id from public.users where auth_user_id=$1',[legacyId])).rows[0].id;profiles.push(legacyProfile);
-  await db.query('insert into app_private.auth_credentials(subject_id,password_hash) select id,encrypted_password from auth.users where id=$1',[legacyId]);
+  await db.query("insert into app_private.auth_credentials(subject_id,password_hash) values($1,extensions.crypt($2,extensions.gen_salt('bf',4)))",[legacyId,password]);
   const legacySession=await client().loginPassword({body:{email:emails[6],password}});assert.deepEqual(await client(legacySession.access_token).getSession(),{user_id:legacyProfile});assert.match((await db.query('select password_hash from app_private.auth_credentials where subject_id=$1',[legacyId])).rows[0].password_hash,/^\$argon2id\$/);
-  await client().requestRecovery({body:{email:emails[6]}});const legacyRecovery=new URL(mail.at(-1).text.match(/http:\/\/\S+/)[0]).searchParams.get('token');await client().resetPassword({body:{token:legacyRecovery,password:nextPassword}});assert.equal((await db.query("select banned_until='infinity'::timestamptz as banned from auth.users where id=$1",[legacyId])).rows[0].banned,true);
+  await client().requestRecovery({body:{email:emails[6]}});const legacyRecovery=new URL(mail.at(-1).text.match(/http:\/\/\S+/)[0]).searchParams.get('token');await client().resetPassword({body:{token:legacyRecovery,password:nextPassword}});assert.equal((await db.query('select native_owned from app_private.auth_subjects where id=$1',[legacyId])).rows[0].native_owned,true);
   // MANAGED has no credential; only directed claim preserves history and profile.
   const userId=randomUUID(),membership=randomUUID(),claimToken=randomBytes(32).toString('hex');profiles.push(userId);
   await db.query("insert into public.users(id,email,full_name,birthdate,account_status) values($1,$2,'MANAGED sintético','1990-01-01','MANAGED')",[userId,emails[2]]);
@@ -118,7 +119,7 @@ test('MIG-18 real HTTP/PostgreSQL: register/identity, RLS, refresh replay/concur
    for(const table of ['auth_refresh','auth_recovery','auth_families','auth_credentials'])await db.query('delete from app_private.'+table+(table==='auth_refresh'?' where family_id in(select id from app_private.auth_families where subject_id=any($1::uuid[]))':' where subject_id=any($1::uuid[])'),[auth]);
    for(const sql of ['delete from public.attendance_records where activity_id in(select id from public.activities where group_id=any($1::uuid[]))','delete from public.activities where group_id=any($1::uuid[])','delete from public.invitations where group_id=any($1::uuid[])','delete from public.memberships where group_id=any($1::uuid[])','delete from app_private.billing_legacy_groups where group_id=any($1::uuid[])','delete from public.groups where id=any($1::uuid[])'])await db.query(sql,[groups]);
    await db.query('delete from public.consents where guardianship_id in(select id from public.guardianships where athlete_user_id=any($1::uuid[]))',[ids]);await db.query('delete from public.guardianships where athlete_user_id=any($1::uuid[])',[ids]);
-   await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[ids]);await db.query('delete from public.users where id=any($1::uuid[])',[ids]);await db.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth]);await db.query('delete from auth.users where id=any($1::uuid[])',[auth]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
+   await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[ids]);await db.query('delete from public.users where id=any($1::uuid[])',[ids]);await db.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
    for(const row of previous){const old=row.rolpassword===null?'null':"'"+row.rolpassword.replaceAll("'","''")+"'";await db.query('alter role '+row.rolname+' '+(row.rolcanlogin?'login':'nologin')+' password '+old);}
    await db.query('commit');
   }finally{await db.end();}}else await db.end();

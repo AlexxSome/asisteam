@@ -16,7 +16,7 @@ const runtimeRoleSql = `
     and not exists (select 1 from pg_roles forbidden where forbidden.rolname in ('service_role','asisteam_migrator') and pg_has_role(current_user, forbidden.oid, 'MEMBER'))
     and not has_schema_privilege(current_user, 'public', 'CREATE')
     and not has_schema_privilege(current_user, 'app_private', 'CREATE')
-    and has_function_privilege(current_user, 'app_private.api_session_user_id(uuid)', 'EXECUTE')
+    and has_function_privilege(current_user, 'app_private.native_session_user_id(uuid)', 'EXECUTE')
     and not exists (
       select 1 from pg_class c
       where c.relnamespace in ('public'::regnamespace, 'app_private'::regnamespace)
@@ -42,19 +42,19 @@ export class Database implements OnApplicationShutdown {
     this.pool.on('error', () => this.logger.event('error', 'database_unavailable'));
   }
   async authenticated<T>(identity: VerifiedIdentity, operation: (transaction: AuthenticatedTransaction) => Promise<T>): Promise<T> {
-    if (!isVerifiedIdentity(identity) || identity.expiresAt <= Math.floor(Date.now() / 1000)) throw new UnauthorizedException();
+    if (!isVerifiedIdentity(identity) || identity.provider !== 'nest' || identity.expiresAt <= Math.floor(Date.now() / 1000)) throw new UnauthorizedException();
     if (this.draining) throw new ServiceUnavailableException();
     const client = await this.pool.connect().catch(() => { throw new ServiceUnavailableException(); });
     let destroy = false;
     let active = false;
     try {
       await client.query('BEGIN');
-      if (this.config.SUPABASE_AUTH_RETIRED && (await client.query('select app_private.auth_is_native() as native')).rows[0]?.native !== true) throw new ServiceUnavailableException();
+      if (this.config.NATIVE_AUTH_SECRET && (await client.query('select app_private.auth_is_native() as native')).rows[0]?.native !== true) throw new ServiceUnavailableException();
       const { rows: [role] } = await client.query<{ safe: boolean }>(runtimeRoleSql);
       if (!role?.safe) throw new ServiceUnavailableException();
       // Erase legacy per-claim GUCs too: auth.uid() prefers claim.sub over JSON.
-      await client.query(`select set_config('request.jwt.claim.sub', '', true), set_config('request.jwt.claim.role', '', true), set_config('request.jwt.claims', $1, true)`, [JSON.stringify({ sub: identity.authUserId, role: 'authenticated', session_id: identity.sessionId, auth_provider: identity.provider ?? 'supabase' })]);
-      const { rows: [profile] } = await client.query<{ user_id: string | null }>(identity.provider === 'nest' ? 'select app_private.native_session_user_id($1::uuid) as user_id' : 'select app_private.api_session_user_id($1::uuid) as user_id', [identity.sessionId]);
+      await client.query(`select set_config('request.jwt.claim.sub', '', true), set_config('request.jwt.claim.role', '', true), set_config('request.jwt.claims', $1, true)`, [JSON.stringify({ sub: identity.authUserId, role: 'authenticated', session_id: identity.sessionId, auth_provider: 'nest' })]);
+      const { rows: [profile] } = await client.query<{ user_id: string | null }>('select app_private.native_session_user_id($1::uuid) as user_id', [identity.sessionId]);
       if (!profile?.user_id) throw new UnauthorizedException();
       active = true;
       const transaction: AuthenticatedTransaction = Object.freeze({ userId: profile.user_id, query: <R extends pg.QueryResultRow>(sql: string, values?: unknown[]) => {
@@ -64,7 +64,7 @@ export class Database implements OnApplicationShutdown {
       const result = await operation(transaction);
       active = false;
       if (identity.expiresAt <= Math.floor(Date.now() / 1000)) throw new UnauthorizedException();
-      const { rows: [stillValid] } = await client.query<{ user_id: string | null }>(identity.provider === 'nest' ? 'select app_private.native_session_user_id($1::uuid) as user_id' : 'select app_private.api_session_user_id($1::uuid) as user_id', [identity.sessionId]);
+      const { rows: [stillValid] } = await client.query<{ user_id: string | null }>('select app_private.native_session_user_id($1::uuid) as user_id', [identity.sessionId]);
       if (stillValid?.user_id !== profile.user_id) throw new UnauthorizedException();
       await client.query('COMMIT');
       return result;
@@ -77,8 +77,8 @@ export class Database implements OnApplicationShutdown {
   async ready(): Promise<boolean> {
     if (this.draining) return false;
     try {
-      if (this.config.SUPABASE_AUTH_RETIRED && (await this.pool.query('select app_private.auth_is_native() as native')).rows[0]?.native !== true) return false;
-      const { rows: [role] } = await this.pool.query<{ safe: boolean }>((this.config.SUPABASE_AUTH_URL || this.config.NATIVE_AUTH_SECRET) ? runtimeRoleSql : 'SELECT true as safe');
+      if (this.config.NATIVE_AUTH_SECRET && (await this.pool.query('select app_private.auth_is_native() as native')).rows[0]?.native !== true) return false;
+      const { rows: [role] } = await this.pool.query<{ safe: boolean }>(this.config.NATIVE_AUTH_SECRET ? runtimeRoleSql : 'SELECT true as safe');
       return !!role?.safe && !this.draining;
     } catch {
       return false;

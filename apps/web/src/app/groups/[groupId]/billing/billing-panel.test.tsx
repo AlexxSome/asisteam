@@ -3,14 +3,13 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { BillingSummary } from "@asisteam/core";
-const mock = vi.hoisted(() => ({ manage: vi.fn(), refresh: vi.fn(), group: vi.fn(), rpc: vi.fn(), api: vi.fn() }));
+const mock = vi.hoisted(() => ({ manage: vi.fn(), refresh: vi.fn(), group: vi.fn(), api: vi.fn() }));
 vi.mock("@/lib/api/server", () => ({ createServerApiClient: () => ({ getGroupBilling: mock.api }) }));
-vi.mock("./actions", () => ({ manageSubscription: mock.manage }));
+vi.mock("@/app/groups/[groupId]/billing/actions", () => ({ manageSubscription: mock.manage }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mock.refresh }), notFound: () => { throw new Error("not-found"); } }));
 vi.mock("@/lib/groups", () => ({ getGroup: mock.group }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: async () => ({ rpc: mock.rpc }) }));
-import { BillingPanel } from "./billing-panel";
-import BillingPage, { metadata } from "./page";
+import { BillingPanel } from "@/app/groups/[groupId]/billing/billing-panel";
+import BillingPage, { metadata } from "@/app/groups/[groupId]/billing/page";
 
 const group = "56000000-0000-4000-8000-000000000201";
 const billing: BillingSummary = {
@@ -27,7 +26,7 @@ beforeEach(() => {
   vi.resetAllMocks();
   mock.manage.mockResolvedValue({ success: true });
   mock.group.mockResolvedValue({ roles: ["ADMIN"] });
-  mock.rpc.mockResolvedValue({ data: billing, error: null });
+  mock.api.mockResolvedValue(billing);
 });
 afterEach(() => { vi.unstubAllEnvs(); cleanup(); vi.unstubAllGlobals(); });
 
@@ -37,7 +36,7 @@ async function reviewCheckout(plan = "Equipo") {
   await userEvent.click(screen.getByRole("button", { name: "Revisar y continuar" }));
 }
 async function renderPage(data: BillingSummary, page = "1", extra = {}) {
-  mock.rpc.mockResolvedValue({ data, error: null });
+  mock.api.mockResolvedValue(data);
   return render(await BillingPage({ params: Promise.resolve({ groupId: group }), searchParams: Promise.resolve({ page, ...extra }) }));
 }
 
@@ -177,7 +176,7 @@ it("muestra resumen, título y capacidad real sin acreditar parámetros de retor
   expect(summary.textContent).toContain("Cobro recurrente autorizado");
   expect(screen.getByText("Pago pendiente de verificación")).toBeTruthy();
   expect(mock.manage).not.toHaveBeenCalled();
-  expect(mock.rpc).toHaveBeenCalledExactlyOnceWith("get_group_billing", { p_group_id: group, p_page: 1 });
+  expect(mock.api).toHaveBeenCalledExactlyOnceWith({params:{groupId:group},query:{page:1}});
 });
 
 it("conserva cupos y deuda después de cancelar sin prometer una próxima renovación", async () => {
@@ -210,14 +209,14 @@ it("historial muestra estados textuales, fecha de Chile y paginación con autori
   expect(history.querySelector('time[datetime="2026-10-04T01:00:00Z"]')?.textContent).toMatch(/^(03-10-2026|3 oct 2026)$/);
   expect(screen.getByRole("link", { name: "Anterior" }).getAttribute("href")).toBe("?page=1");
   expect(screen.getByRole("link", { name: "Siguiente" }).getAttribute("href")).toBe("?page=3");
-  expect(mock.rpc).toHaveBeenCalledWith("get_group_billing", { p_group_id: group, p_page: 2 });
+  expect(mock.api).toHaveBeenCalledWith({params:{groupId:group},query:{page:2}});
   expect(screen.queryByText("Pago pendiente de verificación")).toBeNull();
 });
 
 it("no consulta facturación si no tiene rol ADMIN", async () => {
   mock.group.mockResolvedValue({ roles: ["ATHLETE"] });
   await expect(BillingPage({ params: Promise.resolve({ groupId: group }), searchParams: Promise.resolve({}) })).rejects.toThrow("not-found");
-  expect(mock.rpc).not.toHaveBeenCalled();
+  expect(mock.api).not.toHaveBeenCalled();
 });
 
 it("un fallo al conciliar mantiene el bloqueo, pero la ausencia confirmada permite reintentar", async () => {
@@ -238,11 +237,8 @@ it("un fallo al conciliar mantiene el bloqueo, pero la ausencia confirmada permi
 
 it("la página billing Nest carga DTO por SDK y preserva retorno sin confirmar pago", async () => {
   vi.stubEnv("ASISTEAM_TRANSPORT_BILLING", "nest");
-  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
-  vi.stubEnv("ASISTEAM_API_SUPABASE_URL", "http://127.0.0.1:54321");
   mock.api.mockResolvedValue(billing);
   render(await BillingPage({ params: Promise.resolve({ groupId: group }), searchParams: Promise.resolve({ page: "2" }) }));
   expect(mock.api).toHaveBeenCalledExactlyOnceWith({ params: { groupId: group }, query: { page: 2 } });
-  expect(mock.rpc).not.toHaveBeenCalled();
   expect(screen.getByText(/Volver del checkout no confirma un pago/)).toBeTruthy();
 });
