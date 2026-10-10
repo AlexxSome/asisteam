@@ -24,6 +24,7 @@
 - La equivalencia HU-GEN-03 detectó que recovery rechazaba INVITED con credenciales existentes. La recuperación nativa permite ACTIVE/INVITED con credenciales, mantiene MANAGED bloqueado y no activa memberships/consentimientos por recuperar; se verifican expiración/replay/login/logout.
 - `pg_terminate_backend` responde antes de finalizar algunas sesiones. El ensayo espera de forma acotada que salgan todos los writers; el guard de snapshot sigue exigiendo cero conexiones.
 - El probe SQL necesita instalar pgTAP en su transacción propia antes de `ok(false)`; se corrigió para detectar una aserción fallida real y conservar su reporte negativo separado.
+- El primer CI final aprobó checks/backend/staging, pero QA falló al parsear el informe de logs mientras el servidor lo sobrescribía. La publicación del JSON usa ahora archivo privado temporal y rename atómico; conserva las aserciones de scrubbing. El flujo S3 aislado pasó de nuevo; la matriz completa continúa siendo obligatoria en el CI del head vigente.
 
 [Seguro] [Mapa SQL](sql-native-coverage.json), [mapa 80/628](pending-integration-coverage.json) y [manifiesto de retiro](source-retirement-manifest.json) preservan el vínculo origen→equivalente nativo. El baseline SQL0001 se conserva inmutable como historial; 0002 instala el catálogo vigente sin entrypoints del proveedor. Las referencias en evidencias anteriores son historia fechada, no código/tooling/configuración activa.
 

@@ -1,6 +1,6 @@
 import { startQaNest } from './nest-runtime.mjs';
 import { execFileSync, spawn } from 'node:child_process';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import {nativeBrowserDatabase} from '../../api/test/native-browser-database.mjs';
 import {randomUUID} from 'node:crypto';
 import { roles, email, password, id, groups, activity, rosterName, pendingName, wardName, inviteCode } from './data.mjs';
@@ -97,7 +97,10 @@ const status = { loginPost: false, registerPost: false, actionArguments: false, 
 const persist = () => {
   // next build clears .next; a supervised QA server must not crash on logging.
   mkdirSync('.qa', { recursive: true, mode:0o700 });
-  writeFileSync('.qa/log-check.json', JSON.stringify(status, null, 2));
+  // Playwright reads this while Next continues producing output. Publish one
+  // complete snapshot so a reader never observes a truncated JSON write.
+  writeFileSync('.qa/log-check.json.tmp', JSON.stringify(status, null, 2), { mode:0o600 });
+  renameSync('.qa/log-check.json.tmp', '.qa/log-check.json');
 };
 persist();
 // Capture raw output only in memory. Reports retain booleans, never payloads.
