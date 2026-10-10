@@ -1,5 +1,7 @@
 # Sistema visual web
 
+[Seguro] **UI-01 (#171, 10-10-2026):** [contrato de la referencia #170](design/issue-171/README.md) reutiliza estos tokens/controles y fija sidebar 256 px, cabecera mínima 64 px, anchos por tarea y composición 320/375/768/1024/1440/1536. Incluye siete estados, biblioteca local mínima de SVG decorativos, ajuste de nombres y propuestas desktop/móvil con [comparación anotada](design/issue-171/comparison.html). La muestra SSR está fuera de rutas productivas; adopción funcional y roles corresponden a UI-02…UI-05. No introduce paleta, fuentes, gráficos P1 ni datos sintéticos como fallback de producción.
+
 > Vigencia técnica al 10-10-2026: Next/Nest/Auth/PostgreSQL/S3 independientes. Las evidencias fechadas anteriores describen el stack de su commit y no son configuración ni gates actuales. Consulte [MIG-24](migration/issue-168/README.md) y sus nuevos runners nativos.
 
 

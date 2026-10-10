@@ -1,0 +1,495 @@
+{
+  "date": "2026-10-10T19:27:46.703Z",
+  "node": "v24.16.0",
+  "browser": "153.0.8010.12",
+  "sources": {
+    "docs/design/issue-171/preview.tsx": "65a4f0c273c0fdf50e582772d27a01cbd4c410a95a4eb9825a89f39a8270dccf",
+    "docs/design/issue-171/preview.css": "1a7c9fd531f8a4cf784e6e19690dca14502d9c20847d0553384b78cabf379c1d",
+    "apps/web/src/app/globals.css": "4fc1befb3fe60888937093ce1716f7822f452707696c17c2128eb9b6d2f54aa7",
+    "apps/web/scripts/design-contract.mjs": "f2d368082750eb18165ce077797705cc292cd6925c35ba9dc9cb98e1f7d914a3"
+  },
+  "environment": "static-synthetic-chromium",
+  "checks": [
+    {
+      "variant": "ready",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "variant": "ready",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "variant": "ready",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "ready",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "ready",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "ready",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "loading",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "loading",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "loading",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "loading",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "loading",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "loading",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "empty",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "empty",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "empty",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "empty",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "empty",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "empty",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "no-data",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast",
+        "th-has-data-cells"
+      ]
+    },
+    {
+      "variant": "no-data",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast",
+        "th-has-data-cells"
+      ]
+    },
+    {
+      "variant": "no-data",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "th-has-data-cells"
+      ]
+    },
+    {
+      "variant": "no-data",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "th-has-data-cells"
+      ]
+    },
+    {
+      "variant": "no-data",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "th-has-data-cells"
+      ]
+    },
+    {
+      "variant": "no-data",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "th-has-data-cells"
+      ]
+    },
+    {
+      "variant": "error",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "error",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "error",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "error",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "error",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "error",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "long-name",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "variant": "long-name",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "variant": "long-name",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "long-name",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "long-name",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "long-name",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "no-logo",
+      "width": 320,
+      "status": "PASS",
+      "pageWidth": 320,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "variant": "no-logo",
+      "width": 375,
+      "status": "PASS",
+      "pageWidth": 375,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "variant": "no-logo",
+      "width": 768,
+      "status": "PASS",
+      "pageWidth": 768,
+      "sidebar": 0,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "no-logo",
+      "width": 1024,
+      "status": "PASS",
+      "pageWidth": 1024,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "no-logo",
+      "width": 1440,
+      "status": "PASS",
+      "pageWidth": 1440,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    },
+    {
+      "variant": "no-logo",
+      "width": 1536,
+      "status": "PASS",
+      "pageWidth": 1536,
+      "sidebar": 256,
+      "minimumControlHeight": 44,
+      "minimumControlWidth": 59.625,
+      "axeIncomplete": []
+    }
+  ],
+  "contrast": [
+    {
+      "pair": "foreground/surface",
+      "ratio": 17.85
+    },
+    {
+      "pair": "neutral/surface",
+      "ratio": 7.58
+    },
+    {
+      "pair": "primary/surface",
+      "ratio": 6.7
+    },
+    {
+      "pair": "warning/surface",
+      "ratio": 7.09
+    },
+    {
+      "pair": "focus/surface",
+      "ratio": 5.17
+    },
+    {
+      "pair": "input/surface",
+      "ratio": 4.76
+    },
+    {
+      "pair": "warning/warning-subtle",
+      "ratio": 6.37
+    }
+  ],
+  "keyboard": "PASS",
+  "retryNavigation": "PASS",
+  "reflowProxy": "PASS",
+  "nativeZoom": "PENDING",
+  "screenReader": "PENDING"
+}

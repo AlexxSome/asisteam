@@ -1,0 +1,46 @@
+/* Layout contract only; color, type, radius and control tokens come from globals.css. */
+.specimen { min-height: 100vh; }
+.workspace, main, .dashboard > section { min-width: 0; }
+.sidebar { display: none; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 16px; min-height: 64px; background: var(--surface); border-bottom: 1px solid var(--border); }
+main { padding: 16px; display: flex; flex-direction: column; gap: 24px; overflow-wrap: anywhere; }
+.heading { display: flex; flex-direction: column; gap: 16px; }
+.sample-link, summary { min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 6px; }
+a.sample-link { color: var(--primary); text-decoration: underline; text-underline-offset: 4px; }
+summary { cursor: pointer; list-style: revert; display: list-item; }
+.sample-primary { min-height: 44px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 6px; background: var(--primary); color: var(--surface); }
+.sample-primary:hover { background: var(--primary-hover); }
+.mobile-menu { border-bottom: 1px solid var(--border); background: var(--surface); padding: 8px 16px; }
+.variants { display: flex; gap: 8px; flex-wrap: wrap; }
+.variants a { min-height: 44px; padding: 12px; color: var(--primary); text-decoration: underline; }
+.variants [aria-current] { background: var(--info-subtle); border-radius: 6px; }
+.indicators { display: grid; gap: 16px; }
+.dashboard { display: grid; gap: 16px; }
+.activities { order: 1; }.tasks { order: 2; }.indicators { order: 3; }.context { order: 4; }.records { order: 5; }.notice { order: 6; }
+.activity-row { display: grid; grid-template-columns: 56px minmax(0,1fr); gap: 12px; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.activity-row .sample-link { grid-column: 2; padding-left: 0; }
+.date-tile { display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 6px; background: var(--info-subtle); color: var(--info); font-weight: 600; padding: 8px; }
+.table-region { overflow-x: auto; max-width: 100%; }
+table { width: 100%; min-width: 480px; font-size: 14px; line-height: 20px; text-align: left; }
+th, td { padding: 12px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { font-weight: 500; }thead { color: var(--neutral); }
+.skip { position: absolute; width: 1px; height: 1px; overflow: hidden; }
+.skip:focus { width: auto; height: auto; z-index: 5; background: var(--surface); padding: 12px; }
+@media (min-width: 48rem) {
+  main { padding: 24px; }.topbar { padding-inline: 24px; }
+  .heading { flex-direction: row; align-items: center; justify-content: space-between; }
+  .indicators { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .activity-row { grid-template-columns: 56px minmax(0,1fr) auto; align-items: center; }
+  .activity-row .sample-link { grid-column: auto; }
+}
+@media (min-width: 64rem) {
+  .specimen { display: grid; grid-template-columns: 256px minmax(0,1fr); }
+  .sidebar { display: flex; flex-direction: column; gap: 16px; padding: 24px 16px; border-right: 1px solid var(--border); background: var(--surface); }
+  .mobile-menu { display: none; }main { max-width: 1280px; margin-inline: auto; padding: 32px; }
+}
+@media (min-width: 80rem) {
+  .indicators { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .dashboard { grid-template-columns: minmax(0, 7fr) minmax(320px, 4fr); gap: 24px; grid-template-areas: 'indicators indicators' 'activities context' 'records tasks' 'records notice'; }
+  .indicators { grid-area: indicators; }
+  .activities { grid-area: activities; }.context { grid-area: context; }.records { grid-area: records; }.tasks { grid-area: tasks; }.notice { grid-area: notice; }
+}
