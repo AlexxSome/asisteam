@@ -46,7 +46,7 @@ describe("navegación compartida", () => {
   it("mantiene el nombre completo fuera del selector y IDs únicos en sidebar/drawer", () => {
     const current = { ...group, name: "Club Deportivo de Entrenamiento Comunitario con Nombre Extenso" };
     render(<AppShell group={current} groups={[current]} userId="synthetic"><h1>Inicio</h1></AppShell>);
-    expect(within(screen.getByRole("banner")).getByText(current.name)).toBeTruthy();
+    expect(within(screen.getByRole("banner")).getByRole("link", { name: current.name })).toBeTruthy();
     const ids = [...document.querySelectorAll("[id]")].map(node => node.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
@@ -90,4 +90,30 @@ it("logo no disponible conserva identificación accesible", () => {
   render(<GroupLogo src="https://example.test/missing.png" name="Club local" />);
   fireEvent.error(screen.getByRole("img", { name: "Logo de Club local" }));
   expect(screen.getByRole("img", { name: "Club local: logo no disponible" }).textContent).toBe("CL");
+});
+
+it("breadcrumb usa nombre autorizado y destinos reales sin mostrar IDs ajenos", () => {
+  navigation.pathname = `/groups/${groupId}/activities/opaque-private-id/attendance`;
+  render(<AppShell group={group}><h1>Asistencia</h1></AppShell>);
+  const breadcrumb = screen.getByRole("navigation", { name: "Ruta de navegación" });
+  expect(within(breadcrumb).getByRole("link", { name: group.name }).getAttribute("href")).toBe(`/groups/${groupId}`);
+  expect(breadcrumb.textContent).toContain("Toma de asistencia");
+  expect(breadcrumb.textContent).not.toContain("opaque-private-id");
+  expect(screen.getByRole("link", { name: "Ayuda y soporte" }).getAttribute("href")).toBe("/profile#privacy");
+});
+it("Gestión abre Visibilidad sin marcar también Configuración como página activa", () => {
+  navigation.pathname = `/groups/${groupId}/settings/visibility`;
+  render(<AppShell group={group}><h1>Visibilidad</h1></AppShell>);
+  const nav = screen.getByRole("navigation", { name: "Navegación del grupo" });
+  expect(nav.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+  expect(within(nav).getByRole("link", { name: "Visibilidad" }).getAttribute("aria-current")).toBe("page");
+});
+it.each(["ADMIN", "ATHLETE", "GUARDIAN", "COACH"] as MembershipRole[])("badge autorizado solo para ADMIN, rol %s", role => {
+  const current = { ...group, roles: [role] };
+  render(<AppShell group={current} pendingApprovals={12}><h1>Inicio</h1></AppShell>);
+  expect(screen.queryAllByText("12 pendientes").length > 0).toBe(role === "ADMIN");
+});
+it.each([undefined, 0, -1, 1.5, NaN])("no inventa badge para conteo ausente/inválido %s", pendingApprovals => {
+  render(<AppShell group={group} pendingApprovals={pendingApprovals}><h1>Inicio</h1></AppShell>);
+  expect(screen.queryByText(/^\d+ pendientes$/)).toBeNull();
 });

@@ -3,7 +3,7 @@ import {spawn} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {createServer} from 'node:net';
-import {readFileSync,writeFileSync} from 'node:fs';
+import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {setTimeout as delay} from 'node:timers/promises';
 import {chromium} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -18,7 +18,10 @@ const databaseConnection=(role,password)=>{const url=new URL(isolated.url);url.u
 const run=randomUUID(),email='mig163-browser-'+run+'@example.test',ownerEmail='mig163-browser-'+run+'-owner@example.test',secret=randomBytes(32).toString('hex'),rolePassword=randomUUID();
 const originalFetch=globalThis.fetch,nextEnv=new URL('../next-env.d.ts',import.meta.url),previousEnv=readFileSync(nextEnv,'utf8'),codes=new Map(),transactionIds=[];
 const {publicKey,privateKey}=await generateKeyPair('RS256'),jwk={...await exportJWK(publicKey),kid:'browser163',alg:'RS256',use:'sig'};
-let previous=[],app,next,browser,identity={sub:'browser163-'+run,email};
+let previous=[],app,next,browser,page,identity={sub:'browser163-'+run,email};
+const report={sourceCommit:process.env.SOURCE_COMMIT??'local-pending-diff',environment:process.env.GITHUB_ACTIONS?'github-actions-synthetic':'local-synthetic',phase:'setup',status:'RUNNING',actionRequests:0,pageErrors:0};
+const reportDir=new URL('../../../.ci-results/',import.meta.url);
+const phase=name=>{report.phase=name;report.actionRequests=0;delete report.lastActionStatus;};
 try{
  await db.connect();previous=(await db.query("select rolname,rolcanlogin,rolpassword from pg_authid where rolname in ('asisteam_api','asisteam_auth')")).rows;
  for(const role of ['asisteam_api','asisteam_auth'])await db.query("alter role "+role+" login password '"+rolePassword+"'");
@@ -38,8 +41,12 @@ try{
  const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,ASISTEAM_SITE_URL:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
  for(const module of ['groups','profile','members','invitations','activities','attendance','reports','billing','announcements','qr','storage'])env['ASISTEAM_TRANSPORT_'+module.toUpperCase()]='nest';
  next=spawn(process.execPath,['node_modules/next/dist/bin/next','dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd:new URL('..',import.meta.url),env,stdio:'ignore'});
- let ready=false;for(let n=0;n<120;n++){try{if((await originalFetch(webOrigin+'/login',{signal:AbortSignal.timeout(15000)})).ok){ready=true;break;}}catch{/* Next starts in the owned process. */}if(next.exitCode!==null)throw Error('Next terminó antes del smoke OAuth');await delay(250);}assert.ok(ready);
- browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:375,height:812}}),page=await context.newPage();page.setDefaultTimeout(30000);
+ phase('next-ready');let ready=false;for(let n=0;n<120;n++){try{if((await originalFetch(webOrigin+'/login',{signal:AbortSignal.timeout(15000)})).ok){ready=true;break;}}catch{/* Next starts in the owned process. */}if(next.exitCode!==null)throw Error('Next terminó antes del smoke OAuth');await delay(250);}assert.ok(ready);
+ phase('chromium');browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:375,height:812}});page=await context.newPage();page.setDefaultTimeout(30000);
+ if(process.env.AUTH_SMOKE_SLOW_BROWSER==='1'){const cdp=await context.newCDPSession(page);await cdp.send('Emulation.setCPUThrottlingRate',{rate:6});await context.route('**/_next/static/**/*.js',async route=>{await delay(500);await route.continue();});report.browserCpuRate=6;}
+ page.on('request',request=>{if(request.method()==='POST'&&request.headers()['next-action'])report.actionRequests++;});
+ page.on('response',response=>{if(response.request().method()==='POST'&&response.request().headers()['next-action'])report.lastActionStatus=response.status();});
+ page.on('pageerror',()=>report.pageErrors++);
  await context.route('https://accounts.google.com/o/oauth2/v2/auth**',async route=>{
   const url=new URL(route.request().url()),code=randomUUID();codes.set(code,{...identity,nonce:url.searchParams.get('nonce')});
   const cookies=await context.cookies(webOrigin+'/auth/callback/google'),transaction=cookies.find(c=>c.name==='asisteam-oauth-transaction');assert.ok(transaction?.httpOnly);assert.equal(transaction.sameSite,'Lax');
@@ -47,22 +54,30 @@ try{
   const callback=new URL('/auth/callback/google',webOrigin);callback.searchParams.set('state',url.searchParams.get('state'));callback.searchParams.set('code',code);
   await route.fulfill({status:302,headers:{location:callback.href},body:''});
  });
- await page.goto(webOrigin+'/login');await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/accept-terms**');
+ phase('new-google-login');await page.goto(webOrigin+'/login');await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/accept-terms**');
  let cookies=await context.cookies();assert.ok(cookies.find(c=>c.name==='asisteam-access')?.httpOnly);assert.ok(!cookies.some(c=>c.name==='asisteam-oauth-transaction'));assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
- await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Aceptar y continuar'}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Persona!'}).waitFor();
+ phase('accept-terms');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Aceptar y continuar'}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Persona!'}).waitFor();
  const profile=(await db.query('select id from public.users where email=$1',[email])).rows[0].id;
- await context.clearCookies();await page.goto(webOrigin+'/login');await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/welcome');assert.equal((await db.query('select id from public.users where email=$1',[email])).rows[0].id,profile);
+ phase('existing-google-login');await context.clearCookies();await page.goto(webOrigin+'/login');await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/welcome');assert.equal((await db.query('select id from public.users where email=$1',[email])).rows[0].id,profile);
  const client=new ApiClient({origin:await app.getUrl(),authProxy:{secret,clientIp:randomUUID()}}),password='Synthetic-OAuth-browser-'+run;
- await client.registerPassword({body:{email:ownerEmail,password,full_name:'Titular navegador',birthdate:'1990-01-01',terms_accepted:true,terms_version:'2026-09-21'}});const owner=await client.loginPassword({body:{email:ownerEmail,password}});
+ phase('password-owner');await client.registerPassword({body:{email:ownerEmail,password,full_name:'Titular navegador',birthdate:'1990-01-01',terms_accepted:true,terms_version:'2026-09-21'}});const owner=await client.loginPassword({body:{email:ownerEmail,password}});
  const ownerId=(await db.query('select id from public.users where email=$1',[ownerEmail])).rows[0].id;
  await context.clearCookies();await context.addCookies([{name:'asisteam-access',value:owner.access_token,url:webOrigin,httpOnly:true,sameSite:'Lax'},{name:'asisteam-refresh',value:owner.refresh_token,url:webOrigin,httpOnly:true,sameSite:'Lax'}]);
- await page.goto(webOrigin+'/profile');assert.equal((await new AxeBuilder({page}).analyze()).violations.length,0);
+ phase('profile-accessibility');await page.goto(webOrigin+'/profile');const accessibility=await new AxeBuilder({page}).analyze();report.axeViolationIds=accessibility.violations.map(violation=>violation.id);assert.equal(accessibility.violations.length,0);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));identity={sub:'browser163-owner-'+run,email:ownerEmail};
- await page.getByRole('button',{name:'Vincular Google',exact:true}).click();await page.waitForURL('**/profile?social_linked=1');await page.getByText('Cuenta social vinculada. Tu perfil e historial se conservaron.').waitFor();
+ phase('link-google');await page.getByRole('button',{name:'Vincular Google',exact:true}).click();await page.waitForURL('**/profile?social_linked=1');await page.getByText('Cuenta social vinculada. Tu perfil e historial se conservaron.').waitFor();
  assert.equal((await db.query('select id from public.users where email=$1',[ownerEmail])).rows[0].id,ownerId);assert.equal((await db.query('select count(*)::int as n from app_private.auth_social_identities s join public.users u on u.auth_user_id=s.subject_id where u.id=$1',[ownerId])).rows[0].n,1);
  cookies=await context.cookies();assert.ok(!cookies.some(c=>c.name==='asisteam-oauth-transaction'||c.name.startsWith('sb-')));
  console.log('PASS: Chromium375 + Next/Nest/PostgreSQL OAuth Google: nueva cuenta/consentimiento/onboarding, cookie vinculada/consumida, login existente y vinculación explícita; axe/reflow. Proveedor sintético firmado; no ensayo externo Google/Apple.');
+ report.status='PASS';phase('completed');
+}catch(error){
+ report.status='FAIL';report.failure=error?.name==='TimeoutError'?'timeout':error?.code==='ERR_ASSERTION'?'assertion':'runtime';
+ // Only fixed stage names, counts, rule IDs and booleans. Never page text,
+ // URLs, provider parameters, credentials or raw dependency errors.
+ if(page)try{report.termsChecked=await page.getByRole('checkbox').isChecked().catch(()=>false);}catch{/* Browser may have closed. */}
+ throw error;
 }finally{
+ mkdirSync(reportDir,{recursive:true});writeFileSync(new URL('social-auth-browser.json',reportDir),JSON.stringify(report,null,2)+'\n');
  globalThis.fetch=originalFetch;if(browser)await browser.close();if(next){next.kill('SIGTERM');if(next.exitCode===null)await Promise.race([new Promise(r=>next.once('exit',r)),delay(5000)]);if(next.exitCode===null)next.kill('SIGKILL');}writeFileSync(nextEnv,previousEnv);if(app)await app.close();
  try{await db.query('begin');await db.query("set local session_replication_role='replica'");const own=(await db.query('select id,auth_user_id from public.users where email=any($1::text[])',[[email,ownerEmail]])).rows,ids=own.map(u=>u.id),subjects=own.map(u=>u.auth_user_id).filter(Boolean);
   await db.query('delete from app_private.auth_oauth_transactions where id=any($1::uuid[]) or link_subject_id=any($2::uuid[])',[transactionIds,subjects]);await db.query('delete from app_private.auth_social_identities where subject_id=any($1::uuid[])',[subjects]);

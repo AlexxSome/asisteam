@@ -1,0 +1,390 @@
+{
+  "checks": {
+    "commit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "sourceCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "date": "2026-10-10T20:30:11.960Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "ci-runner-tests",
+        "status": "PASS",
+        "seconds": 0.48
+      },
+      {
+        "check": "lint",
+        "status": "PASS",
+        "seconds": 4.62
+      },
+      {
+        "check": "http-contract-generation",
+        "status": "PASS",
+        "seconds": 2.81
+      },
+      {
+        "check": "native-test-fixture-build",
+        "status": "PASS",
+        "seconds": 0.4
+      },
+      {
+        "check": "typecheck",
+        "status": "PASS",
+        "seconds": 3.29
+      },
+      {
+        "check": "next-http-contract",
+        "status": "PASS",
+        "seconds": 8.84
+      },
+      {
+        "check": "build",
+        "status": "PASS",
+        "seconds": 35.71
+      },
+      {
+        "check": "product-runtime-retirement",
+        "status": "PASS",
+        "seconds": 0.23
+      },
+      {
+        "check": "core-unit",
+        "status": "PASS",
+        "seconds": 1.01,
+        "tests": 150,
+        "omitted": 0
+      },
+      {
+        "check": "web-unit",
+        "status": "PASS",
+        "seconds": 16.67,
+        "tests": 961,
+        "omitted": 84
+      },
+      {
+        "check": "worker-unit",
+        "status": "PASS",
+        "seconds": 0.25
+      },
+      {
+        "check": "api-unit",
+        "status": "PASS",
+        "seconds": 1.87
+      },
+      {
+        "check": "api-client-contract",
+        "status": "PASS",
+        "seconds": 0.62
+      }
+    ]
+  },
+  "backend": {
+    "commit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "sourceCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "date": "2026-10-10T20:21:41.404Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "api-session-build",
+        "status": "PASS",
+        "seconds": 0.21
+      },
+      {
+        "check": "worker-build",
+        "status": "PASS",
+        "seconds": 0.22
+      },
+      {
+        "check": "private-storage-fixture-build",
+        "status": "PASS",
+        "seconds": 1.66
+      },
+      {
+        "check": "independent-postgres-api-worker-types-backup-pitr",
+        "status": "PASS",
+        "seconds": 42.89
+      },
+      {
+        "check": "native-api-worker-all-integrations",
+        "status": "PASS",
+        "seconds": 51.37
+      },
+      {
+        "check": "next-social-auth-browser",
+        "status": "PASS",
+        "seconds": 19.2
+      },
+      {
+        "check": "portability-rehearsal",
+        "status": "PASS",
+        "seconds": 0.18
+      },
+      {
+        "check": "portability-no-omissions",
+        "status": "PASS"
+      },
+      {
+        "check": "portability-injected-failure",
+        "status": "FAIL",
+        "seconds": 1.88,
+        "expected": true
+      },
+      {
+        "check": "portability-cleanup-after-failure",
+        "status": "PASS"
+      },
+      {
+        "check": "pgtap-all-domain",
+        "status": "PASS",
+        "seconds": 7.07
+      },
+      {
+        "check": "sql-coverage-preserved",
+        "status": "PASS"
+      },
+      {
+        "check": "product-integrations",
+        "status": "PASS",
+        "seconds": 52.75,
+        "tests": 84,
+        "omitted": 0
+      },
+      {
+        "check": "module-coverage-preserved",
+        "status": "PASS"
+      }
+    ]
+  },
+  "staging": {
+    "commit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "sourceCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "date": "2026-10-10T20:24:00.794Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "synthetic-external-secrets",
+        "status": "PASS",
+        "seconds": 0.03
+      },
+      {
+        "check": "api-container-build",
+        "status": "PASS",
+        "seconds": 19.33
+      },
+      {
+        "check": "api-image-id",
+        "status": "PASS",
+        "seconds": 0.08
+      },
+      {
+        "check": "staging-deploy",
+        "status": "PASS",
+        "seconds": 6.55
+      },
+      {
+        "check": "staging-role-query",
+        "status": "PASS",
+        "seconds": 0.08
+      },
+      {
+        "check": "staging-role-separation",
+        "status": "PASS"
+      },
+      {
+        "check": "second-artifact-build",
+        "status": "PASS",
+        "seconds": 0.68
+      },
+      {
+        "check": "second-image-id",
+        "status": "PASS",
+        "seconds": 0.07
+      },
+      {
+        "check": "distinct-artifacts",
+        "status": "PASS"
+      },
+      {
+        "check": "staging-deploy",
+        "status": "PASS",
+        "seconds": 5.58
+      },
+      {
+        "check": "staging-deploy",
+        "status": "PASS",
+        "seconds": 4.56
+      },
+      {
+        "check": "rollback-release-state",
+        "status": "PASS"
+      },
+      {
+        "check": "staging-deploy",
+        "status": "FAIL",
+        "seconds": 0.88,
+        "expected": true
+      },
+      {
+        "check": "staging-automatic-rollback",
+        "status": "PASS",
+        "seconds": 1.68
+      },
+      {
+        "check": "automatic-rollback-release-state",
+        "status": "PASS"
+      },
+      {
+        "check": "rollback-container-id",
+        "status": "PASS",
+        "seconds": 0.05
+      },
+      {
+        "check": "rollback-artifact-query",
+        "status": "PASS",
+        "seconds": 0.02
+      },
+      {
+        "check": "rollback-artifact-identity",
+        "status": "PASS"
+      },
+      {
+        "check": "staging-log-read",
+        "status": "PASS",
+        "seconds": 0.04
+      },
+      {
+        "check": "staging-log-privacy",
+        "status": "PASS"
+      },
+      {
+        "check": "api-real-postgres-integration",
+        "status": "PASS",
+        "seconds": 1.31
+      },
+      {
+        "check": "staging-owned-cleanup",
+        "status": "PASS",
+        "seconds": 0.76
+      }
+    ]
+  },
+  "extended": {
+    "commit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "sourceCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "date": "2026-10-10T20:25:02.486Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "chromium-install",
+        "status": "PASS",
+        "seconds": 0.36
+      },
+      {
+        "check": "nest-domain-build",
+        "status": "PASS",
+        "seconds": 0.21
+      },
+      {
+        "check": "private-storage-fixture-build",
+        "status": "PASS",
+        "seconds": 0.41
+      },
+      {
+        "check": "playwright-nest-domain-responsive-axe",
+        "status": "PASS",
+        "seconds": 234.07,
+        "tests": 47,
+        "omitted": 0
+      },
+      {
+        "check": "playwright-transport-faults",
+        "status": "PASS",
+        "seconds": 15.17,
+        "tests": 1,
+        "omitted": 0
+      }
+    ]
+  },
+  "qualification": {
+    "sourceCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "checkoutCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "date": "2026-10-10T20:32:29.256Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "technicalStatus": "PASS",
+    "acceptance": "NO-GO",
+    "suites": [
+      {
+        "suite": "checks",
+        "status": "PASS",
+        "tests": 1111,
+        "omitted": 84
+      },
+      {
+        "suite": "backend",
+        "status": "PASS",
+        "tests": 84,
+        "omitted": 0
+      },
+      {
+        "suite": "staging",
+        "status": "PASS",
+        "tests": 0,
+        "omitted": 0
+      },
+      {
+        "suite": "extended",
+        "status": "PASS",
+        "tests": 48,
+        "omitted": 0
+      }
+    ],
+    "blockers": [
+      "agreed-representative-load-and-source-destination-http-baseline",
+      "external-test-provider-receipts",
+      "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+      "operational-acceptance-MIG22"
+    ],
+    "load": {
+      "status": "PASS",
+      "activeAthletes": 500,
+      "attendanceRecords": 5000,
+      "cells": 8,
+      "requests": 192,
+      "maxP95Ms": 87.65
+    }
+  },
+  "shell172": {
+    "commit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "sourceCommit": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "date": "2026-10-10T20:31:36.450Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "checks": [
+      {
+        "check": "ui02-shell-final-alignment",
+        "status": "PASS",
+        "seconds": 15.78,
+        "tests": 1,
+        "omitted": 0
+      }
+    ]
+  },
+  "provenance": {
+    "base": "2fa6dd5e7d57158af5676d559730dfeb78872119",
+    "state": "base plus issue-172 diff",
+    "finalRevalidation": "checks plus shell172 after breadcrumb items-center and viewport screenshot framing; backend/staging unaffected; full extended before these two visual-only adjustments"
+  },
+  "finalSourcesSha256": {
+    "apps/web/src/components/app-shell.tsx": "c86e339a4a51e2f476221f0c4ac98d897605e9690d55cbb48847cfc9486e3d50",
+    "apps/web/src/components/app-shell.test.tsx": "5f4aa976aeaaf7654330a90f207e599d793d4d91d147b3ad2a134665da6f5369",
+    "apps/web/src/components/shell-icon.tsx": "afbb3ee152c6213ed077496b6979d3755e1adb4a1ba1487d2939a011e6e946d6",
+    "apps/web/e2e/shell.spec.ts": "ad8f8ad99aded154e06eff4c000cf336dc6c4b2cdf852a18fc1dc7f2e94ecc7e"
+  },
+  "capturesSha256": {
+    "shell-375.png": "8346f390501d0eb64c0ad27e39d3a76ddd5977352f8385a114efb83c3c5dab4a",
+    "shell-1440.png": "3f63753e85e06310868f808896019e82ef9587887e85d5a43ce86895cf7f3bcd"
+  }
+}
