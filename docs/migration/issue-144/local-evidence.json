@@ -1,0 +1,412 @@
+{
+  "date": "2026-10-10",
+  "timezone": "America/Santiago",
+  "branch": "codex/144-reconciliar-migracion-nest",
+  "testedRuntimeCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+  "scope": "local synthetic execution on base runtime with documentation working tree changes; not CI of published PR or production acceptance",
+  "documentationHashes": {
+    "README.md": "e9a7115ca8417a890e0da3ba221a147bd1440d0681c72b645fe19a8f4c09e533",
+    "docs/09-roadmap.md": "4e8ebb3ebdf0c807379f7ad79350b0dae5d359f2f04663125f1ea78e419a0f31",
+    "docs/migration/issue-168/README.md": "0d8ca8a73b1d8c18be5a69628eb2695a8b4cce118363b3b207655109ec47e43f",
+    "docs/migration/issue-144/README.md": "e48dbea72b66de266fdeb7a7c8ec5eaa422399e91361de111ea25444c7cbeb31",
+    "docs/migration/issue-144/github-evidence.json": "0041b38cdcebb53e1c866f26c4d07868efbed3d4b1f9d6e4781ad940bccf689f"
+  },
+  "reports": {
+    "checks": {
+      "commit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "sourceCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "date": "2026-10-10T11:41:36.277Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.26
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 2.5
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 2.54
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 2.1
+        },
+        {
+          "check": "next-http-contract",
+          "status": "PASS",
+          "seconds": 7.48
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 29.83
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.54,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 16.43,
+          "tests": 950,
+          "omitted": 84
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.87
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.62
+        }
+      ]
+    },
+    "backend": {
+      "commit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "sourceCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "date": "2026-10-10T11:43:16.447Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.3
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.16
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.47
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 38.67
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 45.8
+        },
+        {
+          "check": "next-social-auth-browser",
+          "status": "PASS",
+          "seconds": 15.77
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.2,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 6.9
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 49.58,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "sourceCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "date": "2026-10-10T11:46:22.891Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 16.31
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.54
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.12
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.69
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.73
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.46
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 1,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.71
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 0.98
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.73
+        }
+      ]
+    },
+    "extended": {
+      "commit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "sourceCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "date": "2026-10-10T11:47:42.301Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.37
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.42
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 121.31,
+          "tests": 46,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 14.12,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "controlled-failure": {
+      "commit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "sourceCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "date": "2026-10-10T11:47:21.782Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.46
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.11,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.3,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.36,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "checkoutCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+      "date": "2026-10-10T11:50:08.164Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 1100,
+          "omitted": 84
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 47,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 90.76
+      }
+    }
+  }
+}

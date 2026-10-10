@@ -1,0 +1,228 @@
+{
+  "date": "2026-10-10",
+  "timezone": "America/Santiago",
+  "repository": "AlexxSome/asisteam",
+  "baseCommit": "0477c97e1fc72ab0413792146b966964c017b376",
+  "issues": [
+    {
+      "number": 168,
+      "state": "OPEN",
+      "title": "[Migración Nest] MIG-24 · Ejecutar corte final, retirar Supabase y reconciliar documentación",
+      "url": "https://github.com/AlexxSome/asisteam/issues/168"
+    },
+    {
+      "number": 167,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-23 · Verificar seguridad, paridad funcional y carga del backend destino",
+      "url": "https://github.com/AlexxSome/asisteam/issues/167"
+    },
+    {
+      "number": 166,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-22 · Ensayar corte y rollback sin pérdida de escrituras ni eventos",
+      "url": "https://github.com/AlexxSome/asisteam/issues/166"
+    },
+    {
+      "number": 165,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-21 · Preparar PostgreSQL independiente y tipos sin Supabase",
+      "url": "https://github.com/AlexxSome/asisteam/issues/165"
+    },
+    {
+      "number": 164,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-20 · Importar identidades y ejecutar el retiro de Supabase Auth",
+      "url": "https://github.com/AlexxSome/asisteam/issues/164"
+    },
+    {
+      "number": 163,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-19 · Migrar Google y Apple con vinculación segura de identidades",
+      "url": "https://github.com/AlexxSome/asisteam/issues/163"
+    },
+    {
+      "number": 162,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-18 · Implementar identidad, contraseña, recovery y sesiones en Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/162"
+    },
+    {
+      "number": 161,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-17 · Migrar archivos a almacenamiento privado independiente",
+      "url": "https://github.com/AlexxSome/asisteam/issues/161"
+    },
+    {
+      "number": 160,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-16 · Migrar QR y llegada propia conservando firma y vigencia",
+      "url": "https://github.com/AlexxSome/asisteam/issues/160"
+    },
+    {
+      "number": 159,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-15 · Migrar anuncios, preferencias y entrega push a Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/159"
+    },
+    {
+      "number": 158,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-14 · Migrar billing y webhook Mercado Pago a Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/158"
+    },
+    {
+      "number": 157,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-13 · Crear worker y migrar mayoría de edad con tareas idempotentes",
+      "url": "https://github.com/AlexxSome/asisteam/issues/157"
+    },
+    {
+      "number": 156,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-12 · Migrar historial y reportes con paridad de métricas",
+      "url": "https://github.com/AlexxSome/asisteam/issues/156"
+    },
+    {
+      "number": 155,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-11 · Migrar toma y edición de asistencia a Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/155"
+    },
+    {
+      "number": 154,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-10 · Migrar actividades y recurrencia semanal a Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/154"
+    },
+    {
+      "number": 153,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-09 · Migrar invitaciones y activación MANAGED a la API Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/153"
+    },
+    {
+      "number": 152,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-08 · Migrar integrantes, apoderados y consentimientos a Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/152"
+    },
+    {
+      "number": 151,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-07 · Migrar grupos, perfil y selector multi-grupo a Nest",
+      "url": "https://github.com/AlexxSome/asisteam/issues/151"
+    },
+    {
+      "number": 150,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-06 · Ensayar portabilidad de SQL, credenciales y archivos",
+      "url": "https://github.com/AlexxSome/asisteam/issues/150"
+    },
+    {
+      "number": 149,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-05 · Implementar sesión temporal y contexto PostgreSQL con RLS",
+      "url": "https://github.com/AlexxSome/asisteam/issues/149"
+    },
+    {
+      "number": 148,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-04 · Definir OpenAPI y el cliente web para migrar por módulo",
+      "url": "https://github.com/AlexxSome/asisteam/issues/148"
+    },
+    {
+      "number": 147,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-03 · Configurar CI y staging reproducible para API y PostgreSQL",
+      "url": "https://github.com/AlexxSome/asisteam/issues/147"
+    },
+    {
+      "number": 146,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-02 · Crear la API NestJS y su base de ejecución en el monorepo",
+      "url": "https://github.com/AlexxSome/asisteam/issues/146"
+    },
+    {
+      "number": 145,
+      "state": "CLOSED",
+      "title": "[Migración Nest] MIG-01 · Inventariar contratos y acordar arquitectura e infraestructura",
+      "url": "https://github.com/AlexxSome/asisteam/issues/145"
+    },
+    {
+      "number": 144,
+      "state": "OPEN",
+      "title": "[Épica] Reemplazar Supabase por backend Node.js y NestJS",
+      "url": "https://github.com/AlexxSome/asisteam/issues/144"
+    }
+  ],
+  "retirementPullRequest": {
+    "baseRefName": "develop",
+    "headRefOid": "29671e6c8bfd28abc93ee436009e5924a65921d4",
+    "mergeCommit": {
+      "oid": "0477c97e1fc72ab0413792146b966964c017b376"
+    },
+    "state": "MERGED",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-10T03:41:15Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/AlexxSome/asisteam/actions/runs/38021296066/job/114122656271",
+        "name": "checks",
+        "startedAt": "2026-10-10T03:38:53Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-10T03:46:02Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/AlexxSome/asisteam/actions/runs/38021296066/job/114122656393",
+        "name": "backend",
+        "startedAt": "2026-10-10T03:38:54Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-10T03:40:12Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/AlexxSome/asisteam/actions/runs/38021296066/job/114122656353",
+        "name": "staging",
+        "startedAt": "2026-10-10T03:38:54Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-10T03:46:55Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/AlexxSome/asisteam/actions/runs/38021296066/job/114122656495",
+        "name": "extended",
+        "startedAt": "2026-10-10T03:38:54Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-10T03:47:00Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/AlexxSome/asisteam/actions/runs/38021296066/job/114124090993",
+        "name": "required",
+        "startedAt": "2026-10-10T03:46:57Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      }
+    ],
+    "url": "https://github.com/AlexxSome/asisteam/pull/207"
+  },
+  "acceptance": "NO-GO",
+  "scope": "public GitHub states and historical PR207 checks; no production acceptance",
+  "developBranchProtection": {
+    "date": "2026-10-10",
+    "endpoint": "repos/AlexxSome/asisteam/branches/develop/protection",
+    "status": 404,
+    "message": "Branch not protected",
+    "changed": false
+  }
+}
