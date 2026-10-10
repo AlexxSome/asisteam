@@ -2,15 +2,15 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { createApplication } from './legacy-application.mjs';
-import { loadConfig } from './legacy-application.mjs';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
 
 const enabled = process.env.API_RLS_TEST === '1';
 test('MIG-10 HTTP/PostgreSQL: activities, series/history, DST, limits, types and tenant/role isolation', { skip: !enabled }, async () => {
-  const admin = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' });
+  const admin = new pg.Client({ connectionString: fixtureConnection() });
   await admin.connect();
   let app, fixture, holder;
   const auth = Array.from({length:4},()=>randomUUID()), sessions=auth.map(()=>randomUUID()), profiles=[];
@@ -21,15 +21,15 @@ test('MIG-10 HTTP/PostgreSQL: activities, series/history, DST, limits, types and
     fixture=await authFixture();
     await admin.query("alter role asisteam_api login password '"+password+"'");
     for(const [i,id] of auth.entries()) {
-      await admin.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)',[id,'mig154-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética',birthdate:'1990-01-01'})]);
+      await admin.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[id,'mig154-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética',birthdate:'1990-01-01'})]);
       profiles.push((await admin.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id);
-      await admin.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
+      await admin.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
       await admin.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profiles[i]]);
     }
     for(const [i,id] of groups.entries())await admin.query('insert into public.groups(id,name,sport,invite_code,created_by) values($1,$2,$3,$4,$5)',[id,'Club sintético','Tenis',randomUUID().replaceAll('-','').slice(0,8),profiles[i===0?0:3]]);
     for(const id of groups)await admin.query('insert into app_private.billing_legacy_groups(group_id) values($1)',[id]);
     for(const [i,g,role] of [[0,0,'ADMIN'],[0,0,'ATHLETE'],[1,0,'ATHLETE'],[2,0,'COACH'],[3,1,'ADMIN']])await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,$3,'ACTIVE',now()-interval '1 day')",[profiles[i],groups[g],role]);
-    app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+password+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'2'}),new SafeLogger(line=>logs.push(line)));
+    app=await createApplication(loadConfig({DATABASE_URL:fixtureConnection('asisteam_api',password),PG_POOL_MAX:'2'}),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');
     const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i]))),clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token,timeoutMs:10000}));
     const params={groupId:groups[0]}, query={group_ids:groups[0]}, body={title:'Actividad sintética',activity_type_id:systemType,description:'',location:'Cancha sintética',...(await admin.query("select to_char((app_private.chile_today()+14),'YYYY-MM-DD') as day,to_char((app_private.chile_today()+16),'YYYY-MM-DD') as until")).rows[0]};
@@ -59,8 +59,8 @@ test('MIG-10 HTTP/PostgreSQL: activities, series/history, DST, limits, types and
     const membership=(await admin.query("select id from public.memberships where group_id=$1 and user_id=$2 and role='ATHLETE'",[groups[0],profiles[0]])).rows[0].id;
     // A real attendance writer holds the series lock. The HTTP edit must wait,
     // then re-evaluate attendance after the concurrent transaction commits.
-    holder=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});await holder.connect();
-    await holder.query('begin');await holder.query('set local role authenticated');await holder.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:auth[0],role:'authenticated'})]);
+    holder=new pg.Client({connectionString:fixtureConnection()});await holder.connect();
+    await holder.query('begin');await holder.query('set local role asisteam_api');await holder.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:auth[0],role:'authenticated',auth_provider:'nest'})]);
     await holder.query('select public.record_attendance_bulk($1,$2::jsonb)',[root,JSON.stringify([{membership_id:membership,status:'PRESENT'}])]);
     const pending=clients[0].updateActivity({params:{...params,activityId:root},body:{...body,title:'Serie editada',scope:'series'}});
     try {
@@ -109,8 +109,8 @@ test('MIG-10 HTTP/PostgreSQL: activities, series/history, DST, limits, types and
       await admin.query('delete from public.groups where id=any($1::uuid[])',[groups]);
       await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.users where id=any($1::uuid[])',[profiles]);
-      await admin.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth]);
-      await admin.query('delete from auth.users where id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
       const old=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";
       await admin.query('alter role asisteam_api '+(previous.rolcanlogin?'login':'nologin')+' password '+old);
     } finally {await admin.query("set session_replication_role='origin'");await admin.end();}

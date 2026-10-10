@@ -1,7 +1,7 @@
 "use server";
 import { createServerApiClient } from "@/lib/api/server";
 import { ApiClientError } from "@asisteam/api-client";
-import { BILLING_ERROR_MESSAGES,subscriptionRequestSchema } from "@asisteam/core";
+import { BILLING_ERROR_MESSAGES,subscriptionRequestSchema,httpSchemas } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 export type BillingResult = {
     success: true;
@@ -13,14 +13,17 @@ export type BillingResult = {
         details: Record<string, never>;
     };
 };
-const fail = (code: string): BillingResult => ({ error: { code, message: BILLING_ERROR_MESSAGES[code] ?? BILLING_ERROR_MESSAGES.billing_unavailable!, details: {} } });
+const fail = (code: string): BillingResult => ({ error: { code: Object.hasOwn(BILLING_ERROR_MESSAGES,code)?code:"billing_unavailable", message: BILLING_ERROR_MESSAGES[code] ?? BILLING_ERROR_MESSAGES.billing_unavailable!, details: {} } });
 export async function manageSubscription(input: unknown): Promise<BillingResult> {
     const parsed = subscriptionRequestSchema.safeParse(input);
     if (!parsed.success)
         return fail("invalid_billing_request");
     try {
         {
-            const data = await createServerApiClient().manageSubscription({ body: parsed.data });
+            const response = await createServerApiClient().manageSubscription({ body: parsed.data });
+            const checked=httpSchemas.BillingResult.safeParse(response);
+            if(!checked.success)return fail("billing_unavailable");
+            const data=checked.data;
             revalidatePath(`/groups/${parsed.data.group_id}/billing`);
             return data;
         }

@@ -1,3 +1,5 @@
+> **Evidencia histórica del alcance inicial, commit 6ffbf2d.** El CI remoto posterior falló y el usuario amplió el retiro. Los PASS de esta matriz no acreditan las reparaciones actuales ni CI remoto verde. Ver [estado vigente](README.md).
+
 # Evidencia de entrega técnica #168
 
 [Seguro] Base revisada: `develop@847a666b081353382cf60550030660db4821b43c`; rama `codex/168-retiro-tecnico-supabase`. Entorno local sintético: Node24.16.0/pnpm10.33.2/Docker, 2026-10-09. Los reportes locales registran la base más el diff pendiente; no representan un deploy ni aceptación del commit remoto.

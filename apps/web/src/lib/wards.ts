@@ -25,8 +25,14 @@ export async function getMyWards(page = 1, pageSize = 50) {
     if (!user)
         redirect("/login");
     {
-        const result = await createServerApiClient().listMyWards({ query: { page } });
-        return { wards: result.data, hasNext: result.has_next };
+        try {
+            // The API pages 50 rows. Home summaries deliberately render ten.
+            const offset = (page - 1) * pageSize;
+            const apiPage = Math.floor(offset / 50) + 1;
+            const start = offset % 50;
+            const result = await createServerApiClient().listMyWards({ query: { page: apiPage } });
+            return { wards: result.data.slice(start, start + pageSize), hasNext: result.has_next || result.data.length > start + pageSize };
+        } catch { throw loadError(); }
     }
 }
 export async function getGroupWards(groupId: string, page = 1) {
@@ -37,8 +43,10 @@ export async function getGroupWards(groupId: string, page = 1) {
     if (!user)
         redirect("/login");
     {
-        const result = await createServerApiClient().listMyWards({ query: { page, group_id: groupId } });
-        return { wards: result.data.map(ward => ({ athlete_user_id: ward.athlete_user_id, full_name: ward.full_name })), hasNext: result.has_next };
+        try {
+            const result = await createServerApiClient().listMyWards({ query: { page, group_id: groupId } });
+            return { wards: result.data.map(ward => ({ athlete_user_id: ward.athlete_user_id, full_name: ward.full_name })), hasNext: result.has_next };
+        } catch { throw loadError(); }
     }
 }
 export async function getWard(athleteUserId: string) {
@@ -66,7 +74,7 @@ export const getGuardianOnboarding = cache(async (groupId: string, athleteUserId
     if (athleteUserId !== undefined && !isGroupId(athleteUserId))
         notFound();
 
-    const { data, error } = await memberOperation(async (api) => (await api.listMembershipOnboarding({ query: { group_id: group.id, as_guardian: true, athlete_user_id: athleteUserId, page } })).data);
+    const { data, error } = await memberOperation(async (api) => (await api.listMembershipOnboarding({ query: { group_id: group.id, as_guardian: true, athlete_user_id: athleteUserId, page } })).data).catch(() => ({ data: null, error: { code: "unavailable", message: "unavailable" } }));
     if (error)
         throw new Error("No pudimos cargar los consentimientos. Vuelve a intentarlo.");
     return data ?? [];

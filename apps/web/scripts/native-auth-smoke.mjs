@@ -8,6 +8,7 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {chromium} from '@playwright/test';
 import {createApplication} from '../../api/dist/application.js';
 import {loadConfig} from '../../api/dist/config.js';
+import {ApiClient} from '../../../packages/api-client/dist/index.js';
 const {Client}=createRequire(new URL('../../api/package.json',import.meta.url))('pg');
 const isolated = process.env.INDEPENDENT_PG_TEST_URL ? null : await (await import('../../api/test/native-browser-database.mjs')).nativeBrowserDatabase();
 const databaseUrl=process.env.INDEPENDENT_PG_TEST_URL??isolated.url;
@@ -39,8 +40,7 @@ try{
  mkdirSync(fixture);owns=true;
  mkdirSync(new URL('csrf/',fixture));writeFileSync(new URL('csrf/route.ts',fixture),'import {assertAuthOrigin} from "@/lib/api/native-auth"; export async function POST(){try{await assertAuthOrigin();return new Response(null,{status:204});}catch{return new Response(null,{status:403});}}');
  writeFileSync(new URL('page.tsx',fixture),'import {signOutUser} from "@/app/login/actions";export default function Fixture(){return <form action={async()=>{"use server";await signOutUser();}}><button>Cerrar sesión sintética</button></form>;}');
- // Empty explicitly: deleting the key lets Next refill it from .env.local.
- const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),ASISTEAM_DATABASE_MODE:'independent',NEXT_PUBLIC_SUPABASE_URL:'',NEXT_PUBLIC_SUPABASE_ANON_KEY:'',ASISTEAM_API_SUPABASE_URL:'',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
+ const env={...process.env,NODE_ENV:'development',ASISTEAM_API_ORIGIN:await app.getUrl(),ASISTEAM_DATABASE_MODE:'independent',ASISTEAM_TRANSPORT_AUTH:'nest',ASISTEAM_AUTH_WEB_ORIGIN:webOrigin,NATIVE_AUTH_PROXY_SECRET:secret,NEXT_TELEMETRY_DISABLED:'1'};
  for(const module of ['groups','profile','members','invitations','activities','attendance','reports','billing','announcements','qr','storage'])env['ASISTEAM_TRANSPORT_'+module.toUpperCase()]='nest';
  next=spawn(process.execPath,['node_modules/next/dist/bin/next','dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd:new URL('..',import.meta.url),env,stdio:'ignore'});
  phase('next-ready');let ready=false;for(let n=0;n<120;n++){try{if((await originalFetch(webOrigin+'/login',{signal:AbortSignal.timeout(15000)})).ok){ready=true;break;}}catch{/* Next is still starting. */}if(next.exitCode!==null)throw Error('Next terminó antes del smoke nativo');await delay(250);}assert.ok(ready);
@@ -70,10 +70,22 @@ try{
  page.on('response',response=>{if(response.request().method()==='POST'&&response.request().headers()['next-action'])report.lastActionStatus=response.status();});
  phase('register');
  await page.goto(webOrigin+'/register',{waitUntil:'commit'});await readyForm(page.getByLabel('Nombre completo',{exact:true}));await page.getByLabel('Nombre completo',{exact:true}).fill('Perfil navegador');await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Fecha de nacimiento',{exact:true}).fill('1990-01-01');await page.getByLabel('Contraseña',{exact:true}).fill(password);await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Crear cuenta',exact:true}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Perfil!'}).waitFor();
- phase('cookies');let tokens=await context.cookies();const access=tokens.find(c=>c.name==='asisteam-access'),refresh=tokens.find(c=>c.name==='asisteam-refresh');assert.ok(access?.httpOnly&&refresh?.httpOnly);assert.equal(access.sameSite,'Lax');assert.ok(!tokens.some(c=>c.name.startsWith('sb-')&&c.name.includes('-auth-token')));assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
+ phase('cookies');let tokens=await context.cookies();const access=tokens.find(c=>c.name==='asisteam-access'),refresh=tokens.find(c=>c.name==='asisteam-refresh');assert.ok(access?.httpOnly&&refresh?.httpOnly);assert.equal(access.sameSite,'Lax');assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
  phase('refresh');
  await context.clearCookies({name:'asisteam-access'});await page.reload();await page.waitForURL('**/welcome');tokens=await context.cookies();assert.notEqual(tokens.find(c=>c.name==='asisteam-refresh').value,refresh.value);assert.ok(tokens.find(c=>c.name==='asisteam-access'));
- phase('logout');await page.goto(webOrigin+'/native-auth-fixture',{waitUntil:'commit'});await readyForm(page.getByRole('button',{name:'Cerrar sesión sintética'}));await page.getByRole('button',{name:'Cerrar sesión sintética'}).click();await page.waitForURL('**/login');assert.ok(!(await context.cookies()).some(c=>c.name==='asisteam-access'||c.name==='asisteam-refresh'));
+ phase('logout');
+ const nativeClient=accessToken=>new ApiClient({origin:awaitedApiOrigin,authProxy:{secret,clientIp:'synthetic-other-device'},accessToken:async()=>accessToken??null,nativeAuth:true,timeoutMs:30000});
+ const awaitedApiOrigin=await app.getUrl();
+ const otherDevice=await nativeClient().loginPassword({body:{email,password}});
+ const leavingCookies=await context.cookies(),leavingAccess=leavingCookies.find(c=>c.name==='asisteam-access').value,leavingRefresh=leavingCookies.find(c=>c.name==='asisteam-refresh').value;
+ await page.goto(webOrigin+'/native-auth-fixture',{waitUntil:'commit'});await readyForm(page.getByRole('button',{name:'Cerrar sesión sintética'}));await page.getByRole('button',{name:'Cerrar sesión sintética'}).click();await page.waitForURL('**/login');assert.ok(!(await context.cookies()).some(c=>c.name==='asisteam-access'||c.name==='asisteam-refresh'));
+ await assert.rejects(nativeClient(leavingAccess).getSession(),{status:401});
+ await assert.rejects(nativeClient().refreshSession({body:{refresh_token:leavingRefresh}}),{status:401});
+ const surviving=await nativeClient().refreshSession({body:{refresh_token:otherDevice.refresh_token}});
+ assert.ok((await nativeClient(surviving.access_token).getSession()).user_id);
+ // Idempotent exit from an already anonymous browser still clears private UI.
+ await page.goto(webOrigin+'/native-auth-fixture',{waitUntil:'commit'});await readyForm(page.getByRole('button',{name:'Cerrar sesión sintética'}));await page.getByRole('button',{name:'Cerrar sesión sintética'}).click();await page.waitForURL('**/login');assert.ok(!(await context.cookies()).some(c=>c.name==='asisteam-access'||c.name==='asisteam-refresh'));
+ report.logout={leavingAccessRevoked:true,leavingRefreshRevoked:true,otherDeviceSurvives:true,anonymousExitIdempotent:true};
  phase('recovery');
  await page.goto(webOrigin+'/forgot-password',{waitUntil:'commit'});await readyForm(page.getByLabel('Email',{exact:true}));await page.getByLabel('Email',{exact:true}).fill(email);await page.getByRole('button',{name:/enviar/i}).click();await page.getByText(/Si el email/).waitFor();assert.equal(mail.length,1);
  phase('reset');const link=mail[0].text.match(/http:\/\/\S+/)[0],newPassword='Changed-browser-'+run;await page.goto(link,{waitUntil:'commit'});await readyForm(page.getByLabel('Nueva contraseña',{exact:true}));await page.getByLabel('Nueva contraseña',{exact:true}).fill(newPassword);await page.getByLabel('Confirmar nueva contraseña',{exact:true}).fill(newPassword);await page.getByRole('button',{name:'Guardar nueva contraseña'}).click();await page.getByText('Tu contraseña fue actualizada. Ya puedes iniciar sesión con ella.').waitFor();assert.equal(new URL(page.url()).searchParams.get('token'),null);

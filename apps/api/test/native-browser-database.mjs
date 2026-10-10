@@ -1,21 +1,31 @@
-// Synthetic browser fixture: isolated native authority, never switches source DB.
+// Every fixture owns a vanilla PostgreSQL container; no shared source cluster.
 import assert from 'node:assert/strict';
-import {execFileSync} from 'node:child_process';
-import {randomUUID} from 'node:crypto';
+import {randomUUID,randomBytes} from 'node:crypto';
+import {readFile} from 'node:fs/promises';
 import pg from 'pg';
+import {command,quote} from '../../../packages/db/scripts/local.mjs';
+import {migrate} from '../../../packages/db/scripts/migrate.mjs';
 export async function nativeBrowserDatabase(){
- const name='native_browser_'+randomUUID().replaceAll('-','');
- const base='postgresql://postgres:postgres@127.0.0.1:54322/';
- const root=new pg.Client({connectionString:base+'postgres'});await root.connect();
- const schema=execFileSync('docker',['exec','supabase_db_asisteam','pg_dump','-U','postgres','--schema-only','--no-owner',...['public','app_private','auth','storage'].flatMap(s=>['-n',s])],{encoding:'utf8',maxBuffer:64000000}).replace(/^ALTER DEFAULT PRIVILEGES FOR ROLE (supabase_admin|supabase_auth_admin) [^\n]+;$/gm,'').replace(/^\\(?:un)?restrict .*$/gm,'');
- await root.query('create database '+name+' template template0');
- const db=new pg.Client({connectionString:base+name});
+ const name='asisteam-native-'+randomUUID().replaceAll('-',''),password=randomBytes(32).toString('hex');
+ let created=false,owner,deploy;
+ const cleanup=async()=>{if(created){await command('docker',['rm','-fv',name]);created=false}};
  try{
-  await db.connect();await db.query('drop schema public;create schema extensions;create extension pgcrypto with schema extensions;');await db.query(schema);
-  await db.query('insert into app_private.auth_authority(singleton) values(true)');
-  await db.query("select app_private.auth_cutover('FREEZE')");await db.query('select app_private.import_auth_identities()');await db.query("select app_private.auth_cutover('ACTIVATE')");
-  assert.equal((await db.query('select app_private.auth_is_native() as native')).rows[0].native,true);
- }catch(error){await root.query('drop database '+name+' with(force)');await root.end();throw error}finally{await db.end()}
- await root.end();
- return {url:base+name,async cleanup(){const owner=new pg.Client({connectionString:base+'postgres'});try{await owner.connect();await owner.query('drop database '+name+' with(force)')}finally{await owner.end()}}};
+  await command('docker',['build','-f',new URL('../../../packages/db/Dockerfile.test',import.meta.url).pathname,'-t','asisteam-db165-test',new URL('../../../',import.meta.url).pathname]);
+  await command('docker',['run','-d','--name',name,'-p','127.0.0.1::5432','-e','POSTGRES_PASSWORD='+password,'asisteam-db165-test']);created=true;
+  for(let n=0;n<100;n++){try{await command('docker',['exec',name,'pg_isready','-h','127.0.0.1','-U','postgres']);break}catch{if(n===99)throw new Error('fixture_not_ready');await new Promise(resolve=>setTimeout(resolve,100))}}
+  const info=JSON.parse(await command('docker',['inspect',name]))[0],binding=info.NetworkSettings.Ports['5432/tcp'][0];assert.equal(binding.HostIp,'127.0.0.1');
+  const url='postgresql://postgres:'+password+'@127.0.0.1:'+binding.HostPort+'/postgres';
+  owner=new pg.Client({connectionString:url});await owner.connect();await owner.query(await readFile(new URL('../../../packages/db/bootstrap.sql',import.meta.url),'utf8'));
+  for(const role of ['asisteam_migrator','asisteam_api','asisteam_auth','asisteam_invitation','asisteam_jobs','asisteam_billing'])await owner.query('alter role '+role+' login password '+quote(password));
+  deploy=new pg.Client({connectionString:url.replace('postgres:','asisteam_migrator:')});await deploy.connect();await migrate(deploy);
+  assert.equal((await owner.query('select app_private.auth_is_native() as native')).rows[0].native,true);
+  return {url,name,password,cleanup};
+ }catch(error){await cleanup();throw error}finally{await deploy?.end();await owner?.end()}
+}
+export function fixtureConnection(role='postgres',password,database='postgres'){
+ const result=new URL(process.env.TEST_DATABASE_URL);result.username=role;if(password)result.password=password;result.pathname='/'+database;return result.toString();
+}
+export async function runWithNativeDatabase(program,args,env={}){
+ const fixture=await nativeBrowserDatabase();
+ try{return await command(program,args,undefined,{...env,TEST_DATABASE_URL:fixture.url,INDEPENDENT_PG_TEST_URL:fixture.url})}finally{await fixture.cleanup()}
 }

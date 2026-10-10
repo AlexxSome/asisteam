@@ -22,7 +22,7 @@ type GroupActionError = {
     };
 };
 const groupError = (code: string, fallback?: string): GroupActionError => ({
-    error: { code, message: fallback ?? GROUP_ERROR_MESSAGES[code] ?? "No pudimos completar la acción. Vuelve a intentarlo.", details: {} },
+    error: { code, message: fallback ?? GROUP_ERROR_MESSAGES[code] ?? (code === "membership_create_failed" ? "No pudimos agregarte como deportista. Vuelve a intentarlo." : "No pudimos completar la acción. Vuelve a intentarlo."), details: {} },
 });
 function nestGroupError(error: unknown, fallback: string): {
     error: {
@@ -31,7 +31,7 @@ function nestGroupError(error: unknown, fallback: string): {
         details: Record<string, never>;
     };
 } {
-    const result = groupError(error instanceof ApiClientError ? error.error.code : fallback);
+    const result = groupError(error instanceof ApiClientError && Object.hasOwn(GROUP_ERROR_MESSAGES, error.error.code) ? error.error.code : fallback);
     return { error: { ...result.error, details: {} } };
 }
 export async function updateGroup(groupId: string, input: unknown): Promise<{

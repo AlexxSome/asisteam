@@ -1,0 +1,325 @@
+{
+  "historicalSuites": 39,
+  "historicalCases": 466,
+  "nativeUnitFiles": 36,
+  "nativeUnitCases": 472,
+  "nativeUnitFailed": 0,
+  "nativeUnitSkipped": 0,
+  "nativeBrowserLogout": "PASS",
+  "mapping": [
+    {
+      "original": "apps/web/src/app/accept-terms/actions.test.ts",
+      "originalCases": 6,
+      "replacement": "apps/web/src/app/accept-terms/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 6
+    },
+    {
+      "original": "apps/web/src/app/auth/callback/route.test.ts",
+      "originalCases": 17,
+      "replacement": "apps/web/src/app/auth/callback/route.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 18
+    },
+    {
+      "original": "apps/web/src/app/check-in/actions.test.ts",
+      "originalCases": 5,
+      "replacement": "apps/web/src/app/check-in/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 5
+    },
+    {
+      "original": "apps/web/src/app/forgot-password/actions.test.ts",
+      "originalCases": 8,
+      "replacement": "apps/web/src/app/forgot-password/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 8
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/actions.test.ts",
+      "originalCases": 31,
+      "replacement": "apps/web/src/app/groups/[groupId]/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 31
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.test.ts",
+      "originalCases": 10,
+      "replacement": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 10
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/activities/new/actions.test.ts",
+      "originalCases": 14,
+      "replacement": "apps/web/src/app/groups/[groupId]/activities/new/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 14
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/activity-types/actions.test.ts",
+      "originalCases": 9,
+      "replacement": "apps/web/src/app/groups/[groupId]/activity-types/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 9
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/announcements/actions.test.ts",
+      "originalCases": 9,
+      "replacement": "apps/web/src/app/groups/[groupId]/announcements/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 9
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/billing/actions.test.ts",
+      "originalCases": 6,
+      "replacement": "apps/web/src/app/groups/[groupId]/billing/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 6
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/billing/billing-panel.test.tsx",
+      "originalCases": 19,
+      "replacement": "apps/web/src/app/groups/[groupId]/billing/billing-panel.test.tsx",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 19
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/guardians/actions.test.ts",
+      "originalCases": 9,
+      "replacement": "apps/web/src/app/groups/[groupId]/guardians/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 9
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/invitations/new/actions.test.ts",
+      "originalCases": 8,
+      "replacement": "apps/web/src/app/groups/[groupId]/invitations/new/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 8
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/members/actions.test.ts",
+      "originalCases": 14,
+      "replacement": "apps/web/src/app/groups/[groupId]/members/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 14
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/members/new/actions.test.ts",
+      "originalCases": 5,
+      "replacement": "apps/web/src/app/groups/[groupId]/members/new/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 5
+    },
+    {
+      "original": "apps/web/src/app/groups/[groupId]/members/pending/actions.test.ts",
+      "originalCases": 10,
+      "replacement": "apps/web/src/app/groups/[groupId]/members/pending/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 10
+    },
+    {
+      "original": "apps/web/src/app/groups/new/actions.test.ts",
+      "originalCases": 8,
+      "replacement": "apps/web/src/app/groups/new/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 8
+    },
+    {
+      "original": "apps/web/src/app/invitations/[token]/actions.test.ts",
+      "originalCases": 17,
+      "replacement": "apps/web/src/app/invitations/[token]/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 17
+    },
+    {
+      "original": "apps/web/src/app/join/page.test.tsx",
+      "originalCases": 4,
+      "replacement": "apps/web/src/app/join/page.test.tsx",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 4
+    },
+    {
+      "original": "apps/web/src/app/login/actions.test.ts",
+      "originalCases": 4,
+      "replacement": "apps/web/src/app/login/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 4
+    },
+    {
+      "original": "apps/web/src/app/login/auth-pages.test.tsx",
+      "originalCases": 15,
+      "replacement": "apps/web/src/app/login/auth-pages.test.tsx",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 15
+    },
+    {
+      "original": "apps/web/src/app/login/sign-out.integration.test.ts",
+      "originalCases": 1,
+      "replacement": "apps/web/scripts/native-auth-smoke.mjs",
+      "status": "PASS",
+      "coverage": "Actual Chromium/Next/Nest/Postgres: outgoing access+refresh revoked, another device refresh/session remains valid, anonymous logout idempotent; cookies/cache/redirect validated by browser and 7 unit cases.",
+      "replacementCases": 1
+    },
+    {
+      "original": "apps/web/src/app/login/sign-out.test.ts",
+      "originalCases": 4,
+      "replacement": "apps/web/src/app/login/sign-out.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 7
+    },
+    {
+      "original": "apps/web/src/app/login/social-actions.test.ts",
+      "originalCases": 11,
+      "replacement": "apps/web/src/app/login/social-actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 11
+    },
+    {
+      "original": "apps/web/src/app/profile/actions.test.ts",
+      "originalCases": 14,
+      "replacement": "apps/web/src/app/profile/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Current private S3 upload through API preserves validation, privacy and failed-commit behavior; native Storage integration asserts unchanged profile pointer and inaccessible orphan. Old client SDK remove-after-upload contract retired because ambiguous DB COMMIT requires reconciliation, not immediate object deletion.",
+      "replacementCases": 14
+    },
+    {
+      "original": "apps/web/src/app/profile/page.test.tsx",
+      "originalCases": 2,
+      "replacement": "apps/web/src/app/profile/page.test.tsx",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 2
+    },
+    {
+      "original": "apps/web/src/app/reset-password/actions.test.ts",
+      "originalCases": 14,
+      "replacement": "apps/web/src/app/reset-password/actions.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 14
+    },
+    {
+      "original": "apps/web/src/lib/activity-types.test.ts",
+      "originalCases": 31,
+      "replacement": "apps/web/src/lib/activity-types.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 31
+    },
+    {
+      "original": "apps/web/src/lib/attendance-history.test.ts",
+      "originalCases": 9,
+      "replacement": "apps/web/src/lib/attendance-history.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 9
+    },
+    {
+      "original": "apps/web/src/lib/groups.test.ts",
+      "originalCases": 29,
+      "replacement": "apps/web/src/lib/groups.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 29
+    },
+    {
+      "original": "apps/web/src/lib/invitations.test.ts",
+      "originalCases": 3,
+      "replacement": "apps/web/src/lib/invitations.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 3
+    },
+    {
+      "original": "apps/web/src/lib/members.test.ts",
+      "originalCases": 10,
+      "replacement": "apps/web/src/lib/members.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 10
+    },
+    {
+      "original": "apps/web/src/lib/reports.test.ts",
+      "originalCases": 9,
+      "replacement": "apps/web/src/lib/reports.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 9
+    },
+    {
+      "original": "apps/web/src/lib/social-auth.test.ts",
+      "originalCases": 7,
+      "replacement": "apps/web/src/lib/social-auth.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 7
+    },
+    {
+      "original": "apps/web/src/lib/supabase/cookie-writes.test.ts",
+      "originalCases": 2,
+      "replacement": "apps/web/src/lib/api/native-session.test.ts",
+      "status": "PASS",
+      "coverage": "Provider-only factory/options removed; native-session covers cookie deletion/read-only writes, recovery without persistence, encrypted OAuth transaction cookies. S256/verifier additionally verified by real API OAuth integration.",
+      "replacementCases": 7
+    },
+    {
+      "original": "apps/web/src/lib/supabase/recovery.test.ts",
+      "originalCases": 1,
+      "replacement": "apps/web/src/lib/api/native-session.test.ts",
+      "status": "PASS",
+      "coverage": "Provider-only factory/options removed; native-session covers cookie deletion/read-only writes, recovery without persistence, encrypted OAuth transaction cookies. S256/verifier additionally verified by real API OAuth integration.",
+      "replacementCases": 7
+    },
+    {
+      "original": "apps/web/src/lib/supabase/server.test.ts",
+      "originalCases": 2,
+      "replacement": "apps/web/src/lib/api/native-session.test.ts",
+      "status": "PASS",
+      "coverage": "Provider-only factory/options removed; native-session covers cookie deletion/read-only writes, recovery without persistence, encrypted OAuth transaction cookies. S256/verifier additionally verified by real API OAuth integration.",
+      "replacementCases": 7
+    },
+    {
+      "original": "apps/web/src/lib/wards.test.tsx",
+      "originalCases": 36,
+      "replacement": "apps/web/src/lib/wards.test.tsx",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 37
+    },
+    {
+      "original": "apps/web/src/middleware.test.ts",
+      "originalCases": 53,
+      "replacement": "apps/web/src/middleware.test.ts",
+      "status": "PASS",
+      "coverage": "Same product cases with native HTTP client; obsolete query-chain/provider arguments replaced by current DTO and operation contract.",
+      "replacementCases": 53
+    }
+  ],
+  "ciRemote": "original head red; pending correction and new publication",
+  "navigationAlternative": "awaiting human authorization; not used"
+}

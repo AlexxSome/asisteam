@@ -27,9 +27,7 @@ export async function createActivity(groupId: string, input: unknown): Promise<C
             return result;
         }
         catch (error) {
-            if (error instanceof ApiClientError)
-                return failure(error.error.code);
-            throw error;
+            return nativeFailure(error, "activity_create_failed");
         }
     }
 }
@@ -49,7 +47,10 @@ function failure(code: string): {
         details: Record<string, string[] | undefined>;
     };
 } {
-    return { error: { code, message: ACTIVITY_ERROR_MESSAGES[code] ?? "No pudimos guardar el cambio. Vuelve a intentarlo.", details: {} } };
+    return { error: { code, message: ACTIVITY_ERROR_MESSAGES[code] ?? (code === "activity_create_failed" ? "No pudimos crear la actividad. Vuelve a intentarlo." : "No pudimos guardar el cambio. Vuelve a intentarlo."), details: {} } };
+}
+function nativeFailure(error: unknown, fallback: string) {
+    return failure(error instanceof ApiClientError && Object.hasOwn(ACTIVITY_ERROR_MESSAGES, error.error.code) ? error.error.code : fallback);
 }
 export async function updateActivity(groupId: string, activityId: string, input: unknown, scope: unknown): Promise<MutationResult> {
     if (!isGroupId(groupId) || !isGroupId(activityId))
@@ -68,9 +69,7 @@ export async function updateActivity(groupId: string, activityId: string, input:
             return result;
         }
         catch (error) {
-            if (error instanceof ApiClientError)
-                return failure(error.error.code);
-            throw error;
+            return nativeFailure(error, "activity_update_failed");
         }
     }
 }
@@ -87,9 +86,7 @@ export async function deleteActivity(groupId: string, activityId: string, scope:
             return result;
         }
         catch (error) {
-            if (error instanceof ApiClientError)
-                return failure(error.error.code);
-            throw error;
+            return nativeFailure(error, "activity_delete_failed");
         }
     }
 }

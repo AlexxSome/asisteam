@@ -1,9 +1,9 @@
-import { checkinPath,SOCIAL_AUTH_ERROR } from '@asisteam/core';
+import { checkinPath,SOCIAL_AUTH_ERROR,socialLoginContextSchema,type SocialLoginContext } from '@asisteam/core';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import 'server-only';
 import { accountConsentPath } from '../account-consent-routing';
-import { socialAuthOrigin } from '../social-auth';
+import { socialAuthOrigin,SOCIAL_CONTEXT_COOKIE } from '../social-auth';
 import { nativeAuthClient,setNativeCookies } from './native-auth';
 import { authCookieSettings } from './native-auth-config';
 export const SOCIAL_TRANSACTION_COOKIE = 'asisteam-oauth-transaction';
@@ -11,11 +11,18 @@ export function socialTransactionSettings(provider: string, maxAge = 600) {
     return { ...authCookieSettings(maxAge), path: '/auth/callback/' + provider,
         ...(provider === 'apple' ? { sameSite: 'none' as const, secure: true } : {}) };
 }
-export async function saveSocialTransaction(provider: string, transaction: string) {
+export async function saveSocialTransaction(provider: string, transaction: string, context: SocialLoginContext = {}) {
+    const routing = socialLoginContextSchema.parse(context);
     const store = await cookies();
     // Only one browser flow is active; switching providers cannot reuse a prior flow.
-    for (const p of ['google', 'apple'])
+    for (const p of ['google', 'apple']) {
         store.set(SOCIAL_TRANSACTION_COOKIE, '', socialTransactionSettings(p, 0));
+        store.set(SOCIAL_CONTEXT_COOKIE, '', socialTransactionSettings(p, 0));
+    }
+    // Routing context is not authentication evidence. Only the API's encrypted
+    // transaction authorizes login; this cookie preserves a validated invite on retry.
+    const retry = routing.invite_code ? { invite_code: routing.invite_code } : {};
+    store.set(SOCIAL_CONTEXT_COOKIE, JSON.stringify(retry), socialTransactionSettings(provider));
     store.set(SOCIAL_TRANSACTION_COOKIE, transaction, socialTransactionSettings(provider));
 }
 export async function completeSocialCallback(request: Request, provider: string) {
@@ -26,7 +33,12 @@ export async function completeSocialCallback(request: Request, provider: string)
     if (provider !== 'google' && provider !== 'apple')
         return NextResponse.redirect(new URL(destination, origin), { status: 303, headers });
     const store = await cookies(), transaction = store.get(SOCIAL_TRANSACTION_COOKIE)?.value;
+    try {
+        const routing = socialLoginContextSchema.parse(JSON.parse(store.get(SOCIAL_CONTEXT_COOKIE)?.value ?? '{}'));
+        if (routing.invite_code) destination = '/login?invite_code=' + routing.invite_code + '&social_error=1';
+    } catch { /* An invalid retry context cannot choose a redirect. */ }
     store.set(SOCIAL_TRANSACTION_COOKIE, '', socialTransactionSettings(provider, 0));
+    store.set(SOCIAL_CONTEXT_COOKIE, '', socialTransactionSettings(provider, 0));
     try {
         if (!transaction)
             throw new Error('Unavailable transaction');
@@ -70,7 +82,10 @@ export async function completeSocialCallback(request: Request, provider: string)
         await setNativeCookies(result.tokens);
         destination = result.linked ? '/profile?social_linked=1' : result.context.checkin ? checkinPath(result.context.checkin) : result.context.invite_code ? '/join?code=' + result.context.invite_code : '/welcome';
         const api = await nativeAuthClient(result.tokens.access_token);
-        if (!(await api.getCurrentAccountConsent()).accepted)
+        // Missing consent evidence never grants access. Keep the authenticated
+        // destination/context while sending the user through acceptance again.
+        const accepted = await api.getCurrentAccountConsent().then(value => value.accepted).catch(() => false);
+        if (!accepted)
             destination = accountConsentPath(destination);
     }
     catch { /* Public failures do not reveal claims, token exchange or linking conflicts. */ }

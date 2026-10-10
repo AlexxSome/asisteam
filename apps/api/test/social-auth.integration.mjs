@@ -4,12 +4,12 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {generateKeyPair,exportJWK,SignJWT,jwtDecrypt} from 'jose';
 import pg from 'pg';
-import {createApplication} from './legacy-application.mjs';
-import {loadConfig} from './legacy-application.mjs';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import {SafeLogger} from '../dist/logger.js';
 import {ApiClient} from '../../../packages/api-client/dist/index.js';
-test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent, replay and concurrency',{skip:process.env.API_RLS_TEST!=='1',timeout:90000},async()=>{
- const db=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres',statement_timeout:10000});
+test('Native OAuth HTTP/PostgreSQL: persisted identities, history, linking, email collision, consent, replay and concurrency',{skip:process.env.API_RLS_TEST!=='1',timeout:90000},async()=>{
+ const db=new pg.Client({connectionString:fixtureConnection(),statement_timeout:10000});
  const run=randomUUID(),secret=randomBytes(32).toString('hex'),rolePassword=randomUUID(),prefix='mig163-'+run+'-';
  const emails={legacy:prefix+'legacy@example.test',owner:prefix+'owner@example.test',fresh:prefix+'fresh@privaterelay.appleid.com',managed:prefix+'managed@example.test',invited:prefix+'invited@example.test'};
  const {publicKey,privateKey}=await generateKeyPair('RS256'),jwk={...await exportJWK(publicKey),kid:'mig163',use:'sig',alg:'RS256'};
@@ -34,7 +34,7 @@ test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent
    }
    return originalFetch(url,init);
   };
-  app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:'postgresql://asisteam_api:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_DATABASE_URL:'postgresql://asisteam_auth:'+rolePassword+'@127.0.0.1:54322/postgres',NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://synthetic-auth.example.test',NATIVE_AUTH_WEB_URL:'https://web.example.test',OAUTH_GOOGLE_CLIENT_ID:'google-client',OAUTH_GOOGLE_CLIENT_SECRET:'synthetic-google',OAUTH_APPLE_CLIENT_ID:'apple-client',OAUTH_APPLE_CLIENT_SECRET:'synthetic-apple',HTTP_TIMEOUT_MS:'30000',PG_STATEMENT_TIMEOUT_MS:'10000'}),new SafeLogger(line=>logs.push(line)));await app.listen(0,'127.0.0.1');
+  app=await createApplication(loadConfig({NODE_ENV:'test',DATABASE_URL:fixtureConnection('asisteam_api',rolePassword),NATIVE_AUTH_DATABASE_URL:fixtureConnection('asisteam_auth',rolePassword),NATIVE_AUTH_SECRET:secret,NATIVE_AUTH_PROXY_SECRET:secret,NATIVE_AUTH_ISSUER:'https://synthetic-auth.example.test',NATIVE_AUTH_WEB_URL:'https://web.example.test',OAUTH_GOOGLE_CLIENT_ID:'google-client',OAUTH_GOOGLE_CLIENT_SECRET:'synthetic-google',OAUTH_APPLE_CLIENT_ID:'apple-client',OAUTH_APPLE_CLIENT_SECRET:'synthetic-apple',HTTP_TIMEOUT_MS:'30000',PG_STATEMENT_TIMEOUT_MS:'10000'}),new SafeLogger(line=>logs.push(line)));await app.listen(0,'127.0.0.1');
   const origin=await app.getUrl(),client=access=>new ApiClient({origin,accessToken:async()=>access??null,authProxy:{secret,clientIp:randomUUID()},nativeAuth:true});
   const flow=async(provider,sub,email,{access,context={},...overrides}={})=>{
    const start=await (access?client(access).startSocialLink({body:{provider,context}}):client().startSocialLogin({body:{provider,context}}));
@@ -47,16 +47,18 @@ test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent
   assert.equal((await raw('link',{provider:'google',context:{}})).status,401);
   assert.equal((await raw('start',{provider:'google',context:{}},{cookie:'asisteam-access=forged'})).status,403);
   assert.equal((await raw('start',{provider:'google',context:{},subject_id:randomUUID()})).status,400);
-  const legacy=randomUUID();await db.query("insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)",[legacy,emails.legacy,JSON.stringify({full_name:'Social legado sintético',birthdate:'1990-01-01'})]);
+  const legacy=randomUUID();await db.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[legacy,emails.legacy,JSON.stringify({full_name:'Social legado sintético',birthdate:'1990-01-01'})]);
   const profile=(await db.query('select id from public.users where auth_user_id=$1',[legacy])).rows[0].id;
-  for(const provider of ['google','apple'])await db.query('insert into auth.identities(id,provider_id,user_id,identity_data,provider) values($1,$2,$3,$4,$5)',[randomUUID(),providerSub('legacy-'+provider),legacy,JSON.stringify({sub:providerSub('legacy-'+provider),email:emails.legacy,email_verified:true}),provider]);
+  for(const provider of ['google','apple'])await db.query('insert into app_private.auth_social_identities(provider,provider_subject,subject_id) values($1,$2,$3)',[provider,providerSub('legacy-'+provider),legacy]);
   const group=randomUUID();groups.push(group);await db.query("insert into public.groups(id,name,invite_code,created_by) values($1,'Club OAuth sintético',$2,$3)",[group,run.replaceAll('-','').slice(0,8).toUpperCase(),profile]);await db.query('insert into app_private.billing_legacy_groups(group_id) values($1)',[group]);
   await db.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,'ADMIN','ACTIVE',now()-interval '2 days')",[profile,group]);
   const membership=(await db.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,'ATHLETE','ACTIVE',now()-interval '2 days') returning id",[profile,group])).rows[0].id;
   const activity=(await db.query("insert into public.activities(group_id,activity_type_id,title,starts_at,ends_at,created_by) values($1,'b2c3d4e5-0001-4b3c-8d4e-111111111111','Historia OAuth',now()-interval '1 hour',now(),$2) returning id",[group,profile])).rows[0].id;
   await db.query("insert into public.attendance_records(activity_id,membership_id,status,recorded_by) values($1,$2,'LATE',$3)",[activity,membership,profile]);
   const history=(await db.query('select to_jsonb(a) as data from public.attendance_records a where activity_id=$1',[activity])).rows[0].data;
-  assert.equal((await db.query('select app_private.import_social_identities() as n')).rows[0].n,2);assert.equal((await db.query('select app_private.import_social_identities() as n')).rows[0].n,0);
+  assert.equal((await db.query('select count(*)::int as n from app_private.auth_social_identities where subject_id=$1',[legacy])).rows[0].n,2);
+  const repeatedIdentity=await db.query('insert into app_private.auth_social_identities(provider,provider_subject,subject_id) values($1,$2,$3) on conflict do nothing returning subject_id',['google',providerSub('legacy-google'),legacy]);
+  assert.equal(repeatedIdentity.rowCount,0);
   let session;
   for(const provider of ['google','apple']){
    const input=await flow(provider,providerSub('legacy-'+provider),emails.fresh);session=(await client().completeSocialLogin({body:input})).tokens;
@@ -67,8 +69,8 @@ test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent
   }
   assert.deepEqual((await db.query('select to_jsonb(a) as data from public.attendance_records a where activity_id=$1',[activity])).rows[0].data,history);
   assert.equal((await db.query('select count(*)::int as n from public.users where email=$1',[emails.legacy])).rows[0].n,1);
-  // MIG-20: native-owned pairs cannot be deleted by the legacy authority.
-  await assert.rejects(db.query('delete from auth.users where id=$1',[legacy]),error=>error.code==='PT503');assert.deepEqual(await client(session.access_token).getSession(),{user_id:profile});
+  // Existing domain history prevents deleting the authenticated subject.
+  await assert.rejects(db.query('delete from app_private.auth_subjects where id=$1',[legacy]),error=>error.code==='23503');assert.deepEqual(await client(session.access_token).getSession(),{user_id:profile});
   assert.equal((await db.query('select auth_user_id from public.users where id=$1',[profile])).rows[0].auth_user_id,legacy);
   const fresh=await client().completeSocialLogin({body:await flow('apple',providerSub('fresh'),emails.fresh,{context:{invite_code:'ABCD1234'}})});
   assert.equal(fresh.context.invite_code,'ABCD1234');assert.equal((await client(fresh.tokens.access_token).getCurrentAccountConsent()).accepted,false);
@@ -118,7 +120,7 @@ test('MIG-19 HTTP/PostgreSQL: import, history, linking, email collision, consent
    await db.query('begin');await db.query("set local session_replication_role='replica'");await db.query('delete from app_private.auth_oauth_transactions where id=any($1::uuid[])',[transactionIds]);await db.query('delete from app_private.auth_social_identities where subject_id=any($1::uuid[])',[subjects]);
    for(const sql of ['delete from public.attendance_records where activity_id in(select id from public.activities where group_id=any($1::uuid[]))','delete from public.activities where group_id=any($1::uuid[])','delete from public.memberships where group_id=any($1::uuid[])','delete from app_private.billing_legacy_groups where group_id=any($1::uuid[])','delete from public.groups where id=any($1::uuid[])'])await db.query(sql,[groups]);
    for(const table of ['auth_refresh','auth_recovery','auth_families','auth_credentials'])await db.query('delete from app_private.'+table+(table==='auth_refresh'?' where family_id in(select id from app_private.auth_families where subject_id=any($1::uuid[]))':' where subject_id=any($1::uuid[])'),[subjects]);
-   await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[ids]);await db.query('delete from public.users where id=any($1::uuid[])',[ids]);await db.query('delete from auth.identities where user_id=any($1::uuid[])',[subjects]);await db.query('delete from auth.users where id=any($1::uuid[])',[subjects]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[subjects]);
+   await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[ids]);await db.query('delete from public.users where id=any($1::uuid[])',[ids]);await db.query('delete from app_private.auth_social_identities where subject_id=any($1::uuid[])',[subjects]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[subjects]);
    for(const row of previous)await db.query('alter role '+row.rolname+' '+(row.rolcanlogin?'login':'nologin')+' password '+(row.rolpassword===null?'null':"'"+row.rolpassword.replaceAll("'","''")+"'"));await db.query('commit');
   }finally{await db.end();}}else await db.end();
  }

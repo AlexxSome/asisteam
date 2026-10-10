@@ -1,7 +1,8 @@
 import { createServerApiClient } from "@/lib/api/server";
 import { getGroup } from "@/lib/groups";
 import { ApiClientError } from "@asisteam/api-client";
-import { canManageAttendance,reportFilterSchema,type ReportFilter } from "@asisteam/core";
+import { canManageAttendance,reportFilterSchema,httpSchemas,type ReportFilter } from "@asisteam/core";
+import { ZodError } from "zod";
 import { notFound } from "next/navigation";
 export type ReportSearchParams = Record<string, string | string[] | undefined>;
 export function parseReportFilters(query: ReportSearchParams) {
@@ -33,14 +34,14 @@ export async function getGroupAttendanceReport(groupId: string, filter: ReportFi
         try {
             const report = await createServerApiClient().getGroupAttendanceReport({ params: { groupId: group.id },
                 query: { ...filter, activity_type_ids: filter.activity_type_ids.join(","), page_size: 50 } });
-            return { report, error: null };
+            return { report: httpSchemas.GroupAttendanceReport.parse(report), error: null };
         }
         catch (error) {
             if (error instanceof ApiClientError && [401, 403, 404].includes(error.status))
                 notFound();
             if (error instanceof ApiClientError && error.status === 400)
                 return { report: null, error: "Revisa el período y los tipos de actividad seleccionados." };
-            throw error;
+            throw Object.assign(new Error(error instanceof ZodError ? "No pudimos leer el reporte." : "No pudimos cargar el reporte.", { cause: error }), error instanceof ApiClientError ? { status: error.status } : {});
         }
     }
 }
@@ -48,7 +49,8 @@ export async function getGroupStats(groupId: string, page = 1, pageSize = 50) {
     await getGroup(groupId);
     {
         try {
-            return { report: await createServerApiClient().getGroupStats({ params: { groupId }, query: { page, page_size: pageSize } }), error: null };
+            const report = await createServerApiClient().getGroupStats({ params: { groupId }, query: { page, page_size: pageSize } });
+            return { report: httpSchemas.GroupStats.parse(report), error: null };
         }
         catch (error) {
             if (error instanceof ApiClientError && [401, 404].includes(error.status))
@@ -57,7 +59,7 @@ export async function getGroupStats(groupId: string, page = 1, pageSize = 50) {
                 return { report: null, error: null };
             if (error instanceof ApiClientError && error.status === 400)
                 return { report: null, error: "Revisa la página seleccionada." };
-            throw error;
+            throw Object.assign(new Error(error instanceof ZodError ? "No pudimos leer las estadísticas." : "No pudimos cargar las estadísticas.", { cause: error }), error instanceof ApiClientError ? { status: error.status } : {});
         }
     }
 }

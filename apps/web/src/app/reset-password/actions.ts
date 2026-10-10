@@ -18,7 +18,9 @@ export async function resetPassword(token: string, input: PasswordResetInput): P
         try {
             await assertAuthOrigin();
             await (await nativeAuthClient()).resetPassword({ body: { token, password: parsed.data.password } });
-            await clearNativeCookies();
+            // The API has committed the password change and revoked its sessions.
+            // A browser cookie write cannot undo that successful operation.
+            await clearNativeCookies().catch(() => {});
             return { success: true };
         }
         catch {

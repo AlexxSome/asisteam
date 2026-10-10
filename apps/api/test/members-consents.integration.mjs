@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { createApplication } from './legacy-application.mjs';
-import { loadConfig } from './legacy-application.mjs';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
 
 test('MIG-08 real HTTP/PostgreSQL: R1, consent, MANAGED, roles, V5/V6, history and concurrency', { skip: process.env.API_RLS_TEST !== '1' }, async () => {
-  const admin = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' });
+  const admin = new pg.Client({ connectionString: fixtureConnection() });
   await admin.connect();
   const fixture = await authFixture(), run = randomUUID(), auth = Array.from({length:7},()=>randomUUID()), sessions = auth.map(()=>randomUUID()), profiles = [], groups = [], guardianships = [];
   const runtimePassword = randomUUID(), logs = [];
@@ -37,14 +37,14 @@ test('MIG-08 real HTTP/PostgreSQL: R1, consent, MANAGED, roles, V5/V6, history a
   try {
     await admin.query("alter role asisteam_api login password '"+runtimePassword+"'");
     for(const [i,id] of auth.entries()) {
-      await admin.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)',[id,email(i),JSON.stringify({full_name:'Persona sintética '+i,birthdate:i===3?'2014-01-01':'1990-01-01'})]);
+      await admin.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[id,email(i),JSON.stringify({full_name:'Persona sintética '+i,birthdate:i===3?'2014-01-01':'1990-01-01'})]);
       profiles.push((await admin.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id);
-      await admin.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
+      await admin.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
       if(i!==6)await admin.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profiles[i]]);
     }
     const g=await group(),foreign=await group(profiles[5]);
     for(const [i,role,status] of [[0,'ATHLETE','ACTIVE'],[1,'ATHLETE','ACTIVE'],[3,'ATHLETE','PENDING'],[4,'COACH','ACTIVE']])await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,$3,$4,case when $4='ACTIVE' then now() else null end)",[profiles[i],g,role,status]);
-    app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+runtimePassword+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'6',PG_STATEMENT_TIMEOUT_MS:'10000'}),new SafeLogger(line=>logs.push(line)));
+    app=await createApplication(loadConfig({DATABASE_URL:fixtureConnection('asisteam_api',runtimePassword),PG_POOL_MAX:'6',PG_STATEMENT_TIMEOUT_MS:'10000'}),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i]))),clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token,timeoutMs:15000}));
     const raw=(i,path,body,method='POST')=>fetch(origin+path,{method,headers:{authorization:'Bearer '+tokens[i],'content-type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});
     const params={groupId:g};
@@ -150,7 +150,7 @@ test('MIG-08 real HTTP/PostgreSQL: R1, consent, MANAGED, roles, V5/V6, history a
       await admin.query('delete from public.guardianships where athlete_user_id=any($1::uuid[]) or guardian_user_id=any($1::uuid[])',[allProfiles]);
       await admin.query('delete from public.memberships where group_id=any($1::uuid[])',[groups]);await admin.query('delete from app_private.billing_legacy_groups where group_id=any($1::uuid[])',[groups]);await admin.query('delete from public.groups where id=any($1::uuid[])',[groups]);
       await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[allProfiles]);await admin.query('delete from public.users where id=any($1::uuid[])',[allProfiles]);
-      await admin.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth]);await admin.query('delete from auth.users where id=any($1::uuid[])',[auth]);
+      await admin.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);await admin.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
       const old=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";await admin.query('alter role asisteam_api '+(previous.rolcanlogin?'login':'nologin')+' password '+old);
     } finally {await admin.query("set session_replication_role='origin'");await admin.end();}
   }

@@ -92,7 +92,7 @@ export async function loginWithSocial(input: SocialLoginInput): Promise<LoginRes
             const { provider, ...context } = parsed.data;
             const result = await (await nativeAuthClient()).startSocialLogin({ body: { provider, context } });
             const { saveSocialTransaction } = await import('@/lib/api/social-auth');
-            await saveSocialTransaction(provider, result.transaction);
+            await saveSocialTransaction(provider, result.transaction, context);
             url = result.authorization_url;
         }
         catch {

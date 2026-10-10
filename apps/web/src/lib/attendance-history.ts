@@ -2,7 +2,8 @@ import { createServerApiClient } from "@/lib/api/server";
 import { isGroupId } from "@/lib/group-routing";
 import { getGroup } from "@/lib/groups";
 import { ApiClientError } from "@asisteam/api-client";
-import { attendancePeriodFilterSchema,type AttendancePeriodFilter } from "@asisteam/core";
+import { attendancePeriodFilterSchema,httpSchemas,type AttendancePeriodFilter } from "@asisteam/core";
+import { ZodError } from "zod";
 import { notFound } from "next/navigation";
 import type { ReportSearchParams } from "./reports";
 export function parseHistoryFilters(query: ReportSearchParams) {
@@ -33,14 +34,14 @@ export async function getWardAttendanceHistory(groupId: string, athleteUserId: s
         try {
             const history = await createServerApiClient().getWardAttendanceHistory({ params: { groupId: group.id, athleteUserId },
                 query: { ...filter, activity_type_ids: filter.activity_type_ids.join(","), page_size: pageSize } });
-            return { history, error: null };
+            return { history: httpSchemas.AttendanceHistory.parse(history), error: null };
         }
         catch (error) {
             if (error instanceof ApiClientError && [401, 403, 404].includes(error.status))
                 notFound();
             if (error instanceof ApiClientError && error.status === 400)
                 return { history: null, error: "Revisa el período y los tipos de actividad seleccionados." };
-            throw error;
+            throw Object.assign(new Error(error instanceof ZodError ? "No pudimos leer el historial del pupilo." : "No pudimos cargar el historial del pupilo.", { cause: error }), error instanceof ApiClientError ? { status: error.status } : {});
         }
     }
 }
@@ -52,14 +53,14 @@ export async function getMyAttendanceHistory(groupId: string, filter: Attendance
         try {
             const history = await createServerApiClient().getMyAttendanceHistory({ params: { groupId: group.id },
                 query: { ...filter, activity_type_ids: filter.activity_type_ids.join(","), page_size: pageSize } });
-            return { history, error: null };
+            return { history: httpSchemas.AttendanceHistory.parse(history), error: null };
         }
         catch (error) {
             if (error instanceof ApiClientError && [401, 403, 404].includes(error.status))
                 notFound();
             if (error instanceof ApiClientError && error.status === 400)
                 return { history: null, error: "Revisa el período y los tipos de actividad seleccionados." };
-            throw error;
+            throw Object.assign(new Error(error instanceof ZodError ? "No pudimos leer tu historial." : "No pudimos cargar tu historial.", { cause: error }), error instanceof ApiClientError ? { status: error.status } : {});
         }
     }
 }

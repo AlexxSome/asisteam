@@ -6,13 +6,7 @@ import { redirect } from "next/navigation";
 export type RegisterResult = {
     error: string;
 } | undefined;
-/**
- * Registro con email y contraseña (HU-GEN-01, AUT-02).
- * Contrato de docs/07-api-y-backend.md §2.1: Supabase Auth `signUp` +
- * trigger de perfil (`handle_new_user`) que crea la fila en `public.users`
- * con `account_status = ACTIVE`. Con las confirmaciones de email
- * deshabilitadas, signUp inicia sesión de inmediato (cookies HttpOnly).
- */
+/** Native registration records account consent before issuing the browser session. */
 export async function registerUser(input: RegisterInput, inviteCode?: string): Promise<RegisterResult> {
     const parsed = registerSchema.safeParse(input);
     if (!parsed.success) {

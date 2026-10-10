@@ -2,7 +2,7 @@
 import { createServerApiClient } from "@/lib/api/server";
 import { isGroupId } from "@/lib/group-routing";
 import { ApiClientError } from "@asisteam/api-client";
-import { ATTENDANCE_ERROR_MESSAGES,attendanceBatchSchema,attendanceChangesSchema,type AttendanceInput } from "@asisteam/core";
+import { ATTENDANCE_ERROR_MESSAGES,attendanceBatchSchema,attendanceChangesSchema,httpSchemas,type AttendanceInput } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 type Failure = {
     error: {
@@ -26,7 +26,7 @@ export async function saveAttendance(groupId: string, activityId: string, input:
         return failure("invalid_attendance_batch");
     {
         try {
-            const result = await createServerApiClient().saveAttendance({ params: { groupId, activityId }, body: { records: parsed.data, only_unmarked: onlyUnmarked } });
+            const result = httpSchemas.AttendanceSaved.parse(await createServerApiClient().saveAttendance({ params: { groupId, activityId }, body: { records: parsed.data, only_unmarked: onlyUnmarked } }));
             revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
             return result;
         }
@@ -59,7 +59,7 @@ export async function updateAttendance(groupId: string, activityId: string, memb
         return failure("invalid_attendance_changes");
     {
         try {
-            const result = await createServerApiClient().updateAttendance({ params: { groupId, activityId, membershipId }, body: parsed.data });
+            const result = httpSchemas.AttendanceSaved.parse(await createServerApiClient().updateAttendance({ params: { groupId, activityId, membershipId }, body: parsed.data }));
             revalidatePath(`/groups/${groupId}/activities/${activityId}/attendance`);
             return result;
         }

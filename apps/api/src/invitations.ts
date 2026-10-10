@@ -105,7 +105,21 @@ export class InvitationsController {
     const body=parse(claim?httpSchemas.InvitationClaim:httpSchemas.InvitationRegistration,input);
     await this.attempt(request,'accept');
     if (!this.config.NATIVE_AUTH_SECRET) throw new ServiceUnavailableException();
-    return httpSchemas.InvitationAccepted.parse(await this.nativeAuth.register(body.registration, { token: body.token, claim }));
+    const context = result(await this.registrations.call('context', [hash(body.token)]));
+    const activation = z.object({ managed_activation: z.boolean().optional() }).parse(context).managed_activation === true;
+    // A MANAGED profile can only be claimed; ordinary registration must not
+    // replace its identity, birthdate or attendance history.
+    if (activation !== claim) throw new DomainException(422, 'registration_failed');
+    try {
+      return httpSchemas.InvitationAccepted.parse(await this.nativeAuth.register(body.registration, { token: body.token, claim }));
+    } catch (error) {
+      // The same unavailable token must retain the public anti-enumeration
+      // response across preview, acceptance and native registration.
+      if (error instanceof DomainException && error.safeBody.error.code === 'invitation_not_available') {
+        throw new DomainException(404, 'invitation_not_available');
+      }
+      throw error;
+    }
   }
   @Get('groups/:groupId/invitations') @UseGuards(SessionGuard)
   async list(@Req() request:AuthenticatedRequest,@Param() params:unknown,@Query() query:Record<string,unknown>) {

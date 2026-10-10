@@ -9,12 +9,13 @@ import { loadConfig } from '../dist/config.js';
 import { MajorityWorker } from '../dist/worker.js';
 import { WorkerStore } from '../dist/store.js';
 import { SafeLogger } from '../../api/dist/logger.js';
+import {fixtureConnection} from '../../api/test/native-browser-database.mjs';
 
 test('two Nest workers, process crash, expired lease, failed HTTP provider and lost receipt', {skip:process.env.WORKER_TEST!=='1'},async()=>{
-  const db=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});await db.connect();
+  const db=new pg.Client({connectionString:fixtureConnection()});await db.connect();
   await db.query("select pg_advisory_lock(hashtextextended('mig157-integration',0))");
   const snapshot={clock:(await db.query("select pg_get_functiondef('app_private.worker_now()'::regprocedure) as definition")).rows[0].definition,executor:(await db.query('select * from app_private.majority_executor')).rows[0],tasks:(await db.query('select * from app_private.majority_tasks')).rows,
-    role:(await db.query("select rolcanlogin,rolpassword from pg_authid where rolname='asisteam_jobs'")).rows[0],cron:(await db.query("select schedule,command from cron.job where jobname='guardianship-majority'")).rows[0],
+    role:(await db.query("select rolcanlogin,rolpassword from pg_authid where rolname='asisteam_jobs'")).rows[0],
     job:(await db.query("select * from public.job_runs where run_date=app_private.chile_today() and job_name='guardianship-majority'")).rows[0]};
   const id=randomUUID(),secret=randomUUID(),logs=[],apps=[],requests=[], receipts=new Map();let fail=true;
   const nativeFetch=globalThis.fetch;
@@ -29,17 +30,21 @@ test('two Nest workers, process crash, expired lease, failed HTTP provider and l
     blocked=(await db.query('update app_private.guardianship_majority_deliveries set blocked_at=now() where sent_at is null and blocked_at is null returning id')).rows.map(r=>r.id);
     await db.query("alter role asisteam_jobs login password '"+secret+"'");
     // Real role, real PostgreSQL; setup bypass is restricted to synthetic operator fixture.
-    await db.query("update app_private.majority_executor set mode='LEGACY',draining_since=null,email_next_at=null");
-    await db.query("select app_private.majority_handoff('DRAINING')");
-    await assert.rejects(db.query("select app_private.majority_handoff('WORKER')"),{code:'55000'});
-    await db.query("update app_private.majority_executor set draining_since=app_private.worker_now()-interval '12 minutes'");
-    await assert.rejects(db.query("select app_private.majority_handoff('WORKER')"),{code:'55000'});
-    await db.query("select app_private.majority_handoff('WORKER',true)");
-    await assert.rejects(db.query('select public.run_guardianship_majority()'),{code:'55000'});
+    assert.equal((await db.query("select to_regnamespace('cron') as source")).rows[0].source, null);
+    await db.query("update app_private.majority_executor set mode='DRAINING',draining_since=app_private.worker_now(),email_next_at=null");
+    const paused = new pg.Client({ connectionString: fixtureConnection('asisteam_jobs', secret) });
+    await paused.connect();
+    try {
+      assert.equal((await paused.query('select * from app_private.worker_claim_transition()')).rows.length, 0);
+      assert.equal((await paused.query('select * from app_private.worker_claim_email()')).rows.length, 0);
+      await assert.rejects(paused.query("update app_private.majority_executor set mode='WORKER'"), { code: '42501' });
+    } finally { await paused.end(); }
+    // Only the isolated fixture operator can resume a paused executor.
+    await db.query("update app_private.majority_executor set mode='WORKER',draining_since=null,email_next_at=null");
     await db.query('delete from app_private.majority_tasks');
     await db.query("insert into app_private.majority_tasks(run_date) values(app_private.chile_today())");
     // A separate OS process claims and crashes before completion.
-    const connection='postgresql://asisteam_jobs:'+secret+'@127.0.0.1:54322/postgres';
+    const connection=fixtureConnection('asisteam_jobs',secret);
     const child=spawn(process.execPath,['--input-type=module','-e',"import pg from 'pg';const c=new pg.Client({connectionString:process.env.WORKER_FIXTURE_DB});await c.connect();const r=await c.query('select * from app_private.worker_claim_transition()');if(r.rows.length!==1)process.exit(2);process.exit(19);"],{cwd:new URL('..',import.meta.url),env:{...process.env,WORKER_FIXTURE_DB:connection},stdio:'ignore'});
     assert.equal(await new Promise(resolve=>child.once('exit',resolve)),19);
     const stale=(await db.query('select run_date::text,lease_token from app_private.majority_tasks')).rows[0];
@@ -74,7 +79,6 @@ test('two Nest workers, process crash, expired lease, failed HTTP provider and l
     await db.query('delete from app_private.majority_tasks');if(snapshot.tasks.length)await db.query('insert into app_private.majority_tasks select * from jsonb_populate_recordset(null::app_private.majority_tasks,$1::jsonb)',[JSON.stringify(snapshot.tasks)]);
     await db.query(snapshot.clock);
     await db.query('update app_private.majority_executor set mode=$1,draining_since=$2,email_next_at=$3',[snapshot.executor.mode,snapshot.executor.draining_since,snapshot.executor.email_next_at]);
-    if(snapshot.cron)await db.query("select cron.schedule('guardianship-majority',$1,$2)",[snapshot.cron.schedule,snapshot.cron.command]);
     if(!snapshot.job)await db.query("delete from public.job_runs where run_date=app_private.chile_today() and job_name='guardianship-majority'");
     const old=snapshot.role.rolpassword===null?'null':"'"+snapshot.role.rolpassword.replaceAll("'","''")+"'";await db.query('alter role asisteam_jobs '+(snapshot.role.rolcanlogin?'login':'nologin')+' password '+old);
     await db.query("select pg_advisory_unlock(hashtextextended('mig157-integration',0))");await db.end();

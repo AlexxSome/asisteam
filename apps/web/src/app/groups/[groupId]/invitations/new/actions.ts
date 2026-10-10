@@ -2,7 +2,7 @@
 import { createServerApiClient } from "@/lib/api/server";
 import { createClient } from "@/lib/supabase/server";
 import { ApiClientError } from "@asisteam/api-client";
-import { SEND_INVITATION_ERROR_MESSAGES,sendInvitationRequestSchema,type SentInvitation } from "@asisteam/core";
+import { SEND_INVITATION_ERROR_MESSAGES,sendInvitationRequestSchema,sentInvitationSchema,type SentInvitation } from "@asisteam/core";
 import { revalidatePath } from "next/cache";
 export type SendInvitationResult = {
     invitation: SentInvitation;
@@ -29,7 +29,8 @@ export async function sendInvitation(input: unknown): Promise<SendInvitationResu
         return fail("authentication_required");
     try {
         {
-            const result = await createServerApiClient().sendInvitation({ body: parsed.data });
+            const response = await createServerApiClient().sendInvitation({ body: parsed.data });
+            const result = { invitation: sentInvitationSchema.strip().parse(response.invitation) };
             revalidatePath(`/groups/${parsed.data.group_id}/invitations/new`);
             return result;
         }

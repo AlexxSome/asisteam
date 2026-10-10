@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
-import { createApplication } from './legacy-application.mjs';
-import { loadConfig } from './legacy-application.mjs';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
 
 test('MIG-16 QR HTTP/SQL: legacy compatibility, roles, signature/expiry/window, own identity and retries/concurrency', { skip: process.env.API_RLS_TEST !== '1' }, async () => {
- const admin=new pg.Client({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'});await admin.connect();
+ const admin=new pg.Client({connectionString:fixtureConnection()});await admin.connect();
  const previous=(await admin.query("select rolcanlogin,rolpassword from pg_authid where rolname='asisteam_api'")).rows[0];
  const auth=Array.from({length:11},()=>randomUUID()),sessions=auth.map(()=>randomUUID()),profiles=[],groups=[randomUUID(),randomUUID()],activities=Array.from({length:5},()=>randomUUID()),logs=[],sensitive=[];
  const password=randomUUID();let app,fixture;
@@ -17,9 +17,9 @@ test('MIG-16 QR HTTP/SQL: legacy compatibility, roles, signature/expiry/window, 
  try {
   fixture=await authFixture();await admin.query("alter role asisteam_api login password '"+password+"'");
   for(const [i,id] of auth.entries()){
-   await admin.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)',[id,'mig160-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética QR',birthdate:'1990-01-01'})]);
+   await admin.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[id,'mig160-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética QR',birthdate:'1990-01-01'})]);
    profiles.push((await admin.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id);
-   await admin.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
+   await admin.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[sessions[i],id]);
    if(i!==10)await admin.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profiles[i]]);
   }
   for(const [i,id]of groups.entries()){
@@ -31,7 +31,7 @@ test('MIG-16 QR HTTP/SQL: legacy compatibility, roles, signature/expiry/window, 
    const row=(await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,$3,$4,now()-interval '1 day') returning id",[profiles[i],groups[g],role,status])).rows[0];if(role==='ATHLETE')memberships[i]=row.id;
   }
   for(const [i,id]of activities.entries())await admin.query("insert into public.activities(id,group_id,activity_type_id,title,starts_at,ends_at,created_by) values($1,$2,'b2c3d4e5-0001-4b3c-8d4e-111111111111','Entrenamiento QR sintético',now()+($3||' minutes')::interval,now()+($3||' minutes')::interval+interval '1 hour',$4)",[id,groups[i===4?1:0],[0,-11,20,-61,0][i],profiles[i===4?4:0]]);
-  app=await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+password+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic',PG_POOL_MAX:'4',PG_STATEMENT_TIMEOUT_MS:'10000',HTTP_TIMEOUT_MS:'15000'}),new SafeLogger(line=>logs.push(line)));await app.listen(0,'127.0.0.1');
+  app=await createApplication(loadConfig({DATABASE_URL:fixtureConnection('asisteam_api',password),PG_POOL_MAX:'4',PG_STATEMENT_TIMEOUT_MS:'10000',HTTP_TIMEOUT_MS:'15000'}),new SafeLogger(line=>logs.push(line)));await app.listen(0,'127.0.0.1');
   const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i]))),clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token,timeoutMs:20000}));sensitive.push(...tokens,password);
   const request=(path,method='POST',body,token=tokens[0])=>fetch(origin+path,{method,headers:{...(token?{authorization:'Bearer '+token}:{}),...(body?{'content-type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
   const params={groupId:groups[0]},issueParams={activityId:activities[0]},body=token=>({activity_id:activities[0],token});
@@ -44,7 +44,7 @@ test('MIG-16 QR HTTP/SQL: legacy compatibility, roles, signature/expiry/window, 
   assert.equal((await request('/api/v1/me/check-in','POST',{...body('0'.repeat(64)),user_id:profiles[1]})).status,400);
   // Issue with the old authenticated RPC before changing transport. No key copy
   // or rotation: the same database/key/token bucket is used by both adapters.
-  const legacy=async(i,query,values)=>{await admin.query('BEGIN');try{await admin.query('set local role authenticated');await admin.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:auth[i],role:'authenticated'})]);const result=(await admin.query(query,values)).rows[0].result;await admin.query('COMMIT');return result;}catch(error){await admin.query('ROLLBACK');throw error;}};
+  const legacy=async(i,query,values)=>{await admin.query('BEGIN');try{await admin.query('set local role asisteam_api');await admin.query("select set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:auth[i],role:'authenticated',auth_provider:'nest'})]);const result=(await admin.query(query,values)).rows[0].result;await admin.query('COMMIT');return result;}catch(error){await admin.query('ROLLBACK');throw error;}};
   let qr=await legacy(0,'select public.issue_activity_checkin_qr($1) as result',[activities[0]]);sensitive.push(qr.token);
   if(Date.parse(qr.expires_at)-Date.now()<5000){await new Promise(resolve=>setTimeout(resolve,Math.max(1,Date.parse(qr.expires_at)-Date.now()+50)));qr=await legacy(0,'select public.issue_activity_checkin_qr($1) as result',[activities[0]]);sensitive.push(qr.token);}
   assert.ok(Date.parse(qr.expires_at)>Date.parse(qr.server_time)&&Date.parse(qr.expires_at)-Date.parse(qr.server_time)<=60000);
@@ -77,7 +77,7 @@ test('MIG-16 QR HTTP/SQL: legacy compatibility, roles, signature/expiry/window, 
   await admin.query("update public.activities set starts_at=now()-interval '61 minutes' where id=$1",[activities[0]]);qr={token:(await admin.query('select app_private.qr_checkin_token(activity_id,secret,clock_timestamp()) as token from app_private.qr_checkin_keys where activity_id=$1',[activities[0]])).rows[0].token};sensitive.push(qr.token);
   await assert.rejects(clients[1].selfCheckin({body:body(qr.token)}),error=>error.status===422&&error.error.code==='checkin_window_closed');
   await admin.query("update public.memberships set status='INACTIVE' where id=$1",[memberships[1]]);await assert.rejects(clients[1].selfCheckin({body:body(qr.token)}),{status:404});
-  await admin.query('delete from auth.sessions where id=$1',[sessions[8]]);await assert.rejects(clients[8].selfCheckin({body:body(qr.token)}),{status:401});
+  await admin.query('delete from app_private.auth_families where id=$1',[sessions[8]]);await assert.rejects(clients[8].selfCheckin({body:body(qr.token)}),{status:401});
   assert.ok(!(await admin.query("select has_table_privilege('asisteam_api','app_private.qr_checkin_keys','SELECT') as readable")).rows[0].readable);
   for(const secret of sensitive)assert.ok(!logs.join('\n').includes(secret),'Logs redactados');assert.ok(!logs.join('\n').includes('Nota privada sintética'));
  } finally {
@@ -86,7 +86,7 @@ test('MIG-16 QR HTTP/SQL: legacy compatibility, roles, signature/expiry/window, 
   try {
    for(const table of ['qr_checkin_keys','qr_checkin_settings'])await admin.query('delete from app_private.'+table+' where '+(table==='qr_checkin_keys'?'activity_id=any($1::uuid[])':'group_id=any($1::uuid[])'),[table==='qr_checkin_keys'?activities:groups]);
    await admin.query('delete from public.attendance_records where activity_id=any($1::uuid[])',[activities]);await admin.query('delete from public.activities where id=any($1::uuid[])',[activities]);await admin.query('delete from public.memberships where group_id=any($1::uuid[])',[groups]);await admin.query('delete from app_private.billing_legacy_groups where group_id=any($1::uuid[])',[groups]);await admin.query('delete from public.groups where id=any($1::uuid[])',[groups]);
-   await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);await admin.query('delete from public.users where id=any($1::uuid[])',[profiles]);await admin.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth]);await admin.query('delete from auth.users where id=any($1::uuid[])',[auth]);
+   await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);await admin.query('delete from public.users where id=any($1::uuid[])',[profiles]);await admin.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);await admin.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
    const old=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";await admin.query('alter role asisteam_api '+(previous.rolcanlogin?'login':'nologin')+' password '+old);
   } finally {await admin.query("set session_replication_role='origin'");await admin.end();}
  }

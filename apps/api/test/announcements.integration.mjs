@@ -4,8 +4,8 @@ import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
 import pg from 'pg';
-import { createApplication } from './legacy-application.mjs';
-import { loadConfig } from './legacy-application.mjs';
+import {createApplication} from '../dist/application.js';
+import {loadFixtureConfig as loadConfig,fixtureConnection} from './fixture-config.mjs';
 import { SafeLogger } from '../dist/logger.js';
 import { authFixture } from './auth-fixture.mjs';
 import { ApiClient } from '../../../packages/api-client/dist/index.js';
@@ -15,26 +15,26 @@ import { WorkerStore } from '../../worker/dist/store.js';
 import { loadConfig as workerConfig } from '../../worker/dist/config.js';
 
 test('MIG-15 Nest HTTP/SQL and two Expo workers: roles, opt-in, retries, tokens, leases and handoff', { skip: process.env.API_RLS_TEST !== '1' }, async () => {
-  const db = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres' }); await db.connect();
+  const db = new pg.Client({ connectionString: fixtureConnection() }); await db.connect();
   await db.query("select pg_advisory_lock(hashtextextended('mig159-integration',0))");
   // Fail safely before altering any unrelated queue: all provider calls must belong to this test.
   assert.equal((await db.query("select count(*)::int n from app_private.announcement_push_deliveries where status in ('PENDING','AWAITING_RECEIPT')")).rows[0].n, 0);
   const roles = (await db.query("select rolname,rolcanlogin,rolpassword from pg_authid where rolname in ('asisteam_api','asisteam_jobs')")).rows;
   const executor = (await db.query('select * from app_private.announcement_executor')).rows[0];
-  const cron = (await db.query("select schedule,command from cron.job where jobname='send-announcement-push'")).rows[0];
+  assert.equal((await db.query("select to_regnamespace('cron') as schema")).rows[0].schema,null);
   const ledger = (await db.query("select * from public.job_runs where job_name='send-announcement-push' and run_date=app_private.chile_today()")).rows[0];
   const password = randomUUID(), profiles = [], auth = [], groups = [randomUUID(),randomUUID()], apps = [], logs = [], requests = [];
   let app, fixture, provider, mode = 'ok';
   const nativeFetch = globalThis.fetch;
   try {
-    await db.query("update app_private.announcement_executor set mode='LEGACY',draining_since=null,activated_at=null");
+    await db.query("update app_private.announcement_executor set mode='DRAINING',draining_since=now(),activated_at=null");
     for (const role of roles) await db.query("alter role " + role.rolname + " login password '" + password + "'");
     fixture = await authFixture();
     for (let i=0;i<7;i++) {
       const id = randomUUID(), session = randomUUID(); auth.push(id);
-      await db.query('insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3)',[id,'mig159-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética',birthdate:'1990-01-01'})]);
+      await db.query("with subject as (insert into app_private.auth_subjects(id,email,native_owned) values($1,$2,true) returning id) insert into public.users(auth_user_id,email,full_name,birthdate,account_status) select id,$2,($3::jsonb->>'full_name'),($3::jsonb->>'birthdate')::date,'ACTIVE' from subject",[id,'mig159-'+id+'@example.test',JSON.stringify({full_name:'Persona sintética',birthdate:'1990-01-01'})]);
       const profile = (await db.query('select id from public.users where auth_user_id=$1',[id])).rows[0].id; profiles.push(profile);
-      await db.query("insert into auth.sessions(id,user_id,created_at,not_after) values($1,$2,now(),now()+interval '1 hour')",[session,id]);
+      await db.query("insert into app_private.auth_families(id,subject_id,created_at,expires_at) values($1,$2,now(),now()+interval '1 hour')",[session,id]);
       if(i!==6) await db.query("insert into public.account_consents(user_id,terms_version,channel) values($1,'2026-09-21','IN_APP')",[profile]);
       auth[i] = {id, session};
     }
@@ -44,7 +44,7 @@ test('MIG-15 Nest HTTP/SQL and two Expo workers: roles, opt-in, retries, tokens,
     }
     for (const [i,g,role,status] of [[0,0,'ADMIN','ACTIVE'],[0,0,'ATHLETE','ACTIVE'],[1,0,'ATHLETE','ACTIVE'],[2,0,'GUARDIAN','ACTIVE'],[3,0,'COACH','ACTIVE'],[4,1,'ADMIN','ACTIVE'],[5,0,'ATHLETE','PENDING'],[6,0,'ADMIN','ACTIVE']])
       await db.query('insert into public.memberships(user_id,group_id,role,status) values($1,$2,$3,$4)',[profiles[i],groups[g],role,status]);
-    app = await createApplication(loadConfig({DATABASE_URL:'postgresql://asisteam_api:'+password+'@127.0.0.1:54322/postgres',SUPABASE_AUTH_URL:fixture.issuer,SUPABASE_AUTH_PUBLIC_KEY:'sb_publishable_synthetic'}),new SafeLogger(line=>logs.push(line))); await app.listen(0,'127.0.0.1');
+    app = await createApplication(loadConfig({DATABASE_URL:fixtureConnection('asisteam_api',password),}),new SafeLogger(line=>logs.push(line))); await app.listen(0,'127.0.0.1');
     const origin = await app.getUrl(), tokens = await Promise.all(auth.map(item=>fixture.token(item.id,item.session)));
     const clients = tokens.map(token=>new ApiClient({origin,accessToken:async()=>token,timeoutMs:15000})), params = {groupId:groups[0]}, token = `ExpoPushToken[${randomUUID().replaceAll('-','')}]`;
     const publish = id=>clients[0].publishAnnouncement({params,body:{request_id:id,title:'Título privado sintético',body:'Cuerpo privado sintético'}});
@@ -81,16 +81,16 @@ test('MIG-15 Nest HTTP/SQL and two Expo workers: roles, opt-in, retries, tokens,
       response.end(JSON.stringify({data:mode==='invalid'?{status:'error',details:{error:'DeviceNotRegistered'}}:{status:'ok',id:randomUUID()}}));
     });await new Promise(resolve=>provider.listen(0,'127.0.0.1',resolve));
     globalThis.fetch=(url,options)=>String(url).startsWith('https://exp.host/--/api/v2/push/')?nativeFetch('http://127.0.0.1:'+provider.address().port+'/'+String(url).split('/').at(-1),options):nativeFetch(url,options);
-    const connection='postgresql://asisteam_jobs:'+password+'@127.0.0.1:54322/postgres';
+    const connection=fixtureConnection('asisteam_jobs',password);
     for(let n=0;n<2;n++)apps.push(await createWorker(workerConfig({DATABASE_URL:connection}),new SafeLogger(line=>logs.push(line))));
     await Promise.all(apps.map(instance=>instance.get(AnnouncementWorker).tick()));assert.equal(requests.length,0);
-    await db.query("select app_private.announcement_handoff('DRAINING')");
-    assert.equal((await db.query("select count(*)::int n from cron.job where jobname='send-announcement-push'")).rows[0].n,0);
-    await assert.rejects(db.query('select public.claim_announcement_push(false)'),{code:'55000'});
-    await assert.rejects(db.query("select app_private.announcement_handoff('WORKER',true)"),{code:'55000'});
-    await db.query("update app_private.announcement_executor set draining_since=now()-interval '4 minutes'");
-    await assert.rejects(db.query("select app_private.announcement_handoff('WORKER')"),{code:'55000'});
-    await db.query("select app_private.announcement_handoff('WORKER',true)");
+    assert.equal((await db.query("select mode from app_private.announcement_executor")).rows[0].mode,'DRAINING');
+    assert.equal((await apps[0].get(WorkerStore).call('pushClaim',[false])).length,0);
+    assert.equal((await apps[1].get(WorkerStore).call('pushClaim',[true])).length,0);
+    const control=new pg.Client({connectionString:connection});await control.connect();
+    try{await assert.rejects(control.query("update app_private.announcement_executor set mode='WORKER'"),{code:'42501'})}finally{await control.end()}
+    await db.query("update app_private.announcement_executor set mode='WORKER',draining_since=null,activated_at=now()");
+    assert.equal((await db.query("select mode from app_private.announcement_executor")).rows[0].mode,'WORKER');
     await assert.rejects(db.query('select public.claim_announcement_push(false)'),{code:'55000'});
     // Two simultaneous workers accept once and receipts never resend the message.
     await Promise.all(apps.map(instance=>instance.get(AnnouncementWorker).tick()));assert.equal(requests.length,1);
@@ -119,7 +119,7 @@ test('MIG-15 Nest HTTP/SQL and two Expo workers: roles, opt-in, retries, tokens,
     const latest=(await clients[0].getAnnouncements({params})).announcements.find(item=>item.id===id);await clients[0].deleteAnnouncement({params:{...params,announcementId:id},body:{updated_at:latest.updated_at}});
     assert.ok(!(await clients[1].getAnnouncements({params})).announcements.some(item=>item.id===id));
     const runtime = new pg.Client({connectionString:connection});await runtime.connect();try {
-      for(const sql of ['select token from public.push_tokens','select * from app_private.announcement_push_deliveries',"select app_private.announcement_handoff('WORKER',true)",'select * from app_private.canonical_claim_announcement_push(false)'])await assert.rejects(runtime.query(sql),{code:'42501'});
+      for(const sql of ['select token from public.push_tokens','select * from app_private.announcement_push_deliveries',"update app_private.announcement_executor set mode='DRAINING'",'select * from app_private.canonical_claim_announcement_push(false)'])await assert.rejects(runtime.query(sql),{code:'42501'});
     }finally{await runtime.end();}
     assert.ok(!logs.join().includes(token));assert.ok(!logs.join().includes('privado'));assert.ok(!logs.join().includes('@example.test'));assert.ok(!logs.join().includes(password));
   } catch(error) { console.error('MIG159 fixture failure', error?.code ?? error?.name); throw error; } finally {
@@ -130,9 +130,8 @@ test('MIG-15 Nest HTTP/SQL and two Expo workers: roles, opt-in, retries, tokens,
     await db.query('delete from public.group_announcements where group_id=any($1::uuid[])',[groups]);
     await db.query('delete from public.push_tokens where user_id=any($1::uuid[])',[profiles]);await db.query('delete from public.announcement_push_preferences where user_id=any($1::uuid[])',[profiles]);
     await db.query('delete from public.memberships where group_id=any($1::uuid[])',[groups]);await db.query('delete from app_private.billing_legacy_groups where group_id=any($1::uuid[])',[groups]);await db.query('delete from public.groups where id=any($1::uuid[])',[groups]);
-    await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);await db.query('delete from public.users where id=any($1::uuid[])',[profiles]);await db.query('delete from auth.sessions where user_id=any($1::uuid[])',[auth.map(item=>item.id??item)]);await db.query('delete from auth.users where id=any($1::uuid[])',[auth.map(item=>item.id??item)]);
+    await db.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);await db.query('delete from public.users where id=any($1::uuid[])',[profiles]);await db.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth.map(item=>item.id??item)]);await db.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth.map(item=>item.id??item)]);
     await db.query('update app_private.announcement_executor set mode=$1,draining_since=$2,activated_at=$3',[executor.mode,executor.draining_since,executor.activated_at]);
-    if(cron)await db.query("select cron.schedule('send-announcement-push',$1,$2)",[cron.schedule,cron.command]);
     await db.query("delete from public.job_runs where job_name='send-announcement-push' and run_date=app_private.chile_today()");if(ledger)await db.query('insert into public.job_runs select * from jsonb_populate_record(null::public.job_runs,$1::jsonb)',[JSON.stringify(ledger)]);
     for(const role of roles)await db.query('alter role '+role.rolname+' '+(role.rolcanlogin?'login':'nologin')+' password '+(role.rolpassword===null?'null':"'"+role.rolpassword.replaceAll("'","''")+"'"));
     await db.query("select pg_advisory_unlock(hashtextextended('mig159-integration',0))");} finally { await db.query("set session_replication_role='origin'"); await db.end(); }

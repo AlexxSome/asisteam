@@ -1,0 +1,459 @@
+{
+  "date": "2026-10-09T20:10:56.427703+00:00",
+  "sourceCommit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+  "includesUncommittedRepairs": true,
+  "environment": "local-synthetic",
+  "deliveryStatus": "LOCAL_CI_REPAIRED_PENDING_REMOTE",
+  "lint": "PASS",
+  "webTypecheck": "PASS",
+  "diffWhitespace": "PASS",
+  "nativeReplacementWeb": {
+    "originalSuites": 39,
+    "originalCases": 466,
+    "currentCases": 472,
+    "passed": 472,
+    "skipped": 0
+  },
+  "wholeWeb": {
+    "total": 1030,
+    "passed": 950,
+    "failed": 0,
+    "skipped": 80
+  },
+  "nativeBackend": {
+    "files": 15,
+    "cases": 18,
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 44.258
+  },
+  "independentPostgres": {
+    "checks": [
+      {
+        "check": "vanilla-postgres17-with-pgtap-fixture",
+        "status": "PASS",
+        "seconds": 0.603
+      },
+      {
+        "check": "isolated-destination-and-wal-archiving",
+        "status": "PASS",
+        "seconds": 4.256
+      },
+      {
+        "check": "clean-baseline-with-deploy-role-and-ledger",
+        "status": "PASS",
+        "seconds": 0.075
+      },
+      {
+        "check": "pgtap-destination-policies-and-invariants",
+        "status": "PASS",
+        "seconds": 0.198
+      },
+      {
+        "check": "persistence-types-and-migration-hashes-independent",
+        "status": "PASS",
+        "seconds": 0.073
+      },
+      {
+        "check": "native-identities-and-http-api-with-minimal-roles",
+        "status": "PASS",
+        "seconds": 0.281
+      },
+      {
+        "check": "canonical-history-minors-consents-metrics-and-rls",
+        "status": "PASS",
+        "seconds": 0.062
+      },
+      {
+        "check": "worker-native-claims-and-durable-ledger",
+        "status": "PASS",
+        "seconds": 0.012
+      },
+      {
+        "check": "destination-security-parity-concurrent-load-500ms",
+        "status": "PASS",
+        "seconds": 5.772
+      },
+      {
+        "check": "next-chromium-native-auth-independent-database",
+        "status": "PASS",
+        "seconds": 17.766
+      },
+      {
+        "check": "pool-concurrency-and-connection-budget",
+        "status": "PASS",
+        "seconds": 0.186
+      },
+      {
+        "check": "cutover-abort-post-write-reconciliation-and-forward-recovery",
+        "status": "PASS",
+        "seconds": 3.032
+      },
+      {
+        "check": "logical-backup-restore-all-table-and-group-reconciliation",
+        "status": "PASS",
+        "seconds": 0.57
+      },
+      {
+        "check": "physical-basebackup-and-point-in-time-recovery",
+        "status": "PASS",
+        "seconds": 5.167
+      },
+      {
+        "check": "owned-resources-cleanup",
+        "status": "PASS",
+        "seconds": 0.508
+      }
+    ],
+    "pgtapCases": 50,
+    "canonicalMetricCases": 9,
+    "pitr": {
+      "basebackup": true,
+      "archivedWal": true,
+      "recoveredToNamedPoint": true,
+      "postPointWriteExcluded": true
+    }
+  },
+  "browserLogout": {
+    "leavingAccessRevoked": true,
+    "leavingRefreshRevoked": true,
+    "otherDeviceSurvives": true,
+    "anonymousExitIdempotent": true
+  },
+  "remoteCI": "PENDING_VERIFICATION_OF_REPAIR_HEAD",
+  "pending": [
+    "complete-origin-SQL-RLS-equivalence",
+    "80-web-integration-cases-native-equivalence",
+    "remove-remaining-Supabase-code-tooling-config-dependencies",
+    "final-native-CI-and-frozen-lockfile",
+    "full-retirement-review"
+  ],
+  "production": "NO_GO",
+  "incrementalCI": {
+    "checks": {
+      "commit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "sourceCommit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "date": "2026-10-10T01:27:19.512Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.34
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.66
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.59
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 3.65
+        },
+        {
+          "check": "api-contract-fixture-build",
+          "status": "PASS",
+          "seconds": 0.99
+        },
+        {
+          "check": "next-http-contract",
+          "status": "PASS",
+          "seconds": 7.63
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 30.54
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.06,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 16.21,
+          "tests": 950,
+          "omitted": 80
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.33
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.87
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.63
+        }
+      ]
+    },
+    "backend": {
+      "commit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "sourceCommit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "date": "2026-10-10T01:24:44.907Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "supabase-local-start",
+          "status": "PASS",
+          "seconds": 2.11
+        },
+        {
+          "check": "database-migrations",
+          "status": "PASS",
+          "seconds": 1.68
+        },
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 2.88
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.71
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.53
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 39.78
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 46.34
+        },
+        {
+          "check": "next-social-auth-browser",
+          "status": "PASS",
+          "seconds": 15.76
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 18.2
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 5.19,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "database-types-generation",
+          "status": "PASS",
+          "seconds": 2.83
+        },
+        {
+          "check": "database-types-match",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all",
+          "status": "PASS",
+          "seconds": 4.3
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "origin-sql-integrations",
+          "status": "PASS",
+          "seconds": 50.82,
+          "tests": 80,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "sourceCommit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "date": "2026-10-10T01:28:51.896Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 18.99
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.11
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.45
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.13
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.64
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.91
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.47
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.94,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.72
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.02
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.74
+        }
+      ]
+    },
+    "retirement": {
+      "commit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "sourceCommit": "6ffbf2d5e3b40b550b33d9c69047e9945d71869d",
+      "date": "2026-10-10T01:28:07.120Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "product-dependencies-without-supabase",
+          "status": "PASS"
+        },
+        {
+          "check": "product-source-without-sdk-provider-http-or-fixtures",
+          "status": "PASS"
+        },
+        {
+          "check": "compiled-product-artifacts-required",
+          "status": "PASS"
+        },
+        {
+          "check": "next-traces-without-sdk-or-origin-harness",
+          "status": "PASS"
+        },
+        {
+          "check": "production-routes-without-synthetic-fixtures",
+          "status": "PASS"
+        },
+        {
+          "check": "server-browser-api-worker-bundles-without-provider-client",
+          "status": "PASS"
+        }
+      ]
+    }
+  },
+  "generatedBeforeCommit": true,
+  "legacyApiGeneratedDirectoryAbsent": true
+}

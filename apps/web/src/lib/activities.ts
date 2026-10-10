@@ -68,7 +68,8 @@ async function loadActivities(groupIds: string[], page: number, period: Activity
     parseActivitySearch({ page: String(page), period });
     if (!groupIds.length)
         return { activities: [], hasNext: false };
-    return createServerApiClient().listActivities({ query: { group_ids: groupIds.join(","), page, period } });
+    try { return await createServerApiClient().listActivities({ query: { group_ids: groupIds.join(","), page, period } }); }
+    catch { throw new Error("No pudimos cargar las actividades. Vuelve a intentarlo."); }
 }
 export async function getActivity(groupId: string, activityId: string) {
     await getGroup(groupId);
@@ -98,7 +99,8 @@ async function loadHomeActivities(groupIds: string[]) {
     const now = new Date().toISOString();
     if (!groupIds.length)
         return { next: null, previous: null, now };
-    return createServerApiClient().getHomeActivities({ query: { group_ids: groupIds.join(",") } });
+    try { return await createServerApiClient().getHomeActivities({ query: { group_ids: groupIds.join(",") } }); }
+    catch { throw new Error("No pudimos cargar las actividades. Vuelve a intentarlo."); }
 }
 export function homeActivityLabel(activity: {
     starts_at: string | null;
