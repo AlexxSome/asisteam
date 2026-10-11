@@ -275,3 +275,7 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Base paralela React/Vite · WEB-03 (#215)
 
 [Seguro] [WEB-03](web-migration/issue-215/README.md) añade una aplicación temporal separada: AUT-01 login email, AUT-08 aceptación/LEG-01 aviso estático, GRP-01 lista y GRP-02 contexto mínimo de grupo, logout y límites de carga/error. Conserva URLs/códigos y las 39 páginas Next; no acredita dashboard ni migración de módulos. La vertical sintética real Nest verifica cambio/recarga/expiración/aislamiento/consentimiento/logout. WEB-04…10 completan paridad y shell #170; producción NO-GO.
+
+## Acceso React Router · WEB-04 (#216)
+
+[Seguro] [WEB-04](web-migration/issue-216/README.md) entrega AUT-01…AUT-08/LEG-01 y ONB-01…ONB-03 en la aplicación paralela: login/registro/recovery/reset/OAuth, invitación dirigida y claim MANAGED, aceptación/aviso, bienvenida/join y redirección raíz con preferencia autorizada. Conserva rutas/códigos y39 páginas Next. El menor por código sigue ATHLETE/PENDING; decisiones del apoderado y ADMIN permanecen en servidor. Los destinos de gestión/perfil/historial siguen pendientes de #217–219, con estado seguro Vite. Matriz, evidencia y límites de accesibilidad/proveedor/corte en el runbook; producción NO-GO.

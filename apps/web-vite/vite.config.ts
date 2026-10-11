@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv, type ProxyOptions } from "vite";
+import { createLogger, defineConfig, loadEnv, type ProxyOptions } from "vite";
 import { ACCOUNT_TERMS_2026_09_21 } from "../../packages/core/src/schemas/account-consent";
 import { legalPage } from "./scripts/legal-document.mjs";
 import react from "@vitejs/plugin-react";
@@ -7,7 +7,7 @@ import {
   browserBoundary,
   publicEnvironment,
 } from "./scripts/browser-boundary.mjs";
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = { ...loadEnv(mode, process.cwd(), ""), ...process.env };
   publicEnvironment(env);
   const target = env.ASISTEAM_VITE_API_TARGET ?? "http://127.0.0.1:3001";
@@ -40,7 +40,14 @@ export default defineConfig(({ mode }) => {
       });
     },
   };
+  const logger = createLogger();
+  if (command === "serve") {
+    // Vite's proxy-error diagnostics can include callback codes/URLs. No access logs.
+    logger.error = () => process.stderr.write("Error de frontend/proxy; detalles sensibles omitidos.\n");
+    logger.warn = logger.warnOnce = () => process.stderr.write("Aviso de frontend; detalles sensibles omitidos.\n");
+  }
   return {
+    customLogger: logger,
     plugins: [browserBoundary(), legalPage(ACCOUNT_TERMS_2026_09_21), react()],
     resolve: {
       alias: {
@@ -65,7 +72,11 @@ export default defineConfig(({ mode }) => {
         "/profile/avatar/": proxy,
       },
     },
-    preview: { host: "127.0.0.1", port: 3131, strictPort: true },
+    preview: {
+      host: "127.0.0.1", port: 3131, strictPort: true,
+      headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", "X-Robots-Tag": "noindex,nofollow" },
+      proxy: { "/web-api/v1": proxy, "/auth/callback": proxy, "/profile/avatar/": proxy },
+    },
     build: { sourcemap: false, manifest: true },
   };
 });

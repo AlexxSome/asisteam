@@ -92,13 +92,13 @@ export class NativeAuth implements OnApplicationShutdown {
   return httpSchemas.AuthTokens.parse({access_token:access,refresh_token:refresh,expires_in:900});
  }
  async refresh(token:string){const next=randomBytes(32).toString('hex');return this.tokens(this.result(await this.call('refresh',{token_hash:tokenHash(token),next_hash:tokenHash(next)})),next);}
- async recover(email:string){
+ async recover(email:string,inviteCode?:string){
   if(!this.config.NATIVE_AUTH_WEB_URL||!this.config.RESEND_API_KEY||!this.config.INVITATION_EMAIL_FROM)throw new ServiceUnavailableException();
   const token=randomBytes(32).toString('hex');
   const value=await this.call('recovery',{email,token_hash:tokenHash(token)});
   const started=performance.now();
   if(value.send){
-   const link=new URL('/reset-password',this.config.NATIVE_AUTH_WEB_URL);link.searchParams.set('token',token);
+   const link=new URL('/reset-password',this.config.NATIVE_AUTH_WEB_URL);link.searchParams.set('token',token);if(inviteCode)link.searchParams.set('invite_code',httpSchemas.JoinByCode.shape.code.parse(inviteCode));
    try{await this.email.send(this.email.payload(email,'Restablecer contraseña de Asisteam',`Para cambiar tu contraseña abre este enlace de un uso, vigente durante 60 minutos:\n${link.href}\nSi no lo solicitaste, ignora este correo.`),'recovery-'+randomUUID(),2000);}catch{/* Same public result whether delivery/account exists. No sensitive logs. */}
   }
   // Equalize the observable delivery phase for unknown and known accounts.

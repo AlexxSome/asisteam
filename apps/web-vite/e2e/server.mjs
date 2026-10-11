@@ -2,18 +2,24 @@ import { createServer } from "vite";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { randomUUID } from "node:crypto";
+import { createRequire } from "node:module";
 import { nativeBrowserDatabase } from "../../api/test/native-browser-database.mjs";
 import { createApplication } from "../../api/dist/application.js";
 import { loadFixtureConfig } from "../../api/test/fixture-config.mjs";
+import { TransactionalEmail } from "../../api/dist/email.js";
 import { SafeLogger } from "../../api/dist/logger.js";
 import { password, email, groups } from "./data.mjs";
+const { SignJWT, generateKeyPair, exportJWK } = createRequire(new URL("../../api/package.json", import.meta.url))("jose");
+const originalFetch = globalThis.fetch;
 let database, app, vite, closing;
 const stop = () =>
   (closing ??= (async () => {
+    globalThis.fetch = originalFetch;
     await vite?.close();
     await app?.close();
     await database?.cleanup();
-    rmSync(".qa/runtime.json", { force: true });
+    for (const file of ["runtime.json", "email.json", "logs.json"])
+      rmSync(".qa/" + file, { force: true });
   })());
 for (const signal of ["SIGTERM", "SIGINT"])
   process.on(signal, async () => {
@@ -21,6 +27,23 @@ for (const signal of ["SIGTERM", "SIGINT"])
     process.exit(0);
   });
 try {
+  const { publicKey, privateKey } = await generateKeyPair("RS256");
+  const jwk = { ...await exportJWK(publicKey), kid: "web216", alg: "RS256", use: "sig" };
+  globalThis.fetch = async (url, init) => {
+    const address = String(url);
+    if (address.startsWith("https://api.pwnedpasswords.com/range/")) return new Response("A".repeat(35) + ":0");
+    if (address === "https://www.googleapis.com/oauth2/v3/certs") return Response.json({ keys: [jwk] });
+    if (address === "https://oauth2.googleapis.com/token") {
+      const params = new URLSearchParams(init.body);
+      const code = JSON.parse(Buffer.from(params.get("code"), "base64url").toString());
+      if (!params.get("code_verifier") || params.get("redirect_uri") !== "http://127.0.0.1:3130/auth/callback/google") throw new Error("synthetic_oidc_invalid");
+      const token = await new SignJWT({ sub: code.sub, email: code.email, email_verified: true, nonce: code.nonce })
+        .setProtectedHeader({ alg: "RS256", kid: "web216" }).setIssuer("https://accounts.google.com")
+        .setAudience("google-client").setIssuedAt().setExpirationTime("5m").sign(privateKey);
+      return Response.json({ access_token: "synthetic-provider-token", token_type: "Bearer", id_token: token });
+    }
+    return originalFetch(url, init);
+  };
   database = await nativeBrowserDatabase();
   const sql = (statement) =>
     execFileSync(
@@ -67,14 +90,29 @@ try {
     url.username = role;
     return url.toString();
   };
+  const logs = [];
+  mkdirSync(".qa", { recursive: true, mode: 0o700 });
   app = await createApplication(
     loadFixtureConfig({
       DATABASE_URL: roleUrl("asisteam_api"),
+      OAUTH_GOOGLE_CLIENT_ID: "google-client",
+      OAUTH_GOOGLE_CLIENT_SECRET: "synthetic-google",
+      INVITATION_DATABASE_URL: roleUrl("asisteam_invitation"),
+      INVITATION_PROXY_SECRET: "3".repeat(64),
+      INVITATION_WEB_URL: "http://127.0.0.1:3130",
+      RESEND_API_KEY: "synthetic-email-only",
+      INVITATION_EMAIL_FROM: "qa@synthetic.example.test",
       WEB_AUTH_ENABLED: "1",
       NATIVE_AUTH_WEB_URL: "http://127.0.0.1:3130",
     }),
-    new SafeLogger(() => {}),
+    new SafeLogger(line => {
+      logs.push(line);
+      writeFileSync(".qa/logs.json", JSON.stringify(logs), { mode: 0o600 });
+    }),
   );
+  app.get(TransactionalEmail).send = async (payload) => {
+    writeFileSync(".qa/email.json", JSON.stringify(payload), { mode: 0o600 });
+  };
   await app.listen(0, "127.0.0.1");
   process.env.ASISTEAM_VITE_API_TARGET = await app.getUrl();
   mkdirSync(".qa", { recursive: true, mode: 0o700 });

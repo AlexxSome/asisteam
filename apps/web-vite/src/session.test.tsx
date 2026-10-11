@@ -104,9 +104,15 @@ describe("sesión y navegación", () => {
       "//evil.test",
       "/groups?token=secret",
       "/groups/../../login",
+      "/join?code=WEB21502&return_to=https://evil.test",
+      "/invitations/invalid",
+      "/groups/" + id + "?token=secret",
     ])
       expect(safeReturn(target)).toBe("/groups");
     expect(safeReturn("/groups/" + id)).toBe("/groups/" + id);
+    expect(safeReturn("/groups/" + id + "/me/history")).toBe("/groups/" + id + "/me/history");
+    expect(safeReturn("/join?code=WEB21502")).toBe("/join?code=WEB21502");
+    expect(safeReturn("/invitations/" + "a".repeat(64))).toBe("/invitations/" + "a".repeat(64));
   });
   it("propaga cancelación al transporte cookie y mantiene no-store", async () => {
     const controller = new AbortController();

@@ -19,15 +19,20 @@ export function browserApi(signal?: AbortSignal) {
   return api;
 }
 export function safeReturn(value: string | null) {
-  if (!value || !/^\/(?:groups(?:\/[0-9a-f-]{36})?|welcome)$/.test(value))
-    return "/groups";
-  return value;
+  if (!value || value.length > 2048 || /[\\\r\n]/.test(value)) return "/groups";
+  if (/^\/(?:groups(?:\/[0-9a-f-]{36}(?:\/me\/history)?)?|welcome|join|profile|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
+  if (/^\/join\?code=[A-Za-z0-9]{8}$/.test(value)) return value;
+  return "/groups";
+}
+function requestDestination(request: Request) {
+  const url = new URL(request.url);
+  return safeReturn(url.pathname === "/join" ? url.pathname + url.search : url.pathname);
 }
 export function sessionError(error: unknown, request: Request): never {
   if (error instanceof ApiClientError && error.status === 401)
     throw redirect(
       "/login?return_to=" +
-        encodeURIComponent(safeReturn(new URL(request.url).pathname)),
+        encodeURIComponent(requestDestination(request)),
     );
   if (
     error instanceof ApiClientError &&
@@ -35,7 +40,7 @@ export function sessionError(error: unknown, request: Request): never {
   )
     throw redirect(
       "/accept-terms?return_to=" +
-        encodeURIComponent(safeReturn(new URL(request.url).pathname)),
+        encodeURIComponent(requestDestination(request)),
     );
   throw error;
 }
@@ -45,7 +50,7 @@ export async function requireSession(request: Request, consent = true) {
     if (consent && !session.accepted)
       throw redirect(
         "/accept-terms?return_to=" +
-          encodeURIComponent(safeReturn(new URL(request.url).pathname)),
+          encodeURIComponent(requestDestination(request)),
       );
     return session;
   } catch (error) {

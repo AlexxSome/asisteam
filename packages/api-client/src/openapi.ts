@@ -2545,6 +2545,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        WebRecovery: {
+            /** Format: email */
+            email: string;
+            invite_code?: string;
+        };
         WebCsrf: {
             csrf_token: string;
         };
@@ -5917,7 +5922,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AuthRecovery"];
+                "application/json": components["schemas"]["WebRecovery"];
             };
         };
         responses: {

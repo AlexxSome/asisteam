@@ -2,8 +2,10 @@ import { z } from 'zod';
 import { registerSchema } from './schemas/register';
 import { socialLoginContextSchema } from './schemas/login';
 import { loginSchema } from './schemas/login';
+import { joinCodeSchema } from './schemas/group';
 const token = z.string().regex(/^[a-f0-9]{64}$/);
 export const authHttpSchemas = {
+  WebRecovery: z.object({email:z.string().trim().email().max(254),invite_code:joinCodeSchema.optional()}).strict(),
   WebCsrf: z.object({csrf_token:z.string().regex(/^[a-f0-9]{64}$/)}).strict(),
   WebSession: z.object({user_id:z.string().uuid(),accepted:z.boolean()}).strict(),
   WebSocialStarted: z.object({authorization_url:z.string().url()}).strict(),
@@ -44,7 +46,7 @@ export const webAuthHttpOperations = {
   webRegister:{...web,method:'POST',path:'/web-api/v1/auth/register',authenticated:false,body:'AuthRegister',response:'Success',summary:'Registro web con dominio y consentimiento canónicos'},
   webRefresh:{...web,method:'POST',path:'/web-api/v1/auth/refresh',authenticated:true,body:'Empty',response:'Success',summary:'Asegura sesión; refresh serializado en PostgreSQL entre instancias'},
   webLogout:{...web,method:'POST',path:'/web-api/v1/auth/logout',authenticated:false,body:'Empty',response:'Success',summary:'Revoca familia y elimina cookies, incluso con access expirado'},
-  webRecovery:{...web,method:'POST',path:'/web-api/v1/auth/recovery',authenticated:false,body:'AuthRecovery',response:'AuthRecoveryResult',summary:'Recovery web anti-enumeración'},
+  webRecovery:{...web,method:'POST',path:'/web-api/v1/auth/recovery',authenticated:false,body:'WebRecovery',response:'AuthRecoveryResult',summary:'Recovery web anti-enumeración'},
   webReset:{...web,method:'POST',path:'/web-api/v1/auth/reset',authenticated:false,body:'AuthReset',response:'Success',summary:'Reset de un uso, revocación y limpieza de cookies'},
   webPassword:{...web,method:'POST',path:'/web-api/v1/auth/password',authenticated:true,body:'AuthPassword',response:'Success',summary:'Cambio con contraseña actual y revocación de sesiones'},
   webSocialProviders:{...web,method:'GET',path:'/web-api/v1/auth/social/providers',authenticated:false,response:'SocialProviders',summary:'Proveedores OAuth disponibles'},
