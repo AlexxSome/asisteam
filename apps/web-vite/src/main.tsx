@@ -1,6 +1,7 @@
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
+import { sessionChannel } from "./session-events";
 import { createRouter } from "./router";
 import { LoadingState, Page } from "./ui";
 import "../../web/src/app/globals.css";
@@ -21,11 +22,7 @@ function reset() {
   render();
 }
 render();
-const channel =
-  typeof BroadcastChannel === "undefined"
-    ? null
-    : new BroadcastChannel("asisteam-web-session");
-channel?.addEventListener("message", reset);
+sessionChannel?.addEventListener("message", reset);
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) reset();
 });

@@ -112,7 +112,7 @@ export class WebAuth {
  async middleware(request:Request,response:Response,next:()=>void){
   const path=request.path,lower=path.toLowerCase(),web=lower.startsWith('/web-api/v1/'),callback=lower==='/auth/callback'||lower.startsWith('/auth/callback/');
   if(!web&&!callback)return next();
-  response.setHeader('cache-control','private, no-store');response.setHeader('referrer-policy','no-referrer');response.setHeader('x-content-type-options','nosniff');
+  response.setHeader('cache-control','private, no-store');response.setHeader('referrer-policy','no-referrer');response.setHeader('x-content-type-options','nosniff');response.setHeader('x-robots-tag','noindex,nofollow');
   try{
    this.enabled();
    // Express may initialize a case-insensitive router before app settings.
@@ -146,7 +146,7 @@ export class WebAuthController {
  @Post('register') @HttpCode(200) async register(@Req() r:Request,@Res({passthrough:true}) res:Response,@Body() input:unknown){const p=parse(httpSchemas.AuthRegister,input);await this.web.rate(r,'register');await this.web.auth.register(p);await this.web.open(await this.web.auth.login(p.email,p.password),r,res);return {success:true};}
  @Post('refresh') @HttpCode(200) async refresh(@Req() r:Request,@Res({passthrough:true}) res:Response,@Body() input:unknown){parse(httpSchemas.Empty,input);await this.web.rate(r,'web-refresh');await this.web.session(r,res);return {success:true};}
  @Post('logout') @HttpCode(200) async logout(@Req() r:Request,@Res({passthrough:true}) res:Response){await this.web.rate(r,'logout');return this.web.close(r,res);}
- @Post('recovery') @HttpCode(200) async recovery(@Req() r:Request,@Body() input:unknown){const p=parse(httpSchemas.AuthRecovery,input);await this.web.rate(r,'recovery');return this.web.auth.recover(p.email);}
+ @Post('recovery') @HttpCode(200) async recovery(@Req() r:Request,@Body() input:unknown){const p=parse(httpSchemas.WebRecovery,input);await this.web.rate(r,'recovery');return this.web.auth.recover(p.email,p.invite_code);}
  @Post('reset') @HttpCode(200) async reset(@Req() r:Request,@Res({passthrough:true}) res:Response,@Body() input:unknown){const p=parse(httpSchemas.AuthReset,input);await this.web.rate(r,'reset');const result=await this.web.auth.reset(p.token,p.password);await this.web.close(r,res);return result;}
  @Post('password') @HttpCode(200) async password(@Req() r:AuthenticatedRequest,@Res({passthrough:true}) res:Response,@Body() input:unknown){const p=parse(httpSchemas.AuthPassword,input);await this.web.rate(r,'password');await this.web.session(r,res);const result=await this.web.auth.change(r,p.current_password,p.password);await this.web.close(r,res);return result;}
  @Get('social/providers') providers(){return this.social.availability();}

@@ -1,4 +1,5 @@
-import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { useEffect } from "react";
+import { Link, useRouteLoaderData, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { httpSchemas, MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
 import { browserApi, requireSession, sessionError } from "../api";
 import { Page } from "../ui";
@@ -14,6 +15,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 export function Component() {
   const group = useLoaderData<typeof loader>();
+  const session = useRouteLoaderData("private") as Awaited<ReturnType<typeof requireSession>>;
+  useEffect(() => {
+    document.cookie = `asisteam-group-${session.user_id}=${group.id}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+  }, [group.id, session.user_id]);
   return (
     <Page>
       <title>Grupo · Asisteam</title>

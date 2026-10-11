@@ -206,3 +206,7 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Base visual React/Vite · WEB-03 (#215)
 
 [Seguro] [WEB-03](web-migration/issue-215/README.md) reutiliza globals.css y Field/Input/Alert/Card/LoadingState puros en apps/web-vite, con botón44px y enlaces Router. Carga/navegación oculta DTOs anteriores; error de transporte ofrece reintento sin colección vacía, logout falla sin anunciar éxito. Tema claro/tokens/etiquetas permanecen. El layout paralelo es mínimo: sidebar/drawer/AppShell #170 se adoptan en WEB-05. Reflow320–1440 y axe automático acotado no cierran lector/zoom nativo/cancha.
+
+## Estados de acceso React Router · WEB-04 (#216)
+
+[Seguro] [WEB-04](web-migration/issue-216/README.md) reutiliza Field/Input/Card/Alert y tokens canónicos; formularios españoles con aceptación legal explícita, radios de modo de invitación, proveedor indisponible deshabilitado y botones44px durante POST. Recovery muestra el mismo éxito para email existente/inexistente únicamente al confirmarse el servidor; red/timeout muestran error y reintento. Reset conserva confirmación y limpia token; preview expirado/usado no presenta acciones. Solicitudes pendientes muestran pasos canónicos propios sin habilitar menores. No añade tokens visuales ni sustituye el shell #170. Evidencia automática reflow320–1440/axe y límites humanos en el runbook.
