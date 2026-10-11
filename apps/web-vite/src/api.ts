@@ -19,10 +19,16 @@ export function browserApi(signal?: AbortSignal) {
   return api;
 }
 export function safeReturn(value: string | null) {
-  if (!value || value.length > 2048 || /[\\\r\n]/.test(value)) return "/groups";
-  if (/^\/(?:groups(?:\/new|\/[0-9a-f-]{36}(?:\/me\/history|\/settings(?:\/visibility)?|\/members(?:\/(?:new|pending|consent))?|\/guardians|\/invitations\/new)?)?|welcome|join|profile(?:\/birthdate-requests)?|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.length > 2048 || /[\\\r\n]/.test(value)) return "/groups";
+  if (/^\/(?:groups(?:\/new|\/[0-9a-f-]{36}(?:\/me\/history|\/settings(?:\/visibility)?|\/members(?:\/(?:new|pending|consent))?|\/guardians|\/invitations\/new)?)?|me\/history|welcome|join|profile(?:\/birthdate-requests)?|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
   const context=/^(\/groups\/[0-9a-f-]{36}\/(?:members\/(?:pending|consent)|guardians))\?(membership|athlete)=([0-9a-f-]{36})$/.exec(value);
   if(context && ((context[2]==="athlete" && context[1]!.endsWith("/consent")) || (context[2]==="membership" && !context[1]!.endsWith("/consent")))) return value;
+  const route=/^\/groups\/[0-9a-f-]{36}\/(?:activities(?:\/(?:new|[0-9a-f-]{36}(?:\/(?:edit|attendance))?))?|activity-types|reports|me\/history|wards\/[0-9a-f-]{36}\/history)$/;
+  const parsed=new URL(value,"http://return.invalid");
+  if(route.test(parsed.pathname) && !parsed.hash){
+    const allowed:Record<string,RegExp>={period:/^(?:upcoming|past|week|month|custom|season)$/,page:/^[1-9]\d{0,5}$|^1000000$/,ward_page:/^[1-9]\d{0,5}$|^1000000$/,from:/^(?:group|agenda|wards|\d{4}-\d{2}-\d{2})$/,ward:/^[0-9a-f-]{36}$/,to:/^\d{4}-\d{2}-\d{2}$/,activity_type_id:/^[0-9a-f-]{36}$/,sort:/^(?:attendance|name)$/,include_inactive:/^true$/};
+    if(Array.from(parsed.searchParams).every(([key,item])=>allowed[key]?.test(item)))return parsed.pathname+parsed.search;
+  }
   if (/^\/join\?code=[A-Za-z0-9]{8}$/.test(value)) return value;
   return "/groups";
 }

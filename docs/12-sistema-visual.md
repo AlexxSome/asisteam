@@ -225,3 +225,10 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 [Seguro] Desactivación/reenvío requieren confirmación inline con foco inicial en Cancelar; Escape y retorno de foco permanecen. El editor MANAGED protege borradores con blocker/beforeunload y descarte. Alta/vínculo conservan resultados confirmados cuando el envío es incierto; no reenvían altas ni vínculos automáticamente. Un fallo de loader entra al error recuperable y no se muestra como colección vacía.
 
 [Seguro] La confirmación de consentimiento e invitación sobrevive a la revalidación que retira la fila o el formulario; un único status anuncia el consentimiento. El proveedor de feedback se reinicia por grupo/pupilo/vista y los formularios por su contexto, evitando borradores/avisos ajenos. Pupilos conserva avatar privado, fechas America/Santiago, porcentaje/semáforo core y null «Sin datos» por grupo. Matriz automática en Chromium/reflow 320–1440/axe y capturas sintéticas revisadas en el runbook; lector humano, zoom nativo y cancha mantienen aceptación pendiente.
+
+
+## Actividades, asistencia y tablas en Vite · WEB-07 (#219)
+
+[Seguro] [WEB-07](web-migration/issue-219/README.md) adapta ActivityForm, ActivityTypeForm, AttendanceSheet, ReportFilters/Table/Stats e historial a React Router y al SDK cookie/CSRF. Conserva controles de 44 px, chips con texto/marca/color, feedback junto a la fila, confirmación inline con Cancelar/Escape/foco, búsqueda/páginas de 50 y lotes de 500 parciales. Borrador de actividad usa blocker/beforeunload; un write confirmado navega sin anunciar descarte. Una respuesta incierta revierte la presentación provisional y solicita actualizar sin reenvío automático.
+
+[Seguro] Historial propio/pupilo y reportes conservan métricas core/SQL, null «Sin datos», puntualidad y período Chile; son tablas con caption/scope, primera columna fija y scroll contenido. Filtros usan borrador/Aplicar/URL y reinician contexto por grupo/pupilo. Fotos se resuelven con PrivateAvatar/S3 autorizado. La matriz automática responsive/axe acredita estados sintéticos; cancha, lector de pantalla y zoom nativo conservan aceptación pendiente de #176/#178/#209.

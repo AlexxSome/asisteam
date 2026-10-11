@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { httpSchemas } from "@asisteam/core/browser";
 import { browserApi } from "../api";
 /** No S3 URL reaches the browser; every read checks current SQL visibility. */
-export function PrivateAvatar({path,alt}:{path:string;alt:string}) {
+export function PrivateAvatar({path,alt,className="size-24 rounded-full object-cover"}:{path:string;alt:string;className?:string}) {
  const [image,setImage]=useState<string|null>(null),[failed,setFailed]=useState(false);
  useEffect(()=>{
   const controller=new AbortController(); let object:string|undefined;
@@ -17,5 +17,5 @@ export function PrivateAvatar({path,alt}:{path:string;alt:string}) {
   }).catch(()=>{if(!controller.signal.aborted)setFailed(true);});
   return()=>{controller.abort();if(object)URL.revokeObjectURL(object);};
  },[path]);
- return image?<img src={image} alt={alt} width={96} height={96} className="size-24 rounded-full object-cover" onError={()=>{setFailed(true);setImage(null);}}/>:<p role="status">{failed?"Foto no disponible":"Cargando foto…"}</p>;
+ return image?<img src={image} alt={alt} width={96} height={96} className={className} onError={()=>{setFailed(true);setImage(null);}}/>:<p role="status">{failed?"Foto no disponible":"Cargando foto…"}</p>;
 }

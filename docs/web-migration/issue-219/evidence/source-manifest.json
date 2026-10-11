@@ -1,0 +1,126 @@
+{
+  "baseCommit": "731d4f0b2baa8abab47777fa44ad992db44a39c6",
+  "environment": "local-synthetic",
+  "files": [
+    {
+      "path": "apps/web-vite/e2e/activities-reports.spec.ts",
+      "sha256": "a352da5750d21af5296561c47fdcb3ea01a5ef521f194ad7958c402dbdf0d160"
+    },
+    {
+      "path": "apps/web-vite/src/activities-reports.test.tsx",
+      "sha256": "c98d55c8b92492e8369f0ada3eb8ca3a8591ad0acf8d32e24f6139a267800168"
+    },
+    {
+      "path": "apps/web-vite/src/activity-data.ts",
+      "sha256": "01b4e9376df1deccf6fd7bb209638f2c0cc0f3e3581029ed7f4ced4e6331d3ae"
+    },
+    {
+      "path": "apps/web-vite/src/activity-mutations.ts",
+      "sha256": "436c52b9b8fbf0684fe371a3add677db962e4d561ca3c05886ad7b453ae31c38"
+    },
+    {
+      "path": "apps/web-vite/src/activity-type-mutations.ts",
+      "sha256": "c3bde80736baed7b88a24738174745567be8ff84cb442b7aab6c4795de33f6d9"
+    },
+    {
+      "path": "apps/web-vite/src/api.ts",
+      "sha256": "0c210f90f60d158445ca8b7ec4ac950cc899577cd28c24aaa04d76bcfa021bff"
+    },
+    {
+      "path": "apps/web-vite/src/attendance-mutations.ts",
+      "sha256": "6ac76d41b64d8f504c762fcc2d268f5ef019e4ea90546ceeb30d3ead98586d96"
+    },
+    {
+      "path": "apps/web-vite/src/attendance-presentation.ts",
+      "sha256": "1c5ab25a51cbc5fdb077c3f3c00ad74a43b2b70a6f88d95bb49476b4029a2ab2"
+    },
+    {
+      "path": "apps/web-vite/src/components/activity-form.tsx",
+      "sha256": "eacf84f1e95028b7c54d5b50c0ca40751be6f09b84ea2f9ddf6428e46082517a"
+    },
+    {
+      "path": "apps/web-vite/src/components/activity-type-form.tsx",
+      "sha256": "d092b46808711ef6c329e15dca86183085f610580d56d43ca76b4ad6d96a2131"
+    },
+    {
+      "path": "apps/web-vite/src/components/attendance-history.tsx",
+      "sha256": "8040f4b4201e3da020af5bec6c528438af5725227ab577f83048fd9e4b72581d"
+    },
+    {
+      "path": "apps/web-vite/src/components/attendance-sheet.tsx",
+      "sha256": "d5d7e90d3a80148c68b183387ab846780a2bc856df4b40b5c491ed53192545bd"
+    },
+    {
+      "path": "apps/web-vite/src/components/group-stats.tsx",
+      "sha256": "8e328145beeb11e5d2382e7abf99d7bcf42a36c95efcca21dbc376be8bbe8a5b"
+    },
+    {
+      "path": "apps/web-vite/src/components/private-avatar.tsx",
+      "sha256": "95bfee07374feba463ba3b7ca1f59f901fa823d7f6f453f082e2531dfd478129"
+    },
+    {
+      "path": "apps/web-vite/src/components/report-filters.tsx",
+      "sha256": "419559a864b9aa60fdb342ff3ed0c342d7eff1397560805dce6e16faa1ced9a4"
+    },
+    {
+      "path": "apps/web-vite/src/components/report-table.tsx",
+      "sha256": "a75c0abc283a1360d9d99c15068ad0388a0520d9890d51361112310640a6ef15"
+    },
+    {
+      "path": "apps/web-vite/src/components/stats-table.tsx",
+      "sha256": "b93cbe385991c98f071afbf128de5cccff0e9e12f794ec7f3e38cf6750a22934"
+    },
+    {
+      "path": "apps/web-vite/src/navigation.tsx",
+      "sha256": "593dcb7303635a1a688d439bcde6edcdf5857e4ffac019faa9ff6f0d6cfb8a90"
+    },
+    {
+      "path": "apps/web-vite/src/report-data.ts",
+      "sha256": "91c0e6d4b5bb3944fd4d6c6c833acb053b2955acf95f7d8b00a1be825e02764c"
+    },
+    {
+      "path": "apps/web-vite/src/router.tsx",
+      "sha256": "971fae5bb80b347f76ce8b8e86fc31132c9ec8e117ac6563f30d492c30246e51"
+    },
+    {
+      "path": "apps/web-vite/src/routes/activities.tsx",
+      "sha256": "b5d8c88257cb9a0bbf99771bae51d0355c07ed64ac1a5e4015ae7fa1123e8e3a"
+    },
+    {
+      "path": "apps/web-vite/src/routes/activity-edit.tsx",
+      "sha256": "504dbf0749a3c9f624a88b3642482d8b2ee9e1587a181d29cd253b58552461c6"
+    },
+    {
+      "path": "apps/web-vite/src/routes/activity-types.tsx",
+      "sha256": "04ba119e448f5d0c87ae62c9f9710b34dc47a667802881e1e572fa7f571d4a4b"
+    },
+    {
+      "path": "apps/web-vite/src/routes/activity.tsx",
+      "sha256": "1e2ca9558cddfccbf431b54662603562a4a479c2d9c071df5c3a673a0a639ddd"
+    },
+    {
+      "path": "apps/web-vite/src/routes/attendance.tsx",
+      "sha256": "cb8a87947bb134eb797c7672341d30d68d1856a10b979c787838eba68ce5378d"
+    },
+    {
+      "path": "apps/web-vite/src/routes/history-groups.tsx",
+      "sha256": "a5f5b4780eb6e8cbe0d3b8aa3044cb81cf6257415878ca3e61a0b7b500a1b990"
+    },
+    {
+      "path": "apps/web-vite/src/routes/history.tsx",
+      "sha256": "6853d1bc3bd0c64dafb0a23363b1104cf55f23e186c41e08e157e72f44f8da87"
+    },
+    {
+      "path": "apps/web-vite/src/routes/reports.tsx",
+      "sha256": "26a1305e6041986a89a5bed17de2335a102dcb6e995959521fd314962ceede92"
+    },
+    {
+      "path": "apps/web-vite/src/ui.tsx",
+      "sha256": "f1189dbc27cd27759b97b3b0ce13cb5a4a72670fcf954b56543aef30ebcb19d4"
+    },
+    {
+      "path": "packages/core/src/browser.ts",
+      "sha256": "c7072c0eafbc95c1f5d25d676d40aad9ae6f889160a9f64095860356d06bda80"
+    }
+  ]
+}

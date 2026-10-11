@@ -303,3 +303,23 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 | [`/wards/:athleteUserId`](../apps/web-vite/src/routes/ward.tsx) | APO-04 | GUARDIAN vigente: grupos y agenda autorizada, entradas contextuales a consentimiento/historial. |
 
 [Seguro] Los writes consumen SDK cookie/CSRF y schemas core existentes; R1, consentimiento append-only, historial, LAST_ADMIN, restricciones de salida, expiración/idempotencia y V1–V6 permanecen en Nest/SQL. #177 conserva su alcance pendiente de UX; #218 no introduce detalle dedicado, directorio ni desvinculación ausentes en Next. Actividades/historial/reportes completos SPA siguen #219 y billing/anuncios/QR #220; esos enlaces mantienen sus URLs y Next continúa durante coexistencia. Evidencias y límites del gate humano/proveedores en el runbook; producción NO-GO.
+
+
+## Actividades, asistencia, historiales y reportes React Router · WEB-07 (#219)
+
+[Seguro] [WEB-07](web-migration/issue-219/README.md) migra las diez rutas siguientes. Las páginas Next permanecen durante coexistencia; el estado SPA implementado y sus verificaciones/limitaciones están en el runbook. Los códigos y permisos del inventario se conservan.
+
+| Ruta SPA e implementación | Código | Estado y acceso |
+| --- | --- | --- |
+| [`/groups/:groupId/activities`](../apps/web-vite/src/routes/activities.tsx) | ACT-01 | SPA: miembro ACTIVE, próximas/pasadas y páginas50. |
+| [`/groups/:groupId/activities/new`](../apps/web-vite/src/routes/activity-edit.tsx) | ACT-03 | SPA: ADMIN, simple/serie semanal y horario Chile/DST. |
+| [`/groups/:groupId/activities/:activityId`](../apps/web-vite/src/routes/activity.tsx) | ACT-02 | SPA: miembro ACTIVE; retorno de agenda y acciones por rol. |
+| [`/groups/:groupId/activities/:activityId/edit`](../apps/web-vite/src/routes/activity-edit.tsx) | ACT-03 / ACT-04 | SPA: ADMIN; puntual/serie, futuras sin asistencia. |
+| [`/groups/:groupId/activity-types`](../apps/web-vite/src/routes/activity-types.tsx) | GRP-05 | SPA: ADMIN; sistema inmutable y tipos propios. |
+| [`/groups/:groupId/activities/:activityId/attendance`](../apps/web-vite/src/routes/attendance.tsx) | ASI-01 | SPA: ADMIN/COACH, estado por fila; notas/desmarcado ADMIN, lotes500. |
+| [`/me/history`](../apps/web-vite/src/routes/history-groups.tsx) | PRF-02 / ASI-02 | SPA: selector ATHLETE, único→redirección, sin membresía→vacío. |
+| [`/groups/:groupId/me/history`](../apps/web-vite/src/routes/history.tsx) | PRF-02 / ASI-02 | SPA: ATHLETE propio; tabla, filtros y resumen. |
+| [`/groups/:groupId/wards/:athleteUserId/history`](../apps/web-vite/src/routes/history.tsx) | ASI-02 / APO-04 | SPA: GUARDIAN vigente y pupilo ACTIVE en el grupo. |
+| [`/groups/:groupId/reports`](../apps/web-vite/src/routes/reports.tsx) | REP-01 / REP-02 | SPA: ADMIN/COACH agregados; ATHLETE/GUARDIAN propios/pupilos y toggles V4. |
+
+[Seguro] Los filtros/estados pertenecen al grupo/pupilo actual; Nest/RLS revalida sesión, roles y V1–V6. #176/#178 conservan su coordinación y aceptación humana; no se acredita rediseño adicional. QR/billing/anuncios corresponden a WEB-08 y Next continúa hasta WEB-10. No se añade historial ADMIN inexistente, CSV, gráficos ni métricas globales.
