@@ -8,9 +8,11 @@
   "exports": {
     ".": "./src/index.ts",
     "./runtime": {
+      "browser": "./src/browser.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./browser": "./src/browser.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

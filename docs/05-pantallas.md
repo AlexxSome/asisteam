@@ -271,3 +271,7 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## 8. Baseline de migración web — WEB-01 (#213)
 
 [Seguro] La [matriz de migración](web-migration/issue-213/rutas.md) coteja las 39 páginas anteriores con sus fuentes reales en `db1396d490c481209a81a67fde0104c4fbfe248c`, layouts, roles, operaciones, reemplazos y pruebas pendientes. Mantiene códigos/URLs/alcance; no demuestra paridad React/Vite ni añade pantallas. Los tres handlers de callback genérico, callback por proveedor y avatar privado se registran aparte de las páginas. [ADR de sesión/SPA](web-migration/issue-213/ADR.md) y [operaciones](web-migration/issue-213/operaciones.md) fijan su traslado futuro a Nest. El rediseño #170 y los límites de implementación de este inventario permanecen vigentes.
+
+## Base paralela React/Vite · WEB-03 (#215)
+
+[Seguro] [WEB-03](web-migration/issue-215/README.md) añade una aplicación temporal separada: AUT-01 login email, AUT-08 aceptación/LEG-01 aviso estático, GRP-01 lista y GRP-02 contexto mínimo de grupo, logout y límites de carga/error. Conserva URLs/códigos y las 39 páginas Next; no acredita dashboard ni migración de módulos. La vertical sintética real Nest verifica cambio/recarga/expiración/aislamiento/consentimiento/logout. WEB-04…10 completan paridad y shell #170; producción NO-GO.
