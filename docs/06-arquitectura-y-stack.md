@@ -52,3 +52,9 @@ flowchart LR
 ## 5. Aceptación externa
 
 [Seguro] Producción sigue NO-GO por entradas operativas pendientes, no por un runtime de coexistencia: entorno/proveedor y permisos, volumen/carga acordada, evidencias reales Google/Apple/Resend/MP/Expo, observabilidad, responsables, ventana y RPO/RTO aprobados. El cierre administrativo de #166/#167 no demuestra esos gates. [Matriz y handoff](migration/issue-168/operational-acceptance.md). No ejecutar corte/deploy real, apagar receptores remotos, destruir recursos/datos ni cerrar #168 sin autorización y evidencia correspondientes.
+
+## 6. Arquitectura web objetivo — WEB-01 (#213)
+
+[Seguro] [ADR e inventario](web-migration/issue-213/README.md) fijan la decisión de #212: React19/TypeScript/Vite + React Router **Data Mode**, build estático sin servidor SSR de Router; Nest sirve sesión web con cookies HttpOnly/Secure/SameSite=Lax y CSRF. Mismo origen vía proxy; `/api/v1` conserva Bearer y `/web-api/v1` reserva el adaptador cookie, con callbacks e imágenes privadas en URLs compatibles. Las versiones y diferencias de SEO/HTTP/caché respecto a SSR están fijadas en el [ADR](web-migration/issue-213/ADR.md).
+
+[Seguro] React Router será el único dueño de lecturas/invalidación de la web objetivo; loaders/actions/fetchers reemplazan Server Components/Actions/revalidatePath. No se añade una segunda caché TanStack Query. Este objetivo aún requiere WEB-02…10: el stack vigente de las secciones anteriores sigue Next16 y los secretos permanecen en Next/API hasta traslado verificado. PostgreSQL17/RLS/RPC, Worker, S3, dominio y contratos se mantienen. #170/#209 y producción NO-GO conservan sus gates.

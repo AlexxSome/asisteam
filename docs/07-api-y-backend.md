@@ -405,7 +405,7 @@ Cada regla se implementa en la capa indicada y se prueba en CI (pgTAP para SQL, 
 
 ### 6.1 Autenticación (JWT access + refresh) [P0]
 
-- Auth propio de Nest emite **access token JWT** (vida 1 hora, firma verificada por Nest → SQL/RLS en cada request) y **refresh token** de un solo uso con rotación automática (detección de reutilización → revocación de la familia de tokens).
+- Auth propio de Nest emite **access token JWT** (vida 15 minutos, firma verificada por Nest → SQL/RLS en cada request) y **refresh token** de un solo uso con rotación automática (detección de reutilización → revocación de la familia de tokens).
 - El JWT viaja en `Authorization: Bearer`; en el cliente web se gestiona con `sesión nativa del servidor Next` (cookies `HttpOnly`, `Secure`, `SameSite=Lax`), nunca en `localStorage`.
 - `app_private.actor_subject_id()` del JWT se traduce a `public.users.id` con la función helper `auth_user_id()` (por el desacople para cuentas MANAGED, ver 06-arquitectura-y-stack.md).
 
@@ -496,3 +496,11 @@ El reenvío marca la fila previa EXPIRED y crea otra PENDING en la misma transac
 **Configuración de emisión:** RESEND_API_KEY, INVITATION_EMAIL_FROM e INVITATION_WEB_URL externos de API; JWT/proxy propios de Next. Solo el hash entra en SQL; valor plano solo email. Resend conserva idempotencia por ID. Respuesta incierta503 deja invitación PENDING y permite reenvío controlado.
 
 **Verificación vigente:** `pnpm ci:checks`, `pnpm ci:backend` y `pnpm ci:extended`;40 suites SQL,80 casos originales,4 recuperación y navegador nativo. [Inventario/equivalencia](migration/issue-168/README.md). Historial de cada MIG permanece en su evidencia fechada; no prescribe configuración activa ni deploy real.
+
+## 8. Sesión web objetivo y contratos reutilizables — WEB-01 (#213)
+
+[Seguro] El [inventario por SHA](web-migration/issue-213/operaciones.md) mapea 47 funciones de Server Actions,88 operaciones HTTP y 3 Route Handlers. Los servicios Nest de dominio ya existen; retirarlos de Next no requiere duplicar SQL/endpoints de negocio. Hoy SessionGuard exige Bearer y NativeAuth.rate rechaza Cookie; preview/accept de invitaciones exigen proxy secreto/IP. Esta auditoría no declara una API cookie entregada.
+
+[Seguro] El [ADR](web-migration/issue-213/ADR.md) reserva `/web-api/v1` para un adaptador Nest de sesión web con cookies HttpOnly/Secure/SameSite=Lax, CSRF/Origin, refresh coordinado y DTO sin access/refresh/transaction. `/api/v1` mantiene contratos Bearer existentes. Nest absorberá callbacks `/auth/callback/:provider` (GET Google/POST Apple) y entrega binaria autorizada `/profile/avatar/:ownerId/:fileName`; mismo origen vía proxy, sin colisiones con 39 páginas ni secretos VITE_*. Reutilizar límites/IP/ledger y anti-enumeración, conservando ventanas SQL y 50/día/grupo para invitaciones.
+
+[Seguro] WEB-02/03 aún deben entregar y probar cookies/CSRF, Apple form_post, replay/concurrencia, cliente generado cookie/AbortSignal, headers/IP confiable y avatares privados. WEB-04…09 acreditarán enlaces anteriores de emails/QR, rutas/roles/estados y contratos. La UI SPA puede recibir 200 del shell y luego 403/404 en loader; la respuesta API conserva su HTTP real y V1–V6/R1. Las pruebas futuras están en la [matriz de rutas](web-migration/issue-213/rutas.md); no sustituye gates ni aceptación de #209.

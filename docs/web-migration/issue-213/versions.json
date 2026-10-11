@@ -1,0 +1,43 @@
+{
+  "vite": {
+    "version": "7.3.7",
+    "engines": {
+      "node": "^20.19.0 || >=22.12.0"
+    },
+    "peerDependencies": {
+      "tsx": "^4.8.1",
+      "jiti": ">=1.21.0",
+      "less": "^4.0.0",
+      "sass": "^1.70.0",
+      "yaml": "^2.4.2",
+      "stylus": ">=0.54.8",
+      "terser": "^5.16.0",
+      "sugarss": "^5.0.0",
+      "@types/node": "^20.19.0 || >=22.12.0",
+      "lightningcss": "^1.21.0",
+      "sass-embedded": "^1.70.0"
+    },
+    "source": "https://registry.npmjs.org/vite/7.3.7"
+  },
+  "@vitejs/plugin-react": {
+    "version": "5.2.0",
+    "engines": {
+      "node": "^20.19.0 || >=22.12.0"
+    },
+    "peerDependencies": {
+      "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
+    },
+    "source": "https://registry.npmjs.org/@vitejs%2fplugin-react/5.2.0"
+  },
+  "react-router": {
+    "version": "7.18.4",
+    "engines": {
+      "node": ">=20.0.0"
+    },
+    "peerDependencies": {
+      "react": ">=18",
+      "react-dom": ">=18"
+    },
+    "source": "https://registry.npmjs.org/react-router/7.18.4"
+  }
+}
