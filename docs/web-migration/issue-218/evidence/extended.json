@@ -1,0 +1,45 @@
+{
+  "commit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "sourceCommit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "date": "2026-10-11T21:15:37.291Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "chromium-install",
+      "status": "PASS",
+      "seconds": 0.35
+    },
+    {
+      "check": "nest-domain-build",
+      "status": "PASS",
+      "seconds": 0.16
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 1.94
+    },
+    {
+      "check": "playwright-nest-domain-responsive-axe",
+      "status": "PASS",
+      "seconds": 131.09,
+      "tests": 47,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-vite-session",
+      "status": "PASS",
+      "seconds": 59.08,
+      "tests": 30,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-transport-faults",
+      "status": "PASS",
+      "seconds": 14.17,
+      "tests": 1,
+      "omitted": 0
+    }
+  ]
+}

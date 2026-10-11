@@ -1,0 +1,253 @@
+{
+  "baseCommit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "date": "2026-10-11T21:17:51.312Z",
+  "environment": "local-synthetic",
+  "vite": {
+    "startTime": "2026-10-11T21:17:51.312Z",
+    "duration": 58596.748999999996,
+    "expected": 30,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "access.spec.ts",
+      "title": "registro directo y desde código conserva aceptación legal; menor queda PENDING al recargar",
+      "passed": true,
+      "durationMs": 1060
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "registro sin grupos muestra bienvenida y raíz redirige a ella",
+      "passed": true,
+      "durationMs": 728
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "invitación INVITED registra destinatario, consume una vez y no filtra datos en preview",
+      "passed": true,
+      "durationMs": 1074
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "token inválido/vencido y destinatario distinto no aceptan una invitación",
+      "passed": true,
+      "durationMs": 1024
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "cuenta ACTIVE acepta dirigida después de login y consentimiento pendiente preserva retorno",
+      "passed": true,
+      "durationMs": 861
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "MANAGED no inicia sesión; claim conserva identidad y membresía",
+      "passed": true,
+      "durationMs": 978
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "recovery genérica conserva código; reset consume una vez, limpia URL y revoca sesión",
+      "passed": true,
+      "durationMs": 5828
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "errores de red no simulan éxito; recuperación y preview permiten reintento",
+      "passed": true,
+      "durationMs": 2960
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "OAuth/callbacks Nest y enlaces sensibles tienen headers sin datos privados",
+      "passed": true,
+      "durationMs": 187
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "OAuth Google atraviesa start, proveedor sintético firmado, callback y consentimiento; replay no duplica identidad",
+      "passed": true,
+      "durationMs": 619
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "raíz recuerda únicamente un grupo autorizado y descarta una cookie ajena",
+      "passed": true,
+      "durationMs": 742
+    },
+    {
+      "file": "access.spec.ts",
+      "title": "OAuth rechaza state distinto sin crear identidad ni registrar el código",
+      "passed": true,
+      "durationMs": 12
+    },
+    {
+      "file": "groups-profile.spec.ts",
+      "title": "roles, multirol, negativos ACTIVE/V6 y navegación móvil/teclado",
+      "passed": true,
+      "durationMs": 4665
+    },
+    {
+      "file": "groups-profile.spec.ts",
+      "title": "crear/editar grupo, regenerar código y toggles independientes persisten tras recarga",
+      "passed": true,
+      "durationMs": 1821
+    },
+    {
+      "file": "groups-profile.spec.ts",
+      "title": "selector conserva sección segura y descarta grupo/pupilo/IDs previos",
+      "passed": true,
+      "durationMs": 1005
+    },
+    {
+      "file": "groups-profile.spec.ts",
+      "title": "avatar propio S3 privado, lectura ajena negada, red y selección conservada",
+      "passed": true,
+      "durationMs": 3008
+    },
+    {
+      "file": "groups-profile.spec.ts",
+      "title": "perfil, borrador protegido, fecha pendiente ADMIN y permiso de imagen de menor",
+      "passed": true,
+      "durationMs": 2957
+    },
+    {
+      "file": "groups-profile.spec.ts",
+      "title": "fallo de datos no se presenta vacío y reintento recupera shell; evidencia responsive",
+      "passed": true,
+      "durationMs": 1245
+    },
+    {
+      "file": "members.spec.ts",
+      "title": "nómina paginada, multirol y gestión exclusiva ADMIN; negativos V5/V6",
+      "passed": true,
+      "durationMs": 4552
+    },
+    {
+      "file": "members.spec.ts",
+      "title": "alta menor PENDING, consentimiento vigente, cuenta gestionada e historia; vínculo revocado",
+      "passed": true,
+      "durationMs": 4111
+    },
+    {
+      "file": "members.spec.ts",
+      "title": "respuesta incierta de alta no reintenta y la nómina recupera el registro confirmado",
+      "passed": true,
+      "durationMs": 1027
+    },
+    {
+      "file": "members.spec.ts",
+      "title": "invitación/reenvío conserva historia, invalida enlace y limita recuperación incierta",
+      "passed": true,
+      "durationMs": 1665
+    },
+    {
+      "file": "members.spec.ts",
+      "title": "último ADMIN, restricciones GUARDIAN y tenant preservados por HTTP cookie; superficies y evidencia",
+      "passed": true,
+      "durationMs": 2372
+    },
+    {
+      "file": "members.spec.ts",
+      "title": "incorporación ordinaria exige vínculo, consentimiento y confirmación ADMIN; perfil MANAGED y COACH independientes",
+      "passed": true,
+      "durationMs": 3967
+    },
+    {
+      "file": "session.spec.ts",
+      "title": "login → selección/cambio de grupo → recarga → logout y Atrás",
+      "passed": true,
+      "durationMs": 900
+    },
+    {
+      "file": "session.spec.ts",
+      "title": "acceso directo sin sesión y después del login; grupo ajeno 404 sin datos",
+      "passed": true,
+      "durationMs": 485
+    },
+    {
+      "file": "session.spec.ts",
+      "title": "consentimiento exige confirmación explícita antes de grupos",
+      "passed": true,
+      "durationMs": 506
+    },
+    {
+      "file": "session.spec.ts",
+      "title": "familia expirada elimina DTOs al recargar y vuelve a login",
+      "passed": true,
+      "durationMs": 564
+    },
+    {
+      "file": "session.spec.ts",
+      "title": "logout de otra pestaña descarta identidad y login distinto no conserva grupos",
+      "passed": true,
+      "durationMs": 1007
+    },
+    {
+      "file": "session.spec.ts",
+      "title": "responsive/axe, error de transporte recuperable y ningún write duplicado",
+      "passed": true,
+      "durationMs": 758
+    }
+  ],
+  "scopedWeb06": {
+    "passed": 6,
+    "total": 6
+  },
+  "finalGate": {
+    "checks": "PASS",
+    "backend": "PASS",
+    "staging": "PASS",
+    "extended": "PASS",
+    "qualificationTechnical": "PASS",
+    "acceptance": "NO-GO"
+  },
+  "previousFailures": [
+    {
+      "stage": "initial-five",
+      "passed": 2,
+      "failed": 3,
+      "corrected": [
+        "duplicate-landmarks",
+        "consent-feedback-revalidation",
+        "synthetic-expiration-constraint"
+      ]
+    },
+    {
+      "stage": "expanded-six",
+      "corrected": [
+        "wait-for-profile-confirmation",
+        "single-consent-status"
+      ]
+    },
+    {
+      "stage": "extended-recovery",
+      "passed": 29,
+      "failed": 1,
+      "location": "access.spec.ts:182",
+      "sourceUnchanged": true,
+      "causeUnattributed": true
+    },
+    {
+      "stage": "extended-activation-preview",
+      "passed": 29,
+      "failed": 1,
+      "status": 429,
+      "code": "rate_limit",
+      "corrected": "fixture-loopback-buckets-isolated-between-independent-journeys"
+    }
+  ],
+  "captureRun": {
+    "suite": "vite-complete",
+    "passed": 30,
+    "failed": 0,
+    "seconds": 58.0,
+    "viewports": [
+      375,
+      1440
+    ],
+    "reviewed": true
+  }
+}

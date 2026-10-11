@@ -1,0 +1,49 @@
+{
+  "sourceCommit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "checkoutCommit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "date": "2026-10-11T21:19:54.304Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "technicalStatus": "PASS",
+  "acceptance": "NO-GO",
+  "suites": [
+    {
+      "suite": "checks",
+      "status": "PASS",
+      "tests": 1149,
+      "omitted": 84
+    },
+    {
+      "suite": "backend",
+      "status": "PASS",
+      "tests": 84,
+      "omitted": 0
+    },
+    {
+      "suite": "staging",
+      "status": "PASS",
+      "tests": 0,
+      "omitted": 0
+    },
+    {
+      "suite": "extended",
+      "status": "PASS",
+      "tests": 78,
+      "omitted": 0
+    }
+  ],
+  "blockers": [
+    "agreed-representative-load-and-source-destination-http-baseline",
+    "external-test-provider-receipts",
+    "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+    "operational-acceptance-MIG22"
+  ],
+  "load": {
+    "status": "PASS",
+    "activeAthletes": 500,
+    "attendanceRecords": 5000,
+    "cells": 8,
+    "requests": 192,
+    "maxP95Ms": 117.03
+  }
+}

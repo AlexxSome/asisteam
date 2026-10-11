@@ -20,13 +20,16 @@ export function browserApi(signal?: AbortSignal) {
 }
 export function safeReturn(value: string | null) {
   if (!value || value.length > 2048 || /[\\\r\n]/.test(value)) return "/groups";
-  if (/^\/(?:groups(?:\/new|\/[0-9a-f-]{36}(?:\/me\/history|\/settings(?:\/visibility)?)?)?|welcome|join|profile(?:\/birthdate-requests)?|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
+  if (/^\/(?:groups(?:\/new|\/[0-9a-f-]{36}(?:\/me\/history|\/settings(?:\/visibility)?|\/members(?:\/(?:new|pending|consent))?|\/guardians|\/invitations\/new)?)?|welcome|join|profile(?:\/birthdate-requests)?|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
+  const context=/^(\/groups\/[0-9a-f-]{36}\/(?:members\/(?:pending|consent)|guardians))\?(membership|athlete)=([0-9a-f-]{36})$/.exec(value);
+  if(context && ((context[2]==="athlete" && context[1]!.endsWith("/consent")) || (context[2]==="membership" && !context[1]!.endsWith("/consent")))) return value;
   if (/^\/join\?code=[A-Za-z0-9]{8}$/.test(value)) return value;
   return "/groups";
 }
 function requestDestination(request: Request) {
   const url = new URL(request.url);
-  return safeReturn(url.pathname === "/join" ? url.pathname + url.search : url.pathname);
+  const destination=safeReturn(url.pathname + url.search);
+  return destination === "/groups" && url.pathname !== "/join" ? safeReturn(url.pathname) : destination;
 }
 export function sessionError(error: unknown, request: Request): never {
   if (error instanceof ApiClientError && error.status === 401)
