@@ -1,0 +1,2116 @@
+{
+  "issue": 213,
+  "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+  "sourceStatus": "clean before documentation edits",
+  "discovery": "graphify update . --no-cluster; query/explain only",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "f27db116b4fbb1ec39b105033736c06d0637fdd3a7606096026078fc6693df0c"
+    },
+    {
+      "path": ".github/workflows/extended.yml",
+      "sha256": "9f6ff970c20cb28afe031b9b1707897593049400e4f01c651e948d0335cd8c62"
+    },
+    {
+      "path": "apps/api/src/activities.ts",
+      "sha256": "8747039f01b9ad8933e52d233697cfcc372b3de89524b92181caf98b9cf36769"
+    },
+    {
+      "path": "apps/api/src/announcements.ts",
+      "sha256": "6549b3ef24bfc04ece05be31e805923d8b9544293161e182167825bfde31539e"
+    },
+    {
+      "path": "apps/api/src/application.ts",
+      "sha256": "8ec02e20845e1b51bf13e1b1bde793305ffa364a8b89060a2e04946cc787e8e7"
+    },
+    {
+      "path": "apps/api/src/attendance.ts",
+      "sha256": "9d89b40de4ca2f8608626e90a0bfc7faf0cc494cff394e34e02afeab68e2ab1b"
+    },
+    {
+      "path": "apps/api/src/auth.ts",
+      "sha256": "ddf01cdb195cc27c077ddb2deccd017c7341650a944160c71fa436ad50760bdc"
+    },
+    {
+      "path": "apps/api/src/authorization.ts",
+      "sha256": "a0bf17c7e89eb84be90a8d10f265ff2b135d4fbf2a9309742c029ee56c20a61b"
+    },
+    {
+      "path": "apps/api/src/avatars.ts",
+      "sha256": "dbc122e559b0a712321dda45e5e455b027cf4e933c903e9996b5d325d5869568"
+    },
+    {
+      "path": "apps/api/src/billing.ts",
+      "sha256": "02c2e5812f9d30d3b4fa550128bbe29574ad1afa0401e70403ea8b14310f5c19"
+    },
+    {
+      "path": "apps/api/src/config.ts",
+      "sha256": "d8b5f1d9079ac96d58315ff8a86e7cd3667b3de8689a72575e09b98956ff6f2a"
+    },
+    {
+      "path": "apps/api/src/database.ts",
+      "sha256": "189c8853be145f5d29787a481f34f66995494ddd39bb107421aa24166dffd157"
+    },
+    {
+      "path": "apps/api/src/domain-errors.ts",
+      "sha256": "e6749191eda8981b2b103249d03a5871d9ac5d3d41862ceda9df245026d1aa88"
+    },
+    {
+      "path": "apps/api/src/email.ts",
+      "sha256": "2a934cdc4ee487b6b13a9bcbac5a88c3008f84103b1895ce3f8d5abaf647a6d4"
+    },
+    {
+      "path": "apps/api/src/errors.ts",
+      "sha256": "35d38bb0b57d2c91d992a13ddccb47aa9882076448c507c75271b5e6cf59eaaa"
+    },
+    {
+      "path": "apps/api/src/groups-profile.ts",
+      "sha256": "452207d85e6f6348feb51de2c5704c6089132e08597d28fecfd6f946eae1669c"
+    },
+    {
+      "path": "apps/api/src/health.ts",
+      "sha256": "715e8db7de3e94169877be2c1de85592b9f8fb620084786bd59b575c0304cb21"
+    },
+    {
+      "path": "apps/api/src/identity.ts",
+      "sha256": "caf00b9bedb562afcad175a4f815cf80191ef6ff0ab33ce5f301a3890b7e58fe"
+    },
+    {
+      "path": "apps/api/src/invitations.ts",
+      "sha256": "7960a0b1c3ad49f22418cc8182f56462be4c29ab10bc1d259af4010a8f7e0527"
+    },
+    {
+      "path": "apps/api/src/logger.ts",
+      "sha256": "62743354868c0b7a47228e1c66e2e8843280f27e1508c1ec8281a6e40a34e518"
+    },
+    {
+      "path": "apps/api/src/main.ts",
+      "sha256": "65d9e50aa9ebfe7e02614fea59ae2029cd30bbdfd749f03d5d99e7ee501e5a50"
+    },
+    {
+      "path": "apps/api/src/members-consents.ts",
+      "sha256": "ea33df5700b8e90c5e813582b354fe4d9da82eab1417d0bf726e59cd3445cd9b"
+    },
+    {
+      "path": "apps/api/src/native-auth.ts",
+      "sha256": "bcc688cb768176d083b4356eba4eb181c715dc8d6ba2ffe159d539d6b3152550"
+    },
+    {
+      "path": "apps/api/src/qr.ts",
+      "sha256": "1dcc9fb189df78f159cf64480e2ee8b98e6d42118e6d5810d3aa3fc6dc62507d"
+    },
+    {
+      "path": "apps/api/src/reports.ts",
+      "sha256": "5c9034614da07d15c7e2faba7ff18b3e13a0b04c5c9b9ecd7e1acaa379eae687"
+    },
+    {
+      "path": "apps/api/src/social-auth.ts",
+      "sha256": "e7ed0735cc0bacf79f6263775361d5da2004f31be2b27647b20691152566c69a"
+    },
+    {
+      "path": "apps/api/src/storage.ts",
+      "sha256": "07e239a168773e9485a3edb4919189e8bbda4648950b1476d0a5afac1eebab84"
+    },
+    {
+      "path": "apps/api/src/worker-services.ts",
+      "sha256": "4fb0a2a5ea5c706a2029f328da571a96c92c898d766e587b192532b56ccd7880"
+    },
+    {
+      "path": "apps/web/e2e/fault-server.mjs",
+      "sha256": "e9ba7a94b94b90a9a931ad42a3467aeddc9ff113fdfe4e39ee067002292e58c2"
+    },
+    {
+      "path": "apps/web/e2e/server.mjs",
+      "sha256": "3359ecd115a36b80ca1501969d544d5afa6f4e99ff023339f85d5b97d22f85a0"
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "sha256": "7b550dda9686c16f36a17bf9051d5dbf31e98555b30d114ac49fc49a1e712651"
+    },
+    {
+      "path": "apps/web/next.config.ts",
+      "sha256": "21a24ae3b6a7ca0a5444949f6d5b1f37770a50a9fae1ca27f4d593f13a6d867f"
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "acdaecb15b82f19100d5e72749201f1f6ff0f1fc3328aeb5426c3d65deac0c05"
+    },
+    {
+      "path": "apps/web/playwright.config.ts",
+      "sha256": "9d0664f3bf360fe9d6d5a703f104d68b897da5a1ea626e80391e088f3fe5927e"
+    },
+    {
+      "path": "apps/web/playwright.fault.config.ts",
+      "sha256": "68bb3718bb19eac52c3c07774e489b9413d26182c6e3b2a99f0aaaaf156f541c"
+    },
+    {
+      "path": "apps/web/scripts/api-contract-smoke.mjs",
+      "sha256": "f65607c03f47eecf4343d4c45c136e8d92346f85ed739fcdbd3943f0c4a17cdf"
+    },
+    {
+      "path": "apps/web/scripts/native-auth-smoke.mjs",
+      "sha256": "8645d06fdeb55d797ffa0d9c22ea0c7899f1a39d0d468bb077dd78f985be2e73"
+    },
+    {
+      "path": "apps/web/scripts/social-auth-smoke.mjs",
+      "sha256": "1c5e3ed93daabf50cc4341e4ae6fc75950b5192f4ca33e23bdc29e2b5c31d210"
+    },
+    {
+      "path": "apps/web/src/app/accept-terms/accept-terms-form.tsx",
+      "sha256": "98c9e1b729d71fe3d53fb4e0f99119d68b6536b3fbf24cb944b226c83f64ac97"
+    },
+    {
+      "path": "apps/web/src/app/accept-terms/actions.ts",
+      "sha256": "995b2d78910d100cebc487095796ab9150025947f42c83c4300c3bd992e9e12d"
+    },
+    {
+      "path": "apps/web/src/app/accept-terms/page.tsx",
+      "sha256": "ebc4b5d09af809da0273b0a1f5f25cd676f7454b8c6045c75be8078d74ac6a57"
+    },
+    {
+      "path": "apps/web/src/app/auth/callback/[provider]/route.ts",
+      "sha256": "fc09dd5982c228fffac490c056d054d60d78389442951d57eb062d4b8b8f2000"
+    },
+    {
+      "path": "apps/web/src/app/auth/callback/route.ts",
+      "sha256": "001b598eb77030d611b277f82e38d46893c00723a59a3809df56b446a96c63e3"
+    },
+    {
+      "path": "apps/web/src/app/check-in/actions.ts",
+      "sha256": "98151cad4945b2ba69c07393739449fd1b992087ec97e7d95690b1c7f272c78d"
+    },
+    {
+      "path": "apps/web/src/app/check-in/check-in-form.tsx",
+      "sha256": "65d16bd292f7d62eb26810720c4a9a3df1150b8da766ad89733743709459882c"
+    },
+    {
+      "path": "apps/web/src/app/check-in/page.tsx",
+      "sha256": "a0dd0798aa6454bb9aea55eb6308f6a97a1da0365f3dedf3f222797d46f181e6"
+    },
+    {
+      "path": "apps/web/src/app/error.tsx",
+      "sha256": "cfd6e7c4bcd4c8838fb20d009eecccf60bad59161130b0186a0b52295af8ccbd"
+    },
+    {
+      "path": "apps/web/src/app/forgot-password/actions.ts",
+      "sha256": "ca30ec9cfd3c1cc5b38f590d9fdef01b1fad03ff24eb4fa6f5dd80f65a6b36a0"
+    },
+    {
+      "path": "apps/web/src/app/forgot-password/forgot-password-form.tsx",
+      "sha256": "1b93a8b66a05ae8f1f74c7595ebeb7565afcf0652258be6923bfd90033697f46"
+    },
+    {
+      "path": "apps/web/src/app/forgot-password/page.tsx",
+      "sha256": "acec7f0c5717043e94e390f58f4cc4059f58c853df3922de14397ff4046eb322"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/actions.ts",
+      "sha256": "f7cf4bf34d7284f161f346aaf35548178806881e4cb2e2351dfb19c1677a90a9"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.ts",
+      "sha256": "862f5201870fedcb7d20fd58d382e43b3ea23905ee61b85836a92f07976375de"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/attendance-sheet.tsx",
+      "sha256": "c5e128d8ba0bec85975c394cc7eff1ad7d1cd39be0f3da9b445695dd54659f14"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/page.tsx",
+      "sha256": "f7e74efc11705d4decbe1d628b13a4d27f137d3a168e10a588ffc450d9675e84"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/edit/page.tsx",
+      "sha256": "8a2b8a59dd390f4a07f2a1fa6ad13810d871c625b3b3d6adaec42f5fea365b91"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/page.tsx",
+      "sha256": "64cf7b406adc1a4ca1a0c8dd3fcd12067a037d72512c52b50702150fa661ca46"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/page.tsx",
+      "sha256": "c2b239a3367ed381ed42a2903c4c7995575381ad1b58597ab821f9c8866037af"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/qr-display.tsx",
+      "sha256": "cce811ed4bd3bf95b9e1a0b2febb2daaf4bf2d9c8d1a041197bb619eeb02e02f"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/new/actions.ts",
+      "sha256": "a4e0e88a00a6aaf231577e9c84b08cb2bf944c47c9df39f8d6d8c1c7464a679c"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/new/activity-form.tsx",
+      "sha256": "bdbd3995760b5437bf87f0c9e9cbc67312c08e0a65855fd93ccdbcad170a9c97"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/new/page.tsx",
+      "sha256": "7a8682d7cdae09ef8f0fcf0ccaf9dc9f1b107f432265c6957c4178da8e2e3d99"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/page.tsx",
+      "sha256": "6ab25b34d6cf886f7b96050b726ef8031947d3d857c10c1454c4f32621b9a0e2"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activity-types/actions.ts",
+      "sha256": "81c0ad48b5330a3bbb95a21d175578f6b54dd582e30d1fe93ef58084d5cb8b7d"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activity-types/activity-type-form.tsx",
+      "sha256": "4df771abad17d198d8694febdb008cebbccd691f51c95bf1fa08e3a9b82560c7"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activity-types/page.tsx",
+      "sha256": "645e47743db178d73f6f7b9405fe869040b2ea65acd89b24bb94bd61d39c0d09"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/announcements/actions.ts",
+      "sha256": "a0ace1cd5ccec079ddfe531fe74f123a04565f4e9f7afd8c4668f518d0465fdd"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/announcements/announcement-form.tsx",
+      "sha256": "fbef12ba0b14625dbf2c8ea5883144b90c140bb161542b8600cae084e64f6c88"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/announcements/page.tsx",
+      "sha256": "1652978140a518de6f7f3e9251b6748fbef39853d184de59808a9172095b3312"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/announcements/wall-controls.tsx",
+      "sha256": "6b64c043df3c2cae91a1c14244d826fe9bc4f309bea9d080de8189a569b03c0f"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/billing/actions.ts",
+      "sha256": "bbbf7f002fdb5575fbbc427bf7fe2ae758b0aca2af4192190433b42b86d1a187"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/billing/billing-panel.tsx",
+      "sha256": "102ad5fcd4c4373aac544c2cf49c98866b556485643ade23e6cab5be25072efa"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/billing/page.tsx",
+      "sha256": "a155fcb86b1b3ec04c5c6f22f85fe53484738cd3901a6f49e77da04a8191a5b5"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/error.tsx",
+      "sha256": "772f8400daa3936fdd25a301d4a7cdac6090315fc1b5c1e48be386b4d05e72e8"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/getting-started.tsx",
+      "sha256": "8763ca7cdc78644604eb67fe9fde86a6033230ea3c94e22c5c87ce92343cec2c"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/guardians/actions.ts",
+      "sha256": "bd4363aa79fa6610e9b19c2b4d794810e5eb6683d6782c34785c0e27e0a28390"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/guardians/guardian-form.tsx",
+      "sha256": "5aa93ead7e9ed1297882d5030c0b383971cb396b39cc059fd912a6ca1eb4756c"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/guardians/page.tsx",
+      "sha256": "3d26b76ea8302297aa67bf923f45aeb950edfd0ebcf76e733f1c84ef340525d7"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/invitations/new/actions.ts",
+      "sha256": "3a455af606dd57bad61d19c0401c327f572e186674eb738fb281b8adcbf9f71b"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/invitations/new/invitation-form.tsx",
+      "sha256": "21eca5900970e156304224f646b052cc4e9634c88a891274ee98abca3d439c8a"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/invitations/new/page.tsx",
+      "sha256": "45fc7b727c25e9e2010b2fdbb7c9b2393cc8886c76ce424bd9fe53a242791ccf"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/join-as-athlete.tsx",
+      "sha256": "ffdc4e24d409f512f4644cd735627fe56de1477cffb923ae801e5170ec67e17e"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/layout.tsx",
+      "sha256": "b34db2f80f808f57f4eeb9d80f66a701c7c9c3eb3dbdb27bf912af6f641a847a"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/me/history/page.tsx",
+      "sha256": "90970521eb7e6f51b4863603a7a8a2f5df255cb427e5fd10cf2a7d1b063edaf5"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/actions.ts",
+      "sha256": "dccb5c45890df7fe9a9d749ce084bfab34f475746397c6141f856836c3c5a747"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/consent/actions.ts",
+      "sha256": "c128d609c49a63165faba69efa5e3560bda6bca09c647ebffcb1a4c87405e637"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/consent/consent-form.tsx",
+      "sha256": "12db3a88ada778d1cc81b396b62ca64588bc1a6e1883e4a69d773640eb8b8cfc"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/consent/page.tsx",
+      "sha256": "97f7f7e08cd66fdbaeb99c9dd946d766505a5e094a018dbd49a779542758cb42"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/member-management.tsx",
+      "sha256": "fa8344a28931543b2f55dff3dc6dec44dee0f7fe3933d4377543de65b185b48b"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/new/actions.ts",
+      "sha256": "490c6caebdfeb1b5d07c92a4baf4fb6f401849a1160e9efb5012033455ae4764"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/new/managed-member-form.tsx",
+      "sha256": "8e8d17ed5cb8c1e5a95225aae0b597f7c24808bba03ea13b9f0fd24b1f21b94c"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/new/page.tsx",
+      "sha256": "15e4870378cdbe6a17313736a575b1f875d72b8c77e8e63f00041fbf87a1847b"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/page.tsx",
+      "sha256": "c3fc1bbb1785c61348729649aa4e5b90b2b7c6bba638e2bfcc4dc28a2644458c"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/pending/actions.ts",
+      "sha256": "c7ca78a1804616addf1a38fc9650cfb9879513c97dd84f26bc0cca42c52ad775"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/pending/membership-review.tsx",
+      "sha256": "fb63b15307b92ab69c598e5cfe412374771dd346049c197600bc512ea44a2515"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/pending/page.tsx",
+      "sha256": "e62af4c14366d6367388068d6c2a5048c5d7aa16702f9a30b3defa61c1081352"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/page.tsx",
+      "sha256": "df0c3c426a67acb7853c7ff74ac51d71d90521512a91a003060298eebce6a7ee"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/reports/group-stats.tsx",
+      "sha256": "278826fa6ae333cbce4ebc913d507eab2f0cc0a63f8ee421f980cb006b4ef0e4"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/reports/page.tsx",
+      "sha256": "849b292d25de418516aff54f32360c3dedc80f86a538c9a5f2370a32b4e6d768"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/reports/report-filters.tsx",
+      "sha256": "aae4bf974190274d76829ba193bd8f3ae51a6fc8d993f441c8f10dd65dbb62e0"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/reports/report-table.tsx",
+      "sha256": "f0a8e80cb24ecde4413711ee1f500734c930b1e9989b7c3a348337272eb89994"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/reports/stats-table.tsx",
+      "sha256": "f28b89af3c0b6669ea8c89f622bdea32da47a0c39ae221ea66313d3989e0a299"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/settings/page.tsx",
+      "sha256": "0dcce2c5c55605ef6fb8743c7ef7c312318168b8e7eb163e4f3c6382f472ba2e"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/settings/visibility/page.tsx",
+      "sha256": "493e3f5a9e17a1c6bdc48345094846eae33f78c187953d4863684b23be6a067d"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/settings/visibility/visibility-form.tsx",
+      "sha256": "7e677084ec59ca3183aed962af9211b4470ce3a196fd84374a56c8afd66af978"
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.tsx",
+      "sha256": "032563171798e2fb494a61f45fd71497d51cbdedd094ad81f2c92fe4ece9c6ce"
+    },
+    {
+      "path": "apps/web/src/app/groups/group-selector.tsx",
+      "sha256": "e9abca15b0a8d815b4ea4886f98b68dba7179eadbf64cd8896d820ed161d3139"
+    },
+    {
+      "path": "apps/web/src/app/groups/new/actions.ts",
+      "sha256": "7d18c86df79106c188e2697dabcd08319ec77b4624de74742be198a38f9e6c81"
+    },
+    {
+      "path": "apps/web/src/app/groups/new/group-form.tsx",
+      "sha256": "e9385c4a84613aec46e8e58a0e8f9cedfd643bdd8082b22af6ac437263f16c53"
+    },
+    {
+      "path": "apps/web/src/app/groups/new/page.tsx",
+      "sha256": "acd18faeca1a10370282d2e6df24bbf8ebbc625e21f61310bbd8957e0db327b8"
+    },
+    {
+      "path": "apps/web/src/app/groups/page.tsx",
+      "sha256": "48d5db6afddfec9062f2edfb1473e0f3ec8da8bf5162c50c45f1b5b3b5d00cd2"
+    },
+    {
+      "path": "apps/web/src/app/invitations/[token]/actions.ts",
+      "sha256": "3a8bd9c3fc51d88399ed7c4783716f960a9aa1e37b58fca3efe309001a25beee"
+    },
+    {
+      "path": "apps/web/src/app/invitations/[token]/invitation-form.tsx",
+      "sha256": "17c100db39979e72cc0b5b4f123313c51ae43b787521f7bfad22813f307056c9"
+    },
+    {
+      "path": "apps/web/src/app/invitations/[token]/page.tsx",
+      "sha256": "72be7543a35e21580277a1042f6af6d4322c855948709346293f1939440b158a"
+    },
+    {
+      "path": "apps/web/src/app/join/page.tsx",
+      "sha256": "7783c29224fad3bdb443d9d162fea9dafef6f944f98305ec507d16c89e635eb8"
+    },
+    {
+      "path": "apps/web/src/app/layout.tsx",
+      "sha256": "8d08dfdc2d80054d3a6c31aaa42de51ad4ce4eca7994723e08ccbe194048fca7"
+    },
+    {
+      "path": "apps/web/src/app/legal/2026-09-21/page.tsx",
+      "sha256": "53b2e5b28a62eb3de0c37081db60ed0db600bc2cd54fa01ec782099f56681360"
+    },
+    {
+      "path": "apps/web/src/app/login/actions.ts",
+      "sha256": "42a5dfdeccbb5d20b804981b3d12b0b27359f66f14f6e55bc543bc9ec8cb26cf"
+    },
+    {
+      "path": "apps/web/src/app/login/login-form.tsx",
+      "sha256": "835657be4064d59dfe7f9d47cd0e869879a2a8f42689a0afbd789e3b9097c83a"
+    },
+    {
+      "path": "apps/web/src/app/login/page.tsx",
+      "sha256": "027b63301819c705726cf92982d3fac43444dc9238f6108fd048628257cb7fbf"
+    },
+    {
+      "path": "apps/web/src/app/me/history/page.tsx",
+      "sha256": "00104fb494935295a2e419957735b41276cd954fc75df3473dab58e3ad5a7c9e"
+    },
+    {
+      "path": "apps/web/src/app/not-found.tsx",
+      "sha256": "3ad303637acc4380486345e30053d4628795b55e3163fdcd63b0668d6c21e572"
+    },
+    {
+      "path": "apps/web/src/app/page.tsx",
+      "sha256": "e544c531103119dab478d48d8900df01a537bda83967feefd7de5d243018a83b"
+    },
+    {
+      "path": "apps/web/src/app/profile/actions.ts",
+      "sha256": "16b0fcd5cfbffd2fdd3ff761099d7d1403ccc004eae0b25417a0e045891d7245"
+    },
+    {
+      "path": "apps/web/src/app/profile/avatar-permissions.tsx",
+      "sha256": "4a0adf75abc7d9bccc37693193c44cd31516cb296a06105f24299430be67bd39"
+    },
+    {
+      "path": "apps/web/src/app/profile/avatar/[ownerId]/[fileName]/route.ts",
+      "sha256": "96c3a974f5d6f44faed783942bd51d322a8be55448ebd98ef1bb738e9a8b9854"
+    },
+    {
+      "path": "apps/web/src/app/profile/birthdate-requests/page.tsx",
+      "sha256": "6747f00aa65bfb1b8570b23a448309d44d7226ab6cd387f6d1416dd84258511d"
+    },
+    {
+      "path": "apps/web/src/app/profile/birthdate-requests/reviews.tsx",
+      "sha256": "ea1ac2eb8a3c721579c8a87337e733402efb8a020bd3c36e646db337a32eac9d"
+    },
+    {
+      "path": "apps/web/src/app/profile/page.tsx",
+      "sha256": "56302086cae40973702be0b00bfddfe7b4d84d982a886831fba73baeb894bcc7"
+    },
+    {
+      "path": "apps/web/src/app/profile/profile-form.tsx",
+      "sha256": "c58246a11a8b598dc14bf1734ff3a7cdff0dc6687df04c49e2d3fdd553289d76"
+    },
+    {
+      "path": "apps/web/src/app/register/actions.ts",
+      "sha256": "af16e84788d9b24fa217c1d65aeca7b5d9b1009157abc330996bb9541dac59f8"
+    },
+    {
+      "path": "apps/web/src/app/register/page.tsx",
+      "sha256": "808cc2c180f52eac841dd5f232c0de6c5baf1f133b1b0b8b85a0b9f7956a9030"
+    },
+    {
+      "path": "apps/web/src/app/register/register-form.tsx",
+      "sha256": "724e59d1ee178579a842eb356226be2570ca63b9e2d4daad6e0900cee2f3bc10"
+    },
+    {
+      "path": "apps/web/src/app/reset-password/actions.ts",
+      "sha256": "c317138aff91e3428e4cab27aa2018f25abc339d168d7d1d00525cf3724964cd"
+    },
+    {
+      "path": "apps/web/src/app/reset-password/page.tsx",
+      "sha256": "113312fab6add0853f374d5dec86e954314138a494b283b318b1cd5df51ff9b5"
+    },
+    {
+      "path": "apps/web/src/app/reset-password/reset-password-form.tsx",
+      "sha256": "956fd8d48d0441ebac431c77d9e8578f939d22261c5ce653e666fdadf23f291c"
+    },
+    {
+      "path": "apps/web/src/app/wards/[athleteUserId]/page.tsx",
+      "sha256": "815dc851041ffb6c69b5d3f4b73e119a8cd90288b0c858f84050dfea16f0f36c"
+    },
+    {
+      "path": "apps/web/src/app/wards/page.tsx",
+      "sha256": "e3b15ddef8263c5bd57d40e788f36dc97da98d9ce0c5ecd400728e8076b92a9b"
+    },
+    {
+      "path": "apps/web/src/app/welcome/page.tsx",
+      "sha256": "52ee430498d5f4b6220c62dbb5161346592f67c400f308cf07dc17ce6a3d58ab"
+    },
+    {
+      "path": "apps/web/src/components/account-menu.tsx",
+      "sha256": "0adc6cbca46d7b1e259e7d2ba2fb9525e42a8e8532c4764f9e87fc7f8196a465"
+    },
+    {
+      "path": "apps/web/src/components/account-terms-field.tsx",
+      "sha256": "a15cb69270f45c60bb2b23f0dfb69b092ab78d103c86720595d6c0b4897071ab"
+    },
+    {
+      "path": "apps/web/src/components/activity-agenda.tsx",
+      "sha256": "b09731dd9262586acd80d2eafd2455654c83c73756c45b9949b0e1ef4fa9a90b"
+    },
+    {
+      "path": "apps/web/src/components/app-shell.tsx",
+      "sha256": "c86e339a4a51e2f476221f0c4ac98d897605e9690d55cbb48847cfc9486e3d50"
+    },
+    {
+      "path": "apps/web/src/components/attendance-history.tsx",
+      "sha256": "aba7e47507b6db561bc4fe9313e8be13385a561998bf1efe0800331c5572a16b"
+    },
+    {
+      "path": "apps/web/src/components/auth-layout.tsx",
+      "sha256": "f24e30b9df36f14713b165fae95d827cc3d510b7986684b3702c109750883ca0"
+    },
+    {
+      "path": "apps/web/src/components/group-capacity.tsx",
+      "sha256": "edc5f6e67526fd10de8dbd65b8d4b1d4adaa789c939fc1ac56b405c2a66afc89"
+    },
+    {
+      "path": "apps/web/src/components/social-login-buttons.tsx",
+      "sha256": "a953b880e24b1156302a8a7d506c335cb2b99d0373804fd775f446f60016a94c"
+    },
+    {
+      "path": "apps/web/src/components/ui/alert.tsx",
+      "sha256": "d88e4e81a9cef8b51ad58aa61c7944ff68838ade4861956ec59306c7f1109c56"
+    },
+    {
+      "path": "apps/web/src/components/ui/button.tsx",
+      "sha256": "b3c07de0d775b1c59c030e2e07c182d96a69b212be6a74eeffd2f14041f3a720"
+    },
+    {
+      "path": "apps/web/src/components/ui/card.tsx",
+      "sha256": "a4c1f6ca80cb6bbc1c2d6e236ea840c1c20a2868d4cead129c376181a53a3c5a"
+    },
+    {
+      "path": "apps/web/src/components/ui/empty-state.tsx",
+      "sha256": "e20bcf416e87b5b2cf77ad812f6f789c50c558327f4d1a2c3c360b1f5689a96e"
+    },
+    {
+      "path": "apps/web/src/components/ui/error-state.tsx",
+      "sha256": "528c92e24b2423f7895cff71caa977343fbee91de7f1c950f363cf9e956bb7ed"
+    },
+    {
+      "path": "apps/web/src/components/ui/field.tsx",
+      "sha256": "4566c77326325d38180b6eab4847b4d7b78e39c84df1a58c4a9e64cc7e0711f3"
+    },
+    {
+      "path": "apps/web/src/components/ui/inline-confirmation.tsx",
+      "sha256": "fab9be16bc43cf4c1a5128fcf6f1068fd5b88836c085307afb533c3078b6dea0"
+    },
+    {
+      "path": "apps/web/src/components/ui/input.tsx",
+      "sha256": "0e5f2cddb7d7c4222e70e7c8265b26ed6d813dd0b5614eb899946b3f4e7a5736"
+    },
+    {
+      "path": "apps/web/src/components/ui/loading-state.tsx",
+      "sha256": "d3f54e0b97d3c98015583d30e8e4f1c16e02a316225fbad3b4fe2e04e8548615"
+    },
+    {
+      "path": "apps/web/src/components/ui/navigation-progress.tsx",
+      "sha256": "1fee09a4899b8d1ef189b6a06c926896919899376321b69631e4390b5f104d36"
+    },
+    {
+      "path": "apps/web/src/components/ui/unavailable-state.tsx",
+      "sha256": "ef586cd2a0d53e41b402cc34182aad48f20e51672a856b2616637e3a553b3718"
+    },
+    {
+      "path": "apps/web/src/lib/account-consent-routing.ts",
+      "sha256": "fe9dab834ace4b4f3375397fd3329bc2e1e85ad3587510d4adfa29ff4c88e0eb"
+    },
+    {
+      "path": "apps/web/src/lib/activities.ts",
+      "sha256": "2387ac4fc2fabb9832496fd4dbe2b66f254be003ab33ff2782593d6498b60d3d"
+    },
+    {
+      "path": "apps/web/src/lib/announcements.ts",
+      "sha256": "b631b35fae9243fb720804f488a3a549ee825d4d516a9cb97cadedf53f62536c"
+    },
+    {
+      "path": "apps/web/src/lib/api/config.ts",
+      "sha256": "7472f46d386c15c41809238c2e7538586c995bcf367fa68fb7b3eb172fbc2e88"
+    },
+    {
+      "path": "apps/web/src/lib/api/cookie-options.ts",
+      "sha256": "52a2594f404cc5192ec7fa9dcb982845e1c7d06df4d404a5591a6b71420f3cf2"
+    },
+    {
+      "path": "apps/web/src/lib/api/native-auth-config.ts",
+      "sha256": "22077a3ab3f2f8a9cf5a99f67ac8dff8e5782185b8ca71d3f93d06cf1b8b8917"
+    },
+    {
+      "path": "apps/web/src/lib/api/native-auth-middleware.ts",
+      "sha256": "f53169c582eea4ae8b0c68f2b84132f4c60f8d0295047b04ca19509a07ae0705"
+    },
+    {
+      "path": "apps/web/src/lib/api/native-auth.ts",
+      "sha256": "3012cd5c0fe206b621d9e756418d9d962dfe21395d36f4ebc9c2e533a704106f"
+    },
+    {
+      "path": "apps/web/src/lib/api/server.ts",
+      "sha256": "4098c6683610faceefe38833987c61af55bf64f81d7b9516c9c77ccf2c8791b8"
+    },
+    {
+      "path": "apps/web/src/lib/api/session.ts",
+      "sha256": "26bb2752bf26b42abc2ac0c8e1d328429dd1c482c45bbb5419692cb26d7188e5"
+    },
+    {
+      "path": "apps/web/src/lib/api/social-auth.ts",
+      "sha256": "67a8e19ced5fa4b84f0319ec462d0d38c5ebd4fd4272f673912159f20e018aa0"
+    },
+    {
+      "path": "apps/web/src/lib/api/transport.ts",
+      "sha256": "e51487d9c5c8ba1b734e81a446425558cf8754fa4ac9b9d69403649f3e221ca6"
+    },
+    {
+      "path": "apps/web/src/lib/attendance-history.ts",
+      "sha256": "b13e8e6ef6e43dc3cae20eaeb07cd10b1d9f2546e063f599ba15c27140b03ce8"
+    },
+    {
+      "path": "apps/web/src/lib/attendance-presentation.ts",
+      "sha256": "dcf9c8c9d980c54ee8c41315eb8abd65c1c1e295f43489ba793ad9009a034a09"
+    },
+    {
+      "path": "apps/web/src/lib/attendance.ts",
+      "sha256": "3a01aff4d2cc28b25c9b802d5088793a3f5c181a69be5b585d67b4ada082dd6c"
+    },
+    {
+      "path": "apps/web/src/lib/auth-context.ts",
+      "sha256": "38eefa32680b9d404ad987743d4f516a4bc4ae1c470d3ab65692dfd218212d6b"
+    },
+    {
+      "path": "apps/web/src/lib/group-routing.ts",
+      "sha256": "e411ea7fa02b7cc99d751839feddd93138ee3757c05fb40822bb227d246469a6"
+    },
+    {
+      "path": "apps/web/src/lib/groups.ts",
+      "sha256": "92a3f2739c220ae499d7c3d669cf07256a752c74fa5c5e9103ea8e46eb099b0b"
+    },
+    {
+      "path": "apps/web/src/lib/invitations.ts",
+      "sha256": "6ad6418fb9c29a38592e193825fef8624d5738c21a1bca26616f69ed704e61d8"
+    },
+    {
+      "path": "apps/web/src/lib/members.ts",
+      "sha256": "de263d35f33bfcfa9ee553fd810c4c8242d1807fde1fbb058e98d01aada5d1c2"
+    },
+    {
+      "path": "apps/web/src/lib/profile.ts",
+      "sha256": "d37ea391aa623e7d906733e0189c1f1a407f504f6e2e2fb1fdb7f074492ec33d"
+    },
+    {
+      "path": "apps/web/src/lib/reports.ts",
+      "sha256": "540b5d0810cb82c4a47a796b5de5829cc6ea29377bb662ba0200dc70f305860d"
+    },
+    {
+      "path": "apps/web/src/lib/resource-state.ts",
+      "sha256": "ac3ff9f4be72be0e86cb76e5839e639a238ccba53e0f42b91fad9563dd413333"
+    },
+    {
+      "path": "apps/web/src/lib/social-auth.ts",
+      "sha256": "c2563987ab8759e4ac8a0cbb10cc5972965859703dc9c2bc4124bffb9795e490"
+    },
+    {
+      "path": "apps/web/src/lib/support.ts",
+      "sha256": "2ab9f1ccdc75f65a7480f23caa19ef2968622bffb3422543c1fc94a5355cdfc1"
+    },
+    {
+      "path": "apps/web/src/lib/use-unsaved-changes.ts",
+      "sha256": "55aa5cedcb9e2e2aa7b06411d251256d5134325f78ae064930706e902f7bce19"
+    },
+    {
+      "path": "apps/web/src/lib/utils.ts",
+      "sha256": "cc6609b738c3668364cbcb4afe9906228fb9cdea6541ced71694f1eb8eef5981"
+    },
+    {
+      "path": "apps/web/src/lib/wards.ts",
+      "sha256": "f5ae39f90a5555e03e1bd54a45b36bd454428628e7d6810ad3bb9f72dd7172f8"
+    },
+    {
+      "path": "apps/web/src/middleware.ts",
+      "sha256": "f28ac1676d8b7b8d692725bfcfc683b14fd1d47a89b5d21335cfc5b5400e1638"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "c0cfef5ecc82aee2f200adc4250e02467790bcd6df74312ad6e6b7d66ab5fc55"
+    },
+    {
+      "path": "apps/web/vitest.config.ts",
+      "sha256": "5360df57697d8570848daf252193a1fd52ff924de9075df38e22173475bf257d"
+    },
+    {
+      "path": "apps/web/vitest.setup.ts",
+      "sha256": "dd22a0fef785e46023aeaa7b108f2010178df870bc1ece3fc61b0ec3122b9b95"
+    },
+    {
+      "path": "package.json",
+      "sha256": "9bdc2951d83e0dffaf9c6ee8c86c1d7401ff5e551ab1d8f098426c547be3461b"
+    },
+    {
+      "path": "packages/api-client/package.json",
+      "sha256": "ee55fdfcd39aa5ba1546ecdd666f6973bf7599893b4e290df969ca49b0927301"
+    },
+    {
+      "path": "packages/api-client/src/transport.ts",
+      "sha256": "0d7588ba8f34c150bfc3ddd07e87225436b82a6b2db0d1e1a53141a0769d4df6"
+    },
+    {
+      "path": "packages/core/package.json",
+      "sha256": "43d77685ae7f01365835d2bf7a7b1ce11d97c31c9552dfc8a0bbb7c697b098bc"
+    },
+    {
+      "path": "packages/core/src/http-activities-contract.ts",
+      "sha256": "d8d388c3783d2631665df1f955ff999cbdaf99ff58b0e6dff92078e19f229168"
+    },
+    {
+      "path": "packages/core/src/http-announcements-contract.ts",
+      "sha256": "1980cce96ff5d64eeee0bddfb25565af8631074eaf917fdede16f736b0d481fc"
+    },
+    {
+      "path": "packages/core/src/http-attendance-contract.ts",
+      "sha256": "d3e8074a2530dc9cd810ab0387877e0aa75c8c5629b3b5b3b1cf592fa7c556f9"
+    },
+    {
+      "path": "packages/core/src/http-auth-contract.ts",
+      "sha256": "e7bcf1abb1fcf84aeba68a43b3a95b6c684b376e7ec892119ad1347c17b9f869"
+    },
+    {
+      "path": "packages/core/src/http-contract.ts",
+      "sha256": "0ff1eebe5dc3a6ecf422a57d9432998d250bae2cc4b84deef4e0bb700c82034d"
+    },
+    {
+      "path": "packages/core/src/http-invitations-contract.ts",
+      "sha256": "5696c79b624bb0d3d085f57d6d9547770dbbb9aa95b8b9fcda9f56e890bfed15"
+    },
+    {
+      "path": "packages/core/src/http-members-contract.ts",
+      "sha256": "ab43240b82ccaf048b3da23d72c8d9beaa7baa12ee28878be6bb28e76613483e"
+    },
+    {
+      "path": "packages/core/src/http-qr-contract.ts",
+      "sha256": "de62aeebc51553332dba6555e0c033ff5538a5255501a01412a70612ce63dcdf"
+    },
+    {
+      "path": "packages/core/src/http-reports-contract.ts",
+      "sha256": "171fa9574b6aa014ec018f423ca0940db8c4de358a5614a5d5eb0346d49ad438"
+    },
+    {
+      "path": "packages/db/migrations/0001_baseline.sql",
+      "sha256": "4cd17dcc871ae63ed4f893cf6dfc310d84b84b2eaefe95aa0594c0e6b1b88a98"
+    },
+    {
+      "path": "packages/db/migrations/0002_retire_provider_entrypoints.sql",
+      "sha256": "8a6bf499d733093cdc813540a3f3f1ac1cff8fe43f84e144b859fff957dff960"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "b4fb2cd282153698746a6a0126c1493cfffede81452822a011e3943d34f8bd33"
+    },
+    {
+      "path": "scripts/ci/backend.mjs",
+      "sha256": "c01ad271ade4dacffd12a94add956478e7ec39b2d11adb82281e1012314f9920"
+    },
+    {
+      "path": "scripts/ci/checks.mjs",
+      "sha256": "f3d9a9cd5d475fa92289c2157d5b0f889ef912f60131fb4e36145055855df628"
+    },
+    {
+      "path": "scripts/ci/extended.mjs",
+      "sha256": "af6e32c5978988375daac28b30a87b6986b4015bb2614d2d6f487b0dd59eb267"
+    },
+    {
+      "path": "scripts/ci/run.mjs",
+      "sha256": "be14c46c02a9d9ae12b4eda8b3c23766dc37c25c6087d25d5ff27deb8240b60a"
+    },
+    {
+      "path": "scripts/ci/staging.mjs",
+      "sha256": "6544780b613032c3210812efce20f52a893da21e1aa1971571fd145ac130a183"
+    }
+  ],
+  "pages": [
+    "apps/web/src/app/accept-terms/page.tsx",
+    "apps/web/src/app/check-in/page.tsx",
+    "apps/web/src/app/forgot-password/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activities/[activityId]/edit/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activities/[activityId]/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activities/new/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activities/page.tsx",
+    "apps/web/src/app/groups/[groupId]/activity-types/page.tsx",
+    "apps/web/src/app/groups/[groupId]/announcements/page.tsx",
+    "apps/web/src/app/groups/[groupId]/billing/page.tsx",
+    "apps/web/src/app/groups/[groupId]/guardians/page.tsx",
+    "apps/web/src/app/groups/[groupId]/invitations/new/page.tsx",
+    "apps/web/src/app/groups/[groupId]/me/history/page.tsx",
+    "apps/web/src/app/groups/[groupId]/members/consent/page.tsx",
+    "apps/web/src/app/groups/[groupId]/members/new/page.tsx",
+    "apps/web/src/app/groups/[groupId]/members/page.tsx",
+    "apps/web/src/app/groups/[groupId]/members/pending/page.tsx",
+    "apps/web/src/app/groups/[groupId]/page.tsx",
+    "apps/web/src/app/groups/[groupId]/reports/page.tsx",
+    "apps/web/src/app/groups/[groupId]/settings/page.tsx",
+    "apps/web/src/app/groups/[groupId]/settings/visibility/page.tsx",
+    "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.tsx",
+    "apps/web/src/app/groups/new/page.tsx",
+    "apps/web/src/app/groups/page.tsx",
+    "apps/web/src/app/invitations/[token]/page.tsx",
+    "apps/web/src/app/join/page.tsx",
+    "apps/web/src/app/legal/2026-09-21/page.tsx",
+    "apps/web/src/app/login/page.tsx",
+    "apps/web/src/app/me/history/page.tsx",
+    "apps/web/src/app/page.tsx",
+    "apps/web/src/app/profile/birthdate-requests/page.tsx",
+    "apps/web/src/app/profile/page.tsx",
+    "apps/web/src/app/register/page.tsx",
+    "apps/web/src/app/reset-password/page.tsx",
+    "apps/web/src/app/wards/[athleteUserId]/page.tsx",
+    "apps/web/src/app/wards/page.tsx",
+    "apps/web/src/app/welcome/page.tsx"
+  ],
+  "actions": [
+    {
+      "path": "apps/web/src/app/accept-terms/actions.ts",
+      "functions": [
+        {
+          "symbol": "acceptAccountTerms",
+          "apiMethods": [
+            "acceptAccountTerms"
+          ],
+          "revalidate": [
+            "\"/\", \"layout\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/check-in/actions.ts",
+      "functions": [
+        {
+          "symbol": "loadQrSettings",
+          "apiMethods": [
+            "getQrSettings"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "saveQrSettings",
+          "apiMethods": [
+            "setQrSettings"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "issueCheckinQr",
+          "apiMethods": [
+            "issueCheckinQr"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "redeemCheckin",
+          "apiMethods": [
+            "selfCheckin"
+          ],
+          "revalidate": [
+            "`/groups/${result.data.group_id}/activities/${result.data.activity_id}/attendance`)",
+            "`/groups/${result.data.group_id}/me/history`)"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/forgot-password/actions.ts",
+      "functions": [
+        {
+          "symbol": "requestPasswordRecovery",
+          "apiMethods": [
+            "requestRecovery"
+          ],
+          "revalidate": []
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/actions.ts",
+      "functions": [
+        {
+          "symbol": "updateGroup",
+          "apiMethods": [
+            "updateGroup"
+          ],
+          "revalidate": [
+            "\"/groups\", \"layout\")"
+          ]
+        },
+        {
+          "symbol": "rotateInviteCode",
+          "apiMethods": [
+            "rotateInviteCode"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}`, \"layout\")"
+          ]
+        },
+        {
+          "symbol": "updateGroupSettings",
+          "apiMethods": [
+            "updateGroupSettings"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}`, \"layout\")"
+          ]
+        },
+        {
+          "symbol": "joinAsAthlete",
+          "apiMethods": [
+            "joinAsAthlete"
+          ],
+          "revalidate": [
+            "\"/groups\", \"layout\")"
+          ]
+        },
+        {
+          "symbol": "joinByCode",
+          "apiMethods": [
+            "joinByCode"
+          ],
+          "revalidate": [
+            "\"/groups\", \"layout\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.ts",
+      "functions": [
+        {
+          "symbol": "saveAttendance",
+          "apiMethods": [
+            "saveAttendance"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}/activities/${activityId}/attendance`)"
+          ]
+        },
+        {
+          "symbol": "clearAttendance",
+          "apiMethods": [
+            "clearAttendance"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}/activities/${activityId}/attendance`)"
+          ]
+        },
+        {
+          "symbol": "updateAttendance",
+          "apiMethods": [
+            "updateAttendance"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}/activities/${activityId}/attendance`)"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activities/new/actions.ts",
+      "functions": [
+        {
+          "symbol": "createActivity",
+          "apiMethods": [
+            "createActivity"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}/activities`)"
+          ]
+        },
+        {
+          "symbol": "updateActivity",
+          "apiMethods": [
+            "updateActivity"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}/activities`, \"layout\")"
+          ]
+        },
+        {
+          "symbol": "deleteActivity",
+          "apiMethods": [
+            "deleteActivity"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}/activities`, \"layout\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/activity-types/actions.ts",
+      "functions": [
+        {
+          "symbol": "createActivityType",
+          "apiMethods": [],
+          "revalidate": []
+        },
+        {
+          "symbol": "updateActivityType",
+          "apiMethods": [],
+          "revalidate": []
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/announcements/actions.ts",
+      "functions": [
+        {
+          "symbol": "publishAnnouncement",
+          "apiMethods": [
+            "publishAnnouncement"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "updateAnnouncement",
+          "apiMethods": [
+            "updateAnnouncement"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "deleteAnnouncement",
+          "apiMethods": [
+            "deleteAnnouncement"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "setAnnouncementPush",
+          "apiMethods": [
+            "setAnnouncementPush"
+          ],
+          "revalidate": []
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/billing/actions.ts",
+      "functions": [
+        {
+          "symbol": "manageSubscription",
+          "apiMethods": [
+            "manageSubscription"
+          ],
+          "revalidate": [
+            "`/groups/${parsed.data.group_id}/billing`)"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/guardians/actions.ts",
+      "functions": [
+        {
+          "symbol": "createGuardianship",
+          "apiMethods": [
+            "createGuardianship"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}`, \"layout\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/invitations/new/actions.ts",
+      "functions": [
+        {
+          "symbol": "sendInvitation",
+          "apiMethods": [
+            "getSession",
+            "sendInvitation"
+          ],
+          "revalidate": [
+            "`/groups/${parsed.data.group_id}/invitations/new`)",
+            "`/groups/${parsed.data.group_id}/invitations/new`)"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/actions.ts",
+      "functions": [
+        {
+          "symbol": "requestManagedActivation",
+          "apiMethods": [
+            "requestManagedActivation"
+          ],
+          "revalidate": [
+            "`/groups/${group_id}/members/consent`)"
+          ]
+        },
+        {
+          "symbol": "updateManagedMember",
+          "apiMethods": [
+            "updateManagedMember"
+          ],
+          "revalidate": [
+            "\"/groups\", \"layout\")",
+            "\"/profile/birthdate-requests\")"
+          ]
+        },
+        {
+          "symbol": "changeMemberStatus",
+          "apiMethods": [
+            "deactivateMembership",
+            "reactivateMembership"
+          ],
+          "revalidate": [
+            "\"/groups\", \"layout\")"
+          ]
+        },
+        {
+          "symbol": "assignMemberCoach",
+          "apiMethods": [
+            "assignMemberCoach"
+          ],
+          "revalidate": [
+            "\"/groups\", \"layout\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/consent/actions.ts",
+      "functions": [
+        {
+          "symbol": "reviewManagedActivation",
+          "apiMethods": [
+            "reviewManagedActivation"
+          ],
+          "revalidate": [
+            "`/groups/${identity.data.group_id}/members/consent`)"
+          ]
+        },
+        {
+          "symbol": "consentManagedMember",
+          "apiMethods": [
+            "consentMembershipData"
+          ],
+          "revalidate": [
+            "\"/groups/[groupId]\", \"layout\")",
+            "\"/wards\", \"layout\")",
+            "\"/welcome\")",
+            "\"/join\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/new/actions.ts",
+      "functions": [
+        {
+          "symbol": "createManagedMember",
+          "apiMethods": [
+            "createManagedMember"
+          ],
+          "revalidate": [
+            "`/groups/${groupId}`, \"layout\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/[groupId]/members/pending/actions.ts",
+      "functions": [
+        {
+          "symbol": "reviewMembership",
+          "apiMethods": [
+            "approveMembership",
+            "rejectMembership"
+          ],
+          "revalidate": [
+            "`/groups/${group_id}`, \"layout\")",
+            "\"/groups\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/groups/new/actions.ts",
+      "functions": [
+        {
+          "symbol": "createGroup",
+          "apiMethods": [
+            "createGroup"
+          ],
+          "revalidate": [
+            "\"/groups\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/invitations/[token]/actions.ts",
+      "functions": [
+        {
+          "symbol": "previewInvitation",
+          "apiMethods": [],
+          "revalidate": []
+        },
+        {
+          "symbol": "acceptInvitation",
+          "apiMethods": [
+            "getCurrentAccountConsent",
+            "getSession",
+            "loginPassword"
+          ],
+          "revalidate": []
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/login/actions.ts",
+      "functions": [
+        {
+          "symbol": "signOutUser",
+          "apiMethods": [
+            "logoutSession",
+            "refreshSession"
+          ],
+          "revalidate": [
+            "\"/\", \"layout\")"
+          ]
+        },
+        {
+          "symbol": "loginUser",
+          "apiMethods": [
+            "loginPassword"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "loginWithSocial",
+          "apiMethods": [
+            "startSocialLogin"
+          ],
+          "revalidate": []
+        },
+        {
+          "symbol": "linkWithSocial",
+          "apiMethods": [
+            "startSocialLink"
+          ],
+          "revalidate": []
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/profile/actions.ts",
+      "functions": [
+        {
+          "symbol": "saveProfile",
+          "apiMethods": [
+            "updateOwnProfile"
+          ],
+          "revalidate": [
+            "\"/profile\")",
+            "\"/welcome\")"
+          ]
+        },
+        {
+          "symbol": "uploadAvatar",
+          "apiMethods": [
+            "uploadAvatar"
+          ],
+          "revalidate": [
+            "\"/profile\")"
+          ]
+        },
+        {
+          "symbol": "reviewBirthdate",
+          "apiMethods": [
+            "reviewBirthdate"
+          ],
+          "revalidate": [
+            "\"/profile\")",
+            "\"/profile/birthdate-requests\")"
+          ]
+        },
+        {
+          "symbol": "setAvatarPermission",
+          "apiMethods": [
+            "setAvatarPermission"
+          ],
+          "revalidate": [
+            "\"/profile\")"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/register/actions.ts",
+      "functions": [
+        {
+          "symbol": "registerUser",
+          "apiMethods": [
+            "loginPassword",
+            "registerPassword"
+          ],
+          "revalidate": []
+        }
+      ]
+    },
+    {
+      "path": "apps/web/src/app/reset-password/actions.ts",
+      "functions": [
+        {
+          "symbol": "resetPassword",
+          "apiMethods": [
+            "resetPassword"
+          ],
+          "revalidate": []
+        }
+      ]
+    }
+  ],
+  "handlers": [
+    "apps/web/src/app/auth/callback/[provider]/route.ts",
+    "apps/web/src/app/auth/callback/route.ts",
+    "apps/web/src/app/profile/avatar/[ownerId]/[fileName]/route.ts"
+  ],
+  "nextImports": {
+    "next/navigation": [
+      "apps/web/src/app/accept-terms/accept-terms-form.tsx",
+      "apps/web/src/app/accept-terms/page.tsx",
+      "apps/web/src/app/groups/[groupId]/actions.ts",
+      "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/page.tsx",
+      "apps/web/src/app/groups/[groupId]/activities/new/activity-form.tsx",
+      "apps/web/src/app/groups/[groupId]/activity-types/activity-type-form.tsx",
+      "apps/web/src/app/groups/[groupId]/activity-types/page.tsx",
+      "apps/web/src/app/groups/[groupId]/announcements/announcement-form.tsx",
+      "apps/web/src/app/groups/[groupId]/announcements/wall-controls.tsx",
+      "apps/web/src/app/groups/[groupId]/billing/billing-panel.tsx",
+      "apps/web/src/app/groups/[groupId]/billing/page.tsx",
+      "apps/web/src/app/groups/[groupId]/guardians/page.tsx",
+      "apps/web/src/app/groups/[groupId]/invitations/new/invitation-form.tsx",
+      "apps/web/src/app/groups/[groupId]/invitations/new/page.tsx",
+      "apps/web/src/app/groups/[groupId]/join-as-athlete.tsx",
+      "apps/web/src/app/groups/[groupId]/me/history/page.tsx",
+      "apps/web/src/app/groups/[groupId]/members/consent/consent-form.tsx",
+      "apps/web/src/app/groups/[groupId]/members/consent/page.tsx",
+      "apps/web/src/app/groups/[groupId]/members/member-management.tsx",
+      "apps/web/src/app/groups/[groupId]/members/new/page.tsx",
+      "apps/web/src/app/groups/[groupId]/members/page.tsx",
+      "apps/web/src/app/groups/[groupId]/members/pending/membership-review.tsx",
+      "apps/web/src/app/groups/[groupId]/members/pending/page.tsx",
+      "apps/web/src/app/groups/[groupId]/settings/page.tsx",
+      "apps/web/src/app/groups/[groupId]/settings/visibility/page.tsx",
+      "apps/web/src/app/groups/[groupId]/settings/visibility/visibility-form.tsx",
+      "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.tsx",
+      "apps/web/src/app/groups/group-selector.tsx",
+      "apps/web/src/app/groups/new/group-form.tsx",
+      "apps/web/src/app/groups/new/page.tsx",
+      "apps/web/src/app/groups/page.tsx",
+      "apps/web/src/app/invitations/[token]/actions.ts",
+      "apps/web/src/app/join/page.tsx",
+      "apps/web/src/app/login/actions.ts",
+      "apps/web/src/app/login/login-form.tsx",
+      "apps/web/src/app/login/page.tsx",
+      "apps/web/src/app/me/history/page.tsx",
+      "apps/web/src/app/page.tsx",
+      "apps/web/src/app/profile/avatar-permissions.tsx",
+      "apps/web/src/app/profile/birthdate-requests/page.tsx",
+      "apps/web/src/app/profile/birthdate-requests/reviews.tsx",
+      "apps/web/src/app/profile/page.tsx",
+      "apps/web/src/app/profile/profile-form.tsx",
+      "apps/web/src/app/register/actions.ts",
+      "apps/web/src/app/register/page.tsx",
+      "apps/web/src/app/register/register-form.tsx",
+      "apps/web/src/app/welcome/page.tsx",
+      "apps/web/src/components/account-menu.tsx",
+      "apps/web/src/components/app-shell.tsx",
+      "apps/web/src/components/social-login-buttons.tsx",
+      "apps/web/src/components/ui/error-state.tsx",
+      "apps/web/src/lib/activities.ts",
+      "apps/web/src/lib/announcements.ts",
+      "apps/web/src/lib/attendance-history.ts",
+      "apps/web/src/lib/attendance.ts",
+      "apps/web/src/lib/groups.ts",
+      "apps/web/src/lib/reports.ts",
+      "apps/web/src/lib/wards.ts"
+    ],
+    "next/cache": [
+      "apps/web/src/app/accept-terms/actions.ts",
+      "apps/web/src/app/check-in/actions.ts",
+      "apps/web/src/app/groups/[groupId]/actions.ts",
+      "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.ts",
+      "apps/web/src/app/groups/[groupId]/activities/new/actions.ts",
+      "apps/web/src/app/groups/[groupId]/activity-types/actions.ts",
+      "apps/web/src/app/groups/[groupId]/announcements/actions.ts",
+      "apps/web/src/app/groups/[groupId]/billing/actions.ts",
+      "apps/web/src/app/groups/[groupId]/guardians/actions.ts",
+      "apps/web/src/app/groups/[groupId]/invitations/new/actions.ts",
+      "apps/web/src/app/groups/[groupId]/members/actions.ts",
+      "apps/web/src/app/groups/[groupId]/members/consent/actions.ts",
+      "apps/web/src/app/groups/[groupId]/members/new/actions.ts",
+      "apps/web/src/app/groups/[groupId]/members/pending/actions.ts",
+      "apps/web/src/app/groups/new/actions.ts",
+      "apps/web/src/app/login/actions.ts",
+      "apps/web/src/app/profile/actions.ts"
+    ],
+    "next": [
+      "apps/web/src/app/accept-terms/page.tsx",
+      "apps/web/src/app/forgot-password/page.tsx",
+      "apps/web/src/app/groups/new/page.tsx",
+      "apps/web/src/app/invitations/[token]/page.tsx",
+      "apps/web/src/app/join/page.tsx",
+      "apps/web/src/app/layout.tsx",
+      "apps/web/src/app/legal/2026-09-21/page.tsx",
+      "apps/web/src/app/login/page.tsx",
+      "apps/web/src/app/register/page.tsx",
+      "apps/web/src/app/reset-password/page.tsx",
+      "apps/web/src/app/welcome/page.tsx"
+    ],
+    "next/server": [
+      "apps/web/src/app/auth/callback/route.ts",
+      "apps/web/src/lib/api/native-auth-middleware.ts",
+      "apps/web/src/lib/api/social-auth.ts",
+      "apps/web/src/middleware.ts"
+    ],
+    "next/headers": [
+      "apps/web/src/app/forgot-password/actions.ts",
+      "apps/web/src/app/invitations/[token]/actions.ts",
+      "apps/web/src/app/login/actions.ts",
+      "apps/web/src/app/reset-password/page.tsx",
+      "apps/web/src/lib/api/native-auth.ts",
+      "apps/web/src/lib/api/session.ts",
+      "apps/web/src/lib/api/social-auth.ts",
+      "apps/web/src/lib/groups.ts"
+    ],
+    "next/link": [
+      "apps/web/src/app/groups/[groupId]/activities/[activityId]/edit/page.tsx",
+      "apps/web/src/app/groups/[groupId]/activities/[activityId]/page.tsx",
+      "apps/web/src/app/groups/[groupId]/activities/new/page.tsx",
+      "apps/web/src/app/groups/[groupId]/activities/page.tsx",
+      "apps/web/src/app/groups/[groupId]/announcements/page.tsx",
+      "apps/web/src/app/groups/[groupId]/getting-started.tsx",
+      "apps/web/src/app/groups/[groupId]/guardians/guardian-form.tsx",
+      "apps/web/src/app/groups/[groupId]/guardians/page.tsx",
+      "apps/web/src/app/groups/[groupId]/join-as-athlete.tsx",
+      "apps/web/src/app/groups/[groupId]/members/consent/page.tsx",
+      "apps/web/src/app/groups/[groupId]/members/member-management.tsx",
+      "apps/web/src/app/groups/[groupId]/members/new/managed-member-form.tsx",
+      "apps/web/src/app/groups/[groupId]/members/pending/membership-review.tsx",
+      "apps/web/src/app/groups/[groupId]/members/pending/page.tsx",
+      "apps/web/src/app/groups/[groupId]/page.tsx",
+      "apps/web/src/app/groups/[groupId]/reports/group-stats.tsx",
+      "apps/web/src/app/groups/[groupId]/reports/page.tsx",
+      "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.tsx",
+      "apps/web/src/app/groups/group-selector.tsx",
+      "apps/web/src/app/groups/new/group-form.tsx",
+      "apps/web/src/app/groups/new/page.tsx",
+      "apps/web/src/app/groups/page.tsx",
+      "apps/web/src/app/invitations/[token]/page.tsx",
+      "apps/web/src/app/join/page.tsx",
+      "apps/web/src/app/me/history/page.tsx",
+      "apps/web/src/app/profile/birthdate-requests/page.tsx",
+      "apps/web/src/app/profile/page.tsx",
+      "apps/web/src/app/wards/[athleteUserId]/page.tsx",
+      "apps/web/src/app/wards/page.tsx",
+      "apps/web/src/app/welcome/page.tsx",
+      "apps/web/src/components/account-menu.tsx",
+      "apps/web/src/components/activity-agenda.tsx",
+      "apps/web/src/components/app-shell.tsx",
+      "apps/web/src/components/attendance-history.tsx",
+      "apps/web/src/components/group-capacity.tsx",
+      "apps/web/src/components/ui/button.tsx",
+      "apps/web/src/components/ui/navigation-progress.tsx"
+    ],
+    "server-only": [
+      "apps/web/src/lib/api/native-auth.ts",
+      "apps/web/src/lib/api/server.ts",
+      "apps/web/src/lib/api/session.ts",
+      "apps/web/src/lib/api/social-auth.ts",
+      "apps/web/src/lib/api/transport.ts",
+      "apps/web/src/lib/invitations.ts",
+      "apps/web/src/lib/members.ts",
+      "apps/web/src/lib/profile.ts"
+    ]
+  },
+  "contracts": [
+    {
+      "operation": "getSocialProviders",
+      "method": "GET",
+      "path": "/api/v1/auth/social/providers",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "startSocialLogin",
+      "method": "POST",
+      "path": "/api/v1/auth/social/start",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "startSocialLink",
+      "method": "POST",
+      "path": "/api/v1/auth/social/link",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "completeSocialLogin",
+      "method": "POST",
+      "path": "/api/v1/auth/social/callback",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "loginPassword",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "registerPassword",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "requestRecovery",
+      "method": "POST",
+      "path": "/api/v1/auth/recovery",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "resetPassword",
+      "method": "POST",
+      "path": "/api/v1/auth/reset",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "refreshSession",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "logoutSession",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "changePassword",
+      "method": "POST",
+      "path": "/api/v1/auth/password",
+      "source": "packages/core/src/http-auth-contract.ts"
+    },
+    {
+      "operation": "getQrSettings",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/check-in-settings",
+      "source": "packages/core/src/http-qr-contract.ts"
+    },
+    {
+      "operation": "setQrSettings",
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}/check-in-settings",
+      "source": "packages/core/src/http-qr-contract.ts"
+    },
+    {
+      "operation": "issueCheckinQr",
+      "method": "POST",
+      "path": "/api/v1/activities/{activityId}/check-in-qr",
+      "source": "packages/core/src/http-qr-contract.ts"
+    },
+    {
+      "operation": "selfCheckin",
+      "method": "POST",
+      "path": "/api/v1/me/check-in",
+      "source": "packages/core/src/http-qr-contract.ts"
+    },
+    {
+      "operation": "getAnnouncements",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/announcements",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "publishAnnouncement",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/announcements",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "updateAnnouncement",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}/announcements/{announcementId}",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "deleteAnnouncement",
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/announcements/{announcementId}",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "getAnnouncementPush",
+      "method": "GET",
+      "path": "/api/v1/me/announcement-push",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "setAnnouncementPush",
+      "method": "PATCH",
+      "path": "/api/v1/me/announcement-push",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "registerAnnouncementToken",
+      "method": "POST",
+      "path": "/api/v1/me/announcement-push/tokens",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "unregisterAnnouncementToken",
+      "method": "DELETE",
+      "path": "/api/v1/me/announcement-push/tokens",
+      "source": "packages/core/src/http-announcements-contract.ts"
+    },
+    {
+      "operation": "getGroupBilling",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/billing",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "manageSubscription",
+      "method": "POST",
+      "path": "/api/v1/billing/subscriptions",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "listGroupActivities",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/activities",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "listActivities",
+      "method": "GET",
+      "path": "/api/v1/me/activities",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "getHomeActivities",
+      "method": "GET",
+      "path": "/api/v1/me/activities/home",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "getActivity",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "createActivity",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/activities",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "updateActivity",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "deleteActivity",
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "listActivityTypes",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/activity-types",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "createActivityType",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/activity-types",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "updateActivityType",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}/activity-types/{typeId}",
+      "source": "packages/core/src/http-activities-contract.ts"
+    },
+    {
+      "operation": "getAttendanceRoster",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}/attendance",
+      "source": "packages/core/src/http-attendance-contract.ts"
+    },
+    {
+      "operation": "saveAttendance",
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}/attendance",
+      "source": "packages/core/src/http-attendance-contract.ts"
+    },
+    {
+      "operation": "updateAttendance",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}/attendance/{membershipId}",
+      "source": "packages/core/src/http-attendance-contract.ts"
+    },
+    {
+      "operation": "clearAttendance",
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/activities/{activityId}/attendance/{membershipId}",
+      "source": "packages/core/src/http-attendance-contract.ts"
+    },
+    {
+      "operation": "listGroupMembers",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/memberships",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "createManagedMember",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/managed-members",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "updateManagedMember",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/managed-profile",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "approveMembership",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/approve",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "rejectMembership",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/reject",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "deactivateMembership",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/deactivate",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "reactivateMembership",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/reactivate",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "assignMemberCoach",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/coach",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "listMembershipOnboarding",
+      "method": "GET",
+      "path": "/api/v1/memberships/onboarding",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "consentMembershipData",
+      "method": "POST",
+      "path": "/api/v1/memberships/{membershipId}/data-consents",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "createGuardianship",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/guardianships",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "listGuardianshipAthletes",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/guardianships/eligible-athletes",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "getPendingSummary",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/memberships/pending-summary",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "getCurrentAccountConsent",
+      "method": "GET",
+      "path": "/api/v1/account-consents/current",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "acceptAccountTerms",
+      "method": "POST",
+      "path": "/api/v1/account-consents",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "listMyWards",
+      "method": "GET",
+      "path": "/api/v1/me/wards",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "getWard",
+      "method": "GET",
+      "path": "/api/v1/me/wards/{athleteUserId}",
+      "source": "packages/core/src/http-members-contract.ts"
+    },
+    {
+      "operation": "sendInvitation",
+      "method": "POST",
+      "path": "/api/v1/invitations/send",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "previewInvitation",
+      "method": "POST",
+      "path": "/api/v1/invitations/preview",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "acceptInvitation",
+      "method": "POST",
+      "path": "/api/v1/invitations/accept",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "registerInvitation",
+      "method": "POST",
+      "path": "/api/v1/invitations/register",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "claimInvitation",
+      "method": "POST",
+      "path": "/api/v1/invitations/claim",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "listInvitations",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/invitations",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "requestManagedActivation",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/{membershipId}/activation",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "reviewManagedActivation",
+      "method": "POST",
+      "path": "/api/v1/activation-requests/{requestId}",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "listManagedActivations",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/activation-requests",
+      "source": "packages/core/src/http-invitations-contract.ts"
+    },
+    {
+      "operation": "getSession",
+      "method": "GET",
+      "path": "/api/v1/auth/session",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "health",
+      "method": "GET",
+      "path": "/api/v1/health",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "ready",
+      "method": "GET",
+      "path": "/api/v1/ready",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "listMyGroups",
+      "method": "GET",
+      "path": "/api/v1/me/groups",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "getGroup",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "createGroup",
+      "method": "POST",
+      "path": "/api/v1/groups",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "updateGroup",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "updateGroupSettings",
+      "method": "PATCH",
+      "path": "/api/v1/groups/{groupId}/settings",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "rotateInviteCode",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/invite-code/rotate",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "joinAsAthlete",
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/memberships/self",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "joinByCode",
+      "method": "POST",
+      "path": "/api/v1/groups/join",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "uploadAvatar",
+      "method": "POST",
+      "path": "/api/v1/me/avatar",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "getAvatar",
+      "method": "GET",
+      "path": "/api/v1/avatars/{ownerId}/{fileName}",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "getProfileContext",
+      "method": "GET",
+      "path": "/api/v1/me/profile-context",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "listBirthdateReviews",
+      "method": "GET",
+      "path": "/api/v1/me/birthdate-reviews",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "reviewBirthdate",
+      "method": "POST",
+      "path": "/api/v1/me/birthdate-reviews/{requestId}",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "setAvatarPermission",
+      "method": "PATCH",
+      "path": "/api/v1/me/avatar-permissions/{guardianshipId}",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "getOwnProfile",
+      "method": "GET",
+      "path": "/api/v1/me",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "updateOwnProfile",
+      "method": "PATCH",
+      "path": "/api/v1/me",
+      "source": "packages/core/src/http-contract.ts"
+    },
+    {
+      "operation": "getMyAttendanceHistory",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/me/history",
+      "source": "packages/core/src/http-reports-contract.ts"
+    },
+    {
+      "operation": "getWardAttendanceHistory",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/wards/{athleteUserId}/history",
+      "source": "packages/core/src/http-reports-contract.ts"
+    },
+    {
+      "operation": "getGroupAttendanceReport",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/reports",
+      "source": "packages/core/src/http-reports-contract.ts"
+    },
+    {
+      "operation": "getGroupStats",
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/stats",
+      "source": "packages/core/src/http-reports-contract.ts"
+    }
+  ],
+  "configurationFiles": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "apps/web/package.json",
+    "packages/core/package.json",
+    "packages/api-client/package.json",
+    "apps/web/next.config.ts",
+    "apps/web/next-env.d.ts",
+    "apps/web/tsconfig.json",
+    "apps/web/vitest.config.ts",
+    "apps/web/vitest.setup.ts",
+    "apps/web/playwright.config.ts",
+    "apps/web/playwright.fault.config.ts",
+    "packages/api-client/src/transport.ts",
+    ".github/workflows/ci.yml",
+    ".github/workflows/extended.yml",
+    "scripts/ci/checks.mjs",
+    "scripts/ci/backend.mjs",
+    "scripts/ci/staging.mjs",
+    "scripts/ci/extended.mjs",
+    "scripts/ci/run.mjs",
+    "apps/web/e2e/server.mjs",
+    "apps/web/e2e/fault-server.mjs",
+    "apps/web/scripts/native-auth-smoke.mjs",
+    "apps/web/scripts/social-auth-smoke.mjs",
+    "apps/web/scripts/api-contract-smoke.mjs"
+  ]
+}

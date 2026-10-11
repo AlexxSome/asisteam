@@ -267,3 +267,7 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Transporte de avatar · MIG-17 (#161), 08-10-2026
 
 [Seguro] PRF-01/CFG-01/CFG-03 en `/profile` conserva formulario/preview/Subir foto y proxy `/profile/avatar/:ownerId/:fileName`. STORAGE=nest dirige carga/lectura a Nest/S3 privado con permisos SQL y no-store, separado de PROFILE; no añade páginas. Contrato, delta/reversión y evidencia en [MIG-17](migration/issue-161/README.md). Los resultados E2E específicos se registran en ese informe.
+
+## 8. Baseline de migración web — WEB-01 (#213)
+
+[Seguro] La [matriz de migración](web-migration/issue-213/rutas.md) coteja las 39 páginas anteriores con sus fuentes reales en `db1396d490c481209a81a67fde0104c4fbfe248c`, layouts, roles, operaciones, reemplazos y pruebas pendientes. Mantiene códigos/URLs/alcance; no demuestra paridad React/Vite ni añade pantallas. Los tres handlers de callback genérico, callback por proveedor y avatar privado se registran aparte de las páginas. [ADR de sesión/SPA](web-migration/issue-213/ADR.md) y [operaciones](web-migration/issue-213/operaciones.md) fijan su traslado futuro a Nest. El rediseño #170 y los límites de implementación de este inventario permanecen vigentes.

@@ -1,0 +1,403 @@
+{
+  "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+  "documentationStatus": "reviewed working-tree documentation before commit; runtime unchanged",
+  "environment": "local-synthetic",
+  "suites": {
+    "checks": {
+      "commit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "date": "2026-10-11T00:19:37.846Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.32
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.44
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 1.48
+        },
+        {
+          "check": "next-http-contract",
+          "status": "PASS",
+          "seconds": 7.42
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.15,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 17.13,
+          "tests": 961,
+          "omitted": 84
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.96
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.67
+        }
+      ]
+    },
+    "backend": {
+      "commit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "date": "2026-10-11T00:21:00.867Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.64
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 53.19
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 46.89
+        },
+        {
+          "check": "next-social-auth-browser",
+          "status": "PASS",
+          "seconds": 16.25
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 1.96,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.74
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 47.72,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "date": "2026-10-11T00:21:01.512Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 27.42
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.16
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 7.92
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.15
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 1.01
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.86
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.76
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.91,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.74
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 3.15
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 1.1
+        }
+      ]
+    },
+    "extended": {
+      "commit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "date": "2026-10-11T00:24:23.107Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.43
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.61
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 145.14,
+          "tests": 47,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 14.35,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "controlled-failure": {
+      "commit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "date": "2026-10-11T00:24:23.386Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.4
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 3.19,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.69,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.41,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "checkoutCommit": "db1396d490c481209a81a67fde0104c4fbfe248c",
+      "date": "2026-10-11T00:27:12.154Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 1111,
+          "omitted": 84
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 48,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 213.58
+      }
+    }
+  }
+}

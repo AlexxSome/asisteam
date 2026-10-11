@@ -246,3 +246,11 @@ El calendario anterior de 19 semanas (2026-07-06 → 2026-11-13) dejó de ser v�
 [Seguro] La [aceptación operacional](migration/issue-168/operational-acceptance.md) exige provisión/residencia/capacidad, responsables, presupuesto, proveedores reales de prueba, QA humana/legal, carga acordada, RPO/RTO, observación y ventana. Los ensayos locales y CI no fijan fecha de lanzamiento ni autorizan corte o apagado de receptores remotos.
 
 [Seguro] Las ventanas originales de este documento permanecen como antecedente de planificación. La referencia inicial de 12–16 semanas de migración (dos desarrolladores) o 20–28 (uno) tampoco es un compromiso: faltan capacidad y aceptación externas. No se reactiva la meta móvil de 2026-11-13; Java/Swift, FCM/APNs, CSV, beta y v1.0 requieren replanificar tras esos acuerdos.
+
+## 12. Retiro de Next — épica #212 / WEB-01 (#213)
+
+[Seguro] [WEB-01](web-migration/issue-213/README.md) registra inventario/ADR/matriz sobre `db1396d490c481209a81a67fde0104c4fbfe248c`: 39 páginas, 47 funciones Server Actions,88 operaciones de contrato y 3 handlers. El objetivo autorizado es React19/TypeScript/Vite + React Router Data Mode, sesión/callbacks/privadas en Nest y mismo origen; Next sigue siendo el runtime entregado hasta WEB-10.
+
+[Suposición] Estimación recalibrada: 30–45 jornadas / 6–9 semanas con una persona dedicada, frente a 5–8 semanas iniciales; sin fecha comprometida ni aceptación externa. El [desglose por hito](web-migration/issue-213/README.md#estimación-recalibrada-y-secuencia) reserva esfuerzo para cookies/CSRF/refresh/OAuth/IP, cliente generado, invalidación, private binary/URLs antiguas y runners/proxy. Secuencia WEB-01→02→03→04→05→06/07→08→09→10; WEB-08 depende de07, paridad09 exige todos los módulos y retiro10 exige cuatro gates required+qualification.
+
+[Seguro] Coordinar cambios por módulo con rediseño #170 y aceptación de desarrollo #209. No añade features P1/P2, no reactiva calendario móvil, no cierra QA humana/operacional ni autoriza corte/deploy/apagado de receptores: producción sigue NO-GO. Los pendientes y estimaciones históricas de las secciones anteriores siguen distinguidos de esta planificación.
