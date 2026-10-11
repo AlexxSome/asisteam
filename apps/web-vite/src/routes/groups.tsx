@@ -1,3 +1,4 @@
+import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
 import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { browserApi, requireSession, sessionError } from "../api";
 import { Card, CardContent, CardHeader, CardTitle, Page } from "../ui";
@@ -37,7 +38,10 @@ export function Component() {
                 <CardContent>
                   <p>{group.sport}</p>
                   <p className="text-small text-neutral">
-                    Roles: {group.roles.join(", ")}
+                    Roles:{" "}
+                    {group.roles
+                      .map((role) => MEMBERSHIP_ROLE_LABELS[role])
+                      .join(", ")}
                   </p>
                 </CardContent>
               </Card>

@@ -1,5 +1,5 @@
 import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
-import { httpSchemas } from "@asisteam/core/browser";
+import { httpSchemas, MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
 import { browserApi, requireSession, sessionError } from "../api";
 import { Page } from "../ui";
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -19,7 +19,10 @@ export function Component() {
       <title>Grupo · Asisteam</title>
       <h1>{group.name}</h1>
       <p>{group.sport}</p>
-      <p className="text-small text-neutral">Roles: {group.roles.join(", ")}</p>
+      <p className="text-small text-neutral">
+        Roles:{" "}
+        {group.roles.map((role) => MEMBERSHIP_ROLE_LABELS[role]).join(", ")}
+      </p>
       {group.description && <p>{group.description}</p>}
       <Link to="/groups" className="text-primary underline">
         Cambiar grupo

@@ -80,6 +80,7 @@ describe("sesión y navegación", () => {
     const router = createMemoryRouter(routes, { initialEntries: ["/groups"] });
     render(<RouterProvider router={router} />);
     await screen.findByRole("link", { name: "Club sintético" });
+    expect(screen.getByText("Roles: Deportista")).toBeTruthy();
     mockApi({ authenticated: false });
     router.revalidate();
     await screen.findByRole("heading", { name: "Iniciar sesión" });
