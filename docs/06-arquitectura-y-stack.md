@@ -60,3 +60,7 @@ flowchart LR
 [Seguro] React Router será el único dueño de lecturas/invalidación de la web objetivo; loaders/actions/fetchers reemplazan Server Components/Actions/revalidatePath. No se añade una segunda caché TanStack Query. Este objetivo aún requiere WEB-02…10: el stack vigente de las secciones anteriores sigue Next16 y los secretos permanecen en Next/API hasta traslado verificado. PostgreSQL17/RLS/RPC, Worker, S3, dominio y contratos se mantienen. #170/#209 y producción NO-GO conservan sus gates.
 
 [Seguro] WEB-02 (#214) entrega la [fachada Nest opt-in](web-migration/issue-214/README.md): cookie de sesión opaca host-only, credenciales cifradas en PostgreSQL, refresh atómico entre instancias, CSRF/origen y callbacks OAuth compatibles. Access15min/refresh30d y autoridad SQL permanecen. La transición desde cookies Next requiere reautenticación explícita; no acredita migración SPA ni corte productivo.
+
+## Base paralela WEB-03 (#215)
+
+[Seguro] [WEB-03](web-migration/issue-215/README.md) entrega apps/web-vite con versiones fijadas, Data Mode, loaders/actions, SDK cookie Nest, límites de bundle y QA aislada3130. Core añade entrypoint browser sin handlers de servidor; runtime Node se conserva. Next sigue siendo la web completa: la base Vite solo acredita sesión/consentimiento/lista/contexto de grupos/logout sintéticos. No implica corte ni aceptación externa.

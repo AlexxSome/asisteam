@@ -1,0 +1,32 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({
+  testDir: "./e2e",
+  workers: 1,
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
+  retries: 0,
+  timeout: 60000,
+  expect: { timeout: 10000 },
+  outputDir: ".qa/results",
+  reporter: [["list"], ["html", { outputFolder: ".qa/report", open: "never" }]],
+  use: {
+    baseURL: "http://127.0.0.1:3130",
+    browserName: "chromium",
+    viewport: { width: 375, height: 812 },
+    locale: "es-CL",
+    timezoneId: "America/Santiago",
+    reducedMotion: "reduce",
+    trace: "off",
+    video: "off",
+    screenshot: "off",
+  },
+  webServer: {
+    command: "node e2e/server.mjs",
+    url: "http://127.0.0.1:3130/login",
+    reuseExistingServer: false,
+    timeout: 180000,
+    stdout: "pipe",
+    stderr: "pipe",
+    gracefulShutdown: { signal: "SIGTERM", timeout: 10000 },
+  },
+});

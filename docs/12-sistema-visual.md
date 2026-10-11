@@ -202,3 +202,7 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de avatar con Nest · MIG-17 (#161), 08-10-2026
 
 [Seguro] ProfileForm mantiene Seleccionar foto/preview/Subir foto, éxito tras confirmación y error con selección conservada. El proxy sigue autorizado y no-store; retirar permiso de imagen oculta lectura histórica. No se cambian componentes/tokens/disposición. [MIG-17](migration/issue-161/README.md) registra transporte S3 y E2E375px/axe; revisión humana de lector/zoom continúa pendiente.
+
+## Base visual React/Vite · WEB-03 (#215)
+
+[Seguro] [WEB-03](web-migration/issue-215/README.md) reutiliza globals.css y Field/Input/Alert/Card/LoadingState puros en apps/web-vite, con botón44px y enlaces Router. Carga/navegación oculta DTOs anteriores; error de transporte ofrece reintento sin colección vacía, logout falla sin anunciar éxito. Tema claro/tokens/etiquetas permanecen. El layout paralelo es mínimo: sidebar/drawer/AppShell #170 se adoptan en WEB-05. Reflow320–1440 y axe automático acotado no cierran lector/zoom nativo/cancha.
