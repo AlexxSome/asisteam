@@ -216,3 +216,12 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 [Seguro] [WEB-05](web-migration/issue-217/README.md) adapta AppShell/selector, GroupForm, ProfileForm, VisibilityForm, revisión de edad, permiso de imagen y primer uso a Router/HTTP, conservando tokens, etiquetas y composición vigente. Sidebar/drawer modal y disclosure de cuenta mantienen teclado/Escape/retorno de foco. El perfil protege borrador con blocker/beforeunload; foto y datos conservan guardado/descarte independientes. Imagen privada usa fallback de carga/error y object URL revocable, sin URL pública de S3.
 
 [Seguro] Toggles guardan cada cambio por separado después de confirmar Nest; error no confirma éxito. Cambio de grupo limpia IDs y DTOs previos, y la shell verifica membership ACTIVE desde el servidor. Loading/error y reintento no presentan colecciones vacías como resultado de un fallo. No se añaden indicadores/composición de #173–#175/#179; siguen pendientes. Evidencia automática responsive/axe/roles y límites humanos constan en el runbook de #217.
+
+
+## Integrantes y pupilos React Router · WEB-06 (#218)
+
+[Seguro] [WEB-06](web-migration/issue-218/README.md) adapta MemberManagement, ManagedMemberForm, GuardianForm, MembershipReview/Progress, consentimiento, InvitationForm/reenvío, Pagination y aviso de capacidad a Router/SDK. Conserva etiquetas, tokens, controles de 44 px, nómina por rol y acciones inline; react-hook-form/Zod reutilizan los schemas existentes. Cada fila es un article con nombre y rol, evitando landmarks duplicados de una persona multirol.
+
+[Seguro] Desactivación/reenvío requieren confirmación inline con foco inicial en Cancelar; Escape y retorno de foco permanecen. El editor MANAGED protege borradores con blocker/beforeunload y descarte. Alta/vínculo conservan resultados confirmados cuando el envío es incierto; no reenvían altas ni vínculos automáticamente. Un fallo de loader entra al error recuperable y no se muestra como colección vacía.
+
+[Seguro] La confirmación de consentimiento e invitación sobrevive a la revalidación que retira la fila o el formulario; un único status anuncia el consentimiento. El proveedor de feedback se reinicia por grupo/pupilo/vista y los formularios por su contexto, evitando borradores/avisos ajenos. Pupilos conserva avatar privado, fechas America/Santiago, porcentaje/semáforo core y null «Sin datos» por grupo. Matriz automática en Chromium/reflow 320–1440/axe y capturas sintéticas revisadas en el runbook; lector humano, zoom nativo y cancha mantienen aceptación pendiente.

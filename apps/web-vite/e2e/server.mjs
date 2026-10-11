@@ -132,6 +132,7 @@ try {
   writeFileSync(".qa/runtime.json", JSON.stringify({
     name: database.name,
     loginRateKey: createHash("sha256").update(`${fixtureSecret}:login:ip:127.0.0.1`).digest("hex"),
+    invitationRateKeys: ["preview", "accept"].map(action => createHash("sha256").update(`${"3".repeat(64)}:${action}:127.0.0.1`).digest("hex")),
   }), {
     mode: 0o600,
   });

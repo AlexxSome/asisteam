@@ -1,0 +1,85 @@
+{
+  "commit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "sourceCommit": "df0246d32add77ea260d1363f1ed1a3c50ab31ce",
+  "date": "2026-10-11T21:14:37.462Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "ci-runner-tests",
+      "status": "PASS",
+      "seconds": 0.3
+    },
+    {
+      "check": "lint",
+      "status": "PASS",
+      "seconds": 3.08
+    },
+    {
+      "check": "http-contract-generation",
+      "status": "PASS",
+      "seconds": 1.8
+    },
+    {
+      "check": "native-test-fixture-build",
+      "status": "PASS",
+      "seconds": 0.25
+    },
+    {
+      "check": "typecheck",
+      "status": "PASS",
+      "seconds": 2.24
+    },
+    {
+      "check": "next-http-contract",
+      "status": "PASS",
+      "seconds": 8.01
+    },
+    {
+      "check": "build",
+      "status": "PASS",
+      "seconds": 2.87
+    },
+    {
+      "check": "product-runtime-retirement",
+      "status": "PASS",
+      "seconds": 0.25
+    },
+    {
+      "check": "core-unit",
+      "status": "PASS",
+      "seconds": 0.97,
+      "tests": 150,
+      "omitted": 0
+    },
+    {
+      "check": "web-unit",
+      "status": "PASS",
+      "seconds": 16.73,
+      "tests": 961,
+      "omitted": 84
+    },
+    {
+      "check": "vite-unit",
+      "status": "PASS",
+      "seconds": 1.07,
+      "tests": 38,
+      "omitted": 0
+    },
+    {
+      "check": "worker-unit",
+      "status": "PASS",
+      "seconds": 0.25
+    },
+    {
+      "check": "api-unit",
+      "status": "PASS",
+      "seconds": 1.97
+    },
+    {
+      "check": "api-client-contract",
+      "status": "PASS",
+      "seconds": 0.71
+    }
+  ]
+}

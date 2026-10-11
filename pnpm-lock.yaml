@@ -178,6 +178,9 @@ importers:
       '@asisteam/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@hookform/resolvers':
+        specifier: ^3.9.0
+        version: 3.10.0(react-hook-form@7.81.0(react@19.2.7))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -187,6 +190,9 @@ importers:
       react-dom:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
+      react-hook-form:
+        specifier: ^7.54.0
+        version: 7.81.0(react@19.2.7)
       react-router:
         specifier: 7.18.4
         version: 7.18.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)

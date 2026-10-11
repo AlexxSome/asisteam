@@ -3,8 +3,8 @@ export * from "./enums";
 export * from "./schemas/account-consent";
 export * from "./schemas/login";
 export * from "./http-contract";
-export { membershipOnboardingSteps } from "./schemas/membership-review";
-export { invitationErrorMessages } from "./schemas/invitation";
+export * from "./schemas/membership-review";
+export * from "./schemas/invitation";
 export { GROUP_ERROR_MESSAGES } from "./schemas/group";
 export * from "./schemas/profile";
 export * from "./schemas/group";
@@ -13,3 +13,8 @@ export { activityDateTimeInput, formatActivityDateTime, activityTypeLabel, forma
 export { reportPercentage, reportAttendanceTone } from "./schemas/report";
 export type { AttendanceHistory } from "./schemas/attendance-history";
 export type { GroupCapacity } from "./schemas/subscription";
+
+export * from "./schemas/member-management";
+export * from "./schemas/managed-member";
+export * from "./schemas/guardianship";
+export { SUBSCRIPTION_CAPACITY_MESSAGES } from "./schemas/subscription";

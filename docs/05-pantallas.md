@@ -284,4 +284,22 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 
 [Seguro] [WEB-05](web-migration/issue-217/README.md) incorpora la shell de contexto/grupo y GRP-01/02/03, inicio por rol, configuración/visibilidad y perfil/revisiones en `apps/web-vite`. Las rutas `/groups`, `/groups/new`, `/groups/:groupId`, `/groups/:groupId/settings`, `/groups/:groupId/settings/visibility`, `/profile` y `/profile/birthdate-requests` conservan contratos y controles existentes. Mi agenda global conserva paginación/filtros y nombres de grupo; multirol mantiene Mi asistencia. La imagen privada se resuelve mediante SDK cookie→Nest→S3, sin Route Handler Next en la SPA. Evidencia/estados y límites en el runbook.
 
-[Seguro] #173–#175/#179 continúan abiertos; esta migración conserva lo integrado sin implementar su rediseño adicional. Integrantes/actividades/reportes/billing/anuncios/QR SPA siguen WEB-06/07/08; sus enlaces mantienen URLs, y Next conserva esas páginas durante coexistencia. No se declara paridad total ni retiro de Next ni aceptación externa #209.
+[Seguro] #173–#175/#179 continúan abiertos; esta migración conserva lo integrado sin implementar su rediseño adicional. En ese corte, integrantes/actividades/reportes/billing/anuncios/QR SPA seguían WEB-06/07/08; sus enlaces mantienen URLs, y Next conserva esas páginas durante coexistencia. No se declara paridad total ni retiro de Next ni aceptación externa #209.
+
+
+## Integrantes, apoderados e invitaciones React Router · WEB-06 (#218)
+
+[Seguro] [WEB-06](web-migration/issue-218/README.md) migra las ocho rutas existentes con sus códigos y límites a la SPA paralela. Nest verifica ADMIN antes de entregar la nómina y gestión; el consentimiento pertenece exclusivamente al GUARDIAN vigente del pupilo, incluso cuando otro usuario es ADMIN. Multirol conserva una membership por fila. Los loaders cancelables y el reset de sesión no conservan contactos ni IDs del grupo anterior.
+
+| Ruta SPA / archivo | Código | Audiencia y comportamiento |
+| --- | --- | --- |
+| [`/groups/:groupId/members`](../apps/web-vite/src/routes/members.tsx) | INT-01 | ADMIN: nómina, búsqueda/filtros/paginación, detalle inline, perfil MANAGED, COACH, desactivar/reactivar y solicitar activación propia. No página INT-02. |
+| [`/groups/:groupId/members/new`](../apps/web-vite/src/routes/member-new.tsx) | INT-03 | ADMIN: alta MANAGED; menor PENDING hasta consentimiento efectivo. Guarda el ID confirmado aunque falle el correo. |
+| [`/groups/:groupId/members/pending`](../apps/web-vite/src/routes/members-pending.tsx) | INT-06 | ADMIN: progreso y aprobar/rechazar; `?membership=` conserva el contexto seleccionado. |
+| [`/groups/:groupId/guardians`](../apps/web-vite/src/routes/guardians.tsx) | APO-01 / APO-02 parcial | ADMIN: buscar menor y registrar/vincular; `?membership=` abre el menor verificado. Directorio/desvinculación continúan sin UI. |
+| [`/groups/:groupId/members/consent`](../apps/web-vite/src/routes/members-consent.tsx) | APO-04 / AUT-06 | GUARDIAN vigente: consentimiento de datos y autorización de cuenta propia separados; `?athlete=` conserva pupilo. Imagen sigue en Perfil. |
+| [`/groups/:groupId/invitations/new`](../apps/web-vite/src/routes/invitations-admin.tsx) | INT-04 | ADMIN: envío e historial `?view=history`, reenvío confirmado, expiración y recuperación incierta sin reintento automático. |
+| [`/wards`](../apps/web-vite/src/routes/wards.tsx) | APO-03 | Pupilos propios vigentes: grupos, agenda y resumen mensual por grupo; tareas pendientes y aviso de mayoría. |
+| [`/wards/:athleteUserId`](../apps/web-vite/src/routes/ward.tsx) | APO-04 | GUARDIAN vigente: grupos y agenda autorizada, entradas contextuales a consentimiento/historial. |
+
+[Seguro] Los writes consumen SDK cookie/CSRF y schemas core existentes; R1, consentimiento append-only, historial, LAST_ADMIN, restricciones de salida, expiración/idempotencia y V1–V6 permanecen en Nest/SQL. #177 conserva su alcance pendiente de UX; #218 no introduce detalle dedicado, directorio ni desvinculación ausentes en Next. Actividades/historial/reportes completos SPA siguen #219 y billing/anuncios/QR #220; esos enlaces mantienen sus URLs y Next continúa durante coexistencia. Evidencias y límites del gate humano/proveedores en el runbook; producción NO-GO.

@@ -112,6 +112,9 @@ describe("sesión y navegación", () => {
     ])
       expect(safeReturn(target)).toBe("/groups");
     expect(safeReturn("/groups/"+id+"/settings/visibility")).toBe("/groups/"+id+"/settings/visibility");
+    expect(safeReturn(`/groups/${id}/members/consent?athlete=${id}`)).toBe(`/groups/${id}/members/consent?athlete=${id}`);
+    expect(safeReturn(`/groups/${id}/members/pending?membership=${id}`)).toBe(`/groups/${id}/members/pending?membership=${id}`);
+    expect(safeReturn(`/groups/${id}/members/consent?athlete=${id}&token=secret`)).toBe("/groups");
     expect(safeReturn("/profile/birthdate-requests")).toBe("/profile/birthdate-requests");
     expect(safeReturn("/groups/new")).toBe("/groups/new");
     expect(safeReturn("/groups/" + id)).toBe("/groups/" + id);
