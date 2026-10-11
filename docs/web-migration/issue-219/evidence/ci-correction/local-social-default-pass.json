@@ -1,0 +1,32 @@
+{
+  "sourceCommit": "local-pending-diff",
+  "environment": "local-synthetic",
+  "phase": "completed",
+  "status": "PASS",
+  "actionRequests": 0,
+  "pageErrors": 0,
+  "controlsReady": [
+    {
+      "phase": "new-google-login",
+      "initiallyReady": true,
+      "seconds": 0.033
+    },
+    {
+      "phase": "accept-terms",
+      "initiallyReady": true,
+      "seconds": 0.032
+    },
+    {
+      "phase": "existing-google-login",
+      "initiallyReady": true,
+      "seconds": 0.03
+    },
+    {
+      "phase": "link-google",
+      "initiallyReady": true,
+      "seconds": 0.026
+    }
+  ],
+  "consentActionRequests": 1,
+  "axeViolationIds": []
+}
