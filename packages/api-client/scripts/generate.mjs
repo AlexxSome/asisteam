@@ -20,12 +20,25 @@ export function document() {
     paths[operation.path] ??= {};
     paths[operation.path][operation.method.toLowerCase()] = {
       operationId, summary: operation.summary, tags: [operation.module],
-      'x-implementation-status': operation.state, security: operation.authenticated ? [{ bearerAuth: [] }] : [],
+      'x-implementation-status': operation.state, security: operation.authenticated ? [{ [operation.path.startsWith('/web-api/v1/') ? 'webSession' : 'bearerAuth']: [] }] : [],
       ...(parameters.length ? { parameters } : {}),
       ...(operation.body ? { requestBody: { required: true, content: json(ref(operation.body)) } } : {}), responses,
     };
+    if (operation.path.startsWith('/api/v1/') && !['auth', 'runtime'].includes(operation.module)) {
+      const webPath = operation.path.replace('/api/v1/', '/web-api/v1/');
+      paths[webPath] ??= {};
+      paths[webPath][operation.method.toLowerCase()] = {
+        ...paths[operation.path][operation.method.toLowerCase()],
+        operationId: 'web' + operationId[0].toUpperCase() + operationId.slice(1),
+        security: operation.authenticated ? [{ webSession: [] }] : [],
+        ...(operation.method === 'GET' ? {} : { parameters: [...parameters, {name:'x-csrf-token',in:'header',required:true,schema:{type:'string',pattern:'^[a-f0-9]{64}$'}}] }),
+      };
+    }
+    if (operation.path.startsWith('/web-api/v1/') && operation.method !== 'GET') {
+      paths[operation.path][operation.method.toLowerCase()].parameters = [...parameters, {name:'x-csrf-token',in:'header',required:true,schema:{type:'string',pattern:'^[a-f0-9]{64}$'}}];
+    }
   }
-  return { openapi: '3.0.3', info: { title: 'Asisteam HTTP', version: '1.0.0', description: 'MIG-19. Google/Apple con transacción cifrada, claims validados y vinculación explícita sin fusionar por email. MIG-17. Avatar privado S3 con validación y permisos SQL, URLs firmadas internas. MIG-16. QR/configuración/llegada propia implementados sobre firma, reloj y claves SQL existentes. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema.' }, paths, components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } }, schemas } };
+  return { openapi: '3.0.3', info: { title: 'Asisteam HTTP', version: '1.0.0', description: 'MIG-19. Google/Apple con transacción cifrada, claims validados y vinculación explícita sin fusionar por email. MIG-17. Avatar privado S3 con validación y permisos SQL, URLs firmadas internas. MIG-16. QR/configuración/llegada propia implementados sobre firma, reloj y claves SQL existentes. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema.' }, paths, components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, webSession: { type: 'apiKey', in: 'cookie', name: 'asisteam-web-session' } }, schemas } };
 }
 
 export async function artifacts() {

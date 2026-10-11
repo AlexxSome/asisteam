@@ -11,6 +11,26 @@ const page = { data: [group], pagination: { page: 1, page_size: 50, total: 1 } }
 const response = (payload, status = 200, headers = {}) => new Response(JSON.stringify(payload), { status, headers });
 const options = (fetch, extra = {}) => ({ origin: 'http://127.0.0.1:3001', accessToken: async () => 'synthetic-only', fetch, ...extra });
 
+test('WEB-02 SDK cookie usa credenciales/CSRF sin Bearer ni proxy y publica OpenAPI compatible', async()=>{
+ const seen=[],csrf='a'.repeat(64);
+ const client=new ApiClient({origin:'https://web.example.test',web:{csrfToken:async()=>csrf},fetch:async(url,init)=>{
+  seen.push({url,init});return response(url.pathname.endsWith('/csrf')?{csrf_token:csrf}:url.pathname.endsWith('/groups')?page:{success:true});
+ }});
+ assert.deepEqual(await client.getWebCsrf(),{csrf_token:csrf});
+ assert.deepEqual(await client.webLogin({body:{email:'synthetic@example.test',password:'synthetic'}}),{success:true});
+ assert.deepEqual(await client.listMyGroups(),page);
+ assert.equal(seen[2].url.pathname,'/web-api/v1/me/groups');
+ for(const {init} of seen){assert.equal(init.credentials,'same-origin');assert.equal(init.headers.authorization,undefined);assert.equal(init.headers['x-asisteam-proxy'],undefined);}
+ assert.equal(seen[1].init.headers['x-csrf-token'],csrf);
+ assert.equal(seen[0].init.headers['x-csrf-token'],undefined);
+ await assert.rejects(client.loginPassword({body:{email:'synthetic@example.test',password:'synthetic'}}),{status:400});
+ await assert.rejects(new ApiClient({origin:'https://web.example.test'}).getWebCsrf(),{status:400});
+ await assert.rejects(new ApiClient({origin:'https://web.example.test',accessToken:async()=>csrf,web:{csrfToken:async()=>csrf}}).getWebCsrf(),{status:400});
+ const spec=document();assert.deepEqual(spec.paths['/web-api/v1/me/groups'].get.security,[{webSession:[]}]);
+ assert.deepEqual(spec.paths['/api/v1/me/groups'].get.security,[{bearerAuth:[]}]);
+ assert.ok(spec.paths['/web-api/v1/groups'].post.parameters.some(p=>p.name==='x-csrf-token'&&p.required));
+});
+
 test('OpenAPI/generador son deterministas, con DTO estrictos y estado de implementación explícito', async () => {
   const spec = document();
   assert.equal(spec.openapi, '3.0.3');

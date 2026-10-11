@@ -151,6 +151,12 @@
       false
     ],
     [
+      "app_private",
+      "web_sessions",
+      true,
+      false
+    ],
+    [
       "public",
       "account_consents",
       true,
@@ -1374,6 +1380,38 @@
       "integer",
       true,
       "10"
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "token_hash",
+      "text",
+      true,
+      null
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "family_id",
+      "uuid",
+      true,
+      null
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "credentials",
+      "text",
+      true,
+      null
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "expires_at",
+      "timestamp with time zone",
+      true,
+      null
     ],
     [
       "public",
@@ -4214,6 +4252,30 @@
       "qr_checkin_settings",
       "qr_checkin_settings_pkey",
       "PRIMARY KEY (group_id)"
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "web_sessions_credentials_check",
+      "CHECK (((length(credentials) >= 1) AND (length(credentials) <= 24000)))"
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "web_sessions_family_id_fkey",
+      "FOREIGN KEY (family_id) REFERENCES app_private.auth_families(id) ON DELETE CASCADE"
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "web_sessions_pkey",
+      "PRIMARY KEY (token_hash)"
+    ],
+    [
+      "app_private",
+      "web_sessions",
+      "web_sessions_token_hash_check",
+      "CHECK ((token_hash ~ '^[a-f0-9]{64}$'::text))"
     ],
     [
       "public",

@@ -569,3 +569,7 @@ Notas de compatibilidad: la exportación CSV [P1] no requiere tablas nuevas (con
 ## Destino PostgreSQL independiente · MIG-21 (#165)
 
 [Seguro] [packages/db](../packages/db/README.md) contiene el esquema vigente, catálogo y tipos propios. Baseline0001 inmutable +0002 retiro; historial de importación, consentimiento, jobs, billing y archivos se conserva. Toda migración futura pertenece a este paquete. Corte externo pendiente según matriz #168.
+
+## Sesión de transporte web — WEB-02 (#214)
+
+[Seguro] La migración `0003_web_sessions.sql` añade `app_private.web_sessions`: `token_hash` SHA-256 como PK, `family_id` FK a la familia canónica, `credentials` JWE cifrado por Nest y `expires_at` fijo. No contiene perfiles ni métricas. RLS deny-by-default, sin acceso directo para API/Auth/Worker; RPC definer con search_path vacío y EXECUTE solo Auth. Lock/reemplazo y refresh canónico comparten transacción. Expirar/logout puede retirar sesiones técnicas; no borra historia/consentimientos de dominio. [Ciclo y evidencia](web-migration/issue-214/README.md).

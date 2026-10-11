@@ -67,3 +67,7 @@
 ## Cierre y consecuencias
 
 [Seguro] WEB-01 solo entrega inventario/decisión/matriz; WEB-02–10 deben demostrar cada reemplazo de [operaciones](operaciones.md) y cada recorrido de [rutas](rutas.md). Migración incremental paralela, URL de prueba separada y selección de frontend por entorno; no balancear dos autoridades de sesión ni dos escritores. WEB-09 ensaya proxy/callbacks/links antiguos, rollback al artefacto anterior sin rebobinar datos y sin publicar sesiones cruzadas. WEB-10 retira Next solo tras paridad y cuatro gates required+qualification. Producción continúa NO-GO; #100/#170/#209 y aceptación externa no cierran por este ADR.
+
+## Enmienda WEB-02 (#214): sesión opaca y transición explícita
+
+[Seguro] La [implementación opt-in de WEB-02](../issue-214/README.md) reemplaza el detalle de las dos cookies de tokens de este ADR por `asisteam-web-session` opaca HttpOnly/Secure/Lax/Path=/ y credenciales cifradas solo en Nest/PostgreSQL. Access15min/refresh30d y replay canónico siguen vigentes; el lock de fila y la sustitución en la misma transacción coordinan distintas instancias/pestañas sin reemitir credenciales en respuestas de refresh. El cambio desde cookies Next exige reautenticación explícita, también en rollback; no importa/restaura familias revocadas. El resto del ADR (prefijos, mismo origen, frontend, SQL y NO-GO) se mantiene. Esta enmienda no modifica la evidencia histórica del inventario.

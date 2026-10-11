@@ -1,4 +1,4 @@
-import { authHttpSchemas, authHttpOperations } from './http-auth-contract';
+import { authHttpSchemas, authHttpOperations, webAuthHttpOperations } from './http-auth-contract';
 import { z } from "zod";
 import { qrHttpSchemas, qrHttpOperations } from "./http-qr-contract";
 import { announcementHttpSchemas, announcementHttpOperations } from "./http-announcements-contract";
@@ -94,6 +94,7 @@ export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 410, 500,
 /** Only specified operations enter the generated SDK. Domain handlers arrive in #151 and following module issues. */
 export const httpOperations = {
   ...authHttpOperations,
+  ...webAuthHttpOperations,
   ...qrHttpOperations,
   ...announcementHttpOperations,
   getGroupBilling: { method: "GET", path: "/api/v1/groups/{groupId}/billing", module: "billing", authenticated: true, params: "GroupParams", query: "BillingQuery", response: "BillingSummary", status: 200, state: "implemented", summary: "Ledger y capacidad ADMIN; DTO sin datos privados del proveedor" },

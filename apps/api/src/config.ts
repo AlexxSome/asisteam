@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isIP } from 'node:net';
 
 const milliseconds = (fallback: number) => z.coerce.number().int().min(100).max(120_000).default(fallback);
 const configSchema = z.object({
@@ -26,6 +27,9 @@ const configSchema = z.object({
   NATIVE_AUTH_ISSUER: z.string().url().optional(),
   NATIVE_AUTH_WEB_URL: z.string().url().optional(),
   NATIVE_AUTH_PROXY_SECRET: z.string().min(32).optional(),
+  WEB_AUTH_ENABLED: z.literal('1').optional(),
+  // Exact socket peers, never a client-controlled X-Forwarded-For chain.
+  WEB_TRUSTED_PROXY_IPS: z.string().refine(value=>!value||value.split(',').every(ip=>!!isIP(ip.trim()))).default(''),
   AUTH_TIMEOUT_MS: milliseconds(2000),
   BILLING_DATABASE_URL: z.string().url().optional(),
   MERCADOPAGO_ACCESS_TOKEN: z.string().min(1).optional(),
@@ -63,6 +67,7 @@ export function loadConfig(environment: NodeJS.ProcessEnv): RuntimeConfig {
       if (provider==='APPLE' && id && !value.NATIVE_AUTH_WEB_URL?.startsWith('https://')) ctx.addIssue({code:'custom',path:['OAUTH_APPLE_CLIENT_ID'],message:'Apple requiere retorno HTTPS.'});
     }
     const native = [value.NATIVE_AUTH_DATABASE_URL,value.NATIVE_AUTH_SECRET,value.NATIVE_AUTH_ISSUER,value.NATIVE_AUTH_WEB_URL,value.NATIVE_AUTH_PROXY_SECRET];
+    if(value.WEB_AUTH_ENABLED&&!native.every(Boolean))ctx.addIssue({code:'custom',path:['WEB_AUTH_ENABLED'],message:'La fachada web requiere Auth completo.'});
     if (value.NODE_ENV === 'production' && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Producción requiere identidad propia completa.'});
     if (native.some(Boolean) && !native.every(Boolean)) ctx.addIssue({code:'custom',path:['NATIVE_AUTH_SECRET'],message:'Configura Auth independiente completo.'});
     if (value.NATIVE_AUTH_DATABASE_URL) {
