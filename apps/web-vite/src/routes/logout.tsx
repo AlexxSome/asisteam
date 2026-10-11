@@ -1,4 +1,5 @@
 import { redirectDocument, type ActionFunctionArgs } from "react-router";
+import { changedSession } from "../session-events";
 import { actionMessage, browserApi } from "../api";
 import { Alert, Page } from "../ui";
 import { useActionData } from "react-router";
@@ -8,11 +9,7 @@ export function loader() {
 export async function action({ request }: ActionFunctionArgs) {
   try {
     await browserApi(request.signal).webLogout({ body: {} });
-    if (typeof BroadcastChannel !== "undefined") {
-      const channel = new BroadcastChannel("asisteam-web-session");
-      channel.postMessage("changed");
-      channel.close();
-    }
+    changedSession();
     return redirectDocument("/login");
   } catch (error) {
     return { error: actionMessage(error) };

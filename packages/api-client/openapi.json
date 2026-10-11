@@ -2475,7 +2475,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AuthRecovery"
+                "$ref": "#/components/schemas/WebRecovery"
               }
             }
           }
@@ -27683,6 +27683,24 @@
       }
     },
     "schemas": {
+      "WebRecovery": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "invite_code": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{8}$"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "additionalProperties": false
+      },
       "WebCsrf": {
         "type": "object",
         "properties": {

@@ -10,9 +10,7 @@ export function legalDocument(notice) {
 /** @returns {import('vite').Plugin} */
 export function legalPage(notice) {
   const html = legalDocument(notice);
-  return {
-    name: "asisteam-legal-static",
-    configureServer(server) {
+  const serve = (server) => {
       server.middlewares.use((request, response, next) => {
         if (request.url?.split("?")[0] === "/legal/" + notice.version) {
           response.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -22,7 +20,11 @@ export function legalPage(notice) {
           response.end(html);
         } else next();
       });
-    },
+    };
+  return {
+    name: "asisteam-legal-static",
+    configureServer: serve,
+    configurePreviewServer: serve,
     generateBundle() {
       this.emitFile({
         type: "asset",
