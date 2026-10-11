@@ -1,0 +1,44 @@
+{
+  "sourceCommit": "8ed9359241430a446f2c7a53a002e2a4231f7739",
+  "checkoutCommit": "8ed9359241430a446f2c7a53a002e2a4231f7739",
+  "date": "2026-10-11T16:24:50.554Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "technicalStatus": "FAIL",
+  "acceptance": "NO-GO",
+  "suites": [
+    {
+      "suite": "checks",
+      "status": "PASS",
+      "tests": 1129,
+      "omitted": 84
+    },
+    {
+      "suite": "backend",
+      "status": "FAIL",
+      "tests": 84,
+      "omitted": 0
+    },
+    {
+      "suite": "staging",
+      "status": "FAIL",
+      "tests": 0,
+      "omitted": 0
+    },
+    {
+      "suite": "extended",
+      "status": "FAIL",
+      "tests": 66,
+      "omitted": 0
+    }
+  ],
+  "blockers": [
+    "agreed-representative-load-and-source-destination-http-baseline",
+    "external-test-provider-receipts",
+    "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+    "operational-acceptance-MIG22"
+  ],
+  "load": {
+    "status": "FAIL"
+  }
+}

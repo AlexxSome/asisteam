@@ -279,3 +279,9 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## Acceso React Router · WEB-04 (#216)
 
 [Seguro] [WEB-04](web-migration/issue-216/README.md) entrega AUT-01…AUT-08/LEG-01 y ONB-01…ONB-03 en la aplicación paralela: login/registro/recovery/reset/OAuth, invitación dirigida y claim MANAGED, aceptación/aviso, bienvenida/join y redirección raíz con preferencia autorizada. Conserva rutas/códigos y39 páginas Next. El menor por código sigue ATHLETE/PENDING; decisiones del apoderado y ADMIN permanecen en servidor. Los destinos de gestión/perfil/historial siguen pendientes de #217–219, con estado seguro Vite. Matriz, evidencia y límites de accesibilidad/proveedor/corte en el runbook; producción NO-GO.
+
+## Paridad parcial React Router · WEB-05 (#217)
+
+[Seguro] [WEB-05](web-migration/issue-217/README.md) incorpora la shell de contexto/grupo y GRP-01/02/03, inicio por rol, configuración/visibilidad y perfil/revisiones en `apps/web-vite`. Las rutas `/groups`, `/groups/new`, `/groups/:groupId`, `/groups/:groupId/settings`, `/groups/:groupId/settings/visibility`, `/profile` y `/profile/birthdate-requests` conservan contratos y controles existentes. Mi agenda global conserva paginación/filtros y nombres de grupo; multirol mantiene Mi asistencia. La imagen privada se resuelve mediante SDK cookie→Nest→S3, sin Route Handler Next en la SPA. Evidencia/estados y límites en el runbook.
+
+[Seguro] #173–#175/#179 continúan abiertos; esta migración conserva lo integrado sin implementar su rediseño adicional. Integrantes/actividades/reportes/billing/anuncios/QR SPA siguen WEB-06/07/08; sus enlaces mantienen URLs, y Next conserva esas páginas durante coexistencia. No se declara paridad total ni retiro de Next ni aceptación externa #209.

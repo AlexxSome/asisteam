@@ -238,7 +238,7 @@ test("raíz recuerda únicamente un grupo autorizado y descarta una cookie ajena
   await signIn(page);
   await expect(page.getByRole("heading", { name: "Mis grupos" })).toBeVisible();
   await page.goto("/groups/" + groups.second);
-  await expect(page.getByRole("heading", { name: "Club WEB215 second" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Inicio", exact: true })).toBeVisible();
   await page.goto("/");
   await expect(page).toHaveURL(new RegExp(`/groups/${groups.second}$`));
   const saved = (await context.cookies()).find(cookie => cookie.name.startsWith("asisteam-group-"))!;

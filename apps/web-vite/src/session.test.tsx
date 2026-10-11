@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { ACCOUNT_TERMS_2026_09_21 } from "@asisteam/core/browser";
@@ -9,6 +9,7 @@ import {
   forbiddenImport,
   publicEnvironment,
 } from "../scripts/browser-boundary.mjs";
+beforeEach(()=>Object.defineProperty(window,"matchMedia",{configurable:true,writable:true,value:()=>({matches:false,addEventListener:()=>{},removeEventListener:()=>{}})}));
 const id = "a1111111-1111-4111-8111-111111111111";
 function mockApi({ accepted = true, authenticated = true, fail = false } = {}) {
   const fetch = vi.fn(async (input: RequestInfo | URL) => {
@@ -40,6 +41,7 @@ function mockApi({ accepted = true, authenticated = true, fail = false } = {}) {
         ],
         pagination: { page: 1, page_size: 50, total: 1 },
       });
+    if(path.endsWith("/me/activities"))return Response.json({activities:[],hasNext:false});
     return Response.json(
       { error: { code: "not_found", message: "No disponible", details: {} } },
       { status: 404 },
@@ -109,6 +111,9 @@ describe("sesión y navegación", () => {
       "/groups/" + id + "?token=secret",
     ])
       expect(safeReturn(target)).toBe("/groups");
+    expect(safeReturn("/groups/"+id+"/settings/visibility")).toBe("/groups/"+id+"/settings/visibility");
+    expect(safeReturn("/profile/birthdate-requests")).toBe("/profile/birthdate-requests");
+    expect(safeReturn("/groups/new")).toBe("/groups/new");
     expect(safeReturn("/groups/" + id)).toBe("/groups/" + id);
     expect(safeReturn("/groups/" + id + "/me/history")).toBe("/groups/" + id + "/me/history");
     expect(safeReturn("/join?code=WEB21502")).toBe("/join?code=WEB21502");

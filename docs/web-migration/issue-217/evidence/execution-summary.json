@@ -1,0 +1,19 @@
+{
+  "issue": 217,
+  "recordedAt": "2026-10-11T16:25:25Z",
+  "checkoutCommit": "8ed9359241430a446f2c7a53a002e2a4231f7739",
+  "workingTreeChanges": true,
+  "environment": "local-synthetic",
+  "recordType": "observed-coordinated-command-results",
+  "node": "v24.16.0",
+  "pnpm": "10.33.2",
+  "viteE2E": { "command": "corepack pnpm --filter @asisteam/web-vite test:e2e", "exitCode": 0, "passed": 24, "failed": 0, "omitted": 0, "durationSeconds": 40.1, "attempt": 3 },
+  "checks": { "status": "PASS", "exitCode": 0, "reportedTests": 1129, "existingNextOmitted": 84 },
+  "backend": { "status": "CANCELLED", "exitCode": 130, "passedSteps": ["api-session-build", "worker-build"], "waitingStep": "private-storage-fixture-build", "remainingSteps": "NOT_ACCREDITED" },
+  "staging": { "status": "CANCELLED", "exitCode": 130, "passedSteps": ["synthetic-external-secrets"], "waitingStep": "api-container-build", "remainingSteps": "NOT_ACCREDITED" },
+  "extended": { "status": "CANCELLED", "exitCode": 130, "passedSteps": ["chromium-install", "nest-domain-build"], "waitingStep": "private-storage-fixture-build", "remainingSteps": "NOT_ACCREDITED" },
+  "qualification": { "status": "FAIL", "exitCode": 1, "acceptance": "NO-GO", "originalReport": "qualification.json", "historicalCountersDoNotAccreditIssueGates": true },
+  "humanAndExternalAcceptance": "OMITTED_PENDING",
+  "remoteCI": "NOT_ACCREDITED",
+  "production": "NO-GO"
+}

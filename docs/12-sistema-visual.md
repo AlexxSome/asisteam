@@ -210,3 +210,9 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 ## Estados de acceso React Router · WEB-04 (#216)
 
 [Seguro] [WEB-04](web-migration/issue-216/README.md) reutiliza Field/Input/Card/Alert y tokens canónicos; formularios españoles con aceptación legal explícita, radios de modo de invitación, proveedor indisponible deshabilitado y botones44px durante POST. Recovery muestra el mismo éxito para email existente/inexistente únicamente al confirmarse el servidor; red/timeout muestran error y reintento. Reset conserva confirmación y limpia token; preview expirado/usado no presenta acciones. Solicitudes pendientes muestran pasos canónicos propios sin habilitar menores. No añade tokens visuales ni sustituye el shell #170. Evidencia automática reflow320–1440/axe y límites humanos en el runbook.
+
+## Shell, grupos y perfil React Router · WEB-05 (#217)
+
+[Seguro] [WEB-05](web-migration/issue-217/README.md) adapta AppShell/selector, GroupForm, ProfileForm, VisibilityForm, revisión de edad, permiso de imagen y primer uso a Router/HTTP, conservando tokens, etiquetas y composición vigente. Sidebar/drawer modal y disclosure de cuenta mantienen teclado/Escape/retorno de foco. El perfil protege borrador con blocker/beforeunload; foto y datos conservan guardado/descarte independientes. Imagen privada usa fallback de carga/error y object URL revocable, sin URL pública de S3.
+
+[Seguro] Toggles guardan cada cambio por separado después de confirmar Nest; error no confirma éxito. Cambio de grupo limpia IDs y DTOs previos, y la shell verifica membership ACTIVE desde el servidor. Loading/error y reintento no presentan colecciones vacías como resultado de un fallo. No se añaden indicadores/composición de #173–#175/#179; siguen pendientes. Evidencia automática responsive/axe/roles y límites humanos constan en el runbook de #217.
