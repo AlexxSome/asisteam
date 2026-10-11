@@ -20,7 +20,7 @@ export function browserApi(signal?: AbortSignal) {
 }
 export function safeReturn(value: string | null) {
   if (!value || value.length > 2048 || /[\\\r\n]/.test(value)) return "/groups";
-  if (/^\/(?:groups(?:\/[0-9a-f-]{36}(?:\/me\/history)?)?|welcome|join|profile|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
+  if (/^\/(?:groups(?:\/new|\/[0-9a-f-]{36}(?:\/me\/history|\/settings(?:\/visibility)?)?)?|welcome|join|profile(?:\/birthdate-requests)?|wards(?:\/[0-9a-f-]{36})*|invitations\/[A-Za-z0-9_-]{22,256})$/.test(value)) return value;
   if (/^\/join\?code=[A-Za-z0-9]{8}$/.test(value)) return value;
   return "/groups";
 }

@@ -47,18 +47,18 @@ test("login → selección/cambio de grupo → recarga → logout y Atrás", asy
   await login(page);
   await page.getByRole("link", { name: "Club WEB215 first" }).click();
   await expect(
-    page.getByRole("heading", { name: "Club WEB215 first", level: 1 }),
+    page.getByRole("heading", { name: "Inicio", level: 1, exact: true }),
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Club WEB215 first", level: 1 }),
+    page.getByRole("heading", { name: "Inicio", level: 1, exact: true }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "Cambiar grupo" }).click();
-  await page.getByRole("link", { name: "Club WEB215 second" }).click();
+  await page.getByRole("button", { name: "Menú", exact: true }).click();
+  await page.getByRole("dialog").getByLabel("Grupo activo").selectOption(groups.second);
   await expect(
-    page.getByRole("heading", { name: "Club WEB215 second", level: 1 }),
+    page.getByRole("heading", { name: "Inicio", level: 1, exact: true }),
   ).toBeVisible();
-  expect(await page.getByText("Club WEB215 first").count()).toBe(0);
+  await expect(page.locator("#main-content")).not.toContainText("Club WEB215 first");
   const cookies = await context.cookies();
   expect(cookies.find((c) => c.name === "asisteam-web-session")?.httpOnly).toBe(
     true,
@@ -66,6 +66,7 @@ test("login → selección/cambio de grupo → recarga → logout y Atrás", asy
   expect(
     await page.evaluate(() => localStorage.length + sessionStorage.length),
   ).toBe(0);
+  await page.getByText("Mi cuenta", { exact: true }).click();
   await page.getByRole("button", { name: "Cerrar sesión" }).click();
   await expect(
     page.getByRole("heading", { name: "Iniciar sesión" }),
@@ -87,7 +88,7 @@ test("acceso directo sin sesión y después del login; grupo ajeno 404 sin datos
   await page.getByLabel("Contraseña", { exact: true }).fill(password);
   await page.getByRole("button", { name: "Ingresar", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Club WEB215 second", level: 1 }),
+    page.getByRole("heading", { name: "Inicio", level: 1, exact: true }),
   ).toBeVisible();
   await page.goto("/groups/" + groups.first);
   await expect(
@@ -127,6 +128,7 @@ test("logout de otra pestaña descarta identidad y login distinto no conserva gr
   await expect(
     other.getByRole("heading", { name: "Mis grupos" }),
   ).toBeVisible();
+  await other.getByText("Mi cuenta", { exact: true }).click();
   await other.getByRole("button", { name: "Cerrar sesión" }).click();
   await expect(
     page.getByRole("heading", { name: "Iniciar sesión" }),

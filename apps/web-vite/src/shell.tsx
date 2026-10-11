@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import {
-  Form,
   Link,
   Outlet,
   isRouteErrorResponse,
@@ -11,54 +10,47 @@ import {
   useRouteLoaderData,
 } from "react-router";
 import { ApiClientError } from "@asisteam/api-client";
-import { Alert, Button, LoadingState, Page } from "./ui";
-import type { requireSession } from "./api";
+import { httpSchemas } from "@asisteam/core/browser";
+import { Alert, Button, LoadingState, Page, ShellContentContext } from "./ui";
+import { browserApi, requireSession, sessionError } from "./api";
+import { AppShell } from "./components/app-shell";
+import type { LoaderFunctionArgs } from "react-router";
 export function Root() {
+  const privateRoute=useRouteLoaderData("private");
   const location = useLocation(),
     main = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    main.current?.querySelector<HTMLElement>("#main")?.focus();
-  }, [location.pathname]);
+    if (location.hash) {
+      try { document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView(); }
+      catch { /* An invalid fragment must not interrupt authorized navigation. */ }
+    } else main.current?.querySelector<HTMLElement>("#main-content, #main")?.focus();
+  }, [location.pathname, location.hash]);
   return (
     <div ref={main}>
-      <a href="#main" className="sr-only focus:not-sr-only">
+      {!privateRoute && <a href="#main" className="sr-only focus:not-sr-only">
         Saltar al contenido
-      </a>
+      </a>}
       <Outlet />
     </div>
   );
 }
+export async function privateLoader({request}:LoaderFunctionArgs){
+ const session=await requireSession(request,false);
+ if(!session.accepted)return {...session,groups:[],group:undefined};
+ try {
+  const api=browserApi(request.signal);
+  const {data:groups}=await api.listMyGroups({query:{page:1,page_size:100}});
+  const id=/^\/groups\/([0-9a-f-]{36})(?:\/|$)/.exec(new URL(request.url).pathname)?.[1];
+  if(id && !httpSchemas.GroupParams.safeParse({groupId:id}).success)throw new Response(null,{status:404});
+  const group=id?await api.getGroup({params:{groupId:id}}):undefined;
+  return {...session,groups,group};
+ }catch(error){return sessionError(error,request);}
+}
 export function PrivateLayout() {
-  const session = useRouteLoaderData("private") as Awaited<
-    ReturnType<typeof requireSession>
-  >;
-  const navigation = useNavigation(),
-    location = useLocation();
-  return (
-    <div key={session.user_id}>
-      <header className="flex min-h-16 flex-wrap items-center justify-between gap-4 border-b bg-surface px-4 py-3">
-        <Link to="/groups" className="text-h2 text-primary">
-          {import.meta.env.VITE_APP_NAME ?? "Asisteam"}
-        </Link>
-        <Form method="post" action="/logout">
-          <Button busy={navigation.state !== "idle"}>Cerrar sesión</Button>
-        </Form>
-      </header>
-      {navigation.state !== "idle" ? (
-        <Page>
-          <LoadingState
-            label={
-              navigation.state === "submitting"
-                ? "Procesando…"
-                : "Cargando página…"
-            }
-          />
-        </Page>
-      ) : (
-        <Outlet key={location.pathname} />
-      )}
-    </div>
-  );
+ const session=useRouteLoaderData("private") as Awaited<ReturnType<typeof privateLoader>>;
+ const navigation=useNavigation(),location=useLocation();
+ if(navigation.state!=="idle")return <Page><LoadingState label={navigation.state === "submitting" ? "Procesando…" : "Cargando página…"}/></Page>;
+ return <AppShell key={session.user_id} group={session.group} groups={session.groups} userId={session.user_id}><ShellContentContext.Provider value={true}><Outlet key={location.pathname}/></ShellContentContext.Provider></AppShell>;
 }
 export function RouteError() {
   const error = useRouteError(),

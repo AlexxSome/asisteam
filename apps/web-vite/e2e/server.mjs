@@ -1,23 +1,25 @@
 import { createServer } from "vite";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync, rmSync } from "node:fs";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import { nativeBrowserDatabase } from "../../api/test/native-browser-database.mjs";
 import { createApplication } from "../../api/dist/application.js";
-import { loadFixtureConfig } from "../../api/test/fixture-config.mjs";
+import { loadFixtureConfig, fixtureSecret } from "../../api/test/fixture-config.mjs";
 import { TransactionalEmail } from "../../api/dist/email.js";
 import { SafeLogger } from "../../api/dist/logger.js";
+import { storageFixture } from "../../api/test/storage-fixture.mjs";
 import { password, email, groups } from "./data.mjs";
 const { SignJWT, generateKeyPair, exportJWK } = createRequire(new URL("../../api/package.json", import.meta.url))("jose");
 const originalFetch = globalThis.fetch;
-let database, app, vite, closing;
+let database, app, vite, storage, closing;
 const stop = () =>
   (closing ??= (async () => {
     globalThis.fetch = originalFetch;
     await vite?.close();
     await app?.close();
     await database?.cleanup();
+    storage?.storage.client.destroy();storage?.stop();
     for (const file of ["runtime.json", "email.json", "logs.json"])
       rmSync(".qa/" + file, { force: true });
   })());
@@ -64,13 +66,13 @@ try {
       { input: statement, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] },
     ).trim();
   const users = {};
-  for (const role of ["first", "second", "pending"]) {
+  for (const role of ["first", "second", "pending", "coach", "guardian", "multi", "minor"]) {
     const subject = randomUUID(),
       user = randomUUID();
     users[role] = user;
     sql(`insert into app_private.auth_subjects(id,email,native_owned) values('${subject}','${email(role)}',true);
    insert into app_private.auth_credentials(subject_id,password_hash) values('${subject}',extensions.crypt('${password}',extensions.gen_salt('bf',4)));
-   insert into public.users(id,auth_user_id,email,full_name,birthdate,account_status) values('${user}','${subject}','${email(role)}','Persona sintética WEB215','1990-01-01','ACTIVE');`);
+   insert into public.users(id,auth_user_id,email,full_name,birthdate,account_status) values('${user}','${subject}','${email(role)}','Persona sintética WEB215','${role === "minor" ? "2014-01-01" : "1990-01-01"}','ACTIVE');`);
     if (role !== "pending")
       sql(
         `insert into public.account_consents(user_id,terms_version,channel) values('${user}','2026-09-21','IN_APP');`,
@@ -85,6 +87,16 @@ try {
   sql(
     `insert into public.memberships(user_id,group_id,role,status) values('${users.second}','${groups.second}','ATHLETE','ACTIVE');`,
   );
+  sql(`insert into public.memberships(user_id,group_id,role,status) values('${users.coach}','${groups.second}','COACH','ACTIVE'),('${users.multi}','${groups.second}','ADMIN','ACTIVE'),('${users.multi}','${groups.second}','ATHLETE','ACTIVE');`);
+  const minor=randomUUID();
+  sql(`insert into public.users(id,full_name,birthdate,account_status) values('${minor}','Pupilo sintético WEB217','2014-01-01','MANAGED');
+  insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship) values('${randomUUID()}','${users.guardian}','${minor}','Apoderado');
+  insert into public.consents(guardianship_id,consent_type,terms_version,allows_avatar) select id,'DATA_PROCESSING_MINOR','synthetic',true from public.guardianships where athlete_user_id='${minor}';
+  insert into public.memberships(user_id,group_id,role,status) values('${minor}','${groups.second}','ATHLETE','ACTIVE');`);
+  sql(`insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship) values('${randomUUID()}','${users.guardian}','${users.minor}','Apoderado');
+  insert into public.consents(guardianship_id,consent_type,terms_version) select id,'DATA_PROCESSING_MINOR','synthetic' from public.guardianships where athlete_user_id='${users.minor}';
+  insert into public.memberships(user_id,group_id,role,status) values('${users.minor}','${groups.second}','ATHLETE','ACTIVE');`);
+  storage=await storageFixture();
   const roleUrl = (role) => {
     const url = new URL(database.url);
     url.username = role;
@@ -95,6 +107,7 @@ try {
   app = await createApplication(
     loadFixtureConfig({
       DATABASE_URL: roleUrl("asisteam_api"),
+      ...storage.config,
       OAUTH_GOOGLE_CLIENT_ID: "google-client",
       OAUTH_GOOGLE_CLIENT_SECRET: "synthetic-google",
       INVITATION_DATABASE_URL: roleUrl("asisteam_invitation"),
@@ -116,7 +129,10 @@ try {
   await app.listen(0, "127.0.0.1");
   process.env.ASISTEAM_VITE_API_TARGET = await app.getUrl();
   mkdirSync(".qa", { recursive: true, mode: 0o700 });
-  writeFileSync(".qa/runtime.json", JSON.stringify({ name: database.name }), {
+  writeFileSync(".qa/runtime.json", JSON.stringify({
+    name: database.name,
+    loginRateKey: createHash("sha256").update(`${fixtureSecret}:login:ip:127.0.0.1`).digest("hex"),
+  }), {
     mode: 0o600,
   });
   vite = await createServer();

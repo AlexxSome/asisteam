@@ -1,6 +1,5 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
-import { Root, RouteError, PrivateLayout } from "./shell";
-import { requireSession } from "./api";
+import { Root, RouteError, PrivateLayout, privateLoader } from "./shell";
 import { LoadingState } from "./ui";
 export const routes: RouteObject[] = [
   {
@@ -22,7 +21,7 @@ export const routes: RouteObject[] = [
       { path: "legal/2026-09-21", lazy: () => import("./routes/legal") },
       {
         id: "private",
-        loader: ({ request }) => requireSession(request, false),
+        loader: privateLoader,
         shouldRevalidate: () => true,
         Component: PrivateLayout,
         children: [
@@ -30,6 +29,11 @@ export const routes: RouteObject[] = [
           { path: "join", lazy: () => import("./routes/join") },
           { path: "accept-terms", lazy: () => import("./routes/terms") },
           { path: "groups", lazy: () => import("./routes/groups") },
+          { path: "groups/new", lazy: () => import("./routes/group-new") },
+          { path: "groups/:groupId/settings", lazy: () => import("./routes/group-settings") },
+          { path: "groups/:groupId/settings/visibility", lazy: () => import("./routes/visibility") },
+          { path: "profile", lazy: () => import("./routes/profile") },
+          { path: "profile/birthdate-requests", lazy: () => import("./routes/birthdate-reviews") },
           { path: "groups/:groupId", lazy: () => import("./routes/group") },
           { path: "logout", lazy: () => import("./routes/logout") },
         ],
