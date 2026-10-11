@@ -35,6 +35,42 @@ export class ApiClient extends ApiTransport {
   changePassword(input: { body: operations["changePassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["changePassword"]["responses"][200]["content"]["application/json"]> {
     return this.execute("changePassword", input ?? {});
   }
+  getWebCsrf(): Promise<operations["getWebCsrf"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getWebCsrf", {});
+  }
+  getWebSession(): Promise<operations["getWebSession"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getWebSession", {});
+  }
+  webLogin(input: { body: operations["webLogin"]["requestBody"]["content"]["application/json"] }): Promise<operations["webLogin"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webLogin", input ?? {});
+  }
+  webRegister(input: { body: operations["webRegister"]["requestBody"]["content"]["application/json"] }): Promise<operations["webRegister"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webRegister", input ?? {});
+  }
+  webRefresh(input: { body: operations["webRefresh"]["requestBody"]["content"]["application/json"] }): Promise<operations["webRefresh"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webRefresh", input ?? {});
+  }
+  webLogout(input: { body: operations["webLogout"]["requestBody"]["content"]["application/json"] }): Promise<operations["webLogout"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webLogout", input ?? {});
+  }
+  webRecovery(input: { body: operations["webRecovery"]["requestBody"]["content"]["application/json"] }): Promise<operations["webRecovery"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webRecovery", input ?? {});
+  }
+  webReset(input: { body: operations["webReset"]["requestBody"]["content"]["application/json"] }): Promise<operations["webReset"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webReset", input ?? {});
+  }
+  webPassword(input: { body: operations["webPassword"]["requestBody"]["content"]["application/json"] }): Promise<operations["webPassword"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webPassword", input ?? {});
+  }
+  webSocialProviders(): Promise<operations["webSocialProviders"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webSocialProviders", {});
+  }
+  webSocialStart(input: { body: operations["webSocialStart"]["requestBody"]["content"]["application/json"] }): Promise<operations["webSocialStart"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webSocialStart", input ?? {});
+  }
+  webSocialLink(input: { body: operations["webSocialLink"]["requestBody"]["content"]["application/json"] }): Promise<operations["webSocialLink"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("webSocialLink", input ?? {});
+  }
   getQrSettings(input: { params: operations["getQrSettings"]["parameters"]["path"] }): Promise<operations["getQrSettings"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getQrSettings", input ?? {});
   }

@@ -1,3 +1,4 @@
+import { WebAuth, WebAuthController, WebCallbackController } from './web-auth.js';
 import { SocialAuth, SocialAuthController } from './social-auth.js';
 import { NativeAuth, NativeAuthController } from './native-auth.js';
 import { Passwords } from './passwords.js';
@@ -28,8 +29,8 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [SocialAuthController,NativeAuthController,AvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
-    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, SocialAuth, NativeAuth, Passwords, AvatarStorage, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
+    controllers: [WebAuthController, WebCallbackController, SocialAuthController,NativeAuthController,AvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, WebAuth, SocialAuth, NativeAuth, Passwords, AvatarStorage, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}
   const app = await NestFactory.create<NestExpressApplication>(RuntimeModule, { logger, abortOnError: false, bodyParser: false });
@@ -54,9 +55,12 @@ export async function createApplication(config: RuntimeConfig, logger = new Safe
   });
   // Large notes remain bounded by the strict500-record attendance schema.
   app.useBodyParser('json', { limit: '2mb', type: request => request.method === 'PUT'
-    && /^\/api\/v1\/groups\/[^/]+\/activities\/[^/]+\/attendance\/?$/.test(request.url ?? '') });
-  app.useBodyParser('json', { limit: '3mb', type: request => request.method === 'POST' && /^\/api\/v1\/me\/avatar\/?$/.test(request.url ?? '') });
+    && /^\/(?:api|web-api)\/v1\/groups\/[^/]+\/activities\/[^/]+\/attendance\/?$/.test(request.url ?? '') });
+  app.useBodyParser('json', { limit: '3mb', type: request => request.method === 'POST' && /^\/(?:api|web-api)\/v1\/me\/avatar\/?$/.test(request.url ?? '') });
   app.useBodyParser('json', { limit: '64kb' });
+  app.useBodyParser('urlencoded', { limit: '16kb', extended: false, type: request => request.method === 'POST' && /^\/auth\/callback\/apple$/.test(request.url ?? '') });
+  const webAuth = app.get(WebAuth);
+  app.use((request: import('express').Request, response: import('express').Response, next: () => void) => { void webAuth.middleware(request, response, next); });
   app.useGlobalFilters(new SafeExceptionFilter(logger));
   const server: Server = app.getHttpServer();
   server.requestTimeout = config.HTTP_TIMEOUT_MS;

@@ -1755,6 +1755,27 @@ export type PersistenceSchema = {
         };
         Relationships: [];
       };
+      "web_sessions": {
+        Row: {
+          "token_hash": string;
+          "family_id": string;
+          "credentials": string;
+          "expires_at": string;
+        };
+        Insert: {
+          "token_hash": string;
+          "family_id": string;
+          "credentials": string;
+          "expires_at": string;
+        };
+        Update: {
+          "token_hash"?: string;
+          "family_id"?: string;
+          "credentials"?: string;
+          "expires_at"?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       "attendance_report_counts": {
@@ -1856,6 +1877,7 @@ export type PersistenceSchema = {
       "review_pending_membership": { Args: { "p_group_id": string; "p_membership_id": string; "p_approve": boolean }; Returns: undefined };
       "sync_group_subscription": { Args: { "p_subscription_id": string; "p_provider_id": string; "p_status": string; "p_provider_updated_at": string; "p_next_payment_at": string; "p_checkout_url": string }; Returns: undefined };
       "sync_subscription_invoice": { Args: { "p_provider_subscription_id": string; "p_invoice_id": string; "p_due_at": string; "p_amount_clp": number; "p_currency": string; "p_status": string; "p_payment_id": string; "p_paid_at": string; "p_provider_updated_at": string }; Returns: undefined };
+      "web_session_operation": { Args: { "p_operation": string; "p_data": Json }; Returns: Json };
       "worker_claim_announcement_push": { Args: { "p_receipts"?: boolean }; Returns: { "delivery_id": string; "claim_token": string; "token": string; "announcement_id": string; "group_id": string; "ticket_id": string }[] };
       "worker_claim_email": { Args: {  }; Returns: { "delivery_id": string; "claim_token": string; "email": string; "full_name": string; "audience": string; "payload": Json }[] };
       "worker_claim_transition": { Args: {  }; Returns: { "run_date": string; "lease_token": string }[] };

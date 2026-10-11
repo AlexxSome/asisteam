@@ -1,0 +1,17 @@
+BEGIN;
+CREATE EXTENSION IF NOT EXISTS pgtap;
+SELECT plan(12);
+SELECT ok((SELECT relrowsecurity FROM pg_class WHERE oid='app_private.web_sessions'::regclass),'web session RLS enabled');
+SELECT is((SELECT count(*)::int FROM pg_policies WHERE schemaname='app_private' AND tablename='web_sessions'),0,'deny by default');
+SELECT ok(NOT has_table_privilege('asisteam_auth','app_private.web_sessions','SELECT,INSERT,UPDATE,DELETE'),'auth has no direct table privileges');
+SELECT ok(NOT has_table_privilege('asisteam_api','app_private.web_sessions','SELECT,INSERT,UPDATE,DELETE'),'domain cannot read credentials');
+SELECT ok(NOT has_table_privilege('asisteam_jobs','app_private.web_sessions','SELECT,INSERT,UPDATE,DELETE'),'worker cannot read credentials');
+SELECT ok(has_function_privilege('asisteam_auth','app_private.web_session_operation(text,jsonb)','EXECUTE'),'minimal auth role can execute facade');
+SELECT ok(NOT has_function_privilege('asisteam_api','app_private.web_session_operation(text,jsonb)','EXECUTE'),'domain cannot execute facade');
+SELECT ok(NOT has_function_privilege('asisteam_jobs','app_private.web_session_operation(text,jsonb)','EXECUTE'),'worker cannot execute facade');
+SELECT ok((SELECT prosecdef FROM pg_proc WHERE oid='app_private.web_session_operation(text,jsonb)'::regprocedure),'security definer');
+SELECT ok((SELECT proconfig @> ARRAY['search_path=""'] FROM pg_proc WHERE oid='app_private.web_session_operation(text,jsonb)'::regprocedure),'fixed empty search path');
+SELECT is(app_private.web_session_operation('lock','{"token_hash":"missing"}'::jsonb),'{}'::jsonb,'unknown session reveals nothing');
+SELECT is(app_private.web_session_operation('close','{"token_hash":"missing"}'::jsonb),'{}'::jsonb,'close is idempotent');
+SELECT * FROM finish();
+ROLLBACK;

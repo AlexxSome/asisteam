@@ -1,0 +1,430 @@
+{
+  "issue": "https://github.com/AlexxSome/asisteam/issues/214",
+  "baseCommit": "3e09d19a72bb1572ff959c53ca4bf1e6439dc965",
+  "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+  "scope": "WEB-02: opt-in Nest web session/callback facade; Next frontend migration remains outside this issue",
+  "recordedAt": "2026-10-11T02:01:06.543Z",
+  "environment": "local-synthetic",
+  "node": "v24.16.0",
+  "gates": [
+    {
+      "command": "pnpm ci:checks",
+      "status": "PASS",
+      "commit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "date": "2026-10-11T01:56:07.064Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.28
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.53
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.54
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 3.44
+        },
+        {
+          "check": "next-http-contract",
+          "status": "PASS",
+          "seconds": 7.53
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 6.63
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 0.99,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 16.78,
+          "tests": 961,
+          "omitted": 84
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.87
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.7
+        }
+      ]
+    },
+    {
+      "command": "pnpm ci:backend",
+      "status": "PASS",
+      "commit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "date": "2026-10-11T01:53:34.466Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 2.47
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.77
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.36
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 48.19
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 51.26
+        },
+        {
+          "check": "next-social-auth-browser",
+          "status": "PASS",
+          "seconds": 15.82
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 1.96,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 6.72
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 49.62,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "command": "pnpm ci:staging",
+      "status": "PASS",
+      "commit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "date": "2026-10-11T01:53:31.882Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 20.53
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.99
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.94
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.16
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.22
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 5.52
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.89,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.71
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.16
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.84
+        }
+      ]
+    },
+    {
+      "command": "pnpm ci:extended",
+      "status": "PASS",
+      "commit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "date": "2026-10-11T01:58:26.476Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.36
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.39
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 134.74,
+          "tests": 47,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 14.22,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    }
+  ],
+  "qualification": {
+    "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+    "checkoutCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+    "date": "2026-10-11T02:01:04.096Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "technicalStatus": "PASS",
+    "acceptance": "NO-GO",
+    "suites": [
+      {
+        "suite": "checks",
+        "status": "PASS",
+        "tests": 1111,
+        "omitted": 84
+      },
+      {
+        "suite": "backend",
+        "status": "PASS",
+        "tests": 84,
+        "omitted": 0
+      },
+      {
+        "suite": "staging",
+        "status": "PASS",
+        "tests": 0,
+        "omitted": 0
+      },
+      {
+        "suite": "extended",
+        "status": "PASS",
+        "tests": 48,
+        "omitted": 0
+      }
+    ],
+    "blockers": [
+      "agreed-representative-load-and-source-destination-http-baseline",
+      "external-test-provider-receipts",
+      "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+      "operational-acceptance-MIG22"
+    ],
+    "load": {
+      "status": "PASS",
+      "activeAthletes": 500,
+      "attendanceRecords": 5000,
+      "cells": 8,
+      "requests": 192,
+      "maxP95Ms": 370.42
+    }
+  },
+  "focused": [
+    {
+      "command": "node apps/api/test/native-suite.mjs apps/api/test/web-auth.integration.mjs",
+      "status": "PASS",
+      "tests": 1,
+      "omitted": 0,
+      "description": "Comprehensive HTTP/PostgreSQL scenario, two Nest instances, concurrency/replay, minor invitations, synthetic signed Google/Apple callbacks/link"
+    },
+    {
+      "file": "packages/db/tests/web_sessions.sql",
+      "status": "PASS",
+      "assertions": 12,
+      "executedBy": "web-auth.integration.mjs"
+    },
+    {
+      "command": "pnpm --filter @asisteam/api test",
+      "status": "PASS",
+      "tests": 24,
+      "omitted": 0
+    },
+    {
+      "command": "pnpm --filter @asisteam/api-client test",
+      "status": "PASS",
+      "tests": 28,
+      "omitted": 0
+    }
+  ],
+  "preservedCoverage": {
+    "sqlDomainSuites": 40,
+    "sqlDomainAssertions": 1646,
+    "productIntegrations": 84,
+    "productIntegrationsOmitted": 0
+  },
+  "executionIncidents": [
+    {
+      "command": "pnpm ci:checks",
+      "sourceCommit": "d450e43c895981a972f6e9e14bbbbfba198a1ad0",
+      "date": "2026-10-11T01:53:57.466Z",
+      "checks": [
+        {
+          "check": "next-http-contract",
+          "status": "FAIL",
+          "seconds": 2.13
+        }
+      ],
+      "disposition": "Sequential rerun passed on identical code. Root cause not established; concurrent Next runners were active. Not classified as a proven pre-existing failure."
+    }
+  ],
+  "limits": [
+    "Synthetic fixtures and OIDC providers; no production data, external provider receipts, production deploy or human acceptance.",
+    "Switching Next/Nest web session transport requires fresh login; old Next cookies are not imported.",
+    "Production remains NO-GO; remote CI is independent and is not asserted by these local reports.",
+    "A later evidence-only commit records these reports; sourceCommit identifies the implementation actually checked."
+  ]
+}

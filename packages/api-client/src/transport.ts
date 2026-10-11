@@ -24,6 +24,7 @@ export type ApiClientOptions = {
   fetch?: typeof globalThis.fetch;
   authProxy?: { secret: string; clientIp: string };
   nativeAuth?: boolean;
+  web?: { csrfToken: () => Promise<string | null> };
   invitationProxy?: { secret: string; clientIp: string };
 };
 type Input = { params?: object; query?: object; body?: unknown };
@@ -63,7 +64,12 @@ export class ApiTransport {
     const params = parse(httpSchemas[operation.params ?? "Empty"], input.params ?? {});
     const query = parse(httpSchemas[operation.query ?? "Empty"], input.query ?? {});
     const body = operation.body ? parse(httpSchemas[operation.body], input.body) : undefined;
-    let path = operation.path;
+    const cookieMode = !!this.options.web;
+    const webOperation = operation.path.startsWith('/web-api/v1/');
+    if (webOperation && !cookieMode || cookieMode && (this.options.authProxy || this.options.invitationProxy || this.options.accessToken)) throw new ApiClientError(400, 'invalid_api_configuration');
+    // Token-returning native Auth operations are never available over cookies.
+    if (cookieMode && operation.path.startsWith('/api/v1/auth/')) throw new ApiClientError(400, 'invalid_request');
+    let path = cookieMode && operation.path.startsWith('/api/v1/') && operation.path !== '/api/v1/health' && operation.path !== '/api/v1/ready' ? operation.path.replace('/api/v1/', '/web-api/v1/') : operation.path;
     for (const [key, value] of Object.entries(params)) path = path.replace(`{${key}}`, encodeURIComponent(String(value)));
     const url = new URL(path, this.origin);
     for (const [key, value] of Object.entries(query)) if (value !== undefined) url.searchParams.set(key, String(value));
@@ -74,13 +80,13 @@ export class ApiTransport {
     });
     const request = async () => {
       const headers: Record<string, string> = { accept: "application/json" };
-      if (operation.authenticated) {
+      if (operation.authenticated && !cookieMode) {
         const token = await this.options.accessToken?.();
         if (!token || /[\r\n]/.test(token)) throw new ApiClientError(401, "authentication_required");
         headers.authorization = `Bearer ${token}`;
       }
       if (controller.signal.aborted) throw new ApiClientError(504, "request_timeout");
-      if (operationId === "previewInvitation" || operationId === "acceptInvitation" || operationId === "registerInvitation" || operationId === "claimInvitation") {
+      if (!cookieMode && (operationId === "previewInvitation" || operationId === "acceptInvitation" || operationId === "registerInvitation" || operationId === "claimInvitation")) {
         const proxy = this.options.invitationProxy;
         if (!proxy?.secret || !proxy.clientIp || /[\r\n]/.test(proxy.secret + proxy.clientIp)) throw new ApiClientError(401, "authentication_required");
         headers["x-asisteam-proxy"] = proxy.secret; headers["x-asisteam-client-ip"] = proxy.clientIp;
@@ -91,10 +97,16 @@ export class ApiTransport {
         if (!proxy.secret || !proxy.clientIp || /[\r\n]/.test(proxy.secret+proxy.clientIp)) throw new ApiClientError(401,'authentication_required');
         headers['x-asisteam-auth-proxy']=proxy.secret;headers['x-asisteam-client-ip']=proxy.clientIp;
       }
-      if (body !== undefined) headers["content-type"] = "application/json";
+      if (cookieMode && !['GET', 'HEAD'].includes(operation.method)) {
+        const csrf = await this.options.web!.csrfToken();
+        if (!csrf || !/^[a-f0-9]{64}$/.test(csrf)) throw new ApiClientError(403, 'permission_denied');
+        headers['x-csrf-token'] = csrf;
+      }
+      if (body !== undefined || cookieMode && !['GET', 'HEAD'].includes(operation.method)) headers["content-type"] = "application/json";
+      if (controller.signal.aborted) throw new ApiClientError(504, 'request_timeout');
       const response = await (this.options.fetch ?? globalThis.fetch)(url, {
-        method: operation.method, headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-        cache: "no-store", credentials: "omit", redirect: "error", signal: controller.signal,
+        method: operation.method, headers, ...(body === undefined ? cookieMode && !['GET', 'HEAD'].includes(operation.method) ? { body: '{}' } : {} : { body: JSON.stringify(body) }),
+        cache: "no-store", credentials: cookieMode ? "same-origin" : "omit", redirect: "error", signal: controller.signal,
       });
       const rawId = response.headers.get("x-request-id");
       const requestId = rawId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawId) ? rawId : undefined;

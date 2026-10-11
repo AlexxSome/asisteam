@@ -24,6 +24,7 @@ await suite('backend', async () => {
     'apps/api/test/social-auth.integration.mjs',
     'apps/api/test/storage.integration.mjs',
     'apps/worker/test/worker.integration.mjs',
+    'apps/api/test/web-auth.integration.mjs',
   ], { noSkip: true });
   await check('next-social-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:social-contract']);
   await check('portability-rehearsal', 'pnpm', ['migration:portability', '--', '--verified-report']);

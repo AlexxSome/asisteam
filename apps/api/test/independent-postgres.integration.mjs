@@ -39,7 +39,7 @@ try {
   await owner.query(await readFile(new URL('bootstrap.sql',root),'utf8'));
   for(const role of ['asisteam_migrator','asisteam_api','asisteam_jobs','asisteam_auth','asisteam_invitation','asisteam_billing'])await owner.query('alter role '+role+' login password '+quote(password));
   deploy=await connect(port,'asisteam_migrator');await migrate(deploy);await migrate(deploy);
-  assert.equal((await owner.query('select count(*)::int as n from db_migrations.ledger')).rows[0].n,2);
+  assert.equal((await owner.query('select count(*)::int as n from db_migrations.ledger')).rows[0].n,3);
  });
  await check('pgtap-destination-policies-and-invariants',async()=>{
   const output=await sql(name,'postgres',await readFile(new URL('tests/independent.sql',root),'utf8'));assert.doesNotMatch(output,/not ok|Looks like you failed/);assert.match(output,/1\.\.23/);
@@ -58,7 +58,7 @@ try {
   const output=await persistenceTypes(owner),path=new URL('src/persistence.types.ts',root);
   if(process.env.DB_GENERATE_TYPES==='1')await writeFile(path,output);else assert.equal(output,await readFile(path,'utf8'));
   assert.equal(digest(await readFile(new URL('migrations/0001_baseline.sql',root))),JSON.parse(await readFile(new URL('transformation.json',root),'utf8')).baselineSha256);
-  const changed=new URL('changed/',new URL('file://'+dir+'/'));await mkdir(changed);await writeFile(new URL('0001_baseline.sql',changed),'-- tampered');await writeFile(new URL('0002_retire_provider_entrypoints.sql',changed),await readFile(new URL('migrations/0002_retire_provider_entrypoints.sql',root)));await assert.rejects(migrate(deploy,changed),/migration_history_changed/);
+  const changed=new URL('changed/',new URL('file://'+dir+'/'));await mkdir(changed);await writeFile(new URL('0001_baseline.sql',changed),'-- tampered');await writeFile(new URL('0002_retire_provider_entrypoints.sql',changed),await readFile(new URL('migrations/0002_retire_provider_entrypoints.sql',root)));await writeFile(new URL('0003_web_sessions.sql',changed),await readFile(new URL('migrations/0003_web_sessions.sql',root)));await assert.rejects(migrate(deploy,changed),/migration_history_changed/);
   const missing=new URL('missing/',new URL('file://'+dir+'/'));await mkdir(missing);await assert.rejects(migrate(deploy,missing),/migration_history_missing/);
   await owner.query('create database denied');const denied=await connect(port,'asisteam_api');await assert.rejects(migrate(denied),/deployment_role_required/);await denied.end();
  });

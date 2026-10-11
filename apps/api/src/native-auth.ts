@@ -38,8 +38,22 @@ export class NativeAuth implements OnApplicationShutdown {
    return (await client.query('select app_private.auth_operation($1,$2::jsonb) as data',[operation,JSON.stringify(data)])).rows[0]?.data;
   }catch(error){return domainSqlError(error);}finally{client.release();}
  }
+ // Keep the web row lock, canonical refresh consumption and encrypted replacement
+ // in one transaction across instances. Error results commit replay revocation.
+ async webTransaction<T>(run:(call:(kind:'auth'|'web',operation:string,data:Record<string,unknown>)=>Promise<Record<string,unknown>>)=>Promise<T>):Promise<T>{
+  if(!this.pool)throw new ServiceUnavailableException();
+  const client=await this.pool.connect().catch(()=>{throw new ServiceUnavailableException();});
+  try{
+   if((await client.query(roleSql)).rows[0]?.safe!==true)throw new ServiceUnavailableException();
+   await client.query('begin');
+   const result=await run(async(kind,operation,data)=>(await client.query(kind==='web'
+    ?'select app_private.web_session_operation($1,$2::jsonb) as data'
+    :'select app_private.auth_operation($1,$2::jsonb) as data',[operation,JSON.stringify(data)])).rows[0]?.data);
+   await client.query('commit');return result;
+  }catch(error){await client.query('rollback');return domainSqlError(error);}finally{client.release();}
+ }
  private result(value:Record<string,unknown>){if(value.error)throw new UnauthorizedException();return value;}
- async rate(request:Request,action:string,email?:string){
+ async rate(request:Pick<Request,'headers'|'socket'>,action:string,email?:string){
   if(request.headers.cookie)throw new ForbiddenException(); // bearer-only API
   let ip=request.socket.remoteAddress??'unknown';
   const proxy=request.headers['x-asisteam-auth-proxy'], supplied=request.headers['x-asisteam-client-ip'];
