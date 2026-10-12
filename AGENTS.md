@@ -10,7 +10,7 @@ Aplicación **web [P0] y móvil [P1]** para el control de asistencia de deportis
 
 **Roles por membresía (nunca globales):** `ADMIN` (gestiona el grupo), `ATHLETE` (deportista), `GUARDIAN` (apoderado de menores de edad) y `COACH` (extensión [P2] autorizada e implementada en #55). ADMIN y COACH toman/corrigen estados; notas y desmarcado quedan reservados a ADMIN. La referencia de permisos sigue siendo [doc 02](docs/02-roles-y-permisos.md), incluida su sección de delegación COACH.
 
-**Estado vigente al 10-10-2026:** monorepo pnpm/Turborepo con Next.js, `packages/core`, tipos en `packages/db`, PostgreSQL17 independiente (migraciones, RLS/RPC) y Nest/Worker, Vitest y Playwright/axe. Hay **39 páginas web** en la base `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; [doc 05](docs/05-pantallas.md) enlaza cada archivo, código de pantalla y límite de implementación. Las 37 de la auditoría inicial preceden a las dos páginas de aceptación/aviso legal de #107. No hay cliente móvil implementado; la planificación vigente es nativo: Java para Android y Swift para iOS.
+**Estado vigente WEB-10 (#222, 12-10-2026):** monorepo pnpm/Turborepo con React19/Vite7/React Router7 Data Mode, `packages/core`, tipos en `packages/db`, PostgreSQL17 independiente (migraciones, RLS/RPC) y Nest/Worker, Vitest y Playwright/axe. Hay **39 destinos web** conservados desde la base histórica `48d404ab96cecd1d6ddb109616e91ed0fcabce8b`; [doc 05](docs/05-pantallas.md) enlaza cada archivo, código de pantalla y límite de implementación. Las 37 de la auditoría inicial preceden a las dos páginas de aceptación/aviso legal de #107. No hay cliente móvil implementado; la planificación vigente es nativo: Java para Android y Swift para iOS.
 
 **Módulos actuales:** acceso/invitaciones/consentimiento, grupos, integrantes/apoderados, actividades, asistencia, historial/reportes/visibilidad, perfil y soporte. Además existen COACH (#55), billing SaaS por club (#56), anuncios (#57), QR web (#58) y login social (#59), con decisiones verificadas. No eliminar esas capacidades por su etiqueta P2 ni extenderlas por inferencia. CSV (#36) y otras historias cerradas sin UI se registran como discrepancias en [doc 05 §7](docs/05-pantallas.md#7-reconciliación-de-historias-y-alcance); el cierre administrativo no demuestra entrega. Offline sigue pospuesto según #54; la app móvil P1 se planifica nativa.
 
@@ -24,12 +24,12 @@ Aplicación **web [P0] y móvil [P1]** para el control de asistencia de deportis
 
 | Capa | Elección |
 |---|---|
-| Web [P0] | **Next.js 16** (App Router, React 19, TypeScript 5) + Tailwind CSS 4 + shadcn/ui + cliente HTTP generado + TanStack Query 5 + react-hook-form + Zod |
+| Web [P0] | **React19/Vite7/React Router7 Data Mode** + TypeScript5 + Tailwind CSS4 + controles compartidos + cliente HTTP web generado + react-hook-form + Zod; Router es el único dueño de loaders/actions/revalidación |
 | Móvil [P1] | **Android nativo en Java** (Android Studio/Gradle) + **iOS nativo en Swift** (Xcode); distribución por Google Play y App Store. Migración de push Expo a tokens/APNs/FCM pendiente de planificar. |
 | Backend | **Nest/Node24**: Nest + RLS (lecturas), servicios Nest/Node + RPC PL/pgSQL (escrituras con reglas de negocio), Worker (jobs) |
 | Base de datos | **PostgreSQL 17** (PostgreSQL independiente; residencia `sa-east-1` prevista, provisión externa pendiente), esquema único multi-tenant discriminado por `group_id` |
 | Auth | Auth propio de Nest (email+contraseña [P0]; Google/Apple [P2 autorizado, #59]); `public.users` **desacoplada** de `app_private.auth_subjects` (FK opcional) para cuentas MANAGED sin credenciales |
-| Hosting/infra | Next + Nest/PostgreSQL/S3 (provisión externa pendiente) + Resend (email transaccional) + Sentry (errores) + GitHub Actions (CI) |
+| Hosting/infra | Frontend estático con proxy mismo origen + Nest/PostgreSQL/S3 (provisión externa pendiente) + Resend (email transaccional) + Sentry (errores) + GitHub Actions (CI) |
 | Monorepo | **pnpm + Turborepo** |
 
 Alternativas descartadas (comparativa en doc 06 §4): BaaS original (retirado técnicamente en MIG-24) y Flutter (degradaba el P0 web).
@@ -38,7 +38,7 @@ Alternativas descartadas (comparativa en doc 06 §4): BaaS original (retirado t�
 
 ```
 asisteam/
-├── apps/web/          # Next.js16 P0
+├── apps/web/          # React/Vite/Router P0
 ├── apps/api/          # Nest/Node24 HTTP/Auth/S3
 ├── apps/worker/       # Jobs durables con rol mínimo
 ├── apps/mobile/       # P1 planificado Java/Swift
@@ -135,13 +135,13 @@ Base canónica de 9 tablas [P0] (no es el inventario completo del esquema actual
 
 ## 6. API y backend (doc 07)
 
-El contrato HTTP generado de packages/core/api-client es consumido por Next → Nest; Nest delega el dominio a SQL/RLS transaccional con roles mínimos. Doc07 documenta operaciones y reglas; OpenAPI generado fija rutas/DTO exactos.
+El contrato HTTP generado de packages/core/api-client es consumido por React/Router → Nest; Nest delega el dominio a SQL/RLS transaccional con roles mínimos. Doc07 documenta operaciones y reglas; OpenAPI generado fija rutas/DTO exactos.
 
 - **Errores uniformes:** `{ "error": { "code": "snake_case_estable", "message": "texto en español", "details": {} } }`. HTTP: 400 validación, 401 sin sesión, 403 sin permiso, **404 no existe o no visible (anti-enumeración)**, 409 conflicto (ej. `LAST_ADMIN`, `membership_already_exists`), 422 regla de negocio (ej. `minor_cannot_leave`, `guardian_has_active_wards`), 429 rate limit.
 - **Validación:** schemas Zod en `packages/core` para web y servicios Nest/Node; las apps nativas validan formularios localmente según el mismo contrato. CHECK/UNIQUE/RPC de Postgres son la red final. Tipos TS se regeneran con generador PostgreSQL propio en cada migración; CI falla si divergen.
 - **Reglas de negocio R1–R15** (doc 07 §5) — las críticas: R1 menor-requiere-apoderado+consentimiento; R2 ADMIN toma/edita asistencia; la extensión COACH de doc 02 permite estados sin notas ni desmarcado; R3 upsert único por `(activity_id, membership_id)`, lote ≤ 500; R4 métrica canónica en vista SQL y core con los mismos tests; R5 último ADMIN no puede salir (409 `LAST_ADMIN`, con `FOR UPDATE`); R6 scoping por grupo vía RLS; R7 convocatoria = existe registro; R10 código de grupo solo incorpora ATHLETE (GUARDIAN solo por invitación dirigida); R12 invitaciones expiran a 7 días; R13 editar serie afecta solo futuras sin asistencia; R14 tipos de sistema inmutables.
-- **Auth:** JWT access (15 min) + refresh rotatorio; en web con `sesión nativa del servidor Next` (cookies HttpOnly/Secure/SameSite=Lax, **nunca localStorage**); `app_private.actor_subject_id()` → `public.users.id` vía helper `auth_user_id()`.
-- **Seguridad:** Credenciales de roles mínimos SOLO en servidores/CI, jamás en clientes ni `NEXT_PUBLIC_*`; anti-enumeración en login/recovery/invitaciones; rate limits (join por código 10/15 min, invitaciones 50/día/grupo); CORS por allowlist; contraseñas argon2id/bcrypt, mínimo 10 chars; scrubbing de PII en logs y Sentry (nunca email/phone/birthdate en logs).
+- **Auth:** JWT access (15 min) + refresh rotatorio; en web con sesión opaca Nest `asisteam-web-session` (credenciales cifradas solo en Nest/PostgreSQL, cookie HttpOnly/Secure/SameSite=Lax + Origin/CSRF, **nunca localStorage**); `app_private.actor_subject_id()` → `public.users.id` vía helper `auth_user_id()`.
+- **Seguridad:** Credenciales de roles mínimos SOLO en servidores/CI, jamás en clientes ni `VITE_*`; anti-enumeración en login/recovery/invitaciones; rate limits (join por código 10/15 min, invitaciones 50/día/grupo); CORS por allowlist; contraseñas argon2id/bcrypt, mínimo 10 chars; scrubbing de PII en logs y Sentry (nunca email/phone/birthdate en logs).
 - **Límites:** 500 memberships ACTIVE para grupos legacy; los planes pagados aplican cupos ATHLETE y límite operativo de 5.000 memberships ACTIVE según [doc 12 de suscripciones](docs/12-suscripciones-saas.md), que sustituye el límite general original; 30 grupos por usuario; paginación API default 50 / máx. 100; reportes en vivo sin cache (si p95 > 500 ms, recién ahí vista materializada — no antes).
 
 ## 7. Testing y CI (docs 06 §7.2, 09)

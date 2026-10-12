@@ -1,15 +1,16 @@
-"use client";
+// WEB-05: preserves the existing presentation with Router/HTTP adapters.
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { RouterLink as Link } from "../navigation";
+import { usePathname } from "../navigation";
+import { useLocation } from "react-router";
 import { useEffect, useId, useRef, useState } from "react";
-import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core";
-import type { MyGroup } from "@/lib/groups";
-import { GroupSelector } from "@/app/groups/group-selector";
-import { AccountMenu } from "@/components/account-menu";
-import { Button } from "@/components/ui/button";
-import { ShellIcon, type ShellIconName } from "@/components/shell-icon";
-import { NavigationProgress } from "@/components/ui/navigation-progress";
+import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
+import type { MyGroup } from "../group-data";
+import { GroupSelector } from "./group-selector";
+import { AccountMenu } from "./account-menu";
+import { Button } from "../ui";
+import { ShellIcon, type ShellIconName } from "../../src/components/shell-icon";
+import { NavigationProgress } from "../navigation";
 
 type ShellProps = {
   children: React.ReactNode;
@@ -38,7 +39,7 @@ export function GroupLogo({ src, name, preview = false }: { src?: string | null;
 /** Shared navigation only: access checks remain in the server pages and RLS. */
 export function AppShell({ children, group, groups = [], userId, wards = false, pendingApprovals }: ShellProps) {
   const pathname = usePathname();
-  const [hash, setHash] = useState("");
+  const { hash } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -66,12 +67,6 @@ export function AppShell({ children, group, groups = [], userId, wards = false, 
     : pathname?.startsWith("/profile") ? "Mi perfil" : pathname?.startsWith("/wards") ? "Mis pupilos" : pathname === "/me/history" ? "Mi asistencia por grupo" : pathname === "/groups/new" ? "Crear un grupo" : pathname === "/join" ? "Unirme con código" : pathname === "/welcome" ? "Bienvenida" : "Mis grupos";
   const inManagement = isAdmin && managementItems.some(item => item.active);
 
-  useEffect(() => {
-    const updateHash = () => setHash(window.location.hash);
-    updateHash();
-    window.addEventListener("hashchange", updateHash);
-    return () => window.removeEventListener("hashchange", updateHash);
-  }, [pathname]);
 
   function closeMenu() {
     if (dialog.current?.open) dialog.current.close();
@@ -98,7 +93,7 @@ export function AppShell({ children, group, groups = [], userId, wards = false, 
 
   const link = ({ label, href, active, icon }: NavigationItem) => <Link key={href} href={href} prefetch={false}
     aria-current={active ? "page" : undefined}
-    onClick={() => { setHash(href.includes("#") ? `#${href.split("#")[1]}` : ""); closeMenu(); }}
+    onClick={closeMenu}
     className={`flex min-h-11 items-center gap-3 rounded-md border-l-4 px-3 py-2 text-small break-words ${active
       ? "border-primary bg-info-subtle font-semibold text-info"
       : "border-transparent text-foreground hover:bg-muted"}`}>

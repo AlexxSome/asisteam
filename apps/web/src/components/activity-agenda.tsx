@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { activityDateTimeInput, activityTypeLabel, formatActivityDay, formatActivityTime } from "@asisteam/core";
-import type { ActivityPeriod } from "@/lib/activities";
+import { RouterLink as Link } from "../navigation";
+import { activityDateTimeInput, activityTypeLabel, formatActivityDay, formatActivityTime } from "@asisteam/core/browser";
+type ActivityPeriod="upcoming"|"past";
 
 type AgendaActivity = {
   id: string | null; group_id: string | null; title: string | null;

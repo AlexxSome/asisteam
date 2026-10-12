@@ -35,6 +35,7 @@ test('MIG23 evidence: omissions, stale/missing reports and slow load cannot cert
       () => write('backend', { sourceCommit: 'stale', checks: [{ check: mandatory.backend[0], status: 'PASS', tests: 81, omitted: 0 }] }),
       () => write('extended', { sourceCommit, checks: mandatory.extended.map(check => ({ check, status: 'PASS', tests: 40, omitted: 1 })) }),
       () => write('extended', { sourceCommit, checks: [{ check: mandatory.extended[0], status: 'PASS', tests: 47, omitted: 0 }] }),
+      () => write('checks', { sourceCommit, checks: [...mandatory.checks.map(check => ({ check, status: 'PASS', tests: 1, omitted: 0 })), {check:'web-unit',status:'PASS',tests:422,omitted:1}] }),
       () => write('independent-postgres', { sourceCommit, qualification: load(501) }),
       () => write('independent-postgres', { sourceCommit, qualification: load(null) }),
       () => rmSync(join(dir, '.ci-results/vite-bundle.json')),

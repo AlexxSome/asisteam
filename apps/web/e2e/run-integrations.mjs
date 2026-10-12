@@ -9,7 +9,7 @@ const hasSelector=args.some((arg,index)=>!arg.startsWith('-')&&!(args[index-1]?.
 if(!hasSelector)args.unshift('integration.test.ts');
 const fixture=await nativeBrowserDatabase();
 try {
- const child=spawn(process.execPath,['node_modules/vitest/vitest.mjs','run',...args,'--maxWorkers=1'],{env:{...process.env,...flags,TEST_DATABASE_URL:fixture.url,NATIVE_TEST_CONTAINER:fixture.name,NATIVE_TEST_OPERATOR:randomBytes(32).toString('hex'),INVITATION_PROXY_SECRET:randomBytes(32).toString('hex')},stdio:'inherit'});
+ const child=spawn(process.execPath,['node_modules/vitest/vitest.mjs','run','--config','vitest.integration.config.ts',...args,'--maxWorkers=1'],{env:{...process.env,...flags,TEST_DATABASE_URL:fixture.url,NATIVE_TEST_CONTAINER:fixture.name,NATIVE_TEST_OPERATOR:randomBytes(32).toString('hex'),INVITATION_PROXY_SECRET:randomBytes(32).toString('hex')},stdio:'inherit'});
  for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>child.kill(signal));
  const code=await new Promise(resolve=>child.on('exit',code=>resolve(code??1)));process.exitCode=code;
 }finally{await fixture.cleanup()}

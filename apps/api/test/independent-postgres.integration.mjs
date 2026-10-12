@@ -117,7 +117,7 @@ try {
  await check('destination-security-parity-concurrent-load-500ms',async()=>{
   report.qualification=await qualifyDestination({owner,app,config:runtimeConfig,ids,sessions,group,worker,wardId:managed,evidence:report});
  });
- await check('next-chromium-native-auth-independent-database',async()=>{
+ await check('static-chromium-native-auth-independent-database',async()=>{
   const output=await command(process.execPath,['apps/web/scripts/native-auth-smoke.mjs'],undefined,{INDEPENDENT_PG_TEST_URL:'postgresql://postgres:'+password+'@127.0.0.1:'+port+'/postgres'});
   assert.match(output,/PASS: Chromium/);
  });

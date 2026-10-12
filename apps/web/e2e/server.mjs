@@ -1,145 +1,187 @@
-import { startQaNest } from './nest-runtime.mjs';
-import { execFileSync, spawn } from 'node:child_process';
-import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
-import {nativeBrowserDatabase} from '../../api/test/native-browser-database.mjs';
-import {randomUUID} from 'node:crypto';
-import { roles, email, password, id, groups, activity, rosterName, pendingName, wardName, inviteCode } from './data.mjs';
-
-// Every run owns a fresh database; never reads deployment credentials.
-const config=await nativeBrowserDatabase();
-const sql = statement => {
-  try {
-    return execFileSync('docker', ['exec', '-i', config.name, 'psql', '-U', 'postgres', '-d', 'postgres', '-At', '-v', 'ON_ERROR_STOP=1'], {
-      input: statement, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'],
-    }).trim();
-  } catch (error) {
-    const code = String(error.stderr).match(/ERROR:\s+([a-z_]+)/)?.[1] ?? 'sql_error';
-    throw new Error(`Fixture QA local: ${code}`);
+import { staticServer } from "../scripts/static-server.mjs";
+import { execFileSync } from "node:child_process";
+import { mkdirSync, writeFileSync, readFileSync, rmSync, cpSync } from "node:fs";
+import { resolve } from "node:path";
+import { writeArtifact } from "../scripts/artifact.mjs";
+import { randomUUID, createHash } from "node:crypto";
+import { createRequire } from "node:module";
+import { nativeBrowserDatabase } from "../../api/test/native-browser-database.mjs";
+import { createApplication } from "../../api/dist/application.js";
+import { loadFixtureConfig, fixtureSecret } from "../../api/test/fixture-config.mjs";
+import { TransactionalEmail } from "../../api/dist/email.js";
+import { SafeLogger } from "../../api/dist/logger.js";
+import { storageFixture } from "../../api/test/storage-fixture.mjs";
+import { password, email, groups } from "./data.mjs";
+const { SignJWT, generateKeyPair, exportJWK } = createRequire(new URL("../../api/package.json", import.meta.url))("jose");
+const originalFetch = globalThis.fetch;
+let database, app, vite, storage, closing;
+const stop = () =>
+  (closing ??= (async () => {
+    globalThis.fetch = originalFetch;
+    if (vite) await new Promise(resolve => vite.close(resolve));
+    await app?.close();
+    await database?.cleanup();
+    storage?.storage.client.destroy();storage?.stop();
+    for (const file of ["runtime.json", "email.json", "logs.json"])
+      rmSync(".qa/" + file, { force: true });
+    rmSync(".qa/releases", { recursive: true, force: true });
+    rmSync(".qa/release-selection", { force: true });
+  })());
+for (const signal of ["SIGTERM", "SIGINT"])
+  process.on(signal, async () => {
+    await stop();
+    process.exit(0);
+  });
+try {
+  const subscriptions=new Map();
+  const { publicKey, privateKey } = await generateKeyPair("RS256");
+  const jwk = { ...await exportJWK(publicKey), kid: "web216", alg: "RS256", use: "sig" };
+  globalThis.fetch = async (url, init) => {
+    const address = String(url);
+    if(address.startsWith("https://api.mercadopago.com/")) {
+      const url=new URL(address);
+      if(url.pathname==="/preapproval" && init.method==="POST"){
+        const body=JSON.parse(init.body);
+        // Record only configured URL checks, never payer details or provider payloads.
+        const back=new URL(body.back_url);
+        if(back.origin!=="https://web.synthetic.example.test" || !/^\/groups\/[0-9a-f-]{36}\/billing$/.test(back.pathname) || back.search || back.hash || body.notification_url!=="https://api.synthetic.example.test/api/v1/billing/mercadopago-webhook")throw new Error("synthetic_billing_urls_invalid");
+        writeFileSync(".qa/billing-urls.json",JSON.stringify({returnPath:true,webhookPath:true,https:true}),{mode:0o600});
+        const id="web220-"+randomUUID(),item={id,external_reference:body.external_reference,collector_id:"123",status:"pending",last_modified:new Date().toISOString(),auto_recurring:body.auto_recurring,init_point:"https://www.mercadopago.cl/subscriptions/checkout?preapproval_id="+id};subscriptions.set(id,item);return Response.json(item);
+      }
+      if(url.pathname==="/preapproval/search")return Response.json({results:[...subscriptions.values()].filter(item=>item.external_reference===url.searchParams.get("external_reference"))});
+      if(url.pathname.startsWith("/preapproval/")){const item=subscriptions.get(url.pathname.split("/").at(-1));if(!item)return new Response(null,{status:404});if(init.method==="PUT"){item.status="cancelled";item.last_modified=new Date().toISOString();}return Response.json(item);}
+      if(url.pathname==="/authorized_payments/search")return Response.json({paging:{total:0},results:[]});
+      throw new Error("unexpected_synthetic_billing_resource");
+    }
+    if (address.startsWith("https://api.pwnedpasswords.com/range/")) return new Response("A".repeat(35) + ":0");
+    if (address === "https://www.googleapis.com/oauth2/v3/certs") return Response.json({ keys: [jwk] });
+    if (address === "https://oauth2.googleapis.com/token") {
+      const params = new URLSearchParams(init.body);
+      const code = JSON.parse(Buffer.from(params.get("code"), "base64url").toString());
+      if (!params.get("code_verifier") || params.get("redirect_uri") !== "http://127.0.0.1:3130/auth/callback/google") throw new Error("synthetic_oidc_invalid");
+      const token = await new SignJWT({ sub: code.sub, email: code.email, email_verified: true, nonce: code.nonce })
+        .setProtectedHeader({ alg: "RS256", kid: "web216" }).setIssuer("https://accounts.google.com")
+        .setAudience("google-client").setIssuedAt().setExpirationTime("5m").sign(privateKey);
+      return Response.json({ access_token: "synthetic-provider-token", token_type: "Bearer", id_token: token });
+    }
+    return originalFetch(url, init);
+  };
+  database = await nativeBrowserDatabase();
+  const sql = (statement) =>
+    execFileSync(
+      "docker",
+      [
+        "exec",
+        "-i",
+        database.name,
+        "psql",
+        "-U",
+        "postgres",
+        "-d",
+        "postgres",
+        "-At",
+        "-v",
+        "ON_ERROR_STOP=1",
+      ],
+      { input: statement, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] },
+    ).trim();
+  const users = {};
+  for (const role of ["first", "second", "pending", "coach", "guardian", "multi", "minor"]) {
+    const subject = randomUUID(),
+      user = randomUUID();
+    users[role] = user;
+    sql(`insert into app_private.auth_subjects(id,email,native_owned) values('${subject}','${email(role)}',true);
+   insert into app_private.auth_credentials(subject_id,password_hash) values('${subject}',extensions.crypt('${password}',extensions.gen_salt('bf',4)));
+   insert into public.users(id,auth_user_id,email,full_name,birthdate,account_status) values('${user}','${subject}','${email(role)}','Persona sintética WEB215','${role === "minor" ? "2014-01-01" : "1990-01-01"}','ACTIVE');`);
+    if (role !== "pending")
+      sql(
+        `insert into public.account_consents(user_id,terms_version,channel) values('${user}','2026-09-21','IN_APP');`,
+      );
   }
-};
-const profiles = {};
-for (const role of roles) {
-  const subject=randomUUID();
-  sql(`insert into app_private.auth_subjects(id,email,native_owned) values('${subject}','${email(role)}',true);
-    insert into app_private.auth_credentials(subject_id,password_hash) values('${subject}',extensions.crypt('${password}',extensions.gen_salt('bf',4)));
-    insert into public.users(auth_user_id,email,full_name,birthdate,account_status) values('${subject}','${email(role)}','Persona QA ${role}','1990-01-01','ACTIVE');`);
-  profiles[role] = sql(`select id from public.users where email='${email(role)}';`);
-  // Version is the same as the legal notice rendered by the existing app.
-  sql(`insert into public.account_consents(user_id,terms_version,channel)
-    select '${profiles[role]}','2026-09-21','IN_APP' where not exists
-    (select 1 from public.account_consents where user_id='${profiles[role]}' and terms_version='2026-09-21');`);
+  for (const [key, id] of Object.entries(groups))
+    sql(`insert into public.groups(id,name,sport,invite_code,created_by) values('${id}','Club WEB215 ${key}','Tenis','WEB2150${key === "first" ? "1" : "2"}','${users.first}');
+  insert into public.memberships(user_id,group_id,role,status) values('${users.first}','${id}','ADMIN','ACTIVE');`);
+  sql(
+    `insert into public.group_subscriptions(id,group_id,plan_code,amount_clp,athlete_limit,requested_by,status,activated_at) values('${randomUUID()}','${groups.second}','ACADEMY',15990,1000,'${users.first}','AUTHORIZED',now());`,
+  );
+  sql(
+    `insert into public.memberships(user_id,group_id,role,status) values('${users.second}','${groups.second}','ATHLETE','ACTIVE');`,
+  );
+  sql(`insert into public.memberships(user_id,group_id,role,status) values('${users.coach}','${groups.second}','COACH','ACTIVE'),('${users.multi}','${groups.second}','ADMIN','ACTIVE'),('${users.multi}','${groups.second}','ATHLETE','ACTIVE');`);
+  const minor=randomUUID();
+  sql(`insert into public.users(id,full_name,birthdate,account_status) values('${minor}','Pupilo sintético WEB217','2014-01-01','MANAGED');
+  insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship) values('${randomUUID()}','${users.guardian}','${minor}','Apoderado');
+  insert into public.consents(guardianship_id,consent_type,terms_version,allows_avatar) select id,'DATA_PROCESSING_MINOR','synthetic',true from public.guardianships where athlete_user_id='${minor}';
+  insert into public.memberships(user_id,group_id,role,status) values('${minor}','${groups.second}','ATHLETE','ACTIVE');`);
+  sql(`insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship) values('${randomUUID()}','${users.guardian}','${users.minor}','Apoderado');
+  insert into public.consents(guardianship_id,consent_type,terms_version) select id,'DATA_PROCESSING_MINOR','synthetic' from public.guardianships where athlete_user_id='${users.minor}';
+  insert into public.memberships(user_id,group_id,role,status) values('${users.minor}','${groups.second}','ATHLETE','ACTIVE');`);
+  storage=await storageFixture();
+  const roleUrl = (role) => {
+    const url = new URL(database.url);
+    url.username = role;
+    return url.toString();
+  };
+  const logs = [];
+  mkdirSync(".qa", { recursive: true, mode: 0o700 });
+  app = await createApplication(
+    loadFixtureConfig({
+      DATABASE_URL: roleUrl("asisteam_api"),
+      BILLING_DATABASE_URL: roleUrl("asisteam_billing"),
+      MERCADOPAGO_ACCESS_TOKEN:"synthetic-token",
+      MERCADOPAGO_WEBHOOK_SECRET:"synthetic-billing-only",
+      MERCADOPAGO_COLLECTOR_ID:"123",
+      BILLING_WEB_URL:"https://web.synthetic.example.test",
+      BILLING_WEBHOOK_URL:"https://api.synthetic.example.test/api/v1/billing/mercadopago-webhook",
+      ...storage.config,
+      OAUTH_GOOGLE_CLIENT_ID: "google-client",
+      OAUTH_GOOGLE_CLIENT_SECRET: "synthetic-google",
+      INVITATION_DATABASE_URL: roleUrl("asisteam_invitation"),
+      INVITATION_PROXY_SECRET: "3".repeat(64),
+      INVITATION_WEB_URL: "http://127.0.0.1:3130",
+      RESEND_API_KEY: "synthetic-email-only",
+      INVITATION_EMAIL_FROM: "qa@synthetic.example.test",
+      WEB_AUTH_ENABLED: "1",
+      NATIVE_AUTH_WEB_URL: "http://127.0.0.1:3130",
+    }),
+    new SafeLogger(line => {
+      logs.push(line);
+      writeFileSync(".qa/logs.json", JSON.stringify(logs), { mode: 0o600 });
+    }),
+  );
+  app.get(TransactionalEmail).send = async (payload) => {
+    writeFileSync(".qa/email.json", JSON.stringify(payload), { mode: 0o600 });
+  };
+  await app.listen(0, "127.0.0.1");
+  process.env.ASISTEAM_VITE_API_TARGET = await app.getUrl();
+  mkdirSync(".qa", { recursive: true, mode: 0o700 });
+  writeFileSync(".qa/runtime.json", JSON.stringify({
+    name: database.name,
+    loginRateKey: createHash("sha256").update(`${fixtureSecret}:login:ip:127.0.0.1`).digest("hex"),
+    invitationRateKeys: ["preview", "accept"].map(action => createHash("sha256").update(`${"3".repeat(64)}:${action}:127.0.0.1`).digest("hex")),
+  }), {
+    mode: 0o600,
+  });
+  // The full browser matrix runs the release artifact, including CSP and proxy.
+  // Candidate changes the entry asset/hash; retain previous lazy assets on upgrade.
+  const previous = resolve(".qa/releases/previous"), current = resolve(".qa/releases/current");
+  for (const directory of [previous, current]) cpSync("dist", directory, { recursive: true });
+  const manifest = JSON.parse(readFileSync("dist/release.json", "utf8"));
+  const viteManifest = JSON.parse(readFileSync(current + "/.vite/manifest.json", "utf8"));
+  const entry = Object.values(viteManifest).find(value => value.isEntry).file;
+  const candidateBytes = readFileSync(current + "/" + entry, "utf8") + "\n/* WEB09 synthetic candidate */\n";
+  const candidateName = "assets/release-" + createHash("sha256").update(candidateBytes).digest("hex").slice(0, 16) + ".js";
+  writeFileSync(current + "/" + candidateName, candidateBytes);
+  writeFileSync(current + "/index.html", readFileSync(current + "/index.html", "utf8").replace(entry, candidateName).replace("<html", '<html data-release="current"'));
+  writeArtifact(current, { sourceCommit: manifest.sourceCommit, paths: manifest.paths, performance: manifest.performance });
+  writeFileSync(".qa/release-selection", "previous", { mode: 0o600 });
+  vite = staticServer({ directory: previous, previous: [current], target: process.env.ASISTEAM_VITE_API_TARGET, selectDirectory: () => readFileSync(".qa/release-selection", "utf8").trim() === "current" ? current : previous });
+  await new Promise(resolve => vite.listen(3130, "127.0.0.1", resolve));
+  console.log("WEB09: Nest/PostgreSQL sintéticos y artefacto estático aislado listos.");
+} catch {
+  await stop();
+  console.error(
+    "WEB215: falló el arranque del entorno sintético; diagnóstico privado omitido.",
+  );
+  process.exitCode = 1;
 }
-// Refuse to overwrite a namespace owned by anything other than this fixture.
-if (sql(`select count(*) from public.groups where id in (${Object.values(groups).map(value => `'${value}'`).join(',')}) and created_by<>'${profiles.admin}';`) !== '0') {
-  throw new Error('El namespace QA ya pertenece a otro usuario');
-}
-for (const [index, [kind, group]] of Object.entries(groups).entries()) {
-  sql(`insert into public.groups(id,name,sport,invite_code,created_by)
-    values('${group}','Club QA ${kind}','Tenis','${inviteCode(index)}','${profiles.admin}') on conflict(id) do nothing;
-    update public.groups set created_at=now()-interval '100 days' where id='${group}';
-    insert into public.memberships(user_id,group_id,role,status,joined_at)
-    values('${profiles.admin}','${group}','ADMIN','ACTIVE',now()-interval '90 days') on conflict(user_id,group_id,role) do nothing;
-    insert into public.memberships(user_id,group_id,role,status,joined_at)
-    values('${profiles.multi}','${group}','ADMIN','ACTIVE',now()-interval '90 days') on conflict(user_id,group_id,role) do nothing;
-    insert into public.group_subscriptions(id,group_id,plan_code,amount_clp,athlete_limit,requested_by,status,activated_at)
-    values('${id(300+index)}','${group}','ACADEMY',15990,1000,'${profiles.admin}','AUTHORIZED',now()) on conflict(id) do nothing;
-    insert into public.activities(id,group_id,activity_type_id,title,starts_at,ends_at,created_by)
-    values('${activity(group)}','${group}','b2c3d4e5-0001-4b3c-8d4e-111111111111','Entrenamiento QA',date_trunc('day',now())-interval '1 day',date_trunc('day',now())-interval '23 hours','${profiles.admin}')
-    on conflict(id) do update set starts_at=excluded.starts_at,ends_at=excluded.ends_at;`);
-}
-// Adults without credentials fill the roster; avoid synthetic third-party PII.
-sql(`insert into public.users(id,full_name,birthdate,account_status) values ${Array.from({ length: 500 }, (_, index) => `('${id(1001+index)}','${rosterName(index+1)}','1990-01-01','MANAGED')`).join(',')} on conflict(id) do nothing;`);
-for (const [kind, count] of [['single', 1], ['fifty', 50], ['large', 500]]) {
-  const group = groups[kind];
-  // Counts refer to ATHLETE rows; administrative memberships are additional.
-  sql(`insert into public.memberships(user_id,group_id,role,status,joined_at)
-    select id,'${group}','ATHLETE','ACTIVE',now()-interval '90 days' from public.users
-    where id between '${id(1001)}' and '${id(1000+count)}' on conflict(user_id,group_id,role) do nothing;`);
-}
-for (const [role, membership] of [['athlete','ATHLETE'], ['coach','COACH'], ['multi','ATHLETE']]) {
-  sql(`insert into public.memberships(user_id,group_id,role,status,joined_at)
-    values('${profiles[role]}','${groups.fifty}','${membership}','ACTIVE',now()-interval '90 days') on conflict(user_id,group_id,role) do nothing;`);
-}
-// Keep the 50-row group exact, with accounts and a ward replacing three fillers.
-sql(`update public.memberships set status='INACTIVE' where group_id='${groups.fifty}' and user_id in ('${id(1048)}','${id(1049)}','${id(1050)}');
-  insert into public.users(id,full_name,birthdate,account_status) values
-  ('${id(2001)}','${wardName}',(current_date-interval '15 years')::date,'MANAGED'),
-  ('${id(2002)}','${pendingName}',(current_date-interval '15 years')::date,'MANAGED') on conflict(id) do nothing;
-  insert into public.guardianships(id,guardian_user_id,athlete_user_id,relationship)
-  values('${id(2101)}','${profiles.guardian}','${id(2001)}','Tutor') on conflict(guardian_user_id,athlete_user_id) do nothing;
-  insert into public.consents(guardianship_id,consent_type,terms_version,channel)
-  select '${id(2101)}','DATA_PROCESSING_MINOR','2026-09-21','IN_APP' where not exists(select 1 from public.consents where guardianship_id='${id(2101)}' and revoked_at is null);
-  insert into public.memberships(user_id,group_id,role,status,joined_at) values
-  ('${id(2001)}','${groups.fifty}','ATHLETE','ACTIVE',now()-interval '90 days'),
-  ('${id(2002)}','${groups.fifty}','ATHLETE','PENDING',null) on conflict(user_id,group_id,role) do nothing;
-  insert into public.memberships(user_id,group_id,role,status,joined_at)
-  values('${profiles.guardian}','${groups.fifty}','GUARDIAN','ACTIVE',now()-interval '90 days') on conflict(user_id,group_id,role) do nothing;
-  delete from public.attendance_records where activity_id in (${Object.values(groups).map(group => `'${activity(group)}'`).join(',')});`);
-
-// Canonical history: 6 PRESENT + 1 LATE + 2 ABSENT + 1 EXCUSED = 77.8%.
-// The domain computes metrics; fixtures only provide the ten recorded states.
-for (const [index, status] of ['PRESENT','PRESENT','PRESENT','PRESENT','PRESENT','PRESENT','LATE','ABSENT','ABSENT','EXCUSED'].entries()) {
-  sql(`insert into public.activities(id,group_id,activity_type_id,title,starts_at,ends_at,created_by)
-    values('${id(10000+index)}','${groups.fifty}','b2c3d4e5-0001-4b3c-8d4e-111111111111','Historial QA ${index+1}',
-    now()-interval '${12-index} days',now()-interval '${12-index} days'+interval '1 hour','${profiles.admin}')
-    on conflict(id) do update set starts_at=excluded.starts_at,ends_at=excluded.ends_at;
-    insert into public.attendance_records(activity_id,membership_id,status,recorded_by)
-    select '${id(10000+index)}',id,'${status}','${profiles.admin}' from public.memberships
-    where group_id='${groups.fifty}' and role='ATHLETE' and status='ACTIVE'
-    on conflict(activity_id,membership_id) do update set status=excluded.status;`);
-}
-
-// QA caches/metadata are outside .next, isolated from production builds.
-// Start only this owned cache fresh.
-rmSync('.qa/app', { recursive: true, force: true });
-mkdirSync('.qa', { recursive: true, mode:0o700 });
-const status = { loginPost: false, registerPost: false, actionArguments: false, sensitivePayload: false, token: false, sensitiveUrl: false, qrPayload: false, requests: 0 };
-const persist = () => {
-  // next build clears .next; a supervised QA server must not crash on logging.
-  mkdirSync('.qa', { recursive: true, mode:0o700 });
-  // Playwright reads this while Next continues producing output. Publish one
-  // complete snapshot so a reader never observes a truncated JSON write.
-  writeFileSync('.qa/log-check.json.tmp', JSON.stringify(status, null, 2), { mode:0o600 });
-  renameSync('.qa/log-check.json.tmp', '.qa/log-check.json');
-};
-persist();
-// Capture raw output only in memory. Reports retain booleans, never payloads.
-let tail = '';
-let ready = false;
-function inspect(chunk) {
-  const text = tail + chunk.toString();
-  if (!ready) {
-    const startup = chunk.toString().replaceAll(password, '[redacted]').replace(/[\w.+-]+@[\w.-]+/g, '[email]').replace(/eyJ[A-Za-z0-9_.-]+/g, '[token]');
-    process.stdout.write(startup);
-  }
-  ready ||= /Ready in/.test(text);
-  status.loginPost ||= /POST \/login\b/.test(text);
-  status.registerPost ||= /POST \/register\b/.test(text);
-  status.actionArguments ||= /ƒ\s*(?:loginUser|registerUser)\s*\(/.test(text);
-  status.sensitivePayload ||= text.includes(password) || /qa(?:100|120)-[\w-]+@qa(?:100|120)\.example\.test/.test(text) || text.includes('QA120 Log Probe');
-  status.qrPayload ||= /(?:[0-9a-f]{64}|activity_id=[0-9a-f-]+&token=)/i.test(text);
-  status.token ||= /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/.test(text);
-  status.sensitiveUrl ||= /(?:GET|POST) \/(?:invitations\/[0-9a-f]{32,}|[^\s]*\?[^\s]*(?:token|token_hash|code|search|next)=)/.test(text);
-  status.requests += (chunk.toString().match(/(?:GET|POST) \/[^\s]* \d{3}/g) ?? []).length;
-  tail = text.slice(-4096);
-  persist();
-}
-const nest = await startQaNest(config);
-writeFileSync('.qa/native-runtime.json',JSON.stringify(nest.runtime),{mode:0o600});
-const child = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'dev', '--hostname', '127.0.0.1', '--port', '3120'], {
-  env: { ...process.env, ...nest.env,
-    NEXT_PUBLIC_APP_URL: 'http://127.0.0.1:3120', ASISTEAM_SITE_URL: 'http://127.0.0.1:3120', NEXT_TELEMETRY_DISABLED: '1', ASISTEAM_QA: '1' }, stdio: ['ignore', 'pipe', 'pipe'],
-});
-child.stdout.on('data', inspect); child.stderr.on('data', inspect);
-console.log('QA: fixtures locales listos; diagnósticos privados reducidos a indicadores.');
-for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, async () => {
-  await nest.stop();
-  await config.cleanup();
-  child.kill(signal);
-});
-child.on('exit', async code => {
-  await nest.stop();
-  await config.cleanup();
-  if (code && !status.sensitivePayload && !status.token && !status.sensitiveUrl && !status.qrPayload) console.error(tail.replace(/[\w.+-]+@[\w.-]+/g, '[email]'));
-  process.exit(code ?? 1);
-});

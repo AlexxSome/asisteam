@@ -34,10 +34,10 @@ export async function rehearseFrontend() {
     verify('vite-container-provenance', () => { const report = JSON.parse(runtime); assert.equal(report.sourceCommit, sourceCommit); assert.match(report.artifactHash, /^[a-f0-9]{64}$/); });
   };
   try {
-    await check('vite-container-build', 'docker', ['build', '-f', 'apps/web-vite/Dockerfile', '--build-arg', 'SOURCE_COMMIT=' + sourceCommit, '-t', firstTag, '.']);
+    await check('vite-container-build', 'docker', ['build', '-f', 'apps/web/Dockerfile', '--build-arg', 'SOURCE_COMMIT=' + sourceCommit, '-t', firstTag, '.']);
     const first = (await check('vite-image-id', 'docker', ['image', 'inspect', firstTag, '--format', '{{.Id}}'])).trim();
     await start(first);
-    await check('vite-second-artifact-build', 'docker', ['build', '-f', 'apps/web-vite/Dockerfile', '--build-arg', 'SOURCE_COMMIT=' + sourceCommit, '--label', 'asisteam.ci.fixture=second', '-t', secondTag, '.']);
+    await check('vite-second-artifact-build', 'docker', ['build', '-f', 'apps/web/Dockerfile', '--build-arg', 'SOURCE_COMMIT=' + sourceCommit, '--label', 'asisteam.ci.fixture=second', '-t', secondTag, '.']);
     const second = (await check('vite-second-image-id', 'docker', ['image', 'inspect', secondTag, '--format', '{{.Id}}'])).trim();
     verify('vite-distinct-container-artifacts', () => assert.notEqual(first, second));
     await start(second);

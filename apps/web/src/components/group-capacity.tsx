@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { SUBSCRIPTION_CAPACITY_MESSAGES, type GroupCapacity } from "@asisteam/core";
-import { ActionLink } from "@/components/ui/button";
+import { RouterLink as Link } from "../navigation";
+import { SUBSCRIPTION_CAPACITY_MESSAGES, type GroupCapacity } from "@asisteam/core/browser";
+import { ActionLink } from "../ui";
 
 /** Only rendered by a server-verified ADMIN route. No invoice data reaches this component. */
 export function GroupCapacityNotice({ groupId, capacity }: { groupId: string; capacity: GroupCapacity | null }) {

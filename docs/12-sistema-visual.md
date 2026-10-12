@@ -4,7 +4,7 @@
 
 [Seguro] **UI-01 (#171, 10-10-2026):** [contrato de la referencia #170](design/issue-171/README.md) reutiliza estos tokens/controles y fija sidebar 256 px, cabecera mínima 64 px, anchos por tarea y composición 320/375/768/1024/1440/1536. Incluye siete estados, biblioteca local mínima de SVG decorativos, ajuste de nombres y propuestas desktop/móvil con [comparación anotada](design/issue-171/comparison.html). La muestra SSR está fuera de rutas productivas; adopción funcional y roles corresponden a UI-02…UI-05. No introduce paleta, fuentes, gráficos P1 ni datos sintéticos como fallback de producción.
 
-> Vigencia técnica al 10-10-2026: Next/Nest/Auth/PostgreSQL/S3 independientes. Las evidencias fechadas anteriores describen el stack de su commit y no son configuración ni gates actuales. Consulte [MIG-24](migration/issue-168/README.md) y sus nuevos runners nativos.
+> Vigencia técnica WEB-10 al 12-10-2026: React/Vite/Router/Nest/Auth/PostgreSQL/S3 independientes. Las evidencias fechadas anteriores describen el stack de su commit y no son configuración ni gates actuales. Consulte [MIG-24](migration/issue-168/README.md) y sus nuevos runners nativos.
 
 
 
@@ -81,26 +81,26 @@ Esta tabla describe la implementación compartida existente, no declara migradas
 
 | Componente / fuente | Contrato existente y responsabilidad del consumidor |
 |---|---|
-| [Button / ActionLink](../apps/web/src/components/ui/button.tsx) | `primary`, `secondary`, `tertiary`, `destructive`; aliases `default`/`outline`. Button con `loading` bloquea doble envío y establece `aria-busy`; el consumidor aporta el texto de la operación. ActionLink conserva navegación de Next y añade progreso; no simula un botón de mutación. |
+| [Button / ActionLink](../apps/web/src/ui.tsx) | `primary`, `secondary`, `tertiary`, `destructive`; aliases `default`/`outline`. Button con `loading` bloquea doble envío y establece `aria-busy`; el consumidor aporta el texto de la operación. ActionLink conserva navegación de React Router y añade progreso; no simula un botón de mutación. |
 | [Input / Textarea](../apps/web/src/components/ui/input.tsx) y [Field](../apps/web/src/components/ui/field.tsx) | Field conecta un control a label, ayuda/error mediante IDs y conserva `aria-describedby` anterior; error añade `aria-invalid`. Input/Textarea comparten borde, foco y disabled; no validan negocio por sí solos. |
 | [Alert](../apps/web/src/components/ui/alert.tsx) | Tonos error/success/warning/info con texto; por defecto error anuncia `alert`, otros `status`. El consumidor puede ajustar rol y no debe duplicar anuncios de la misma operación. |
 | [Badge](../apps/web/src/components/ui/badge.tsx) | Etiqueta neutral; no es un botón ni un indicador de selección por sí mismo. Asistencia usa etiquetas core y presentación semántica específica. |
 | [Card / CardTitle](../apps/web/src/components/ui/card.tsx) y [PageHeader](../apps/web/src/components/ui/page-header.tsx) | CardTitle admite h1/h2/h3; PageHeader genera H1. La composición decide un único H1 y orden de encabezados, sin elegir semántica por tamaño. |
-| [InlineConfirmation](../apps/web/src/components/ui/inline-confirmation.tsx) | Confirmación **no modal**, `role=group`: foco inicial en Cancelar, Escape cancela si no está ocupada, retorno al disparador o fallback; Tab puede salir. Confirmar/Cancelar se bloquean durante operación. No confundir con el drawer modal. |
-| [Pagination](../apps/web/src/components/ui/pagination.tsx) | `nav` con nombre; modo callbacks o enlaces, página anunciada con `aria-live=polite`. El consumidor mantiene filtros en URLs y decide límites. |
+| [InlineConfirmation](../apps/web/src/components/inline-confirmation.tsx) | Confirmación **no modal**, `role=group`: foco inicial en Cancelar, Escape cancela si no está ocupada, retorno al disparador o fallback; Tab puede salir. Confirmar/Cancelar se bloquean durante operación. No confundir con el drawer modal. |
+| [Pagination](../apps/web/src/components/pagination.tsx) | `nav` con nombre; modo callbacks o enlaces, página anunciada con `aria-live=polite`. El consumidor mantiene filtros en URLs y decide límites. |
 | [AppShell](../apps/web/src/components/app-shell.tsx) | Salto a contenido, main enfocable, navegación por tarea y `aria-current`; sidebar desde 1024 px y `dialog.showModal()` en móvil. Drawer: foco inicial, límites de Tab, Escape/cierre y retorno al disparador; al pasar a escritorio devuelve foco al main. Los permisos siguen en servidor/RLS. |
 | [AccountMenu](../apps/web/src/components/account-menu.tsx) | Disclosure «Mi cuenta» con Escape y retorno a summary; cierre de sesión del dispositivo, estado de envío, error y reintento. No promete cerrar otras sesiones. |
-| [ReportTableRegion](../apps/web/src/app/groups/%5BgroupId%5D/reports/report-table.tsx) | Región nombrada y enfocable para scroll horizontal local, instrucciones visibles, primera columna fija, caption y encabezados de tabla. El padre conserva el DTO autorizado; reutilizar presentación no abre datos ADMIN a otros roles. |
+| [ReportTableRegion](../apps/web/src/components/report-table.tsx) | Región nombrada y enfocable para scroll horizontal local, instrucciones visibles, primera columna fija, caption y encabezados de tabla. El padre conserva el DTO autorizado; reutilizar presentación no abre datos ADMIN a otros roles. |
 
 ### Matriz de estados compartidos
 
 | Estado | Implementación actual | Límite/recuperación |
 |---|---|---|
 | Carga de contenido | [LoadingState](../apps/web/src/components/ui/loading-state.tsx): texto `status`, sección `aria-busy` y esqueletos ocultos a lectores. | No introduce contenido ficticio como datos reales; no prueba que toda ruta tenga la misma boundary. |
-| Navegación pendiente | [NavigationProgress](../apps/web/src/components/ui/navigation-progress.tsx) usa `useLinkStatus` dentro de Link. | Anuncio «Cargando página…» mientras el router está pendiente; contempla navegación cancelada. |
+| Navegación pendiente | [NavigationProgress](../apps/web/src/shell.tsx) usa `useNavigation` de Router. | Anuncio «Cargando página…» mientras el router está pendiente; contempla navegación cancelada. |
 | Vacío | [EmptyState](../apps/web/src/components/ui/empty-state.tsx): título opcional H2, descripción y acción provistos por pantalla. | El consumidor diferencia grupo vacío, filtro sin coincidencias y página fuera de rango; CTA según permiso. |
-| Error recuperable / sin red | [ErrorState](../apps/web/src/components/ui/error-state.tsx): título según conexión, alert, `router.refresh()` + `reset()`, estado «Volviendo a cargar…» y regreso a grupos. | Reintento explícito; no cola ni reenvío offline automático. Un fallo de carga no debe aparecer como colección vacía. |
-| Recurso no disponible | [UnavailableState](../apps/web/src/components/ui/unavailable-state.tsx): mensaje seguro compartido y regreso a grupos. | No revela existencia de un grupo/recurso ajeno; distinguir errores de transporte en el consumidor. |
+| Error recuperable / sin red | [ErrorState](../apps/web/src/shell.tsx): título según conexión, alert, `useRevalidator()` de Router, estado «Volviendo a cargar…» y regreso a grupos. | Reintento explícito; no cola ni reenvío offline automático. Un fallo de carga no debe aparecer como colección vacía. |
+| Recurso no disponible | [UnavailableState](../apps/web/src/routes/unavailable.tsx): mensaje seguro compartido y regreso a grupos. | No revela existencia de un grupo/recurso ajeno; distinguir errores de transporte en el consumidor. |
 | Mutación procesando / éxito / error | Button + mensaje de la pantalla; asistencia tiene feedback y rollback por fila. | Conservar borrador si falla cuando el formulario lo soporte; no anunciar éxito antes de confirmar servidor. No existe un toast global obligatorio ni una única semántica de autosave. |
 | Selección / disabled | Asistencia usa texto, marca y `aria-pressed`; Button/Input exponen disabled real. | La selección no depende solo de color. Disabled debe acompañarse de la explicación pertinente, no sustituirla. |
 
@@ -244,3 +244,7 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 # Entrega estática y estados de navegación · WEB-09 (#221)
 
 [Seguro] [WEB-09](web-migration/issue-221/README.md) sirve el build de las39 rutas React Router y ejecuta sus recorridos con CSP/proxy/gzip reales. Conserva componentes/tokens, estados375px/teclado/axe y errores canónicos: shell200 de navegación no concede acceso ni transforma el error Nest en éxito. Assets/UI desconocidos mantienen404; imágenes autorizadas y respuestas sensibles no se cachean. Actualizar/restaurar frontend conserva sesión opaca viva y no revive logout. Next/suites históricas permanecen hasta #222; lector humano/zoom nativo/cancha y aceptación externa siguen pendientes de #181/#209.
+
+## WEB-10 · Componentes y estados definitivos
+
+[Seguro] Los controles puros (Field/Input/Alert/Card/Badge/LoadingState, iconos y CSS) viven ahora dentro de apps/web. Button/ActionLink usan Router; AppShell/drawer, tablas y confirmaciones mantienen su contrato visual. Error/carga/navigation son boundaries/revalidación de Router, sin Next Link/useLinkStatus ni revalidatePath. Los recorridos de regresión existentes se trasladan al servidor del artefacto estático y conservan320/375/768/1024/1440, teclado/axe y roles. La [transferencia de cobertura](web-migration/issue-222/coverage.json) distingue comportamiento vigente de pruebas exclusivas de SSR/Server Actions retirados. Las notas WEB-03…09 y evidencias de cortes anteriores son antecedentes fechados. Lector/zoom nativo/cancha y #170/#181/#209 siguen pendientes.

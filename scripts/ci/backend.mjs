@@ -4,6 +4,7 @@ import { check, suite, verify, evidence } from './run.mjs';
 await suite('backend', async () => {
   await check('api-session-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/api']);
   await check('worker-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/worker']);
+  await check('web-static-auth-fixture-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/web']);
   await check('private-storage-fixture-build', 'docker', ['build', '-f', 'scripts/migration/storage/Dockerfile.fixture', '-t', 'asisteam-storage-fixture:161', '.']);
   await check('independent-postgres-api-worker-types-backup-pitr', 'node', ['apps/api/test/independent-postgres.integration.mjs']);
   // Every runner owns a disposable vanilla PostgreSQL fixture.
@@ -26,7 +27,7 @@ await suite('backend', async () => {
     'apps/worker/test/worker.integration.mjs',
     'apps/api/test/web-auth.integration.mjs',
   ], { noSkip: true });
-  await check('next-social-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:social-contract']);
+  await check('static-social-auth-browser','pnpm',['--filter','@asisteam/web','test:social-contract']);
   await check('portability-rehearsal', 'pnpm', ['migration:portability', '--', '--verified-report']);
   verify('portability-no-omissions', () => {
     const report = JSON.parse(readFileSync('.ci-results/portability.json', 'utf8'));
