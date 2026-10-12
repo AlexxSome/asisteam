@@ -402,5 +402,33 @@
     "operational-acceptance/#209",
     "production-NO-GO"
   ],
-  "remoteCI": "pending-after-PR-publication"
+  "remoteCI": "pending-after-PR-publication",
+  "remoteFailureFollowUp": {
+    "failedRunId": 38189628149,
+    "failedHead": "fe95c4c3106fff83a5f603c495c6e181543b9b21",
+    "observedGates": {
+      "checks": "PASS",
+      "backend": "PASS",
+      "staging": "PASS",
+      "extended": "FAIL"
+    },
+    "nextE2ePassed": 47,
+    "viteE2ePassed": 38,
+    "failureLocation": "apps/web-vite/e2e/members.spec.ts:26:241",
+    "priorAssertionCommit": "744e4b93",
+    "causeConfidence": "probable",
+    "correction": "Await exact DOM count of 2 after ADMIN filter instead of immediate count snapshot.",
+    "localVerification": {
+      "lint": "PASS",
+      "viteTypecheck": "PASS",
+      "relatedE2e": {
+        "status": "PASS",
+        "passed": 16,
+        "omitted": 0,
+        "seconds": 51.6
+      },
+      "diffReview": "PASS"
+    },
+    "remoteVerification": "New PR head pipeline pending at this evidence commit; see PR checks for live state."
+  }
 }
