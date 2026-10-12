@@ -28,9 +28,9 @@ export default defineConfig(({ mode, command }) => {
       server.on("proxyReq", (outgoing, incoming) => {
         for (const name of Object.keys(incoming.headers))
           if (
-            name === "authorization" ||
+            (name === "authorization" && !incoming.url?.startsWith("/api/v1/")) ||
             name.startsWith("x-asisteam-") ||
-            name.startsWith("x-forwarded-")
+            name.startsWith("x-forwarded-") || name.startsWith("x-invitation-") || name === "forwarded"
           )
             outgoing.removeHeader(name);
         outgoing.setHeader(
@@ -67,6 +67,7 @@ export default defineConfig(({ mode, command }) => {
         "X-Robots-Tag": "noindex,nofollow",
       },
       proxy: {
+        "/api/v1": proxy,
         "/web-api/v1": proxy,
         "/auth/callback": proxy,
         "/profile/avatar/": proxy,
@@ -75,7 +76,7 @@ export default defineConfig(({ mode, command }) => {
     preview: {
       host: "127.0.0.1", port: 3131, strictPort: true,
       headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", "X-Robots-Tag": "noindex,nofollow" },
-      proxy: { "/web-api/v1": proxy, "/auth/callback": proxy, "/profile/avatar/": proxy },
+      proxy: { "/api/v1": proxy, "/web-api/v1": proxy, "/auth/callback": proxy, "/profile/avatar/": proxy },
     },
     build: { sourcemap: false, manifest: true },
   };

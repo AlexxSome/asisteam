@@ -16,6 +16,7 @@
     "@asisteam/api-client#typecheck": { "dependsOn": ["^build", "^typecheck"] },
     "@asisteam/web#typecheck": { "dependsOn": ["^build", "^typecheck"] },
     "@asisteam/web#test": { "dependsOn": ["^build", "^test"] },
+    "@asisteam/web-vite#build": { "dependsOn": ["^build"], "outputs": ["dist/**"], "cache": false, "env": ["SOURCE_COMMIT"] },
     "@asisteam/web-vite#typecheck": { "dependsOn": ["^build", "^typecheck"] },
     "@asisteam/web-vite#test": { "dependsOn": ["^build", "^test"] }
   }

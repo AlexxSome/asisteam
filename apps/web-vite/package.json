@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/check-bundle.mjs",
+    "build": "tsc --noEmit && vite build && node scripts/check-bundle.mjs && node scripts/artifact.mjs",
+    "start": "node scripts/static-server.mjs",
+    "test:infrastructure": "node --test scripts/static-server.test.mjs",
+    "test:bundle": "node scripts/check-performance.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

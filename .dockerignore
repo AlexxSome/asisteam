@@ -4,6 +4,9 @@ node_modules
 **/dist
 **/.next
 **/.turbo
+**/.qa
+**/.ci-*.json
+.ci-results
 graphify-out
 .pnpm-store
 .env
