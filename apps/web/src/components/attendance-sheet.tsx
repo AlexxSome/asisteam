@@ -152,22 +152,13 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
   const visibleRows = rows.filter((row) => row.full_name.toLocaleLowerCase("es").includes(query.trim().toLocaleLowerCase("es")));
   function clearSearch() { setQuery(""); setPage(1); searchRef.current?.focus(); }
   return <section className="space-y-3" aria-label="Registro de asistencia">
-    <p className="text-small tabular-nums" aria-live="polite">Presentes {counts.PRESENT} · Atrasados {counts.LATE} · Ausentes {counts.ABSENT} · Justificados {counts.EXCUSED} · Sin marcar {counts.unmarked}</p>
+    <p className="rounded-md border bg-muted px-3 py-2 text-small tabular-nums" aria-live="polite">Presentes {counts.PRESENT} · Atrasados {counts.LATE} · Ausentes {counts.ABSENT} · Justificados {counts.EXCUSED} · Sin marcar {counts.unmarked}</p>
     <div className="flex items-end gap-2">
       <div className="min-w-0 flex-1"><Field id="athlete-search" label="Buscar deportista">
         <Input ref={searchRef} type="search" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
       </Field></div>
       {query && <Button type="button" variant="tertiary" onClick={clearSearch}>Limpiar búsqueda</Button>}
     </div>
-    <Button type="button" variant="secondary" onClick={() => setConfirmAll(true)} loading={bulkBusy}
-      disabled={busy.size > 0 || counts.unmarked === 0}>Marcar todos como Presente</Button>
-    <InlineConfirmation open={confirmAll} title="Confirmar presentes" busy={bulkBusy} disabled={busy.size > 0}
-      onConfirm={() => void markAllPresent()} onCancel={() => setConfirmAll(false)} fallbackFocusRef={feedbackRef}>
-      Se marcarán como presentes los {counts.unmarked} deportistas sin registro de toda la nómina, incluidos los que no aparecen en esta búsqueda o página. Las marcas existentes se conservan.
-    </InlineConfirmation>
-    {error && <Alert>{error}</Alert>}
-    <p ref={feedbackRef} tabIndex={-1} role="status" aria-label="Resultado del guardado masivo"
-      className={bulkBusy || feedback ? "text-small text-muted-foreground" : "sr-only"}>{bulkBusy ? "Guardando toda la nómina…" : feedback}</p>
     <p className="text-caption text-muted-foreground">Cada toque guarda. {canEditNotes ? "Repite el estado para desmarcar." : "Solo ADMIN edita notas o desmarca."}</p>
     {query && <p role="status" className="text-small text-muted-foreground">{visibleRows.length} de {rows.length} deportistas coinciden.</p>}
     <ul ref={rosterRef} tabIndex={-1} aria-label="Deportistas" className="space-y-2 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">{visibleRows.slice((page - 1) * 50, page * 50).map((row) => <AthleteRow key={row.membership_id} row={row} busy={bulkBusy || busy.has(row.membership_id)} feedback={rowFeedback[row.membership_id]} canEditNotes={canEditNotes}
@@ -177,6 +168,17 @@ export function AttendanceSheet({ groupId, activityId, initialRows, canEditNotes
       totalPages={Math.ceil(visibleRows.length / 50)} onPageChange={next => {
         setPage(next); rosterRef.current?.focus(); rosterRef.current?.scrollIntoView({ block: "start" });
       }} />}
+    <section aria-label="Guardado de toda la nómina" className="space-y-3 rounded-lg border bg-surface p-3">
+    <Button type="button" variant="secondary" onClick={() => setConfirmAll(true)} loading={bulkBusy}
+      disabled={busy.size > 0 || counts.unmarked === 0}>Marcar todos como Presente</Button>
+    <InlineConfirmation open={confirmAll} title="Confirmar presentes" busy={bulkBusy} disabled={busy.size > 0}
+      onConfirm={() => void markAllPresent()} onCancel={() => setConfirmAll(false)} fallbackFocusRef={feedbackRef}>
+      Se marcarán como presentes los {counts.unmarked} deportistas sin registro de toda la nómina, incluidos los que no aparecen en esta búsqueda o página. Las marcas existentes se conservan.
+    </InlineConfirmation>
+    {error && <Alert>{error}</Alert>}
+    <p ref={feedbackRef} tabIndex={-1} role="status" aria-label="Resultado del guardado masivo"
+      className={bulkBusy || feedback ? "text-small text-muted-foreground" : "sr-only"}>{bulkBusy ? "Guardando toda la nómina…" : feedback}</p>
+    </section>
     {visibleRows.length === 0 && <EmptyState title="Sin resultados para esta búsqueda">
       No se encontraron deportistas con ese nombre. Prueba con otro nombre o limpia la búsqueda.
     </EmptyState>}

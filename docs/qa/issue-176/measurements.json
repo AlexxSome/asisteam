@@ -1,0 +1,45 @@
+{
+  "environment": "local-synthetic-chromium",
+  "geometry": {
+    "firstRowTop": 439,
+    "firstRowBottom": 569,
+    "initialScroll": 0,
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "targets": [
+      {
+        "label": "Nota",
+        "width": 46.875,
+        "height": 44
+      },
+      {
+        "label": "Presente",
+        "width": 76.25,
+        "height": 44
+      },
+      {
+        "label": "Ausente",
+        "width": 76.25,
+        "height": 44
+      },
+      {
+        "label": "Atrasado",
+        "width": 76.25,
+        "height": 44
+      },
+      {
+        "label": "Justificado",
+        "width": 76.25,
+        "height": 44
+      }
+    ]
+  },
+  "automatedTask": {
+    "athletes": 20,
+    "elapsedMs": 2215,
+    "confirmed": 20
+  },
+  "humanDeviceTask": "PENDING: 20 deportistas / menos de 60 segundos en teléfono real"
+}

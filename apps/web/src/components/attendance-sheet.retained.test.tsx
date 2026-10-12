@@ -44,7 +44,6 @@ describe("toma de asistencia", () => {
     const user = userEvent.setup();
     render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
     await user.tab(); // búsqueda
-    await user.tab(); // acción en lote
     await user.tab(); // nota
     await user.tab(); // presente
     const present = controls("Ana").getByRole("button", { name: "Presente" });
@@ -123,13 +122,13 @@ describe("toma de asistencia", () => {
 
 it("la confirmación inline recibe foco, permite Tab fuera y Escape devuelve al disparador", async () => {
   const user = userEvent.setup();
-  render(<AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} />);
+  render(<><AttendanceSheet groupId={group} activityId={activity} initialRows={[ana]} /><button>Después de la nómina</button></>);
   const trigger = screen.getByRole("button", { name: "Marcar todos como Presente" });
   await user.click(trigger);
   const cancel = screen.getByRole("button", { name: "Cancelar" });
   expect(document.activeElement).toBe(cancel);
   await user.tab();
-  expect(document.activeElement).toBe(screen.getByRole("button", { name: "Nota de Ana (opcional)" }));
+  expect(document.activeElement).toBe(screen.getByRole("button", { name: "Después de la nómina" }));
   await user.tab({ shift: true });
   await user.keyboard("{Escape}");
   expect(screen.queryByRole("group", { name: "Confirmar presentes" })).toBeNull();
