@@ -232,3 +232,12 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 [Seguro] [WEB-07](web-migration/issue-219/README.md) adapta ActivityForm, ActivityTypeForm, AttendanceSheet, ReportFilters/Table/Stats e historial a React Router y al SDK cookie/CSRF. Conserva controles de 44 px, chips con texto/marca/color, feedback junto a la fila, confirmación inline con Cancelar/Escape/foco, búsqueda/páginas de 50 y lotes de 500 parciales. Borrador de actividad usa blocker/beforeunload; un write confirmado navega sin anunciar descarte. Una respuesta incierta revierte la presentación provisional y solicita actualizar sin reenvío automático.
 
 [Seguro] Historial propio/pupilo y reportes conservan métricas core/SQL, null «Sin datos», puntualidad y período Chile; son tablas con caption/scope, primera columna fija y scroll contenido. Filtros usan borrador/Aplicar/URL y reinician contexto por grupo/pupilo. Fotos se resuelven con PrivateAvatar/S3 autorizado. La matriz automática responsive/axe acredita estados sintéticos; cancha, lector de pantalla y zoom nativo conservan aceptación pendiente de #176/#178/#209.
+
+
+## Estados billing, anuncios y QR en Vite · WEB-08 (#220)
+
+[Seguro] WEB-08 adapta BillingPanel, AnnouncementComposer/Form/Management, WallSession/Refresh/PushPreference, QrDisplay y CheckinForm a Router/SDK cookie. Conserva tokens, controles44px, confirmaciones inline con Cancelar/Escape/foco, estados y etiquetas españolas. Billing mantiene reserva/checkout incierto, consulta explícita y regreso sin acreditación de pago; deuda/cancelación/capacidad corresponden al DTO canónico.
+
+[Seguro] El muro mantiene lectura separada de edición, texto plano escapado, borrador y versión original; refresh30s/foco/acción explícita se pausa con editor/confirmación abiertos. La revalidación conserva mensajes de publicación/eliminación y preferencia confirmada. QR mantiene superficie blanca, margen local SVG, contador no vivo, renovación monotónica y ajustes plegados con guardado explícito. Check-in distingue lectura, login, registro, confirmación, registro previo, vencimiento y reintento recuperable. El token no llega a storage, enlaces ni capturas; login email/contraseña continúa en memoria y otros métodos requieren reescaneo.
+
+[Seguro] [Matriz sintética y capturas enmascaradas](web-migration/issue-220/README.md) registra reflow320–1440/axe y límites humanos. El rediseño UI-10 (#180), lector de pantalla, zoom nativo y uso a una mano continúan pendientes; esta paridad técnica no declara aprobación de esos gates ni de producción.

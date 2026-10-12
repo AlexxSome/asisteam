@@ -323,3 +323,12 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 | [`/groups/:groupId/reports`](../apps/web-vite/src/routes/reports.tsx) | REP-01 / REP-02 | SPA: ADMIN/COACH agregados; ATHLETE/GUARDIAN propios/pupilos y toggles V4. |
 
 [Seguro] Los filtros/estados pertenecen al grupo/pupilo actual; Nest/RLS revalida sesión, roles y V1–V6. #176/#178 conservan su coordinación y aceptación humana; no se acredita rediseño adicional. QR/billing/anuncios corresponden a WEB-08 y Next continúa hasta WEB-10. No se añade historial ADMIN inexistente, CSV, gráficos ni métricas globales.
+
+
+## Paridad Vite de capacidades autorizadas · WEB-08 (#220)
+
+[Seguro] WEB-08 incorpora las cuatro rutas existentes en el frontend paralelo React Router: [suscripción del club](../apps/web-vite/src/routes/billing.tsx) (`/groups/:groupId/billing`), [muro](../apps/web-vite/src/routes/announcements.tsx) (`/groups/:groupId/announcements`), [emisión QR ADMIN](../apps/web-vite/src/routes/qr.tsx) (`/groups/:groupId/activities/:activityId/qr`) y [llegada propia](../apps/web-vite/src/routes/check-in.tsx) (`/check-in`). Conserva las capacidades #55–#59; Next permanece hasta WEB-10. Sesión cookie/CSRF, autorización, cupos, webhooks, push Expo transitorio y firma/caducidad/idempotencia QR siguen en Nest/PostgreSQL/Worker.
+
+[Seguro] Las consultas pertenecen a loaders y la revalidación a Router, sin caché adicional. El retorno de pago ignora `status`/`payment_id`; solo el ledger del servidor acredita pagos y capacidad. El muro conserva versiones, borradores, pausa de refresco y opt-in global. El QR se retira al vencer/ocultarse; check-in limpia el fragmento y conserva el token solo en memoria durante login email/contraseña. Otro método de acceso o aceptación legal exige reescanear tras completar el flujo. Ningún enlace de salida contiene el token.
+
+[Seguro] [Evidencia, matriz y límites de #220](web-migration/issue-220/README.md) distingue navegador/HTTP/SQL real y transporte externo sintético. UI-10 (#180) conserva su rediseño pendiente; esta entrega adapta la presentación vigente, sin nuevos módulos móviles/FCM/APNs. WEB-09/10, aceptación #209 y producción NO-GO continúan pendientes.
