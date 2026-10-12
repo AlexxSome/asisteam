@@ -340,3 +340,9 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 ## WEB-10 · Contrato definitivo y antecedentes
 
 [Seguro] Las entradas WEB-03…09 anteriores registran el estado de cada commit durante coexistencia y son antecedentes históricos. WEB-10 sustituye esa coexistencia: no queda App Router, middleware, Server Actions, BFF ni emisor de sesión en el frontend. La navegación usa loaders/actions/fetchers y la autorización efectiva sigue Nest/RLS. HTML shell200 no acredita acceso: API conserva401/403/404/503 y React presenta el estado seguro. Legal es legible sin JS; las demás vistas necesitan JS. No se añaden pantallasCSV/offline/móvil ni el rediseño pendiente de #170.
+
+## UI-03 · Contrato de datos de GRP-02 (#173)
+
+[Seguro] [Inicio del grupo](../apps/web/src/routes/group.tsx) consume el DTO autorizado `getGroupDashboard` por Router→SDK→Nest→RPC SQL: indicadores completos por período Chile, mensual ponderado, próximas3/en curso, respaldo finalizada, último anuncio y actividad del día con selección estable. ADMIN recibe preview4; COACH solo resumen operativo sin notas/filas ajenas; ATHLETE/GUARDIAN mantienen lo propio/pupilos y totales según toggles. Falta de permiso y Sin datos conservan null, nunca ceros ficticios.
+
+[Seguro] Se agrega el selector del día si hay varias actividades (Form GET, páginas50), sin nuevos destinos. Tareas GUARDIAN se cuentan en servidor sin recorrer páginas de onboarding en el cliente; capacidad ADMIN conserva billing canónico. [Contrato, fuentes, permisos y evidencia](qa/issue-173/README.md) delimitan el alcance: composición/dashboard completo #174 y variantes #175 continúan pendientes; rutas39 y códigos existentes se conservan.

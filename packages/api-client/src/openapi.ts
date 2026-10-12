@@ -1,4 +1,38 @@
 export interface paths {
+    "/api/v1/groups/{groupId}/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** UI-03: snapshot autorizado de inicio; métricas Chile ponderadas, previews4 ADMIN y propios/pupilos */
+        get: operations["getGroupDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/web-api/v1/groups/{groupId}/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** UI-03: snapshot autorizado de inicio; métricas Chile ponderadas, previews4 ADMIN y propios/pupilos */
+        get: operations["webGetGroupDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/social/providers": {
         parameters: {
             query?: never;
@@ -2545,6 +2579,264 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        DashboardQuery: {
+            /** Format: uuid */
+            activity_id?: string;
+            /** @default 1 */
+            records_page: number;
+            /** @default 1 */
+            day_page: number;
+            /** @default 1 */
+            wards_page: number;
+        };
+        GroupDashboard: {
+            /** Format: uuid */
+            group_id: string;
+            /** Format: date-time */
+            now: string;
+            /** @enum {string} */
+            access: "admin" | "coach" | "member";
+            periods: {
+                week: {
+                    /** Format: date */
+                    from: string;
+                    /** Format: date */
+                    to: string;
+                    /** Format: date-time */
+                    from_utc: string;
+                    /** Format: date-time */
+                    until_utc: string;
+                };
+                month: {
+                    /** Format: date */
+                    from: string;
+                    /** Format: date */
+                    to: string;
+                    /** Format: date-time */
+                    from_utc: string;
+                    /** Format: date-time */
+                    until_utc: string;
+                };
+                /** @enum {string} */
+                timezone: "America/Santiago";
+            };
+            indicators: {
+                active_athletes: number;
+                week_activities: number;
+                monthly: {
+                    convened: number;
+                    present: number;
+                    late: number;
+                    absent: number;
+                    excused: number;
+                    attendance_pct: number | null;
+                    late_rate: number | null;
+                };
+            } | null;
+            latest_announcement: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                body: string;
+                /** Format: date-time */
+                created_at: string;
+                /** Format: date-time */
+                updated_at: string;
+            } | null;
+            pending: number | null;
+            upcoming: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                title: string;
+                description: string | null;
+                location: string | null;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: date-time */
+                ends_at: string;
+                activity_type_name: string;
+                activity_type_color: string | null;
+                is_system_type: boolean;
+                recurrence_rule: {
+                    /** @enum {string} */
+                    freq: "WEEKLY";
+                    by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                    until: string;
+                } | null;
+                /** Format: uuid */
+                recurrence_source_id: string | null;
+            }[];
+            previous: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                title: string;
+                description: string | null;
+                location: string | null;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: date-time */
+                ends_at: string;
+                activity_type_name: string;
+                activity_type_color: string | null;
+                is_system_type: boolean;
+                recurrence_rule: {
+                    /** @enum {string} */
+                    freq: "WEEKLY";
+                    by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                    until: string;
+                } | null;
+                /** Format: uuid */
+                recurrence_source_id: string | null;
+            } | null;
+            today: {
+                data: {
+                    /** Format: uuid */
+                    id: string;
+                    /** Format: uuid */
+                    group_id: string;
+                    /** Format: uuid */
+                    activity_type_id: string;
+                    title: string;
+                    description: string | null;
+                    location: string | null;
+                    /** Format: date-time */
+                    starts_at: string;
+                    /** Format: date-time */
+                    ends_at: string;
+                    activity_type_name: string;
+                    activity_type_color: string | null;
+                    is_system_type: boolean;
+                    recurrence_rule: {
+                        /** @enum {string} */
+                        freq: "WEEKLY";
+                        by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                        until: string;
+                    } | null;
+                    /** Format: uuid */
+                    recurrence_source_id: string | null;
+                }[];
+                total: number;
+                /** @default 1 */
+                page: number;
+            };
+            /** Format: uuid */
+            selected_activity_id: string | null;
+            selected_activity: {
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                group_id: string;
+                /** Format: uuid */
+                activity_type_id: string;
+                title: string;
+                description: string | null;
+                location: string | null;
+                /** Format: date-time */
+                starts_at: string;
+                /** Format: date-time */
+                ends_at: string;
+                activity_type_name: string;
+                activity_type_color: string | null;
+                is_system_type: boolean;
+                recurrence_rule: {
+                    /** @enum {string} */
+                    freq: "WEEKLY";
+                    by_weekday: ("MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU")[];
+                    until: string;
+                } | null;
+                /** Format: uuid */
+                recurrence_source_id: string | null;
+            } | null;
+            guardian_tasks: {
+                consents: number;
+                activations: number;
+            } | null;
+            context: {
+                /** Format: uuid */
+                activity_id: string;
+                /** @enum {string} */
+                phase: "preparation" | "started";
+                active_athletes: number;
+                recorded: number;
+                unmarked: number;
+                counts: {
+                    convened: number;
+                    present: number;
+                    late: number;
+                    absent: number;
+                    excused: number;
+                    attendance_pct: number | null;
+                    late_rate: number | null;
+                };
+                records: {
+                    data: {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        status: "PRESENT" | "ABSENT" | "LATE" | "EXCUSED";
+                        note: string | null;
+                        /** Format: uuid */
+                        membership_id: string;
+                        full_name: string;
+                    }[];
+                    total: number;
+                    /** @default 1 */
+                    page: number;
+                } | null;
+            } | null;
+            personal: {
+                monthly: {
+                    convened: number;
+                    present: number;
+                    late: number;
+                    absent: number;
+                    excused: number;
+                    attendance_pct: number | null;
+                    late_rate: number | null;
+                };
+                selected_record: {
+                    /** Format: uuid */
+                    id: string;
+                    /** @enum {string} */
+                    status: "PRESENT" | "ABSENT" | "LATE" | "EXCUSED";
+                    note: string | null;
+                } | null;
+            } | null;
+            wards: {
+                data: {
+                    /** Format: uuid */
+                    athlete_user_id: string;
+                    full_name: string;
+                    monthly: {
+                        convened: number;
+                        present: number;
+                        late: number;
+                        absent: number;
+                        excused: number;
+                        attendance_pct: number | null;
+                        late_rate: number | null;
+                    };
+                    selected_record: {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        status: "PRESENT" | "ABSENT" | "LATE" | "EXCUSED";
+                        note: string | null;
+                    } | null;
+                }[];
+                total: number;
+                /** @default 1 */
+                page: number;
+            } | null;
+        };
         WebRecovery: {
             /** Format: email */
             email: string;
@@ -3828,6 +4120,258 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getGroupDashboard: {
+        parameters: {
+            query?: {
+                activity_id?: string;
+                records_page?: number;
+                day_page?: number;
+                wards_page?: number;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupDashboard"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    webGetGroupDashboard: {
+        parameters: {
+            query?: {
+                activity_id?: string;
+                records_page?: number;
+                day_page?: number;
+                wards_page?: number;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Respuesta válida */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupDashboard"];
+                };
+            };
+            /** @description Error 400; sin SQL, tokens ni datos privados */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 401; sin SQL, tokens ni datos privados */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 403; sin SQL, tokens ni datos privados */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 404; sin SQL, tokens ni datos privados */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 409; sin SQL, tokens ni datos privados */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 410; sin SQL, tokens ni datos privados */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 422; sin SQL, tokens ni datos privados */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 429; sin SQL, tokens ni datos privados */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 500; sin SQL, tokens ni datos privados */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 503; sin SQL, tokens ni datos privados */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Error 504; sin SQL, tokens ni datos privados */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     getSocialProviders: {
         parameters: {
             query?: never;

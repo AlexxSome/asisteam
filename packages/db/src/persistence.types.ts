@@ -1123,6 +1123,7 @@ export type PersistenceSchema = {
       "delete_group_announcement": { Args: { "p_group_id": string; "p_announcement_id": string; "p_updated_at": string }; Returns: undefined };
       "get_group_attendance_report": { Args: { "p_group_id": string; "p_period"?: string; "p_from"?: string; "p_to"?: string; "p_activity_type_ids"?: (string)[]; "p_include_inactive"?: boolean; "p_page"?: number; "p_page_size"?: number; "p_sort"?: string }; Returns: Json };
       "get_group_billing": { Args: { "p_group_id": string; "p_page"?: number }; Returns: Json };
+      "get_group_dashboard": { Args: { "p_group_id": string; "p_activity_id"?: string; "p_records_page"?: number; "p_day_page"?: number; "p_wards_page"?: number }; Returns: Json };
       "get_group_stats": { Args: { "p_group_id": string; "p_page"?: number; "p_page_size"?: number }; Returns: Json };
       "get_my_attendance_history": { Args: { "p_group_id": string; "p_period"?: string; "p_from"?: string; "p_to"?: string; "p_activity_type_ids"?: (string)[]; "p_page"?: number; "p_page_size"?: number }; Returns: Json };
       "get_qr_checkin_settings": { Args: { "p_group_id": string }; Returns: Json };
@@ -1867,6 +1868,7 @@ export type PersistenceSchema = {
       "lock_attendance_activity": { Args: { "p_activity_id": string }; Returns: string };
       "lookup_billing_subscription": { Args: { "p_subscription_id": string }; Returns: Json };
       "majority_transition": { Args: {  }; Returns: number };
+      "membership_onboarding_rows": { Args: { "p_group_id"?: string; "p_athlete_user_id"?: string; "p_membership_id"?: string; "p_as_guardian"?: boolean }; Returns: { "membership_id": string; "athlete_user_id": string; "group_id": string; "group_name": string; "full_name": string; "membership_status": string; "account_status": string; "is_minor": boolean; "guardian_linked": boolean; "guardian_ready": boolean; "requires_managed_consent": boolean; "can_consent": boolean; "relationship": string; "capacity_block": string; "total_count": number }[] };
       "native_session_user_id": { Args: { "p_session_id": string }; Returns: string };
       "password_auth_operation": { Args: { "p_operation": string; "p_data": Json }; Returns: Json };
       "qr_checkin_status": { Args: { "p_starts_at": string; "p_now": string; "p_opens_before": number; "p_closes_after": number; "p_late_after": number }; Returns: string };

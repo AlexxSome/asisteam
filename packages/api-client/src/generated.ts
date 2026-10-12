@@ -2,6 +2,9 @@
 import type { operations } from "./openapi.js";
 import { ApiTransport } from "./transport.js";
 export class ApiClient extends ApiTransport {
+  getGroupDashboard(input: { params: operations["getGroupDashboard"]["parameters"]["path"]; query?: operations["getGroupDashboard"]["parameters"]["query"] }): Promise<operations["getGroupDashboard"]["responses"][200]["content"]["application/json"]> {
+    return this.execute("getGroupDashboard", input ?? {});
+  }
   getSocialProviders(): Promise<operations["getSocialProviders"]["responses"][200]["content"]["application/json"]> {
     return this.execute("getSocialProviders", {});
   }

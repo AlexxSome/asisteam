@@ -12,6 +12,7 @@ await suite('backend', async () => {
     'apps/api/test/native-suite.mjs',
     'apps/api/test/auth-cutover.integration.mjs',
     'apps/api/test/activities.integration.mjs',
+    'apps/api/test/dashboard.integration.mjs',
     'apps/api/test/announcements.integration.mjs',
     'apps/api/test/attendance.integration.mjs',
     'apps/api/test/billing.integration.mjs',
@@ -42,6 +43,7 @@ await suite('backend', async () => {
     assert.equal(report.checks.find(record => record.check === 'owned-native-fixture').status, 'FAIL');
     assert.equal(report.checks.find(record => record.check === 'owned-resource-cleanup').status, 'PASS');
   });
+  await check('pgtap-dashboard', 'node', ['packages/db/scripts/test.mjs', 'packages/db/tests/dashboard.test.sql'], { env: { DOMAIN_SQL_REPORT_NAME: 'dashboard-sql' }, noSkip: true });
   await check('pgtap-all-domain', 'node', ['packages/db/scripts/test.mjs']);
   verify('sql-coverage-preserved', () => {
     const domain = JSON.parse(readFileSync('.ci-results/domain-sql.json', 'utf8'));

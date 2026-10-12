@@ -6,6 +6,386 @@
     "description": "MIG-19. Google/Apple con transacción cifrada, claims validados y vinculación explícita sin fusionar por email. MIG-17. Avatar privado S3 con validación y permisos SQL, URLs firmadas internas. MIG-16. QR/configuración/llegada propia implementados sobre firma, reloj y claves SQL existentes. Anuncios/preferencias/tokens implementados; Expo en worker con handoff SQL. Billing/ledger y checkout implementados con motor compartido y ejecutor SQL único; webhook firmado fuera del SDK autenticado. Historial/reportes y asistencia y actividades/tipos/series e invitaciones/claim e integrantes/apoderados/consentimientos y grupos/perfil implementados con sesión temporal y SQL canónico. Refines Zod (edad/roles/URLs) y reglas SQL no se sustituyen por JSON Schema."
   },
   "paths": {
+    "/api/v1/groups/{groupId}/dashboard": {
+      "get": {
+        "operationId": "getGroupDashboard",
+        "summary": "UI-03: snapshot autorizado de inicio; métricas Chile ponderadas, previews4 ADMIN y propios/pupilos",
+        "tags": [
+          "groups"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "activity_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "records_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "day_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "wards_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupDashboard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web-api/v1/groups/{groupId}/dashboard": {
+      "get": {
+        "operationId": "webGetGroupDashboard",
+        "summary": "UI-03: snapshot autorizado de inicio; métricas Chile ponderadas, previews4 ADMIN y propios/pupilos",
+        "tags": [
+          "groups"
+        ],
+        "x-implementation-status": "implemented",
+        "security": [
+          {
+            "webSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "activity_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "records_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "day_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "wards_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta válida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupDashboard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 400; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error 401; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error 403; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error 404; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error 409; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Error 410; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error 422; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error 429; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error 500; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error 503; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Error 504; sin SQL, tokens ni datos privados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/social/providers": {
       "get": {
         "operationId": "getSocialProviders",
@@ -27683,6 +28063,1115 @@
       }
     },
     "schemas": {
+      "DashboardQuery": {
+        "type": "object",
+        "properties": {
+          "activity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "records_page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "default": 1
+          },
+          "day_page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "default": 1
+          },
+          "wards_page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "default": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "GroupDashboard": {
+        "type": "object",
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "now": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "coach",
+              "member"
+            ]
+          },
+          "periods": {
+            "type": "object",
+            "properties": {
+              "week": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "to": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "from_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "until_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to",
+                  "from_utc",
+                  "until_utc"
+                ],
+                "additionalProperties": false
+              },
+              "month": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "to": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "from_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "until_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to",
+                  "from_utc",
+                  "until_utc"
+                ],
+                "additionalProperties": false
+              },
+              "timezone": {
+                "type": "string",
+                "enum": [
+                  "America/Santiago"
+                ]
+              }
+            },
+            "required": [
+              "week",
+              "month",
+              "timezone"
+            ],
+            "additionalProperties": false
+          },
+          "indicators": {
+            "type": "object",
+            "properties": {
+              "active_athletes": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "week_activities": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "monthly": {
+                "type": "object",
+                "properties": {
+                  "convened": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "present": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "late": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "absent": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "excused": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "attendance_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "nullable": true
+                  },
+                  "late_rate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "convened",
+                  "present",
+                  "late",
+                  "absent",
+                  "excused",
+                  "attendance_pct",
+                  "late_rate"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "active_athletes",
+              "week_activities",
+              "monthly"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "latest_announcement": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "body",
+              "created_at",
+              "updated_at"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "pending": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "nullable": true
+          },
+          "upcoming": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "group_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "activity_type_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "location": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "starts_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "ends_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "activity_type_name": {
+                  "type": "string"
+                },
+                "activity_type_color": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "is_system_type": {
+                  "type": "boolean"
+                },
+                "recurrence_rule": {
+                  "type": "object",
+                  "properties": {
+                    "freq": {
+                      "type": "string",
+                      "enum": [
+                        "WEEKLY"
+                      ]
+                    },
+                    "by_weekday": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "MO",
+                          "TU",
+                          "WE",
+                          "TH",
+                          "FR",
+                          "SA",
+                          "SU"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 7
+                    },
+                    "until": {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    }
+                  },
+                  "required": [
+                    "freq",
+                    "by_weekday",
+                    "until"
+                  ],
+                  "additionalProperties": false,
+                  "nullable": true
+                },
+                "recurrence_source_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id",
+                "group_id",
+                "activity_type_id",
+                "title",
+                "description",
+                "location",
+                "starts_at",
+                "ends_at",
+                "activity_type_name",
+                "activity_type_color",
+                "is_system_type",
+                "recurrence_rule",
+                "recurrence_source_id"
+              ],
+              "additionalProperties": false
+            },
+            "maxItems": 3
+          },
+          "previous": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "group_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "activity_type_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "location": {
+                "type": "string",
+                "nullable": true
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "activity_type_name": {
+                "type": "string"
+              },
+              "activity_type_color": {
+                "type": "string",
+                "nullable": true
+              },
+              "is_system_type": {
+                "type": "boolean"
+              },
+              "recurrence_rule": {
+                "type": "object",
+                "properties": {
+                  "freq": {
+                    "type": "string",
+                    "enum": [
+                      "WEEKLY"
+                    ]
+                  },
+                  "by_weekday": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "MO",
+                        "TU",
+                        "WE",
+                        "TH",
+                        "FR",
+                        "SA",
+                        "SU"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 7
+                  },
+                  "until": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  }
+                },
+                "required": [
+                  "freq",
+                  "by_weekday",
+                  "until"
+                ],
+                "additionalProperties": false,
+                "nullable": true
+              },
+              "recurrence_source_id": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "group_id",
+              "activity_type_id",
+              "title",
+              "description",
+              "location",
+              "starts_at",
+              "ends_at",
+              "activity_type_name",
+              "activity_type_color",
+              "is_system_type",
+              "recurrence_rule",
+              "recurrence_source_id"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "today": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "group_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "activity_type_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "location": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "starts_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "ends_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "activity_type_name": {
+                      "type": "string"
+                    },
+                    "activity_type_color": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "is_system_type": {
+                      "type": "boolean"
+                    },
+                    "recurrence_rule": {
+                      "type": "object",
+                      "properties": {
+                        "freq": {
+                          "type": "string",
+                          "enum": [
+                            "WEEKLY"
+                          ]
+                        },
+                        "by_weekday": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "MO",
+                              "TU",
+                              "WE",
+                              "TH",
+                              "FR",
+                              "SA",
+                              "SU"
+                            ]
+                          },
+                          "minItems": 1,
+                          "maxItems": 7
+                        },
+                        "until": {
+                          "type": "string",
+                          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                        }
+                      },
+                      "required": [
+                        "freq",
+                        "by_weekday",
+                        "until"
+                      ],
+                      "additionalProperties": false,
+                      "nullable": true
+                    },
+                    "recurrence_source_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "group_id",
+                    "activity_type_id",
+                    "title",
+                    "description",
+                    "location",
+                    "starts_at",
+                    "ends_at",
+                    "activity_type_name",
+                    "activity_type_color",
+                    "is_system_type",
+                    "recurrence_rule",
+                    "recurrence_source_id"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 50
+              },
+              "total": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "page": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000000,
+                "default": 1
+              }
+            },
+            "required": [
+              "data",
+              "total"
+            ],
+            "additionalProperties": false
+          },
+          "selected_activity_id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "selected_activity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "group_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "activity_type_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "location": {
+                "type": "string",
+                "nullable": true
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "activity_type_name": {
+                "type": "string"
+              },
+              "activity_type_color": {
+                "type": "string",
+                "nullable": true
+              },
+              "is_system_type": {
+                "type": "boolean"
+              },
+              "recurrence_rule": {
+                "type": "object",
+                "properties": {
+                  "freq": {
+                    "type": "string",
+                    "enum": [
+                      "WEEKLY"
+                    ]
+                  },
+                  "by_weekday": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "MO",
+                        "TU",
+                        "WE",
+                        "TH",
+                        "FR",
+                        "SA",
+                        "SU"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 7
+                  },
+                  "until": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  }
+                },
+                "required": [
+                  "freq",
+                  "by_weekday",
+                  "until"
+                ],
+                "additionalProperties": false,
+                "nullable": true
+              },
+              "recurrence_source_id": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "group_id",
+              "activity_type_id",
+              "title",
+              "description",
+              "location",
+              "starts_at",
+              "ends_at",
+              "activity_type_name",
+              "activity_type_color",
+              "is_system_type",
+              "recurrence_rule",
+              "recurrence_source_id"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "guardian_tasks": {
+            "type": "object",
+            "properties": {
+              "consents": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "activations": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "consents",
+              "activations"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "activity_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "phase": {
+                "type": "string",
+                "enum": [
+                  "preparation",
+                  "started"
+                ]
+              },
+              "active_athletes": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "recorded": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "unmarked": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "counts": {
+                "type": "object",
+                "properties": {
+                  "convened": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "present": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "late": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "absent": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "excused": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "attendance_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "nullable": true
+                  },
+                  "late_rate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "convened",
+                  "present",
+                  "late",
+                  "absent",
+                  "excused",
+                  "attendance_pct",
+                  "late_rate"
+                ],
+                "additionalProperties": false
+              },
+              "records": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "PRESENT",
+                            "ABSENT",
+                            "LATE",
+                            "EXCUSED"
+                          ]
+                        },
+                        "note": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "membership_id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "full_name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "status",
+                        "note",
+                        "membership_id",
+                        "full_name"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "maxItems": 4
+                  },
+                  "total": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "page": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000000,
+                    "default": 1
+                  }
+                },
+                "required": [
+                  "data",
+                  "total"
+                ],
+                "additionalProperties": false,
+                "nullable": true
+              }
+            },
+            "required": [
+              "activity_id",
+              "phase",
+              "active_athletes",
+              "recorded",
+              "unmarked",
+              "counts",
+              "records"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "personal": {
+            "type": "object",
+            "properties": {
+              "monthly": {
+                "type": "object",
+                "properties": {
+                  "convened": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "present": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "late": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "absent": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "excused": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "attendance_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "nullable": true
+                  },
+                  "late_rate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "convened",
+                  "present",
+                  "late",
+                  "absent",
+                  "excused",
+                  "attendance_pct",
+                  "late_rate"
+                ],
+                "additionalProperties": false
+              },
+              "selected_record": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PRESENT",
+                      "ABSENT",
+                      "LATE",
+                      "EXCUSED"
+                    ]
+                  },
+                  "note": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "id",
+                  "status",
+                  "note"
+                ],
+                "additionalProperties": false,
+                "nullable": true
+              }
+            },
+            "required": [
+              "monthly",
+              "selected_record"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "wards": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "athlete_user_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "full_name": {
+                      "type": "string"
+                    },
+                    "monthly": {
+                      "type": "object",
+                      "properties": {
+                        "convened": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "present": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "late": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "absent": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "excused": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "attendance_pct": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "nullable": true
+                        },
+                        "late_rate": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "convened",
+                        "present",
+                        "late",
+                        "absent",
+                        "excused",
+                        "attendance_pct",
+                        "late_rate"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "selected_record": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "PRESENT",
+                            "ABSENT",
+                            "LATE",
+                            "EXCUSED"
+                          ]
+                        },
+                        "note": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "status",
+                        "note"
+                      ],
+                      "additionalProperties": false,
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "athlete_user_id",
+                    "full_name",
+                    "monthly",
+                    "selected_record"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 4
+              },
+              "total": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "page": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000000,
+                "default": 1
+              }
+            },
+            "required": [
+              "data",
+              "total"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          }
+        },
+        "required": [
+          "group_id",
+          "now",
+          "access",
+          "periods",
+          "indicators",
+          "latest_announcement",
+          "pending",
+          "upcoming",
+          "previous",
+          "today",
+          "selected_activity_id",
+          "selected_activity",
+          "guardian_tasks",
+          "context",
+          "personal",
+          "wards"
+        ],
+        "additionalProperties": false
+      },
       "WebRecovery": {
         "type": "object",
         "properties": {
