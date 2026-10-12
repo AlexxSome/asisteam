@@ -1,5 +1,7 @@
 # Pantallas web y móvil
 
+[Seguro] Épica web #212: la [matriz de aceptación técnica](web-migration/issue-212/README.md) reúne WEB-01…10, los 39 destinos preservados, sus gates y límites. La aceptación externa/humana y el rediseño pendiente siguen en #209/#170/#181; producción NO-GO.
+
 [Seguro] **WEB-10 (#222, 12-10-2026):** `apps/web` es React19/Vite7/React Router7 Data Mode. El [inventario final](web-migration/issue-222/rutas.json) contrasta las39 páginas anteriores con39 destinos conservados y logout como acción técnica. Nest gestiona sesión opaca/callbacks/imágenes y autorización. [Evidencia y desarrollo/rollback](web-migration/issue-222/README.md). Producción NO-GO y aceptación humana/externa #181/#209 pendientes.
 
 [Seguro] **UI-02 (#172, 10-10-2026):** AppShell aplica sidebar de 256 px desde `lg`, marca/selector/logo real o iniciales/roles, iconos locales decorativos y Gestión con Configuración/Visibilidad/Tipos/Suscripción ADMIN. Cabecera flexible con breadcrumb del grupo autorizado y tarea; móvil conserva Menú, identidad y drawer modal. «Ayuda y soporte» enlaza `/profile#privacy`; cuenta/cierre, multirol y cambio de grupo sin IDs ajenos conservan el flujo vigente. [Evidencia y límites](design/issue-172/README.md). El badge admite únicamente conteo completo autorizado ADMIN; su productor queda en UI-03 (#173), todavía abierto, sin consulta alternativa ni fallback ficticio.
