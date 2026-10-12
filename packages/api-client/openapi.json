@@ -28289,6 +28289,18 @@
             "additionalProperties": false,
             "nullable": true
           },
+          "secondary_errors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "latest_announcement"
+              ]
+            },
+            "maxItems": 2,
+            "default": []
+          },
           "pending": {
             "type": "integer",
             "minimum": -9007199254740991,

@@ -3,13 +3,14 @@ import { Form } from "react-router";
 import { httpSchemas, ATTENDANCE_STATUS_LABELS, formatActivityDateTime, activityDateTimeInput, reportPercentage, type AttendanceHistory } from "@asisteam/core/browser";
 import { ActionLink, Button } from "../ui";
 import { reportAttendanceClass, attendanceStatusClasses } from "../attendance-presentation";
+import { AdminHomePanels, DashboardRetry } from "./admin-home-panels";
 import { EmptyState } from "./ui/empty-state";
 
 type Dashboard = ReturnType<typeof httpSchemas.GroupDashboard.parse>;
 type Group = { id: string; name: string };
 const surface = "min-w-0 space-y-4 rounded-lg border bg-surface p-4 md:p-6";
 
-function activityLabel(activity: Dashboard["upcoming"][number], now: string) {
+export function activityLabel(activity: Dashboard["upcoming"][number], now: string) {
   if (Date.parse(activity.starts_at) <= Date.parse(now) && Date.parse(activity.ends_at) >= Date.parse(now)) return "En curso";
   const today = activityDateTimeInput(activity.starts_at).slice(0, 10) === activityDateTimeInput(now).slice(0, 10);
   return Date.parse(activity.ends_at) < Date.parse(now) ? today ? "Anterior de hoy" : "Anterior" : today ? "Hoy" : "Próxima";
@@ -87,6 +88,25 @@ export function GroupHomePanels({ group, dashboard }: { group: Group; dashboard:
   const base = `/groups/${group.id}`, operator = dashboard.access !== "member";
   const selected = dashboard.selected_activity, next = selected ?? dashboard.upcoming[0];
   const context = dashboard.context;
+  if (dashboard.access === "admin") return <>
+    <AdminHomePanels group={group} dashboard={dashboard}/>
+    {dashboard.personal && <section id="my-attendance" aria-labelledby="my-attendance-heading" className={surface}>
+      <h2 id="my-attendance-heading" className="text-h2">Mi asistencia</h2>
+      <p className="break-words text-small">Grupo: {group.name}</p>
+      <MonthlyAttendance totals={dashboard.personal.monthly} period={dashboard.periods.month}/>
+      <SelectedRecord record={dashboard.personal.selected_record} activity={selected}/>
+      <ActionLink href={`${base}/me/history?period=month`}>Ver mi historial de asistencia</ActionLink>
+      <ActionLink href="/groups#agenda">Mi agenda de todos los grupos</ActionLink>
+      <p className="text-small text-muted-foreground">Solo corresponde a este grupo.</p>
+    </section>}
+    {dashboard.wards && <GuardianPanel key={`${group.id}:${dashboard.wards.page}`} group={group} dashboard={dashboard}/>}
+    {dashboard.previous && <details className={surface}><summary className="min-h-11 cursor-pointer py-2 font-semibold">Actividad anterior</summary>
+      <p className="break-words font-semibold">{dashboard.previous.title}</p>
+      <p className="text-small">{formatActivityDateTime(dashboard.previous.starts_at)} · {dashboard.previous.location || "Lugar por confirmar"}</p>
+      <ActionLink href={`${base}/activities/${dashboard.previous.id}/attendance`}>Revisar asistencia anterior</ActionLink>
+      <ActionLink href={`${base}/activities?period=past`}>Ver todas las anteriores</ActionLink>
+    </details>}
+  </>;
   return <>
     <section aria-labelledby="next-activity-heading" className={surface}>
       <h2 id="next-activity-heading" className="text-h2">{next && activityLabel(next, dashboard.now) === "En curso" ? "Actividad en curso" : next && Date.parse(next.ends_at) < Date.parse(dashboard.now) ? "Actividad anterior de hoy" : "Próxima actividad"}</h2>
@@ -99,7 +119,7 @@ export function GroupHomePanels({ group, dashboard }: { group: Group; dashboard:
           {operator && <ActionLink variant="primary" href={`${base}/activities/${next.id}/attendance`}>Tomar asistencia</ActionLink>}
           <ActionLink href={`${base}/activities/${next.id}`}>Ver actividad</ActionLink>
         </div>
-      </div> : <EmptyState title={dashboard.previous ? "No hay próximas actividades" : "Aún no hay actividades"} action={<ActionLink href={dashboard.access === "admin" ? `${base}/activities/new` : `${base}/activities`}>{dashboard.access === "admin" ? "Crear actividad" : "Ver agenda del grupo"}</ActionLink>}>
+      </div> : <EmptyState title={dashboard.previous ? "No hay próximas actividades" : "Aún no hay actividades"} action={<ActionLink href={`${base}/activities`}>{"Ver agenda del grupo"}</ActionLink>}>
         Cuando se programe un encuentro, aparecerá aquí.
       </EmptyState>}
       {dashboard.today.total > 1 && <Form method="get" className="space-y-2">
@@ -115,7 +135,7 @@ export function GroupHomePanels({ group, dashboard }: { group: Group; dashboard:
         {dashboard.today.page > 1 && <ActionLink href={pageHref(dashboard, "day_page", dashboard.today.page - 1)}>Actividades anteriores del día</ActionLink>}
         {dashboard.today.page * 50 < dashboard.today.total && <ActionLink href={pageHref(dashboard, "day_page", dashboard.today.page + 1)}>Más actividades del día</ActionLink>}
       </Form>}
-      {(next || dashboard.access === "admin") && <ActionLink href={`${base}/activities`}>Ver agenda del grupo</ActionLink>}
+      {next && <ActionLink href={`${base}/activities`}>Ver agenda del grupo</ActionLink>}
     </section>
     <div className="grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,7fr)_minmax(320px,4fr)]">
       <div className="min-w-0 space-y-6">
@@ -172,7 +192,7 @@ export function GroupHomePanels({ group, dashboard }: { group: Group; dashboard:
         </section>}
         <section aria-labelledby="latest-announcement-heading" className={surface}>
           <h2 id="latest-announcement-heading" className="text-h2">Último anuncio</h2>
-          {dashboard.latest_announcement ? <>
+          {dashboard.secondary_errors?.includes("latest_announcement") ? <DashboardRetry label="anuncio"/> : dashboard.latest_announcement ? <>
             <h3 className="break-words text-h3">{dashboard.latest_announcement.title}</h3>
             <p className="whitespace-pre-wrap break-words text-small">{dashboard.latest_announcement.body}</p>
           </> : <p>No hay anuncios publicados.</p>}

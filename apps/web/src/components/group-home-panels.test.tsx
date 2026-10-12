@@ -38,8 +38,8 @@ describe("UI-05 permisos y composición", () => {
       expect(!!screen.queryByRole("region", { name: "Mi asistencia" })).toBe(roles.includes("ATHLETE"));
       expect(!!screen.queryByRole("region", { name: "Mis pupilos" })).toBe(roles.includes("GUARDIAN"));
       expect(!!screen.queryByRole("region", { name: "Resumen de la actividad" })).toBe(roles.includes("ADMIN") || roles.includes("COACH"));
-      expect(!!screen.queryByRole("link", { name: "Tomar asistencia" })).toBe(roles.includes("ADMIN") || roles.includes("COACH"));
-      expect(screen.queryByRole("table")).toBeNull();
+      expect(!!screen.queryByRole("link", { name: "Tomar asistencia" })).toBe(!roles.includes("ADMIN") && roles.includes("COACH"));
+      expect(!!screen.queryByRole("table")).toBe(roles.includes("ADMIN"));
       expect(screen.queryByRole("button", { name: /nota|desmarcar|aprobar/i })).toBeNull();
       if (roles.includes("ATHLETE")) expect(screen.getByRole("link", { name: "Ver mi historial de asistencia" }).getAttribute("href")).toBe(`/groups/${group.id}/me/history?period=month`);
     });

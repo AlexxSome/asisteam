@@ -79,6 +79,24 @@ test('UI-03 HTTP/SQL: full totals, bounded role DTO, stable activity, no push ac
   await db.query("update public.attendance_records set status='ABSENT' where activity_id=$1 and membership_id=$2",[activity,memberships[0]]);
   assert.equal((await clients[0].getGroupDashboard({params})).indicators.monthly.attendance_pct,83.3);
   assert.equal((await fetch(origin+path,{headers:{authorization:'Bearer '+tokens[0]}})).headers.get('cache-control'),'no-store');
+  // UI-04: real Nest/SQL transport retains primary data on secondary faults.
+  const announcementDefinition=(await db.query("select pg_get_functiondef('public.list_group_announcements(uuid,integer)'::regprocedure) as definition")).rows[0].definition;
+  const dashboardDefinition=(await db.query("select pg_get_functiondef('public.get_group_dashboard(uuid,uuid,integer,integer,integer)'::regprocedure) as definition")).rows[0].definition;
+  try {
+   await db.query(`CREATE OR REPLACE FUNCTION public.list_group_announcements(p_group_id uuid,p_page integer DEFAULT 1)
+    RETURNS TABLE(id uuid,group_id uuid,title text,body text,created_at timestamptz,updated_at timestamptz,total_count bigint)
+    LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path='' AS $$ BEGIN RAISE EXCEPTION 'synthetic_secondary_fault'; END $$;`);
+   const partial=await clients[0].getGroupDashboard({params});
+   assert.deepEqual(partial.secondary_errors,['latest_announcement']);assert.equal(partial.latest_announcement,null);
+   assert.equal(partial.selected_activity_id,activity);assert.equal(partial.context.records.total,6);assert.equal(partial.pending,51);
+   assert.equal(partial.indicators.monthly.attendance_pct,83.3);
+   const pendingFault=dashboardDefinition.replace("SELECT count(*) INTO v_pending FROM public.memberships WHERE group_id=p_group_id AND role='ATHLETE' AND status='PENDING';","SELECT 1/0 INTO v_pending;");
+   assert.notEqual(pendingFault,dashboardDefinition);await db.query(pendingFault);
+   const failedPending=await clients[0].getGroupDashboard({params});
+   assert.ok(failedPending.secondary_errors.includes('pending'));assert.equal(failedPending.pending,null);assert.equal(failedPending.context.records.total,6);
+   assert.ok(!(await clients[2].getGroupDashboard({params})).secondary_errors.includes('pending'));
+  } finally { await db.query(announcementDefinition);await db.query(dashboardDefinition); }
+  const recovered=await clients[0].getGroupDashboard({params});assert.deepEqual(recovered.secondary_errors,[]);assert.equal(recovered.latest_announcement.id,published.id);assert.equal(recovered.pending,51);
   await db.query("update public.memberships set status='INACTIVE' where group_id=$1 and user_id=$2 and role='COACH'",[groups[0],profiles[2]]);
   await assert.rejects(clients[2].getGroupDashboard({params}),{status:404});
   for(const token of tokens)assert.ok(!logs.join('\n').includes(token));assert.ok(!logs.join('\n').includes('Nota privada sintética'));

@@ -19,12 +19,15 @@ export const dashboardHttpSchemas = {
   periods: z.object({ week: period, month: period, timezone: z.literal("America/Santiago") }).strict(),
   indicators: z.object({ active_athletes: count, week_activities: count, monthly: metric }).strict().nullable(),
   latest_announcement: z.object({id:uuid,title:z.string(),body:z.string(),created_at:instant,updated_at:instant}).strict().nullable(),
+  secondary_errors: z.array(z.enum(["pending", "latest_announcement"])).max(2).default([]),
   pending: count.nullable(), upcoming: z.array(activityHttpSchemas.Activity).max(3), previous: activityHttpSchemas.Activity.nullable(),
   today: z.object({ data: z.array(activityHttpSchemas.Activity).max(50), total: count, page }).strict(), selected_activity_id: uuid.nullable(), selected_activity: activityHttpSchemas.Activity.nullable(),
   guardian_tasks:z.object({consents:count,activations:count}).strict().nullable(),
   context: summary.nullable(), personal: z.object({ monthly: metric, selected_record: record.nullable() }).strict().nullable(),
   wards: z.object({ data: z.array(z.object({ athlete_user_id: uuid, full_name: z.string(), monthly: metric, selected_record: record.nullable() }).strict()).max(4), total: count, page }).strict().nullable(),
  }).strict().superRefine((value, ctx) => {
+  if (value.secondary_errors.includes("pending") && (value.access !== "admin" || value.pending !== null)) ctx.addIssue({ code: "custom", message: "El fallo de pendientes requiere ADMIN y total desconocido." });
+  if (value.secondary_errors.includes("latest_announcement") && value.latest_announcement !== null) ctx.addIssue({ code: "custom", message: "Un anuncio fallido no puede presentarse como actual." });
   if (value.access !== "admin" && (value.pending !== null || value.context?.records != null)) ctx.addIssue({ code: "custom", message: "La proyección administrativa requiere ADMIN." });
   if (value.access === "member" && value.context !== null) ctx.addIssue({ code: "custom", message: "El resumen operativo requiere ADMIN o COACH." });
   if (value.context?.phase === "preparation" && (value.context.counts.attendance_pct !== null || value.context.counts.late_rate !== null)) ctx.addIssue({ code: "custom", message: "Una actividad futura no tiene porcentaje realizado." });

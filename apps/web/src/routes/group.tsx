@@ -1,9 +1,11 @@
+import { ApiClientError } from "@asisteam/api-client";
 import { useEffect } from "react";
 import { Link, useLoaderData, useRouteLoaderData, type LoaderFunctionArgs } from "react-router";
 import { httpSchemas, MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
 import { browserApi, requireSession, sessionError } from "../api";
 import { groupData } from "../group-data";
-import { Page } from "../ui";
+import { Page, ActionLink } from "../ui";
+import { DashboardRetry } from "../components/admin-home-panels";
 import { GroupHomePanels } from "../components/group-home-panels";
 import {JoinAsAthlete} from "../components/join-as-athlete";
 import { GettingStarted } from "../components/getting-started";
@@ -18,13 +20,16 @@ export async function loader({request,params}:LoaderFunctionArgs){
  try {
   const [dashboard,capacity]=await Promise.all([
    api.getGroupDashboard({params:{groupId:group.id},query:parseDashboardQuery(request)}),
-   isAdmin?api.getGroupBilling({params:{groupId:group.id},query:{page:1}}):null,
+   isAdmin?api.getGroupBilling({params:{groupId:group.id},query:{page:1}}).catch(error=>{
+    if(request.signal.aborted || error instanceof Response || (error instanceof ApiClientError && error.status < 500))throw error;
+    return null;
+   }):null,
   ]);
   return {group,dashboard,agenda:{next:dashboard.upcoming[0]??null,previous:dashboard.previous,now:dashboard.now},capacity,personal:dashboard.personal?{period:{type:"month" as const,...dashboard.periods.month,timezone:dashboard.periods.timezone},totals:dashboard.personal.monthly}:null,pending:dashboard.pending,guardianTasks:dashboard.guardian_tasks};
  }catch(error){return sessionError(error,request);}
 }
 export function Component(){
- const {group,dashboard,agenda,capacity,pending}=useLoaderData<typeof loader>();
+ const {group,dashboard,agenda,capacity}=useLoaderData<typeof loader>();
  const session=useRouteLoaderData("private") as Awaited<ReturnType<typeof requireSession>>;
  useEffect(()=>{document.cookie=`asisteam-group-${session.user_id}=${group.id}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol==="https:"?"; Secure":""}`;},[group.id,session.user_id]);
  const isAdmin=group.access==="admin";
@@ -32,19 +37,26 @@ export function Component(){
     const next = dashboard.selected_activity??agenda.next;
     const previous = agenda.previous;
     return <Page className="max-w-7xl lg:px-8"><title>Inicio del grupo · Asisteam</title>
-    <header className="space-y-2">
-      <p className="break-words text-h2">{group.name}</p>
-      <h1 className="text-h1">Inicio</h1>
-      <p className="text-small text-muted-foreground"><time dateTime={dashboard.now}>{new Intl.DateTimeFormat("es-CL",{timeZone:"America/Santiago",weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(new Date(dashboard.now))}</time> · America/Santiago</p>
-      <p className="break-words text-muted-foreground">Tu actividad y tareas en {group.name}.</p>
-      <p className="text-small">Tus roles en este grupo: {group.roles.map(role=>MEMBERSHIP_ROLE_LABELS[role]).join(" · ")}</p>
+    <header className="flex flex-wrap items-start justify-between gap-4"><div className="min-w-0 space-y-2">
+      {isAdmin ? <>
+        <p className="text-small text-muted-foreground"><time dateTime={dashboard.now}>{new Intl.DateTimeFormat("es-CL",{timeZone:"America/Santiago",weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(new Date(dashboard.now))}</time></p>
+        <h1 className="text-h1">Inicio</h1>
+        <p className="break-words text-muted-foreground">Este es el resumen de {group.name}.</p>
+        <p className="sr-only">Tus roles en este grupo: {group.roles.map(role=>MEMBERSHIP_ROLE_LABELS[role]).join(" · ")}</p>
+      </> : <>
+        <p className="break-words text-h2">{group.name}</p>
+        <h1 className="text-h1">Inicio</h1>
+        <p className="text-small text-muted-foreground"><time dateTime={dashboard.now}>{new Intl.DateTimeFormat("es-CL",{timeZone:"America/Santiago",weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(new Date(dashboard.now))}</time> · America/Santiago</p>
+        <p className="break-words text-muted-foreground">Tu actividad y tareas en {group.name}.</p>
+        <p className="text-small">Tus roles en este grupo: {group.roles.map(role=>MEMBERSHIP_ROLE_LABELS[role]).join(" · ")}</p>
+      </>}
+      </div>{isAdmin && <div className="min-w-0 space-y-2">
+        <ActionLink variant="primary" href={next ? `${base}/activities/${next.id}/attendance` : previous ? `${base}/activities` : `${base}/activities/new`}>{next ? "Tomar asistencia" : previous ? "Ver actividades" : "Crear actividad"}</ActionLink>
+        {next && <p className="max-w-xs break-words text-small text-muted-foreground">Actividad: {next.title}</p>}
+      </div>}
     </header>
     <GroupHomePanels group={group} dashboard={dashboard}/>
-    {isAdmin && <section className="space-y-2 rounded-lg border p-4 sm:p-5">
-      <h2 className="text-lg font-semibold">Aprobaciones pendientes <span className="tabular-nums">({pending})</span></h2>
-      <p className="text-muted-foreground">{pending ? "Revisa los requisitos de apoderado y consentimiento antes de confirmar cada incorporación." : "No hay solicitudes pendientes."}</p>
-      <Link to={`${base}/members/pending`}>Revisar aprobaciones</Link>
-    </section>}
+    {isAdmin && !capacity && <section className="rounded-lg border bg-surface p-4"><DashboardRetry label="capacidad"/></section>}
     {isAdmin && <GettingStarted groupId={group.id} capacity={capacity} hasActivities={Boolean(next || previous)}/>}
     <details className="rounded-lg border p-4 sm:p-5">
       <summary className="min-h-11 cursor-pointer py-2 font-semibold">{isAdmin ? "Administración del grupo" : "Acerca del grupo"}</summary>
