@@ -1,0 +1,45 @@
+{
+  "commit": "61a539d147b0dc73005699619b765964cc983fea",
+  "sourceCommit": "f7203071f0803e25eb95fb44b236ae9d712d2ab7",
+  "date": "2026-10-11T23:44:17.266Z",
+  "node": "v24.16.0",
+  "environment": "github-actions-synthetic",
+  "checks": [
+    {
+      "check": "chromium-install",
+      "status": "PASS",
+      "seconds": 19.55
+    },
+    {
+      "check": "nest-domain-build",
+      "status": "PASS",
+      "seconds": 5.6
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 102.6
+    },
+    {
+      "check": "playwright-nest-domain-responsive-axe",
+      "status": "PASS",
+      "seconds": 232.35,
+      "tests": 47,
+      "omitted": 0
+    },
+    {
+      "check": "playwright-vite-session",
+      "status": "FAIL",
+      "seconds": 105.21,
+      "tests": 34,
+      "omitted": 0,
+      "failureLocations": [
+        {
+          "file": "apps/web-vite/e2e/access.spec.ts",
+          "line": 247,
+          "column": 67
+        }
+      ]
+    }
+  ]
+}
