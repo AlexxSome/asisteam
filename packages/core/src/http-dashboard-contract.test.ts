@@ -15,6 +15,13 @@ describe("UI-03 contrato fail-closed",()=>{
   for(const extra of [{email:"private"},{phone:"private"},{birthdate:"private"}])expect(dashboardHttpSchemas.GroupDashboard.safeParse({...data,...extra}).success).toBe(false);
   expect(dashboardHttpSchemas.GroupDashboard.safeParse({...data,pending:0}).success).toBe(false);
  });
+ it("fallos secundarios son explícitos, distintos del vacío y fail-closed por rol",()=>{
+  const failed={...data,access:"admin",secondary_errors:["pending","latest_announcement"]};
+  expect(dashboardHttpSchemas.GroupDashboard.parse(failed).pending).toBeNull();
+  expect(dashboardHttpSchemas.GroupDashboard.safeParse({...failed,pending:0}).success).toBe(false);
+  expect(dashboardHttpSchemas.GroupDashboard.safeParse({...failed,access:"coach"}).success).toBe(false);
+  expect(dashboardHttpSchemas.GroupDashboard.safeParse({...failed,secondary_errors:["indicators"]}).success).toBe(false);
+ });
  it("COACH no admite preview ADMIN y futuro nunca tiene porcentaje realizado",()=>{
   const context={activity_id:id,phase:"preparation",active_athletes:1,recorded:0,unmarked:1,counts,records:null};
   expect(dashboardHttpSchemas.GroupDashboard.safeParse({...data,access:"coach",context}).success).toBe(true);

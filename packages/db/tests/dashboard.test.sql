@@ -167,5 +167,37 @@ SET LOCAL ROLE asisteam_api;
 SELECT pg_temp.actor(2);
 SELECT is(pg_temp.home()#>>'{wards,total}','0','revoked guardianship never returns old selected ward');
 RESET ROLE;
+-- UI-04 faults are confined to this transaction; no production hook exists.
+CREATE TEMP TABLE dashboard_definition AS SELECT pg_get_functiondef('public.get_group_dashboard(uuid,uuid,integer,integer,integer)'::regprocedure) AS definition;
+CREATE OR REPLACE FUNCTION public.list_group_announcements(p_group_id uuid,p_page integer DEFAULT 1)
+RETURNS TABLE(id uuid,group_id uuid,title text,body text,created_at timestamptz,updated_at timestamptz,total_count bigint)
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path='' AS $$ BEGIN RAISE EXCEPTION 'synthetic_announcement_failure'; END $$;
+SET LOCAL ROLE asisteam_api;
+SELECT pg_temp.actor(1);
+SELECT is(pg_temp.home()->'secondary_errors','["latest_announcement"]'::jsonb,'announcement failure explicit');
+SELECT is(pg_temp.home()->'latest_announcement','null'::jsonb,'failed announcement has no current data');
+SELECT is(jsonb_array_length(pg_temp.home()->'upcoming'),3,'announcement failure preserves agenda');
+SELECT ok(pg_temp.home()->'indicators'<>'null'::jsonb,'announcement failure preserves indicators');
+SELECT is(pg_temp.home()->>'pending','47','announcement failure preserves full pending total');
+RESET ROLE;
+DO $$ BEGIN EXECUTE replace((SELECT definition FROM dashboard_definition),
+ 'SELECT count(*) INTO v_pending FROM public.memberships WHERE group_id=p_group_id AND role=''ATHLETE'' AND status=''PENDING'';',
+ 'SELECT 1/0 INTO v_pending;'); END $$;
+SET LOCAL ROLE asisteam_api;
+SELECT pg_temp.actor(1);
+SELECT ok(pg_temp.home()->'secondary_errors' ? 'pending','pending failure explicit');
+SELECT is(pg_temp.home()->'pending','null'::jsonb,'pending failure never becomes zero');
+SELECT is(jsonb_array_length(pg_temp.home()->'upcoming'),3,'both secondary failures preserve agenda');
+SELECT pg_temp.actor(3);
+SELECT ok(NOT (pg_temp.home()->'secondary_errors' ? 'pending'),'COACH never reads pending even with fault');
+RESET ROLE;
+DO $$ BEGIN EXECUTE (SELECT definition FROM dashboard_definition); END $$;
+CREATE OR REPLACE FUNCTION public.list_group_announcements(p_group_id uuid,p_page integer DEFAULT 1)
+RETURNS TABLE(id uuid,group_id uuid,title text,body text,created_at timestamptz,updated_at timestamptz,total_count bigint)
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path='' AS $$ BEGIN RAISE SQLSTATE 'PT404' USING message='group_not_found'; END $$;
+SET LOCAL ROLE asisteam_api;
+SELECT pg_temp.actor(1);
+SELECT throws_ok($$SELECT pg_temp.home()$$,'PT404','group_not_found','secondary authorization failure remains fatal');
+RESET ROLE;
 SELECT * FROM finish();
 ROLLBACK;

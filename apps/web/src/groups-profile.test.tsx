@@ -1,3 +1,4 @@
+import { ApiClientError } from "@asisteam/api-client";
 import { describe,it,expect,vi,beforeEach } from "vitest";
 import { loader } from "./routes/group";
 import { loader as settings } from "./routes/group-settings";
@@ -32,6 +33,18 @@ describe("WEB-05 permisos y DTOs de inicio",()=>{
  it("IDs inválidos y grupos ajenos no cargan agenda ni datos privados",async()=>{
   await expect(groupData(request,"invalid")).rejects.toMatchObject({status:404});expect(mocked.api.getGroup).not.toHaveBeenCalled();
   mocked.api.getGroup.mockRejectedValue(new Response(null,{status:404}));await expect(loader(args)).rejects.toMatchObject({status:404});expect(mocked.api.getGroupDashboard).not.toHaveBeenCalled();
+ });
+ it("fallo operacional de capacidad no bloquea agenda ni fabrica cupos",async()=>{
+  mocked.api.getGroup.mockResolvedValue({id,roles:["ADMIN"],access:"admin"});
+  mocked.api.getGroupBilling.mockRejectedValue(new Error("synthetic-network"));
+  const result=await loader(args);expect(result.capacity).toBeNull();expect(result.dashboard.pending).toBe(51);
+ });
+ it("capacidad no oculta sesión/permisos revocados",async()=>{
+  mocked.api.getGroup.mockResolvedValue({id,roles:["ADMIN"],access:"admin"});
+  for(const status of [401,403,404]){
+   const error=new ApiClientError(status,"access_denied");
+   mocked.api.getGroupBilling.mockRejectedValue(error);await expect(loader(args)).rejects.toBe(error);
+  }
  });
  it("un error de transporte conserva el error, no produce totales vacíos",async()=>{
   mocked.api.getGroup.mockResolvedValue({id,roles:["ATHLETE"],access:"member"});const error=new Error("synthetic-network");mocked.api.getGroupDashboard.mockRejectedValue(error);await expect(loader(args)).rejects.toBe(error);

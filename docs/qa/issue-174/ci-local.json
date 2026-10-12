@@ -1,0 +1,6268 @@
+{
+  "issue": 174,
+  "baseCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+  "validatedContent": "working-tree-on-base; runtime/test hashes identify the final content",
+  "date": "2026-10-12T21:39:24.994Z",
+  "environment": "local-synthetic",
+  "node": "v24.16.0",
+  "pnpm": "10.33.2",
+  "host": {
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "workflow": ".github/workflows/ci.yml",
+  "frozenLockfileInstall": "PASS",
+  "runtimeAndTestSha256": {
+    "apps/web/src/routes/group.tsx": "f43415bec19e989972cfec37fcf79b0558d3fa309b4b66e93fb97eb95622a44e",
+    "apps/web/src/components/admin-home-panels.tsx": "496598f8d2e87ede311ea68fc8e4a6a67c3dbb952af370b22986e09e0def3842",
+    "apps/web/src/components/group-home-panels.tsx": "3ca4587758f1ee61c2948eca5f74d7fcf4c53443c65d4be879834b19351bf541",
+    "apps/web/src/components/admin-home-panels.test.tsx": "2704e2f2fb8a9d5134d0018879ffa485c26320e172bd6818451e85a159092b9c",
+    "apps/web/src/components/group-home-panels.test.tsx": "1243b95cc0d2999c04115961e9ff705fd5afc59f6124983e75377d249314b028",
+    "apps/web/src/groups-profile.test.tsx": "09b0e8b58ecff3d3cf184ab64748ed3a48c2b6503052886e9a75f8ec0b419233",
+    "apps/web/e2e/groups-profile.spec.ts": "5176fbadd5f15122b00f5edf3593c2ac1828a306a6afe7e74d61319613c052b3",
+    "apps/web/e2e/regression/group-home.spec.ts": "80113b5775307673e06bc9e4ddfbf18915a2b5b2e3c3d86fb71c6fa975ce9d00",
+    "apps/api/test/dashboard.integration.mjs": "18fb3f77a9f219c5d5be3797a17d5af881a48fd78bc96032febe38302c4e3d20",
+    "packages/core/src/http-dashboard-contract.ts": "c6cce210d1731e446b7d50cb2dc0044ff817cf21cde16cfde3f6f958c720df32",
+    "packages/core/src/http-dashboard-contract.test.ts": "56fd0f84c25b3caa2f8d0c99ed75f6aa8d9b4ff830003971168d5d2e3172e47d",
+    "packages/api-client/openapi.json": "2385d9fabf2445824af01b4f2834c22253fbc13a9a4e9b07de9de902f6ef6e98",
+    "packages/api-client/src/openapi.ts": "1a5ba68633045023d10c3d0c1026b74c591470da3ef4e8b0c756f34b103e8e64",
+    "packages/db/migrations/0005_dashboard_secondary_states.sql": "f3ba89f66191b0902ca20576228eeba17ae7aa221a0580564d68e88affc2a8a9",
+    "packages/db/tests/dashboard.test.sql": "eaccd4c7ff2aa456a6c1046522f95cbc30f6d23026b9fbbbc46bb4ec52f8779e",
+    "packages/db/src/persistence.types.ts": "80221fe25bb5ff1d73977bd019d4fd7127d805b3cf9964fcfc311ab1a6559b2e",
+    "packages/db/catalog.json": "5bca00ce703f61fab8f088ae3d75dc2263027178c0c1673ddf72f1546c887856"
+  },
+  "persistenceRegeneration": {
+    "postgresql": 17,
+    "types": "regenerated, unchanged",
+    "catalog": "structurally unchanged"
+  },
+  "jobs": {
+    "checks": {
+      "commit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "date": "2026-10-12T21:34:01.575Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.34
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.29
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.53
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 2.72
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 3.3
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.3
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 0.99,
+          "tests": 154,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 12.27,
+          "tests": 491,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.89
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.71
+        }
+      ]
+    },
+    "backend": {
+      "commit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "date": "2026-10-12T21:26:27.229Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.23
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "web-static-auth-fixture-build",
+          "status": "PASS",
+          "seconds": 3.49
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 2.15
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 27.61
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 52.83
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 4.75
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.05,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-dashboard",
+          "status": "PASS",
+          "seconds": 2.23
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.22
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 50.69,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "date": "2026-10-12T21:29:08.781Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 15.41
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.83
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.12
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.64
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.91
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.67
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.92,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.72
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.07
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 10.29
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.74
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.1
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.72
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.44
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.9
+        }
+      ]
+    },
+    "extended": {
+      "commit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "date": "2026-10-12T21:34:47.321Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.37
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 3.54
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.41
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 90.96,
+          "tests": 49,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 84.97,
+          "tests": 42,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.16,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "controlled-failure": {
+      "commit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "date": "2026-10-12T21:29:00.927Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 1.99,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.22,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.18,
+          "expected": true
+        },
+        {
+          "check": "controlled-next-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.19,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "checkoutCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "date": "2026-10-12T21:38:26.929Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 645,
+          "omitted": 0
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 92,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 88.43
+      },
+      "bundle": {
+        "status": "PASS",
+        "budgetStatus": "PASS",
+        "initialGzipBytes": 200098,
+        "deltaInitialGzipBytes": 980
+      }
+    },
+    "dashboard-sql": {
+      "checks": [
+        {
+          "file": "packages/db/tests/dashboard.test.sql",
+          "status": "PASS",
+          "cases": 77,
+          "failures": []
+        }
+      ],
+      "totalCases": 77
+    },
+    "domain-sql": {
+      "checks": [
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/account_consents.test.sql",
+          "status": "PASS",
+          "cases": 32,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/activities.test.sql",
+          "status": "PASS",
+          "cases": 48,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/activity_types.test.sql",
+          "status": "PASS",
+          "cases": 40,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/announcement_worker.test.sql",
+          "status": "PASS",
+          "cases": 29,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/api_invitations.test.sql",
+          "status": "PASS",
+          "cases": 11,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/api_session_rls.test.sql",
+          "status": "PASS",
+          "cases": 16,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/attendance.test.sql",
+          "status": "PASS",
+          "cases": 60,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/attendance_edit.test.sql",
+          "status": "PASS",
+          "cases": 44,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/attendance_history.test.sql",
+          "status": "PASS",
+          "cases": 54,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/auth_cutover.test.sql",
+          "status": "PASS",
+          "cases": 16,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/billing_nest.test.sql",
+          "status": "PASS",
+          "cases": 17,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/coach_role.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/configure_groups.test.sql",
+          "status": "PASS",
+          "cases": 31,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/create_groups.test.sql",
+          "status": "PASS",
+          "cases": 58,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_announcements.test.sql",
+          "status": "PASS",
+          "cases": 73,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_reports.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_stats_visibility.test.sql",
+          "status": "PASS",
+          "cases": 84,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_subscriptions.test.sql",
+          "status": "PASS",
+          "cases": 53,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/groups.test.sql",
+          "status": "PASS",
+          "cases": 27,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/guardianships.test.sql",
+          "status": "PASS",
+          "cases": 42,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/invitations.test.sql",
+          "status": "PASS",
+          "cases": 53,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/join_group_by_code.test.sql",
+          "status": "PASS",
+          "cases": 28,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/majority_worker.test.sql",
+          "status": "PASS",
+          "cases": 46,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/manage_members.test.sql",
+          "status": "PASS",
+          "cases": 59,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/managed_activation.test.sql",
+          "status": "PASS",
+          "cases": 61,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/managed_members.test.sql",
+          "status": "PASS",
+          "cases": 49,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/member_roster_search.test.sql",
+          "status": "PASS",
+          "cases": 24,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/membership_approvals.test.sql",
+          "status": "PASS",
+          "cases": 62,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/membership_onboarding.test.sql",
+          "status": "PASS",
+          "cases": 37,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/my_wards.test.sql",
+          "status": "PASS",
+          "cases": 45,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/native_auth.test.sql",
+          "status": "PASS",
+          "cases": 20,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/profile.test.sql",
+          "status": "PASS",
+          "cases": 72,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/qr_attendance.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/send_invitations.test.sql",
+          "status": "PASS",
+          "cases": 51,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/social_auth.test.sql",
+          "status": "PASS",
+          "cases": 15,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/social_auth_native.test.sql",
+          "status": "PASS",
+          "cases": 31,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/users_managed_no_auth.test.sql",
+          "status": "PASS",
+          "cases": 2,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/users_rls.test.sql",
+          "status": "PASS",
+          "cases": 14,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/ward_attendance_history.test.sql",
+          "status": "PASS",
+          "cases": 44,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/weekly_activities.test.sql",
+          "status": "PASS",
+          "cases": 48,
+          "failures": []
+        }
+      ],
+      "totalCases": 1646
+    },
+    "vite-bundle": {
+      "sourceCommit": "19e2b6be31401938e499f9a1fd7bbcdcbcce18d2",
+      "baselineCommit": "e63e05cb9adfc11e209ebd23031b973e9afeb038",
+      "measurementStatus": "PASS",
+      "budgetStatus": "PASS",
+      "approval": "Usuario: «Perfecto usa lo recomendado»; 2026-10-12 America/Santiago; #221; máximos de 220000 y 25000 bytes gzip",
+      "initialGzipBytes": 200098,
+      "baselineInitialGzipBytes": 199118,
+      "deltaInitialGzipBytes": 980,
+      "routes": [
+        {
+          "module": "src/routes/activities.tsx",
+          "additionalGzipBytes": 2796,
+          "baselineGzipBytes": 2812,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/activity-edit.tsx",
+          "additionalGzipBytes": 16822,
+          "baselineGzipBytes": 16839,
+          "deltaGzipBytes": -17
+        },
+        {
+          "module": "src/routes/activity-types.tsx",
+          "additionalGzipBytes": 15103,
+          "baselineGzipBytes": 15123,
+          "deltaGzipBytes": -20
+        },
+        {
+          "module": "src/routes/activity.tsx",
+          "additionalGzipBytes": 1877,
+          "baselineGzipBytes": 1889,
+          "deltaGzipBytes": -12
+        },
+        {
+          "module": "src/routes/announcements.tsx",
+          "additionalGzipBytes": 17281,
+          "baselineGzipBytes": 17247,
+          "deltaGzipBytes": 34
+        },
+        {
+          "module": "src/routes/attendance.tsx",
+          "additionalGzipBytes": 7841,
+          "baselineGzipBytes": 7869,
+          "deltaGzipBytes": -28
+        },
+        {
+          "module": "src/routes/billing.tsx",
+          "additionalGzipBytes": 8056,
+          "baselineGzipBytes": 8077,
+          "deltaGzipBytes": -21
+        },
+        {
+          "module": "src/routes/birthdate-reviews.tsx",
+          "additionalGzipBytes": 2309,
+          "baselineGzipBytes": 2124,
+          "deltaGzipBytes": 185
+        },
+        {
+          "module": "src/routes/check-in.tsx",
+          "additionalGzipBytes": 5127,
+          "baselineGzipBytes": 4458,
+          "deltaGzipBytes": 669
+        },
+        {
+          "module": "src/routes/forgot-password.tsx",
+          "additionalGzipBytes": 3394,
+          "baselineGzipBytes": 2628,
+          "deltaGzipBytes": 766
+        },
+        {
+          "module": "src/routes/group-new.tsx",
+          "additionalGzipBytes": 5716,
+          "baselineGzipBytes": 5536,
+          "deltaGzipBytes": 180
+        },
+        {
+          "module": "src/routes/group-settings.tsx",
+          "additionalGzipBytes": 6115,
+          "baselineGzipBytes": 5941,
+          "deltaGzipBytes": 174
+        },
+        {
+          "module": "src/routes/group.tsx",
+          "additionalGzipBytes": 10944,
+          "baselineGzipBytes": 4044,
+          "deltaGzipBytes": 6900
+        },
+        {
+          "module": "src/routes/groups.tsx",
+          "additionalGzipBytes": 2653,
+          "baselineGzipBytes": 2663,
+          "deltaGzipBytes": -10
+        },
+        {
+          "module": "src/routes/guardians.tsx",
+          "additionalGzipBytes": 15217,
+          "baselineGzipBytes": 15245,
+          "deltaGzipBytes": -28
+        },
+        {
+          "module": "src/routes/history-groups.tsx",
+          "additionalGzipBytes": 579,
+          "baselineGzipBytes": 582,
+          "deltaGzipBytes": -3
+        },
+        {
+          "module": "src/routes/history.tsx",
+          "additionalGzipBytes": 6606,
+          "baselineGzipBytes": 6621,
+          "deltaGzipBytes": -15
+        },
+        {
+          "module": "src/routes/invitation.tsx",
+          "additionalGzipBytes": 4634,
+          "baselineGzipBytes": 3978,
+          "deltaGzipBytes": 656
+        },
+        {
+          "module": "src/routes/invitations-admin.tsx",
+          "additionalGzipBytes": 16895,
+          "baselineGzipBytes": 16933,
+          "deltaGzipBytes": -38
+        },
+        {
+          "module": "src/routes/join.tsx",
+          "additionalGzipBytes": 1831,
+          "baselineGzipBytes": 1837,
+          "deltaGzipBytes": -6
+        },
+        {
+          "module": "src/routes/legal.tsx",
+          "additionalGzipBytes": 365,
+          "baselineGzipBytes": 372,
+          "deltaGzipBytes": -7
+        },
+        {
+          "module": "src/routes/login.tsx",
+          "additionalGzipBytes": 4089,
+          "baselineGzipBytes": 3413,
+          "deltaGzipBytes": 676
+        },
+        {
+          "module": "src/routes/logout.tsx",
+          "additionalGzipBytes": 310,
+          "baselineGzipBytes": 313,
+          "deltaGzipBytes": -3
+        },
+        {
+          "module": "src/routes/member-new.tsx",
+          "additionalGzipBytes": 14586,
+          "baselineGzipBytes": 14613,
+          "deltaGzipBytes": -27
+        },
+        {
+          "module": "src/routes/members-consent.tsx",
+          "additionalGzipBytes": 7010,
+          "baselineGzipBytes": 7045,
+          "deltaGzipBytes": -35
+        },
+        {
+          "module": "src/routes/members-pending.tsx",
+          "additionalGzipBytes": 4603,
+          "baselineGzipBytes": 4630,
+          "deltaGzipBytes": -27
+        },
+        {
+          "module": "src/routes/members.tsx",
+          "additionalGzipBytes": 19589,
+          "baselineGzipBytes": 19628,
+          "deltaGzipBytes": -39
+        },
+        {
+          "module": "src/routes/profile.tsx",
+          "additionalGzipBytes": 9488,
+          "baselineGzipBytes": 8634,
+          "deltaGzipBytes": 854
+        },
+        {
+          "module": "src/routes/qr.tsx",
+          "additionalGzipBytes": 10445,
+          "baselineGzipBytes": 10444,
+          "deltaGzipBytes": 1
+        },
+        {
+          "module": "src/routes/register.tsx",
+          "additionalGzipBytes": 4987,
+          "baselineGzipBytes": 4212,
+          "deltaGzipBytes": 775
+        },
+        {
+          "module": "src/routes/reports.tsx",
+          "additionalGzipBytes": 8672,
+          "baselineGzipBytes": 8688,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/reset-password.tsx",
+          "additionalGzipBytes": 3694,
+          "baselineGzipBytes": 2974,
+          "deltaGzipBytes": 720
+        },
+        {
+          "module": "src/routes/terms.tsx",
+          "additionalGzipBytes": 3793,
+          "baselineGzipBytes": 1107,
+          "deltaGzipBytes": 2686
+        },
+        {
+          "module": "src/routes/unavailable.tsx",
+          "additionalGzipBytes": 245,
+          "baselineGzipBytes": 248,
+          "deltaGzipBytes": -3
+        },
+        {
+          "module": "src/routes/visibility.tsx",
+          "additionalGzipBytes": 2750,
+          "baselineGzipBytes": 2570,
+          "deltaGzipBytes": 180
+        },
+        {
+          "module": "src/routes/ward.tsx",
+          "additionalGzipBytes": 8077,
+          "baselineGzipBytes": 8111,
+          "deltaGzipBytes": -34
+        },
+        {
+          "module": "src/routes/wards.tsx",
+          "additionalGzipBytes": 7644,
+          "baselineGzipBytes": 7672,
+          "deltaGzipBytes": -28
+        },
+        {
+          "module": "src/routes/welcome.tsx",
+          "additionalGzipBytes": 3321,
+          "baselineGzipBytes": 3332,
+          "deltaGzipBytes": -11
+        }
+      ]
+    }
+  },
+  "required": "PASS",
+  "axe": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "caption"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "th[scope=\"col\"]:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "th[scope=\"col\"]:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(1) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(2) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(3) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(4) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.03,
+          "foreground": "#0f172a",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "caption"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "th:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": [
+            {
+              "target": [
+                "table"
+              ],
+              "checks": [
+                {
+                  "id": "th-has-data-cells",
+                  "message": "Table data cells are missing or empty"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "caption"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "th[scope=\"col\"]:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(1) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(2) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(3) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".last\\:border-0:nth-child(4) > td:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.03,
+          "foreground": "#0f172a",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.03,
+          "foreground": "#0f172a",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.03,
+          "foreground": "#0f172a",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.03,
+          "foreground": "#0f172a",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1536,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 5.49,
+          "foreground": "#1d4ed8",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.03,
+          "foreground": "#0f172a",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.09,
+          "foreground": "#92400e",
+          "background": "#ffffff",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.36,
+          "foreground": "#92400e",
+          "background": "#fef3c7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    }
+  ],
+  "acceptance": "NO-GO; human/external gates remain pending"
+}

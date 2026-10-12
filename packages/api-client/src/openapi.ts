@@ -2643,6 +2643,8 @@ export interface components {
                 /** Format: date-time */
                 updated_at: string;
             } | null;
+            /** @default [] */
+            secondary_errors: ("pending" | "latest_announcement")[];
             pending: number | null;
             upcoming: {
                 /** Format: uuid */

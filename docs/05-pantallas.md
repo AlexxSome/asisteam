@@ -1,6 +1,8 @@
 # Pantallas web y móvil
 
-[Seguro] **UI-05 (#175, 12-10-2026):** GRP-02 conecta las tarjetas del inicio con el DTO autorizado de #173: agenda de tres actividades, resumen COACH, asistencia propia ATHLETE, selector/métrica/historial GUARDIAN y unión multirol. [Matriz por rol y evidencia](qa/issue-175/README.md). La composición ADMIN de #174 permanece pendiente; los hitos históricos posteriores describen su estado en la fecha original.
+[Seguro] **UI-04 (#174, 12-10-2026):** GRP-02 ADMIN conecta la composición de #171/#170: cabecera/CTA con actividad concreta, cuatro indicadores, agenda de tres encuentros, resumen y tabla acotada de la actividad seleccionada, pendientes y último anuncio. Móvil prioriza actividad/acción y pendientes; escritorio conserva 7:4 y cuatro indicadores. La RPC canónica aísla fallos secundarios con `secondary_errors`; capacidad tiene recuperación Router independiente y los fallos de autorización permanecen fatales. Mi asistencia/Mis pupilos multirol, primer uso, suscripción y revisión anterior se conservan. [Evidencia y límites](qa/issue-174/README.md). Aceptación humana #181/#209 y producción NO-GO permanecen pendientes.
+
+[Seguro] **UI-05 (#175, 12-10-2026):** GRP-02 conecta las tarjetas del inicio con el DTO autorizado de #173: agenda de tres actividades, resumen COACH, asistencia propia ATHLETE, selector/métrica/historial GUARDIAN y unión multirol. [Matriz por rol y evidencia](qa/issue-175/README.md). La composición ADMIN seguía pendiente al entregar #175; UI-04 arriba registra su incorporación. Los hitos históricos posteriores describen su estado en la fecha original.
 
 [Seguro] Épica web #212: la [matriz de aceptación técnica](web-migration/issue-212/README.md) reúne WEB-01…10, los 39 destinos preservados, sus gates y límites. La aceptación externa/humana y el rediseño pendiente siguen en #209/#170/#181; producción NO-GO.
 
