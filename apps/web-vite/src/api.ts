@@ -29,6 +29,12 @@ export function safeReturn(value: string | null) {
     const allowed:Record<string,RegExp>={period:/^(?:upcoming|past|week|month|custom|season)$/,page:/^[1-9]\d{0,5}$|^1000000$/,ward_page:/^[1-9]\d{0,5}$|^1000000$/,from:/^(?:group|agenda|wards|\d{4}-\d{2}-\d{2})$/,ward:/^[0-9a-f-]{36}$/,to:/^\d{4}-\d{2}-\d{2}$/,activity_type_id:/^[0-9a-f-]{36}$/,sort:/^(?:attendance|name)$/,include_inactive:/^true$/};
     if(Array.from(parsed.searchParams).every(([key,item])=>allowed[key]?.test(item)))return parsed.pathname+parsed.search;
   }
+  if (value === "/check-in") return value;
+  const capability = new URL(value,"http://return.invalid");
+  if(/^\/groups\/[0-9a-f-]{36}\/(?:billing|announcements|activities\/[0-9a-f-]{36}\/qr)$/.test(capability.pathname) && !capability.hash){
+    const entries=Array.from(capability.searchParams);
+    if(entries.length === 0 || (entries.length === 1 && entries[0]![0] === "page" && /^[1-9]\d{0,5}$|^1000000$/.test(entries[0]![1]) && !capability.pathname.endsWith("/qr"))) return capability.pathname+capability.search;
+  }
   if (/^\/join\?code=[A-Za-z0-9]{8}$/.test(value)) return value;
   return "/groups";
 }
