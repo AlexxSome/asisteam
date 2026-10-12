@@ -18,14 +18,14 @@ export function Button({ busy, loading, variant = "primary", children, className
  const colors=variant === "secondary" || variant === "outline" ? "border border-input bg-surface text-secondary-foreground hover:bg-secondary" : variant === "tertiary" ? "text-primary underline underline-offset-4 hover:bg-secondary" : variant === "destructive" ? "bg-destructive text-primary-foreground" : "bg-primary text-primary-foreground hover:bg-primary-hover";
  return <button {...props} disabled={props.disabled || busy || loading} aria-busy={busy || loading || undefined} className={cn(`inline-flex min-h-control min-w-11 max-w-full items-center justify-center gap-2 whitespace-normal rounded-md px-4 py-2 text-center text-label focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:opacity-50 ${colors}`, className)}>{children}</button>;
 }
-export function Page({ children }: { children: ReactNode }) {
+export function Page({ children, className }: { children: ReactNode; className?: string }) {
   const privateRoute = useContext(ShellContentContext);
   const Container = privateRoute ? "div" : "main";
   return (
     <Container
       id={privateRoute ? undefined : "main"}
       tabIndex={-1}
-      className="mx-auto w-full max-w-3xl space-y-6 px-4 py-8 md:px-6"
+      className={cn("mx-auto w-full max-w-3xl space-y-6 px-4 py-8 md:px-6", className)}
     >
       {children}
     </Container>

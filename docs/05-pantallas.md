@@ -1,5 +1,7 @@
 # Pantallas web y móvil
 
+[Seguro] **UI-05 (#175, 12-10-2026):** GRP-02 conecta las tarjetas del inicio con el DTO autorizado de #173: agenda de tres actividades, resumen COACH, asistencia propia ATHLETE, selector/métrica/historial GUARDIAN y unión multirol. [Matriz por rol y evidencia](qa/issue-175/README.md). La composición ADMIN de #174 permanece pendiente; los hitos históricos posteriores describen su estado en la fecha original.
+
 [Seguro] Épica web #212: la [matriz de aceptación técnica](web-migration/issue-212/README.md) reúne WEB-01…10, los 39 destinos preservados, sus gates y límites. La aceptación externa/humana y el rediseño pendiente siguen en #209/#170/#181; producción NO-GO.
 
 [Seguro] **WEB-10 (#222, 12-10-2026):** `apps/web` es React19/Vite7/React Router7 Data Mode. El [inventario final](web-migration/issue-222/rutas.json) contrasta las39 páginas anteriores con39 destinos conservados y logout como acción técnica. Nest gestiona sesión opaca/callbacks/imágenes y autorización. [Evidencia y desarrollo/rollback](web-migration/issue-222/README.md). Producción NO-GO y aceptación humana/externa #181/#209 pendientes.
@@ -49,7 +51,7 @@ El [diseño original completo](https://github.com/AlexxSome/asisteam/blob/48d404
 | [`/join`](../apps/web/src/routes/join.tsx) | ONB-02 / ONB-03 | Sesión | Código incorpora ATHLETE; muestra progreso pendiente del menor. |
 | [`/groups`](../apps/web/src/routes/groups.tsx) | GRP-01 / ACT-01 global | Sesión | Selector de grupos y agenda global en #agenda. |
 | [`/groups/new`](../apps/web/src/routes/group-new.tsx) | ONB-04 | Sesión | Formulario de alta del grupo y contexto del primer pago. |
-| [`/groups/[groupId]`](../apps/web/src/routes/group.tsx) | GRP-02 | Miembro del grupo | Inicio por roles, próxima actividad, pendientes y datos propios/pupilos. |
+| [`/groups/[groupId]`](../apps/web/src/routes/group.tsx) | GRP-02 | Miembro del grupo | Inicio por roles: próximas tres, resumen COACH, métricas propias y selector de pupilo; gestión ADMIN contextual. |
 | [`/groups/[groupId]/settings`](../apps/web/src/routes/group-settings.tsx) | GRP-03 / INT-05 | ADMIN | Datos, código/enlace y regeneración; guardado explícito de datos. |
 | [`/groups/[groupId]/settings/visibility`](../apps/web/src/routes/visibility.tsx) | GRP-04 | ADMIN | Toggles independientes con guardado inmediato y vista previa. |
 | [`/groups/[groupId]/activity-types`](../apps/web/src/routes/activity-types.tsx) | GRP-05 | ADMIN | Crear/editar/desactivar tipos propios; sistema inmutable. |
@@ -346,3 +348,11 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 [Seguro] [Inicio del grupo](../apps/web/src/routes/group.tsx) consume el DTO autorizado `getGroupDashboard` por Router→SDK→Nest→RPC SQL: indicadores completos por período Chile, mensual ponderado, próximas3/en curso, respaldo finalizada, último anuncio y actividad del día con selección estable. ADMIN recibe preview4; COACH solo resumen operativo sin notas/filas ajenas; ATHLETE/GUARDIAN mantienen lo propio/pupilos y totales según toggles. Falta de permiso y Sin datos conservan null, nunca ceros ficticios.
 
 [Seguro] Se agrega el selector del día si hay varias actividades (Form GET, páginas50), sin nuevos destinos. Tareas GUARDIAN se cuentan en servidor sin recorrer páginas de onboarding en el cliente; capacidad ADMIN conserva billing canónico. [Contrato, fuentes, permisos y evidencia](qa/issue-173/README.md) delimitan el alcance: composición/dashboard completo #174 y variantes #175 continúan pendientes; rutas39 y códigos existentes se conservan.
+
+## UI-05 · Inicio autorizado por rol y multirol (#175)
+
+[Seguro] GRP-02 conserva `/groups/:groupId` y los 39 destinos. `GroupHomePanels` presenta próximos tres encuentros, actividad seleccionada y anuncio del grupo. COACH abre toma/corrección de estados y resumen sin notas/desmarcado/gestión; ATHLETE conserva Mi asistencia e historial propio; GUARDIAN selecciona un pupilo ACTIVE vigente dentro de una página de 4, con métrica e historial por grupo. V1/V2 no dependen de los toggles. Los agregados aparecen únicamente si el servidor devuelve indicadores autorizados; no se descargan registros ADMIN para ocultarlos en cliente.
+
+[Seguro] ADMIN+ATHLETE conserva administración y asistencia propia; ATHLETE+GUARDIAN conserva ambos paneles. La identidad de grupo/pupilo acompaña cada resumen/enlace. Navegar de grupo/página reinicia selección; un pupilo retirado desaparece al revalidar el servidor. PENDING se excluye de asistencia, con explicación de pasos y enlaces a APO-03/APO-04 y consentimientos existentes. Mayoría de edad/vínculo/membership usan helpers canónicos, probados en SQL/HTTP y la interfaz. La [matriz detallada](qa/issue-175/README.md) documenta acciones, datos y cobertura.
+
+[Seguro] No se añaden rutas, contratos, migraciones ni endpoints. APO-03/APO-04 siguen siendo los destinos de agenda y progreso detallado del pupilo; no se replica su carga en el inicio. Gestión/primer uso/capacidad ADMIN permanecen; la tabla y la composición ADMIN completa de #174 y su validación visual continúan pendientes. Producción mantiene NO-GO.
