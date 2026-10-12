@@ -91,9 +91,32 @@ jobs:
           path: .ci-results/*.json
           retention-days: 7
           include-hidden-files: true
+  qualification:
+    needs: [checks, backend, staging, extended]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: 24.16.0
+          package-manager-cache: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: '*-evidence'
+          path: .ci-results
+          merge-multiple: true
+      - run: node scripts/ci/qualification.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: qualification-evidence
+          path: .ci-results/qualification.json
+          retention-days: 7
+          include-hidden-files: true
   required:
     if: always()
-    needs: [checks, backend, staging, extended]
+    needs: [checks, backend, staging, extended, qualification]
     runs-on: ubuntu-24.04
     steps:
       - env:
@@ -101,4 +124,5 @@ jobs:
           BACKEND: ${{ needs.backend.result }}
           STAGING: ${{ needs.staging.result }}
           EXTENDED: ${{ needs.extended.result }}
-        run: test "$CHECKS" = success && test "$BACKEND" = success && test "$STAGING" = success && test "$EXTENDED" = success
+          QUALIFICATION: ${{ needs.qualification.result }}
+        run: test "$CHECKS" = success && test "$BACKEND" = success && test "$STAGING" = success && test "$EXTENDED" = success && test "$QUALIFICATION" = success

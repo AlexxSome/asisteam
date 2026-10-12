@@ -13,15 +13,15 @@ for (const suite of suites) {
     const result = JSON.parse(readFileSync(`.ci-results/${suite}.json`, 'utf8'));
     const commit = result.sourceCommit ?? result.commit;
     const allPassed = Array.isArray(result.checks) && result.checks.length > 0 && result.checks.every(check => check.status === 'PASS' || (check.status === 'FAIL' && check.expected === true && expectedFaults.has(check.check)));
-    const mandatory = { checks: 'api-client-contract', backend: 'product-integrations', staging: 'staging-owned-cleanup', extended: 'playwright-nest-domain-responsive-axe' }[suite];
-    const completed = result.checks?.find(check => check.check === mandatory);
-    if (allPassed && commit === sourceCommit && completed?.status === 'PASS') status = 'PASS';
+    const mandatory = { checks: ['api-client-contract', 'vite-static-infrastructure', 'vite-bundle-baseline'], backend: ['product-integrations'], staging: ['staging-owned-cleanup', 'vite-container-rollback-identity', 'vite-container-owned-cleanup'], extended: ['playwright-nest-domain-responsive-axe', 'playwright-vite-static-parity', 'playwright-transport-faults'] }[suite];
+    const completed = mandatory.map(name => result.checks?.find(check => check.check === name));
+    if (allPassed && commit === sourceCommit && completed.every(check => check?.status === 'PASS')) status = 'PASS';
     for (const check of result.checks ?? []) {
       tests += Number.isInteger(check.tests) ? check.tests : 0;
       omitted += Number.isInteger(check.omitted) ? check.omitted : 0;
       if (check.check !== 'web-unit' && check.omitted > 0) status = 'FAIL';
     }
-    if (['backend', 'extended'].includes(suite) && !(completed?.tests > 0 && completed.omitted === 0)) status = 'FAIL';
+    if (['backend', 'extended'].includes(suite) && !completed.every(check => check?.tests > 0 && check.omitted === 0)) status = 'FAIL';
   } catch { /* Missing/stale evidence remains FAIL, never an implicit PASS. */ }
   report.suites.push({ suite, status, tests, omitted });
 }
@@ -33,7 +33,13 @@ try {
     report.load = { status: 'PASS', activeAthletes: 500, attendanceRecords: 5000, cells: 8, requests: 192, maxP95Ms: Math.max(...load.rows.map(row => row.p95Ms)) };
   } else report.load = { status: 'FAIL' };
 } catch { report.load = { status: 'FAIL' }; }
-if (report.suites.every(suite => suite.status === 'PASS') && report.load.status === 'PASS') report.technicalStatus = 'PASS';
+try {
+  const bundle = JSON.parse(readFileSync('.ci-results/vite-bundle.json', 'utf8'));
+  const valid = bundle.sourceCommit === sourceCommit && bundle.measurementStatus === 'PASS' && bundle.routes?.length === 38 && Number.isSafeInteger(bundle.initialGzipBytes) && bundle.initialGzipBytes > 0 && ['PASS', 'PENDING_AGREEMENT'].includes(bundle.budgetStatus);
+  report.bundle = { status: valid ? 'PASS' : 'FAIL', budgetStatus: bundle.budgetStatus, initialGzipBytes: bundle.initialGzipBytes, deltaInitialGzipBytes: bundle.deltaInitialGzipBytes };
+  if (bundle.budgetStatus !== 'PASS') report.blockers.push('frontend-bundle-budget-agreement-WEB09');
+} catch { report.bundle = { status: 'FAIL' }; }
+if (report.suites.every(suite => suite.status === 'PASS') && report.load.status === 'PASS' && report.bundle.status === 'PASS') report.technicalStatus = 'PASS';
 mkdirSync('.ci-results', { recursive: true });
 writeFileSync('.ci-results/qualification.json', JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report));

@@ -1,5 +1,7 @@
 # Staging sintético reproducible · MIG-03 (#147)
 
+[Seguro] **WEB-09 (#221):** `ci:staging` conserva el ensayo MIG-03 y añade la imagen estática Vite/Node24 en la red sintética propia, mismo origen con Nest, comprobación de procedencia/errores/cache/CSP y restauración por digest. [Procedimiento frontend y límites de sesión](../../docs/web-migration/issue-221/README.md). El harness browser separado usa Nest/PostgreSQL/S3 completos y verifica cambio de assets/HTML y rollback con sesión opaca; el staging mínimo de este documento conserva su alcance operativo. Provisión/HTTPS/receipts/aceptación externas siguen pendientes en #209; producción NO-GO.
+
 [Seguro] Este despliegue Docker usa PostgreSQL 17.9 y el artefacto Nest de #146, con datos exclusivamente sintéticos. La API sigue exponiendo solo `/health` y `/ready`. **El usuario eligió este alcance; provisión externa, cuenta/región y presupuesto siguen PENDIENTES.** No se migra tráfico ni el esquema de producto de Supabase.
 
 ## Crear y desplegar

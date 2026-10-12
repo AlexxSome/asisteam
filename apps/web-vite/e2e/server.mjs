@@ -1,6 +1,8 @@
-import { createServer } from "vite";
+import { staticServer } from "../scripts/static-server.mjs";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, rmSync, cpSync } from "node:fs";
+import { resolve } from "node:path";
+import { writeArtifact } from "../scripts/artifact.mjs";
 import { randomUUID, createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import { nativeBrowserDatabase } from "../../api/test/native-browser-database.mjs";
@@ -16,12 +18,14 @@ let database, app, vite, storage, closing;
 const stop = () =>
   (closing ??= (async () => {
     globalThis.fetch = originalFetch;
-    await vite?.close();
+    if (vite) await new Promise(resolve => vite.close(resolve));
     await app?.close();
     await database?.cleanup();
     storage?.storage.client.destroy();storage?.stop();
     for (const file of ["runtime.json", "email.json", "logs.json"])
       rmSync(".qa/" + file, { force: true });
+    rmSync(".qa/releases", { recursive: true, force: true });
+    rmSync(".qa/release-selection", { force: true });
   })());
 for (const signal of ["SIGTERM", "SIGINT"])
   process.on(signal, async () => {
@@ -158,9 +162,22 @@ try {
   }), {
     mode: 0o600,
   });
-  vite = await createServer();
-  await vite.listen();
-  console.log("WEB215: Nest/PostgreSQL sintéticos y frontend aislado listos.");
+  // The full browser matrix runs the release artifact, including CSP and proxy.
+  // Candidate changes the entry asset/hash; retain previous lazy assets on upgrade.
+  const previous = resolve(".qa/releases/previous"), current = resolve(".qa/releases/current");
+  for (const directory of [previous, current]) cpSync("dist", directory, { recursive: true });
+  const manifest = JSON.parse(readFileSync("dist/release.json", "utf8"));
+  const viteManifest = JSON.parse(readFileSync(current + "/.vite/manifest.json", "utf8"));
+  const entry = Object.values(viteManifest).find(value => value.isEntry).file;
+  const candidateBytes = readFileSync(current + "/" + entry, "utf8") + "\n/* WEB09 synthetic candidate */\n";
+  const candidateName = "assets/release-" + createHash("sha256").update(candidateBytes).digest("hex").slice(0, 16) + ".js";
+  writeFileSync(current + "/" + candidateName, candidateBytes);
+  writeFileSync(current + "/index.html", readFileSync(current + "/index.html", "utf8").replace(entry, candidateName).replace("<html", '<html data-release="current"'));
+  writeArtifact(current, { sourceCommit: manifest.sourceCommit, paths: manifest.paths, performance: manifest.performance });
+  writeFileSync(".qa/release-selection", "previous", { mode: 0o600 });
+  vite = staticServer({ directory: previous, previous: [current], target: process.env.ASISTEAM_VITE_API_TARGET, selectDirectory: () => readFileSync(".qa/release-selection", "utf8").trim() === "current" ? current : previous });
+  await new Promise(resolve => vite.listen(3130, "127.0.0.1", resolve));
+  console.log("WEB09: Nest/PostgreSQL sintéticos y artefacto estático aislado listos.");
 } catch {
   await stop();
   console.error(

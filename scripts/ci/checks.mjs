@@ -7,6 +7,8 @@ await suite('checks', async () => {
   await check('typecheck', 'pnpm', ['typecheck']);
   await check('next-http-contract', 'pnpm', ['--filter', '@asisteam/web', 'test:api-contract']);
   await check('build', 'pnpm', ['build'], { env: { ASISTEAM_DATABASE_MODE: 'independent', NEXT_TELEMETRY_DISABLED: '1' } });
+  await check('vite-static-infrastructure', 'pnpm', ['--filter', '@asisteam/web-vite', 'test:infrastructure'], { noSkip: true });
+  await check('vite-bundle-baseline', 'pnpm', ['--filter', '@asisteam/web-vite', 'test:bundle']);
   await check('product-runtime-retirement', 'pnpm', ['ci:retirement']);
   await check('core-unit', 'pnpm', ['--filter', '@asisteam/core', 'exec', 'vitest', 'run', '--reporter=json', '--outputFile=.ci-unit.json'], { cwd: undefined, report: 'packages/core/.ci-unit.json', requireAll: true });
   await check('web-unit', 'pnpm', ['--filter', '@asisteam/web', 'exec', 'vitest', 'run', '--maxWorkers=2', '--testTimeout=10000', '--reporter=json', '--outputFile=.ci-unit.json'], { report: 'apps/web/.ci-unit.json' });

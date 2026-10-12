@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { check, suite, verify, evidence } from './run.mjs';
 import { deploy, rollback, current, composeArgs } from '../../deploy/staging/release.mjs';
+import { rehearseFrontend } from './vite-staging.mjs';
 
 await suite('staging', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'asisteam-staging-ci-'));
@@ -40,6 +41,7 @@ await suite('staging', async () => {
     });
     // Connect from within the isolated network using the actual runtime role.
     await check('api-real-postgres-integration', 'docker', [...composeArgs, 'run', '--rm', '--no-deps', '-v', `${process.cwd()}/apps/api/test:/app/test:ro`, 'api', 'node', '--input-type=module', '-e', "import {readFileSync} from 'node:fs';process.env.API_TEST_DATABASE_URL=readFileSync('/run/secrets/runtime_url','utf8').trim();await import('./test/postgres.integration.mjs');"], { env: { API_IMAGE: image }, noSkip: true });
+    await rehearseFrontend();
   } finally {
     if (image) await check('staging-owned-cleanup', 'docker', [...composeArgs, 'down', '-v'], { env: { API_IMAGE: image } });
     rmSync(dir, { recursive: true, force: true });

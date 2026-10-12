@@ -22,7 +22,7 @@ export default defineConfig({
   },
   webServer: {
     command: "node e2e/server.mjs",
-    url: "http://127.0.0.1:3130/login",
+    url: "http://127.0.0.1:3130/legal/2026-09-21",
     reuseExistingServer: false,
     timeout: 180000,
     stdout: "pipe",
