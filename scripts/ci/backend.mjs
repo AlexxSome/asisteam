@@ -4,6 +4,7 @@ import { check, suite, verify, evidence } from './run.mjs';
 await suite('backend', async () => {
   await check('api-session-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/api']);
   await check('worker-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/worker']);
+  await check('web-static-auth-fixture-build', 'pnpm', ['exec', 'turbo', 'run', 'build', '--filter', '@asisteam/web']);
   await check('private-storage-fixture-build', 'docker', ['build', '-f', 'scripts/migration/storage/Dockerfile.fixture', '-t', 'asisteam-storage-fixture:161', '.']);
   await check('independent-postgres-api-worker-types-backup-pitr', 'node', ['apps/api/test/independent-postgres.integration.mjs']);
   // Every runner owns a disposable vanilla PostgreSQL fixture.

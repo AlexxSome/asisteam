@@ -69,3 +69,7 @@ pnpm ci:qualification
 ## Coordinación y límites
 
 [Seguro] #209 conserva provisión/HTTPS, providers/callbacks, receipts Google/Apple/Resend/MP/Expo, observabilidad, RPO/RTO, responsables y aceptación legal/operacional externa. #170/#181 conservan rediseños pendientes, lector humano, zoom nativo200%, axe incompleto y prueba de 20 personas/<60s a una mano. Responsive/axe/fixtures sintéticos no cierran esos gates. No se cierran issues dependientes ni se hace merge/deploy/corte/apagado de receptores. Producción **NO-GO**.
+
+## Corrección del job backend en checkout limpio
+
+[Seguro] La primera corrida remota del PR#232 pasó checks/staging/extended y falló en el smoke Auth antes de ejecutar APIs. Backend construía API/Worker y esperaba un artefacto web que sólo existía por corridas locales anteriores; cada job GitHub tiene su propio checkout. Se reprodujo retirando temporalmente `apps/web/dist`: `ENOENT` de `dist/release.json`, fase setup, sin cuenta creada. El job backend ahora construye explícitamente `@asisteam/web` antes de ambos smokes Chromium. No depende de otro job/caché ni modifica aserciones, omisiones, permisos o comportamiento del producto. La evidencia inicial anterior permanece fechada; la corrección se verifica con los cuatro gates canónicos desde ausencia del dist y CI remoto del nuevo SHA.
