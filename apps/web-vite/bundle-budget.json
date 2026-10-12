@@ -1,5 +1,5 @@
 {
-  "approval": null,
-  "maxInitialGzipBytes": null,
-  "maxAdditionalRouteGzipBytes": null
+  "approval": "Usuario: «Perfecto usa lo recomendado»; 2026-10-12 America/Santiago; #221; máximos de 220000 y 25000 bytes gzip",
+  "maxInitialGzipBytes": 220000,
+  "maxAdditionalRouteGzipBytes": 25000
 }
