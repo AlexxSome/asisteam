@@ -28,7 +28,7 @@ El calendario de 19 semanas se basaba en Expo y ya no es una fecha comprometida 
 **Objetivo:** dejar operativa toda la base técnica y de diseño para que la Fase 1 produzca features de negocio desde el primer día, y desactivar temprano los tres flujos de mayor riesgo del canon.
 
 **Entregables:**
-- Monorepo pnpm + Turborepo con paquetes `apps/web` (Next.js 16), `packages/core` (schemas Zod, métrica canónica, tipos de dominio) y `packages/db/` (migraciones, fixtures, tipos) + apps/api y apps/worker. Estructura según 06-arquitectura-y-stack.md.
+- Monorepo pnpm + Turborepo con paquetes `apps/web` (React/Vite/Router; Next es antecedente), `packages/core` (schemas Zod, métrica canónica, tipos de dominio) y `packages/db/` (migraciones, fixtures, tipos) + apps/api y apps/worker. Estructura según 06-arquitectura-y-stack.md.
 - Proyecto PostgreSQL independiente (región `sa-east-1`) con entornos dev/staging/prod; Vercel Pro conectado con preview deployments por PR; Resend y Sentry configurados.
 - CI en GitHub Actions: lint + typecheck + tests unitarios de `packages/core` + fixtures PostgreSQL/S3 propios (CLI/Docker) con pgTAP y seeds por rol. Hardening del pipeline presupuestado aquí (ver riesgo R11).
 - Migración inicial del esquema canónico completo (ver 04-modelo-de-datos.md): `users`, `groups`, `memberships`, `guardianships`, `activity_types` (con los 4 tipos de sistema sembrados), `activities`, `attendance_records`, `invitations`, `consents`, enums implementados como `text` + `CHECK` (sin `CREATE TYPE`, según 04-modelo-de-datos.md §1) y únicos compuestos.
@@ -51,7 +51,7 @@ El calendario de 19 semanas se basaba en Expo y ya no es una fecha comprometida 
 
 **Objetivo:** entregar la primera versión utilizable por un club real: web responsive donde un ADMIN gestiona su grupo, toma asistencia y ve reportes, y donde ATHLETE/GUARDIAN consultan lo que las reglas de visibilidad les permiten.
 
-**Entregables:** la totalidad del alcance [P0] del canon, desplegado en producción (stack Next/Nest/PostgreSQL/S3).
+**Entregables:** la totalidad del alcance [P0] del canon, desplegado en producción (stack React/Vite/Nest/PostgreSQL/S3).
 
 ### 3.1 Orden de implementación de módulos y dependencias
 
@@ -249,8 +249,12 @@ El calendario anterior de 19 semanas (2026-07-06 → 2026-11-13) dejó de ser v�
 
 ## 12. Retiro de Next — épica #212 / WEB-01 (#213)
 
-[Seguro] [WEB-01](web-migration/issue-213/README.md) registra inventario/ADR/matriz sobre `db1396d490c481209a81a67fde0104c4fbfe248c`: 39 páginas, 47 funciones Server Actions,88 operaciones de contrato y 3 handlers. El objetivo autorizado es React19/TypeScript/Vite + React Router Data Mode, sesión/callbacks/privadas en Nest y mismo origen; Next sigue siendo el runtime entregado hasta WEB-10.
+[Seguro] [WEB-01](web-migration/issue-213/README.md) registra inventario/ADR/matriz sobre `db1396d490c481209a81a67fde0104c4fbfe248c`: 39 páginas, 47 funciones Server Actions,88 operaciones de contrato y 3 handlers. El objetivo autorizado es React19/TypeScript/Vite + React Router Data Mode, sesión/callbacks/privadas en Nest y mismo origen; Ese corte precede a WEB-10; el runtime definitivo es React/Vite/Router en apps/web.
 
 [Suposición] Estimación recalibrada: 30–45 jornadas / 6–9 semanas con una persona dedicada, frente a 5–8 semanas iniciales; sin fecha comprometida ni aceptación externa. El [desglose por hito](web-migration/issue-213/README.md#estimación-recalibrada-y-secuencia) reserva esfuerzo para cookies/CSRF/refresh/OAuth/IP, cliente generado, invalidación, private binary/URLs antiguas y runners/proxy. Secuencia WEB-01→02→03→04→05→06/07→08→09→10; WEB-08 depende de07, paridad09 exige todos los módulos y retiro10 exige cuatro gates required+qualification.
 
 [Seguro] Coordinar cambios por módulo con rediseño #170 y aceptación de desarrollo #209. No añade features P1/P2, no reactiva calendario móvil, no cierra QA humana/operacional ni autoriza corte/deploy/apagado de receptores: producción sigue NO-GO. Los pendientes y estimaciones históricas de las secciones anteriores siguen distinguidos de esta planificación.
+
+## WEB-10 (#222) · Retiro técnico web
+
+[Seguro] WEB-10 retira Next y la carpeta paralela, reconcilia las39 páginas y conserva Nest/Node24/PostgreSQL17/Worker/S3 y las capacidades autorizadas. [Matriz, regresión, desarrollo y rollback](web-migration/issue-222/README.md). Entrega técnica y CI sintético no cierran #170/#181 ni aceptación externa #209; producción NO-GO y calendario móvil/offline pendiente.

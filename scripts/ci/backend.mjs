@@ -26,7 +26,7 @@ await suite('backend', async () => {
     'apps/worker/test/worker.integration.mjs',
     'apps/api/test/web-auth.integration.mjs',
   ], { noSkip: true });
-  await check('next-social-auth-browser', 'pnpm', ['--filter', '@asisteam/web', 'test:social-contract']);
+  await check('static-social-auth-browser','pnpm',['--filter','@asisteam/web','test:social-contract']);
   await check('portability-rehearsal', 'pnpm', ['migration:portability', '--', '--verified-report']);
   verify('portability-no-omissions', () => {
     const report = JSON.parse(readFileSync('.ci-results/portability.json', 'utf8'));

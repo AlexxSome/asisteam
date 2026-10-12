@@ -21,8 +21,14 @@ await suite('controlled-failure', async () => {
       const report = JSON.parse(readFileSync('.ci-results/retirement-controlled.json', 'utf8'));
       assert.equal(report.checks.find(record => record.check === 'product-source-without-sdk-provider-http-or-fixtures')?.status, 'FAIL');
     } finally { rmSync(retiredClientProbe); }
+    writeFileSync(retiredClientProbe, ['import Link from', JSON.stringify('next/link'), '; export const forbiddenLink = Link;'].join(' '));
+    try {
+      await assert.rejects(check('controlled-next-retirement-failure', 'pnpm', ['ci:retirement'], { env: { CI_RETIREMENT_REPORT_NAME: 'retirement-next-controlled' } }));
+      const report = JSON.parse(readFileSync('.ci-results/retirement-next-controlled.json', 'utf8'));
+      assert.equal(report.checks.find(record => record.check === 'product-source-without-sdk-provider-http-or-fixtures')?.status, 'FAIL');
+    } finally { rmSync(retiredClientProbe); }
     // Expected FAIL stays explicit; the probe itself passes only after observing it.
-    assert.equal(evidence.checks.filter(check => check.status === 'FAIL').length, 3);
+    assert.equal(evidence.checks.filter(check => check.status === 'FAIL').length, 4);
     for (const record of evidence.checks) if (record.status === 'FAIL') record.expected = true;
     evidence.checks.push({ check: 'controlled-failure-detected', status: 'PASS' });
   } finally { rmSync(dir, { recursive: true, force: true }); }

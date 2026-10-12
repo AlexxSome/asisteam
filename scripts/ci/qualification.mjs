@@ -19,7 +19,7 @@ for (const suite of suites) {
     for (const check of result.checks ?? []) {
       tests += Number.isInteger(check.tests) ? check.tests : 0;
       omitted += Number.isInteger(check.omitted) ? check.omitted : 0;
-      if (check.check !== 'web-unit' && check.omitted > 0) status = 'FAIL';
+      if (check.omitted > 0) status = 'FAIL';
     }
     if (['backend', 'extended'].includes(suite) && !completed.every(check => check?.tests > 0 && check.omitted === 0)) status = 'FAIL';
   } catch { /* Missing/stale evidence remains FAIL, never an implicit PASS. */ }

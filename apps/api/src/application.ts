@@ -4,7 +4,7 @@ import { NativeAuth, NativeAuthController } from './native-auth.js';
 import { Passwords } from './passwords.js';
 import 'reflect-metadata';
 import { AvatarStorage } from './storage.js';
-import { AvatarsController } from './avatars.js';
+import { AvatarsController, WebAvatarsController, AvatarReader } from './avatars.js';
 import { randomUUID } from 'node:crypto';
 import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -29,8 +29,8 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [WebAuthController, WebCallbackController, SocialAuthController,NativeAuthController,AvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
-    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, WebAuth, SocialAuth, NativeAuth, Passwords, AvatarStorage, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
+    controllers: [WebAuthController, WebCallbackController, SocialAuthController,NativeAuthController,AvatarsController,WebAvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, WebAuth, SocialAuth, NativeAuth, Passwords, AvatarStorage, AvatarReader, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}
   const app = await NestFactory.create<NestExpressApplication>(RuntimeModule, { logger, abortOnError: false, bodyParser: false });

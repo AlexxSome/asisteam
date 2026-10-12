@@ -1,0 +1,204 @@
+{
+  "base": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+  "pageCount": 39,
+  "technicalRoutes": [
+    "/logout"
+  ],
+  "pages": [
+    {
+      "route": "/",
+      "previous": "apps/web/src/app/page.tsx",
+      "current": "apps/web/src/routes/welcome.tsx"
+    },
+    {
+      "route": "/login",
+      "previous": "apps/web/src/app/login/page.tsx",
+      "current": "apps/web/src/routes/login.tsx"
+    },
+    {
+      "route": "/register",
+      "previous": "apps/web/src/app/register/page.tsx",
+      "current": "apps/web/src/routes/register.tsx"
+    },
+    {
+      "route": "/forgot-password",
+      "previous": "apps/web/src/app/forgot-password/page.tsx",
+      "current": "apps/web/src/routes/forgot-password.tsx"
+    },
+    {
+      "route": "/reset-password",
+      "previous": "apps/web/src/app/reset-password/page.tsx",
+      "current": "apps/web/src/routes/reset-password.tsx"
+    },
+    {
+      "route": "/invitations/:token",
+      "previous": "apps/web/src/app/invitations/[token]/page.tsx",
+      "current": "apps/web/src/routes/invitation.tsx"
+    },
+    {
+      "route": "/accept-terms",
+      "previous": "apps/web/src/app/accept-terms/page.tsx",
+      "current": "apps/web/src/routes/terms.tsx"
+    },
+    {
+      "route": "/legal/2026-09-21",
+      "previous": "apps/web/src/app/legal/2026-09-21/page.tsx",
+      "current": "apps/web/src/routes/legal.tsx"
+    },
+    {
+      "route": "/welcome",
+      "previous": "apps/web/src/app/welcome/page.tsx",
+      "current": "apps/web/src/routes/welcome.tsx"
+    },
+    {
+      "route": "/join",
+      "previous": "apps/web/src/app/join/page.tsx",
+      "current": "apps/web/src/routes/join.tsx"
+    },
+    {
+      "route": "/groups",
+      "previous": "apps/web/src/app/groups/page.tsx",
+      "current": "apps/web/src/routes/groups.tsx"
+    },
+    {
+      "route": "/groups/new",
+      "previous": "apps/web/src/app/groups/new/page.tsx",
+      "current": "apps/web/src/routes/group-new.tsx"
+    },
+    {
+      "route": "/groups/:groupId",
+      "previous": "apps/web/src/app/groups/[groupId]/page.tsx",
+      "current": "apps/web/src/routes/group.tsx"
+    },
+    {
+      "route": "/groups/:groupId/settings",
+      "previous": "apps/web/src/app/groups/[groupId]/settings/page.tsx",
+      "current": "apps/web/src/routes/group-settings.tsx"
+    },
+    {
+      "route": "/groups/:groupId/settings/visibility",
+      "previous": "apps/web/src/app/groups/[groupId]/settings/visibility/page.tsx",
+      "current": "apps/web/src/routes/visibility.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activity-types",
+      "previous": "apps/web/src/app/groups/[groupId]/activity-types/page.tsx",
+      "current": "apps/web/src/routes/activity-types.tsx"
+    },
+    {
+      "route": "/groups/:groupId/members",
+      "previous": "apps/web/src/app/groups/[groupId]/members/page.tsx",
+      "current": "apps/web/src/routes/members.tsx"
+    },
+    {
+      "route": "/groups/:groupId/members/new",
+      "previous": "apps/web/src/app/groups/[groupId]/members/new/page.tsx",
+      "current": "apps/web/src/routes/member-new.tsx"
+    },
+    {
+      "route": "/groups/:groupId/members/pending",
+      "previous": "apps/web/src/app/groups/[groupId]/members/pending/page.tsx",
+      "current": "apps/web/src/routes/members-pending.tsx"
+    },
+    {
+      "route": "/groups/:groupId/members/consent",
+      "previous": "apps/web/src/app/groups/[groupId]/members/consent/page.tsx",
+      "current": "apps/web/src/routes/members-consent.tsx"
+    },
+    {
+      "route": "/groups/:groupId/invitations/new",
+      "previous": "apps/web/src/app/groups/[groupId]/invitations/new/page.tsx",
+      "current": "apps/web/src/routes/invitations-admin.tsx"
+    },
+    {
+      "route": "/groups/:groupId/guardians",
+      "previous": "apps/web/src/app/groups/[groupId]/guardians/page.tsx",
+      "current": "apps/web/src/routes/guardians.tsx"
+    },
+    {
+      "route": "/wards",
+      "previous": "apps/web/src/app/wards/page.tsx",
+      "current": "apps/web/src/routes/wards.tsx"
+    },
+    {
+      "route": "/wards/:athleteUserId",
+      "previous": "apps/web/src/app/wards/[athleteUserId]/page.tsx",
+      "current": "apps/web/src/routes/ward.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activities",
+      "previous": "apps/web/src/app/groups/[groupId]/activities/page.tsx",
+      "current": "apps/web/src/routes/activities.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activities/new",
+      "previous": "apps/web/src/app/groups/[groupId]/activities/new/page.tsx",
+      "current": "apps/web/src/routes/activity-edit.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activities/:activityId",
+      "previous": "apps/web/src/app/groups/[groupId]/activities/[activityId]/page.tsx",
+      "current": "apps/web/src/routes/activity.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activities/:activityId/edit",
+      "previous": "apps/web/src/app/groups/[groupId]/activities/[activityId]/edit/page.tsx",
+      "current": "apps/web/src/routes/activity-edit.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activities/:activityId/attendance",
+      "previous": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/page.tsx",
+      "current": "apps/web/src/routes/attendance.tsx"
+    },
+    {
+      "route": "/me/history",
+      "previous": "apps/web/src/app/me/history/page.tsx",
+      "current": "apps/web/src/routes/history-groups.tsx"
+    },
+    {
+      "route": "/groups/:groupId/me/history",
+      "previous": "apps/web/src/app/groups/[groupId]/me/history/page.tsx",
+      "current": "apps/web/src/routes/history.tsx"
+    },
+    {
+      "route": "/groups/:groupId/wards/:athleteUserId/history",
+      "previous": "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.tsx",
+      "current": "apps/web/src/routes/history.tsx"
+    },
+    {
+      "route": "/groups/:groupId/reports",
+      "previous": "apps/web/src/app/groups/[groupId]/reports/page.tsx",
+      "current": "apps/web/src/routes/reports.tsx"
+    },
+    {
+      "route": "/profile",
+      "previous": "apps/web/src/app/profile/page.tsx",
+      "current": "apps/web/src/routes/profile.tsx"
+    },
+    {
+      "route": "/profile/birthdate-requests",
+      "previous": "apps/web/src/app/profile/birthdate-requests/page.tsx",
+      "current": "apps/web/src/routes/birthdate-reviews.tsx"
+    },
+    {
+      "route": "/groups/:groupId/billing",
+      "previous": "apps/web/src/app/groups/[groupId]/billing/page.tsx",
+      "current": "apps/web/src/routes/billing.tsx"
+    },
+    {
+      "route": "/groups/:groupId/announcements",
+      "previous": "apps/web/src/app/groups/[groupId]/announcements/page.tsx",
+      "current": "apps/web/src/routes/announcements.tsx"
+    },
+    {
+      "route": "/groups/:groupId/activities/:activityId/qr",
+      "previous": "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/page.tsx",
+      "current": "apps/web/src/routes/qr.tsx"
+    },
+    {
+      "route": "/check-in",
+      "previous": "apps/web/src/app/check-in/page.tsx",
+      "current": "apps/web/src/routes/check-in.tsx"
+    }
+  ]
+}

@@ -1,13 +1,13 @@
-// @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { GroupSelector } from "@/app/groups/group-selector";
+import { GroupSelector } from "../components/group-selector";
 import { activeGroupCookie, activityReturnLink, activityReturnQuery, isGroupId, switchedGroupPath } from "./group-routing";
 
 const navigation = vi.hoisted(() => ({ pathname: "", push: vi.fn() }));
-vi.mock("next/navigation", () => ({ usePathname: () => navigation.pathname, useRouter: () => ({ push: navigation.push }) }));
+vi.mock("../navigation", () => ({ usePathname: () => navigation.pathname, useRouter: () => ({ push: navigation.push }), navigateWithUnsavedChanges: (run:()=>void)=>run(), RouterLink: ({href,children}:{href:string;children:unknown})=>createElement("a",{href},children as never) }));
+vi.stubGlobal("location", {protocol:"http:"});
 
 const a = "17000000-0000-4000-8000-000000000201";
 const b = "17000000-0000-4000-8000-000000000202";

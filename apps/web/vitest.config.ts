@@ -1,12 +1,19 @@
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
-
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
 export default defineConfig({
-  esbuild: { jsx: "automatic" },
-  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@/lib/utils": fileURLToPath(
+        new URL("src/lib/utils.ts", import.meta.url),
+      ),
+    },
+  },
   test: {
     environment: "node",
-    setupFiles: ["./vitest.setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
+    setupFiles: ["./src/test-setup.ts"],
+    restoreMocks: true,
   },
 });

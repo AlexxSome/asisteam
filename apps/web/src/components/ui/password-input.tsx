@@ -1,8 +1,6 @@
-"use client";
-
 import { useState, type ComponentProps } from "react";
 import { Input } from "./input";
-import { Button } from "./button";
+import { Button } from "../../ui";
 
 /** Forward Field's ARIA attributes and the form ref to the actual input. */
 export function PasswordInput({ visibilityLabel = "contraseña", ...props }:

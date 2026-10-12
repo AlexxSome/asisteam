@@ -1,6 +1,6 @@
 # Pantallas web y móvil
 
-[Seguro] **WEB-09 (#221):** las39 rutas canónicas migradas a React Router se sirven desde artefacto estático con allowlist del mismo router; Nest conserva sesión/callbacks/imágenes/HTTP y autorización. [Matriz comparativa y ensayo](web-migration/issue-221/README.md) añade deep links/recarga, hashes/cache/CSP y actualización/rollback. Next y las suites históricas permanecen hasta #222; #181/#209 y producción NO-GO conservan sus pendientes externos.
+[Seguro] **WEB-10 (#222, 12-10-2026):** `apps/web` es React19/Vite7/React Router7 Data Mode. El [inventario final](web-migration/issue-222/rutas.json) contrasta las39 páginas anteriores con39 destinos conservados y logout como acción técnica. Nest gestiona sesión opaca/callbacks/imágenes y autorización. [Evidencia y desarrollo/rollback](web-migration/issue-222/README.md). Producción NO-GO y aceptación humana/externa #181/#209 pendientes.
 
 [Seguro] **UI-02 (#172, 10-10-2026):** AppShell aplica sidebar de 256 px desde `lg`, marca/selector/logo real o iniciales/roles, iconos locales decorativos y Gestión con Configuración/Visibilidad/Tipos/Suscripción ADMIN. Cabecera flexible con breadcrumb del grupo autorizado y tarea; móvil conserva Menú, identidad y drawer modal. «Ayuda y soporte» enlaza `/profile#privacy`; cuenta/cierre, multirol y cambio de grupo sin IDs ajenos conservan el flujo vigente. [Evidencia y límites](design/issue-172/README.md). El badge admite únicamente conteo completo autorizado ADMIN; su productor queda en UI-03 (#173), todavía abierto, sin consulta alternativa ni fallback ficticio.
 
@@ -13,7 +13,7 @@
 
 
 
-**Proyecto:** Asisteam · **Corte verificado:** 05-10-2026 · **Base:** `48d404ab96cecd1d6ddb109616e91ed0fcabce8b` (`develop`) · **Reconciliación:** [#121](https://github.com/AlexxSome/asisteam/issues/121), dependiente de [#102](https://github.com/AlexxSome/asisteam/issues/102) entregado en [PR #123](https://github.com/AlexxSome/asisteam/pull/123).
+**Proyecto:** Asisteam · **Inventario actualizado:** 12-10-2026 · **Corte histórico:** 05-10-2026 · **Base:** `48d404ab96cecd1d6ddb109616e91ed0fcabce8b` (`develop`) · **Reconciliación:** [#121](https://github.com/AlexxSome/asisteam/issues/121), dependiente de [#102](https://github.com/AlexxSome/asisteam/issues/102) entregado en [PR #123](https://github.com/AlexxSome/asisteam/pull/123).
 
 Este documento separa disponibilidad en el repositorio y objetivos de producto. La autorización se define en [02-roles-y-permisos.md](02-roles-y-permisos.md); el inventario no concede permisos. Los códigos `AUT-01`, `ASI-01`, etc. se conservan para las referencias de [módulos](03-modulos-y-flujos.md) e [historias](10-historias-de-usuario.md). Un código puede representar varias rutas o una sección dentro de otra pantalla.
 
@@ -26,56 +26,56 @@ El [diseño original completo](https://github.com/AlexxSome/asisteam/blob/48d404
 - **Ruta lógica/objetivo UX:** dirección o interacción del plan original sin página equivalente; no se presenta como enlace operativo.
 - **Diferido o sin evidencia:** requiere planificación/ratificación, no una implementación deducida de un issue cerrado.
 - **Prioridad:** [P0]/[P1]/[P2] conserva el roadmap original. COACH, billing SaaS, anuncios, QR web y OAuth son [P2] ya autorizados; no se degradan ni se amplían por esta reconciliación.
-- **Parámetros:** la tabla usa `[groupId]`, `[activityId]`, `[athleteUserId]` y `[token]` como el App Router; equivalen a `:groupId`, etc. en contratos lógicos. No son URLs que se abran sin valores autorizados.
+- **Parámetros:** la tabla usa `[groupId]`, `[activityId]`, `[athleteUserId]` y `[token]` por compatibilidad con el inventario histórico; equivalen a `:groupId`, etc. en contratos lógicos. No son URLs que se abran sin valores autorizados.
 - **Plataforma:** web responsive implementada; no hay cliente móvil implementado en el corte verificado. La planificación vigente desde 2026-10-05 define apps nativas Java/Android y Swift/iOS [P1]. Offline [P2] fue pospuesto explícitamente en #54 y sigue diferido.
 
 ## 2. Inventario de páginas reales
 
-**39 archivos `page.tsx`** identificados en el grafo de graphify actualizado a la base del corte, cada uno enlazado abajo. Incluyen la entrada de redirección `/` y el aviso legal. La auditoría inicial sobre `d7dff870f2b2` tenía **37**; [#107](https://github.com/AlexxSome/asisteam/issues/107) añadió `/accept-terms` y `/legal/2026-09-21`. No se cuentan layouts, estados especiales, componentes, hashes, query strings ni handlers como páginas nuevas.
+**39 destinos de página** conservados en React Router, enlazados abajo y derivados del mapa `src/router.tsx`. Incluyen la entrada de redirección `/` y el aviso legal estático; no corresponden a39 archivos porque creación/edición e historiales comparten módulos. La comparación de los39 `page.tsx` anteriores queda en el inventario final de WEB-10. La auditoría inicial sobre `d7dff870f2b2` tenía **37**; [#107](https://github.com/AlexxSome/asisteam/issues/107) añadió `/accept-terms` y `/legal/2026-09-21`. No se cuentan layouts, estados especiales, componentes, hashes, query strings ni handlers como páginas nuevas.
 
 | Ruta real / archivo | Código de pantalla | Audiencia efectiva | Implementación y límite |
 |---|---|---|---|
-| [`/`](../apps/web/src/app/page.tsx) | GRP-01 / ONB-01 | Sesión | Redirección al grupo válido recordado, único grupo, selector o bienvenida. |
-| [`/login`](../apps/web/src/app/login/page.tsx) | AUT-01 / AUT-07 | Público | Email y proveedores Google/Apple disponibles según configuración. |
-| [`/register`](../apps/web/src/app/register/page.tsx) | AUT-02 / AUT-07 | Público | Registro con aceptación informada y contexto de código. |
-| [`/forgot-password`](../apps/web/src/app/forgot-password/page.tsx) | AUT-03 | Público | Recuperación por email; conserva contexto de invitación. |
-| [`/reset-password`](../apps/web/src/app/reset-password/page.tsx) | AUT-04 | Recuperación | Recibe `?token=`; la acción verifica el token de recuperación en un cliente transitorio y limpia la URL tras guardar. |
-| [`/invitations/[token]`](../apps/web/src/app/invitations/%5Btoken%5D/page.tsx) | AUT-05 / AUT-06 | Destinatario | Aceptación o activación MANAGED, según la invitación validada. |
-| [`/accept-terms`](../apps/web/src/app/accept-terms/page.tsx) | AUT-02 / AUT-07, continuación | Sesión | Aceptación pendiente antes de continuar; página añadida por #107. |
-| [`/legal/2026-09-21`](../apps/web/src/app/legal/2026-09-21/page.tsx) | AUT-02 / CFG-03, aviso | Público | Archivo del aviso versionado; leerlo no registra consentimiento (#107). |
-| [`/welcome`](../apps/web/src/app/welcome/page.tsx) | ONB-01 / ONB-03 | Sin grupos activos | Crear/unirse, suscripción explicada y solicitudes pendientes. |
-| [`/join`](../apps/web/src/app/join/page.tsx) | ONB-02 / ONB-03 | Sesión | Código incorpora ATHLETE; muestra progreso pendiente del menor. |
-| [`/groups`](../apps/web/src/app/groups/page.tsx) | GRP-01 / ACT-01 global | Sesión | Selector de grupos y agenda global en #agenda. |
-| [`/groups/new`](../apps/web/src/app/groups/new/page.tsx) | ONB-04 | Sesión | Formulario de alta del grupo y contexto del primer pago. |
-| [`/groups/[groupId]`](../apps/web/src/app/groups/%5BgroupId%5D/page.tsx) | GRP-02 | Miembro del grupo | Inicio por roles, próxima actividad, pendientes y datos propios/pupilos. |
-| [`/groups/[groupId]/settings`](../apps/web/src/app/groups/%5BgroupId%5D/settings/page.tsx) | GRP-03 / INT-05 | ADMIN | Datos, código/enlace y regeneración; guardado explícito de datos. |
-| [`/groups/[groupId]/settings/visibility`](../apps/web/src/app/groups/%5BgroupId%5D/settings/visibility/page.tsx) | GRP-04 | ADMIN | Toggles independientes con guardado inmediato y vista previa. |
-| [`/groups/[groupId]/activity-types`](../apps/web/src/app/groups/%5BgroupId%5D/activity-types/page.tsx) | GRP-05 | ADMIN | Crear/editar/desactivar tipos propios; sistema inmutable. |
-| [`/groups/[groupId]/members`](../apps/web/src/app/groups/%5BgroupId%5D/members/page.tsx) | INT-01 | ADMIN | Búsqueda y filtros por rol/estado, acciones por fila; no detalle dedicado. |
-| [`/groups/[groupId]/members/new`](../apps/web/src/app/groups/%5BgroupId%5D/members/new/page.tsx) | INT-03 | ADMIN | Alta MANAGED; menor pendiente hasta consentimiento efectivo. |
-| [`/groups/[groupId]/members/pending`](../apps/web/src/app/groups/%5BgroupId%5D/members/pending/page.tsx) | INT-06 | ADMIN | Progreso de incorporación, vínculo, consentimiento y aprobación. |
-| [`/groups/[groupId]/members/consent`](../apps/web/src/app/groups/%5BgroupId%5D/members/consent/page.tsx) | APO-04 / AUT-06, consentimiento | GUARDIAN del pupilo | Tratamiento de datos y activación de cuenta separados; no es gestión ADMIN. |
-| [`/groups/[groupId]/invitations/new`](../apps/web/src/app/groups/%5BgroupId%5D/invitations/new/page.tsx) | INT-04 | ADMIN | Nueva invitación e historial mediante ?view=history, con reenvío. |
-| [`/groups/[groupId]/guardians`](../apps/web/src/app/groups/%5BgroupId%5D/guardians/page.tsx) | APO-01 / APO-02 parcial | ADMIN | Registrar/vincular apoderado a menor elegido; no directorio completo de apoderados. |
-| [`/wards`](../apps/web/src/app/wards/page.tsx) | APO-03 | GUARDIAN | Pupilos, grupos, actividad, métricas y tareas de consentimiento. |
-| [`/wards/[athleteUserId]`](../apps/web/src/app/wards/%5BathleteUserId%5D/page.tsx) | APO-04 | GUARDIAN vigente | Grupos y agenda del pupilo; entradas a historial/consentimiento por grupo. |
-| [`/groups/[groupId]/activities`](../apps/web/src/app/groups/%5BgroupId%5D/activities/page.tsx) | ACT-01 | Miembro del grupo | Agenda próximas/pasadas y paginación; no calendario mensual interactivo. |
-| [`/groups/[groupId]/activities/new`](../apps/web/src/app/groups/%5BgroupId%5D/activities/new/page.tsx) | ACT-03 | ADMIN | Creación simple o recurrencia semanal. |
-| [`/groups/[groupId]/activities/[activityId]`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/page.tsx) | ACT-02 | Miembro del grupo | Datos, retorno a agenda y acciones según rol; consulta de asistencia mediante historial. |
-| [`/groups/[groupId]/activities/[activityId]/edit`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/edit/page.tsx) | ACT-03 / ACT-04 | ADMIN | Edición y alcance de serie; preserva ocurrencias con asistencia. |
-| [`/groups/[groupId]/activities/[activityId]/attendance`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/attendance/page.tsx) | ASI-01 | ADMIN / COACH | Estados y guardado por fila; notas/desmarcado solo ADMIN. |
-| [`/me/history`](../apps/web/src/app/me/history/page.tsx) | PRF-02 / ASI-02 | ATHLETE | Selector de grupo o redirección si solo hay uno; vacío sin membership ATHLETE. |
-| [`/groups/[groupId]/me/history`](../apps/web/src/app/groups/%5BgroupId%5D/me/history/page.tsx) | PRF-02 / ASI-02 | ATHLETE propio | Historial individual con filtros y resumen. |
-| [`/groups/[groupId]/wards/[athleteUserId]/history`](../apps/web/src/app/groups/%5BgroupId%5D/wards/%5BathleteUserId%5D/history/page.tsx) | ASI-02 / APO-04 | GUARDIAN vigente | Historial del pupilo activo en ese grupo. |
-| [`/groups/[groupId]/reports`](../apps/web/src/app/groups/%5BgroupId%5D/reports/page.tsx) | REP-01 / REP-02 | Por permisos | ADMIN/COACH: reporte autorizado; ATHLETE/GUARDIAN: propios/pupilos y agregados según toggles. |
-| [`/profile`](../apps/web/src/app/profile/page.tsx) | PRF-01 / CFG-01 / CFG-03 | Sesión | Datos/foto, corrección de edad, cuenta y privacidad por soporte. |
-| [`/profile/birthdate-requests`](../apps/web/src/app/profile/birthdate-requests/page.tsx) | PRF-01, revisión | ADMIN revisor | Solicitudes de corrección de edad de sus grupos, limitadas por RPC. |
-| [`/groups/[groupId]/billing`](../apps/web/src/app/groups/%5BgroupId%5D/billing/page.tsx) | Extensión #56 (sin código histórico) | ADMIN | Plan, checkout, capacidad e historial de cobros del club. |
-| [`/groups/[groupId]/announcements`](../apps/web/src/app/groups/%5BgroupId%5D/announcements/page.tsx) | Extensión #57 (sin código histórico) | Miembro; edición ADMIN | Muro, publicación/edición y preferencia de avisos; no mensajería. |
-| [`/groups/[groupId]/activities/[activityId]/qr`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/qr/page.tsx) | ASI-04, emisión | ADMIN | QR temporal y ajustes plegables para todo el grupo. |
-| [`/check-in`](../apps/web/src/app/check-in/page.tsx) | ASI-04, llegada | ATHLETE propio | Lectura de fragmento QR, login si falta sesión y registro propio. |
+| [`/`](../apps/web/src/routes/welcome.tsx) | GRP-01 / ONB-01 | Sesión | Redirección al grupo válido recordado, único grupo, selector o bienvenida. |
+| [`/login`](../apps/web/src/routes/login.tsx) | AUT-01 / AUT-07 | Público | Email y proveedores Google/Apple disponibles según configuración. |
+| [`/register`](../apps/web/src/routes/register.tsx) | AUT-02 / AUT-07 | Público | Registro con aceptación informada y contexto de código. |
+| [`/forgot-password`](../apps/web/src/routes/forgot-password.tsx) | AUT-03 | Público | Recuperación por email; conserva contexto de invitación. |
+| [`/reset-password`](../apps/web/src/routes/reset-password.tsx) | AUT-04 | Recuperación | Recibe `?token=`; la acción verifica el token de recuperación en un transporte web Nest con CSRF y limpia la URL tras guardar. |
+| [`/invitations/[token]`](../apps/web/src/routes/invitation.tsx) | AUT-05 / AUT-06 | Destinatario | Aceptación o activación MANAGED, según la invitación validada. |
+| [`/accept-terms`](../apps/web/src/routes/terms.tsx) | AUT-02 / AUT-07, continuación | Sesión | Aceptación pendiente antes de continuar; página añadida por #107. |
+| [`/legal/2026-09-21`](../apps/web/src/routes/legal.tsx) | AUT-02 / CFG-03, aviso | Público | Archivo del aviso versionado; leerlo no registra consentimiento (#107). |
+| [`/welcome`](../apps/web/src/routes/welcome.tsx) | ONB-01 / ONB-03 | Sin grupos activos | Crear/unirse, suscripción explicada y solicitudes pendientes. |
+| [`/join`](../apps/web/src/routes/join.tsx) | ONB-02 / ONB-03 | Sesión | Código incorpora ATHLETE; muestra progreso pendiente del menor. |
+| [`/groups`](../apps/web/src/routes/groups.tsx) | GRP-01 / ACT-01 global | Sesión | Selector de grupos y agenda global en #agenda. |
+| [`/groups/new`](../apps/web/src/routes/group-new.tsx) | ONB-04 | Sesión | Formulario de alta del grupo y contexto del primer pago. |
+| [`/groups/[groupId]`](../apps/web/src/routes/group.tsx) | GRP-02 | Miembro del grupo | Inicio por roles, próxima actividad, pendientes y datos propios/pupilos. |
+| [`/groups/[groupId]/settings`](../apps/web/src/routes/group-settings.tsx) | GRP-03 / INT-05 | ADMIN | Datos, código/enlace y regeneración; guardado explícito de datos. |
+| [`/groups/[groupId]/settings/visibility`](../apps/web/src/routes/visibility.tsx) | GRP-04 | ADMIN | Toggles independientes con guardado inmediato y vista previa. |
+| [`/groups/[groupId]/activity-types`](../apps/web/src/routes/activity-types.tsx) | GRP-05 | ADMIN | Crear/editar/desactivar tipos propios; sistema inmutable. |
+| [`/groups/[groupId]/members`](../apps/web/src/routes/members.tsx) | INT-01 | ADMIN | Búsqueda y filtros por rol/estado, acciones por fila; no detalle dedicado. |
+| [`/groups/[groupId]/members/new`](../apps/web/src/routes/member-new.tsx) | INT-03 | ADMIN | Alta MANAGED; menor pendiente hasta consentimiento efectivo. |
+| [`/groups/[groupId]/members/pending`](../apps/web/src/routes/members-pending.tsx) | INT-06 | ADMIN | Progreso de incorporación, vínculo, consentimiento y aprobación. |
+| [`/groups/[groupId]/members/consent`](../apps/web/src/routes/members-consent.tsx) | APO-04 / AUT-06, consentimiento | GUARDIAN del pupilo | Tratamiento de datos y activación de cuenta separados; no es gestión ADMIN. |
+| [`/groups/[groupId]/invitations/new`](../apps/web/src/routes/invitations-admin.tsx) | INT-04 | ADMIN | Nueva invitación e historial mediante ?view=history, con reenvío. |
+| [`/groups/[groupId]/guardians`](../apps/web/src/routes/guardians.tsx) | APO-01 / APO-02 parcial | ADMIN | Registrar/vincular apoderado a menor elegido; no directorio completo de apoderados. |
+| [`/wards`](../apps/web/src/routes/wards.tsx) | APO-03 | GUARDIAN | Pupilos, grupos, actividad, métricas y tareas de consentimiento. |
+| [`/wards/[athleteUserId]`](../apps/web/src/routes/ward.tsx) | APO-04 | GUARDIAN vigente | Grupos y agenda del pupilo; entradas a historial/consentimiento por grupo. |
+| [`/groups/[groupId]/activities`](../apps/web/src/routes/activities.tsx) | ACT-01 | Miembro del grupo | Agenda próximas/pasadas y paginación; no calendario mensual interactivo. |
+| [`/groups/[groupId]/activities/new`](../apps/web/src/routes/activity-edit.tsx) | ACT-03 | ADMIN | Creación simple o recurrencia semanal. |
+| [`/groups/[groupId]/activities/[activityId]`](../apps/web/src/routes/activity.tsx) | ACT-02 | Miembro del grupo | Datos, retorno a agenda y acciones según rol; consulta de asistencia mediante historial. |
+| [`/groups/[groupId]/activities/[activityId]/edit`](../apps/web/src/routes/activity-edit.tsx) | ACT-03 / ACT-04 | ADMIN | Edición y alcance de serie; preserva ocurrencias con asistencia. |
+| [`/groups/[groupId]/activities/[activityId]/attendance`](../apps/web/src/routes/attendance.tsx) | ASI-01 | ADMIN / COACH | Estados y guardado por fila; notas/desmarcado solo ADMIN. |
+| [`/me/history`](../apps/web/src/routes/history-groups.tsx) | PRF-02 / ASI-02 | ATHLETE | Selector de grupo o redirección si solo hay uno; vacío sin membership ATHLETE. |
+| [`/groups/[groupId]/me/history`](../apps/web/src/routes/history.tsx) | PRF-02 / ASI-02 | ATHLETE propio | Historial individual con filtros y resumen. |
+| [`/groups/[groupId]/wards/[athleteUserId]/history`](../apps/web/src/routes/history.tsx) | ASI-02 / APO-04 | GUARDIAN vigente | Historial del pupilo activo en ese grupo. |
+| [`/groups/[groupId]/reports`](../apps/web/src/routes/reports.tsx) | REP-01 / REP-02 | Por permisos | ADMIN/COACH: reporte autorizado; ATHLETE/GUARDIAN: propios/pupilos y agregados según toggles. |
+| [`/profile`](../apps/web/src/routes/profile.tsx) | PRF-01 / CFG-01 / CFG-03 | Sesión | Datos/foto, corrección de edad, cuenta y privacidad por soporte. |
+| [`/profile/birthdate-requests`](../apps/web/src/routes/birthdate-reviews.tsx) | PRF-01, revisión | ADMIN revisor | Solicitudes de corrección de edad de sus grupos, limitadas por RPC. |
+| [`/groups/[groupId]/billing`](../apps/web/src/routes/billing.tsx) | Extensión #56 (sin código histórico) | ADMIN | Plan, checkout, capacidad e historial de cobros del club. |
+| [`/groups/[groupId]/announcements`](../apps/web/src/routes/announcements.tsx) | Extensión #57 (sin código histórico) | Miembro; edición ADMIN | Muro, publicación/edición y preferencia de avisos; no mensajería. |
+| [`/groups/[groupId]/activities/[activityId]/qr`](../apps/web/src/routes/qr.tsx) | ASI-04, emisión | ADMIN | QR temporal y ajustes plegables para todo el grupo. |
+| [`/check-in`](../apps/web/src/routes/check-in.tsx) | ASI-04, llegada | ATHLETE propio | Lectura de fragmento QR, login si falta sesión y registro propio. |
 
-El resto de rutas no es una pantalla independiente: [`/auth/callback`](../apps/web/src/app/auth/callback/route.ts) es el handler de autenticación y [`/profile/avatar/[ownerId]/[fileName]`](../apps/web/src/app/profile/avatar/%5BownerId%5D/%5BfileName%5D/route.ts) entrega imágenes autorizadas. `error.tsx`, `not-found.tsx` y los estados compartidos se documentan en el [sistema visual](12-sistema-visual.md#contratos-de-componentes-y-estados--corte-05-10-2026).
+El resto de rutas no es una pantalla independiente: [`/auth/callback`](../apps/api/src/web-auth.ts) es el handler de autenticación y [`/profile/avatar/[ownerId]/[fileName]`](../apps/api/src/avatars.ts) entrega imágenes autorizadas. `RouteError`, `unavailable.tsx` y los estados compartidos se documentan en el [sistema visual](12-sistema-visual.md#contratos-de-componentes-y-estados--corte-05-10-2026).
 
 ### 2.1 Códigos lógicos sin página propia y brechas
 
@@ -97,7 +97,7 @@ El resto de rutas no es una pantalla independiente: [`/auth/callback`](../apps/w
 | REP-02 [P0] | `/groups/:groupId/stats` | Integrada en `/groups/[groupId]/reports`; no existe `/stats`. |
 | REP-03 [P1] | Botón Exportar CSV en REP-01 | Sin control/descarga identificados; discrepancia de #36 registrada en §7. |
 | REP-04 [P2] | Ranking gamificado | Sin pantalla identificada; no se deduce de ordenar métricas. |
-| CFG-01 [P0] | `/settings/account`, contraseña y cerrar todas las sesiones | Cuenta dentro de `/profile`; contraseña vía recuperación; «Mi cuenta» cierra **este dispositivo**, no todas las sesiones. |
+| CFG-01 [P0] | `/settings/account`, contraseña y cerrar todas las sesiones | Cuenta dentro de `/profile`; contraseña y recuperación; «Mi cuenta» cierra **este dispositivo**, no todas las sesiones. |
 | CFG-02 [P1] | `/settings/notifications`, recordatorio/ausencia | Sin página. La preferencia de anuncios en el muro pertenece a #57 y no implementa #44/#50. |
 | CFG-03 [P0] | `/settings/privacy` | Integrada en `/profile#privacy`: solicitudes por correo a soporte; no descarga, supresión ni revocación automáticas. |
 | PRF-02 [P0] | `/me/history` | Selector/redirección al historial por grupo; nunca un porcentaje global. |
@@ -106,7 +106,7 @@ Las brechas P0 anteriores se documentan para decisión del responsable dentro de
 
 ## 3. Navegación implementada por rol
 
-La entrada [`groupHomePath()`](../apps/web/src/lib/groups.ts) lleva a `/welcome` si no hay grupos ACTIVE; restaura un grupo recordado aún autorizado, usa el único grupo o abre `/groups` si hay varios. GUARDIAN no redirige automáticamente a `/wards` por el mero rol: esa vista se alcanza desde la navegación.
+La entrada [`home()`](../apps/web/src/routes/welcome.tsx) lleva a `/welcome` si no hay grupos ACTIVE; restaura un grupo recordado aún autorizado, usa el único grupo o abre `/groups` si hay varios. GUARDIAN no redirige automáticamente a `/wards` por el mero rol: esa vista se alcanza desde la navegación.
 
 | Contexto | Recorrido implementado |
 |---|---|
@@ -128,13 +128,13 @@ La distribución móvil de [doc 09](09-roadmap.md) sigue siendo un **objetivo**:
 
 ### 5.1 ASI-01 — Toma de asistencia
 
-[`AttendanceSheet`](../apps/web/src/app/groups/%5BgroupId%5D/activities/%5BactivityId%5D/attendance/attendance-sheet.tsx) presenta deportistas activos, búsqueda y páginas de 50. Contadores, estado textual, selección y guardado por fila distinguen sin marcar/guardando/guardado/error. El lote confirma «todos presentes» sobre los no marcados y usa bloques de hasta 500; conserva lo ya confirmado ante un fallo posterior. La nota es opcional y exclusiva de ADMIN, al igual que volver a sin marcar. COACH conserva notas existentes sin leerlas ni escribirlas.
+[`AttendanceSheet`](../apps/web/src/components/attendance-sheet.tsx) presenta deportistas activos, búsqueda y páginas de 50. Contadores, estado textual, selección y guardado por fila distinguen sin marcar/guardando/guardado/error. El lote confirma «todos presentes» sobre los no marcados y usa bloques de hasta 500; conserva lo ya confirmado ante un fallo posterior. La nota es opcional y exclusiva de ADMIN, al igual que volver a sin marcar. COACH conserva notas existentes sin leerlas ni escribirlas.
 
 Sin nómina se ofrecen acciones según rol; un cambio fallido se revierte y admite recuperación. No hay cola offline. El objetivo histórico de marcar 20 personas en menos de 60 segundos es una meta de usabilidad, no una medición certificada por este inventario.
 
 ### 5.2 INT-01 — Integrantes y altas
 
-[`/members`](../apps/web/src/app/groups/%5BgroupId%5D/members/page.tsx) busca por nombre, filtra rol/estado y pagina; cada fila corresponde a una membership y una persona puede repetirse por rol. Distingue nómina vacía, filtros sin resultados y página fuera de rango. Las acciones por fila no abren INT-02, que no tiene ruta.
+[`/members`](../apps/web/src/routes/members.tsx) busca por nombre, filtra rol/estado y pagina; cada fila corresponde a una membership y una persona puede repetirse por rol. Distingue nómina vacía, filtros sin resultados y página fuera de rango. Las acciones por fila no abren INT-02, que no tiene ruta.
 
 INT-03 no activa automáticamente a un menor: separa declaración ADMIN, vínculo y consentimiento efectivo del apoderado. INT-06 muestra el avance y quién completa cada paso; «Consentimientos de mis pupilos» pertenece al GUARDIAN. Doc 02 define cuándo el consentimiento basta y cuándo falta confirmación ADMIN.
 
@@ -142,13 +142,13 @@ INT-03 no activa automáticamente a un menor: separa declaración ADMIN, víncul
 
 El detalle muestra horario de Chile, tipo, ubicación, recurrencia y retorno al contexto de agenda. ADMIN edita y muestra QR; ADMIN/COACH acceden a toma de asistencia. ATHLETE/GUARDIAN consultan estados y notas autorizadas mediante enlaces a sus historiales; no se promete un resumen de asistencia embebido en el detalle.
 
-La creación y edición comparten [`ActivityForm`](../apps/web/src/app/groups/%5BgroupId%5D/activities/new/activity-form.tsx). El alcance de serie se elige en la edición; futuras con asistencia quedan protegidas por el contrato de backend. La agenda real es una lista por próximas/pasadas, no un calendario mensual navegable.
+La creación y edición comparten [`ActivityForm`](../apps/web/src/components/activity-form.tsx). El alcance de serie se elige en la edición; futuras con asistencia quedan protegidas por el contrato de backend. La agenda real es una lista por próximas/pasadas, no un calendario mensual navegable.
 
 ### 5.4 REP-01 / REP-02 — Reportes y estadísticas
 
-[`/reports`](../apps/web/src/app/groups/%5BgroupId%5D/reports/page.tsx) selecciona la presentación por permisos. ADMIN/COACH reciben el reporte autorizado, con filtros aplicados, promedio individual y total ponderado diferenciados; la proyección COACH conserva las restricciones de doc 02. ATHLETE/GUARDIAN reciben sus datos/pupilos y, si corresponde, agregados grupales de temporada; no necesitan `/stats`.
+[`/reports`](../apps/web/src/routes/reports.tsx) selecciona la presentación por permisos. ADMIN/COACH reciben el reporte autorizado, con filtros aplicados, promedio individual y total ponderado diferenciados; la proyección COACH conserva las restricciones de doc 02. ATHLETE/GUARDIAN reciben sus datos/pupilos y, si corresponde, agregados grupales de temporada; no necesitan `/stats`.
 
-[`ReportTable`](../apps/web/src/app/groups/%5BgroupId%5D/reports/report-table.tsx) presenta nombres y métricas en una región enfocable, encabezados por fila/columna, números tabulares y primera columna fija. La tabla por tipo incluye barras visuales de apoyo; la evolución semanal es tabla. **No hay botón CSV ni enlace de fila a historial ADMIN** en el corte. Null se presenta como «Sin datos»; los umbrales y fórmula vienen de core/SQL.
+[`ReportTable`](../apps/web/src/components/report-table.tsx) presenta nombres y métricas en una región enfocable, encabezados por fila/columna, números tabulares y primera columna fija. La tabla por tipo incluye barras visuales de apoyo; la evolución semanal es tabla. **No hay botón CSV ni enlace de fila a historial ADMIN** en el corte. Null se presenta como «Sin datos»; los umbrales y fórmula vienen de core/SQL.
 
 ### 5.5 ASI-02 / PRF-02 — Historial individual
 
@@ -284,7 +284,7 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 
 ## Paridad parcial React Router · WEB-05 (#217)
 
-[Seguro] [WEB-05](web-migration/issue-217/README.md) incorpora la shell de contexto/grupo y GRP-01/02/03, inicio por rol, configuración/visibilidad y perfil/revisiones en `apps/web-vite`. Las rutas `/groups`, `/groups/new`, `/groups/:groupId`, `/groups/:groupId/settings`, `/groups/:groupId/settings/visibility`, `/profile` y `/profile/birthdate-requests` conservan contratos y controles existentes. Mi agenda global conserva paginación/filtros y nombres de grupo; multirol mantiene Mi asistencia. La imagen privada se resuelve mediante SDK cookie→Nest→S3, sin Route Handler Next en la SPA. Evidencia/estados y límites en el runbook.
+[Seguro] [WEB-05](web-migration/issue-217/README.md) incorpora la shell de contexto/grupo y GRP-01/02/03, inicio por rol, configuración/visibilidad y perfil/revisiones en `apps/web`. Las rutas `/groups`, `/groups/new`, `/groups/:groupId`, `/groups/:groupId/settings`, `/groups/:groupId/settings/visibility`, `/profile` y `/profile/birthdate-requests` conservan contratos y controles existentes. Mi agenda global conserva paginación/filtros y nombres de grupo; multirol mantiene Mi asistencia. La imagen privada se resuelve mediante SDK cookie→Nest→S3, sin Route Handler Next en la SPA. Evidencia/estados y límites en el runbook.
 
 [Seguro] #173–#175/#179 continúan abiertos; esta migración conserva lo integrado sin implementar su rediseño adicional. En ese corte, integrantes/actividades/reportes/billing/anuncios/QR SPA seguían WEB-06/07/08; sus enlaces mantienen URLs, y Next conserva esas páginas durante coexistencia. No se declara paridad total ni retiro de Next ni aceptación externa #209.
 
@@ -295,14 +295,14 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 
 | Ruta SPA / archivo | Código | Audiencia y comportamiento |
 | --- | --- | --- |
-| [`/groups/:groupId/members`](../apps/web-vite/src/routes/members.tsx) | INT-01 | ADMIN: nómina, búsqueda/filtros/paginación, detalle inline, perfil MANAGED, COACH, desactivar/reactivar y solicitar activación propia. No página INT-02. |
-| [`/groups/:groupId/members/new`](../apps/web-vite/src/routes/member-new.tsx) | INT-03 | ADMIN: alta MANAGED; menor PENDING hasta consentimiento efectivo. Guarda el ID confirmado aunque falle el correo. |
-| [`/groups/:groupId/members/pending`](../apps/web-vite/src/routes/members-pending.tsx) | INT-06 | ADMIN: progreso y aprobar/rechazar; `?membership=` conserva el contexto seleccionado. |
-| [`/groups/:groupId/guardians`](../apps/web-vite/src/routes/guardians.tsx) | APO-01 / APO-02 parcial | ADMIN: buscar menor y registrar/vincular; `?membership=` abre el menor verificado. Directorio/desvinculación continúan sin UI. |
-| [`/groups/:groupId/members/consent`](../apps/web-vite/src/routes/members-consent.tsx) | APO-04 / AUT-06 | GUARDIAN vigente: consentimiento de datos y autorización de cuenta propia separados; `?athlete=` conserva pupilo. Imagen sigue en Perfil. |
-| [`/groups/:groupId/invitations/new`](../apps/web-vite/src/routes/invitations-admin.tsx) | INT-04 | ADMIN: envío e historial `?view=history`, reenvío confirmado, expiración y recuperación incierta sin reintento automático. |
-| [`/wards`](../apps/web-vite/src/routes/wards.tsx) | APO-03 | Pupilos propios vigentes: grupos, agenda y resumen mensual por grupo; tareas pendientes y aviso de mayoría. |
-| [`/wards/:athleteUserId`](../apps/web-vite/src/routes/ward.tsx) | APO-04 | GUARDIAN vigente: grupos y agenda autorizada, entradas contextuales a consentimiento/historial. |
+| [`/groups/:groupId/members`](../apps/web/src/routes/members.tsx) | INT-01 | ADMIN: nómina, búsqueda/filtros/paginación, detalle inline, perfil MANAGED, COACH, desactivar/reactivar y solicitar activación propia. No página INT-02. |
+| [`/groups/:groupId/members/new`](../apps/web/src/routes/member-new.tsx) | INT-03 | ADMIN: alta MANAGED; menor PENDING hasta consentimiento efectivo. Guarda el ID confirmado aunque falle el correo. |
+| [`/groups/:groupId/members/pending`](../apps/web/src/routes/members-pending.tsx) | INT-06 | ADMIN: progreso y aprobar/rechazar; `?membership=` conserva el contexto seleccionado. |
+| [`/groups/:groupId/guardians`](../apps/web/src/routes/guardians.tsx) | APO-01 / APO-02 parcial | ADMIN: buscar menor y registrar/vincular; `?membership=` abre el menor verificado. Directorio/desvinculación continúan sin UI. |
+| [`/groups/:groupId/members/consent`](../apps/web/src/routes/members-consent.tsx) | APO-04 / AUT-06 | GUARDIAN vigente: consentimiento de datos y autorización de cuenta propia separados; `?athlete=` conserva pupilo. Imagen sigue en Perfil. |
+| [`/groups/:groupId/invitations/new`](../apps/web/src/routes/invitations-admin.tsx) | INT-04 | ADMIN: envío e historial `?view=history`, reenvío confirmado, expiración y recuperación incierta sin reintento automático. |
+| [`/wards`](../apps/web/src/routes/wards.tsx) | APO-03 | Pupilos propios vigentes: grupos, agenda y resumen mensual por grupo; tareas pendientes y aviso de mayoría. |
+| [`/wards/:athleteUserId`](../apps/web/src/routes/ward.tsx) | APO-04 | GUARDIAN vigente: grupos y agenda autorizada, entradas contextuales a consentimiento/historial. |
 
 [Seguro] Los writes consumen SDK cookie/CSRF y schemas core existentes; R1, consentimiento append-only, historial, LAST_ADMIN, restricciones de salida, expiración/idempotencia y V1–V6 permanecen en Nest/SQL. #177 conserva su alcance pendiente de UX; #218 no introduce detalle dedicado, directorio ni desvinculación ausentes en Next. Actividades/historial/reportes completos SPA siguen #219 y billing/anuncios/QR #220; esos enlaces mantienen sus URLs y Next continúa durante coexistencia. Evidencias y límites del gate humano/proveedores en el runbook; producción NO-GO.
 
@@ -313,24 +313,28 @@ Se corrigen el reintento de `ErrorState` (refresca el payload del servidor) y la
 
 | Ruta SPA e implementación | Código | Estado y acceso |
 | --- | --- | --- |
-| [`/groups/:groupId/activities`](../apps/web-vite/src/routes/activities.tsx) | ACT-01 | SPA: miembro ACTIVE, próximas/pasadas y páginas50. |
-| [`/groups/:groupId/activities/new`](../apps/web-vite/src/routes/activity-edit.tsx) | ACT-03 | SPA: ADMIN, simple/serie semanal y horario Chile/DST. |
-| [`/groups/:groupId/activities/:activityId`](../apps/web-vite/src/routes/activity.tsx) | ACT-02 | SPA: miembro ACTIVE; retorno de agenda y acciones por rol. |
-| [`/groups/:groupId/activities/:activityId/edit`](../apps/web-vite/src/routes/activity-edit.tsx) | ACT-03 / ACT-04 | SPA: ADMIN; puntual/serie, futuras sin asistencia. |
-| [`/groups/:groupId/activity-types`](../apps/web-vite/src/routes/activity-types.tsx) | GRP-05 | SPA: ADMIN; sistema inmutable y tipos propios. |
-| [`/groups/:groupId/activities/:activityId/attendance`](../apps/web-vite/src/routes/attendance.tsx) | ASI-01 | SPA: ADMIN/COACH, estado por fila; notas/desmarcado ADMIN, lotes500. |
-| [`/me/history`](../apps/web-vite/src/routes/history-groups.tsx) | PRF-02 / ASI-02 | SPA: selector ATHLETE, único→redirección, sin membresía→vacío. |
-| [`/groups/:groupId/me/history`](../apps/web-vite/src/routes/history.tsx) | PRF-02 / ASI-02 | SPA: ATHLETE propio; tabla, filtros y resumen. |
-| [`/groups/:groupId/wards/:athleteUserId/history`](../apps/web-vite/src/routes/history.tsx) | ASI-02 / APO-04 | SPA: GUARDIAN vigente y pupilo ACTIVE en el grupo. |
-| [`/groups/:groupId/reports`](../apps/web-vite/src/routes/reports.tsx) | REP-01 / REP-02 | SPA: ADMIN/COACH agregados; ATHLETE/GUARDIAN propios/pupilos y toggles V4. |
+| [`/groups/:groupId/activities`](../apps/web/src/routes/activities.tsx) | ACT-01 | SPA: miembro ACTIVE, próximas/pasadas y páginas50. |
+| [`/groups/:groupId/activities/new`](../apps/web/src/routes/activity-edit.tsx) | ACT-03 | SPA: ADMIN, simple/serie semanal y horario Chile/DST. |
+| [`/groups/:groupId/activities/:activityId`](../apps/web/src/routes/activity.tsx) | ACT-02 | SPA: miembro ACTIVE; retorno de agenda y acciones por rol. |
+| [`/groups/:groupId/activities/:activityId/edit`](../apps/web/src/routes/activity-edit.tsx) | ACT-03 / ACT-04 | SPA: ADMIN; puntual/serie, futuras sin asistencia. |
+| [`/groups/:groupId/activity-types`](../apps/web/src/routes/activity-types.tsx) | GRP-05 | SPA: ADMIN; sistema inmutable y tipos propios. |
+| [`/groups/:groupId/activities/:activityId/attendance`](../apps/web/src/routes/attendance.tsx) | ASI-01 | SPA: ADMIN/COACH, estado por fila; notas/desmarcado ADMIN, lotes500. |
+| [`/me/history`](../apps/web/src/routes/history-groups.tsx) | PRF-02 / ASI-02 | SPA: selector ATHLETE, único→redirección, sin membresía→vacío. |
+| [`/groups/:groupId/me/history`](../apps/web/src/routes/history.tsx) | PRF-02 / ASI-02 | SPA: ATHLETE propio; tabla, filtros y resumen. |
+| [`/groups/:groupId/wards/:athleteUserId/history`](../apps/web/src/routes/history.tsx) | ASI-02 / APO-04 | SPA: GUARDIAN vigente y pupilo ACTIVE en el grupo. |
+| [`/groups/:groupId/reports`](../apps/web/src/routes/reports.tsx) | REP-01 / REP-02 | SPA: ADMIN/COACH agregados; ATHLETE/GUARDIAN propios/pupilos y toggles V4. |
 
 [Seguro] Los filtros/estados pertenecen al grupo/pupilo actual; Nest/RLS revalida sesión, roles y V1–V6. #176/#178 conservan su coordinación y aceptación humana; no se acredita rediseño adicional. QR/billing/anuncios corresponden a WEB-08 y Next continúa hasta WEB-10. No se añade historial ADMIN inexistente, CSV, gráficos ni métricas globales.
 
 
 ## Paridad Vite de capacidades autorizadas · WEB-08 (#220)
 
-[Seguro] WEB-08 incorpora las cuatro rutas existentes en el frontend paralelo React Router: [suscripción del club](../apps/web-vite/src/routes/billing.tsx) (`/groups/:groupId/billing`), [muro](../apps/web-vite/src/routes/announcements.tsx) (`/groups/:groupId/announcements`), [emisión QR ADMIN](../apps/web-vite/src/routes/qr.tsx) (`/groups/:groupId/activities/:activityId/qr`) y [llegada propia](../apps/web-vite/src/routes/check-in.tsx) (`/check-in`). Conserva las capacidades #55–#59; Next permanece hasta WEB-10. Sesión cookie/CSRF, autorización, cupos, webhooks, push Expo transitorio y firma/caducidad/idempotencia QR siguen en Nest/PostgreSQL/Worker.
+[Seguro] WEB-08 incorpora las cuatro rutas existentes en el frontend paralelo React Router: [suscripción del club](../apps/web/src/routes/billing.tsx) (`/groups/:groupId/billing`), [muro](../apps/web/src/routes/announcements.tsx) (`/groups/:groupId/announcements`), [emisión QR ADMIN](../apps/web/src/routes/qr.tsx) (`/groups/:groupId/activities/:activityId/qr`) y [llegada propia](../apps/web/src/routes/check-in.tsx) (`/check-in`). Conserva las capacidades #55–#59; Next permanece hasta WEB-10. Sesión cookie/CSRF, autorización, cupos, webhooks, push Expo transitorio y firma/caducidad/idempotencia QR siguen en Nest/PostgreSQL/Worker.
 
 [Seguro] Las consultas pertenecen a loaders y la revalidación a Router, sin caché adicional. El retorno de pago ignora `status`/`payment_id`; solo el ledger del servidor acredita pagos y capacidad. El muro conserva versiones, borradores, pausa de refresco y opt-in global. El QR se retira al vencer/ocultarse; check-in limpia el fragmento y conserva el token solo en memoria durante login email/contraseña. Otro método de acceso o aceptación legal exige reescanear tras completar el flujo. Ningún enlace de salida contiene el token.
 
 [Seguro] [Evidencia, matriz y límites de #220](web-migration/issue-220/README.md) distingue navegador/HTTP/SQL real y transporte externo sintético. UI-10 (#180) conserva su rediseño pendiente; esta entrega adapta la presentación vigente, sin nuevos módulos móviles/FCM/APNs. WEB-09/10, aceptación #209 y producción NO-GO continúan pendientes.
+
+## WEB-10 · Contrato definitivo y antecedentes
+
+[Seguro] Las entradas WEB-03…09 anteriores registran el estado de cada commit durante coexistencia y son antecedentes históricos. WEB-10 sustituye esa coexistencia: no queda App Router, middleware, Server Actions, BFF ni emisor de sesión en el frontend. La navegación usa loaders/actions/fetchers y la autorización efectiva sigue Nest/RLS. HTML shell200 no acredita acceso: API conserva401/403/404/503 y React presenta el estado seguro. Legal es legible sin JS; las demás vistas necesitan JS. No se añaden pantallasCSV/offline/móvil ni el rediseño pendiente de #170.

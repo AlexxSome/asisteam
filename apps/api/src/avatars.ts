@@ -1,15 +1,36 @@
-import { BadRequestException, Body, Controller, Get, Inject, NotFoundException, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Inject, Injectable, NotFoundException, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { httpSchemas } from '@asisteam/core/runtime';
 import { SessionGuard, type AuthenticatedRequest } from './auth.js';
 import { Database, type AuthenticatedTransaction } from './database.js';
 import { DomainException, domainSqlError } from './domain-errors.js';
+import type { Response } from 'express';
+import { WebAuth } from './web-auth.js';
+import { errorBody } from './errors.js';
 import { AvatarStorage, validateAvatar } from './storage.js';
+
+@Injectable()
+export class AvatarReader {
+  constructor(@Inject(Database) private readonly database: Database, @Inject(AvatarStorage) private readonly storage: AvatarStorage) {}
+  async read(identity: NonNullable<AuthenticatedRequest['identity']>, params: unknown) {
+    const parsed = httpSchemas.AvatarParams.safeParse(params);
+    if (!parsed.success) throw new NotFoundException();
+    const key = parsed.data.ownerId + '/' + parsed.data.fileName;
+    try {
+      return await this.database.authenticated(identity, async tx => {
+        if ((await tx.query('select public.has_account_consent() as accepted')).rows[0]?.accepted !== true) throw new DomainException(403, 'account_consent_required');
+        if ((await tx.query('select public.can_read_avatar($1) as allowed', [key])).rows[0]?.allowed !== true) throw new NotFoundException();
+        try { const data = await this.storage.read(key); return httpSchemas.AvatarDownload.parse({type: data.type, content_base64: data.bytes.toString('base64')}); }
+        catch { throw new NotFoundException(); }
+      });
+    } catch (error) { return domainSqlError(error); }
+  }
+}
 
 @Controller('api/v1')
 @UseGuards(SessionGuard)
 export class AvatarsController {
-  constructor(@Inject(Database) private readonly database: Database, @Inject(AvatarStorage) private readonly storage: AvatarStorage) {}
+  constructor(@Inject(Database) private readonly database: Database, @Inject(AvatarStorage) private readonly storage: AvatarStorage, @Inject(AvatarReader) private readonly reader: AvatarReader) {}
   private async run<T>(request: AuthenticatedRequest, operation: (tx: AuthenticatedTransaction) => Promise<T>) {
     try { return await this.database.authenticated(request.identity!, async tx => {
       if ((await tx.query('select public.has_account_consent() as accepted')).rows[0]?.accepted !== true) throw new DomainException(403, 'account_consent_required');
@@ -36,15 +57,27 @@ export class AvatarsController {
     });
   }
   @Get('avatars/:ownerId/:fileName')
-  async download(@Req() request: AuthenticatedRequest, @Param() params: unknown) {
-    const parsed = httpSchemas.AvatarParams.safeParse(params);
-    if (!parsed.success) throw new NotFoundException();
-    const key = parsed.data.ownerId + '/' + parsed.data.fileName;
-    const data = await this.run(request, async tx => {
-      if ((await tx.query('select public.can_read_avatar($1) as allowed', [key])).rows[0]?.allowed !== true) throw new NotFoundException();
-      try { const data = await this.storage.read(key); return { type: data.type, content_base64: data.bytes.toString('base64') }; }
-      catch { throw new NotFoundException(); }
-    });
-    return httpSchemas.AvatarDownload.parse(data);
+  download(@Req() request: AuthenticatedRequest, @Param() params: unknown) {
+    return this.reader.read(request.identity!, params);
+  }
+}
+
+@Controller('profile/avatar')
+export class WebAvatarsController {
+  constructor(@Inject(WebAuth) private readonly web: WebAuth, @Inject(AvatarReader) private readonly reader: AvatarReader) {}
+  @Get(':ownerId/:fileName')
+  async download(@Req() request: AuthenticatedRequest, @Res() response: Response, @Param() params: unknown) {
+    response.setHeader('cache-control', 'private, no-store');
+    response.setHeader('x-content-type-options', 'nosniff');
+    response.setHeader('referrer-policy', 'no-referrer');
+    try {
+      this.web.origin(request);
+      await this.web.session(request, response);
+      const data = await this.reader.read(request.identity!, params);
+      response.type(data.type).status(200).send(Buffer.from(data.content_base64, 'base64'));
+    } catch {
+      // Same opaque404 for absent object, denied owner/consent or invalid session.
+      response.status(404).json(errorBody(404));
+    }
   }
 }

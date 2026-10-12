@@ -11,6 +11,7 @@ import { ApiClient } from '../../../packages/api-client/dist/index.js';
 import { storageFixture } from './storage-fixture.mjs';
 import { PutObjectCommand, PutBucketPolicyCommand, DeleteBucketPolicyCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { sha256 } from '../dist/storage.js';
+import { WebAuth } from '../dist/web-auth.js';
 import { reconcile, avatarReference } from '../../../scripts/migration/storage/reconcile.mjs';
 import { mkdtempSync, rmSync, statSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -43,10 +44,18 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
     guardianship=(await admin.query("insert into public.guardianships(guardian_user_id,athlete_user_id,relationship) values($1,$2,'Apoderado') returning id",[profiles[2],profiles[3]])).rows[0].id;
     await admin.query("insert into public.consents(guardianship_id,consent_type,terms_version,allows_avatar) values($1,'DATA_PROCESSING_MINOR','synthetic',false)",[guardianship]);
     for (const [i,g,role] of [[0,0,'ADMIN'],[0,0,'ATHLETE'],[1,0,'ATHLETE'],[3,0,'ATHLETE'],[4,0,'COACH'],[5,1,'ADMIN']]) await admin.query("insert into public.memberships(user_id,group_id,role,status,joined_at) values($1,$2,$3,'ACTIVE',now())",[profiles[i],groupIds[g],role]);
-    app=await createApplication(loadConfig({ DATABASE_URL:fixtureConnection('asisteam_api',rolePassword),PG_POOL_MAX:'1',...s3.config }),new SafeLogger(line=>logs.push(line)));
+    app=await createApplication(loadConfig({ DATABASE_URL:fixtureConnection('asisteam_api',rolePassword),NATIVE_AUTH_DATABASE_URL:fixtureConnection('asisteam_auth'),PG_POOL_MAX:'1',WEB_AUTH_ENABLED:'1',...s3.config }),new SafeLogger(line=>logs.push(line)));
     await app.listen(0,'127.0.0.1');
     const origin=await app.getUrl(),tokens=await Promise.all(auth.map((id,i)=>fixture.token(id,sessions[i])));
     const clients=tokens.map(token=>new ApiClient({origin,accessToken:async()=>token}));
+    const cookies=[];
+    for(const token of tokens){
+      let handle;
+      await app.get(WebAuth).open({access_token:token,refresh_token:'a'.repeat(64),expires_in:900},
+        {headers:{}},{cookie:(name,value)=>{if(name==='asisteam-web-session'&&value)handle=value;}});
+      assert.match(handle,/^[a-f0-9]{64}$/);cookies.push('asisteam-web-session='+handle);
+    }
+    const binary=(i,key,headers={})=>fetch(origin+'/profile/avatar/'+key,{headers:{cookie:cookies[i],origin:'http://127.0.0.1:3120',...headers}});
     const request=(i,path,method='GET',body)=>fetch(origin+path,{method,headers:{authorization:'Bearer '+tokens[i],...(body===undefined?{}:{'content-type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)})});
     const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6rGQAAAAASUVORK5CYII=','base64');
     const upload=i=>clients[i].uploadAvatar({body:{type:'image/png',content_base64:png.toString('base64')}});
@@ -55,8 +64,15 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
     const download=(i,key)=>clients[i].getAvatar({params:paramsOf(key)});
     await upload(1);let key=await keyOf(1);
     assert.equal((await download(1,key)).content_base64,png.toString('base64'));
+    const ownBinary=await binary(1,key);
+    assert.equal(ownBinary.status,200);assert.equal(ownBinary.headers.get('content-type'),'image/png');
+    assert.equal(ownBinary.headers.get('cache-control'),'private, no-store');assert.equal(ownBinary.headers.get('x-content-type-options'),'nosniff');
+    assert.deepEqual(Buffer.from(await ownBinary.arrayBuffer()),png);
     for(const i of [0,4])assert.equal((await download(i,key)).content_base64,png.toString('base64'));
-    for(const i of [2,3,5])await assert.rejects(download(i,key),{status:404});
+    for(const i of [2,3,5]){await assert.rejects(download(i,key),{status:404});assert.equal((await binary(i,key)).status,404);}
+    assert.equal((await binary(1,key,{cookie:'',authorization:'Bearer '+tokens[1]})).status,404,'binary alias requires opaque session, never bearer alone');
+    assert.equal((await binary(1,key,{origin:'https://attacker.example.test'})).status,404);
+    assert.equal((await binary(1,auth[1]+'/invalid.png')).status,404);
     await clients[0].updateGroupSettings({params:{groupId:groupIds[0]},body:{athletes_can_view_group_stats:true}});
     assert.equal((await download(3,key)).type,'image/png');
     await upload(1);const newer=await keyOf(1);assert.notEqual(newer,key);
@@ -66,10 +82,10 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
     await assert.rejects(upload(3),error=>error.status===422&&error.error.code==='avatar_consent_required');
     await clients[2].setAvatarPermission({params:{guardianshipId:guardianship},body:{allow:true}});
     await upload(3);const minorKey=await keyOf(3);
-    for(const i of [0,2,3,4])assert.equal((await download(i,minorKey)).type,'image/png');
+    for(const i of [0,2,3,4]){assert.equal((await download(i,minorKey)).type,'image/png');assert.equal((await binary(i,minorKey)).status,200);}
     await assert.rejects(download(5,minorKey),{status:404});
     await clients[2].setAvatarPermission({params:{guardianshipId:guardianship},body:{allow:false}});
-    for(const i of [0,2,3,4])await assert.rejects(download(i,minorKey),{status:404});
+    for(const i of [0,2,3,4]){await assert.rejects(download(i,minorKey),{status:404});assert.equal((await binary(i,minorKey)).status,404);}
     assert.equal((await fetch(origin+'/api/v1/avatars/'+key)).status,401);
     await assert.rejects(upload(6),{status:403});
     for(const data of [{type:'image/png',content_base64:png.toString('base64'),ownerId:auth[5]},
@@ -126,6 +142,7 @@ test('MIG-17 real private S3/HTTP/Postgres: own and authorized avatars, roles/te
       await admin.query('delete from app_private.join_code_attempts where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.account_consents where user_id=any($1::uuid[])',[profiles]);
       await admin.query('delete from public.users where id=any($1::uuid[])',[profiles]);
+      await admin.query('delete from app_private.web_sessions where family_id=any($1::uuid[])',[sessions]);
       await admin.query('delete from app_private.auth_families where subject_id=any($1::uuid[])',[auth]);
       await admin.query('delete from app_private.auth_subjects where id=any($1::uuid[])',[auth]);
       const oldPassword=previous.rolpassword===null?'null':"'"+previous.rolpassword.replaceAll("'","''")+"'";

@@ -6,19 +6,19 @@ Aplicación web responsive para gestionar la asistencia de deportistas en clubes
 
 ## Estado y arquitectura vigente
 
-Retiro de repositorio MIG-24 (#168), actualizado el **10-10-2026**, sobre `develop@13a0a643431f480e1ddf4c83022c8083c31beb68` (merge PR206). Las **39 páginas App Router** y capacidades autorizadas conservan sus contratos. El [inventario de pantallas](docs/05-pantallas.md) diferencia implementación, rutas lógicas y pendientes; código o CI verde no acreditan despliegue ni aceptación operacional.
+Retiro técnico WEB-10 (#222), actualizado el **12-10-2026**, sobre `develop@d2f5101c7342a733cfe144ecaa79bce22b317d69` (merge WEB-09). Los **39 destinos React Router** y capacidades autorizadas conservan sus contratos. El [inventario de pantallas](docs/05-pantallas.md) diferencia implementación, rutas lógicas y pendientes; código o CI verde no acreditan despliegue ni aceptación operacional.
 
 | Ubicación | Contenido actual |
 |---|---|
 | `apps/api/` | NestJS/Node 24, HTTP de producto, Auth nativo, JWT, roles PostgreSQL mínimos y S3 privado |
-| `apps/web/` | Next.js 16/React 19, sesión nativa del servidor, DTO HTTP, Vitest y Playwright/axe |
+| `apps/web/` | React19/Vite7/React Router7 Data Mode, build estático, SDK cookie/CSRF Nest, Vitest y Playwright/axe |
 | `apps/worker/` | Jobs idempotentes, mayoría de edad y cola duradera de anuncios/recibos |
 | `packages/core/` | Métrica canónica, schemas Zod, enums, etiquetas y contrato HTTP |
 | `packages/api-client/` | Cliente y OpenAPI generados del contrato de core |
 | `packages/db/` | Migraciones PostgreSQL propias, RLS/RPC, catálogo, tipos, fixtures sintéticos y pgTAP |
 | `docs/` | Contratos de producto, cobertura y evidencia histórica fechada |
 
-pnpm **10.33.2**, Turborepo y Node **24.16.0 LTS** coordinan el monorepo. Next consume Nest; Nest instala la identidad verificada dentro de la transacción SQL. Las invariantes permanecen en PostgreSQL 17 con RLS. SDK, CLI, configuración y fixtures Supabase se retiraron; el historial versionado se conserva como antecedente, sin runtime del proveedor. La app móvil sigue planificada en Java/Android y Swift/iOS.
+pnpm **10.33.2**, Turborepo y Node **24.16.0 LTS** coordinan el monorepo. React/Router consume Nest mediante proxy del mismo origen; Nest instala la identidad verificada dentro de la transacción SQL. Las invariantes permanecen en PostgreSQL 17 con RLS. SDK, CLI, configuración y fixtures Supabase se retiraron; el historial versionado se conserva como antecedente, sin runtime del proveedor. La app móvil sigue planificada en Java/Android y Swift/iOS.
 
 ## Módulos y alcance existente
 
@@ -77,3 +77,5 @@ Hay **15 documentos principales**: la serie de producto **01–14** y la guía v
 [AGENTS.md](AGENTS.md) resume las reglas para agentes. Al cerrar cada cambio de UI, actualizar el inventario y los contratos afectados con evidencia del mismo commit.
 
 Proyecto desarrollado por el equipo de Arc Velion.
+
+[Seguro] [Desarrollo y rollback WEB-10](docs/web-migration/issue-222/README.md) documenta puertos3130/3001, configuración sin secretos de frontend, sesiones opacas, diferencias SPA/SSR, matriz de transferencia y calificación del artefacto definitivo. Los inventarios/evidencias anteriores de Next permanecen como antecedentes fechados.

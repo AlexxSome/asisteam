@@ -1,0 +1,3437 @@
+{
+  "date": "2026-10-12T14:46:04.815Z",
+  "environment": "local-synthetic",
+  "baseCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+  "checkoutState": "Validated working tree before delivery commit; reports identify this base, not the future PR SHA. PR summary records final SHA and its subsequent canonical validation.",
+  "fingerprint": {
+    "algorithm": "sha256 of sorted JSON path/hash array; deleted paths use null; verification.json excluded to avoid self-reference",
+    "value": "0ecf4f7c56e46dc5633fa670f7c3fa66416b7d9cd6a109d94544ab865ad2f58c",
+    "files": [
+      {
+        "path": ".dockerignore",
+        "sha256": "16ebdbc0755aa8c4069958f3f6446d74c1477635f2b9d86052ca7953504edbd6"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "222293cd84bd9b4a49712736c4cf495fc9e0cdf5951148e2e3931ac13cd91e1a"
+      },
+      {
+        "path": "AGENTS.md",
+        "sha256": "c81d17e02005284118ecb814de4030c0cd44b8f629168ec7a4f88210a1a8cf98"
+      },
+      {
+        "path": "README.md",
+        "sha256": "87704174bc727a23c3a72c49418bf2799daf6a4916d8e36039ad2703c1cbdd2d"
+      },
+      {
+        "path": "apps/api/src/application.ts",
+        "sha256": "8f631a519a4af182ee9dbfd6bcbb2995a8389d3be41fb62d51eff3f6dd8e4c4d"
+      },
+      {
+        "path": "apps/api/src/avatars.ts",
+        "sha256": "d8c212644f9168a20d9f80ef0ec57fc5435673eb1218f342ecc4bd73c71544a8"
+      },
+      {
+        "path": "apps/api/test/independent-postgres.integration.mjs",
+        "sha256": "bcc23e7d5ebfa5e962df943e238a0f4a2a7bb648cacf9f77c6ca30f6f70e71c8"
+      },
+      {
+        "path": "apps/api/test/storage.integration.mjs",
+        "sha256": "4f7cfffdda83c007ac0e9cfe5a42bcb82bb4c1c0e4fc457a26c980f1f982c3b5"
+      },
+      {
+        "path": "apps/web-vite/.env.example",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/Dockerfile",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/bundle-budget.json",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/access.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/activities-reports.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/capabilities.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/data.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/groups-profile.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/infrastructure.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/members.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/server.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/e2e/session.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/index.html",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/package.json",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/playwright.config.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/postcss.config.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/artifact.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/browser-boundary.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/check-bundle.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/check-performance.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/legal-document.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/static-server.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/scripts/static-server.test.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/activities-reports.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/activity-data.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/activity-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/activity-type-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/announcement-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/api.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/attendance-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/attendance-presentation.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/auth-context.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/billing-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/capabilities.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/capability-data.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/capability-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/account-menu.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/activity-agenda.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/activity-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/activity-type-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/announcement-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/announcement-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/app-shell.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/attendance-history.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/attendance-sheet.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/avatar-permissions.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/billing-panel.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/billing-panel.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/birthdate-reviews.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/check-in-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/check-in-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/check-in-login.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/consent-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/getting-started.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/group-capacity.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/group-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/group-selector.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/group-stats.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/guardian-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/inline-confirmation.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/invitation-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/managed-member-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/member-management.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/membership-review.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/pagination.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/private-avatar.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/profile-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/qr-display.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/qr-display.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/report-filters.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/report-table.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/stats-table.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/visibility-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/components/wall-controls.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/group-data.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/groups-profile.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/main.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/member-mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/members.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/mutations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/navigation.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/report-data.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/router.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/activities.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/activity-edit.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/activity-types.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/activity.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/announcements.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/attendance.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/billing.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/birthdate-reviews.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/check-in.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/forgot-password.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/group-new.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/group-settings.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/group.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/groups.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/guardians.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/history-groups.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/history.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/invitation.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/invitations-admin.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/join.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/legal.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/login.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/logout.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/member-new.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/members-consent.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/members-pending.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/members.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/profile.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/qr.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/register.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/reports.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/reset-password.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/terms.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/unavailable.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/visibility.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/ward.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/wards.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/routes/welcome.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/session-events.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/session.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/shell.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/test-setup.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/ui.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/src/ward-data.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/tsconfig.json",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/vite.config.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web-vite/vitest.config.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/.env.example",
+        "sha256": "979307810e2ef4f2d5c3d458c193580ea8cdc63fbaf8d53e4a63c50a2f09542b"
+      },
+      {
+        "path": "apps/web/Dockerfile",
+        "sha256": "eeaf00fc067873d620bf65de47687bdd6d2b70b365564c3162035cc7f5086057"
+      },
+      {
+        "path": "apps/web/bundle-budget.json",
+        "sha256": "587023f933ad2e5e19f473827a9601011d7aea611c063402dfc7c7e05b975bfc"
+      },
+      {
+        "path": "apps/web/e2e/access.spec.ts",
+        "sha256": "a93fa25bc6a011e4686189a29a9765055949f70e2db1ad950f5f6f6f2607eac6"
+      },
+      {
+        "path": "apps/web/e2e/accessibility-final.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/activities-reports.spec.ts",
+        "sha256": "06e0567f8f473912ac612d2e9a23bca44ea50cc123c2350214c3c2a5756b4072"
+      },
+      {
+        "path": "apps/web/e2e/capabilities.spec.ts",
+        "sha256": "8a91fecb52a9167d4e1575bc8cf26a65c884a1ecac1d32f46e038a0cdc955423"
+      },
+      {
+        "path": "apps/web/e2e/data.mjs",
+        "sha256": "686ae8a9202c5569a9287d6c240ef4823ddd6d3fd7d6e4ac71ae360f8479cd58"
+      },
+      {
+        "path": "apps/web/e2e/fault-server.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/faults.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/flows.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/groups-profile.spec.ts",
+        "sha256": "7f6bc9b1dd25c5a68a293caa3ff2d5d8f7fca748f3213dc2ecd17af1312aca81"
+      },
+      {
+        "path": "apps/web/e2e/helpers.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/infrastructure.spec.ts",
+        "sha256": "2d7edd5158ced2bac92af96f3fbb7bc50e6f7a6fa11aa9f414ad62ac1bcb596d"
+      },
+      {
+        "path": "apps/web/e2e/invitation-flows.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/local-fixtures.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/manual-fixture.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/members.spec.ts",
+        "sha256": "e50f20072400edf83be303db234ef63359e64819f30a2bfb78fcc3c60cc0b4d8"
+      },
+      {
+        "path": "apps/web/e2e/modules-final.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-activities.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-announcements.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-attendance.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-billing.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-groups-profile.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-invitations.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-qr.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-reports.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-runtime.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/nest-storage.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/public-final.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/qa.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/regression/accessibility-final.spec.ts",
+        "sha256": "9a3a2896ea2de5264f298f50f4d041958bf8ebde57517e2e95d44eb45baa5246"
+      },
+      {
+        "path": "apps/web/e2e/regression/data.mjs",
+        "sha256": "afc897e81b79c7f7fc93f9a237d4bfcf864fd6a4ffdef5b45db2b2af208b0fc0"
+      },
+      {
+        "path": "apps/web/e2e/regression/fault-server.mjs",
+        "sha256": "8997c6d77f434bcd8073c6334cefe6c05b4f6d842cc3d008e1aff845540f8d01"
+      },
+      {
+        "path": "apps/web/e2e/regression/faults.spec.ts",
+        "sha256": "ca87c395c4be0226d93cd77a4a5ffcc6e7a6a89a3c205557ac15d1da1476677f"
+      },
+      {
+        "path": "apps/web/e2e/regression/flows.spec.ts",
+        "sha256": "c7b0cdaf71e00382f97a5cf9df2e5dc5d86e999db9cc2c8f327633f1695f6535"
+      },
+      {
+        "path": "apps/web/e2e/regression/helpers.ts",
+        "sha256": "2ddf8967ed8c7721dc1a2875c1bc6cf13ef622a0e5243e1bf902d189ccb3f4ec"
+      },
+      {
+        "path": "apps/web/e2e/regression/invitation-flows.spec.ts",
+        "sha256": "b9bc3dd5abbeb839a2f3c619b5d067578ff24b1cf6ebefb6396d881306bb1f4e"
+      },
+      {
+        "path": "apps/web/e2e/regression/local-fixtures.mjs",
+        "sha256": "0a76ae00eab14d761bd1f1eb33d5449c7a8872bd6d089e3d3faf4e4f7677363f"
+      },
+      {
+        "path": "apps/web/e2e/regression/modules-final.spec.ts",
+        "sha256": "2a2ffad4535bdfac7510be4d50ce2308f6bf9ca463fd5febfa8328eb8a32ab61"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-activities.spec.ts",
+        "sha256": "27e21c264a2db3592565bb03f16a646b4a655dc320bc02382386074a51558be3"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-announcements.spec.ts",
+        "sha256": "51253e3f86cdfe1c049bfecf07e9263741d7a2a5c408a314ac8efb9a2cd34873"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-attendance.spec.ts",
+        "sha256": "747a357a12f6b40e85f25d3a4d649f9c88cd1670776bef7d0a6bbcf01880e769"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-billing.spec.ts",
+        "sha256": "f167fa1fb4ef28a7b495d69281f1b21562192965c874773b6f207900d801d320"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-groups-profile.spec.ts",
+        "sha256": "3a6ab84e47caedc6990a46d9fb17a04cc414ae41cfc3efbc627eff3dcf614f71"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-invitations.spec.ts",
+        "sha256": "ff21c9630518487039e16341f08cc32d679ea1fe54724bbc25077f42c18d7a16"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-qr.spec.ts",
+        "sha256": "fe83c6b36b83a8ffd7cccf773893f535420044832850740371b86d5cd1d65083"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-reports.spec.ts",
+        "sha256": "313d0741823cd50073e4c5beae52ec8d5784abf98017c72c84df0c32baff2a72"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-runtime.mjs",
+        "sha256": "4342312cd56c08e3aa2c613c80d572e4f9ebe2d06a06359ddcf711ab7b9bddd0"
+      },
+      {
+        "path": "apps/web/e2e/regression/nest-storage.spec.ts",
+        "sha256": "0c419be76a339ae7d22a11f05f913b4bd31dbeff2c9b08f5828f32f238f544aa"
+      },
+      {
+        "path": "apps/web/e2e/regression/public-final.spec.ts",
+        "sha256": "b30ef4ddff4cf14bc94302e09cb09d033d255cc18b175fb79bc3ce177dfe6c93"
+      },
+      {
+        "path": "apps/web/e2e/regression/qa.spec.ts",
+        "sha256": "ffd41f28e7f404a2ab1c18cbf72d85400c0735ec1ff9b26289eeb5a2d0d338b0"
+      },
+      {
+        "path": "apps/web/e2e/regression/server.mjs",
+        "sha256": "521717f77b563f8deed4f65e1f7b1059f5e0c4fbadaeeea6b3637b95bf477b7f"
+      },
+      {
+        "path": "apps/web/e2e/regression/shell.spec.ts",
+        "sha256": "0babc535bfa485f5ea168664e308866d10722a469f8460dcc4d155b0a21d5274"
+      },
+      {
+        "path": "apps/web/e2e/regression/test.ts",
+        "sha256": "6846c9830ba9d91e0347cc5080c57ebd04edefc806813522615416c6c25e6e85"
+      },
+      {
+        "path": "apps/web/e2e/run-integrations.mjs",
+        "sha256": "98d09fc7708ec1ec4a56edf4599f9b2707e7dd9ff91d45330a1862c6c5df8900"
+      },
+      {
+        "path": "apps/web/e2e/server.mjs",
+        "sha256": "2e0a7ec2c6d1c64d1a2eb3e06fd14f07ba5768b6ec0d464e84ca6d9b726afb2e"
+      },
+      {
+        "path": "apps/web/e2e/session.spec.ts",
+        "sha256": "61dfbb2ff8108401455e5ed8904f56e867f6d6740763f002c01779dafa035f70"
+      },
+      {
+        "path": "apps/web/e2e/shell.spec.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/e2e/test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/index.html",
+        "sha256": "f90ef9bbbc6a56a7ecf8539b490904e8642d6dc38e6a4af98fb8aa08e3ba0f67"
+      },
+      {
+        "path": "apps/web/next-env.d.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/next.config.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/package.json",
+        "sha256": "f4102675a369727630b8c9077d6681e612313598183e2c8822a20cd2e3e08069"
+      },
+      {
+        "path": "apps/web/playwright.config.ts",
+        "sha256": "265f693b40fddc8ef44ca52f5d8161e4e36a2838959f4661c5ee72154c5335d7"
+      },
+      {
+        "path": "apps/web/playwright.fault.config.ts",
+        "sha256": "fa03296d2ff24c51da5a3fe4526cf4b338dd81e371f52ade597786ae763a70c4"
+      },
+      {
+        "path": "apps/web/playwright.regression.config.ts",
+        "sha256": "794cbeaa49a2568d7d00015c878aa765db8226705d523ed71ad69615c5fad387"
+      },
+      {
+        "path": "apps/web/postcss.config.mjs",
+        "sha256": "a1a188221f064d964dd9958c3d48b0c23252fabbeb6099d95ee8e15c764718b0"
+      },
+      {
+        "path": "apps/web/scripts/api-contract-smoke.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/scripts/artifact.mjs",
+        "sha256": "721a2a144ececbb61b2733571880907c5b17fb2b5a2008ac6aba0d92fd15ba31"
+      },
+      {
+        "path": "apps/web/scripts/browser-boundary.mjs",
+        "sha256": "6f2c5cb314a0707d6cf9ddc2a8f406a53f6753106bc09b06273423869fdbe7a1"
+      },
+      {
+        "path": "apps/web/scripts/check-bundle.mjs",
+        "sha256": "9083a6b81b9f971e3e00c55d684e1aad1a915abaea96c2d0585c3e5caf6a3a2c"
+      },
+      {
+        "path": "apps/web/scripts/check-performance.mjs",
+        "sha256": "3ba35cb341754f4f1662f9f12d1948ebf120f07b09a1e8bbd58b11017a56018f"
+      },
+      {
+        "path": "apps/web/scripts/design-contract.mjs",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/scripts/legal-document.mjs",
+        "sha256": "d2639e0d1a4b0b31c3c5d954b7e4d5f3b6456a6489db0f90294360bca78accce"
+      },
+      {
+        "path": "apps/web/scripts/native-auth-smoke.mjs",
+        "sha256": "5083112cd35bc260a940da88d473d98fbe511b07ebb4ffe1ad98713f45aca510"
+      },
+      {
+        "path": "apps/web/scripts/social-auth-smoke.mjs",
+        "sha256": "114bd8bd6635a76f9269dea1064fb89c565c8f013147024187a8c0003f41464b"
+      },
+      {
+        "path": "apps/web/scripts/static-server.mjs",
+        "sha256": "2a69efffd19cb8f1ea9a967ecae6d454d86e333749a274a1e1fc9afebab1edfb"
+      },
+      {
+        "path": "apps/web/scripts/static-server.test.mjs",
+        "sha256": "a997e5c231bc7b46577032beabc01570f18affad268f707843eae0277e4a7096"
+      },
+      {
+        "path": "apps/web/src/activities-reports.test.tsx",
+        "sha256": "c98d55c8b92492e8369f0ada3eb8ca3a8591ad0acf8d32e24f6139a267800168"
+      },
+      {
+        "path": "apps/web/src/activity-data.ts",
+        "sha256": "01b4e9376df1deccf6fd7bb209638f2c0cc0f3e3581029ed7f4ced4e6331d3ae"
+      },
+      {
+        "path": "apps/web/src/activity-mutations.ts",
+        "sha256": "f3c4d763b6a89409f0a3c2ba29e0a3404c2d85332a700965ef8ca04f9dd09700"
+      },
+      {
+        "path": "apps/web/src/activity-type-mutations.ts",
+        "sha256": "da74311572c55af6172ede13592359a4351457b0968ae99e4f90ce0b6f989fda"
+      },
+      {
+        "path": "apps/web/src/announcement-mutations.ts",
+        "sha256": "2ede9075c9dae2a63ff4aae7e016bfabffa8a5e9ec5f7b8909993b331aab6e5c"
+      },
+      {
+        "path": "apps/web/src/api.ts",
+        "sha256": "f5cfb4bee2684abfea0e9c401dcc0a1225626c50e85bcf39b44542fdcf4485da"
+      },
+      {
+        "path": "apps/web/src/app/accept-terms/accept-terms-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/accept-terms/accept-terms-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/accept-terms/account-consent.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/accept-terms/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/accept-terms/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/accept-terms/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/auth/callback/[provider]/route.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/auth/callback/route.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/auth/callback/route.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/check-in/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/check-in/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/check-in/check-in-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/check-in/check-in-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/check-in/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/error.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/forgot-password/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/forgot-password/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/forgot-password/forgot-password-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/forgot-password/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/attendance-sheet.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/attendance-sheet.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/attendance/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/edit/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/qr-display.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/[activityId]/qr/qr-display.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/new/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/new/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/new/activity-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/new/activity-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/new/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/new/weekly-activities.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activities/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/activity-type-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/activity-type-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/activity-types.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/activity-types/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/announcement-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/announcement-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/announcements/wall-controls.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/billing/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/billing/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/billing/billing-panel.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/billing/billing-panel.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/billing/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/error.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/getting-started.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/guardians/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/guardians/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/guardians/guardian-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/guardians/guardian-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/guardians/guardianship.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/guardians/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/invitation-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/invitation-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/send-invitation.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/invitations/new/send-invitation.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/join-as-athlete.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/layout.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/me/history/history.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/me/history/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/me/history/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/consent/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/consent/consent-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/consent/consent-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/consent/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/member-management.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/member-management.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/member-management.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/new/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/new/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/new/managed-member-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/new/managed-member-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/new/managed-member.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/new/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/membership-review.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/membership-review.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/membership-review.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/members/pending/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/not-found.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/group-stats.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/report-filters.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/report-table.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/reports.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/reports/stats-table.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/settings/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/settings/visibility/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/settings/visibility/visibility-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/settings/visibility/visibility-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/[groupId]/wards/[athleteUserId]/history/ward-history.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/group-selector.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/new/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/new/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/new/group-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/new/group-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/new/group.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/new/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/groups/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/invitations/[token]/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/invitations/[token]/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/invitations/[token]/invitation-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/invitations/[token]/invitation.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/invitations/[token]/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/join/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/join/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/layout.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/legal/2026-09-21/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/auth-forms.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/auth-pages.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/login-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/sign-out.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/login/social-actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/me/history/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/me/history/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/not-found.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/avatar-permissions.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/avatar-permissions.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/avatar/[ownerId]/[fileName]/route.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/birthdate-requests/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/birthdate-requests/reviews.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/page.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/profile-form.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/profile/profile-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/register/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/register/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/register/register-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/reset-password/actions.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/reset-password/actions.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/reset-password/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/reset-password/reset-password-form.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/wards/[athleteUserId]/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/wards/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/app/welcome/page.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/attendance-mutations.ts",
+        "sha256": "498fee6f5684fc1a92d4d1b1e9e0277713c7f7e61840b7c190ee3fd942fe6f39"
+      },
+      {
+        "path": "apps/web/src/attendance-presentation.ts",
+        "sha256": "1c5ab25a51cbc5fdb077c3f3c00ad74a43b2b70a6f88d95bb49476b4029a2ab2"
+      },
+      {
+        "path": "apps/web/src/auth-context.tsx",
+        "sha256": "2ba535f5cd5713f086bbfc4b72d92eeba60a2bd66d2e70cac084b0fa6291c198"
+      },
+      {
+        "path": "apps/web/src/auth-controls.retained.test.tsx",
+        "sha256": "5e7e3d6425c463074d6c3f99bc0ef057fceaba4d2d0e57606e3cfe6936c6da8b"
+      },
+      {
+        "path": "apps/web/src/billing-mutations.ts",
+        "sha256": "557dad0cdc4b2638cce22e44e38ddb968c5184dd17f3d3a632553313224e8db0"
+      },
+      {
+        "path": "apps/web/src/capabilities.test.ts",
+        "sha256": "8e2548dc9658ba4dc55a198f572faa04f1514914111d889f866d23669f67d83a"
+      },
+      {
+        "path": "apps/web/src/capability-data.ts",
+        "sha256": "bb21a4530662d30c0e56eb42451b6a7702554883733fff451b7a470c402d9993"
+      },
+      {
+        "path": "apps/web/src/capability-mutations.ts",
+        "sha256": "8317771d279ac3e77a9938f6685d9a37e4e55fa7d3762b72a4525dc486690bc3"
+      },
+      {
+        "path": "apps/web/src/components/account-menu.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/account-menu.tsx",
+        "sha256": "8937d48fccf51c5161a535f52690f7d16fa90314ccf5fb8c495a7542e1c2b869"
+      },
+      {
+        "path": "apps/web/src/components/account-terms-field.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/activity-agenda.tsx",
+        "sha256": "d2e77814d6ba023e66e86a2a3e008366bc2ebc1415bcde7455dbe176a2df6a48"
+      },
+      {
+        "path": "apps/web/src/components/activity-form.retained.test.tsx",
+        "sha256": "7c1ac8c157b7cd2587acc9f61382acd5299506a8fbd3d7656563cfa3bd1ba0e1"
+      },
+      {
+        "path": "apps/web/src/components/activity-form.tsx",
+        "sha256": "eacf84f1e95028b7c54d5b50c0ca40751be6f09b84ea2f9ddf6428e46082517a"
+      },
+      {
+        "path": "apps/web/src/components/activity-type-form.retained.test.tsx",
+        "sha256": "5a43e0d488ac7833943dcea6c0145d8777ac86df8a94ae0b8ec0c47c7f3bdbdf"
+      },
+      {
+        "path": "apps/web/src/components/activity-type-form.tsx",
+        "sha256": "d092b46808711ef6c329e15dca86183085f610580d56d43ca76b4ad6d96a2131"
+      },
+      {
+        "path": "apps/web/src/components/announcement-form.test.tsx",
+        "sha256": "b56fb93741cc2e57c215ecafe47858cbd16b9a1de9876f4c9bbe4b6cbe3bdcaa"
+      },
+      {
+        "path": "apps/web/src/components/announcement-form.tsx",
+        "sha256": "ca4b77391e343869df9970c5c32d0ac724e86c37ed87ca74f9dbb92e2a11ed41"
+      },
+      {
+        "path": "apps/web/src/components/app-shell.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/app-shell.tsx",
+        "sha256": "0b43dfdbd03b10b892e442ffbe99747319b27460e3d172c007866eadfa42ce5f"
+      },
+      {
+        "path": "apps/web/src/components/attendance-history.tsx",
+        "sha256": "8040f4b4201e3da020af5bec6c528438af5725227ab577f83048fd9e4b72581d"
+      },
+      {
+        "path": "apps/web/src/components/attendance-sheet.retained.test.tsx",
+        "sha256": "365166115878efe8424020e9197ec2519f05fe2a66241d5ead9a1416be0a566c"
+      },
+      {
+        "path": "apps/web/src/components/attendance-sheet.tsx",
+        "sha256": "83a98713668775f61c054b101fe01a9edebe7b3b1df6a80b37517172e0da7de0"
+      },
+      {
+        "path": "apps/web/src/components/auth-layout.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/avatar-permissions.retained.test.tsx",
+        "sha256": "1bc6030210c17d0568d11cd3c462b68760ea105d9cae91307198612e893ad432"
+      },
+      {
+        "path": "apps/web/src/components/avatar-permissions.tsx",
+        "sha256": "7069d9ca1081c40a34a7ea9263b9ffe371859cc64c5fb891f5f1994094d64da3"
+      },
+      {
+        "path": "apps/web/src/components/billing-panel.test.tsx",
+        "sha256": "69049fda6e9911c62cd71cba388571da207582ca5cc13c08979d1e49e25ff6d3"
+      },
+      {
+        "path": "apps/web/src/components/billing-panel.tsx",
+        "sha256": "f5f0736964fcd2ac5439735f913096c5d1f48cf118ebf00ef90d2029817f1e7e"
+      },
+      {
+        "path": "apps/web/src/components/birthdate-reviews.tsx",
+        "sha256": "ff9c4405d175d66ee84dcfb10919fa36c1660dc5f834b1aaa241d01df46330dd"
+      },
+      {
+        "path": "apps/web/src/components/check-in-form.test.tsx",
+        "sha256": "71ec95f281338a121656eebafa0a6aecea8ad5a62e6c23e919b4ed6f4f6d3f95"
+      },
+      {
+        "path": "apps/web/src/components/check-in-form.tsx",
+        "sha256": "661c570be955d9ed2e6041603a8e29f2c397b0ffee1c599078c83d4a98c23a05"
+      },
+      {
+        "path": "apps/web/src/components/check-in-login.tsx",
+        "sha256": "9cd2870012716aee097fcdbbcc7fd9797feab94938a8b18cf3440626d0930e82"
+      },
+      {
+        "path": "apps/web/src/components/consent-form.retained.test.tsx",
+        "sha256": "331a0060fc09f684aab35d372a43cd140f09c19d4d5517a9efbd8ef615c891fb"
+      },
+      {
+        "path": "apps/web/src/components/consent-form.tsx",
+        "sha256": "f64d3791eeb3fea88639f5fe286164943e299aaeffdc931fb2087c415e0ad4cc"
+      },
+      {
+        "path": "apps/web/src/components/controls.retained.test.tsx",
+        "sha256": "25026802c2afc5e607025209b587e6a4a0208d3acdef4ef6e623c4040443ae58"
+      },
+      {
+        "path": "apps/web/src/components/getting-started.tsx",
+        "sha256": "727f2cc251dc8f7ab6668df677898ec01bbe9bbaf42a276648264a2ba8e5792c"
+      },
+      {
+        "path": "apps/web/src/components/group-capacity.retained.test.tsx",
+        "sha256": "5633ef43892d7ffb1edc438d293d9c0ef86da065b6d2f507525b0b195c9e5f11"
+      },
+      {
+        "path": "apps/web/src/components/group-capacity.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/group-capacity.tsx",
+        "sha256": "9c33d9491ca39b7b342e802ac1e36673828e743a94ee9c45713eacddd01d7b14"
+      },
+      {
+        "path": "apps/web/src/components/group-form.retained.test.tsx",
+        "sha256": "b25840f268e125b23199dcf4b10dcb2f5eaaa71a3c89857f31113d2018e6c398"
+      },
+      {
+        "path": "apps/web/src/components/group-form.tsx",
+        "sha256": "44c52d15d97675ae336e6f87151fb19537fe125597d842c6e8a4ed8ba6312e5a"
+      },
+      {
+        "path": "apps/web/src/components/group-selector.tsx",
+        "sha256": "6927b23ccad475df3f45e0a3b5cbd1cd85080a68d22508bffae52c08453da3ec"
+      },
+      {
+        "path": "apps/web/src/components/group-stats.tsx",
+        "sha256": "8e328145beeb11e5d2382e7abf99d7bcf42a36c95efcca21dbc376be8bbe8a5b"
+      },
+      {
+        "path": "apps/web/src/components/guardian-form.retained.test.tsx",
+        "sha256": "60fe78b04a6dcc9b29d37db66bbe4952477e23456c01677fdaa533c239a13050"
+      },
+      {
+        "path": "apps/web/src/components/guardian-form.tsx",
+        "sha256": "3b4e5fcc7ffa5a4e5d115ed95a0f0a650dea3d76284f2214c4b957451ce8c2dd"
+      },
+      {
+        "path": "apps/web/src/components/inline-confirmation.tsx",
+        "sha256": "6f84f381a70269e04ba381128eb862537e7bd4f7411497a204dab6f226bf0f1d"
+      },
+      {
+        "path": "apps/web/src/components/invitation-form.tsx",
+        "sha256": "953295131d83c0a6ffe4bee3f0c5e94bebe3ea95ae6883bf79cf24f0eb7f5372"
+      },
+      {
+        "path": "apps/web/src/components/join-as-athlete.tsx",
+        "sha256": "216e030d5f69591a1d99ce51ee49ff3d1481d5d36483ad293cb6831f5a31b515"
+      },
+      {
+        "path": "apps/web/src/components/managed-member-form.retained.test.tsx",
+        "sha256": "243f35ad229223008c78b620fe88df6076ff00ddfe8f1806ea01be1f0dd28216"
+      },
+      {
+        "path": "apps/web/src/components/managed-member-form.tsx",
+        "sha256": "c8a652237b4c5a6dc2efa46a3220632e31aac306ff4fc0758e2fd0afe91ea00b"
+      },
+      {
+        "path": "apps/web/src/components/member-management.retained.test.tsx",
+        "sha256": "b915365dcf7f11c9a5a2844c4bbe2e99950a81cba3414621d816ae6f16677683"
+      },
+      {
+        "path": "apps/web/src/components/member-management.tsx",
+        "sha256": "ee7e4ff9726be9cebb17def9feb01269133ec02a2a376c815d3f2b7819bfea27"
+      },
+      {
+        "path": "apps/web/src/components/membership-review.retained.test.tsx",
+        "sha256": "c228251692525a67e3ea8699e0dcc38592ed23f3baa1743c0addf27b4f13e5c2"
+      },
+      {
+        "path": "apps/web/src/components/membership-review.tsx",
+        "sha256": "fb3763693cb597721c21bca4aaf6bb4973c761dafc7ba013220bb97a0581665d"
+      },
+      {
+        "path": "apps/web/src/components/pagination.tsx",
+        "sha256": "64c77e27d8fdbf5dab6e75f84cc8609b6652977ce7a92211ab424ec9ebed66bd"
+      },
+      {
+        "path": "apps/web/src/components/private-avatar.tsx",
+        "sha256": "95bfee07374feba463ba3b7ca1f59f901fa823d7f6f453f082e2531dfd478129"
+      },
+      {
+        "path": "apps/web/src/components/profile-form.retained.test.tsx",
+        "sha256": "51591b7cdf61b4c45a6a2ec48c16b83525e53ccda05e28f6c1f7b929bae85691"
+      },
+      {
+        "path": "apps/web/src/components/profile-form.tsx",
+        "sha256": "c5ae43fb959629318aeab99671a57e6ebe90da0196cccea73804e494785da8b5"
+      },
+      {
+        "path": "apps/web/src/components/qr-display.test.tsx",
+        "sha256": "7f1899d4e869fb53f631b7a7fedac77c88bc1030cba2f918aed39a85a13afb59"
+      },
+      {
+        "path": "apps/web/src/components/qr-display.tsx",
+        "sha256": "c78b7e1d529fba362066f84776f75dbaf33cbc22d809e7c0814ec16ab2cbbe5b"
+      },
+      {
+        "path": "apps/web/src/components/report-filters.tsx",
+        "sha256": "419559a864b9aa60fdb342ff3ed0c342d7eff1397560805dce6e16faa1ced9a4"
+      },
+      {
+        "path": "apps/web/src/components/report-table.tsx",
+        "sha256": "a75c0abc283a1360d9d99c15068ad0388a0520d9890d51361112310640a6ef15"
+      },
+      {
+        "path": "apps/web/src/components/social-login-buttons.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/social-login-buttons.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/stats-table.tsx",
+        "sha256": "b93cbe385991c98f071afbf128de5cccff0e9e12f794ec7f3e38cf6750a22934"
+      },
+      {
+        "path": "apps/web/src/components/ui/button.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/controls.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/error-state.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/inline-confirmation.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/navigation-progress.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/pagination.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/password-input.tsx",
+        "sha256": "88235be06397993047a859e656559552db64aaa9585562459b8cbd1ac70c30e8"
+      },
+      {
+        "path": "apps/web/src/components/ui/recovery.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/ui/unavailable-state.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/components/visibility-form.retained.test.tsx",
+        "sha256": "ccc9827866db7885e567a8c327062f6f0d399d081e5e5666d70a76a1156ac838"
+      },
+      {
+        "path": "apps/web/src/components/visibility-form.tsx",
+        "sha256": "d6c23a7fb0ca52c8aef963bd71fd247429944dc1735b6cc08b2648f7c6b3c1ed"
+      },
+      {
+        "path": "apps/web/src/components/wall-controls.tsx",
+        "sha256": "f432140f8af0afff0af648da7c5a4d35dc47fa7015b4a004b8bc29a64af5d1ce"
+      },
+      {
+        "path": "apps/web/src/group-data.ts",
+        "sha256": "37c7d783fb3a4dc9674b177363075356a9d503c120cd78308d553a1a91189579"
+      },
+      {
+        "path": "apps/web/src/group-settings.retained.test.ts",
+        "sha256": "f7360a66bf5ea0aca5defb2362460da32be4909162cc578f257938d4279de707"
+      },
+      {
+        "path": "apps/web/src/groups-profile.test.tsx",
+        "sha256": "d5387970e5b00bde6707e59953984649ef4e6ef0f15cc13cadf6d41b21b9a390"
+      },
+      {
+        "path": "apps/web/src/lib/activities.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/activity-types.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/announcements.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/announcements.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/activities.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/announcements.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/attendance.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/auth-cutover.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/config.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/cookie-options.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/groups-profile.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/independent-database.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/native-auth-config.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/native-auth-middleware.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/native-auth.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/native-auth.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/native-session.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/qr.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/reports.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/retirement.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/server.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/server.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/session.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/social-auth.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/social-auth.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/api/transport.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/attendance-history.test-fixture.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/attendance-history.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/attendance-history.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/attendance-presentation.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/attendance.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/auth-context.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/check-in.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/group-routing.test.ts",
+        "sha256": "2a433acce94675dbb3ffc66c0f977b3197347ba28ffcde76da77e581fcf08e70"
+      },
+      {
+        "path": "apps/web/src/lib/groups.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/groups.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/invitations.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/invitations.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/members.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/members.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/password-recovery-native.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/profile.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/reports.test-fixture.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/reports.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/reports.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/resource-state.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/social-auth.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/social-auth.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/subscription-billing.integration.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/use-unsaved-changes.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/wards.test.tsx",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/lib/wards.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/main.tsx",
+        "sha256": "ccf510dd6a0de4d775c422f2843918576ba919e0efca4e9d198d5329d8261765"
+      },
+      {
+        "path": "apps/web/src/member-mutations.ts",
+        "sha256": "1bc043f94d0123b49b287bf86153e8efab5c0ccf6d1d7b61463f62166db650c3"
+      },
+      {
+        "path": "apps/web/src/members.test.tsx",
+        "sha256": "499b251bf07aab07ee7cd4d1b48a4974248931f336da063a99d39e850301a591"
+      },
+      {
+        "path": "apps/web/src/middleware.test.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/middleware.ts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/src/mutations.ts",
+        "sha256": "af3b3ecab8a33a2fd3370e64982bb805b6e9ab7477d9affc9278912734527e19"
+      },
+      {
+        "path": "apps/web/src/navigation.retained.test.tsx",
+        "sha256": "d66d0ad0e88b18dfd4420bfbd270b31907e7b93b3e39bfac267659fb5e8ce81f"
+      },
+      {
+        "path": "apps/web/src/navigation.tsx",
+        "sha256": "593dcb7303635a1a688d439bcde6edcdf5857e4ffac019faa9ff6f0d6cfb8a90"
+      },
+      {
+        "path": "apps/web/src/report-data.ts",
+        "sha256": "91c0e6d4b5bb3944fd4d6c6c833acb053b2955acf95f7d8b00a1be825e02764c"
+      },
+      {
+        "path": "apps/web/src/retained-app-check-in-actions-test-ts.test.ts",
+        "sha256": "b2e86e77e26f60e911e25c9512f61beb2f75efb0f3c316df4a1f1d545de7e52b"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups--groupId--activities--activityId--attendance-actions-test-ts.test.ts",
+        "sha256": "fa57073bf4c26b1c9934bf5a788995c97b5a05313276ba8e2885e22e4a6a53bc"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups--groupId--activities-new-actions-test-ts.test.ts",
+        "sha256": "948bc404428fb67fc87865cd8328ade9cd9e69e1d3f5f4560a1e68e107a6c08d"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups--groupId--activity-types-actions-test-ts.test.ts",
+        "sha256": "faa4f4fe27c99098b43f0dad0a440c2329906dd1bb50dc58ceee1de7d1f55591"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups--groupId--announcements-actions-test-ts.test.ts",
+        "sha256": "e2c43f7804a0e78c31ae8679a1ec7e79860f0810ceea2694dfe09c47a44a50e9"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups--groupId--billing-actions-test-ts.test.ts",
+        "sha256": "d8b107c614b93f6fc6d29562a3d6fa7cd4721991740ee9b46cd59a8f32b5976a"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups--groupId--members-pending-actions-test-ts.test.ts",
+        "sha256": "422b23bc7e37dc1f5533a967cb6c78607026189bad3b98470ebdca9d9e7e61b0"
+      },
+      {
+        "path": "apps/web/src/retained-app-groups-new-actions-test-ts.test.ts",
+        "sha256": "3b643538457af12027013fdae9d572ccd0a09b19c9da540a4753877c59b3a21d"
+      },
+      {
+        "path": "apps/web/src/retained-app-profile-actions-test-ts.test.ts",
+        "sha256": "42256df06d6a74c0316f777374155230faabd3a4897f78f856920ba22339bb6d"
+      },
+      {
+        "path": "apps/web/src/retained-member-management-actions.test.ts",
+        "sha256": "a4ac19faa9958dba7fdf4af835a86b11c1844caa79a219e25438d104159db8bf"
+      },
+      {
+        "path": "apps/web/src/router.tsx",
+        "sha256": "4a01b1fbd86a0069abc036ba6ca61f8b4d53966cea5300857b07f76f2035331e"
+      },
+      {
+        "path": "apps/web/src/routes/activities.tsx",
+        "sha256": "950b151add2faf9f14e161fc8f0e7487b14fa2d9d7ba6b9f1f20b5b81d256d6a"
+      },
+      {
+        "path": "apps/web/src/routes/activity-edit.tsx",
+        "sha256": "6883cd3f85868bf50e4b81944eeba06804e0d08b96094b507151b99e3dd31141"
+      },
+      {
+        "path": "apps/web/src/routes/activity-types.tsx",
+        "sha256": "9c2051f106fdbff460e675b3010f15e02964ac7d1a6ae7d1e4cd37d367c09109"
+      },
+      {
+        "path": "apps/web/src/routes/activity.tsx",
+        "sha256": "0aa943191eb6e5a0f00b550d29ae7484c8f076729c847457dbab5f65243ab2f4"
+      },
+      {
+        "path": "apps/web/src/routes/announcements.tsx",
+        "sha256": "a6890a31b1ed773155e4efc6c69fbf51afd3922d114dfeb545be9d6a57bff5ec"
+      },
+      {
+        "path": "apps/web/src/routes/attendance.tsx",
+        "sha256": "2a1a52503913140b5e626b49e0ca4909df7e469f1b5ce317e3083ee6d68269ea"
+      },
+      {
+        "path": "apps/web/src/routes/billing.tsx",
+        "sha256": "afa2ce3b108cb7b996d74b51e309f6c703872bf7538b731257f0cfb2745f87af"
+      },
+      {
+        "path": "apps/web/src/routes/birthdate-reviews.tsx",
+        "sha256": "0ea010f615963b31bca2e9f877a6b4bb60b675b2458bc0f314d33dd19fa418dc"
+      },
+      {
+        "path": "apps/web/src/routes/check-in.tsx",
+        "sha256": "1b1dd140a30f1b9a4fd1ea3cd44d0efe8c94559da31af57633308b0bbd1f66c2"
+      },
+      {
+        "path": "apps/web/src/routes/forgot-password.tsx",
+        "sha256": "f9e92bcba3c37924b6e9f2423a95f59fc55c4c4838b2189921a071c00e08f970"
+      },
+      {
+        "path": "apps/web/src/routes/group-new.tsx",
+        "sha256": "c9894c8057999257ba583d5fce4db02e956f8ef5077f72cbc69c964eb9bcf28a"
+      },
+      {
+        "path": "apps/web/src/routes/group-settings.tsx",
+        "sha256": "9a50e3384157c9974705e9aaa4f3d49ca5f58aa769fdd1554d335f4c5fd6c3b6"
+      },
+      {
+        "path": "apps/web/src/routes/group.tsx",
+        "sha256": "8e100ba3682165584a48b04dade0862f0dfb03b2c2d3a29e08774c12ec4f4c18"
+      },
+      {
+        "path": "apps/web/src/routes/groups.tsx",
+        "sha256": "3b30fc6e8dc3d1ceb9f13babcefe9f7118a0e0c3f1c297b2921cfd97cdec26a1"
+      },
+      {
+        "path": "apps/web/src/routes/guardians.tsx",
+        "sha256": "6f1fb61e75e05c112ec74a55dba8dd9ef1d09de49054dd1b558096d9a384c153"
+      },
+      {
+        "path": "apps/web/src/routes/history-groups.tsx",
+        "sha256": "a5f5b4780eb6e8cbe0d3b8aa3044cb81cf6257415878ca3e61a0b7b500a1b990"
+      },
+      {
+        "path": "apps/web/src/routes/history.tsx",
+        "sha256": "6853d1bc3bd0c64dafb0a23363b1104cf55f23e186c41e08e157e72f44f8da87"
+      },
+      {
+        "path": "apps/web/src/routes/invitation.tsx",
+        "sha256": "f4cdfc1afdc3f03bfe83489311a92e794eab55b34e3f74d9f1cb7c4a24754c88"
+      },
+      {
+        "path": "apps/web/src/routes/invitations-admin.tsx",
+        "sha256": "f4cd35a52fd678e046f67e038796e423af7f0b0ef1539b58bc817f05e8259ffc"
+      },
+      {
+        "path": "apps/web/src/routes/join.tsx",
+        "sha256": "00e153837adf9561a3249c518dc41b4b2f4e86e27e5546a422248c17516a1d6e"
+      },
+      {
+        "path": "apps/web/src/routes/legal.tsx",
+        "sha256": "42167d5f2e3da55426e5ef491f15ad3832d01582e5d79c129e7d2a9bda54afe4"
+      },
+      {
+        "path": "apps/web/src/routes/login.tsx",
+        "sha256": "65ccf48e0f5c579a9ba2db91b1d5ecb9345e3db221a05b09491548808542d39a"
+      },
+      {
+        "path": "apps/web/src/routes/logout.tsx",
+        "sha256": "470a86b12cf4f9f2b120b8aeeb4bd0e9273585da31964ecdd06d6cdfd20d41ed"
+      },
+      {
+        "path": "apps/web/src/routes/member-new.tsx",
+        "sha256": "a8108664b6d8bcac3d9465f02188b5e47620caba002a186fb2bb1d3fa7638b0f"
+      },
+      {
+        "path": "apps/web/src/routes/members-consent.tsx",
+        "sha256": "0dc6863c2fbb76ce0596d52a61949d04eb848bb08f115a982ffcc6856a551003"
+      },
+      {
+        "path": "apps/web/src/routes/members-pending.tsx",
+        "sha256": "9d6d374ebf3811d18a5dcd74bcb220417a3b54d441195f09a6a24383499aa739"
+      },
+      {
+        "path": "apps/web/src/routes/members.tsx",
+        "sha256": "3b0a60a19d9c71b7e7ed957881e5879f07e016a7f6de2b9adf3bee1060147fb2"
+      },
+      {
+        "path": "apps/web/src/routes/profile.tsx",
+        "sha256": "5864ab5473b8081c2550cced9726b57bd6da9ffe9a6ce2ad227983781083d37f"
+      },
+      {
+        "path": "apps/web/src/routes/qr.tsx",
+        "sha256": "76db54e9825ef5e5a8eae8d7cd6558008b810cd86c6e8d648fba04e2a5e0789b"
+      },
+      {
+        "path": "apps/web/src/routes/register.tsx",
+        "sha256": "b16996c3b83dcddafb51a2115bc7ceff5bb41304632cb2d97d2e346b1f94ae3c"
+      },
+      {
+        "path": "apps/web/src/routes/reports.tsx",
+        "sha256": "26a1305e6041986a89a5bed17de2335a102dcb6e995959521fd314962ceede92"
+      },
+      {
+        "path": "apps/web/src/routes/reset-password.tsx",
+        "sha256": "18469504f579e2c511323cd7cff46803d17e4b773e597f842c35edc67317ca47"
+      },
+      {
+        "path": "apps/web/src/routes/terms.tsx",
+        "sha256": "4eb984415a910efa1179754bacbdd7ed59d01ecd185a79cc26c3c424bfa54c4e"
+      },
+      {
+        "path": "apps/web/src/routes/unavailable.tsx",
+        "sha256": "7573d05b8dff67aae9c83e6200422c272eeaa68f73b30459ae53775fa5ca7192"
+      },
+      {
+        "path": "apps/web/src/routes/visibility.tsx",
+        "sha256": "250fbea4b3f5d4250f8d8de176968ebb83535408bad6af8c67f22fd4a6b5f117"
+      },
+      {
+        "path": "apps/web/src/routes/ward.tsx",
+        "sha256": "3e50bcf042c00406f1f05ebf978cd83f741171f4d8f76a43e49a736652bd4d38"
+      },
+      {
+        "path": "apps/web/src/routes/wards.tsx",
+        "sha256": "449f0e660edb946261677f977f46e3ab5576dc5c838d624e97ad6a281456b63f"
+      },
+      {
+        "path": "apps/web/src/routes/welcome.tsx",
+        "sha256": "96847d8baa887b9b56509123de490fd2e2fde41c0ac224ddcf0568d6b5ca4216"
+      },
+      {
+        "path": "apps/web/src/session-events.ts",
+        "sha256": "dd5bbd1cbe487805de286add638dee0aeae84c668e931740d10267c9ef077ec1"
+      },
+      {
+        "path": "apps/web/src/session.test.tsx",
+        "sha256": "8e5898f69a14c4bc35cc7e75054dcdfd712b7f824445d95a02ef16448c8fe789"
+      },
+      {
+        "path": "apps/web/src/shell.tsx",
+        "sha256": "5d7492d62c1f05ffaaa6119cf11f965d99ab971891241a69848a0cde0250429e"
+      },
+      {
+        "path": "apps/web/src/test-setup.ts",
+        "sha256": "9f779257308d22284039271c208dd94a80424d6612cf64d2ba60d866149b5def"
+      },
+      {
+        "path": "apps/web/src/ui.tsx",
+        "sha256": "b1a39b423178d7dfed99529f6e196518ac147659a2a35533187bb24bd628a30d"
+      },
+      {
+        "path": "apps/web/src/ward-data.ts",
+        "sha256": "742223fb564b9b93c58ff6b25d0fd6f08de15d8879fc2be625d55cebd831831b"
+      },
+      {
+        "path": "apps/web/test/integration/account-consent.integration.test.ts",
+        "sha256": "e5d58caf85ec3b9aa2d6ba68db36242fc504bdeba388b3770bcffdc9e31656e2"
+      },
+      {
+        "path": "apps/web/test/integration/activity-types.integration.test.ts",
+        "sha256": "bc4ad2a24399e77bb7e354b8c4e8161610e0d25850c79fa0d680335e57cbf9d8"
+      },
+      {
+        "path": "apps/web/test/integration/announcements.integration.test.ts",
+        "sha256": "864ca90416cafbaf7373c4ec5c8d7841ca72993eb43603e8a00ac0d263aa3be7"
+      },
+      {
+        "path": "apps/web/test/integration/check-in.integration.test.ts",
+        "sha256": "3688f4bd5b20962e073aa852f6b699e8b842b05d05ba362f08386a4f097ab561"
+      },
+      {
+        "path": "apps/web/test/integration/group.integration.test.ts",
+        "sha256": "32054ca0a95b37040e059dcdfaa1af13504ba24ac904ddd71b0b3dc82444aeb2"
+      },
+      {
+        "path": "apps/web/test/integration/guardianship.integration.test.ts",
+        "sha256": "be5ae8c82fd517dae0e933acaf0c6a093a5c248e1be2965e16d036b0790f1f39"
+      },
+      {
+        "path": "apps/web/test/integration/history.integration.test.ts",
+        "sha256": "27a2a917790777821a4b23baa7ebcdcd90e54ab359b3be3f8a649ce06ce77a8c"
+      },
+      {
+        "path": "apps/web/test/integration/invitation.integration.test.ts",
+        "sha256": "24d839b562ccc027902c80c6aa7abbe6401986dbe21d0bc277031b520e55d2e2"
+      },
+      {
+        "path": "apps/web/test/integration/managed-member.integration.test.ts",
+        "sha256": "df8f2664275e86b9d414337e34182cf858ae1819e35b2967c52b25699d33f4f5"
+      },
+      {
+        "path": "apps/web/test/integration/member-management.integration.test.ts",
+        "sha256": "869f1c74170c51597791272b2bef2eeef0a6b3e615b3c3f086fd7659317414d6"
+      },
+      {
+        "path": "apps/web/test/integration/membership-review.integration.test.ts",
+        "sha256": "31b5318096a63aca21df7beb24b8bc7c65a31e41df1a14bc80e987d604c0c3cb"
+      },
+      {
+        "path": "apps/web/test/integration/password-recovery-native.integration.test.ts",
+        "sha256": "bfd5bb680345f65e32a40d8f70ec7fc7384f5d2b93904981f305c25a51e8be35"
+      },
+      {
+        "path": "apps/web/test/integration/reports.integration.test.ts",
+        "sha256": "ea2adf6ab55c12cb3212f6d6ba782a0a09ad6c47c4307bfce6b2b1cf3880bf26"
+      },
+      {
+        "path": "apps/web/test/integration/send-invitation.integration.test.ts",
+        "sha256": "8b309f2d14779754621c80cdf7d56f695159d836030376bc6b5a76073fdc1a3d"
+      },
+      {
+        "path": "apps/web/test/integration/subscription-billing.integration.test.ts",
+        "sha256": "fc1bb33b5822a04f59bddd7ad155c518c6b81ffa03e699c073a7fef9f0d62e4c"
+      },
+      {
+        "path": "apps/web/test/integration/ward-history.integration.test.ts",
+        "sha256": "822ec98418e16beb32c9a1d316fc55c726f7094fd75e64358e8363d023c52034"
+      },
+      {
+        "path": "apps/web/test/integration/weekly-activities.integration.test.ts",
+        "sha256": "f789031f1c5f6d45271950d168500f4a3b248869ff9b65b9ade52fb1d0b5aeba"
+      },
+      {
+        "path": "apps/web/test/native-persistence-implementation.d.mts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/test/native-persistence.d.mts",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/README.md",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/attendance-after-375.jpg",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/attendance-before-375.jpg",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/billing-after-375.jpg",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/billing-before-375.jpg",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/login-after-375.jpg",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tests/evidence/issue-103/responsive-results.json",
+        "sha256": null
+      },
+      {
+        "path": "apps/web/tsconfig.build.json",
+        "sha256": "cde73c3db893b858b18d68257fc4821d8f824a46ceb0e60182b6825a0a2f7072"
+      },
+      {
+        "path": "apps/web/tsconfig.json",
+        "sha256": "52b75288d99bf8013494058f838b6957d1a99bc7c4b05135ed854f3992f0f9ad"
+      },
+      {
+        "path": "apps/web/vite.config.ts",
+        "sha256": "32d0ff501b21fb3468141a906cf9ad4377aebb39dff0fd81538c285b1b0d0a31"
+      },
+      {
+        "path": "apps/web/vitest.config.ts",
+        "sha256": "36900de1fbc7e0b9357ca251658366e9deea9d72e6b91a56dbdb6117ac69ac66"
+      },
+      {
+        "path": "apps/web/vitest.integration.config.ts",
+        "sha256": "e31be24dfc32d171b4c6adb9239d20560deab0ed5d3dfddc2e6e5d36cce5d838"
+      },
+      {
+        "path": "apps/web/vitest.setup.ts",
+        "sha256": null
+      },
+      {
+        "path": "deploy/staging/README.md",
+        "sha256": "8ee3859245e7687cf4dcd1e671783c2ae9228c7a769dde2660b2e84bc2078eb0"
+      },
+      {
+        "path": "docs/05-pantallas.md",
+        "sha256": "30ec1d8771045520fcb0f5ef75647b65e3d2f112f43d3d42e5fccecc370eda9f"
+      },
+      {
+        "path": "docs/06-arquitectura-y-stack.md",
+        "sha256": "6d95e706baba1e1f2e8d5e7130dee6aa01d33da611889caba78986c23d6ad4c4"
+      },
+      {
+        "path": "docs/07-api-y-backend.md",
+        "sha256": "61ca82c5e2a843bb0dd41b2b1357ad2ef751c1dc702ac1565a9a246eecdc8fcf"
+      },
+      {
+        "path": "docs/09-roadmap.md",
+        "sha256": "1dc690eedb34bb26732bb66889754155eb90b43eaa591eecfd57a9867bbca1a1"
+      },
+      {
+        "path": "docs/12-sistema-visual.md",
+        "sha256": "8958f96d29318fff62a3ef40ed85150084f86d278c8a4eed24f07baf42ef31e4"
+      },
+      {
+        "path": "docs/web-migration/issue-222/README.md",
+        "sha256": "3b47a0e2f30c7463789d93e0564319ea5b4ee1cc7fd3153365b2eea8821a9f59"
+      },
+      {
+        "path": "docs/web-migration/issue-222/coverage.json",
+        "sha256": "d35f5eeaabb8e3119e0b3d52eb235f02f535ba761b1686ba007b2e323ef4bd0e"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/README.md",
+        "sha256": "dead879090789703d209b338757f007bd943107da11536fc0e8be6ce22d5166f"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/attendance-after-375.jpg",
+        "sha256": "c8da47ff24faff21f6a1b92acabfcec3b24e75d4d47f50b6496fc1aa336a6cf3"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/attendance-before-375.jpg",
+        "sha256": "e63113d2af98578b84f3f0e2b85d7cd4c57dcda3f51e61ea48d4f2fa501a00e3"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/billing-after-375.jpg",
+        "sha256": "565c096c0d64f37cbdc11c31dcb7b5e41e811b027a640f1d46c35736a1261027"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/billing-before-375.jpg",
+        "sha256": "3a7e5090738124d157500bb63594b8bdbeddd92d207083da0e4e6914ede736e6"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/login-after-375.jpg",
+        "sha256": "3d2a7f8280b722c4e770f2319a4ffd727384372df6bd5ae7c229ea22d1b6996c"
+      },
+      {
+        "path": "docs/web-migration/issue-222/historical-evidence/issue-103/responsive-results.json",
+        "sha256": "025f48717781c493eae2ecf04ab124441d43f41627498e21082a61d11b20cd2b"
+      },
+      {
+        "path": "docs/web-migration/issue-222/rutas.json",
+        "sha256": "284baae9753b4c6a3e91d98b693e7a6a1f5852938c9b0b4b2156ffb266972588"
+      },
+      {
+        "path": "eslint.config.mjs",
+        "sha256": "789d1627b5f3f7464f9897b7d9e46b396758d238b19839ad3ae233a730a5e823"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "4c5dcb03a0916b75908b34d903d5e5ae81b0687233d1011dfb6ff2e62349ac72"
+      },
+      {
+        "path": "scripts/ci/backend.mjs",
+        "sha256": "f745931259386f5efe0c63f5e25ea4e50cd85b974907385d6b21dbe23b490316"
+      },
+      {
+        "path": "scripts/ci/checks.mjs",
+        "sha256": "603a2e01b605177a53cee26f6b95b577c59f080b75c9dd4855a8c06863084401"
+      },
+      {
+        "path": "scripts/ci/extended.mjs",
+        "sha256": "891a2f6a4623ce5895e2a41c773a7dd1f0ddedb99d6ad000dfeef311a320a5e1"
+      },
+      {
+        "path": "scripts/ci/probe.mjs",
+        "sha256": "009757fc6d88cbb90cc5acef19610fe4e2205a70f243e34c7d4e9aedf7c0c43b"
+      },
+      {
+        "path": "scripts/ci/qualification.mjs",
+        "sha256": "03139a4572b1b1c9a878ea76fa37c6b397a3eff16e6c21af270fcd4a9224b843"
+      },
+      {
+        "path": "scripts/ci/qualification.test.mjs",
+        "sha256": "c671324ddabb76cb3d5db35a89f414c3272fdfa310d82a3d84e2d0d4d3b118a8"
+      },
+      {
+        "path": "scripts/ci/retirement.mjs",
+        "sha256": "eddc105d04cab211e8de3c0049f3a6d0140920223e762d59a3e5db0b3cb36522"
+      },
+      {
+        "path": "scripts/ci/vite-staging.mjs",
+        "sha256": "aa8093a074cc649390fe416781901cf9f33c455458e86bb48809b8ac078c5739"
+      },
+      {
+        "path": "turbo.json",
+        "sha256": "26361d7656f29f34c450fa0e1450e8ed5e044c25009dc0c760af86015061e92a"
+      }
+    ]
+  },
+  "runtime": {
+    "node": "v24.16.0",
+    "pnpm": "10.33.2",
+    "database": "PostgreSQL17",
+    "storage": "private synthetic S3"
+  },
+  "artifact": {
+    "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+    "artifactHash": "bd2f95aaae2dce37ac132a9f83ecb9f03a340d1a5a1a8d234919715298627a4d",
+    "sessionProtocol": "nest-opaque-v1",
+    "navigationPaths": 40,
+    "initialGzipBytes": 199373
+  },
+  "reports": {
+    "checks": {
+      "commit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "date": "2026-10-12T14:43:54.647Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.41
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 1.98
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.48
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 0.17
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 3.19
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.3
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.35,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 12.13,
+          "tests": 471,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.86
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.75
+        }
+      ]
+    },
+    "backend": {
+      "commit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "date": "2026-10-12T14:32:07.952Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.79
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.97
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 34.63
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 57.65
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 4.49
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.17,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.53
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 48.6,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "date": "2026-10-12T14:32:12.837Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 20.62
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.88
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 1.35
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.11
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 5.65
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.68
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.85,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.71
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.01
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.38
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 10.62
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.31
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.99
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.28
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.41
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.23
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.91
+        }
+      ]
+    },
+    "extended": {
+      "commit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "date": "2026-10-12T14:32:03.798Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.39
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 1.32
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 3.46
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.93
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 91.67,
+          "tests": 47,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 78.76,
+          "tests": 41,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.07,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "checkoutCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "date": "2026-10-12T14:45:01.187Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 621,
+          "omitted": 0
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 89,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 186.15
+      },
+      "bundle": {
+        "status": "PASS",
+        "budgetStatus": "PASS",
+        "initialGzipBytes": 199373,
+        "deltaInitialGzipBytes": 255
+      }
+    },
+    "native-auth-browser": {
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "environment": "local-synthetic",
+      "phase": "completed",
+      "status": "PASS",
+      "api": [
+        {
+          "operation": "login",
+          "status": 200
+        },
+        {
+          "operation": "refresh",
+          "status": 401
+        },
+        {
+          "operation": "refresh",
+          "status": 200
+        }
+      ],
+      "actionRequests": 0,
+      "logout": {
+        "leavingAccessRevoked": true,
+        "leavingRefreshRevoked": true,
+        "otherDeviceSurvives": true,
+        "anonymousExitIdempotent": true
+      }
+    },
+    "social-auth-browser": {
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "environment": "local-synthetic",
+      "phase": "completed",
+      "status": "PASS",
+      "actionRequests": 0,
+      "pageErrors": 0,
+      "consentActionRequests": 1,
+      "axeViolationIds": []
+    },
+    "vite-bundle": {
+      "sourceCommit": "d2f5101c7342a733cfe144ecaa79bce22b317d69",
+      "baselineCommit": "e63e05cb9adfc11e209ebd23031b973e9afeb038",
+      "measurementStatus": "PASS",
+      "budgetStatus": "PASS",
+      "approval": "Usuario: «Perfecto usa lo recomendado»; 2026-10-12 America/Santiago; #221; máximos de 220000 y 25000 bytes gzip",
+      "initialGzipBytes": 199373,
+      "baselineInitialGzipBytes": 199118,
+      "deltaInitialGzipBytes": 255,
+      "routes": [
+        {
+          "module": "src/routes/activities.tsx",
+          "additionalGzipBytes": 2802,
+          "baselineGzipBytes": 2812,
+          "deltaGzipBytes": -10
+        },
+        {
+          "module": "src/routes/activity-edit.tsx",
+          "additionalGzipBytes": 16837,
+          "baselineGzipBytes": 16839,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/activity-types.tsx",
+          "additionalGzipBytes": 15119,
+          "baselineGzipBytes": 15123,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/activity.tsx",
+          "additionalGzipBytes": 1885,
+          "baselineGzipBytes": 1889,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/announcements.tsx",
+          "additionalGzipBytes": 17294,
+          "baselineGzipBytes": 17247,
+          "deltaGzipBytes": 47
+        },
+        {
+          "module": "src/routes/attendance.tsx",
+          "additionalGzipBytes": 7864,
+          "baselineGzipBytes": 7869,
+          "deltaGzipBytes": -5
+        },
+        {
+          "module": "src/routes/billing.tsx",
+          "additionalGzipBytes": 8073,
+          "baselineGzipBytes": 8077,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/birthdate-reviews.tsx",
+          "additionalGzipBytes": 2315,
+          "baselineGzipBytes": 2124,
+          "deltaGzipBytes": 191
+        },
+        {
+          "module": "src/routes/check-in.tsx",
+          "additionalGzipBytes": 5135,
+          "baselineGzipBytes": 4458,
+          "deltaGzipBytes": 677
+        },
+        {
+          "module": "src/routes/forgot-password.tsx",
+          "additionalGzipBytes": 3397,
+          "baselineGzipBytes": 2628,
+          "deltaGzipBytes": 769
+        },
+        {
+          "module": "src/routes/group-new.tsx",
+          "additionalGzipBytes": 5724,
+          "baselineGzipBytes": 5536,
+          "deltaGzipBytes": 188
+        },
+        {
+          "module": "src/routes/group-settings.tsx",
+          "additionalGzipBytes": 6127,
+          "baselineGzipBytes": 5941,
+          "deltaGzipBytes": 186
+        },
+        {
+          "module": "src/routes/group.tsx",
+          "additionalGzipBytes": 6074,
+          "baselineGzipBytes": 4044,
+          "deltaGzipBytes": 2030
+        },
+        {
+          "module": "src/routes/groups.tsx",
+          "additionalGzipBytes": 2656,
+          "baselineGzipBytes": 2663,
+          "deltaGzipBytes": -7
+        },
+        {
+          "module": "src/routes/guardians.tsx",
+          "additionalGzipBytes": 15229,
+          "baselineGzipBytes": 15245,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/history-groups.tsx",
+          "additionalGzipBytes": 580,
+          "baselineGzipBytes": 582,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/history.tsx",
+          "additionalGzipBytes": 6618,
+          "baselineGzipBytes": 6621,
+          "deltaGzipBytes": -3
+        },
+        {
+          "module": "src/routes/invitation.tsx",
+          "additionalGzipBytes": 4635,
+          "baselineGzipBytes": 3978,
+          "deltaGzipBytes": 657
+        },
+        {
+          "module": "src/routes/invitations-admin.tsx",
+          "additionalGzipBytes": 16916,
+          "baselineGzipBytes": 16933,
+          "deltaGzipBytes": -17
+        },
+        {
+          "module": "src/routes/join.tsx",
+          "additionalGzipBytes": 1835,
+          "baselineGzipBytes": 1837,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/legal.tsx",
+          "additionalGzipBytes": 367,
+          "baselineGzipBytes": 372,
+          "deltaGzipBytes": -5
+        },
+        {
+          "module": "src/routes/login.tsx",
+          "additionalGzipBytes": 4090,
+          "baselineGzipBytes": 3413,
+          "deltaGzipBytes": 677
+        },
+        {
+          "module": "src/routes/logout.tsx",
+          "additionalGzipBytes": 312,
+          "baselineGzipBytes": 313,
+          "deltaGzipBytes": -1
+        },
+        {
+          "module": "src/routes/member-new.tsx",
+          "additionalGzipBytes": 14600,
+          "baselineGzipBytes": 14613,
+          "deltaGzipBytes": -13
+        },
+        {
+          "module": "src/routes/members-consent.tsx",
+          "additionalGzipBytes": 7020,
+          "baselineGzipBytes": 7045,
+          "deltaGzipBytes": -25
+        },
+        {
+          "module": "src/routes/members-pending.tsx",
+          "additionalGzipBytes": 4612,
+          "baselineGzipBytes": 4630,
+          "deltaGzipBytes": -18
+        },
+        {
+          "module": "src/routes/members.tsx",
+          "additionalGzipBytes": 19612,
+          "baselineGzipBytes": 19628,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/profile.tsx",
+          "additionalGzipBytes": 9494,
+          "baselineGzipBytes": 8634,
+          "deltaGzipBytes": 860
+        },
+        {
+          "module": "src/routes/qr.tsx",
+          "additionalGzipBytes": 10456,
+          "baselineGzipBytes": 10444,
+          "deltaGzipBytes": 12
+        },
+        {
+          "module": "src/routes/register.tsx",
+          "additionalGzipBytes": 4991,
+          "baselineGzipBytes": 4212,
+          "deltaGzipBytes": 779
+        },
+        {
+          "module": "src/routes/reports.tsx",
+          "additionalGzipBytes": 8684,
+          "baselineGzipBytes": 8688,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/reset-password.tsx",
+          "additionalGzipBytes": 3698,
+          "baselineGzipBytes": 2974,
+          "deltaGzipBytes": 724
+        },
+        {
+          "module": "src/routes/terms.tsx",
+          "additionalGzipBytes": 3797,
+          "baselineGzipBytes": 1107,
+          "deltaGzipBytes": 2690
+        },
+        {
+          "module": "src/routes/unavailable.tsx",
+          "additionalGzipBytes": 246,
+          "baselineGzipBytes": 248,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/visibility.tsx",
+          "additionalGzipBytes": 2756,
+          "baselineGzipBytes": 2570,
+          "deltaGzipBytes": 186
+        },
+        {
+          "module": "src/routes/ward.tsx",
+          "additionalGzipBytes": 8095,
+          "baselineGzipBytes": 8111,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/wards.tsx",
+          "additionalGzipBytes": 7656,
+          "baselineGzipBytes": 7672,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/welcome.tsx",
+          "additionalGzipBytes": 3324,
+          "baselineGzipBytes": 3332,
+          "deltaGzipBytes": -8
+        }
+      ]
+    }
+  },
+  "probe": {
+    "status": "PASS",
+    "controlledFailures": [
+      "pgtap",
+      "types",
+      "retired-provider",
+      "next-runtime"
+    ],
+    "cleanup": "PASS",
+    "note": "Each injected failure is expected; no uncontrolled failing gate remains."
+  },
+  "review": {
+    "scope": "Diff from base, new files and promotion/removals attributable to #222",
+    "coverage": {
+      "templates": 783,
+      "transferred": 374,
+      "replaced": 404,
+      "historicalTemplates": 5,
+      "pending": 0
+    },
+    "remainingTechnicalFindings": [],
+    "acceptance": "NO-GO",
+    "external": "#209/#170/#181 and qualification blockers retained; no merge, deploy, cutover or issue closure"
+  }
+}

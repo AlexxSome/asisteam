@@ -2,22 +2,86 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
-    "typecheck": { "dependsOn": ["^typecheck"] },
-    "test": { "dependsOn": ["^test"] },
-    "dev": { "cache": false, "persistent": true },
-    "@asisteam/worker#test": { "dependsOn": ["build", "^test"] },
-    "@asisteam/worker#typecheck": { "dependsOn": ["^build", "^typecheck"] },
-    "@asisteam/api#test": { "dependsOn": ["build", "^test"] },
-    "@asisteam/api#typecheck": { "dependsOn": ["^build", "^typecheck"] },
-    "@asisteam/api-client#test": { "dependsOn": ["build", "^test"] },
-    "@asisteam/api-client#typecheck": { "dependsOn": ["^build", "^typecheck"] },
-    "@asisteam/web#typecheck": { "dependsOn": ["^build", "^typecheck"] },
-    "@asisteam/web#test": { "dependsOn": ["^build", "^test"] },
-    "@asisteam/web-vite#build": { "dependsOn": ["^build"], "outputs": ["dist/**"], "cache": false, "env": ["SOURCE_COMMIT"] },
-    "@asisteam/web-vite#typecheck": { "dependsOn": ["^build", "^typecheck"] },
-    "@asisteam/web-vite#test": { "dependsOn": ["^build", "^test"] }
+    "typecheck": {
+      "dependsOn": [
+        "^typecheck"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "@asisteam/worker#test": {
+      "dependsOn": [
+        "build",
+        "^test"
+      ]
+    },
+    "@asisteam/worker#typecheck": {
+      "dependsOn": [
+        "^build",
+        "^typecheck"
+      ]
+    },
+    "@asisteam/api#test": {
+      "dependsOn": [
+        "build",
+        "^test"
+      ]
+    },
+    "@asisteam/api#typecheck": {
+      "dependsOn": [
+        "^build",
+        "^typecheck"
+      ]
+    },
+    "@asisteam/api-client#test": {
+      "dependsOn": [
+        "build",
+        "^test"
+      ]
+    },
+    "@asisteam/api-client#typecheck": {
+      "dependsOn": [
+        "^build",
+        "^typecheck"
+      ]
+    },
+    "@asisteam/web#build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ],
+      "cache": false,
+      "env": [
+        "SOURCE_COMMIT"
+      ]
+    },
+    "@asisteam/web#typecheck": {
+      "dependsOn": [
+        "^build",
+        "^typecheck"
+      ]
+    },
+    "@asisteam/web#test": {
+      "dependsOn": [
+        "^build",
+        "^test"
+      ]
+    }
   }
 }
