@@ -1,0 +1,39 @@
+{
+  "commit": "bd23a2b35695c34f8b7d80bd8d636ec0ed25fdb1",
+  "sourceCommit": "a1169fd3d8510f3aaa4bedc3b48af9aa0c4c0735",
+  "date": "2026-10-11T23:27:03.113Z",
+  "node": "v24.16.0",
+  "environment": "github-actions-synthetic",
+  "checks": [
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 8.39
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 1.93
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 118.72
+    },
+    {
+      "check": "independent-postgres-api-worker-types-backup-pitr",
+      "status": "PASS",
+      "seconds": 70.69
+    },
+    {
+      "check": "native-api-worker-all-integrations",
+      "status": "PASS",
+      "seconds": 63.16
+    },
+    {
+      "check": "next-social-auth-browser",
+      "status": "FAIL",
+      "seconds": 43.1
+    }
+  ]
+}

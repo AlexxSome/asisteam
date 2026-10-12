@@ -1,0 +1,10 @@
+{
+  "sourceCommit": "a1169fd3d8510f3aaa4bedc3b48af9aa0c4c0735",
+  "environment": "github-actions-synthetic",
+  "phase": "accept-terms",
+  "status": "FAIL",
+  "actionRequests": 0,
+  "pageErrors": 0,
+  "failure": "timeout",
+  "termsChecked": false
+}

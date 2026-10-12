@@ -1,0 +1,24 @@
+{
+  "baseCommit": "a1169fd3d8510f3aaa4bedc3b48af9aa0c4c0735",
+  "files": [
+    {
+      "path": "apps/web/scripts/social-auth-smoke.mjs",
+      "sha256": "9f1bac477d62658eb4e6a41842ef2da8f0d752db29342112b50db0c087314fe2"
+    }
+  ],
+  "defaultSmoke": {
+    "status": "PASS",
+    "seconds": 15.37,
+    "consentActionRequests": 1
+  },
+  "slowSmoke": {
+    "status": "PASS",
+    "seconds": 22.29,
+    "cpuRate": 6,
+    "jsDelayMs": 500,
+    "beforeSingleSubmissionAssertion": true
+  },
+  "lint": "PASS",
+  "nodeSyntax": "PASS",
+  "diff": "PASS"
+}

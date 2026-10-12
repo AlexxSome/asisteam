@@ -241,8 +241,16 @@ test("raíz recuerda únicamente un grupo autorizado y descarta una cookie ajena
   await expect(page.getByRole("heading", { name: "Inicio", exact: true })).toBeVisible();
   await page.goto("/");
   await expect(page).toHaveURL(new RegExp(`/groups/${groups.second}$`));
+  await expect(page.getByRole("heading", { name: "Inicio", exact: true })).toBeVisible();
+  await expect.poll(async () => (await context.cookies()).find(cookie => cookie.name.startsWith("asisteam-group-"))?.value).toBe(groups.second);
   const saved = (await context.cookies()).find(cookie => cookie.name.startsWith("asisteam-group-"))!;
-  await context.addCookies([{ name: saved.name, value: randomUUID(), url: "http://127.0.0.1:3130" }]);
+  // Set the foreign preference after the active group's selector has unmounted.
+  // Its mount effect otherwise races the test's cookie replacement after redirect.
+  await page.goto("/groups");
+  await expect(page.getByRole("heading", { name: "Mis grupos" })).toBeVisible();
+  const foreignGroup = randomUUID();
+  await context.addCookies([{ name: saved.name, value: foreignGroup, url: "http://127.0.0.1:3130" }]);
+  expect((await context.cookies()).find(cookie => cookie.name === saved.name)?.value).toBe(foreignGroup);
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Mis grupos" })).toBeVisible();
 });

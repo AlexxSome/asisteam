@@ -44,6 +44,22 @@ try{
  phase('next-ready');let ready=false;for(let n=0;n<120;n++){try{if((await originalFetch(webOrigin+'/login',{signal:AbortSignal.timeout(15000)})).ok){ready=true;break;}}catch{/* Next starts in the owned process. */}if(next.exitCode!==null)throw Error('Next terminó antes del smoke OAuth');await delay(250);}assert.ok(ready);
  phase('chromium');browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:375,height:812}});page=await context.newPage();page.setDefaultTimeout(30000);
  if(process.env.AUTH_SMOKE_SLOW_BROWSER==='1'){const cdp=await context.newCDPSession(page);await cdp.send('Emulation.setCPUThrottlingRate',{rate:6});await context.route('**/_next/static/**/*.js',async route=>{await delay(500);await route.continue();});report.browserCpuRate=6;}
+ // The OAuth redirect can update the URL while SSR controls still lack React
+ // handlers. Use the same pinned React 19 commit marker as native-auth-smoke;
+ // wait for the control/form handler and passive effects, never resubmit.
+ const controlReady=element=>{
+  const propsOf=node=>{const key=Object.keys(node).find(name=>name.startsWith('__reactProps$'));return key&&node[key];};
+  if(typeof propsOf(element)?.onClick==='function')return true;
+  const form=element.closest('form');if(!form)return false;
+  const props=propsOf(form);return typeof props?.onSubmit==='function'||typeof props?.action==='function';
+ };
+ const readyControl=async locator=>{
+  await locator.waitFor();const element=await locator.elementHandle(),started=performance.now();
+  const initiallyReady=await element.evaluate(controlReady);
+  await page.waitForFunction(controlReady,element);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  (report.controlsReady??=[]).push({phase:report.phase,initiallyReady,seconds:Number(((performance.now()-started)/1000).toFixed(3))});
+ };
  page.on('request',request=>{if(request.method()==='POST'&&request.headers()['next-action'])report.actionRequests++;});
  page.on('response',response=>{if(response.request().method()==='POST'&&response.request().headers()['next-action'])report.lastActionStatus=response.status();});
  page.on('pageerror',()=>report.pageErrors++);
@@ -54,18 +70,19 @@ try{
   const callback=new URL('/auth/callback/google',webOrigin);callback.searchParams.set('state',url.searchParams.get('state'));callback.searchParams.set('code',code);
   await route.fulfill({status:302,headers:{location:callback.href},body:''});
  });
- phase('new-google-login');await page.goto(webOrigin+'/login');await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/accept-terms**');
+ phase('new-google-login');await page.goto(webOrigin+'/login');await readyControl(page.getByRole('button',{name:'Continuar con Google',exact:true}));await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/accept-terms**');
  let cookies=await context.cookies();assert.ok(cookies.find(c=>c.name==='asisteam-access')?.httpOnly);assert.ok(!cookies.some(c=>c.name==='asisteam-oauth-transaction'));assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
- phase('accept-terms');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Aceptar y continuar'}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Persona!'}).waitFor();
+ phase('accept-terms');await readyControl(page.getByRole('checkbox'));await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Aceptar y continuar'}).click();await page.waitForURL('**/welcome');await page.getByRole('heading',{name:'¡Hola, Persona!'}).waitFor();
+ report.consentActionRequests=report.actionRequests;assert.equal(report.consentActionRequests,1);
  const profile=(await db.query('select id from public.users where email=$1',[email])).rows[0].id;
- phase('existing-google-login');await context.clearCookies();await page.goto(webOrigin+'/login');await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/welcome');assert.equal((await db.query('select id from public.users where email=$1',[email])).rows[0].id,profile);
+ phase('existing-google-login');await context.clearCookies();await page.goto(webOrigin+'/login');await readyControl(page.getByRole('button',{name:'Continuar con Google',exact:true}));await page.getByRole('button',{name:'Continuar con Google',exact:true}).click();await page.waitForURL('**/welcome');assert.equal((await db.query('select id from public.users where email=$1',[email])).rows[0].id,profile);
  const client=new ApiClient({origin:await app.getUrl(),authProxy:{secret,clientIp:randomUUID()}}),password='Synthetic-OAuth-browser-'+run;
  phase('password-owner');await client.registerPassword({body:{email:ownerEmail,password,full_name:'Titular navegador',birthdate:'1990-01-01',terms_accepted:true,terms_version:'2026-09-21'}});const owner=await client.loginPassword({body:{email:ownerEmail,password}});
  const ownerId=(await db.query('select id from public.users where email=$1',[ownerEmail])).rows[0].id;
  await context.clearCookies();await context.addCookies([{name:'asisteam-access',value:owner.access_token,url:webOrigin,httpOnly:true,sameSite:'Lax'},{name:'asisteam-refresh',value:owner.refresh_token,url:webOrigin,httpOnly:true,sameSite:'Lax'}]);
  phase('profile-accessibility');await page.goto(webOrigin+'/profile');const accessibility=await new AxeBuilder({page}).analyze();report.axeViolationIds=accessibility.violations.map(violation=>violation.id);assert.equal(accessibility.violations.length,0);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));identity={sub:'browser163-owner-'+run,email:ownerEmail};
- phase('link-google');await page.getByRole('button',{name:'Vincular Google',exact:true}).click();await page.waitForURL('**/profile?social_linked=1');await page.getByText('Cuenta social vinculada. Tu perfil e historial se conservaron.').waitFor();
+ phase('link-google');await readyControl(page.getByRole('button',{name:'Vincular Google',exact:true}));await page.getByRole('button',{name:'Vincular Google',exact:true}).click();await page.waitForURL('**/profile?social_linked=1');await page.getByText('Cuenta social vinculada. Tu perfil e historial se conservaron.').waitFor();
  assert.equal((await db.query('select id from public.users where email=$1',[ownerEmail])).rows[0].id,ownerId);assert.equal((await db.query('select count(*)::int as n from app_private.auth_social_identities s join public.users u on u.auth_user_id=s.subject_id where u.id=$1',[ownerId])).rows[0].n,1);
  cookies=await context.cookies();assert.ok(!cookies.some(c=>c.name==='asisteam-oauth-transaction'||c.name.startsWith('sb-')));
  console.log('PASS: Chromium375 + Next/Nest/PostgreSQL OAuth Google: nueva cuenta/consentimiento/onboarding, cookie vinculada/consumida, login existente y vinculación explícita; axe/reflow. Proveedor sintético firmado; no ensayo externo Google/Apple.');

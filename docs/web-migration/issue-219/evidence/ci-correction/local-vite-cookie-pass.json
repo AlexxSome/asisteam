@@ -1,0 +1,16 @@
+{
+  "environment": "local-synthetic",
+  "sourceFile": "apps/web-vite/e2e/access.spec.ts",
+  "sourceSha256": "9fe32ac9aeb1ccd1e66bf36b2abdd5429da6a362bbb657db01c1d6addddfbd8e",
+  "stats": {
+    "startTime": "2026-10-11T23:58:28.779Z",
+    "duration": 76362.14600000001,
+    "expected": 35,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "lint": "PASS",
+  "diff": "PASS",
+  "notes": "Full final Vite matrix; retries 0. Earlier targeted iteration passed 5/5 before adding explicit cookie poll/precondition assertion."
+}

@@ -1,0 +1,86 @@
+{
+  "baseCommit": "731d4f0b2baa8abab47777fa44ad992db44a39c6",
+  "environment": "local-synthetic",
+  "finalVite": {
+    "startTime": "2026-10-11T23:22:15.006Z",
+    "duration": 74095.023,
+    "expected": 35,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checks": "PASS",
+  "backend": "PASS",
+  "staging": "PASS",
+  "extended": {
+    "next": 47,
+    "vite": 35,
+    "transportFault": 1,
+    "omitted": 0
+  },
+  "qualification": "PASS",
+  "acceptance": "NO-GO",
+  "unitTests": {
+    "core": 150,
+    "next": 961,
+    "nextOptInOmittedInUnitsExecutedInBackend": 84,
+    "vite": 58
+  },
+  "sql": {
+    "suites": 40,
+    "cases": 1646
+  },
+  "backendProduct": {
+    "tests": 84,
+    "omitted": 0
+  },
+  "observedPriorExecutions": [
+    {
+      "stage": "Vite first added units",
+      "passed": 55,
+      "failed": 1,
+      "cause": "Expected UTC formatting included .000Z while canonical helper emits Z; expectation corrected."
+    },
+    {
+      "stage": "WEB07 first E2E",
+      "passed": 0,
+      "failed": 5,
+      "cause": "Fixture created ATHLETE before authorized SaaS capacity; insert order corrected."
+    },
+    {
+      "stage": "WEB07 second E2E",
+      "passed": 3,
+      "failed": 2,
+      "cause": "Fault matched POST rather than canonical PUT; season fixture group creation date excluded historical data. Fixtures corrected."
+    },
+    {
+      "stage": "WEB07 third E2E",
+      "passed": 4,
+      "failed": 1,
+      "cause": "Direct birthdate update rejected by protected workflow. Pupil moved to isolated fixture; SQL/backend retains majority coverage."
+    },
+    {
+      "stage": "WEB07 fourth E2E",
+      "passed": 4,
+      "failed": 1,
+      "cause": "R1 blocked inactive guardian while minor ACTIVE. Deactivated fixture membership before relationship; no guards bypassed."
+    },
+    {
+      "stage": "WEB07 isolated metric after R1 correction",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "stage": "complete extended Vite",
+      "passed": 35,
+      "failed": 0
+    },
+    {
+      "stage": "final complete Vite after attendance padding correction",
+      "passed": 35,
+      "failed": 0
+    }
+  ],
+  "postGateChange": "ASI01 wrapper removed duplicate Page padding; afterward typecheck/build/browser180/lint and complete Vite35 passed.",
+  "review": "Diff restricted to WEB07; fixed return/context, malformed ward UUID, no-data copy, class merging and attendance padding; no existing cases or axe rules removed."
+}
