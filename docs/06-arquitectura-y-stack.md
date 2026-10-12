@@ -1,5 +1,7 @@
 # Arquitectura y stack tecnológico
 
+[Seguro] La [aceptación técnica de la épica #212](web-migration/issue-212/README.md) reconcilia las diez entregas integradas y los gates del artefacto React/Vite definitivo. Mantiene separados los pendientes de #209/#170/#181 y producción NO-GO.
+
 [Seguro] Vigencia WEB-10 (#222, 2026-10-12): React19/Vite7/React Router7 Data Mode consume exclusivamente la API Nest/Node24. PostgreSQL17 independiente conserva dominio, RLS, RPC, constraints y triggers; Auth y S3 privados tienen autoridades propias. El repositorio no requiere SDK, CLI, proyecto ni fixtures Supabase. [Inventario y evidencia](migration/issue-168/README.md). El historial del stack anterior permanece en Git y en las evidencias fechadas de `docs/migration/`.
 
 ## 1. Arquitectura vigente

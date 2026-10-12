@@ -1,0 +1,1748 @@
+{
+  "issue": 212,
+  "baseCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+  "environment": "local-synthetic-macos-arm64-docker-linux",
+  "node": "v24.16.0",
+  "pnpm": "10.33.2",
+  "status": "PASS",
+  "acceptance": "NO-GO",
+  "fingerprint": {
+    "algorithm": "sha256 of sorted compact JSON path/hash array; verification.json excluded to avoid self-reference",
+    "value": "2b92f7b58d3a8a017938c3500476649a2b9dd1c3f7c4378bb34beaad9edd3148",
+    "files": [
+      {
+        "path": "docs/05-pantallas.md",
+        "sha256": "2a83c39d222919683cc668c95fa1f9352440e6336351d5648a260bc54b5832e9"
+      },
+      {
+        "path": "docs/06-arquitectura-y-stack.md",
+        "sha256": "2ed0c390d85ef37ef58a6238f10e449fcfc2d35569cf80a7c3f659b8d5100cee"
+      },
+      {
+        "path": "docs/12-sistema-visual.md",
+        "sha256": "1afd905029c7d6c9b4f8ae9bf3beff4c7105c66594ce24a82a27888c02d55e70"
+      },
+      {
+        "path": "docs/web-migration/issue-212/README.md",
+        "sha256": "057cda8028f0e2336ac707d78c5c28b16deeba10f811feb83402a30678a04dcb"
+      }
+    ]
+  },
+  "review": {
+    "scope": "Only documentation added or linked for issue #212 relative to baseCommit",
+    "remainingFindings": [],
+    "linkAndMergeAncestryChecks": "PASS; all local links resolve; all ten merge SHAs are ancestors of baseCommit; 39 unique page destinations and logout reconciled.",
+    "noProductChanges": true
+  },
+  "externalPending": [
+    209,
+    170,
+    181
+  ],
+  "previousRemoteEvidence": {
+    "pr": 232,
+    "headCommit": "a61f44b0ddd7a8f5f64e33cc654a7aabdc19c3ab",
+    "runUrl": "https://github.com/AlexxSome/asisteam/actions/runs/38270146124",
+    "checks": {
+      "checks": "SUCCESS",
+      "backend": "SUCCESS",
+      "staging": "SUCCESS",
+      "extended": "SUCCESS",
+      "qualification": "SUCCESS",
+      "required": "SUCCESS"
+    },
+    "note": "Verified via gh; historical remote evidence for WEB-10, not the future issue #212 PR."
+  },
+  "branchProtectionObservation": {
+    "branch": "develop",
+    "httpStatus": 404,
+    "message": "Branch not protected",
+    "note": "Required composition is enforced by repository workflow/instructions; no branch protection was claimed or modified."
+  },
+  "date": "2026-10-12T16:02:42.117282+00:00",
+  "checkoutState": "Validated working tree relative to baseCommit; report source SHA is this base, not a future delivery SHA. Final canonical validation after commit is recorded in the PR; verification.json excluded from its own fingerprint.",
+  "reports": {
+    "checks": {
+      "commit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T15:54:17.843Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.38
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.59
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 2.04
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.48
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 3.83
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.3
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.18,
+          "tests": 150,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 12.35,
+          "tests": 471,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.9
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.71
+        }
+      ]
+    },
+    "backend": {
+      "commit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T15:54:49.626Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.17
+        },
+        {
+          "check": "web-static-auth-fixture-build",
+          "status": "PASS",
+          "seconds": 3.52
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 2.03
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 27.84
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 52.4
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 5.14
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 1.77,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.45
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 51.13,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T15:57:50.085Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 1.55
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.53
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.6
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.59
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.62
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.91,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.72
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.09
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 12.26
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.29
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.12
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.86
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.3
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.56
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.12
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.43
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.33
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.12
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 1.42
+        }
+      ]
+    },
+    "extended": {
+      "commit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T15:58:58.418Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.38
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 3.57
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.5
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 84.2,
+          "tests": 47,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 85.43,
+          "tests": 41,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.33,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "checkoutCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T16:02:31.990Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 621,
+          "omitted": 0
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 89,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 85.25
+      },
+      "bundle": {
+        "status": "PASS",
+        "budgetStatus": "PASS",
+        "initialGzipBytes": 199373,
+        "deltaInitialGzipBytes": 255
+      }
+    },
+    "controlled-failure": {
+      "commit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T15:57:21.580Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.23
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.12,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.56,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.19,
+          "expected": true
+        },
+        {
+          "check": "controlled-next-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.18,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "domain-sql": {
+      "checks": [
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/account_consents.test.sql",
+          "status": "PASS",
+          "cases": 32,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/activities.test.sql",
+          "status": "PASS",
+          "cases": 48,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/activity_types.test.sql",
+          "status": "PASS",
+          "cases": 40,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/announcement_worker.test.sql",
+          "status": "PASS",
+          "cases": 29,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/api_invitations.test.sql",
+          "status": "PASS",
+          "cases": 11,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/api_session_rls.test.sql",
+          "status": "PASS",
+          "cases": 16,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/attendance.test.sql",
+          "status": "PASS",
+          "cases": 60,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/attendance_edit.test.sql",
+          "status": "PASS",
+          "cases": 44,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/attendance_history.test.sql",
+          "status": "PASS",
+          "cases": 54,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/auth_cutover.test.sql",
+          "status": "PASS",
+          "cases": 16,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/billing_nest.test.sql",
+          "status": "PASS",
+          "cases": 17,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/coach_role.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/configure_groups.test.sql",
+          "status": "PASS",
+          "cases": 31,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/create_groups.test.sql",
+          "status": "PASS",
+          "cases": 58,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_announcements.test.sql",
+          "status": "PASS",
+          "cases": 73,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_reports.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_stats_visibility.test.sql",
+          "status": "PASS",
+          "cases": 84,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/group_subscriptions.test.sql",
+          "status": "PASS",
+          "cases": 53,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/groups.test.sql",
+          "status": "PASS",
+          "cases": 27,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/guardianships.test.sql",
+          "status": "PASS",
+          "cases": 42,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/invitations.test.sql",
+          "status": "PASS",
+          "cases": 53,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/join_group_by_code.test.sql",
+          "status": "PASS",
+          "cases": 28,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/majority_worker.test.sql",
+          "status": "PASS",
+          "cases": 46,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/manage_members.test.sql",
+          "status": "PASS",
+          "cases": 59,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/managed_activation.test.sql",
+          "status": "PASS",
+          "cases": 61,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/managed_members.test.sql",
+          "status": "PASS",
+          "cases": 49,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/member_roster_search.test.sql",
+          "status": "PASS",
+          "cases": 24,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/membership_approvals.test.sql",
+          "status": "PASS",
+          "cases": 62,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/membership_onboarding.test.sql",
+          "status": "PASS",
+          "cases": 37,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/my_wards.test.sql",
+          "status": "PASS",
+          "cases": 45,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/native_auth.test.sql",
+          "status": "PASS",
+          "cases": 20,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/profile.test.sql",
+          "status": "PASS",
+          "cases": 72,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/qr_attendance.test.sql",
+          "status": "PASS",
+          "cases": 50,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/send_invitations.test.sql",
+          "status": "PASS",
+          "cases": 51,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/social_auth.test.sql",
+          "status": "PASS",
+          "cases": 15,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/social_auth_native.test.sql",
+          "status": "PASS",
+          "cases": 31,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/users_managed_no_auth.test.sql",
+          "status": "PASS",
+          "cases": 2,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/users_rls.test.sql",
+          "status": "PASS",
+          "cases": 14,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/ward_attendance_history.test.sql",
+          "status": "PASS",
+          "cases": 44,
+          "failures": []
+        },
+        {
+          "file": "/Users/alexsotom/Documents/Asisteam/asisteam/packages/db/tests/domain/weekly_activities.test.sql",
+          "status": "PASS",
+          "cases": 48,
+          "failures": []
+        }
+      ],
+      "totalCases": 1646
+    },
+    "native-auth-browser": {
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "environment": "local-synthetic",
+      "phase": "completed",
+      "status": "PASS",
+      "api": [
+        {
+          "operation": "login",
+          "status": 200
+        },
+        {
+          "operation": "refresh",
+          "status": 401
+        },
+        {
+          "operation": "refresh",
+          "status": 200
+        }
+      ],
+      "actionRequests": 0,
+      "logout": {
+        "leavingAccessRevoked": true,
+        "leavingRefreshRevoked": true,
+        "otherDeviceSurvives": true,
+        "anonymousExitIdempotent": true
+      }
+    },
+    "social-auth-browser": {
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "environment": "local-synthetic",
+      "phase": "completed",
+      "status": "PASS",
+      "actionRequests": 0,
+      "pageErrors": 0,
+      "consentActionRequests": 1,
+      "axeViolationIds": []
+    },
+    "vite-bundle": {
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "baselineCommit": "e63e05cb9adfc11e209ebd23031b973e9afeb038",
+      "measurementStatus": "PASS",
+      "budgetStatus": "PASS",
+      "approval": "Usuario: \u00abPerfecto usa lo recomendado\u00bb; 2026-10-12 America/Santiago; #221; m\u00e1ximos de 220000 y 25000 bytes gzip",
+      "initialGzipBytes": 199373,
+      "baselineInitialGzipBytes": 199118,
+      "deltaInitialGzipBytes": 255,
+      "routes": [
+        {
+          "module": "src/routes/activities.tsx",
+          "additionalGzipBytes": 2802,
+          "baselineGzipBytes": 2812,
+          "deltaGzipBytes": -10
+        },
+        {
+          "module": "src/routes/activity-edit.tsx",
+          "additionalGzipBytes": 16837,
+          "baselineGzipBytes": 16839,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/activity-types.tsx",
+          "additionalGzipBytes": 15119,
+          "baselineGzipBytes": 15123,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/activity.tsx",
+          "additionalGzipBytes": 1885,
+          "baselineGzipBytes": 1889,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/announcements.tsx",
+          "additionalGzipBytes": 17294,
+          "baselineGzipBytes": 17247,
+          "deltaGzipBytes": 47
+        },
+        {
+          "module": "src/routes/attendance.tsx",
+          "additionalGzipBytes": 7864,
+          "baselineGzipBytes": 7869,
+          "deltaGzipBytes": -5
+        },
+        {
+          "module": "src/routes/billing.tsx",
+          "additionalGzipBytes": 8073,
+          "baselineGzipBytes": 8077,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/birthdate-reviews.tsx",
+          "additionalGzipBytes": 2315,
+          "baselineGzipBytes": 2124,
+          "deltaGzipBytes": 191
+        },
+        {
+          "module": "src/routes/check-in.tsx",
+          "additionalGzipBytes": 5135,
+          "baselineGzipBytes": 4458,
+          "deltaGzipBytes": 677
+        },
+        {
+          "module": "src/routes/forgot-password.tsx",
+          "additionalGzipBytes": 3397,
+          "baselineGzipBytes": 2628,
+          "deltaGzipBytes": 769
+        },
+        {
+          "module": "src/routes/group-new.tsx",
+          "additionalGzipBytes": 5724,
+          "baselineGzipBytes": 5536,
+          "deltaGzipBytes": 188
+        },
+        {
+          "module": "src/routes/group-settings.tsx",
+          "additionalGzipBytes": 6127,
+          "baselineGzipBytes": 5941,
+          "deltaGzipBytes": 186
+        },
+        {
+          "module": "src/routes/group.tsx",
+          "additionalGzipBytes": 6074,
+          "baselineGzipBytes": 4044,
+          "deltaGzipBytes": 2030
+        },
+        {
+          "module": "src/routes/groups.tsx",
+          "additionalGzipBytes": 2656,
+          "baselineGzipBytes": 2663,
+          "deltaGzipBytes": -7
+        },
+        {
+          "module": "src/routes/guardians.tsx",
+          "additionalGzipBytes": 15229,
+          "baselineGzipBytes": 15245,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/history-groups.tsx",
+          "additionalGzipBytes": 580,
+          "baselineGzipBytes": 582,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/history.tsx",
+          "additionalGzipBytes": 6618,
+          "baselineGzipBytes": 6621,
+          "deltaGzipBytes": -3
+        },
+        {
+          "module": "src/routes/invitation.tsx",
+          "additionalGzipBytes": 4635,
+          "baselineGzipBytes": 3978,
+          "deltaGzipBytes": 657
+        },
+        {
+          "module": "src/routes/invitations-admin.tsx",
+          "additionalGzipBytes": 16916,
+          "baselineGzipBytes": 16933,
+          "deltaGzipBytes": -17
+        },
+        {
+          "module": "src/routes/join.tsx",
+          "additionalGzipBytes": 1835,
+          "baselineGzipBytes": 1837,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/legal.tsx",
+          "additionalGzipBytes": 367,
+          "baselineGzipBytes": 372,
+          "deltaGzipBytes": -5
+        },
+        {
+          "module": "src/routes/login.tsx",
+          "additionalGzipBytes": 4090,
+          "baselineGzipBytes": 3413,
+          "deltaGzipBytes": 677
+        },
+        {
+          "module": "src/routes/logout.tsx",
+          "additionalGzipBytes": 312,
+          "baselineGzipBytes": 313,
+          "deltaGzipBytes": -1
+        },
+        {
+          "module": "src/routes/member-new.tsx",
+          "additionalGzipBytes": 14600,
+          "baselineGzipBytes": 14613,
+          "deltaGzipBytes": -13
+        },
+        {
+          "module": "src/routes/members-consent.tsx",
+          "additionalGzipBytes": 7020,
+          "baselineGzipBytes": 7045,
+          "deltaGzipBytes": -25
+        },
+        {
+          "module": "src/routes/members-pending.tsx",
+          "additionalGzipBytes": 4612,
+          "baselineGzipBytes": 4630,
+          "deltaGzipBytes": -18
+        },
+        {
+          "module": "src/routes/members.tsx",
+          "additionalGzipBytes": 19612,
+          "baselineGzipBytes": 19628,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/profile.tsx",
+          "additionalGzipBytes": 9494,
+          "baselineGzipBytes": 8634,
+          "deltaGzipBytes": 860
+        },
+        {
+          "module": "src/routes/qr.tsx",
+          "additionalGzipBytes": 10456,
+          "baselineGzipBytes": 10444,
+          "deltaGzipBytes": 12
+        },
+        {
+          "module": "src/routes/register.tsx",
+          "additionalGzipBytes": 4991,
+          "baselineGzipBytes": 4212,
+          "deltaGzipBytes": 779
+        },
+        {
+          "module": "src/routes/reports.tsx",
+          "additionalGzipBytes": 8684,
+          "baselineGzipBytes": 8688,
+          "deltaGzipBytes": -4
+        },
+        {
+          "module": "src/routes/reset-password.tsx",
+          "additionalGzipBytes": 3698,
+          "baselineGzipBytes": 2974,
+          "deltaGzipBytes": 724
+        },
+        {
+          "module": "src/routes/terms.tsx",
+          "additionalGzipBytes": 3797,
+          "baselineGzipBytes": 1107,
+          "deltaGzipBytes": 2690
+        },
+        {
+          "module": "src/routes/unavailable.tsx",
+          "additionalGzipBytes": 246,
+          "baselineGzipBytes": 248,
+          "deltaGzipBytes": -2
+        },
+        {
+          "module": "src/routes/visibility.tsx",
+          "additionalGzipBytes": 2756,
+          "baselineGzipBytes": 2570,
+          "deltaGzipBytes": 186
+        },
+        {
+          "module": "src/routes/ward.tsx",
+          "additionalGzipBytes": 8095,
+          "baselineGzipBytes": 8111,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/wards.tsx",
+          "additionalGzipBytes": 7656,
+          "baselineGzipBytes": 7672,
+          "deltaGzipBytes": -16
+        },
+        {
+          "module": "src/routes/welcome.tsx",
+          "additionalGzipBytes": 3324,
+          "baselineGzipBytes": 3332,
+          "deltaGzipBytes": -8
+        }
+      ]
+    },
+    "retirement": {
+      "commit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "date": "2026-10-12T15:54:28.071Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "product-dependencies-without-retired-frameworks",
+          "status": "PASS"
+        },
+        {
+          "check": "product-source-without-sdk-provider-http-or-fixtures",
+          "status": "PASS"
+        },
+        {
+          "check": "active-tests-tooling-without-next-runtime-or-mocks",
+          "status": "PASS"
+        },
+        {
+          "check": "compiled-product-artifacts-required",
+          "status": "PASS"
+        },
+        {
+          "check": "browser-module-closure-without-server-framework",
+          "status": "PASS"
+        },
+        {
+          "check": "browser-api-worker-bundles-without-retired-provider-client",
+          "status": "PASS"
+        }
+      ]
+    }
+  },
+  "requiredLocalComposition": {
+    "status": "PASS",
+    "conditions": {
+      "checks": "success",
+      "backend": "success",
+      "staging": "success",
+      "extended": "success",
+      "qualification": "success"
+    },
+    "note": "Matches CI required conjunction; artifact upload/download and remote job execution are not claimed."
+  },
+  "artifact": {
+    "manifestSha256": "3857835e2e24d35d76465b6597cbfe5f4273941ad2e2abdc7192609e935cf86c",
+    "manifest": {
+      "schema": 1,
+      "sourceCommit": "62052bafd09423968600c6b248b35ccdb8c0c0c4",
+      "sessionProtocol": "nest-opaque-v1",
+      "paths": [
+        "/",
+        "/accept-terms",
+        "/check-in",
+        "/forgot-password",
+        "/groups",
+        "/groups/:groupId",
+        "/groups/:groupId/activities",
+        "/groups/:groupId/activities/:activityId",
+        "/groups/:groupId/activities/:activityId/attendance",
+        "/groups/:groupId/activities/:activityId/edit",
+        "/groups/:groupId/activities/:activityId/qr",
+        "/groups/:groupId/activities/new",
+        "/groups/:groupId/activity-types",
+        "/groups/:groupId/announcements",
+        "/groups/:groupId/billing",
+        "/groups/:groupId/guardians",
+        "/groups/:groupId/invitations/new",
+        "/groups/:groupId/me/history",
+        "/groups/:groupId/members",
+        "/groups/:groupId/members/consent",
+        "/groups/:groupId/members/new",
+        "/groups/:groupId/members/pending",
+        "/groups/:groupId/reports",
+        "/groups/:groupId/settings",
+        "/groups/:groupId/settings/visibility",
+        "/groups/:groupId/wards/:athleteUserId/history",
+        "/groups/new",
+        "/invitations/:token",
+        "/join",
+        "/legal/2026-09-21",
+        "/login",
+        "/logout",
+        "/me/history",
+        "/profile",
+        "/profile/birthdate-requests",
+        "/register",
+        "/reset-password",
+        "/wards",
+        "/wards/:athleteUserId",
+        "/welcome"
+      ],
+      "performance": {
+        "initialGzipBytes": 199373,
+        "routes": [
+          {
+            "module": "src/routes/activities.tsx",
+            "additionalGzipBytes": 2802
+          },
+          {
+            "module": "src/routes/activity-edit.tsx",
+            "additionalGzipBytes": 16837
+          },
+          {
+            "module": "src/routes/activity-types.tsx",
+            "additionalGzipBytes": 15119
+          },
+          {
+            "module": "src/routes/activity.tsx",
+            "additionalGzipBytes": 1885
+          },
+          {
+            "module": "src/routes/announcements.tsx",
+            "additionalGzipBytes": 17294
+          },
+          {
+            "module": "src/routes/attendance.tsx",
+            "additionalGzipBytes": 7864
+          },
+          {
+            "module": "src/routes/billing.tsx",
+            "additionalGzipBytes": 8073
+          },
+          {
+            "module": "src/routes/birthdate-reviews.tsx",
+            "additionalGzipBytes": 2315
+          },
+          {
+            "module": "src/routes/check-in.tsx",
+            "additionalGzipBytes": 5135
+          },
+          {
+            "module": "src/routes/forgot-password.tsx",
+            "additionalGzipBytes": 3397
+          },
+          {
+            "module": "src/routes/group-new.tsx",
+            "additionalGzipBytes": 5724
+          },
+          {
+            "module": "src/routes/group-settings.tsx",
+            "additionalGzipBytes": 6127
+          },
+          {
+            "module": "src/routes/group.tsx",
+            "additionalGzipBytes": 6074
+          },
+          {
+            "module": "src/routes/groups.tsx",
+            "additionalGzipBytes": 2656
+          },
+          {
+            "module": "src/routes/guardians.tsx",
+            "additionalGzipBytes": 15229
+          },
+          {
+            "module": "src/routes/history-groups.tsx",
+            "additionalGzipBytes": 580
+          },
+          {
+            "module": "src/routes/history.tsx",
+            "additionalGzipBytes": 6618
+          },
+          {
+            "module": "src/routes/invitation.tsx",
+            "additionalGzipBytes": 4635
+          },
+          {
+            "module": "src/routes/invitations-admin.tsx",
+            "additionalGzipBytes": 16916
+          },
+          {
+            "module": "src/routes/join.tsx",
+            "additionalGzipBytes": 1835
+          },
+          {
+            "module": "src/routes/legal.tsx",
+            "additionalGzipBytes": 367
+          },
+          {
+            "module": "src/routes/login.tsx",
+            "additionalGzipBytes": 4090
+          },
+          {
+            "module": "src/routes/logout.tsx",
+            "additionalGzipBytes": 312
+          },
+          {
+            "module": "src/routes/member-new.tsx",
+            "additionalGzipBytes": 14600
+          },
+          {
+            "module": "src/routes/members-consent.tsx",
+            "additionalGzipBytes": 7020
+          },
+          {
+            "module": "src/routes/members-pending.tsx",
+            "additionalGzipBytes": 4612
+          },
+          {
+            "module": "src/routes/members.tsx",
+            "additionalGzipBytes": 19612
+          },
+          {
+            "module": "src/routes/profile.tsx",
+            "additionalGzipBytes": 9494
+          },
+          {
+            "module": "src/routes/qr.tsx",
+            "additionalGzipBytes": 10456
+          },
+          {
+            "module": "src/routes/register.tsx",
+            "additionalGzipBytes": 4991
+          },
+          {
+            "module": "src/routes/reports.tsx",
+            "additionalGzipBytes": 8684
+          },
+          {
+            "module": "src/routes/reset-password.tsx",
+            "additionalGzipBytes": 3698
+          },
+          {
+            "module": "src/routes/terms.tsx",
+            "additionalGzipBytes": 3797
+          },
+          {
+            "module": "src/routes/unavailable.tsx",
+            "additionalGzipBytes": 246
+          },
+          {
+            "module": "src/routes/visibility.tsx",
+            "additionalGzipBytes": 2756
+          },
+          {
+            "module": "src/routes/ward.tsx",
+            "additionalGzipBytes": 8095
+          },
+          {
+            "module": "src/routes/wards.tsx",
+            "additionalGzipBytes": 7656
+          },
+          {
+            "module": "src/routes/welcome.tsx",
+            "additionalGzipBytes": 3324
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": ".vite/manifest.json",
+          "sha256": "0aa5db2a19367ed343a69c0d67b6b4ab701ac93937744c3d2d1a7c6c4dd69053",
+          "bytes": 18420
+        },
+        {
+          "path": "assets/activities-ZcFwrE4j.js",
+          "sha256": "3cb2ea2b47c330cc345128770112f8d0e4c1e0308c57daaf9cbb96cb9e5da401",
+          "bytes": 2403
+        },
+        {
+          "path": "assets/activity-BPf01uEv.js",
+          "sha256": "fdfeb5520637ba4600953f34538b776b693b874186613e23b676cd7f9a5af4a3",
+          "bytes": 3240
+        },
+        {
+          "path": "assets/activity-agenda-0iBqfycR.js",
+          "sha256": "04766bfb9f866fd868d9a36913a8a4280ad32a9f25467efb5577841fd293ba8b",
+          "bytes": 2825
+        },
+        {
+          "path": "assets/activity-data-Cv_Qu6MD.js",
+          "sha256": "2e9d3be254eac9458323465fab6a0c9b1e4a100e793961dda316467fb57a69d3",
+          "bytes": 628
+        },
+        {
+          "path": "assets/activity-edit-B_yuusSH.js",
+          "sha256": "55813e8f81b230ae897a517c078fd19f6a5e317179c12db65e584d1f94c24cf5",
+          "bytes": 12283
+        },
+        {
+          "path": "assets/activity-types-evacZ2eB.js",
+          "sha256": "6c171853d6389e7ad93bea93b75427d53c18edbb63081984a987cc7d46f0f68a",
+          "bytes": 7622
+        },
+        {
+          "path": "assets/announcements-BVoAylgn.js",
+          "sha256": "c5ccef0ddd01eb0154615d92c28dc1b543ce94a2277c6ce1d7b1b8184f23f390",
+          "bytes": 12790
+        },
+        {
+          "path": "assets/attendance-PHePoyR0.js",
+          "sha256": "e7b139193ceafba8acd5b6386d3491e4e243622149e8f83136925e75babf3d4d",
+          "bytes": 11197
+        },
+        {
+          "path": "assets/attendance-presentation-DZ1yGtBK.js",
+          "sha256": "cb40689dcda9a40beda41f7c16555060b232b7f43f10599ff25b3e35388e3be9",
+          "bytes": 408
+        },
+        {
+          "path": "assets/auth-context-CWKMmBLh.js",
+          "sha256": "1c3eed0e9f12e5ed103c96c72d290afe5eb04b17fd022d351d289b91990edcb3",
+          "bytes": 4856
+        },
+        {
+          "path": "assets/billing-D8-iUEXD.js",
+          "sha256": "8254336e25c778510612a123b5703f4d158b28c4f84b127dee41ed0bcb63c89e",
+          "bytes": 15994
+        },
+        {
+          "path": "assets/birthdate-reviews-C1Y773Au.js",
+          "sha256": "642153f33910b2f6edd98718e51b80ec72d83f43c53ae9fd8d91e0b43ff249cd",
+          "bytes": 1650
+        },
+        {
+          "path": "assets/capability-data-BzjAdUbn.js",
+          "sha256": "11ca310a9d9dbbf74b833d38631eb66a7e04aca726a517c766d4debfd230c2f1",
+          "bytes": 231
+        },
+        {
+          "path": "assets/capability-mutations-C8dk0dCM.js",
+          "sha256": "47122a346d9b133a2da9a26e4ad1c8d03ee90623e88979f27a32aeb2cf75388f",
+          "bytes": 887
+        },
+        {
+          "path": "assets/card-BNNho2Mn.js",
+          "sha256": "2d4bc9f699cdaf88a423a46fa7e4931ecf2c3d3a8dc943d47325a764bcdb377f",
+          "bytes": 532
+        },
+        {
+          "path": "assets/check-in-BSZXvVaf.js",
+          "sha256": "5e262525a5336fc52824bde29ac8c65d9722524c1c5751cd9fbb55bf3ddeeebd",
+          "bytes": 5277
+        },
+        {
+          "path": "assets/empty-state-DA3XPw6p.js",
+          "sha256": "60b5513b1590bc350a981b9cf73a68886ba086013a77bfbb46e01ece9816c564",
+          "bytes": 435
+        },
+        {
+          "path": "assets/field-B93P0aeT.js",
+          "sha256": "d32adef6efaaf7422ab7e7491b4b95ef4fb332732a963013a0a9e46b2644b10c",
+          "bytes": 1175
+        },
+        {
+          "path": "assets/forgot-password-BwDsw437.js",
+          "sha256": "bb3f779f6550510abee00433919309c0e7b93690984ae73eb732ede3b01f6672",
+          "bytes": 1406
+        },
+        {
+          "path": "assets/group-DvoCWaTW.js",
+          "sha256": "4609004e2c17819fba3c68040c7f6ecb1199cebe4f66362cfe464437d18a9b1b",
+          "bytes": 10875
+        },
+        {
+          "path": "assets/group-capacity-DbqW0H-T.js",
+          "sha256": "936610c61979936d0ca4ba465a1e29c5cdeed51454dda8ba583ef98efa522304",
+          "bytes": 418
+        },
+        {
+          "path": "assets/group-data-eaXvHXTA.js",
+          "sha256": "5ace26a0515d77266875f8999c3d01db5a5cbd53c999bb4850e5001a1c79510b",
+          "bytes": 364
+        },
+        {
+          "path": "assets/group-form-CinU5uU4.js",
+          "sha256": "18b04f644e451aa801b81797813f262ce836b28c89b0ef8760cbd59120e8c146",
+          "bytes": 6385
+        },
+        {
+          "path": "assets/group-new-Bd38JC9Z.js",
+          "sha256": "30767cfa044ad562f832046d9ba162c310a3a93df22646a00af0b7212f8dc098",
+          "bytes": 412
+        },
+        {
+          "path": "assets/group-settings-DgNrjIZc.js",
+          "sha256": "f86b0ceee4ce50a1282f87376142ac16677b16c92ec8b21397bf64d0ab76b8b3",
+          "bytes": 685
+        },
+        {
+          "path": "assets/groups-ifWhfbb4.js",
+          "sha256": "fd0333ce80925012d375f36ae485e741ffb81d8700e74e88db6288eeac6f2e04",
+          "bytes": 2727
+        },
+        {
+          "path": "assets/guardians-DYAKfIoc.js",
+          "sha256": "2bc1f5559b159bdf15547a04f49e7331968543b151e1424e076b5c616523842a",
+          "bytes": 6490
+        },
+        {
+          "path": "assets/history-C_O11g2t.js",
+          "sha256": "844631c063df8d83f947ca845914d452a264d026fdba5c6c3800b8657e3d6072",
+          "bytes": 5043
+        },
+        {
+          "path": "assets/history-groups-DIiUcd-W.js",
+          "sha256": "4f855bad7e94fc1ecd1e898ff96a5893894d8dc5cde29b7bd7e892254d68f5ab",
+          "bytes": 960
+        },
+        {
+          "path": "assets/index-D6inUPuV.js",
+          "sha256": "c68e9f4f90efba7be30ea3eeaf484e07a9fc5758e8d2a9fd01e1b659cfc779e8",
+          "bytes": 644580
+        },
+        {
+          "path": "assets/index-DV-4sVkG.css",
+          "sha256": "ec3a068b4a74a4bcd4672dbe8da4e418528c05bef4e0849530d90d90c6812bb7",
+          "bytes": 27122
+        },
+        {
+          "path": "assets/inline-confirmation-Bg0Ed1oR.js",
+          "sha256": "cdf4f110b2c5854c8146121c408a028261db969c184cb130949dc815759f3a49",
+          "bytes": 1278
+        },
+        {
+          "path": "assets/invitation-DRGywRPX.js",
+          "sha256": "6088f4431b332e0078c2f4465fac0019ffff027a7049a25b4c0b06670b573415",
+          "bytes": 4162
+        },
+        {
+          "path": "assets/invitations-admin-CYorc7LL.js",
+          "sha256": "aa71247c8f862f5f5332d9e730823a1e8986da71af8835be7501958eb9ebf3e3",
+          "bytes": 6804
+        },
+        {
+          "path": "assets/join-D3fLsM-K.js",
+          "sha256": "b2f3e80980151aaa675a21aec5d424271e2a329ae2dea4024f96e96dfe617900",
+          "bytes": 2466
+        },
+        {
+          "path": "assets/legal-Ci4wvjT_.js",
+          "sha256": "f30ce654c5cfe310f613e7af4518b5731e05108531eff50a043aff6b62f188d4",
+          "bytes": 808
+        },
+        {
+          "path": "assets/login-BQ8_vI8S.js",
+          "sha256": "f9ceeae46306af75f9d9e4d5a6f61fa419826927140b96944382ba7a8cc90fb4",
+          "bytes": 2557
+        },
+        {
+          "path": "assets/logout-n2Pw6r6g.js",
+          "sha256": "dbc56d201a78d9d0ea6b186c5ea0e1a753b1a28686daf773765744d14894997e",
+          "bytes": 448
+        },
+        {
+          "path": "assets/member-mutations-Rx2V9Bsq.js",
+          "sha256": "9fb39bfa2d3b46828882c02b963638f733787803e15d12dace6736d751310546",
+          "bytes": 3918
+        },
+        {
+          "path": "assets/member-new-Y_jZutMK.js",
+          "sha256": "09812a2f5b8b844f65432317e779a556f227ba9d407baee8c1fece3bfad156c9",
+          "bytes": 6369
+        },
+        {
+          "path": "assets/members-DQnlQpVv.js",
+          "sha256": "bfd893196e1286fce8410f3be503a960f2eefa7bc4e4bb4c43018cc383f6291c",
+          "bytes": 15087
+        },
+        {
+          "path": "assets/members-consent-Deqzbtd3.js",
+          "sha256": "829e2086943392fdb087c76e8a834dc1fec573e8022f5ed8c6ef2e931310fd18",
+          "bytes": 8409
+        },
+        {
+          "path": "assets/members-pending-BebJ9XvY.js",
+          "sha256": "0fb00a1e8adcf0c012bbfcfc0c9826849e31ad3cd2af38de83a35276e4041b7e",
+          "bytes": 1906
+        },
+        {
+          "path": "assets/membership-review-CPJRGaVP.js",
+          "sha256": "51101ea76d8bab2534564d61637c95d99d4edac2fe1c725b058f582cdb853a47",
+          "bytes": 4367
+        },
+        {
+          "path": "assets/mutations-QbO-kA4l.js",
+          "sha256": "14e7b90225c8a3a97351ac46bead43e18a5ef4b4bf4295fd2bc210a122b861bd",
+          "bytes": 3817
+        },
+        {
+          "path": "assets/page-header-CDDnlEgx.js",
+          "sha256": "037a578eaf34c44907a5f1b58fba687593f733850e131bf45e7b3c2d27fd5f44",
+          "bytes": 300
+        },
+        {
+          "path": "assets/pagination-BUQ2JV8O.js",
+          "sha256": "b7376e24764120a6798c534c4cb78e1d52cdb62d6d05f86bb0d794d9b4c1ba17",
+          "bytes": 723
+        },
+        {
+          "path": "assets/private-avatar-fk41Wi_N.js",
+          "sha256": "e1953097c27a37e0dd11029e9453d52d0be9cd68980b77a34b964c7238985770",
+          "bytes": 876
+        },
+        {
+          "path": "assets/profile-C9j-Xv3z.js",
+          "sha256": "0ac943b9ad7e5cd3e8b01d7693d13822b0fd111dbb8301747b84b840556596f5",
+          "bytes": 12539
+        },
+        {
+          "path": "assets/qr-BohFjIZy.js",
+          "sha256": "e91db1087b1e9a8077149933ce166f9530a2eeaa57c689927b0e3b0086abb70e",
+          "bytes": 22318
+        },
+        {
+          "path": "assets/register-dwjF9iOT.js",
+          "sha256": "f59d596b7ea3d025f06a523bc65a12676786d301e80f28afee2cd8bfdb002e40",
+          "bytes": 1678
+        },
+        {
+          "path": "assets/report-table-1rmACUKc.js",
+          "sha256": "a14ebce5a1cfd5de9f675d9b00adc31870c6e23041e1888ca96ed66cc8caffa4",
+          "bytes": 10289
+        },
+        {
+          "path": "assets/reports-Dyso5sp8.js",
+          "sha256": "12c7375b52566ba79e6859a6e8e9c7f05f6f1c6443cba8d44da6cd0edd00ae29",
+          "bytes": 12340
+        },
+        {
+          "path": "assets/reset-password-DhZj3BUp.js",
+          "sha256": "7e9f6d3341386d8eca70413c399d308361bf0102d959cb68230d1d80e7901003",
+          "bytes": 2452
+        },
+        {
+          "path": "assets/support-CpoTzpCM.js",
+          "sha256": "17f773cd8aae7619a0173ce4bd5003afb6bf70c38574e0501ea66bb1b8f5db32",
+          "bytes": 450
+        },
+        {
+          "path": "assets/terms-KXEJg31J.js",
+          "sha256": "b5335a92ab18e593c26cdd46e8b90b9c830bf3b951c6a9f3e32c74bffa540495",
+          "bytes": 1703
+        },
+        {
+          "path": "assets/unavailable-CbThYeE9.js",
+          "sha256": "03045fe10050f42eb27f855f143af4d1d9a0af3c834aaa467ac2e3fbad4731ea",
+          "bytes": 323
+        },
+        {
+          "path": "assets/visibility-CQsmoX-t.js",
+          "sha256": "2863ea4f13d1b2157090bd69aa07977d77a451047b7305cec10ad855b320be86",
+          "bytes": 1983
+        },
+        {
+          "path": "assets/ward-DHgwNLnc.js",
+          "sha256": "5feff72a98df970636977e531f7c1c50afca1b51d682f19d0d86f67606b9c102",
+          "bytes": 3960
+        },
+        {
+          "path": "assets/ward-data-CVQjgSDI.js",
+          "sha256": "012ecb69b552ac4a27f27cea71998350027b7c28af388ccc819d61a6061fd6c5",
+          "bytes": 2439
+        },
+        {
+          "path": "assets/wards-B_kVf7wL.js",
+          "sha256": "a793ef00b7ad9d90a1d90359fa60b4808333c1a855a755fcf6f4c167cc3e8753",
+          "bytes": 6195
+        },
+        {
+          "path": "assets/welcome-BhY61L3P.js",
+          "sha256": "b26caa06bb648ac864de73d4c1afc49efbe5dcce8eadece7a4ffd85e5362f829",
+          "bytes": 2663
+        },
+        {
+          "path": "assets/zod-DnW3Hr8t.js",
+          "sha256": "318e04a81e4a7d7b39b1221f7fd36c2f287313ff4f06d904d5fe8c06bc7c57a6",
+          "bytes": 28808
+        },
+        {
+          "path": "browser-modules.json",
+          "sha256": "20d54096b53498a7f5f1595bb87fe5acc5a68115696678969e4db2139b3caa3c",
+          "bytes": 11149
+        },
+        {
+          "path": "index.html",
+          "sha256": "086b021290c7fe652176a9f48465fca5c1ddea953be2f570d795cc082519c7cf",
+          "bytes": 600
+        },
+        {
+          "path": "legal/2026-09-21/index.html",
+          "sha256": "326ed099ed65a00eab122f0cf92d890ed8405b18fa07fab5f53a3fdb777d557e",
+          "bytes": 1216
+        }
+      ],
+      "artifactHash": "49e94f7fe33ce3eae5383e634b2b254cd92b4566c0d136ff1b71a24a7fd4453d"
+    }
+  }
+}

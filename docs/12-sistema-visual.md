@@ -247,4 +247,6 @@ Los contenedores con nombre accesible de acceso social, métodos de aceptación 
 
 ## WEB-10 · Componentes y estados definitivos
 
+[Seguro] La [matriz de aceptación de #212](web-migration/issue-212/README.md) enlaza estas entregas de componentes/estados con rutas, cobertura y QA del artefacto definitivo. Conserva la aceptación humana y el rediseño pendiente de #170/#181/#209; no constituye una nueva medición visual.
+
 [Seguro] Los controles puros (Field/Input/Alert/Card/Badge/LoadingState, iconos y CSS) viven ahora dentro de apps/web. Button/ActionLink usan Router; AppShell/drawer, tablas y confirmaciones mantienen su contrato visual. Error/carga/navigation son boundaries/revalidación de Router, sin Next Link/useLinkStatus ni revalidatePath. Los recorridos de regresión existentes se trasladan al servidor del artefacto estático y conservan320/375/768/1024/1440, teclado/axe y roles. La [transferencia de cobertura](web-migration/issue-222/coverage.json) distingue comportamiento vigente de pruebas exclusivas de SSR/Server Actions retirados. Las notas WEB-03…09 y evidencias de cortes anteriores son antecedentes fechados. Lector/zoom nativo/cancha y #170/#181/#209 siguen pendientes.
