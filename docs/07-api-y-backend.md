@@ -518,3 +518,7 @@ El reenvío marca la fila previa EXPIRED y crea otra PENDING en la misma transac
 ## WEB-10 · Consumidor web definitivo
 
 [Seguro] React Router Data Mode consume el SDK generado con `credentials: same-origin`, CSRF en memoria y AbortSignal. Loaders/actions/fetchers y revalidación pertenecen a Router; sesión/callbacks/privadas son Nest. Las Server Actions y Route Handlers anteriores quedan solo en Git/históricos. El proxy mantiene HTTP real de API/callback/avatar, no sustituye errores por index.html. Logout revoca la familia y elimina datos/borradores; actualización o rollback Vite no restablece sesiones revocadas. La transición/rollback al artefacto histórico Next requiere reautenticación y configuración completa aislada; jamás dos ejecutores ni importar tokens anteriores. [Guía operativa](web-migration/issue-222/README.md).
+
+## UI-03 · Lectura autorizada del inicio (#173)
+
+[Seguro] `GET /api/v1/groups/:groupId/dashboard` (y `/web-api/v1/...` con sesión opaca) usa SDK/OpenAPI generado, DTO estricto y `get_group_dashboard` transaccional. [Contrato campo→fuente→permiso y paginación](qa/issue-173/README.md). Reutiliza períodos/contadores/métrica SQL canónicos; no copia fórmulas a Nest ni instala caché. Preview individual4 ADMIN, COACH sin notas/preview, propios/pupilos sin depender de toggles y agregado mensual solo autorizado. Cuenta ACTIVE, consentimiento y grupo se verifican en servidor; query no admite actor/roles. La migración0004 comparte selección canónica de onboarding con su RPC pública paginada para contar tareas sin N+1 de HTTP.

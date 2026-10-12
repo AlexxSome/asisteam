@@ -1,3 +1,4 @@
+import { dashboardHttpSchemas, dashboardHttpOperations } from "./http-dashboard-contract";
 import { authHttpSchemas, authHttpOperations, webAuthHttpOperations } from './http-auth-contract';
 import { z } from "zod";
 import { qrHttpSchemas, qrHttpOperations } from "./http-qr-contract";
@@ -41,6 +42,7 @@ export const httpOwnProfileSchema = z.object({
 }).strict();
 
 export const httpSchemas = {
+  ...dashboardHttpSchemas,
   ...authHttpSchemas,
   ...qrHttpSchemas,
   ...announcementHttpSchemas,
@@ -93,6 +95,7 @@ export const HTTP_ERROR_STATUSES = [400, 401, 403, 404, 409, 422, 429, 410, 500,
 
 /** Only specified operations enter the generated SDK. Domain handlers arrive in #151 and following module issues. */
 export const httpOperations = {
+  ...dashboardHttpOperations,
   ...authHttpOperations,
   ...webAuthHttpOperations,
   ...qrHttpOperations,

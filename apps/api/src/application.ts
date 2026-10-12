@@ -1,3 +1,4 @@
+import { DashboardController } from "./dashboard.js";
 import { WebAuth, WebAuthController, WebCallbackController } from './web-auth.js';
 import { SocialAuth, SocialAuthController } from './social-auth.js';
 import { NativeAuth, NativeAuthController } from './native-auth.js';
@@ -29,7 +30,7 @@ import { errorBody, SafeExceptionFilter } from './errors.js';
 
 export async function createApplication(config: RuntimeConfig, logger = new SafeLogger()) {
   @Module({
-    controllers: [WebAuthController, WebCallbackController, SocialAuthController,NativeAuthController,AvatarsController,WebAvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
+    controllers: [DashboardController, WebAuthController, WebCallbackController, SocialAuthController,NativeAuthController,AvatarsController,WebAvatarsController, QrController, AnnouncementsController, BillingController, ReportsController, AttendanceController, ActivitiesController, HealthController, SessionController, GroupsProfileController, MembersConsentsController, InvitationsController],
     providers: [{ provide: CONFIG, useValue: config }, { provide: SafeLogger, useValue: logger }, WebAuth, SocialAuth, NativeAuth, Passwords, AvatarStorage, AvatarReader, BillingStore, Database, TokenVerifier, SessionGuard, InvitationRegistrationStore, TransactionalEmail, { provide: EMAIL_CONFIG, useValue: { key: config.RESEND_API_KEY, from: config.INVITATION_EMAIL_FROM } }],
   })
   class RuntimeModule {}
