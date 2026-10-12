@@ -29,10 +29,26 @@ for (const signal of ["SIGTERM", "SIGINT"])
     process.exit(0);
   });
 try {
+  const subscriptions=new Map();
   const { publicKey, privateKey } = await generateKeyPair("RS256");
   const jwk = { ...await exportJWK(publicKey), kid: "web216", alg: "RS256", use: "sig" };
   globalThis.fetch = async (url, init) => {
     const address = String(url);
+    if(address.startsWith("https://api.mercadopago.com/")) {
+      const url=new URL(address);
+      if(url.pathname==="/preapproval" && init.method==="POST"){
+        const body=JSON.parse(init.body);
+        // Record only configured URL checks, never payer details or provider payloads.
+        const back=new URL(body.back_url);
+        if(back.origin!=="https://web.synthetic.example.test" || !/^\/groups\/[0-9a-f-]{36}\/billing$/.test(back.pathname) || back.search || back.hash || body.notification_url!=="https://api.synthetic.example.test/api/v1/billing/mercadopago-webhook")throw new Error("synthetic_billing_urls_invalid");
+        writeFileSync(".qa/billing-urls.json",JSON.stringify({returnPath:true,webhookPath:true,https:true}),{mode:0o600});
+        const id="web220-"+randomUUID(),item={id,external_reference:body.external_reference,collector_id:"123",status:"pending",last_modified:new Date().toISOString(),auto_recurring:body.auto_recurring,init_point:"https://www.mercadopago.cl/subscriptions/checkout?preapproval_id="+id};subscriptions.set(id,item);return Response.json(item);
+      }
+      if(url.pathname==="/preapproval/search")return Response.json({results:[...subscriptions.values()].filter(item=>item.external_reference===url.searchParams.get("external_reference"))});
+      if(url.pathname.startsWith("/preapproval/")){const item=subscriptions.get(url.pathname.split("/").at(-1));if(!item)return new Response(null,{status:404});if(init.method==="PUT"){item.status="cancelled";item.last_modified=new Date().toISOString();}return Response.json(item);}
+      if(url.pathname==="/authorized_payments/search")return Response.json({paging:{total:0},results:[]});
+      throw new Error("unexpected_synthetic_billing_resource");
+    }
     if (address.startsWith("https://api.pwnedpasswords.com/range/")) return new Response("A".repeat(35) + ":0");
     if (address === "https://www.googleapis.com/oauth2/v3/certs") return Response.json({ keys: [jwk] });
     if (address === "https://oauth2.googleapis.com/token") {
@@ -107,6 +123,12 @@ try {
   app = await createApplication(
     loadFixtureConfig({
       DATABASE_URL: roleUrl("asisteam_api"),
+      BILLING_DATABASE_URL: roleUrl("asisteam_billing"),
+      MERCADOPAGO_ACCESS_TOKEN:"synthetic-token",
+      MERCADOPAGO_WEBHOOK_SECRET:"synthetic-billing-only",
+      MERCADOPAGO_COLLECTOR_ID:"123",
+      BILLING_WEB_URL:"https://web.synthetic.example.test",
+      BILLING_WEBHOOK_URL:"https://api.synthetic.example.test/api/v1/billing/mercadopago-webhook",
       ...storage.config,
       OAUTH_GOOGLE_CLIENT_ID: "google-client",
       OAUTH_GOOGLE_CLIENT_SECRET: "synthetic-google",

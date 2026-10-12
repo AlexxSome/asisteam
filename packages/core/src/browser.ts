@@ -24,3 +24,9 @@ export * from "./schemas/activity-type";
 export * from "./schemas/attendance";
 export * from "./schemas/attendance-history";
 export * from "./schemas/report";
+
+// WEB-08 public schemas only; provider credentials/handlers remain server-side.
+export { formatClp, subscriptionRequestSchema, billingSummarySchema, BILLING_ERROR_MESSAGES, INVOICE_STATUS_LABELS, SUBSCRIPTION_STATUS_LABELS } from "./schemas/subscription";
+export type { BillingSummary, SubscriptionRequest } from "./schemas/subscription";
+export * from "./schemas/announcement";
+export * from "./schemas/check-in";
