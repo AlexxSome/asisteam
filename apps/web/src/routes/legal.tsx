@@ -1,5 +1,5 @@
+import { AuthPage } from "../components/auth-page";
 import { ACCOUNT_TERMS_2026_09_21 as notice } from "@asisteam/core/browser";
-import { Page } from "../ui";
 export function Notice() {
   return (
     <>
@@ -18,12 +18,11 @@ export function Notice() {
 }
 export function Component() {
   return (
-    <Page>
+    <AuthPage title="Condiciones de uso y privacidad">
       <title>Condiciones de uso y privacidad · Asisteam</title>
-      <h1>Condiciones de uso y privacidad</h1>
       <p>Versión {notice.version}</p>
       <Notice />
       <p>Consultar este aviso no registra una aceptación.</p>
-    </Page>
+    </AuthPage>
   );
 }

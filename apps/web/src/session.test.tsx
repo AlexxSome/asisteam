@@ -81,7 +81,7 @@ describe("sesión y navegación", () => {
     mockApi();
     const router = createMemoryRouter(routes, { initialEntries: ["/groups"] });
     render(<RouterProvider router={router} />);
-    await screen.findByRole("link", { name: "Club sintético" });
+    expect((await screen.findByRole("link", { name: "Abrir grupo · Club sintético" })).getAttribute("href")).toBe("/groups/" + id);
     expect(screen.getByText("Roles: Deportista")).toBeTruthy();
     mockApi({ authenticated: false });
     router.revalidate();

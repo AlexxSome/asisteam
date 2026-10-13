@@ -1,0 +1,644 @@
+{
+  "issue": 179,
+  "base": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+  "branch": "codex/179-grupos-perfil-acceso",
+  "environment": "local-synthetic",
+  "sourceContentSha256": {
+    "apps/web/e2e/regression/groups-access-ui.spec.ts": "7aaa20b83ff603b366e5c97458f1832e10ace2ebe5ee616dbb58c4f64c918260",
+    "apps/web/e2e/regression/public-final.spec.ts": "4696c839c3c76202da768ea169078a61d029211d2d3991825e135eca5cd85c4d",
+    "apps/web/scripts/legal-document.mjs": "1e8b524cde7869c320277bbb2058c0a900ae230d727504013a138986048e1cb5",
+    "apps/web/src/auth-context.tsx": "c55d8c75603494f2b022f6e7ec4eeac9b32b1374bc946208b5895ef1287775a8",
+    "apps/web/src/auth-controls.retained.test.tsx": "a500dae7d4ec694415a1133e47fafb456db2fe090dcd169d549f90d8e256e19b",
+    "apps/web/src/components/auth-page.tsx": "b722e719ea58c7bc6ef89674536dfe24276217a56778ada257d03c12153af31c",
+    "apps/web/src/components/avatar-permissions.tsx": "7ca8525d4e12a399f07053754387eb4bef5f37dc56379933c3d995e8dba568e8",
+    "apps/web/src/components/birthdate-reviews.tsx": "a920c58fd46b52c356766e1caf852c856f1e128388cb37ce5fc099f931c1440e",
+    "apps/web/src/components/profile-form.tsx": "1eaec8575c56ea6504d755677743e6a38e0d39cbe49e792ee9497dd7d97137d8",
+    "apps/web/src/routes/birthdate-reviews.tsx": "d1aa7422010ca566967c6ed350a19dcdc9b4f2aefb087f6f889d27b5377c7137",
+    "apps/web/src/routes/forgot-password.tsx": "c56fa809f42fff58d2115ba36fc70e62cc5f79ef7faac07eb6cd0e1476643220",
+    "apps/web/src/routes/group-new.tsx": "7711ea768a8bd98fa0a0521a85a7e3e2e3d9e10f6e09a11be77f8d059ee370f9",
+    "apps/web/src/routes/groups.tsx": "db9ab03819eeecdc86f94dd57595d0844d8d7442f8e4d38c23ee9b7ff91f14c0",
+    "apps/web/src/routes/invitation.tsx": "e99c8d2de19714739119f7495b522e269df1a264246b7fc772ad3e427a4da703",
+    "apps/web/src/routes/join.tsx": "8119a46536793ffb5983443474bf0db943aee7d1b3b415ed11427cebf94d3ea8",
+    "apps/web/src/routes/legal.tsx": "dac5d3e0712b4a2acf7c6e93dd53dd7347f82632bf1ace38c4c0386da71e57ff",
+    "apps/web/src/routes/login.tsx": "4052d99945d92d3094ff9978584ee31364f203608a3706df5fa6fb17870bea75",
+    "apps/web/src/routes/profile.tsx": "7805f36b4fab3fc512d32a6bd6c9b0ac5c5edf5da35f4012dde0d88a7960e88d",
+    "apps/web/src/routes/register.tsx": "ba9d6a1f263558bcb940fece8003ec7700496befee0f78502f41f5d1073c24b9",
+    "apps/web/src/routes/reset-password.tsx": "1a78c4214de2d1893df177ec4a30951884a2e74d4652977e06c849de81c6d389",
+    "apps/web/src/routes/terms.tsx": "582d68b8bd9abdfe8f7aa758a86e15d5cf38712200dbe50cdea8ebcaeb2cb9b6",
+    "apps/web/src/routes/welcome.tsx": "fa92b02c3195892bf36b87e58c5bab7c7be3b906a32cb7a660015fbaccd15411",
+    "apps/web/src/session.test.tsx": "042bdded70db8dd9b42282a352a6ecf8d2c27c46bc35f07a6acfc78120c9ba9f"
+  },
+  "captureSha256": {
+    "ui179-groups-1440.png": "95cddd3d055cecff1bc9b299cdb8bdee5c4110885f12b1d63b6bfaab03a22e35",
+    "ui179-groups-375.png": "d91e13d8a35c632f3148a168d7f756438f576b01f50f278014d000e27dddf451",
+    "ui179-groups-new-1440.png": "b90d75eb7d645f70043f7c0b3b1dd40291ddeee804a686f18944a9bac129af9a",
+    "ui179-groups-new-375.png": "e888f36da77c53a074effb678d8f1ce627cb80c2b1493491a8a249bc9fd34111",
+    "ui179-join-1440.png": "c03dc9b2c0682728a84f6c5f581c9e01e6d0ee8a01ac8246b851185d1afa986c",
+    "ui179-join-375.png": "8872f37e6b5b27741feb6d11a9b8100a9c66e22280d5c76e3f3ce5ad41de792a",
+    "ui179-legal-2026-09-21-1440.png": "cc90ed651a90103809cc122ca543e1d8d4d79c61af8a30cecae20c4d2d348cb1",
+    "ui179-legal-2026-09-21-375.png": "49946d1d5f465c737a01aa2d963e440136f7a1aa0e8d4d025aa2d4b2359b4eee",
+    "ui179-login-1440.png": "6dc9c5dac56d9116c943d20b07cdfe342cb653dd7c40db6c67dae16aa3bc4ec8",
+    "ui179-login-375.png": "b4c9104ece7899d467b42ecfe14f30e23df06d5a7847283ba201c0e8689212ca",
+    "ui179-profile-1440.png": "c8b93825ecb42cac2479000f8242ce5e424b496d867a19d7a3a80fa02c518116",
+    "ui179-profile-375.png": "8a464faf8b47e0f7baf9ff21022bf3d9149646b1bd580f38b8bdac6935bf66c4",
+    "ui179-register-1440.png": "9cd9755018039d90c20ccc08a06fe165de48ffa98a4e508d004b25af950da040",
+    "ui179-register-375.png": "409f9c970b62e1b44618bdaf17a0a20744239b0aff654feac1515d0c836a282f",
+    "ui179-terms-1440.png": "b1fedf04e5da693946137c8bfd9471d3b1eccac0dde1a0c05237fce3cb828336",
+    "ui179-terms-375.png": "1b86157f628b901743240dad336e55050a08ab6f0a7eb814c64b6c1598a44ddb",
+    "ui179-welcome-1440.png": "9b3b3cefc98b9be6672053224b822f85a8284660c1959d1cab2c3a392d22f2e7",
+    "ui179-welcome-375.png": "d5129c68e299d5743633d9cb0bc10fa5d5429cdafd93934d1ad63e8f9f1d347f"
+  },
+  "workflow": ".github/workflows/ci.yml",
+  "commands": {
+    "checks": "corepack pnpm ci:checks",
+    "backend": "corepack pnpm ci:backend",
+    "controlled-failure": "node scripts/ci/probe.mjs",
+    "staging": "corepack pnpm ci:staging",
+    "extended": "corepack pnpm ci:extended",
+    "qualification": "corepack pnpm ci:qualification"
+  },
+  "reports": {
+    "checks": {
+      "commit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "sourceCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "date": "2026-10-13T04:19:55.456Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.54
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 3.48
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 2.24
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.27
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 6.23
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 10.38
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.66
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.4
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.41
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 2.53,
+          "tests": 154,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 32.64,
+          "tests": 501,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.6
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 2.98
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 1.33
+        }
+      ]
+    },
+    "backend": {
+      "commit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "sourceCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "date": "2026-10-13T04:25:34.347Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "web-static-auth-fixture-build",
+          "status": "PASS",
+          "seconds": 3.79
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.44
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 30.54
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 54.4
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 5.01
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.65,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-dashboard",
+          "status": "PASS",
+          "seconds": 2.47
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 8.02
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 53.15,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "controlled-failure": {
+      "commit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "sourceCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "date": "2026-10-13T04:29:17.642Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.62,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.64,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.2,
+          "expected": true
+        },
+        {
+          "check": "controlled-next-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.19,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "sourceCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "date": "2026-10-13T04:19:17.597Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 2.51
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.17
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 11.74
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.15
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 1.18
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 5.73
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.93
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.89,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.73
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.07
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.31
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 20.15
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.16
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.64
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.29
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 34.78
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.59
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.94
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.43
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.63
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 1.78
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.18
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.43
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 1.06
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 3.76
+        }
+      ]
+    },
+    "extended": {
+      "commit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "sourceCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "date": "2026-10-13T04:21:13.092Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.4
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 4.19
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.68
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 136.47,
+          "tests": 59,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 89.84,
+          "tests": 42,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.41,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "checkoutCommit": "844be5667c7398d43e7ca09398f7f3e5d2640898",
+      "date": "2026-10-13T04:29:52.626Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 655,
+          "omitted": 0
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 102,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 111.35
+      },
+      "bundle": {
+        "status": "PASS",
+        "budgetStatus": "PASS",
+        "initialGzipBytes": 200267,
+        "deltaInitialGzipBytes": 1149
+      }
+    }
+  },
+  "notes": [
+    "Backend initial HTTP503 preserved separately; final complete sequential rerun PASS without test/backend changes; cause not established.",
+    "Latest birthdate-review action spacing is presentation only; final checks/staging/extended cover it, HTTP/SQL/backend contracts unchanged.",
+    "After gates, only documentation and sanitized evidence were finalized; product/test sources match the hashes.",
+    "Remote CI and human/external acceptance remain pending; production NO-GO."
+  ]
+}

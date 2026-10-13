@@ -1,10 +1,11 @@
+import { AuthPage } from "../components/auth-page";
 import { useState } from "react";
-import { Form, Link, redirectDocument, useActionData, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { Link, redirectDocument, useActionData, useLoaderData, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { httpSchemas, invitationErrorMessages, MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
 import { ApiClientError } from "@asisteam/api-client";
 import { actionMessage, browserApi } from "../api";
-import { changedSession, CredentialsFields, registration } from "../auth-context";
-import { Alert, Button, Card, CardHeader, CardContent, CardTitle, Page } from "../ui";
+import { changedSession, CredentialsFields, registration, SubmissionForm } from "../auth-context";
+import { Alert, Button } from "../ui";
 function invitationMessage(error: unknown) {
   return error instanceof ApiClientError ? invitationErrorMessages[error.error.code] ?? actionMessage(error) : actionMessage(error);
 }
@@ -51,19 +52,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export function Component() {
   const { preview, session, error } = useLoaderData<typeof loader>(), data = useActionData() as { error: string } | undefined, nav = useNavigation();
   const [mode, setMode] = useState(preview?.managed_activation ? "claim" : session ? "session" : "login");
-  return <Page><title>Aceptar invitación · Asisteam</title><Card><CardHeader><CardTitle as="h1">{preview?.managed_activation ? "Activar mi cuenta" : "Aceptar invitación"}</CardTitle>
+  return <AuthPage title={preview?.managed_activation ? "Activar mi cuenta" : "Aceptar invitación"}><title>Aceptar invitación · Asisteam</title>
     {preview && <p>{preview.managed_activation ? `Activa tu acceso personal a ${preview.group_name}. Conservarás tus grupos y tu historial de asistencia.` : `Te invitaron a ${preview.group_name} como ${MEMBERSHIP_ROLE_LABELS[preview.role]}.`}</p>}
-  </CardHeader><CardContent className="space-y-4">
+
     {error ? <Alert>{error}</Alert> : <>
       {!preview?.managed_activation && <fieldset disabled={nav.state !== "idle"} className="flex flex-wrap gap-3"><legend>Cómo aceptar</legend>
         {([...(session ? ["session"] : []), "login", "register"]).map(value => <label key={value} className="flex min-h-control items-center gap-2"><input type="radio" name="accept-mode" value={value} checked={mode === value} onChange={() => setMode(value)} />{value === "session" ? "Usar mi sesión" : value === "login" ? "Ya tengo cuenta" : "Crear mi cuenta"}</label>)}
       </fieldset>}
-      <Form method="post" className="space-y-4" key={mode}><input type="hidden" name="mode" value={mode} />
+      <SubmissionForm method="post" className="space-y-4" key={mode}><input type="hidden" name="mode" value={mode} />
         {mode === "session" ? <p>Usar la sesión iniciada en este navegador.</p> : <CredentialsFields creating={mode === "register" || mode === "claim"} profile={mode === "register"} />}
         {data?.error && <Alert>{data.error}</Alert>}
         <Button busy={nav.state !== "idle"}>{mode === "claim" ? "Activar mi cuenta y ver mi historial" : mode === "register" ? "Activar cuenta y aceptar" : mode === "login" ? "Iniciar sesión y aceptar" : "Aceptar invitación"}</Button>
-      </Form>
+      </SubmissionForm>
     </>}
     <p><Link to="/login" className="underline">Ir a iniciar sesión</Link></p>
-  </CardContent></Card></Page>;
+  </AuthPage>;
 }

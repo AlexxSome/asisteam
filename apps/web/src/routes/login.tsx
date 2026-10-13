@@ -1,9 +1,10 @@
+import { AuthPage } from "../components/auth-page";
 import { Link, redirect, redirectDocument, useActionData, useLoaderData, useLocation, useNavigation, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { httpSchemas, SOCIAL_AUTH_ERROR } from "@asisteam/core/browser";
 import { ApiClientError } from "@asisteam/api-client";
 import { actionMessage, browserApi } from "../api";
 import { SubmissionForm, authPath, changedSession, CredentialsFields, destination, inviteCode, SocialButtons } from "../auth-context";
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle, Page } from "../ui";
+import { Alert, Button } from "../ui";
 export async function loader({ request }: LoaderFunctionArgs) {
   const api = browserApi(request.signal), target = destination(new URL(request.url));
   try {
@@ -39,9 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export function Component() {
   const data = useActionData() as { error: string } | undefined, nav = useNavigation();
   const { providers } = useLoaderData<typeof loader>(), location = useLocation(), url = new URL(location.pathname + location.search, window.location.origin);
-  return <Page><title>Iniciar sesión · Asisteam</title><Card>
-    <CardHeader><p className="text-h2 text-primary">Asisteam</p><CardTitle as="h1">Iniciar sesión</CardTitle></CardHeader>
-    <CardContent className="space-y-4">
+  return <AuthPage title="Iniciar sesión" description="Accede a tu cuenta para continuar con tus grupos y actividades."><title>Iniciar sesión · Asisteam</title>
       {url.searchParams.has("social_error") && <Alert>{SOCIAL_AUTH_ERROR}</Alert>}
       {data?.error && <Alert>{data.error}</Alert>}
       {inviteCode(url) && <p>Después de iniciar sesión podrás unirte como deportista con el código compartido.</p>}
@@ -49,7 +48,7 @@ export function Component() {
       <SubmissionForm method="post" className="space-y-4"><CredentialsFields /><Button busy={nav.state !== "idle"}>Ingresar</Button></SubmissionForm>
       <p><Link to={authPath("/forgot-password", url)} className="underline">Olvidé mi contraseña</Link></p>
       <p>¿No tienes cuenta? <Link to={authPath("/register", url)} className="underline">Crear cuenta</Link></p>
-    </CardContent></Card><p><Link to="/legal/2026-09-21" className="text-primary underline">Condiciones de uso y privacidad</Link></p></Page>;
+    </AuthPage>;
 }
 
 export const shouldRevalidate=({actionResult,defaultShouldRevalidate}:{actionResult?:{error?:string};defaultShouldRevalidate:boolean})=>actionResult?.error?false:defaultShouldRevalidate;
