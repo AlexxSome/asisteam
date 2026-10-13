@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { reportAttendanceClass } from "../attendance-presentation";
 import { reportPercentage, type GroupAttendanceReport } from "@asisteam/core/browser";
 
-const numericCell = "whitespace-nowrap px-3 py-3 text-right tabular-nums";
-export const reportNameCell = "sticky left-0 z-10 w-36 min-w-36 max-w-36 break-words border-r border-border px-3 py-3 text-left sm:w-48 sm:min-w-48 sm:max-w-48";
+const numericCell = "whitespace-nowrap px-2 py-3 text-right tabular-nums";
+export const reportNameCell = "sticky left-0 z-10 w-36 min-w-36 max-w-36 break-words border-r border-border px-2 py-3 text-left sm:w-48 sm:min-w-48 sm:max-w-48";
 
 /** Rendering primitives only: private and public callers keep their own DTOs. */
 export function ReportTableRegion({ label, children }: { label: string; children: ReactNode }) {
