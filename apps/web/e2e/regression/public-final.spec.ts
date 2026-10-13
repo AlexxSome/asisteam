@@ -1,7 +1,7 @@
 import { test, expect } from './test';
 import { randomUUID } from 'node:crypto';
 import { password } from './data.mjs';
-import { checkAccessibility, checkLayout, visit } from './helpers';
+import { checkAccessibility, checkLayout, screenshot, visit } from './helpers';
 import { quote, sql, recoveryToken, fixtureAccount } from './local-fixtures.mjs';
 
 test('@extended acceso: páginas públicas, aceptación pendiente, bienvenida y recuperación real', async ({ page, context }, info) => {
@@ -18,11 +18,22 @@ test('@extended acceso: páginas públicas, aceptación pendiente, bienvenida y 
   await page.getByLabel('Contraseña', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Ingresar', exact: true }).click();
   await expect(page).toHaveURL(/\/accept-terms/);
-  await checkLayout(page); await checkAccessibility(page, info);
+  for (const width of [320, 375, 720, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await checkLayout(page); await checkAccessibility(page, info);
+    await expect(page.getByRole('main').getByRole('link', {name:'Consultar ayuda y soporte', exact:true})).toHaveAttribute('href', /^mailto:/);
+    if ([375, 1440].includes(width)) await screenshot(page, info, `ui179-terms-${width}`);
+  }
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: /Aceptar.*continuar/ }).click();
   await expect(page).toHaveURL(/\/welcome/);
-  await checkLayout(page); await checkAccessibility(page, info);
+  for (const width of [320, 375, 720, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await checkLayout(page); await checkAccessibility(page, info);
+    await expect(page.getByRole('main')).toContainText('primer pago aprobado');
+    await expect(page.getByRole('main')).toContainText('solo deportistas');
+    if ([375, 1440].includes(width)) await screenshot(page, info, `ui179-welcome-${width}`);
+  }
   expect(sql(`select count(*) from public.account_consents c join public.users u on u.id=c.user_id where u.email=${quote(address)}`)).toBe('1');
   await context.clearCookies();
   const token=await recoveryToken(address);

@@ -1,3 +1,4 @@
+import { AuthPage } from "../components/auth-page";
 import {
   ACCOUNT_TERMS_VERSION,
   accountConsentSchema,
@@ -18,7 +19,7 @@ import {
   safeReturn,
   sessionError,
 } from "../api";
-import { Alert, Button, Page } from "../ui";
+import { Alert, Button } from "../ui";
 import { Notice } from "./legal";
 import {SubmissionForm,TermsField} from "../auth-context";
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -51,9 +52,8 @@ export function Component() {
   const data = useActionData() as { error: string } | undefined,
     nav = useNavigation();
   return (
-    <Page>
+    <AuthPage title="Revisa las condiciones de uso y privacidad">
       <title>Revisa las condiciones · Asisteam</title>
-      <h1>Revisa las condiciones de uso y privacidad</h1>
       <p>Antes de aceptar, abre las <Link to={`/legal/${ACCOUNT_TERMS_VERSION}#condiciones`} target="_blank" rel="noopener noreferrer">condiciones de uso</Link> y el <Link to={`/legal/${ACCOUNT_TERMS_VERSION}#privacidad`} target="_blank" rel="noopener noreferrer">aviso de privacidad</Link>.</p>
       <Notice />
       <SubmissionForm method="post" className="space-y-4">
@@ -62,6 +62,6 @@ export function Component() {
         <Button busy={nav.state !== "idle"}>Aceptar y continuar</Button>
       </SubmissionForm>
       <Form method="post" action="/logout"><Button variant="secondary" busy={nav.state!=="idle"}>Salir sin aceptar</Button></Form>
-    </Page>
+    </AuthPage>
   );
 }

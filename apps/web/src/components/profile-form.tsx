@@ -49,9 +49,13 @@ export function ProfileForm({ profile, avatarAllowed }: { profile: OwnProfile; a
     if (avatarInput.current) avatarInput.current.value = "";
   }
 
-  return <div className="space-y-8">
-    <section aria-labelledby="profile-data-title" className="space-y-4">
-      <h2 id="profile-data-title" className="text-lg font-semibold">Datos personales</h2>
+  return <div className="space-y-6 [overflow-wrap:anywhere]">
+    <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-surface p-4 md:p-6">
+      <span role="img" aria-label={`Iniciales de ${saved.full_name}`} className="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-info-subtle font-semibold text-info">{saved.full_name.trim().split(/\s+/).slice(0,2).map(part=>part[0]).join("").toLocaleUpperCase("es")}</span>
+      <div className="min-w-0"><p className="text-h3">{saved.full_name}</p><p className="text-small text-muted-foreground">Tu identidad en Asisteam</p></div>
+    </div>
+    <section aria-labelledby="profile-data-title" className="space-y-4 rounded-lg border border-border bg-surface p-4 md:p-6">
+      <h2 id="profile-data-title" className="text-h2">Datos personales</h2>
       <form className="space-y-4" aria-labelledby="profile-data-title" aria-busy={profileBusy} data-unsaved-activity="true" noValidate onSubmit={async event => {
         event.preventDefault();
         if (profileSubmitting.current) return;
@@ -99,9 +103,9 @@ export function ProfileForm({ profile, avatarAllowed }: { profile: OwnProfile; a
         </div>
       </form>
     </section>
-    <section aria-labelledby="avatar-title" className="space-y-4 border-t pt-6">
-      <h2 id="avatar-title" className="text-lg font-semibold">Foto de perfil</h2>
-      {profile.avatar_url && avatarAllowed && <PrivateAvatar key={profile.avatar_url} path={profile.avatar_url} alt="Tu foto de perfil actual" />}
+    <section aria-labelledby="avatar-title" className="space-y-4 rounded-lg border border-border bg-surface p-4 md:p-6">
+      <h2 id="avatar-title" className="text-h2">Foto de perfil</h2>
+      {profile.avatar_url && avatarAllowed ? <PrivateAvatar key={profile.avatar_url} path={profile.avatar_url} alt="Tu foto de perfil actual" /> : <p className="text-small text-muted-foreground">{profile.avatar_url ? "Tu foto no está disponible con los permisos actuales." : "Aún no tienes una foto de perfil."}</p>}
       <p id="avatar-help" className="text-small text-muted-foreground">JPEG, PNG o WebP, máximo 2 MB. La foto se almacena de forma privada. Seleccionarla permite revisarla antes de subirla; Guardar perfil solo guarda tus datos personales.</p>
       {!avatarAllowed && <p id="avatar-restriction" className="text-small">Para subir una foto, registra tu fecha de nacimiento. Si eres menor, tu apoderado debe autorizar el uso de tu imagen en su consentimiento vigente. Guardar tus datos no otorga esa autorización.</p>}
       <form className="space-y-4" aria-labelledby="avatar-title" aria-busy={avatarBusy} data-unsaved-activity="true" onSubmit={async event => {

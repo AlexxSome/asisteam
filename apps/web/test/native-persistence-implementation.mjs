@@ -4,6 +4,7 @@
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
 import {createRequire} from 'node:module';
+import {nativeProviderTransport} from './native-provider-transport.mjs';
 const requireApi=createRequire(new URL('../../api/package.json',import.meta.url));
 const pg=requireApi('pg');
 import {jwtVerify} from '../../api/node_modules/jose/dist/webapi/index.js';
@@ -23,7 +24,7 @@ export async function nativeIntegrationConfig(){
  if(config)return config;
  const [{createApplication},{loadFixtureConfig},{SafeLogger}]=await Promise.all([import('../../api/dist/application.js'),import('../../api/test/fixture-config.mjs'),import('../../api/dist/logger.js')]);
  const url=role=>{const value=new URL(process.env.TEST_DATABASE_URL);value.username=role;return value.toString()};
- globalThis.fetch=async(input,init)=>String(input).startsWith('https://api.resend.com/')?sendEmail(input,init):String(input).startsWith('https://api.mercadopago.com/')?nativeBillingTransport(input,init):realFetch(input,init);
+ globalThis.fetch=nativeProviderTransport({network:realFetch,email:(input,init)=>sendEmail(input,init),billing:nativeBillingTransport});
  app=await createApplication(loadFixtureConfig({DATABASE_URL:url('asisteam_api'),INVITATION_DATABASE_URL:url('asisteam_invitation'),INVITATION_PROXY_SECRET:process.env.INVITATION_PROXY_SECRET,BILLING_DATABASE_URL:url('asisteam_billing'),MERCADOPAGO_ACCESS_TOKEN:'synthetic',MERCADOPAGO_WEBHOOK_SECRET:'fixture-only',MERCADOPAGO_COLLECTOR_ID:'123',BILLING_WEB_URL:'https://asisteam.test',BILLING_WEBHOOK_URL:'https://native.test/api/v1/billing/mercadopago-webhook',RESEND_API_KEY:'synthetic',EMAIL_FROM:'Asisteam <synthetic@example.test>',INVITATION_WEB_URL:'http://localhost:3000',INVITATION_EMAIL_FROM:'Asisteam <synthetic@example.test>'}),new SafeLogger(()=>{}));
  await app.listen(0,'127.0.0.1');
  config={API_ORIGIN:await app.getUrl(),GUEST_TOKEN:'synthetic-guest',OPERATOR_TOKEN:process.env.NATIVE_TEST_OPERATOR};return config;

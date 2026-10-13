@@ -1,8 +1,10 @@
 import { MEMBERSHIP_ROLE_LABELS } from "@asisteam/core/browser";
-import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { browserApi, requireSession, sessionError } from "../api";
 import { ActivityAgenda, ActivityPeriodLinks } from "../components/activity-agenda";
-import { Card, CardContent, CardHeader, CardTitle, Page } from "../ui";
+import { ActionLink, Page } from "../ui";
+import { PageHeader } from "../components/ui/page-header";
+import { GroupLogo } from "../components/app-shell";
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireSession(request);
   try {
@@ -19,43 +21,30 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 export function Component() {
   const groups = useLoaderData<typeof loader>();
-  return (
-    <Page>
-      <title>Mis grupos · Asisteam</title>
-      <h1>Mis grupos</h1>
-      {groups.data.length === 0 ? (
-        <p>Aún no perteneces a un grupo.</p>
-      ) : (
-        <ul className="space-y-4">
-          {groups.data.map((group) => (
-            <li key={group.id}>
-              <Card>
-                <CardHeader>
-                  <CardTitle>
-                    <Link
-                      to={"/groups/" + group.id}
-                      className="text-primary underline"
-                    >
-                      {group.name}
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{group.sport}</p>
-                  <p className="text-small text-neutral">
-                    Roles:{" "}
-                    {group.roles
-                      .map((role) => MEMBERSHIP_ROLE_LABELS[role])
-                      .join(", ")}
-                  </p>
-                </CardContent>
-              </Card>
-            </li>
-          ))}
-        </ul>
-      )}
-      <section id="agenda" aria-labelledby="agenda-title" className="space-y-4"><h2 id="agenda-title">Mi agenda global</h2><p>Actividades de todos tus grupos · Horarios de Chile · America/Santiago</p><ActivityPeriodLinks path="/groups" period={groups.period} label="Período de mi agenda" anchor="#agenda"/>{groups.agenda.activities.length?<ActivityAgenda activities={groups.agenda.activities} page={groups.page} period={groups.period} context={{from:"agenda"}}/>:<p>No hay actividades en este período.</p>}<nav aria-label="Páginas de mi agenda">{groups.page>1 && <Link to={`/groups?period=${groups.period}&page=${groups.page-1}#agenda`} className="inline-flex min-h-11 items-center underline">Anterior</Link>}{groups.agenda.hasNext && <Link to={`/groups?period=${groups.period}&page=${groups.page+1}#agenda`} className="inline-flex min-h-11 items-center underline">Siguiente</Link>}</nav></section>
-      <nav aria-label="Cuenta" className="flex flex-wrap gap-5"><Link to="/groups/new" className="min-h-11 underline">Crear un grupo</Link><Link to="/join" className="min-h-11 underline">Unirme con código</Link><Link to="/profile" className="min-h-11 underline">Mi perfil</Link></nav>
-    </Page>
-  );
+  return <Page className="max-w-7xl px-0 py-0 md:px-0 [overflow-wrap:anywhere]">
+    <title>Mis grupos · Asisteam</title>
+    <PageHeader title="Mis grupos" description="Elige un grupo para consultar sus actividades y las tareas disponibles para tus roles.">
+      <nav aria-label="Acciones de mis grupos" className="flex flex-wrap gap-3 pt-2">
+        <ActionLink href="/groups/new" variant="secondary">Crear un grupo</ActionLink>
+        <ActionLink href="/join" variant="secondary">Unirme con código</ActionLink>
+      </nav>
+    </PageHeader>
+    {groups.data.length === 0 ? <section className="space-y-3 rounded-lg border border-border bg-surface p-4 md:p-6">
+      <h2>Aún no perteneces a un grupo.</h2><p>Crea tu grupo o usa el código compartido por un administrador. Si tienes una solicitud pendiente, revisa sus próximos pasos.</p>
+      <ActionLink href="/welcome">Revisar mi primer uso</ActionLink>
+    </section> : <ul className="grid gap-4 md:grid-cols-2">
+      {groups.data.map(group => <li key={group.id} className="flex min-w-0 flex-col gap-4 rounded-lg border border-border bg-surface p-4 md:p-6">
+        <div className="flex min-w-0 items-start gap-3"><GroupLogo src={group.logo_url} name={group.name}/><div className="min-w-0 space-y-1"><h2 className="text-h2">{group.name}</h2><p className="text-small text-muted-foreground">{group.sport}</p></div></div>
+        <p className="text-small">Roles: {group.roles.map(role => MEMBERSHIP_ROLE_LABELS[role]).join(" · ")}</p>
+        <ActionLink href={"/groups/" + group.id} variant="secondary" className="mt-auto self-start" aria-label={`Abrir grupo · ${group.name}`}>Abrir grupo</ActionLink>
+      </li>)}
+    </ul>}
+    <section id="agenda" aria-labelledby="agenda-title" className="space-y-4 border-t border-border pt-6">
+      <h2 id="agenda-title" className="text-h2">Mi agenda global</h2><p className="text-small text-muted-foreground">Actividades de todos tus grupos · Horarios de Chile · America/Santiago. Cada actividad conserva su grupo; no se combinan métricas.</p>
+      <div className="rounded-lg border border-border bg-surface p-4"><ActivityPeriodLinks path="/groups" period={groups.period} label="Período de mi agenda" anchor="#agenda"/></div>
+      {groups.agenda.activities.length ? <ActivityAgenda activities={groups.agenda.activities} page={groups.page} period={groups.period} context={{from:"agenda"}}/> : <p className="rounded-lg border border-border bg-surface p-4">No hay actividades en este período.</p>}
+      <nav aria-label="Páginas de mi agenda" className="flex flex-wrap gap-3">{groups.page>1 && <ActionLink href={`/groups?period=${groups.period}&page=${groups.page-1}#agenda`} variant="secondary">Anterior</ActionLink>}{groups.agenda.hasNext && <ActionLink href={`/groups?period=${groups.period}&page=${groups.page+1}#agenda`} variant="secondary">Siguiente</ActionLink>}</nav>
+    </section>
+    <nav aria-label="Cuenta" className="flex flex-wrap gap-3 border-t border-border pt-4"><ActionLink href="/profile">Mi perfil</ActionLink><ActionLink href="/profile#privacy">Consultar ayuda y soporte</ActionLink></nav>
+  </Page>;
 }

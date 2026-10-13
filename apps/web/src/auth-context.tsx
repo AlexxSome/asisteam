@@ -50,7 +50,7 @@ export function SocialButtons({ providers, linking = false }: { providers: { goo
   return <div role="group" aria-label={linking ? "Vincular cuenta social" : "Acceso con cuenta social"} className="space-y-3">
     {(["google", "apple"] as const).map(provider => <SubmissionForm key={provider} method="post">
       <input type="hidden" name="provider" value={provider} />
-      <Button busy={nav.state !== "idle"} disabled={providers?.[provider] === false} aria-describedby={providers?.[provider] === false ? `${provider}-unavailable` : undefined}>{linking ? "Vincular" : "Continuar con"} {SOCIAL_PROVIDER_LABELS[provider]}</Button>
+      <Button variant="secondary" className="w-full" busy={nav.state !== "idle"} disabled={providers?.[provider] === false} aria-describedby={providers?.[provider] === false ? `${provider}-unavailable` : undefined}>{linking ? "Vincular" : "Continuar con"} {SOCIAL_PROVIDER_LABELS[provider]}</Button>
       {providers?.[provider] === false && <p id={`${provider}-unavailable`}>{SOCIAL_PROVIDER_LABELS[provider]} no está disponible en este momento. Puedes usar tu email.</p>}
     </SubmissionForm>)}
     {!providers && <p>No pudimos comprobar la disponibilidad del acceso social. Puedes intentarlo o usar tu email.</p>}

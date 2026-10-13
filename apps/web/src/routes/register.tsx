@@ -1,9 +1,10 @@
+import { AuthPage } from "../components/auth-page";
 import { Link, redirectDocument, useActionData, useLoaderData, useLocation, useNavigation, type ActionFunctionArgs } from "react-router";
 import {ApiClientError} from "@asisteam/api-client";
 import { httpSchemas } from "@asisteam/core/browser";
 import { actionMessage, browserApi } from "../api";
 import { SubmissionForm, authPath, changedSession, CredentialsFields, destination, registration, SocialButtons } from "../auth-context";
-import { Alert, Button, Card, CardHeader, CardContent, CardTitle, Page } from "../ui";
+import { Alert, Button } from "../ui";
 import { loader, socialAction } from "./login";
 export { loader,shouldRevalidate } from "./login";
 export async function action({ request }: ActionFunctionArgs) {
@@ -21,9 +22,9 @@ export async function action({ request }: ActionFunctionArgs) {
 export function Component() {
   const data = useActionData() as { error: string } | undefined, nav = useNavigation(), { providers } = useLoaderData<typeof loader>();
   const location = useLocation(), url = new URL(location.pathname + location.search, window.location.origin);
-  return <Page><title>Crear cuenta · Asisteam</title><Card><CardHeader><CardTitle as="h1">Crear cuenta</CardTitle></CardHeader><CardContent className="space-y-4">
+  return <AuthPage title="Crear cuenta" description="Completa tus datos y revisa las condiciones antes de aceptar."><title>Crear cuenta · Asisteam</title>
     {data?.error && <Alert>{data.error}</Alert>}<SocialButtons providers={providers} />
     <SubmissionForm method="post" className="space-y-4"><CredentialsFields creating profile /><Button busy={nav.state !== "idle"}>Crear cuenta</Button></SubmissionForm>
     <p><Link to={authPath("/login", url)} className="underline">Ya tengo cuenta</Link></p>
-  </CardContent></Card></Page>;
+  </AuthPage>;
 }

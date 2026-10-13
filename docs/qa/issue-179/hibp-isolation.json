@@ -1,0 +1,44 @@
+{
+  "run": "https://github.com/AlexxSome/asisteam/actions/runs/38346903536",
+  "head": "f67197e17eeac2a6f26cfa348530a858e16cabe0",
+  "remote": {
+    "checks": "SUCCESS",
+    "backend": "FAILURE",
+    "staging": "SUCCESS",
+    "extended": "SUCCESS",
+    "qualification": "SKIPPED",
+    "required": "FAILURE"
+  },
+  "reproduction": {
+    "network_enabled": {
+      "passed": 84,
+      "failed": 0,
+      "omitted": 0,
+      "failedCases": []
+    },
+    "hibp_unavailable_before": {
+      "passed": 11,
+      "failed": 2,
+      "omitted": 0,
+      "failedCases": [
+        {
+          "name": "Apoderados: HTTP, invitación y concurrencia registra cuenta nueva y completa invitación sin duplicar membership ni activar pupilo",
+          "file": "guardianship.integration.test.ts"
+        },
+        {
+          "name": "emisión Nest + Auth + Postgres local el enlace emitido completa registro Auth nativo sobre el mismo perfil",
+          "file": "send-invitation.integration.test.ts"
+        }
+      ]
+    },
+    "hibp_unavailable_after": {
+      "passed": 13,
+      "failed": 0,
+      "omitted": 0,
+      "failedCases": []
+    }
+  },
+  "controlledFault": "Only HIBP requests return synthetic HTTP503 in a temporary Node preload; real Nest/PostgreSQL and original assertions unchanged.",
+  "correction": "Test-only provider transport returns a valid synthetic zero-count range and retains synthetic email/billing plus real loopback HTTP.",
+  "limits": "Remote sanitized artifact exposes failedFiles, not underlying network exception; controlled fault reproduces the same two registration assertions. Production fail-closed remains covered by native Auth integration."
+}
