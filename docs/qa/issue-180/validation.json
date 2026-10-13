@@ -1,0 +1,649 @@
+{
+  "issue": 180,
+  "baseCommit": "b9f0c9ed30cf6ecc2639fe7fd6d0d3f3b28631e6",
+  "branch": "codex/180-anuncios-suscripcion-qr",
+  "date": "2026-10-13T13:07:31.494Z",
+  "environment": "local-synthetic-macos-arm64",
+  "node": "v24.16.0",
+  "pnpm": "10.33.2",
+  "gate": "PASS",
+  "remoteCI": "pending-after-publication",
+  "acceptance": "NO-GO",
+  "workflow": ".github/workflows/ci.yml",
+  "commands": [
+    {
+      "job": "checks",
+      "command": "corepack pnpm ci:checks",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.38
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.48
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.62
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 3.78
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 4.61
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.37
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.32
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.39,
+          "tests": 154,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 15.27,
+          "tests": 503,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.28
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 2.09
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.84
+        }
+      ]
+    },
+    {
+      "job": "backend",
+      "command": "corepack pnpm ci:backend",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.16
+        },
+        {
+          "check": "web-static-auth-fixture-build",
+          "status": "PASS",
+          "seconds": 3.64
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.38
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 27.92
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 53.39
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 5
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.51,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-dashboard",
+          "status": "PASS",
+          "seconds": 2.57
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.33
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 43.56,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "job": "backend/probe",
+      "command": "node scripts/ci/probe.mjs",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.72,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.66,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.2,
+          "expected": true
+        },
+        {
+          "check": "controlled-next-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.18,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "job": "staging",
+      "command": "corepack pnpm ci:staging",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 1.46
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.1
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 7.04
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.68
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 5.6
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 5.08
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.88,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.68
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.56
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 12.72
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 1.01
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.75
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.16
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.42
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.59
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.29
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.9
+        }
+      ]
+    },
+    {
+      "job": "extended",
+      "command": "corepack pnpm ci:extended",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.36
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 3.84
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.81
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 148.71,
+          "tests": 62,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 86.95,
+          "tests": 42,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.52,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    {
+      "job": "qualification",
+      "command": "corepack pnpm ci:qualification",
+      "status": "PASS",
+      "report": {
+        "sourceCommit": "b9f0c9ed30cf6ecc2639fe7fd6d0d3f3b28631e6",
+        "checkoutCommit": "b9f0c9ed30cf6ecc2639fe7fd6d0d3f3b28631e6",
+        "date": "2026-10-13T13:06:53.143Z",
+        "node": "v24.16.0",
+        "environment": "local-synthetic",
+        "technicalStatus": "PASS",
+        "acceptance": "NO-GO",
+        "suites": [
+          {
+            "suite": "checks",
+            "status": "PASS",
+            "tests": 657,
+            "omitted": 0
+          },
+          {
+            "suite": "backend",
+            "status": "PASS",
+            "tests": 84,
+            "omitted": 0
+          },
+          {
+            "suite": "staging",
+            "status": "PASS",
+            "tests": 0,
+            "omitted": 0
+          },
+          {
+            "suite": "extended",
+            "status": "PASS",
+            "tests": 105,
+            "omitted": 0
+          }
+        ],
+        "blockers": [
+          "agreed-representative-load-and-source-destination-http-baseline",
+          "external-test-provider-receipts",
+          "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+          "operational-acceptance-MIG22"
+        ],
+        "load": {
+          "status": "PASS",
+          "activeAthletes": 500,
+          "attendanceRecords": 5000,
+          "cells": 8,
+          "requests": 192,
+          "maxP95Ms": 84.25
+        },
+        "bundle": {
+          "status": "PASS",
+          "budgetStatus": "PASS",
+          "initialGzipBytes": 200277,
+          "deltaInitialGzipBytes": 1159
+        }
+      }
+    },
+    {
+      "job": "required",
+      "command": "aggregation of five successful jobs",
+      "status": "PASS"
+    }
+  ],
+  "specificMatrix": [
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "status": "passed",
+      "durationMs": 4292
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "status": "passed",
+      "durationMs": 3273
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "status": "passed",
+      "durationMs": 5660
+    }
+  ],
+  "visualReview": {
+    "captures": 14,
+    "status": "reviewed",
+    "axeAnalyses": 29,
+    "violations": 0,
+    "incomplete": [
+      "aria-valid-attr-value",
+      "color-contrast"
+    ]
+  },
+  "scopeReview": "Final issue diff reviewed; no pending introduced findings. Domain/loaders/mutations/contracts/RLS unchanged.",
+  "hashes": {
+    "apps/web/src/routes/announcements.tsx": "923bd2b1f14399e955348451d4572c311c0e81fb19a8e77b41970f0e6aece36d",
+    "apps/web/src/routes/billing.tsx": "27218d9e79f7e888b2858db83f5f766aed3970376359953dcea2785f6241d147",
+    "apps/web/src/routes/qr.tsx": "cfd8440e49d0f709ddc67e91a88721d9b5f9ad2dee612c912b487a9748c958ac",
+    "apps/web/src/routes/check-in.tsx": "0c8fbd2b6492330c2854967381151be6f48ee27ec1b30381cfddac9fbd9e5155",
+    "apps/web/src/components/billing-panel.tsx": "1115b3a3b01497932296523baca79477b822ef345054eac264f2a43811336345",
+    "apps/web/src/components/billing-panel.test.tsx": "c96f739685bb7be0add254f25d669bcd5f88787e04f74b372897dc5d9a389fff",
+    "apps/web/src/components/qr-display.tsx": "0771e2c0222548568bfaae91a33dd435c56a2999b8f79bad6b8555cf7d68ade7",
+    "apps/web/src/components/check-in-form.tsx": "b669d4631360f9da31714087e03111c02e562108c89ac04cd637018e39a0a650",
+    "apps/web/e2e/regression/capabilities-ui.spec.ts": "7b8144a1494e3cb2da3a0797369864553109bb2311760db8b8467fbdb4aeb425",
+    "docs/05-pantallas.md": "e7559813ff39ed7867b895931380584254f982d5ac076d72db13e9484c0a42d6",
+    "docs/12-sistema-visual.md": "bac5b6780e4c89783a66f7a981720c502f04496f29eec4fae9f5b3a618b5e944",
+    "docs/qa/issue-180/ui180-wall-375.png": "a5bb23efb29591bf6df4f7310f37a7cd9a901a1a0bb2fe3c9def3485277a9843",
+    "docs/qa/issue-180/ui180-wall-1440.png": "dc72095f6fac5bd4317db94c895561b4d5e27cee7ed3518b76742584d93f1e30",
+    "docs/qa/issue-180/ui180-billing-375.png": "bca146fc006f9535a6d4fd150c02cc43801003a5837573b19c38a9d5b772634d",
+    "docs/qa/issue-180/ui180-billing-1440.png": "ebba7ff449bbe5488acc16ac662e424cf8872de7fe88e542b9c25680329f8baf",
+    "docs/qa/issue-180/ui180-invoices-375.png": "4f06d3fb77e9369473d248a2579b9af441b3e76c20179432de9f4816056bd41e",
+    "docs/qa/issue-180/ui180-invoices-1440.png": "b237f35b410fdeae636b6fedbfaeaee610a9378b838c8d65807906e18347a5a8",
+    "docs/qa/issue-180/ui180-qr-375.png": "a879dd7ce08f43c5048bd26d63f172f4e581776a30a47274918195f7cd64ef2a",
+    "docs/qa/issue-180/ui180-qr-1440.png": "b8c7a4fa50cfc5200f4edfc7d78bd2fa43ab5920ea8891ffc1235e204f38a480",
+    "docs/qa/issue-180/ui180-receipt-375.png": "78e2434df903d301bb5df54fec27d8e46855f394f572870f050f5912abdf074b",
+    "docs/qa/issue-180/ui180-expired-375.png": "51e482025033b3c758d5fa03f2f06f3cdf6b8066f35415bb1f3efabacada7571",
+    "docs/qa/issue-180/ui180-receipt-1440.png": "8f01edab13abf9bb83bceeaf7961f680adb1e99eb913131fbac8b3f273b4e473",
+    "docs/qa/issue-180/ui180-expired-1440.png": "3966d48d01861e2d4facdd83c8e6a4dbaa23607b3303797ee8718c2b12620b5c",
+    "docs/qa/issue-180/ui180-registering-375.png": "18625f504d56406dd725b917ca3e28d63eaadec612bb66dec4377652a922cd57",
+    "docs/qa/issue-180/ui180-retry-375.png": "f4348a330719874cb1ac06068463356b01adec5af832a78736aa37d2cbb21ffb",
+    "docs/qa/issue-180/README.md": "377c1245cd8fdac0f574fc321b9fd6d995f24892a843a26e617dfaff07ad8880",
+    "docs/qa/issue-180/accessibility.json": "c505170277a82c6ffa4975833e61920b12dbef8d7a7da84e5ac095e875f98a1b",
+    "docs/qa/issue-180/initial-failures.json": "4b310a370913b76382ae0490e56d2a511e9780b52562d6c085105134d96bb1ee"
+  }
+}

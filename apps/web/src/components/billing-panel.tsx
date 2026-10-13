@@ -89,7 +89,8 @@ export function BillingPanel({ groupId, billing }: { groupId: string; billing: B
   }
 
   return <section className="space-y-6" aria-label="Planes de Asisteam" aria-busy={busy}>
-    <section className="space-y-3" aria-label="Estado del pago y renovación">
+    <section className="space-y-4 rounded-lg border border-border bg-surface p-4 sm:p-6" aria-label="Estado del pago y renovación">
+      <h2 className="text-h2">Estado del pago y renovación</h2>
       <Alert tone="info">
         <p className="font-semibold">{verificationRequired || (open && !current.activated_at) ? "Pago pendiente de verificación" : "Verificación de pagos"}</p>
         <p>Si volviste de Mercado Pago, actualiza el estado. El regreso desde el checkout no confirma un pago ni habilita cupos.</p>
@@ -119,7 +120,7 @@ export function BillingPanel({ groupId, billing }: { groupId: string; billing: B
     <section className="space-y-3" aria-labelledby="billing-plans-title">
       <h2 id="billing-plans-title" className="text-h2">1. Elige un plan</h2>
       <p>Suscripción mensual del club a Asisteam. Todos los planes incluyen las mismas funciones. Administradores, entrenadores y apoderados no consumen cupos de deportistas.</p>
-      <div className="grid gap-3 lg:grid-cols-3">{billing.plans.map(plan => {
+      <div className="grid gap-4 xl:grid-cols-3">{billing.plans.map(plan => {
         const isCurrent = current?.plan_code === plan.code;
         const canSelect = !open || (resumable && isCurrent);
         const selected = selectedCode === plan.code;
@@ -132,7 +133,7 @@ export function BillingPanel({ groupId, billing }: { groupId: string; billing: B
           <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="text-h3">{plan.name}</h3>
             {isCurrent && <Badge>{open ? "Contrato actual" : "Último contrato"}</Badge>}
           </div>
-          <p className="text-xl font-semibold">{formatClp(plan.amount_clp)} {plan.currency}/mes</p>
+          <p className="text-h2 tabular-nums">{formatClp(plan.amount_clp)} <span className="text-small font-normal text-muted-foreground">{plan.currency}/mes</span></p>
           <p>Hasta {plan.athlete_limit.toLocaleString("es-CL")} deportistas activos.</p>
           <div className="mt-auto space-y-2">
             <Button type="button" variant={selected ? "primary" : "secondary"} disabled={busy || verificationRequired || !canSelect}
@@ -146,7 +147,7 @@ export function BillingPanel({ groupId, billing }: { groupId: string; billing: B
       })}</div>
     </section>
 
-    {selectedPlan && selectedAllowed && <form className="space-y-4 rounded-lg border border-border bg-surface p-4" aria-labelledby="billing-checkout-title"
+    {selectedPlan && selectedAllowed && <form className="max-w-2xl space-y-4 rounded-lg border border-border bg-surface p-4 sm:p-6" aria-labelledby="billing-checkout-title"
       onSubmit={event => {
         event.preventDefault();
         if (checkoutReason || !checkoutInput?.success || busyRef.current) return;

@@ -21,11 +21,9 @@ export function Component(){
     const available = billing.athlete_limit === null ? null : Math.max(0, billing.athlete_limit - billing.active_athletes);
     const excess = billing.athlete_limit === null ? 0 : Math.max(0, billing.active_athletes - billing.athlete_limit);
     const cancelled = subscription?.status === "CANCELLED";
-    return <Page><title>Suscripción del club · Asisteam</title><PageHeader title="Suscripción del club">
-    <p>Plan, cupos habilitados y cobros del club a Asisteam.</p>
-  </PageHeader>
+    return <Page className="max-w-7xl p-0 md:p-0"><title>Suscripción del club · Asisteam</title><PageHeader title="Suscripción del club" description="Plan, cupos habilitados y cobros del club a Asisteam." />
   <section className="space-y-3" aria-label="Resumen de la suscripción actual">
-    <dl className="grid gap-3 lg:grid-cols-3">
+    <dl className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       <div className="min-w-0 space-y-2 rounded-lg border border-border bg-surface p-4">
         <dt className="text-small text-muted-foreground">{cancelled || subscription?.status === "FAILED" ? "Último contrato" : "Plan actual"}</dt>
         <dd className="text-h2">{plan?.name ?? "Sin suscripción"}</dd>
@@ -54,10 +52,10 @@ export function Component(){
     <ActionLink href={`/groups/${groupId}/settings`} variant="secondary">Continuar configuración</ActionLink>
   </nav>
   <BillingPanel groupId={groupId} billing={billing}/>
-  <section className="space-y-3" aria-label="Historial de cobros"><h2 className="text-xl font-semibold">Historial de cobros</h2>
-    <p id="billing-history-help" className="text-sm">Fechas en horario de Chile (America/Santiago). Un cobro pendiente se muestra vencido desde el día siguiente a su fecha prevista. En pantallas pequeñas, desplaza la tabla horizontalmente para ver todas las columnas.</p>
-    {billing.invoices.length ? <div role="region" aria-label="Tabla de cobros" aria-describedby="billing-history-help" tabIndex={0} className="overflow-x-auto rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">
-      <table className="w-full text-left text-sm"><caption className="sr-only">Cobros mensuales del club a Asisteam</caption><thead><tr><th scope="col" className="p-2">Plan</th><th scope="col" className="p-2">Fecha prevista</th><th scope="col" className="p-2">Monto CLP</th><th scope="col" className="p-2">Estado</th><th scope="col" className="p-2">Fecha de pago</th></tr></thead>
+  <section className="min-w-0 space-y-4 rounded-lg border border-border bg-surface p-4 sm:p-6" aria-label="Historial de cobros"><h2 className="text-h2">Historial de cobros</h2>
+    <p id="billing-history-help" className="text-small text-muted-foreground">Fechas en horario de Chile (America/Santiago). Un cobro pendiente se muestra vencido desde el día siguiente a su fecha prevista. En pantallas pequeñas, desplaza la tabla horizontalmente para ver todas las columnas.</p>
+    {billing.invoices.length ? <div role="region" aria-label="Tabla de cobros" aria-describedby="billing-history-help" tabIndex={0} className="overflow-x-auto rounded-md border border-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">
+      <table className="w-full min-w-[600px] text-left text-small tabular-nums [&_th]:py-3 [&_td]:py-3"><caption className="sr-only">Cobros mensuales del club a Asisteam</caption><thead className="bg-neutral-subtle"><tr><th scope="col" className="p-2">Plan</th><th scope="col" className="p-2">Fecha prevista</th><th scope="col" className="p-2">Monto CLP</th><th scope="col" className="p-2">Estado</th><th scope="col" className="p-2">Fecha de pago</th></tr></thead>
       <tbody>{billing.invoices.map(invoice => <tr key={invoice.id} className="border-t"><th scope="row" className="p-2 font-normal">{invoice.plan_name}</th><td className="whitespace-nowrap p-2"><time dateTime={invoice.due_at}>{date(invoice.due_at)}</time></td><td className="whitespace-nowrap p-2">{formatClp(invoice.amount_clp)}</td><td className="p-2"><Badge>{INVOICE_STATUS_LABELS[invoice.status]}</Badge></td><td className="whitespace-nowrap p-2">{invoice.paid_at ? <time dateTime={invoice.paid_at}>{date(invoice.paid_at)}</time> : "Sin pago confirmado"}</td></tr>)}</tbody></table></div> : <EmptyState>{billing.total_invoices === 0 ? "Aún no hay cobros registrados. Volver del checkout no confirma un pago." : "No hay cobros en esta página. Usa la paginación para revisar el historial."}</EmptyState>}
     <Pagination label="Páginas de cobros" page={page} totalPages={Math.max(page, Math.ceil(billing.total_invoices / 50))} previousHref={page > 1 ? `?page=${page - 1}` : undefined} nextHref={page * 50 < billing.total_invoices ? `?page=${page + 1}` : undefined}/>
   </section></Page>;

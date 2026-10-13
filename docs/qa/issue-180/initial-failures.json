@@ -1,0 +1,24 @@
+{
+  "environment": "local-synthetic",
+  "failures": [
+    {
+      "gate": "ci:checks",
+      "check": "web-unit",
+      "file": "billing-panel.test.tsx",
+      "reason": "El precio separado en elementos de importe/moneda no coincidía con un selector de nodo único.",
+      "correction": "Comprobar el mismo importe completo dentro del artículo Academia."
+    },
+    {
+      "gate": "specific-responsive-matrix",
+      "check": "billing-table-fixture",
+      "reason": "El interceptor usaba /api/v1/; SDK cookie usa /web-api/v1/.",
+      "correction": "Usar ruta cookie vigente del grupo exacto."
+    },
+    {
+      "gate": "specific-responsive-matrix",
+      "check": "billing-table-scroll",
+      "reason": "El fixture asumía scroll a720px; la tabla600px cabe en ese viewport.",
+      "correction": "Exigir scroll local a320/375px y ausencia de overflow de página en los cuatro tamaños."
+    }
+  ]
+}

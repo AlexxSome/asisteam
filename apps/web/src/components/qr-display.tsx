@@ -59,20 +59,25 @@ export function QrDisplay({ groupId, activityId, initialSettings }: { groupId: s
   }, [activityId, revision]);
 
   return <div className="space-y-6">
-    <section className="space-y-3" aria-label="QR de asistencia">
-      <div className="mx-auto flex min-h-72 max-w-sm flex-col items-center justify-center rounded-lg border bg-white p-2">
-        {url ? <QRCodeSVG value={url} size={280} marginSize={4} level="M" title="QR temporal para registrar asistencia" className="h-auto max-w-full" />
-          : !error ? <p role="status" className="p-4 text-center text-slate-700">Actualizando QR…</p>
+    <section className="space-y-4 rounded-lg border border-border bg-surface p-4 sm:p-6" aria-label="QR de asistencia">
+      <h2 className="text-h2">Escanea para registrar tu llegada</h2>
+      <div className="grid items-center gap-6 md:grid-cols-2">
+      <div className="mx-auto flex min-h-72 w-full max-w-sm flex-col items-center justify-center rounded-lg border border-border bg-white p-2">
+        {url ? <QRCodeSVG value={url} size={280} marginSize={4} level="M" bgColor="#FFFFFF" fgColor="#000000" title="QR temporal para registrar asistencia" className="h-auto max-w-full" />
+          : !error ? <p role="status" className="p-4 text-center text-muted-foreground">Actualizando QR…</p>
             : <div className="space-y-3 p-2">
               <Alert><p className="font-semibold">QR no disponible</p><p>{error.message}</p></Alert>
               {error.code === "checkin_failed" && <Button variant="secondary" onClick={() => setRevision(value => value + 1)}>Reintentar cargar QR</Button>}
               <ActionLink href={`/groups/${groupId}/activities/${activityId}`}>Volver a la actividad</ActionLink>
             </div>}
       </div>
+      <div className="min-w-0 space-y-3">
+      <p className="text-h3">QR temporal de esta actividad</p>
       {/* El contador visual queda fuera de las regiones de anuncios. */}
-      {url && <p className="text-center text-small">Se renueva en {seconds} s. Mantén esta pantalla abierta.</p>}
-      <p className="text-small">Escanea con la cámara de tu teléfono y abre el enlace para registrar tu llegada.</p>
+      {url && <p className="rounded-md bg-neutral-subtle p-3 text-small tabular-nums">Se renueva en {seconds} s. Mantén esta pantalla abierta.</p>}
+      <p className="text-body">Escanea con la cámara de tu teléfono y abre el enlace para registrar tu llegada.</p>
       <p className="text-small text-muted-foreground">Solo para deportistas activos de este grupo. Si ya hay asistencia, se conserva el registro anterior.</p>
+      </div></div>
     </section>
     <details className="rounded-lg border bg-surface">
       <summary className="min-h-11 cursor-pointer rounded-lg px-4 py-3 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">Ajustes de QR de todo el grupo</summary>
