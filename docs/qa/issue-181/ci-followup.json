@@ -1,0 +1,649 @@
+{
+  "issue": 181,
+  "pr": 242,
+  "sourceCommitBeforeFix": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+  "date": "2026-10-13T14:37:12.795754+00:00",
+  "failedRemoteRun": {
+    "id": 38409650758,
+    "head": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+    "nativePassed": 68,
+    "parityPassed": 41,
+    "parityExpected": 42,
+    "failureLocation": "apps/web/e2e/capabilities.spec.ts:40:218",
+    "assertion": "Ya tenías un registro after second QR scan",
+    "payloadRetained": false
+  },
+  "causeConfidence": "Probable: QR lifetime consumed before browser navigation; sanitized remote report does not retain response",
+  "boundaryReproduction": {
+    "startTime": "2026-10-13T14:26:35.024Z",
+    "duration": 25985.734,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "fixedScenario": {
+    "startTime": "2026-10-13T14:27:48.680Z",
+    "duration": 14939.331,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "correction": "Generate token after ready page/listener; when remaining current slot lifetime <10s, wait until next slot. Expired slot, idempotence, permissions, retry and privacy assertions unchanged. No product/SQL/workflow/retries/timeouts changes.",
+  "frozenInstall": "PASS",
+  "technicalStatus": "PASS",
+  "ci": {
+    "checks": {
+      "commit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "sourceCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "date": "2026-10-13T14:28:36.020Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.36
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.78
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 2.29
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.44
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 3.07
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 3.76
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.32
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.28
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 1.31,
+          "tests": 154,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 13.22,
+          "tests": 503,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 1.95
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.74
+        }
+      ]
+    },
+    "backend": {
+      "commit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "sourceCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "date": "2026-10-13T14:29:07.168Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.17
+        },
+        {
+          "check": "web-static-auth-fixture-build",
+          "status": "PASS",
+          "seconds": 3.52
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 2.05
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 27.9
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 52.77
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 4.62
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.13,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-dashboard",
+          "status": "PASS",
+          "seconds": 2.15
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.58
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 42.43,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ]
+    },
+    "controlled-failure": {
+      "commit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "sourceCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "date": "2026-10-13T14:31:32.980Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.36
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.43,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.54,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.19,
+          "expected": true
+        },
+        {
+          "check": "controlled-next-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.2,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ]
+    },
+    "staging": {
+      "commit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "sourceCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "date": "2026-10-13T14:31:37.868Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 1.3
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.46
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.1
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.62
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.7
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.58
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.85,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.69
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.01
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.14
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 10.98
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.27
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.15
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.91
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.31
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.66
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.09
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.31
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.49
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.14
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.27
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 1.14
+        }
+      ]
+    },
+    "extended": {
+      "commit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "sourceCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "date": "2026-10-13T14:32:16.375Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.8
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.2
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 3.74
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 0.32
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 186.05,
+          "tests": 68,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 87.54,
+          "tests": 42,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.38,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    },
+    "qualification": {
+      "sourceCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "checkoutCommit": "ac871d0563fdadfae37d38902daee47cff5f98aa",
+      "date": "2026-10-13T14:37:06.605Z",
+      "node": "v24.16.0",
+      "environment": "local-synthetic",
+      "technicalStatus": "PASS",
+      "acceptance": "NO-GO",
+      "suites": [
+        {
+          "suite": "checks",
+          "status": "PASS",
+          "tests": 657,
+          "omitted": 0
+        },
+        {
+          "suite": "backend",
+          "status": "PASS",
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "suite": "staging",
+          "status": "PASS",
+          "tests": 0,
+          "omitted": 0
+        },
+        {
+          "suite": "extended",
+          "status": "PASS",
+          "tests": 111,
+          "omitted": 0
+        }
+      ],
+      "blockers": [
+        "agreed-representative-load-and-source-destination-http-baseline",
+        "external-test-provider-receipts",
+        "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+        "operational-acceptance-MIG22"
+      ],
+      "load": {
+        "status": "PASS",
+        "activeAthletes": 500,
+        "attendanceRecords": 5000,
+        "cells": 8,
+        "requests": 192,
+        "maxP95Ms": 87.09
+      },
+      "bundle": {
+        "status": "PASS",
+        "budgetStatus": "PASS",
+        "initialGzipBytes": 200272,
+        "deltaInitialGzipBytes": 1154
+      }
+    }
+  },
+  "playwright": {
+    "native": {
+      "startTime": "2026-10-13T14:32:21.826Z",
+      "duration": 185634.77899999998,
+      "expected": 68,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "parity": {
+      "startTime": "2026-10-13T14:35:27.967Z",
+      "duration": 87036.235,
+      "expected": 42,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "faults": {
+      "startTime": "2026-10-13T14:36:55.443Z",
+      "duration": 10940.498,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "sourceFilesSHA256": {
+    "apps/web/e2e/capabilities.spec.ts": "5ecf35f747749c0716b546a87e327c77c3f20fd53d78fabef5c5adaa55878771",
+    "docs/qa/issue-181/README.md": "91d0591b320edd2d46b03e28fa6e4e59bff967e1cd8f81e4a29af2dccab67275"
+  },
+  "diffCheck": "PASS",
+  "autoReview": "Only followup diff and effects; no unresolved introduced findings",
+  "provenance": "ac871d0 plus corrective diff; original screenshots/visual measurements remain unchanged. Current local gate supersedes previous gate; remote CI must be observed after push.",
+  "humanAcceptance": "PENDIENTE",
+  "production": "NO-GO"
+}

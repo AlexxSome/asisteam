@@ -166,8 +166,9 @@ test('@smoke logs: login y registro reales sin argumentos privados', async ({ pa
   });
 });
 
-for (const width of [320, 375, 768, 1024, 1440]) {
+for (const width of [320, 375, 768, 1024, 1440, 1536]) {
   test(`@extended superficies reales ${width}px`, async ({ page }, info) => {
+    test.setTimeout(180000);
     await login(page, 'admin');
     await page.setViewportSize({ width, height: 900 });
     for (const [name, route] of Object.entries({
@@ -180,6 +181,7 @@ for (const width of [320, 375, 768, 1024, 1440]) {
     })) {
       await visit(page, route);
       await checkLayout(page);
+      await checkAccessibility(page, info);
       await screenshot(page, info, `${name}-${width}`);
     }
   });
