@@ -1,5 +1,7 @@
 import { RouterLink as Link } from "../navigation";
 import { activityDateTimeInput, activityTypeLabel, formatActivityDay, formatActivityTime } from "@asisteam/core/browser";
+import { ActionLink } from "../ui";
+import { ActivityDateMark } from "./activity-date-mark";
 type ActivityPeriod="upcoming"|"past";
 
 type AgendaActivity = {
@@ -22,9 +24,10 @@ export function ActivityPeriodLinks({ path, period, label, anchor = "" }: {
 }
 
 /** Presentation only: preserve the authorized query's order and pagination. */
-export function ActivityAgenda({ activities, period, page, context }: {
+export function ActivityAgenda({ activities, period, page, context, canTakeAttendance = false }: {
   activities: AgendaActivity[]; period: ActivityPeriod; page: number;
   context: { from: "group" | "agenda" } | { from: "wards"; wardId: string };
+  canTakeAttendance?: boolean;
 }) {
   const days = new Map<string, AgendaActivity[]>();
   for (const activity of activities) {
@@ -36,18 +39,23 @@ export function ActivityAgenda({ activities, period, page, context }: {
     <ul className="space-y-3">{rows.map(activity => {
       const nextDay = activity.starts_at && activity.ends_at && activityDateTimeInput(activity.starts_at).slice(0, 10) !== activityDateTimeInput(activity.ends_at).slice(0, 10);
       const query = `from=${context.from}${context.from === "wards" ? `&ward=${context.wardId}` : ""}&period=${period}&page=${page}`;
-      return <li key={activity.id} className="grid min-w-0 gap-3 rounded-lg border bg-surface p-4 sm:grid-cols-[8rem_minmax(0,1fr)]">
-        <div className="text-lg font-semibold tabular-nums">
-          <time dateTime={activity.starts_at ?? undefined}>{activity.starts_at ? formatActivityTime(activity.starts_at) : "Por confirmar"}</time>
-          {activity.ends_at && <span className="block text-sm font-normal text-muted-foreground">hasta <time dateTime={activity.ends_at}>{formatActivityTime(activity.ends_at)}</time>{nextDay && <span className="block">{formatActivityDay(activity.ends_at)}</span>}</span>}
-        </div>
+      const detail = `/groups/${activity.group_id}/activities/${activity.id}?${query}`;
+      return <li key={activity.id} className="grid min-w-0 grid-cols-[56px_minmax(0,1fr)] items-start gap-3 rounded-lg border bg-surface p-3 md:grid-cols-[56px_minmax(0,1fr)_auto]">
+        <ActivityDateMark startsAt={activity.starts_at}/>
         <div className="min-w-0 space-y-2">
           {context.from !== "group" && <p className="break-words text-sm text-muted-foreground">{activity.group_name}</p>}
-          <Link href={`/groups/${activity.group_id}/activities/${activity.id}?${query}`} prefetch={false}
-            className="block min-h-11 break-words py-2 text-lg font-semibold underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">{activity.title}<span className="sr-only"> · Ver detalle</span></Link>
+          <Link href={detail} prefetch={false}
+            className="block min-h-11 [overflow-wrap:anywhere] py-2 text-h3 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">{activity.title}<span className="sr-only"> · Ver detalle</span></Link>
+          <p className="text-small tabular-nums"><time dateTime={activity.starts_at ?? undefined}>{activity.starts_at ? formatActivityTime(activity.starts_at) : "Horario por confirmar"}</time>
+            {activity.ends_at && <> – <time dateTime={activity.ends_at}>{formatActivityTime(activity.ends_at)}</time>{nextDay && <> · {formatActivityDay(activity.ends_at)}</>}</>} · Chile</p>
           <p className="flex items-start gap-2 break-words text-sm"><span aria-hidden className="mt-1 size-3 shrink-0 rounded-full" style={{ backgroundColor: activity.activity_type_color ?? undefined }} />{activityTypeLabel(activity.activity_type_name ?? "", !!activity.is_system_type)}</p>
-          <p className="break-words text-sm text-muted-foreground">{activity.location || "Lugar por confirmar"}</p>
+          <p className="[overflow-wrap:anywhere] text-small text-muted-foreground">{activity.location || "Lugar por confirmar"}</p>
         </div>
+        <ActionLink className="col-start-2 justify-self-start md:col-start-3" variant={canTakeAttendance ? "primary" : "secondary"}
+          href={canTakeAttendance ? `/groups/${activity.group_id}/activities/${activity.id}/attendance?${query}` : detail}
+          aria-label={`${canTakeAttendance ? "Tomar asistencia" : "Ver actividad"} · ${activity.title}`}>
+          {canTakeAttendance ? "Tomar asistencia" : "Ver actividad"}
+        </ActionLink>
       </li>;
     })}</ul>
   </section>)}</div>;

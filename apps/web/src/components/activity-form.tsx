@@ -88,8 +88,8 @@ export function ActivityForm({ groupId, types, activity, returnHref, detailQuery
     } catch { setServerError("No pudimos confirmar la eliminación. Revisa la lista de actividades antes de reintentar."); }
     finally { setIsDeleting(false); }
   };
-  return <div className="max-w-xl space-y-8">
-    <form onSubmit={submit} data-unsaved-activity="true" noValidate>
+  return <div className="w-full min-w-0 space-y-6">
+    <form onSubmit={submit} data-unsaved-activity="true" noValidate className="min-w-0 rounded-lg border bg-surface p-4 md:p-6">
       <fieldset disabled={busy} className="min-w-0 space-y-5">
         <legend className="sr-only">Datos de la actividad</legend>
         <p className="text-sm text-muted-foreground">Todos los horarios se ingresan en hora de Chile (America/Santiago).</p>
@@ -148,7 +148,7 @@ export function ActivityForm({ groupId, types, activity, returnHref, detailQuery
       </fieldset>
     </form>
     {serverError && <p role="alert" className="text-destructive">{serverError}</p>}
-    {activity && <section aria-labelledby="delete-activity" className="space-y-3 border-t pt-6">
+    {activity && <section aria-labelledby="delete-activity" className="space-y-3 rounded-lg border bg-surface p-4 md:p-6">
       <h2 id="delete-activity" className="text-lg font-semibold">Eliminar actividad</h2>
       <p className="break-words text-sm">Actividad guardada: <strong>{activity.values.title}</strong>. {localSchedule(activity.values.starts_at, activity.values.ends_at)}</p>
       {activity.recurring && <fieldset disabled={busy} className="space-y-2">
