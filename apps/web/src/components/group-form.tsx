@@ -105,8 +105,8 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
     }
   }
 
-  return <div className="space-y-6"><form onSubmit={submit} noValidate className="space-y-5 rounded-lg border p-5">
-    {groupId ? <h2 className="text-lg font-semibold">Datos del grupo</h2>
+  return <div className="space-y-6"><form onSubmit={submit} noValidate className="space-y-5 rounded-lg border border-border bg-surface p-4 md:p-6">
+    {groupId ? <h2 className="text-h2">Datos del grupo</h2>
       : <p className="text-sm text-muted-foreground">Serás administrador del grupo. Las estadísticas del grupo estarán ocultas para deportistas y apoderados de forma predeterminada.</p>}
     {!groupId && <aside aria-label="Antes de crear tu grupo" className="space-y-2 rounded-md bg-info-subtle p-4 text-sm">
       <h2 className="font-semibold">Configura ahora; activa deportistas con un plan</h2>
@@ -134,8 +134,8 @@ export function GroupForm({ groupId, initialValues, inviteCode }: {
     {saved && <p role="status">Cambios guardados.</p>}
     <Button type="submit" loading={isSubmitting}>{groupId ? "Guardar cambios" : "Crear grupo"}</Button>
   </form>
-    {groupId && <section id="invite" className="space-y-3 rounded-lg border p-5">
-      <h2 className="text-lg font-semibold">Código de invitación</h2>
+    {groupId && <section id="invite" className="space-y-3 rounded-lg border border-border bg-surface p-4 md:p-6">
+      <h2 className="text-h2">Código de invitación</h2>
       <p>Comparte este código con quienes quieras incorporar como deportistas.</p>
       <output className="block font-mono text-xl tracking-widest" aria-label="Código de invitación">{code}</output>
       {code && <div className="space-y-2">

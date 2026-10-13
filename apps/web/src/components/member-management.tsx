@@ -98,15 +98,15 @@ export function MemberManagement({ groupId, member }: { groupId: string; member:
   }
   const otherRoles = member.person_roles.filter(item => item.role !== member.role);
   const roleLabel = MEMBERSHIP_ROLE_LABELS[member.role];
-  return <article aria-label={`${member.full_name}, ${roleLabel}`} className="min-w-0 border-b border-border bg-surface last:border-b-0">
+  return <article aria-label={`${member.full_name}, ${roleLabel}`} className="min-w-0 border-b border-border bg-surface first:rounded-t-lg last:rounded-b-lg last:border-b-0">
     <div className="grid min-w-0 gap-2 p-3 lg:grid-cols-[minmax(0,1fr)_8rem_7rem_auto] lg:items-center">
       <div className="min-w-0">
         <h2 className="font-semibold [overflow-wrap:anywhere]">{member.full_name}</h2>
-        <p className="text-caption text-muted-foreground">{ACCOUNT_STATUS_LABELS[member.account_status]}</p>
+        <p className="text-small text-muted-foreground">{ACCOUNT_STATUS_LABELS[member.account_status]}</p>
         {otherRoles.length > 0 && <p className="text-caption text-muted-foreground [overflow-wrap:anywhere]">Otros roles de esta persona: {otherRoles.map(item => `${MEMBERSHIP_ROLE_LABELS[item.role]} (${MEMBERSHIP_STATUS_LABELS[item.status]})`).join(", ")}</p>}
       </div>
       <p className="text-small"><span className="sr-only">Rol: </span>{roleLabel}</p>
-      <p className="text-small"><span className="sr-only">Estado: </span>{MEMBERSHIP_STATUS_LABELS[member.status]}{member.is_last_admin && <span className="block font-medium">Último administrador</span>}</p>
+      <div className="text-small"><span className="block text-caption text-muted-foreground">Membresía</span><p><span className="sr-only">Estado: </span>{MEMBERSHIP_STATUS_LABELS[member.status]}{member.is_last_admin && <span className="block font-medium">Último administrador</span>}</p></div>
       <div className="flex flex-wrap items-center gap-1">
         <Button ref={detailRef} type="button" variant="tertiary" disabled={saving} aria-expanded={expanded}
           aria-controls={`${prefix}-detail`} onClick={() => {

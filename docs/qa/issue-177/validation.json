@@ -1,0 +1,636 @@
+{
+  "issue": 177,
+  "baseCommit": "8d2a5d02e9c79bdec56abf33be4c81f11966df2a",
+  "scope": "base plus issue working-tree diff; source contents checked against SHA-256",
+  "date": "2026-10-13T00:32:57.112412+00:00",
+  "environment": "local-synthetic macOS arm64",
+  "node": "24.16.0",
+  "pnpm": "10.33.2",
+  "sourceSHA256": {
+    "apps/web/e2e/regression/helpers.ts": "2f53078cc8c267563daea8abf79080b32d0d4b4cb09769435337aa7b8f5e3f7b",
+    "apps/web/src/components/group-form.tsx": "370d01c0789c1f0e4bc96c2c19331f5831e3c86fe2ea9b9bfaccd82985b09d72",
+    "apps/web/src/components/guardian-form.tsx": "9d7d04f820f7998d03b28cc0c0e59da7a9116778201f1761d9061f5fcf175312",
+    "apps/web/src/components/managed-member-form.tsx": "632a18bc5cf8875b3d9358cc55e5443ead486afc65bf5bc279c616f13a7ad587",
+    "apps/web/src/components/member-management.retained.test.tsx": "107699031ca26d02869fb2ba3c9767098aecfb40e87a76a317a9bf23b53b31d7",
+    "apps/web/src/components/member-management.tsx": "3b549d24038587298bb28626f2674d26f1159289ea9c64f94e6f801ee55aae5b",
+    "apps/web/src/components/membership-review.tsx": "56df8eb5b6fce9f64b3b5f75f5d540ca9e68df0647d4bb8cf1b52a6e7a2afe03",
+    "apps/web/src/components/visibility-form.retained.test.tsx": "393817ae2775697c3d07b2ebb86548170f84e3705a13831c4a2b826bddb438d5",
+    "apps/web/src/components/visibility-form.tsx": "830f2f1d4252d1cb8348dacafbba1fd8e69bb08f40c35b6b2f4436c9969860be",
+    "apps/web/src/routes/activity-types.tsx": "ae4d9ecdcf5a159cadabda4204d24b1bb74939ddf41d7c47dbbbd0bd1fe88b8d",
+    "apps/web/src/routes/group-settings.tsx": "38de5550486ac752fe1d23cf3391955609e6be5ca04492b8d2b00a993d058926",
+    "apps/web/src/routes/guardians.tsx": "bb75132d7fd708a866910331b6c4eeef7e2d85d53fd50d4faf309025f43a3ee7",
+    "apps/web/src/routes/invitations-admin.tsx": "2e4b0bbe04d6d713794144259c06e9b101e632810b92693eb586fa29a850f92f",
+    "apps/web/src/routes/member-new.tsx": "5f2dea116cfc84ad15ca38b64a6d13b5e25d3eed6c5041896878ffa7a0f9c705",
+    "apps/web/src/routes/members-consent.tsx": "53e04f24a57c8743aef264dc1f87c1bb98c087da82be586e315ff93edef685ee",
+    "apps/web/src/routes/members-pending.tsx": "cf789f3c9d9445132c5836cb4ebdece78e11649940c3e22fc4e965aedb428f46",
+    "apps/web/src/routes/members.tsx": "bd00a5daff6d28aab81e532897af529bf8206deb1956cba29db6c6f2e10f4232",
+    "apps/web/src/routes/visibility.tsx": "6f0953e1c42105ca31711d5a0cbe6d3841d69777cfd9d104365ba337e4268b74",
+    "apps/web/e2e/regression/members-management.spec.ts": "e9e9e5863651b65c1f00acd071a44c581f94f952b7ff1fb0ef71e3a8ce8215b2"
+  },
+  "suites": {
+    "checks": {
+      "workflow": ".github/workflows/ci.yml:jobs.checks",
+      "command": "pnpm ci:checks",
+      "date": "2026-10-13T00:27:35.859Z",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "ci-runner-tests",
+          "status": "PASS",
+          "seconds": 0.47
+        },
+        {
+          "check": "lint",
+          "status": "PASS",
+          "seconds": 2.32
+        },
+        {
+          "check": "http-contract-generation",
+          "status": "PASS",
+          "seconds": 1.64
+        },
+        {
+          "check": "native-test-fixture-build",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "typecheck",
+          "status": "PASS",
+          "seconds": 2.94
+        },
+        {
+          "check": "build",
+          "status": "PASS",
+          "seconds": 3.53
+        },
+        {
+          "check": "vite-static-infrastructure",
+          "status": "PASS",
+          "seconds": 0.3
+        },
+        {
+          "check": "vite-bundle-baseline",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "product-runtime-retirement",
+          "status": "PASS",
+          "seconds": 0.19
+        },
+        {
+          "check": "core-unit",
+          "status": "PASS",
+          "seconds": 0.92,
+          "tests": 154,
+          "omitted": 0
+        },
+        {
+          "check": "web-unit",
+          "status": "PASS",
+          "seconds": 13.01,
+          "tests": 493,
+          "omitted": 0
+        },
+        {
+          "check": "worker-unit",
+          "status": "PASS",
+          "seconds": 0.26
+        },
+        {
+          "check": "api-unit",
+          "status": "PASS",
+          "seconds": 2.14
+        },
+        {
+          "check": "api-client-contract",
+          "status": "PASS",
+          "seconds": 0.85
+        }
+      ]
+    },
+    "backend": {
+      "workflow": ".github/workflows/ci.yml:jobs.backend",
+      "command": "pnpm ci:backend",
+      "date": "2026-10-13T00:13:49.180Z",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "api-session-build",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "worker-build",
+          "status": "PASS",
+          "seconds": 0.17
+        },
+        {
+          "check": "web-static-auth-fixture-build",
+          "status": "PASS",
+          "seconds": 3.66
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 2.15
+        },
+        {
+          "check": "independent-postgres-api-worker-types-backup-pitr",
+          "status": "PASS",
+          "seconds": 29.92
+        },
+        {
+          "check": "native-api-worker-all-integrations",
+          "status": "PASS",
+          "seconds": 52.92
+        },
+        {
+          "check": "static-social-auth-browser",
+          "status": "PASS",
+          "seconds": 4.81
+        },
+        {
+          "check": "portability-rehearsal",
+          "status": "PASS",
+          "seconds": 0.21
+        },
+        {
+          "check": "portability-no-omissions",
+          "status": "PASS"
+        },
+        {
+          "check": "portability-injected-failure",
+          "status": "FAIL",
+          "seconds": 2.14,
+          "expected": true
+        },
+        {
+          "check": "portability-cleanup-after-failure",
+          "status": "PASS"
+        },
+        {
+          "check": "pgtap-dashboard",
+          "status": "PASS",
+          "seconds": 2.48
+        },
+        {
+          "check": "pgtap-all-domain",
+          "status": "PASS",
+          "seconds": 7.5
+        },
+        {
+          "check": "sql-coverage-preserved",
+          "status": "PASS"
+        },
+        {
+          "check": "product-integrations",
+          "status": "PASS",
+          "seconds": 50.08,
+          "tests": 84,
+          "omitted": 0
+        },
+        {
+          "check": "module-coverage-preserved",
+          "status": "PASS"
+        }
+      ],
+      "additionalCommand": "node scripts/ci/probe.mjs",
+      "controlledFailureChecks": [
+        {
+          "check": "probe-type-baseline",
+          "status": "PASS",
+          "seconds": 0.24
+        },
+        {
+          "check": "controlled-pgtap-failure",
+          "status": "FAIL",
+          "seconds": 2.27,
+          "expected": true
+        },
+        {
+          "check": "controlled-type-failure",
+          "status": "FAIL",
+          "seconds": 1.62,
+          "errorCodes": [
+            "TS2322"
+          ],
+          "expected": true
+        },
+        {
+          "check": "controlled-runtime-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.18,
+          "expected": true
+        },
+        {
+          "check": "controlled-next-retirement-failure",
+          "status": "FAIL",
+          "seconds": 0.21,
+          "expected": true
+        },
+        {
+          "check": "controlled-failure-detected",
+          "status": "PASS"
+        }
+      ],
+      "retainedAfterPresentationChange": "Final changes to route CSS and labels do not change backend/RPC/SDK/auth logic or integration assertions. Final static build, browser suites and staging were repeated."
+    },
+    "staging": {
+      "workflow": ".github/workflows/ci.yml:jobs.staging",
+      "command": "pnpm ci:staging",
+      "date": "2026-10-13T00:28:05.069Z",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "synthetic-external-secrets",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "api-container-build",
+          "status": "PASS",
+          "seconds": 1.31
+        },
+        {
+          "check": "api-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 6.79
+        },
+        {
+          "check": "staging-role-query",
+          "status": "PASS",
+          "seconds": 0.1
+        },
+        {
+          "check": "staging-role-separation",
+          "status": "PASS"
+        },
+        {
+          "check": "second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.56
+        },
+        {
+          "check": "second-image-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "distinct-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.88
+        },
+        {
+          "check": "staging-deploy",
+          "status": "PASS",
+          "seconds": 4.42
+        },
+        {
+          "check": "rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-deploy",
+          "status": "FAIL",
+          "seconds": 0.88,
+          "expected": true
+        },
+        {
+          "check": "staging-automatic-rollback",
+          "status": "PASS",
+          "seconds": 1.7
+        },
+        {
+          "check": "automatic-rollback-release-state",
+          "status": "PASS"
+        },
+        {
+          "check": "rollback-container-id",
+          "status": "PASS",
+          "seconds": 0.06
+        },
+        {
+          "check": "rollback-artifact-query",
+          "status": "PASS",
+          "seconds": 0.01
+        },
+        {
+          "check": "rollback-artifact-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "staging-log-read",
+          "status": "PASS",
+          "seconds": 0.05
+        },
+        {
+          "check": "staging-log-privacy",
+          "status": "PASS"
+        },
+        {
+          "check": "api-real-postgres-integration",
+          "status": "PASS",
+          "seconds": 1.42
+        },
+        {
+          "check": "vite-container-build",
+          "status": "PASS",
+          "seconds": 10.49
+        },
+        {
+          "check": "vite-image-id",
+          "status": "PASS",
+          "seconds": 0.08
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.29
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.11
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-second-artifact-build",
+          "status": "PASS",
+          "seconds": 0.77
+        },
+        {
+          "check": "vite-second-image-id",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-distinct-container-artifacts",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.42
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.27
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.02
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.12
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-replace",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "vite-container-start",
+          "status": "PASS",
+          "seconds": 0.25
+        },
+        {
+          "check": "vite-container-port",
+          "status": "PASS",
+          "seconds": 0.04
+        },
+        {
+          "check": "vite-container-non-navigation",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-legal-and-csp",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-same-origin-nest-error",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-runtime",
+          "status": "PASS",
+          "seconds": 0.1
+        },
+        {
+          "check": "vite-container-provenance",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-restored-image",
+          "status": "PASS",
+          "seconds": 0.03
+        },
+        {
+          "check": "vite-container-rollback-identity",
+          "status": "PASS"
+        },
+        {
+          "check": "vite-container-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.23
+        },
+        {
+          "check": "staging-owned-cleanup",
+          "status": "PASS",
+          "seconds": 0.92
+        }
+      ]
+    },
+    "extended": {
+      "workflow": ".github/workflows/ci.yml:jobs.extended",
+      "command": "pnpm ci:extended",
+      "date": "2026-10-13T00:28:42.579Z",
+      "status": "PASS",
+      "checks": [
+        {
+          "check": "chromium-install",
+          "status": "PASS",
+          "seconds": 0.49
+        },
+        {
+          "check": "nest-domain-build",
+          "status": "PASS",
+          "seconds": 0.22
+        },
+        {
+          "check": "vite-static-build",
+          "status": "PASS",
+          "seconds": 3.8
+        },
+        {
+          "check": "private-storage-fixture-build",
+          "status": "PASS",
+          "seconds": 1.84
+        },
+        {
+          "check": "playwright-nest-domain-responsive-axe",
+          "status": "PASS",
+          "seconds": 108.04,
+          "tests": 52,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-vite-static-parity",
+          "status": "PASS",
+          "seconds": 80.96,
+          "tests": 42,
+          "omitted": 0
+        },
+        {
+          "check": "playwright-transport-faults",
+          "status": "PASS",
+          "seconds": 11.35,
+          "tests": 1,
+          "omitted": 0
+        }
+      ]
+    }
+  },
+  "qualification": {
+    "sourceCommit": "8d2a5d02e9c79bdec56abf33be4c81f11966df2a",
+    "checkoutCommit": "8d2a5d02e9c79bdec56abf33be4c81f11966df2a",
+    "date": "2026-10-13T00:32:09.491Z",
+    "node": "v24.16.0",
+    "environment": "local-synthetic",
+    "technicalStatus": "PASS",
+    "acceptance": "NO-GO",
+    "suites": [
+      {
+        "suite": "checks",
+        "status": "PASS",
+        "tests": 647,
+        "omitted": 0
+      },
+      {
+        "suite": "backend",
+        "status": "PASS",
+        "tests": 84,
+        "omitted": 0
+      },
+      {
+        "suite": "staging",
+        "status": "PASS",
+        "tests": 0,
+        "omitted": 0
+      },
+      {
+        "suite": "extended",
+        "status": "PASS",
+        "tests": 95,
+        "omitted": 0
+      }
+    ],
+    "blockers": [
+      "agreed-representative-load-and-source-destination-http-baseline",
+      "external-test-provider-receipts",
+      "human-screen-reader-native-zoom-axe-incomplete-and-one-handed-attendance",
+      "operational-acceptance-MIG22"
+    ],
+    "load": {
+      "status": "PASS",
+      "activeAthletes": 500,
+      "attendanceRecords": 5000,
+      "cells": 8,
+      "requests": 192,
+      "maxP95Ms": 129.06
+    },
+    "bundle": {
+      "status": "PASS",
+      "budgetStatus": "PASS",
+      "initialGzipBytes": 200263,
+      "deltaInitialGzipBytes": 1145
+    }
+  },
+  "specific": {
+    "unitCasesWithinFinalWebSuite": 51,
+    "membersViteJourneys": 6,
+    "correctedNativeJourney": 1,
+    "visualCells": 16,
+    "viewports": [
+      375,
+      1440
+    ],
+    "axeViolations": 0,
+    "axeIncompleteRules": [
+      "aria-valid-attr-value"
+    ]
+  },
+  "captureSHA256": {
+    "after-visibility-1440.png": "8561468e7922e41bb91dbe70ae75468ddd5d2b5184ea3522bd53c74a1e011883",
+    "after-guardian-375.png": "64ba4e2ecb25f151b7d7b025887480794a15589a673ce7320f97829324c4b8dd",
+    "after-pending-375.png": "18046e0ffb667b795e853ac3655fa89c1b60c02110e0af49211e125e35bf2782",
+    "before-members-1440.png": "fec06e02b7be0c930d4ede9ed57d3979d0ebc927615ad32a6edad3aad2af36ff",
+    "before-members-375.png": "96bf6b3bbb37f98d2c19905bd3306d0e99eb689efd203a97d01174aa82ea3502",
+    "before-pending-375.png": "380225b823fae18e8f6530101083c3c0af6e9de3a3c6d15bb8956970e121b888",
+    "after-members-375.png": "4b22eb991fd5a3105e9830af7edb4fbf7e0653f2c3d249f3c9e2f8a744c3cc46",
+    "before-visibility-1440.png": "4f6fd1f4b3b4ee14e48d8b750c00be67d9ea767fc8220b8c70a682fead6d49c9",
+    "after-members-1440.png": "e80de88d218d423fc96bef03d1127f1fa8893abf930aacf3685bdaf7114720b7",
+    "before-guardian-375.png": "bb6e1a4382ba0a76eeb492f30cddbf4945a56c3c3902bce79b09c9839efcce04"
+  },
+  "review": {
+    "scope": "only issue diff",
+    "resolved": [
+      "reuse existing management navigation",
+      "use AppShell padding",
+      "preserve exact core account labels and accessible Estado labels"
+    ],
+    "gitDiffCheck": "PASS"
+  },
+  "remoteCI": "pending at delivery; local PASS is not remote evidence",
+  "production": "NO-GO"
+}

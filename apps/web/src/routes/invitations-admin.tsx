@@ -1,9 +1,9 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { browserApi, sessionError } from "../api";
 import { groupData } from "../group-data";
-import { RouterLink as Link } from "../navigation";
 import { Page, ActionLink } from "../ui";
 import { EmptyState } from "../../src/components/ui/empty-state";
+import { PageHeader } from "../components/ui/page-header";
 import { Pagination } from "../components/pagination";
 import { INVITATION_STATUS_LABELS,MEMBERSHIP_ROLE_LABELS,httpSchemas } from "@asisteam/core/browser";
 import { InvitationFeedback,InvitationForm,ResendInvitationButton } from "../components/invitation-form";
@@ -16,14 +16,14 @@ export async function loader({request,params}:LoaderFunctionArgs){
  try {const result=await browserApi(request.signal).listInvitations({params:{groupId:group.id},query:parsed.data});return {groupId:group.id,page:parsed.data.page,history:query.get("view")==="history"||query.has("page"),data:result.data,count:result.total};}catch(error){return sessionError(error,request);}
 }
 export function Component(){const {groupId,page,history,data,count}=useLoaderData<typeof loader>();
-    return <Page><title>Invitaciones del grupo · Asisteam</title>
-    <header className="space-y-2"><h1 className="text-h1">Invitaciones del grupo</h1><p>Invita por email o revisa el estado de las invitaciones enviadas.</p></header>
+    return <Page className={`${history ? "max-w-7xl" : "max-w-2xl"} px-0 py-0 md:px-0`}><title>Invitaciones del grupo · Asisteam</title>
+    <PageHeader title="Invitaciones del grupo" description="Invita por email o revisa el estado de las invitaciones enviadas."/>
     <nav aria-label="Vistas de invitaciones" className="flex flex-wrap gap-3">
       <ActionLink href="?view=new" variant={history ? "secondary" : "primary"} aria-current={!history ? "page" : undefined}>Nueva invitación</ActionLink>
       <ActionLink href="?view=history" variant={history ? "primary" : "secondary"} aria-current={history ? "page" : undefined}>Historial ({count ?? 0})</ActionLink>
     </nav>
     <InvitationFeedback key={`${groupId}:${history ? "history" : "new"}`}>
-    {!history ? <section className="space-y-4 rounded-lg border p-4" aria-labelledby="new-invitation-heading">
+    {!history ? <section className="space-y-4 rounded-lg border border-border bg-surface p-4 md:p-6" aria-labelledby="new-invitation-heading">
       <h2 id="new-invitation-heading" className="text-h2">Invitar por email</h2>
       <InvitationForm groupId={groupId}/>
     </section> : <section aria-labelledby="invitations-heading" className="space-y-4">
@@ -35,7 +35,7 @@ export function Component(){const {groupId,page,history,data,count}=useLoaderDat
       </EmptyState> : <ul className="space-y-3">
         {data.map(invitation => {
                     const status = invitation.status === "PENDING" && new Date(invitation.expires_at).getTime() <= Date.now() ? "EXPIRED" : invitation.status;
-                    return <li key={invitation.id} className="min-w-0 space-y-3 rounded-md border p-4">
+                    return <li key={invitation.id} className="min-w-0 space-y-3 rounded-lg border border-border bg-surface p-4 md:flex md:items-center md:justify-between md:gap-4 md:space-y-0">
             <div className="min-w-0 space-y-1">
               <p className="break-all font-medium">{invitation.email ?? "Destinatario vinculado"}</p>
               <p>{MEMBERSHIP_ROLE_LABELS[invitation.role as "ATHLETE" | "GUARDIAN"]} · {INVITATION_STATUS_LABELS[status]}</p>
@@ -48,5 +48,6 @@ export function Component(){const {groupId,page,history,data,count}=useLoaderDat
       <Pagination label="Páginas de invitaciones" page={page} totalPages={Math.ceil((count ?? 0) / PAGE_SIZE)} previousHref={page > 1 ? `?view=history&page=${page - 1}` : undefined} nextHref={(count ?? 0) > page * PAGE_SIZE ? `?view=history&page=${page + 1}` : undefined}/>
     </section>}
     </InvitationFeedback>
+    <ActionLink href={`/groups/${groupId}/members`}>Volver a integrantes</ActionLink>
   </Page>;
 }

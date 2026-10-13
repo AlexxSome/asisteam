@@ -1,5 +1,6 @@
 // WEB-06: existing presentation with Router and cookie HTTP adapters.
 
+import { Button } from "../ui";
 import { useState } from "react";
 import { RouterLink as Link } from "../navigation";
 import { useForm } from "react-hook-form";
@@ -7,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GUARDIANSHIP_ERROR_MESSAGES, guardianshipSchema, type GuardianshipInput } from "@asisteam/core/browser";
 import { createGuardianship, type CreateGuardianshipResult } from "../member-mutations";
 
-const fieldClass = "min-h-11 w-full rounded-md border bg-background px-3 py-2";
+const fieldClass = "min-h-11 w-full rounded-md border border-input bg-surface px-3 py-2";
 export function GuardianForm({ groupId, athletes, selectedAthleteId }: { groupId: string; athletes: { user_id: string; full_name: string }[]; selectedAthleteId?: string }) {
   const [error, setError] = useState<string>();
   const [created, setCreated] = useState<Extract<CreateGuardianshipResult, { guardianshipId: string }>>();
@@ -30,7 +31,7 @@ export function GuardianForm({ groupId, athletes, selectedAthleteId }: { groupId
     <Link href={`/groups/${groupId}/invitations/new`} className="block underline">Revisar invitaciones</Link>
     <Link href={`/groups/${groupId}/members/pending`} className="inline-flex min-h-11 items-center underline">Revisar estado de incorporación</Link>
   </section>;
-  return <form className="max-w-xl space-y-4" onSubmit={submit} noValidate>
+  return <form className="min-w-0 space-y-4" onSubmit={submit} noValidate>
     <div className="space-y-2"><label htmlFor="guardian-athlete">Deportista menor de edad</label>
       <select id="guardian-athlete" className={fieldClass} aria-invalid={!!errors.athlete_user_id} aria-describedby="guardian-athlete-error" {...register("athlete_user_id")}>
         <option value="">Selecciona un deportista</option>
@@ -53,6 +54,6 @@ export function GuardianForm({ groupId, athletes, selectedAthleteId }: { groupId
     </div>
     <p className="text-sm">Se enviará una invitación al email indicado. El apoderado queda agregado al grupo y a los demás grupos donde el pupilo esté activo.</p>
     {error && <p role="alert" className="text-destructive">{error}</p>}
-    <button disabled={isSubmitting} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">{isSubmitting ? "Guardando…" : "Registrar y vincular apoderado"}</button>
+    <Button type="submit" loading={isSubmitting}>{isSubmitting ? "Guardando…" : "Registrar y vincular apoderado"}</Button>
   </form>;
 }

@@ -2,6 +2,7 @@ import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { browserApi, sessionError } from "../api";
 import { groupData } from "../group-data";
 import { RouterLink as Link } from "../navigation";
+import { PageHeader } from "../components/ui/page-header";
 import { Page } from "../ui";
 import { MembershipProgress } from "../components/membership-review";
 import { AccountActivationConsent,ManagedConsentForm,ConsentFeedback } from "../components/consent-form";
@@ -20,13 +21,13 @@ export async function loader({request,params}:LoaderFunctionArgs){
  }catch(error){return sessionError(error,request);}
 }
 export function Component(){const {group,page,query,data,activations}=useLoaderData<typeof loader>();
-    return <Page><title>Consentimientos de mis pupilos · Asisteam</title>
-    <h1 className="text-2xl font-semibold">Consentimientos de mis pupilos</h1>
+    return <Page className="max-w-2xl px-0 py-0 md:px-0"><title>Consentimientos de mis pupilos · Asisteam</title>
+    <PageHeader title="Consentimientos de mis pupilos" description="Revisa cada decisión para tu pupilo y este grupo."/>
     <h2 className="text-xl font-semibold">Participación en {group.name}{query.athlete && data[0] ? ` · ${data[0].full_name}` : ""}</h2>
     <p>El consentimiento de datos, la membresía activa, el acceso con contraseña y la autorización de imagen son decisiones diferentes.</p>
     <ConsentFeedback key={`${group.id}:${query.athlete??""}:${page}`}>
     {!data.some(ward => ward.can_consent) && <p>No tienes consentimientos de datos pendientes en esta página.</p>}
-    {data.map(ward => <section key={ward.membership_id} className="space-y-3">
+    {data.map(ward => <section key={ward.membership_id} className="space-y-3 rounded-lg border border-border bg-surface p-4 md:p-6">
       {ward.can_consent ? <ManagedConsentForm membershipId={ward.membership_id} billingGroupId={group.access === "admin" ? group.id : undefined} fullName={ward.full_name} relationship={ward.relationship ?? ""} managedEnrollment={ward.requires_managed_consent}/>
                 : <><h3 className="text-lg font-semibold">{ward.full_name}</h3><MembershipProgress groupId={group.id} member={ward} audience="guardian"/></>}
     </section>)}

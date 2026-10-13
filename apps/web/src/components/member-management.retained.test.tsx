@@ -176,3 +176,19 @@ it("último ADMIN mantiene bloqueo visible y no ofrece promoción inventada", as
   expect(screen.queryByRole("button", { name: /Promover|Asignar.*Administrador/ })).toBeNull();
   expect(mock.status).not.toHaveBeenCalled();
 });
+
+
+it("dos roles de una persona conservan filas e identidad de la acción", async () => {
+  const athlete={...member, account_status:"ACTIVE" as const,
+    person_roles:[{role:"ADMIN" as const,status:"ACTIVE" as const},{role:"ATHLETE" as const,status:"ACTIVE" as const}]};
+  const admin={...athlete,membership_id:"34000000-0000-4000-8000-000000000312",role:"ADMIN" as const,is_last_admin:true};
+  render(<><MemberManagement groupId={groupId} member={admin}/><MemberManagement groupId={groupId} member={athlete}/></>);
+  expect(screen.getAllByRole("article")).toHaveLength(2);
+  const row=screen.getByRole("article",{name:"Persona gestionada, Deportista"});
+  await userEvent.click(within(row).getByLabelText("Acciones de Persona gestionada, Deportista"));
+  await userEvent.click(within(row).getByRole("button",{name:"Desactivar este rol"}));
+  await userEvent.click(within(row).getByRole("button",{name:"Confirmar desactivación"}));
+  expect(mock.status).toHaveBeenCalledTimes(1);
+  expect(mock.status).toHaveBeenCalledWith({group_id:groupId,membership_id:athlete.membership_id,action:"deactivate"});
+  expect(within(screen.getByRole("article",{name:"Persona gestionada, Administrador"})).getByText("Último administrador")).toBeTruthy();
+});
