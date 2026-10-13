@@ -1,0 +1,5935 @@
+{
+  "environment": "local-synthetic",
+  "provenance": "ci:extended / playwright-nest-domain-responsive-axe",
+  "viewports": [
+    320,
+    375,
+    720,
+    1440
+  ],
+  "nativeMatrixStats": {
+    "startTime": "2026-10-13T13:02:04.788Z",
+    "duration": 148286.93600000002,
+    "expected": 62,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "selected": [
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "status": "passed",
+      "durationMs": 4292
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "status": "passed",
+      "durationMs": 3273
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "status": "passed",
+      "durationMs": 5660
+    }
+  ],
+  "captures": [
+    "ui180-wall-375.png",
+    "ui180-wall-1440.png",
+    "ui180-billing-375.png",
+    "ui180-billing-1440.png",
+    "ui180-invoices-375.png",
+    "ui180-invoices-1440.png",
+    "ui180-qr-375.png",
+    "ui180-qr-1440.png",
+    "ui180-receipt-375.png",
+    "ui180-expired-375.png",
+    "ui180-receipt-1440.png",
+    "ui180-expired-1440.png",
+    "ui180-registering-375.png",
+    "ui180-retry-375.png"
+  ],
+  "analyses": [
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.11,
+          "foreground": "#1d4ed8",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 muro editorial, destino del último anuncio y permisos por rol",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/announcements",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 8.31,
+          "foreground": "#991b1b",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#ffffff",
+          "background": "#1d4ed8",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "tr:nth-child(1) > .whitespace-nowrap:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".whitespace-nowrap:nth-child(5) > time"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "tr:nth-child(2) > .whitespace-nowrap:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "tr:nth-child(2) > .whitespace-nowrap:nth-child(5)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".whitespace-nowrap:nth-child(5) > time"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            },
+            {
+              "target": [
+                "tr:nth-child(2) > .whitespace-nowrap:nth-child(5)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 suscripción responsive: retorno sin pago, planes finitos e historial contenido",
+      "route": "/groups/50a20530-0000-4000-8000-000000000003/billing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.91,
+          "foreground": "#475569",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/groups/07f55c87-6bc1-4cb3-802a-7549fc376455/activities/f9b186a3-b419-4e69-a679-1b1ca151dc38/qr",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/groups/07f55c87-6bc1-4cb3-802a-7549fc376455/activities/f9b186a3-b419-4e69-a679-1b1ca151dc38/qr",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/groups/07f55c87-6bc1-4cb3-802a-7549fc376455/activities/f9b186a3-b419-4e69-a679-1b1ca151dc38/qr",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {},
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/groups/07f55c87-6bc1-4cb3-802a-7549fc376455/activities/f9b186a3-b419-4e69-a679-1b1ca151dc38/qr",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.14,
+          "foreground": "#1e40af",
+          "background": "#dbeafe",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.4,
+          "foreground": "#1d4ed8",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 16.29,
+          "foreground": "#0f172a",
+          "background": "#f1f5f9",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 7.57,
+          "foreground": "#475569",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.49,
+          "foreground": "#166534",
+          "background": "#dcfce7",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    },
+    {
+      "scenario": "UI-10 QR responsive: contraste, apertura sin guardado y llegada propia sin token visible",
+      "route": "/check-in",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "contrast": [
+        {
+          "ratio": 17.06,
+          "foreground": "#0f172a",
+          "background": "#f8fafc",
+          "expected": "3:1"
+        },
+        {
+          "ratio": 7.24,
+          "foreground": "#475569",
+          "background": "#f8fafc",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.8,
+          "foreground": "#991b1b",
+          "background": "#fee2e2",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 17.85,
+          "foreground": "#0f172a",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        },
+        {
+          "ratio": 6.7,
+          "foreground": "#1d4ed8",
+          "background": "#ffffff",
+          "expected": "4.5:1"
+        }
+      ]
+    }
+  ]
+}

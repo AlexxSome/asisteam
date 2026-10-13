@@ -35,7 +35,7 @@ async function reviewCheckout(plan = "Equipo") {
 
 it("permite comparar y elegir antes de pedir email; confirma y envía solo la intención", async () => {
   render(<BillingPanel groupId={group} billing={billing} />);
-  expect(screen.getByText(/15.990 CLP\/mes/)).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Academia" }).closest("article")?.textContent).toContain("15.990 CLP/mes");
   expect(screen.queryByRole("textbox")).toBeNull();
   await reviewCheckout("Academia");
   expect(mock.manage).not.toHaveBeenCalled();

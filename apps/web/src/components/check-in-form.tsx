@@ -43,7 +43,7 @@ export function CheckinForm({ authenticated }: { authenticated: boolean }) {
     {groupsLink}
   </div>;
   if (!signedIn || (result && "error" in result && result.error.code === "authentication_required")) return <div className="space-y-4">
-    <h2 className="text-xl font-semibold">Inicia sesión para registrar tu llegada</h2>
+    <h2 className="text-h2">Inicia sesión para registrar tu llegada</h2>
     <p>Usa tu cuenta de deportista. Si el QR vence mientras ingresas, vuelve a escanear el código actual del administrador.</p>
     <LoginForm onAuthenticated={() => { setSignedIn(true); setResult(null); request.current = null; setAttempt(value => value + 1); }} />
     {groupsLink}
@@ -69,7 +69,7 @@ export function CheckinForm({ authenticated }: { authenticated: boolean }) {
   }
   return <div className="space-y-4">
     <Alert tone="success">
-      <h2 className="text-xl font-semibold">{result.receipt.created ? "Llegada confirmada" : "Ya tenías un registro"}</h2>
+      <h2 className="text-h2">{result.receipt.created ? "Llegada confirmada" : "Ya tenías un registro"}</h2>
       <p className="mt-2 font-medium">{result.receipt.activity_title}</p>
       <p>Estado: <strong>{ATTENDANCE_STATUS_LABELS[result.receipt.status]}</strong>.</p>
       {!result.receipt.created && <p className="mt-2">Se conservó tu asistencia anterior. Si necesitas corregirla, contacta al administrador.</p>}
