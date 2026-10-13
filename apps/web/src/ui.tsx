@@ -34,5 +34,5 @@ export function Page({ children, className }: { children: ReactNode; className?:
 
 export function ActionLink({href,variant="tertiary",className="",...props}: Omit<import("./navigation").RouterLinkProps,"href"> & {href:string;variant?:"primary"|"secondary"|"tertiary";className?:string}) {
  const colors=variant === "primary" ? "bg-primary text-primary-foreground hover:bg-primary-hover" : variant === "secondary" ? "border border-input bg-surface text-secondary-foreground hover:bg-secondary" : "text-primary underline underline-offset-4 hover:bg-secondary";
- return <RouterLink href={href} {...props} className={cn(`inline-flex min-h-control min-w-11 max-w-full items-center justify-center gap-2 whitespace-normal rounded-md px-4 py-2 text-center text-label transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${colors}`, className)}/>;
+ return <RouterLink href={href} {...props} className={cn(`inline-flex min-h-control min-w-11 max-w-full items-center justify-center gap-2 whitespace-normal [overflow-wrap:anywhere] rounded-md px-4 py-2 text-center text-label transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${colors}`, className)}/>;
 }

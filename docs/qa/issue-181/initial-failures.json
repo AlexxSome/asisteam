@@ -1,0 +1,21 @@
+{
+  "sourceBase": "2349c3f358c7f65e150676979ba459a0cbf54134",
+  "environment": "local-synthetic",
+  "status": "FAIL-before-fix",
+  "cases": 5,
+  "omitted": 0,
+  "flaky": 0,
+  "viewportWidth": 320,
+  "documentScrollWidth": 399,
+  "linkClientWidth": 222,
+  "linkScrollWidth": 350,
+  "cause": "ActionLink long unbroken activity title",
+  "resolution": "overflow-wrap:anywhere; keep full text and destination",
+  "repeatSpecific": {
+    "passed": 5,
+    "unexpected": 0,
+    "omitted": 0,
+    "flaky": 0
+  },
+  "humanAcceptance": "PENDIENTE"
+}
