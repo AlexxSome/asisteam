@@ -5,6 +5,11 @@ import { RouterLink } from "../navigation";
 import { useId, useState } from "react";
 import { REPORT_PERIOD_LABELS, activityTypeLabel, type ReportFilter, type AttendancePeriodFilter } from "@asisteam/core/browser";
 
+/** Native fragment keeps applied search parameters and scrolls without a loader. */
+export function ReportFiltersLink() {
+  return <a href="#attendance-filters" className="inline-flex min-h-control min-w-11 max-w-full items-center rounded-md px-4 py-2 text-label text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">Ajustar período y filtros</a>;
+}
+
 export function ReportFilters({ groupId, filter, types, personal = false, athleteUserId }: {
   groupId: string; filter: AttendancePeriodFilter & Partial<Pick<ReportFilter, "sort" | "include_inactive">>; personal?: boolean;
   types: { id: string; name: string; group_id: string | null; is_active: boolean | null }[]; athleteUserId?: string;
@@ -22,7 +27,9 @@ export function ReportFilters({ groupId, filter, types, personal = false, athlet
   const appliedPeriod = filter.period === "custom" ? `${filter.from} al ${filter.to}`
     : filter.period === "season" ? "Temporada completa"
     : `${REPORT_PERIOD_LABELS[filter.period]}${filter.from ? ` de referencia ${filter.from}` : " actual"}`;
-  return <Form action={action} method="get" aria-label="Filtros de asistencia" className="space-y-3 rounded-lg border border-border bg-surface p-4">
+  return <Form id="attendance-filters" action={action} method="get" aria-label="Filtros de asistencia" className="space-y-3 rounded-lg border border-border bg-surface p-4">
+    <h2 className="text-h2">Ajustar filtros</h2>
+    <p className="text-small text-muted-foreground">Los cambios se aplican al pulsar Aplicar filtros.</p>
     <p className="break-words text-small text-muted-foreground"><span className="font-medium">Filtros aplicados: </span>{[
       appliedPeriod, selectedTypes.length ? selectedTypes.join(", ") : "Todos los tipos",
       ...(personal ? [] : [filter.include_inactive ? "Activos e inactivos" : "Solo activos", filter.sort === "name" ? "Nombre (A–Z)" : "Mayor asistencia primero"]),

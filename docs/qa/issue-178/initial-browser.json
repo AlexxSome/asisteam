@@ -1,0 +1,27 @@
+{
+  "stats": {
+    "startTime": "2026-10-13T03:14:48.490Z",
+    "duration": 292965.70200000005,
+    "expected": 54,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  },
+  "failures": [
+    {
+      "test": "UI-08 admin: reportes e historial, tabla contenida y resultados antes del borrador",
+      "status": "timedOut",
+      "diagnosis": "New label selector does not match canonical combobox; Router fragment also discarded applied query, fixed with native anchor."
+    },
+    {
+      "test": "UI-08 coach: reportes e historial, tabla contenida y resultados antes del borrador",
+      "status": "timedOut",
+      "diagnosis": "New label selector does not match canonical combobox; Router fragment also discarded applied query, fixed with native anchor."
+    },
+    {
+      "test": "UI-08 multi: reportes e historial, tabla contenida y resultados antes del borrador",
+      "status": "timedOut",
+      "diagnosis": "New label selector does not match canonical combobox; Router fragment also discarded applied query, fixed with native anchor."
+    }
+  ]
+}

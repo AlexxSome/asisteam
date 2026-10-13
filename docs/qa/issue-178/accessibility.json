@@ -1,0 +1,2437 @@
+{
+  "scope": "local-synthetic; axe automatic; human acceptance pending",
+  "reports": [
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-guardia-00e9e-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 459,
+        "minimumRatio": 6.47,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 355
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 4
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/wards/7a0d3aea-0000-4000-8000-000000002001/history",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-guardia-00e9e-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 112,
+        "minimumRatio": 6.36,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 62
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 14
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 6.91,
+            "foreground": "#475569",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.8,
+            "foreground": "#991b1b",
+            "background": "#fee2e2",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.36,
+            "foreground": "#92400e",
+            "background": "#fef3c7",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.49,
+            "foreground": "#166534",
+            "background": "#dcfce7",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/wards/7a0d3aea-0000-4000-8000-000000002001/history",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-guardia-00e9e-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 93,
+        "minimumRatio": 6.36,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 6.91,
+            "foreground": "#475569",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.8,
+            "foreground": "#991b1b",
+            "background": "#fee2e2",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.36,
+            "foreground": "#92400e",
+            "background": "#fef3c7",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.49,
+            "foreground": "#166534",
+            "background": "#dcfce7",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-guardia-00e9e-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 478,
+        "minimumRatio": 6.47,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 18
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 20
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 4
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/wards/7a0d3aea-0000-4000-8000-000000002001/history",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-guardia-00e9e-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 93,
+        "minimumRatio": 6.36,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 6.91,
+            "foreground": "#475569",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.8,
+            "foreground": "#991b1b",
+            "background": "#fee2e2",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.36,
+            "foreground": "#92400e",
+            "background": "#fef3c7",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.49,
+            "foreground": "#166534",
+            "background": "#dcfce7",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-guardia-00e9e-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 459,
+        "minimumRatio": 6.47,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 355
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 4
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-athlete-7e151-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 459,
+        "minimumRatio": 6.47,
+        "distinctPairs": [
+          {
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 355
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 4
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 5
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/me/history",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-athlete-7e151-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 115,
+        "minimumRatio": 6.36,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 65
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 14
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.91,
+            "foreground": "#475569",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.8,
+            "foreground": "#991b1b",
+            "background": "#fee2e2",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.36,
+            "foreground": "#92400e",
+            "background": "#fef3c7",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.49,
+            "foreground": "#166534",
+            "background": "#dcfce7",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/me/history",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-athlete-7e151-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 94,
+        "minimumRatio": 6.36,
+        "distinctPairs": [
+          {
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.91,
+            "foreground": "#475569",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.8,
+            "foreground": "#991b1b",
+            "background": "#fee2e2",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.36,
+            "foreground": "#92400e",
+            "background": "#fef3c7",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.49,
+            "foreground": "#166534",
+            "background": "#dcfce7",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-athlete-7e151-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.47,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 372
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 18
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 20
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 4
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 5
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/me/history",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_5_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-athlete-7e151-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 94,
+        "minimumRatio": 6.36,
+        "distinctPairs": [
+          {
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 3
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.91,
+            "foreground": "#475569",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.8,
+            "foreground": "#991b1b",
+            "background": "#fee2e2",
+            "expected": "4.5:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.36,
+            "foreground": "#92400e",
+            "background": "#fef3c7",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.49,
+            "foreground": "#166534",
+            "background": "#dcfce7",
+            "expected": "4.5:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-athlete-7e151-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 459,
+        "minimumRatio": 6.47,
+        "distinctPairs": [
+          {
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 355
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 4
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 5
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 17
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 6
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 49
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-admin-r-9295f-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "measurements": 3
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 24
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-admin-r-9295f-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 501,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 386
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 25
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 14
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "measurements": 2
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-admin-r-9295f-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "measurements": 3
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 24
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-coach-r-30693-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "measurements": 3
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 24
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-coach-r-30693-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 499,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 384
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 25
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 14
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "measurements": 2
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-coach-r-30693-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "measurements": 3
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 24
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 720,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-multi-r-a4178-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "measurements": 3
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 24
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [],
+      "scenario": "nest-reports-UI-08-multi-r-a4178-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 502,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 387
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 25
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 14
+          },
+          {
+            "ratio": 7.14,
+            "foreground": "#1e40af",
+            "background": "#dbeafe",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "measurements": 2
+          }
+        ]
+      }
+    },
+    {
+      "route": "/groups/7a0d3aea-0000-4000-8000-000000000003/reports",
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-haspopup=\"dialog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "aria-valid-attr-value",
+                  "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"_r_0_\""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scenario": "nest-reports-UI-08-multi-r-a4178-sultados-antes-del-borrador",
+      "contrastSummary": {
+        "measurements": 480,
+        "minimumRatio": 6.4,
+        "distinctPairs": [
+          {
+            "measurements": 3
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 369
+          },
+          {
+            "ratio": 16.29,
+            "foreground": "#0f172a",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 24
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "3:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.24,
+            "foreground": "#475569",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 8
+          },
+          {
+            "ratio": 17.06,
+            "foreground": "#0f172a",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 7
+          },
+          {
+            "ratio": 7.57,
+            "foreground": "#475569",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 11
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 17.85,
+            "foreground": "#0f172a",
+            "background": "#ffffff",
+            "expected": "3:1",
+            "measurements": 2
+          },
+          {
+            "ratio": 6.4,
+            "foreground": "#1d4ed8",
+            "background": "#f8fafc",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 7.09,
+            "foreground": "#92400e",
+            "background": "#ffffff",
+            "expected": "4.5:1",
+            "measurements": 50
+          },
+          {
+            "ratio": 6.47,
+            "foreground": "#92400e",
+            "background": "#f1f5f9",
+            "expected": "4.5:1",
+            "measurements": 1
+          },
+          {
+            "ratio": 6.7,
+            "foreground": "#ffffff",
+            "background": "#1d4ed8",
+            "expected": "4.5:1",
+            "measurements": 1
+          }
+        ]
+      }
+    }
+  ]
+}
