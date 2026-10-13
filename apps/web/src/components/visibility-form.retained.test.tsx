@@ -1,7 +1,7 @@
 import React from "react";
 // @vitest-environment jsdom
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 const mock = vi.hoisted(() => ({ update: vi.fn(), refresh: vi.fn() }));
 vi.mock("../mutations", () => ({ updateGroupSettings: mock.update }));
@@ -45,4 +45,21 @@ it("bloquea cambios simultáneos mientras confirma el servidor", async () => {
   expect(screen.getAllByRole<HTMLInputElement>("switch").every((input) => input.disabled)).toBe(true);
   complete({ settings: { athletes_can_view_group_stats: true, guardians_can_view_group_stats: true } });
   await waitFor(() => expect(screen.getAllByRole<HTMLInputElement>("switch").every((input) => input.checked && !input.disabled)).toBe(true));
+});
+
+it("vista previa conserva permisos confirmados mientras guarda y ante fallo", async () => {
+  let complete!: (value: unknown) => void;
+  mock.update.mockReturnValue(new Promise(resolve => {complete=resolve;}));
+  render(<VisibilityForm groupId="grupo" initialSettings={initialSettings}/>);
+  const preview=screen.getByRole("region",{name:"Vista previa de permisos"});
+  await userEvent.click(screen.getAllByRole("switch")[0]!);
+  expect(within(preview).getAllByText(/estadísticas agregadas del grupo están ocultas/)).toHaveLength(2);
+  expect(within(preview).queryByText(/Pueden consultar nombres/)).toBeNull();
+  complete({error:{message:"No se confirmó el cambio."}});
+  await screen.findByRole("alert");
+  expect(within(preview).getAllByText(/estadísticas agregadas del grupo están ocultas/)).toHaveLength(2);
+  mock.update.mockResolvedValue({settings:{...initialSettings,athletes_can_view_group_stats:true}});
+  await userEvent.click(screen.getAllByRole("switch")[0]!);
+  await waitFor(()=>expect(within(preview).getByText(/Pueden consultar nombres/)).toBeTruthy());
+  expect(within(preview).getAllByText(/estadísticas agregadas del grupo están ocultas/)).toHaveLength(1);
 });

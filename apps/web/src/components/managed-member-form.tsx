@@ -1,5 +1,6 @@
 // WEB-06: existing presentation with Router and cookie HTTP adapters.
 
+import { Button } from "../ui";
 import { useState } from "react";
 import { RouterLink as Link } from "../navigation";
 import { CapacityError } from "./group-capacity";
@@ -8,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { isMinor, MANAGED_MEMBER_ERROR_MESSAGES, managedMemberSchema, type ManagedMemberInput } from "@asisteam/core/browser";
 import { createManagedMember, type CreateManagedMemberResult } from "../member-mutations";
 
-const fieldClass = "w-full min-h-11 rounded-md border bg-background px-3 py-2";
+const fieldClass = "w-full min-h-11 rounded-md border border-input bg-surface px-3 py-2";
 export function ManagedMemberForm({ groupId }: { groupId: string }) {
   const [error, setError] = useState<string>();
   const [errorCode, setErrorCode] = useState<string>();
@@ -38,7 +39,7 @@ export function ManagedMemberForm({ groupId }: { groupId: string }) {
     <p className="text-sm">El tratamiento de datos, el acceso con cuenta propia y la autorización de imagen se gestionan por separado.</p>
     <Link className="inline-flex min-h-11 items-center underline" href={`/groups/${groupId}/members`}>Volver a integrantes</Link>
   </section>;
-  return <form onSubmit={submit} className="max-w-xl space-y-4" noValidate>
+  return <form onSubmit={submit} className="min-w-0 space-y-4" noValidate>
     <div className="space-y-2"><label htmlFor="managed-name">Nombre completo</label>
       <input id="managed-name" autoComplete="off" maxLength={120} className={fieldClass}
         aria-invalid={!!errors.full_name} aria-describedby="managed-name-error" {...register("full_name")} />
@@ -78,8 +79,8 @@ export function ManagedMemberForm({ groupId }: { groupId: string }) {
       <p id="guardian-authorization-error" className="text-sm text-destructive">{errors.guardian?.authorized?.message ?? errors.guardian?.message}</p>
     </fieldset>}
     {error && <CapacityError error={{ code: errorCode, message: error }} groupId={groupId} />}
-    <button disabled={isSubmitting} className="min-h-11 rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50">
+    <Button type="submit" loading={isSubmitting}>
       {isSubmitting ? "Guardando…" : "Crear cuenta gestionada"}
-    </button>
+    </Button>
   </form>;
 }

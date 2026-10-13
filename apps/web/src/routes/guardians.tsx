@@ -3,8 +3,10 @@ import { httpSchemas } from "@asisteam/core/browser";
 import { groupData } from "../group-data";
 import { browserApi,sessionError } from "../api";
 import { GuardianForm } from "../components/guardian-form";
-import { RouterLink as Link } from "../navigation";
-import { Page,Button,Field,Input } from "../ui";
+import { Page,ActionLink,Button,Field,Input } from "../ui";
+import { PageHeader } from "../components/ui/page-header";
+import { EmptyState } from "../components/ui/empty-state";
+import { Pagination } from "../components/pagination";
 export async function loader({request,params}:LoaderFunctionArgs){
  const group=await groupData(request,params.groupId,true),query=new URL(request.url).searchParams;
  const filter=httpSchemas.EligibleAthletesQuery.safeParse({search:query.get("q")??"",page:query.get("page")?Number(query.get("page")):1});
@@ -19,12 +21,16 @@ export async function loader({request,params}:LoaderFunctionArgs){
   const {data}=await api.listGuardianshipAthletes({params:{groupId:group.id},query:filter.data});return {group,...filter.data,member:null,athletes:data,total:data[0]?.total_count??0};
  }catch(error){return sessionError(error,request);}
 }
-export function Component(){const {group,search,page,athletes,total,member}=useLoaderData<typeof loader>();
+export function Component(){
+ const {group,search,page,athletes,total,member}=useLoaderData<typeof loader>();
  const pageUrl=(value:number)=>`?${new URLSearchParams({q:search,page:String(value)})}`;
- return <Page><title>Registrar apoderado · Asisteam</title><header className="space-y-2"><h1 className="text-2xl font-semibold">{member?`Vincular apoderado de ${member.full_name}`:"Registrar y vincular apoderado"}</h1><p>Vincula un apoderado nuevo o existente a un deportista menor de edad de {group.name}. El apoderado otorga su propio consentimiento.</p></header>
- {!member && <Form method="get" className="flex max-w-xl flex-wrap items-end gap-2"><Field id="athlete-search" label="Buscar deportista por nombre"><Input name="q" defaultValue={search} maxLength={120}/></Field><Button variant="secondary">Buscar</Button></Form>}
- {athletes.length?<GuardianForm key={`${group.id}:${search}:${page}:${member?.membership_id??""}`} groupId={group.id} athletes={athletes} selectedAthleteId={member?.athlete_user_id}/>:<p>No hay deportistas menores activos o pendientes que coincidan en esta página.</p>}
- {!member && <nav aria-label="Páginas de deportistas" className="flex gap-4 underline">{page>1&&<Link href={pageUrl(page-1)}>Anterior</Link>}{total>page*50&&<Link href={pageUrl(page+1)}>Siguiente</Link>}</nav>}
- {member&&<Link className="inline-flex min-h-11 items-center underline" href={`/groups/${group.id}/members/pending?membership=${member.membership_id}`}>Volver al estado de incorporación</Link>}
+ const returnHref=member?`/groups/${group.id}/members/pending?membership=${member.membership_id}`:`/groups/${group.id}/members`;
+ return <Page className="max-w-2xl px-0 py-0 md:px-0"><title>Registrar apoderado · Asisteam</title>
+   <PageHeader title={member?`Vincular apoderado de ${member.full_name}`:"Registrar y vincular apoderado"} description={<>Vincula un apoderado nuevo o existente a un deportista menor de edad de {group.name}. El apoderado otorga su propio consentimiento.</>}/>
+   {!member && <Form method="get" className="flex min-w-0 flex-wrap items-end gap-3 rounded-lg border border-border bg-surface p-4"><div className="min-w-0 flex-1"><Field id="athlete-search" label="Buscar deportista por nombre"><Input name="q" defaultValue={search} maxLength={120}/></Field></div><Button variant="secondary">Buscar</Button></Form>}
+   {athletes.length?<section className="space-y-4 rounded-lg border border-border bg-surface p-4 md:p-6" aria-label="Vínculo con apoderado"><GuardianForm key={`${group.id}:${search}:${page}:${member?.membership_id??""}`} groupId={group.id} athletes={athletes} selectedAthleteId={member?.athlete_user_id}/></section>
+     :<EmptyState title={page>1?"No hay deportistas en esta página":search?"Sin resultados para esta búsqueda":"No hay menores disponibles para vincular"} action={<ActionLink href={page>1?pageUrl(1):`/groups/${group.id}/guardians`} variant="secondary">{page>1?"Volver a la primera página":"Restablecer búsqueda"}</ActionLink>}>Solo se ofrecen deportistas menores activos o pendientes del grupo. El vínculo y el consentimiento se revisan por separado.</EmptyState>}
+   {!member && athletes.length>0 && <Pagination label="Páginas de deportistas" page={page} totalPages={Math.max(1,Math.ceil(total/50))} previousHref={page>1?pageUrl(page-1):undefined} nextHref={total>page*50?pageUrl(page+1):undefined}/>}
+   <ActionLink href={returnHref}>{member?"Volver al estado de incorporación":"Volver a integrantes"}</ActionLink>
  </Page>;
 }
