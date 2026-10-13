@@ -1,0 +1,88 @@
+{
+  "commit": "9e6d17f06d9b9401a2646e1745fba35ee80105ac",
+  "sourceCommit": "f67197e17eeac2a6f26cfa348530a858e16cabe0",
+  "date": "2026-10-13T04:32:44.351Z",
+  "node": "v24.16.0",
+  "environment": "github-actions-synthetic",
+  "checks": [
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 9
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 2.05
+    },
+    {
+      "check": "web-static-auth-fixture-build",
+      "status": "PASS",
+      "seconds": 10.8
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 127.82
+    },
+    {
+      "check": "independent-postgres-api-worker-types-backup-pitr",
+      "status": "PASS",
+      "seconds": 45.49
+    },
+    {
+      "check": "native-api-worker-all-integrations",
+      "status": "PASS",
+      "seconds": 66.81
+    },
+    {
+      "check": "static-social-auth-browser",
+      "status": "PASS",
+      "seconds": 6.6
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 0.38
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 2.35,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-dashboard",
+      "status": "PASS",
+      "seconds": 3.35
+    },
+    {
+      "check": "pgtap-all-domain",
+      "status": "PASS",
+      "seconds": 13.35
+    },
+    {
+      "check": "sql-coverage-preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "product-integrations",
+      "status": "FAIL",
+      "seconds": 70.44,
+      "tests": 82,
+      "omitted": 0,
+      "failedFiles": [
+        "apps/web/test/integration/guardianship.integration.test.ts",
+        "apps/web/test/integration/send-invitation.integration.test.ts"
+      ]
+    }
+  ]
+}

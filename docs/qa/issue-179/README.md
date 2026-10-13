@@ -47,7 +47,7 @@ corepack pnpm ci:qualification
 [Seguro] [Fallo conservado del gate backend](backend-initial-failure.json): la primera ejecución pasó84/84 integraciones de producto; una repetición posterior devolvió503 `service_unavailable` al registrar una invitación de apoderado (83/84). El adaptador/backend de ese caso no fue modificado por UI-09. La repetición completa secuencial posterior pasó84/84 sin alterar tests ni backend. El fallo queda conservado; su causa no fue demostrada y no se atribuye por inferencia a la carga concurrente. La publicación se basa en los gates finales, no en ocultar esta ejecución fallida.
 
 
-## Gates finales
+## Gates de la entrega UI-09 inicial
 
 |Correspondencia workflow|Comando local|Resultado|
 |---|---|---|
@@ -60,3 +60,23 @@ corepack pnpm ci:qualification
 |CI/required|Agregación de los cinco jobs|Todos los resultados locales PASS; CI remoto pendiente al crear PR.|
 
 [Seguro] [Validation.json](validation.json) registra resultados sanitizados, correspondencia del workflow y SHA-256 de23 fuentes y18 capturas finales. El contenido de producto/pruebas publicado coincide con esos hashes; después de los gates solo se finalizó documentación/evidencia. Auto-revisión final limitada al diff, sin hallazgos pendientes introducidos por UI-09. Lector/zoom nativo/teléfono, axe incomplete y aceptación externa continúan pendientes; cualificación técnica PASS conserva aceptación NO-GO.
+
+
+## Corrección del CI remoto · transporte HIBP sintético
+
+[Seguro] El run [38346903536](https://github.com/AlexxSome/asisteam/actions/runs/38346903536) aprobó checks/staging/extended, pero backend falló82/84 integraciones de producto en registro de invitación de apoderado y de una invitación emitida; qualification se omitió por dependencia y required falló. [Evidencia remota sanitizada](remote-backend-failure.json).
+
+[Seguro] El harness de producto sustituía Resend/MercadoPago pero dejaba HIBP real; registro/reset llaman al screening de contraseñas antes de escribir. Una reproducción con red disponible pasó84/84. Al bloquear únicamente HIBP con un503 en un preload temporal, fallaron exactamente los dos registros (11/13); tras aislar HIBP en el transporte test-only pasaron13/13 con el mismo bloqueo y las mismas aserciones. [Comparación y límites](hibp-isolation.json). El artefacto remoto conserva archivos fallidos, no la excepción de red original; la prueba controlada demuestra este patrón y la dependencia externa eliminada.
+
+[Seguro] `native-provider-transport.mjs` entrega el mismo formato sintético válido de rango que los fixtures Auth existentes, conserva correo/billing sintéticos y HTTP real hacia Nest. Dos pruebas unitarias comprueban el aislamiento aunque la red falle, el formato y el encaminamiento de cada transporte. No se altera Passwords, auth, SQL ni el CI; el test nativo sigue exigiendo503 y cero perfiles si el proveedor falla en producción. Los gates completos de esta corrección y los hashes de sus tres fuentes test-only se registran en [ci-correction-validation.json](ci-correction-validation.json).
+
+
+|Gate local repetido para la corrección|Resultado|
+|---|---|
+|ci:checks|PASS: 154 core/503 web y todos los checks de lint/contratos/tipos/build/artefacto/API/Worker/SDK.|
+|ci:backend + probe|PASS: 84/84 producto,40 suites/1646 SQL,Auth/Worker/backup/PITR/OAuth/portabilidad y cuatro fallos controlados detectados.|
+|ci:staging|PASS:53 registros,artefactos API/web,rollback/roles/privacidad/limpieza en Docker local.|
+|ci:extended|PASS:59 nativos +42 paridad Vite +1 transporte, cero omisiones/flaky.|
+|ci:qualification|PASS técnico; aceptación externa NO-GO.|
+
+[Seguro] Carga sintética final:500 ATHLETE/5000 registros,192 peticiones,p95 máximo 127.54 ms; bundle gzip 200267 bytes y presupuesto PASS. El CI remoto del nuevo commit se comprobará tras publicar la corrección.
