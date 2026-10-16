@@ -1,6 +1,8 @@
 # MIG-24 (#168): retiro completo del repositorio
 
-[Seguro] El candidato usa exclusivamente Next → Nest/Auth nativo → PostgreSQL17/RLS y Worker/S3 privados. Se retiran SDK/CLI/dependencias, configuración, Edge Functions, fixtures y tooling del proveedor, incluidos sus imports de desarrollo y CI. Las reglas de dominio y cobertura vigente se trasladan; no se declara el corte real completado.
+[Seguro] En el hito MIG-24 del 10-10-2026, el candidato usaba Next → Nest/Auth nativo → PostgreSQL17/RLS y Worker/S3 privados. WEB-10 (#222) sustituyó después la web por React/Vite/Router; [doc06](../../06-arquitectura-y-stack.md) describe el stack vigente. MIG-24 retiró SDK/CLI/dependencias, configuración, Edge Functions, fixtures y tooling del proveedor, incluidos sus imports de desarrollo y CI. Las reglas de dominio y cobertura se trasladaron; esta evidencia histórica no declara el corte real completado.
+
+[Seguro] #168 y #144 se cerraron administrativamente; la aceptación pendiente se registra en [#209 · desarrollo](../issue-209/README.md), con Alex como responsable y aprobador. Producción conserva **NO-GO** y requiere evidencia y autorización propias.
 
 [Seguro] La [reconciliación de la épica #144](../issue-144/README.md) relaciona los 24 hitos y criterios de cierre con esta entrega y los gates de aceptación externa pendientes.
 
@@ -28,6 +30,6 @@ Rama `codex/168-retiro-completo-supabase`, base sincronizada `develop@13a0a64343
 
 [Seguro] La navegación alternativa acotada fue autorizada mediante «has lo que falta»; la restricción anterior ya no bloquea el inventario final. Los archivos locales ignorados del proveedor se conservaron fuera del repositorio sin revelar sus valores; no entran al commit. El cambio ajeno `apps/web/next-env.d.ts` se preserva byte a byte y se excluye del commit.
 
-[Seguro] Producción continúa **NO-GO**. La [matriz de aceptación y runbook](operational-acceptance.md) identifica responsables/ventana, destino, carga acordada, contratos reales, observabilidad, legal/QA humano y RPO/RTO que faltan. #166/#167 cerrados administrativamente no acreditan esa aceptación. No se ejecuta corte/deploy, apagado remoto, merge ni cierre de #168.
+[Seguro] Producción continúa **NO-GO**. La [matriz de aceptación y runbook](operational-acceptance.md) identifica responsables/ventana, destino, carga acordada, contratos reales, observabilidad, legal/QA humano y RPO/RTO que faltan. #166/#167 cerrados administrativamente no acreditan esa aceptación. No se ejecuta corte/deploy, apagado remoto, merge ni aceptación de #209 por inferencia.
 
 [Seguro] `billing_legacy_groups` conserva grupos con cupos anteriores por la decisión de negocio de #56 (doc12); no representa un transporte ni una autoridad del proveedor. Las claves de configuración retiradas solo aparecen en guards que rechazan usarlas y en pruebas negativas; no habilitan runtime.

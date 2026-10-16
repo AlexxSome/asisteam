@@ -1,0 +1,255 @@
+{
+  "commit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "date": "2026-10-16T03:22:26.912Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "synthetic-external-secrets",
+      "status": "PASS",
+      "seconds": 0.03
+    },
+    {
+      "check": "api-container-build",
+      "status": "PASS",
+      "seconds": 1.97
+    },
+    {
+      "check": "api-image-id",
+      "status": "PASS",
+      "seconds": 0.36
+    },
+    {
+      "check": "staging-deploy",
+      "status": "PASS",
+      "seconds": 7.75
+    },
+    {
+      "check": "staging-role-query",
+      "status": "PASS",
+      "seconds": 0.12
+    },
+    {
+      "check": "staging-role-separation",
+      "status": "PASS"
+    },
+    {
+      "check": "second-artifact-build",
+      "status": "PASS",
+      "seconds": 0.87
+    },
+    {
+      "check": "second-image-id",
+      "status": "PASS",
+      "seconds": 0.08
+    },
+    {
+      "check": "distinct-artifacts",
+      "status": "PASS"
+    },
+    {
+      "check": "staging-deploy",
+      "status": "PASS",
+      "seconds": 6.23
+    },
+    {
+      "check": "staging-deploy",
+      "status": "PASS",
+      "seconds": 5.49
+    },
+    {
+      "check": "rollback-release-state",
+      "status": "PASS"
+    },
+    {
+      "check": "staging-deploy",
+      "status": "FAIL",
+      "seconds": 1.07,
+      "expected": true
+    },
+    {
+      "check": "staging-automatic-rollback",
+      "status": "PASS",
+      "seconds": 1.77
+    },
+    {
+      "check": "automatic-rollback-release-state",
+      "status": "PASS"
+    },
+    {
+      "check": "rollback-container-id",
+      "status": "PASS",
+      "seconds": 0.05
+    },
+    {
+      "check": "rollback-artifact-query",
+      "status": "PASS",
+      "seconds": 0.01
+    },
+    {
+      "check": "rollback-artifact-identity",
+      "status": "PASS"
+    },
+    {
+      "check": "staging-log-read",
+      "status": "PASS",
+      "seconds": 0.06
+    },
+    {
+      "check": "staging-log-privacy",
+      "status": "PASS"
+    },
+    {
+      "check": "api-real-postgres-integration",
+      "status": "PASS",
+      "seconds": 2
+    },
+    {
+      "check": "vite-container-build",
+      "status": "PASS",
+      "seconds": 1.06
+    },
+    {
+      "check": "vite-image-id",
+      "status": "PASS",
+      "seconds": 0.1
+    },
+    {
+      "check": "vite-container-start",
+      "status": "PASS",
+      "seconds": 0.42
+    },
+    {
+      "check": "vite-container-port",
+      "status": "PASS",
+      "seconds": 0.1
+    },
+    {
+      "check": "vite-container-non-navigation",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-legal-and-csp",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-same-origin-nest-error",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-runtime",
+      "status": "PASS",
+      "seconds": 0.16
+    },
+    {
+      "check": "vite-container-provenance",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-second-artifact-build",
+      "status": "PASS",
+      "seconds": 1.2
+    },
+    {
+      "check": "vite-second-image-id",
+      "status": "PASS",
+      "seconds": 0.05
+    },
+    {
+      "check": "vite-distinct-container-artifacts",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-replace",
+      "status": "PASS",
+      "seconds": 0.49
+    },
+    {
+      "check": "vite-container-start",
+      "status": "PASS",
+      "seconds": 0.58
+    },
+    {
+      "check": "vite-container-port",
+      "status": "PASS",
+      "seconds": 0.02
+    },
+    {
+      "check": "vite-container-non-navigation",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-legal-and-csp",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-same-origin-nest-error",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-runtime",
+      "status": "PASS",
+      "seconds": 0.13
+    },
+    {
+      "check": "vite-container-provenance",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-replace",
+      "status": "PASS",
+      "seconds": 0.61
+    },
+    {
+      "check": "vite-container-start",
+      "status": "PASS",
+      "seconds": 1.1
+    },
+    {
+      "check": "vite-container-port",
+      "status": "PASS",
+      "seconds": 0.02
+    },
+    {
+      "check": "vite-container-non-navigation",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-legal-and-csp",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-same-origin-nest-error",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-runtime",
+      "status": "PASS",
+      "seconds": 0.14
+    },
+    {
+      "check": "vite-container-provenance",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-restored-image",
+      "status": "PASS",
+      "seconds": 0.03
+    },
+    {
+      "check": "vite-container-rollback-identity",
+      "status": "PASS"
+    },
+    {
+      "check": "vite-container-owned-cleanup",
+      "status": "PASS",
+      "seconds": 0.31
+    },
+    {
+      "check": "staging-owned-cleanup",
+      "status": "PASS",
+      "seconds": 1.58
+    }
+  ]
+}

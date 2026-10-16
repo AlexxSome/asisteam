@@ -1,0 +1,22 @@
+{
+  "productSourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "sourceState": "working-tree",
+  "files": [
+    {
+      "path": "deploy/development/local.mjs",
+      "sha256": "3acc9007e432f6d5558510de513dccc93838416fcf49b4651e4066e7c92068db"
+    },
+    {
+      "path": "deploy/development/backup.mjs",
+      "sha256": "a04a6b42e1cd201758f6448225935e6721a68884c91cbe60036ac684ff84758d"
+    },
+    {
+      "path": "deploy/development/load.mjs",
+      "sha256": "8d4fd6d517b413e3628f8adac78d8d2753781e6db358f6d1ce8d22a2f4936f2e"
+    },
+    {
+      "path": "deploy/development/verify-flows.mjs",
+      "sha256": "0b25be317b6643525d676f134337381bf037ccf47790a576b9c8427f72bc6506"
+    }
+  ]
+}

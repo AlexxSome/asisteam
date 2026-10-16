@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-16T03:37:37.736Z",
+  "environment": "dev209-local-persistent",
+  "checks": [
+    {
+      "check": "native-login",
+      "status": "PASS"
+    },
+    {
+      "check": "native-authorized-tenant",
+      "status": "PASS"
+    },
+    {
+      "check": "cross-tenant-404",
+      "status": "PASS"
+    },
+    {
+      "check": "refresh-rotation",
+      "status": "PASS"
+    },
+    {
+      "check": "logout",
+      "status": "PASS"
+    },
+    {
+      "check": "revoked-session-denied",
+      "status": "PASS"
+    },
+    {
+      "check": "revoked-refresh-denied",
+      "status": "PASS"
+    },
+    {
+      "check": "persistent-group-marker",
+      "status": "PASS"
+    },
+    {
+      "check": "persistent-private-object-marker",
+      "status": "PASS"
+    },
+    {
+      "check": "existing-private-object-anonymous-denied",
+      "status": "PASS"
+    }
+  ],
+  "markerHash": "5aace9f2b163f5bd672cc86565f273120499f8c80ba9223928b49ff62eb7b79f",
+  "status": "PASS"
+}

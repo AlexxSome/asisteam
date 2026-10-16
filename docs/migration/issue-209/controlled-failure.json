@@ -1,0 +1,45 @@
+{
+  "commit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "date": "2026-10-16T03:33:07.735Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "probe-type-baseline",
+      "status": "PASS",
+      "seconds": 0.22
+    },
+    {
+      "check": "controlled-pgtap-failure",
+      "status": "FAIL",
+      "seconds": 2.48,
+      "expected": true
+    },
+    {
+      "check": "controlled-type-failure",
+      "status": "FAIL",
+      "seconds": 1.34,
+      "errorCodes": [
+        "TS2322"
+      ],
+      "expected": true
+    },
+    {
+      "check": "controlled-runtime-retirement-failure",
+      "status": "FAIL",
+      "seconds": 0.32,
+      "expected": true
+    },
+    {
+      "check": "controlled-next-retirement-failure",
+      "status": "FAIL",
+      "seconds": 0.25,
+      "expected": true
+    },
+    {
+      "check": "controlled-failure-detected",
+      "status": "PASS"
+    }
+  ]
+}

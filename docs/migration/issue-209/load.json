@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-16T03:28:36.203Z",
+  "environment": "dev209-local-persistent",
+  "status": "PASS",
+  "activeAthletes": 500,
+  "attendanceRecords": 5000,
+  "period": "season",
+  "pageSize": 100,
+  "apiPool": 2,
+  "referencePool": 2,
+  "requests": 192,
+  "adoptedP95Ms": 500,
+  "rows": [
+    {
+      "operation": "report",
+      "transport": "canonical-sql",
+      "concurrency": 1,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 35.6,
+      "p95Ms": 353.02
+    },
+    {
+      "operation": "report",
+      "transport": "canonical-sql",
+      "concurrency": 4,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 76.49,
+      "p95Ms": 369.92
+    },
+    {
+      "operation": "report",
+      "transport": "nest-http",
+      "concurrency": 1,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 43,
+      "p95Ms": 364.03
+    },
+    {
+      "operation": "report",
+      "transport": "nest-http",
+      "concurrency": 4,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 88.94,
+      "p95Ms": 407.29
+    },
+    {
+      "operation": "stats",
+      "transport": "canonical-sql",
+      "concurrency": 1,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 21.78,
+      "p95Ms": 24.01
+    },
+    {
+      "operation": "stats",
+      "transport": "canonical-sql",
+      "concurrency": 4,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 28.37,
+      "p95Ms": 55.92
+    },
+    {
+      "operation": "stats",
+      "transport": "nest-http",
+      "concurrency": 1,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 27.49,
+      "p95Ms": 31.65
+    },
+    {
+      "operation": "stats",
+      "transport": "nest-http",
+      "concurrency": 4,
+      "requests": 24,
+      "errors": 0,
+      "p50Ms": 33.1,
+      "p95Ms": 60.88
+    }
+  ],
+  "resources": {
+    "before": {
+      "cpu": "0.77%",
+      "memory": "43.04MiB / 1GiB"
+    },
+    "after": {
+      "cpu": "0.90%",
+      "memory": "240.1MiB / 1GiB"
+    }
+  },
+  "connections": [
+    {
+      "application_name": "",
+      "connections": 3
+    },
+    {
+      "application_name": "asisteam-api",
+      "connections": 2
+    },
+    {
+      "application_name": "asisteam-worker",
+      "connections": 1
+    }
+  ],
+  "productionSla": false
+}

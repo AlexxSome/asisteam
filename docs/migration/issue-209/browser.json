@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-16T03:19:17.892Z",
+  "environment": "dev209-local-persistent",
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "login-http200",
+      "status": "PASS"
+    },
+    {
+      "check": "real-cookie-login",
+      "status": "PASS"
+    },
+    {
+      "check": "own-group-visible",
+      "status": "PASS"
+    },
+    {
+      "check": "opaque-httponly-cookie",
+      "status": "PASS"
+    },
+    {
+      "check": "viewport375",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "check": "dev209-encrypted-backup",
+  "environment": "dev209-local-persistent",
+  "createdAt": "2026-10-16T03:30:23.137Z",
+  "file": "dev209-1792121423142-ec9f3a9f-f220-4393-a5a7-670697197d07.aesgcm",
+  "archiveSha256": "ebbb8076fd73a2c20268315f7797626e6d88b979381c423d3ab6a528acc2b903",
+  "dumpSha256": "cae25a1c248d515294be517150d10ce13e7a2d125ddf15dffae4128b225df6c6",
+  "objects": 1,
+  "bytes": 1615403,
+  "seconds": 0.22,
+  "retentionDays": 30,
+  "expiredOwnedArchivesRemoved": 0,
+  "sustainedRpo": "PENDING"
+}

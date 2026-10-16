@@ -1,0 +1,37 @@
+{
+  "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "date": "2026-10-16T03:40:58.478Z",
+  "environment": "local-synthetic",
+  "jobs": [
+    {
+      "job": "checks",
+      "status": "PASS",
+      "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+      "date": "2026-10-16T03:39:36.743Z"
+    },
+    {
+      "job": "backend",
+      "status": "PASS",
+      "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+      "date": "2026-10-16T03:21:49.274Z"
+    },
+    {
+      "job": "staging",
+      "status": "PASS",
+      "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+      "date": "2026-10-16T03:22:26.912Z"
+    },
+    {
+      "job": "extended",
+      "status": "PASS",
+      "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+      "date": "2026-10-16T03:34:21.193Z"
+    }
+  ],
+  "backendProbe": "PASS",
+  "qualification": "PASS",
+  "required": "PASS",
+  "operationalAcceptance": "PENDING",
+  "production": "NO-GO",
+  "runtimeInputs": "Unchanged product sources; new deploy/development tooling separately verified and ci:checks rerun after final changes"
+}

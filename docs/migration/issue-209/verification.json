@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-16T03:17:37.901Z",
+  "environment": "dev209-local-persistent",
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "postgres17-roles-ledger",
+      "status": "PASS",
+      "ledger": [
+        {
+          "name": "0001_baseline.sql",
+          "sha256": "4cd17dcc871ae63ed4f893cf6dfc310d84b84b2eaefe95aa0594c0e6b1b88a98"
+        },
+        {
+          "name": "0002_retire_provider_entrypoints.sql",
+          "sha256": "8a6bf499d733093cdc813540a3f3f1ac1cff8fe43f84e144b859fff957dff960"
+        },
+        {
+          "name": "0003_web_sessions.sql",
+          "sha256": "597f487398dbcfa4219ed2a30f30559ebf3d32457f9f2918ff331e7aa656abae"
+        },
+        {
+          "name": "0004_group_dashboard.sql",
+          "sha256": "460d13fc842f2048fe0cf5f2a738bcc81f035394da98e213cdc87b9fa29b658e"
+        },
+        {
+          "name": "0005_dashboard_secondary_states.sql",
+          "sha256": "f3ba89f66191b0902ca20576228eeba17ae7aa221a0580564d68e88affc2a8a9"
+        }
+      ]
+    },
+    {
+      "check": "asisteam_api-connect-and-deny-ddl",
+      "status": "PASS"
+    },
+    {
+      "check": "asisteam_auth-connect-and-deny-ddl",
+      "status": "PASS"
+    },
+    {
+      "check": "asisteam_jobs-connect-and-deny-ddl",
+      "status": "PASS"
+    },
+    {
+      "check": "asisteam_invitation-connect-and-deny-ddl",
+      "status": "PASS"
+    },
+    {
+      "check": "asisteam_billing-connect-and-deny-ddl",
+      "status": "PASS"
+    },
+    {
+      "check": "storage-anonymous-denied",
+      "status": "PASS"
+    }
+  ],
+  "providers": "not-configured",
+  "production": "NO-GO"
+}
