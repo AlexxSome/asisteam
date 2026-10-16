@@ -1,0 +1,905 @@
+{
+  "schema": 1,
+  "productSourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "checkout": "working-tree-with-issue-209-tooling-and-docs",
+  "node": "v24.16.0",
+  "pnpm": "10.33.2",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "environment": "dev209-local-persistent",
+  "web": {
+    "schema": 1,
+    "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+    "sessionProtocol": "nest-opaque-v1",
+    "paths": [
+      "/",
+      "/accept-terms",
+      "/check-in",
+      "/forgot-password",
+      "/groups",
+      "/groups/:groupId",
+      "/groups/:groupId/activities",
+      "/groups/:groupId/activities/:activityId",
+      "/groups/:groupId/activities/:activityId/attendance",
+      "/groups/:groupId/activities/:activityId/edit",
+      "/groups/:groupId/activities/:activityId/qr",
+      "/groups/:groupId/activities/new",
+      "/groups/:groupId/activity-types",
+      "/groups/:groupId/announcements",
+      "/groups/:groupId/billing",
+      "/groups/:groupId/guardians",
+      "/groups/:groupId/invitations/new",
+      "/groups/:groupId/me/history",
+      "/groups/:groupId/members",
+      "/groups/:groupId/members/consent",
+      "/groups/:groupId/members/new",
+      "/groups/:groupId/members/pending",
+      "/groups/:groupId/reports",
+      "/groups/:groupId/settings",
+      "/groups/:groupId/settings/visibility",
+      "/groups/:groupId/wards/:athleteUserId/history",
+      "/groups/new",
+      "/invitations/:token",
+      "/join",
+      "/legal/2026-09-21",
+      "/login",
+      "/logout",
+      "/me/history",
+      "/profile",
+      "/profile/birthdate-requests",
+      "/register",
+      "/reset-password",
+      "/wards",
+      "/wards/:athleteUserId",
+      "/welcome"
+    ],
+    "performance": {
+      "initialGzipBytes": 200272,
+      "routes": [
+        {
+          "module": "src/routes/activities.tsx",
+          "additionalGzipBytes": 3785
+        },
+        {
+          "module": "src/routes/activity-edit.tsx",
+          "additionalGzipBytes": 17110
+        },
+        {
+          "module": "src/routes/activity-types.tsx",
+          "additionalGzipBytes": 15154
+        },
+        {
+          "module": "src/routes/activity.tsx",
+          "additionalGzipBytes": 2692
+        },
+        {
+          "module": "src/routes/announcements.tsx",
+          "additionalGzipBytes": 17818
+        },
+        {
+          "module": "src/routes/attendance.tsx",
+          "additionalGzipBytes": 8038
+        },
+        {
+          "module": "src/routes/billing.tsx",
+          "additionalGzipBytes": 8172
+        },
+        {
+          "module": "src/routes/birthdate-reviews.tsx",
+          "additionalGzipBytes": 2741
+        },
+        {
+          "module": "src/routes/check-in.tsx",
+          "additionalGzipBytes": 5749
+        },
+        {
+          "module": "src/routes/forgot-password.tsx",
+          "additionalGzipBytes": 4503
+        },
+        {
+          "module": "src/routes/group-new.tsx",
+          "additionalGzipBytes": 6106
+        },
+        {
+          "module": "src/routes/group-settings.tsx",
+          "additionalGzipBytes": 6491
+        },
+        {
+          "module": "src/routes/group.tsx",
+          "additionalGzipBytes": 10960
+        },
+        {
+          "module": "src/routes/groups.tsx",
+          "additionalGzipBytes": 3666
+        },
+        {
+          "module": "src/routes/guardians.tsx",
+          "additionalGzipBytes": 16376
+        },
+        {
+          "module": "src/routes/history-groups.tsx",
+          "additionalGzipBytes": 582
+        },
+        {
+          "module": "src/routes/history.tsx",
+          "additionalGzipBytes": 7125
+        },
+        {
+          "module": "src/routes/invitation.tsx",
+          "additionalGzipBytes": 5386
+        },
+        {
+          "module": "src/routes/invitations-admin.tsx",
+          "additionalGzipBytes": 17258
+        },
+        {
+          "module": "src/routes/join.tsx",
+          "additionalGzipBytes": 4290
+        },
+        {
+          "module": "src/routes/legal.tsx",
+          "additionalGzipBytes": 1442
+        },
+        {
+          "module": "src/routes/login.tsx",
+          "additionalGzipBytes": 4810
+        },
+        {
+          "module": "src/routes/logout.tsx",
+          "additionalGzipBytes": 310
+        },
+        {
+          "module": "src/routes/member-new.tsx",
+          "additionalGzipBytes": 14889
+        },
+        {
+          "module": "src/routes/members-consent.tsx",
+          "additionalGzipBytes": 7337
+        },
+        {
+          "module": "src/routes/members-pending.tsx",
+          "additionalGzipBytes": 5940
+        },
+        {
+          "module": "src/routes/members.tsx",
+          "additionalGzipBytes": 19904
+        },
+        {
+          "module": "src/routes/profile.tsx",
+          "additionalGzipBytes": 10088
+        },
+        {
+          "module": "src/routes/qr.tsx",
+          "additionalGzipBytes": 10822
+        },
+        {
+          "module": "src/routes/register.tsx",
+          "additionalGzipBytes": 5741
+        },
+        {
+          "module": "src/routes/reports.tsx",
+          "additionalGzipBytes": 9261
+        },
+        {
+          "module": "src/routes/reset-password.tsx",
+          "additionalGzipBytes": 4804
+        },
+        {
+          "module": "src/routes/terms.tsx",
+          "additionalGzipBytes": 4926
+        },
+        {
+          "module": "src/routes/unavailable.tsx",
+          "additionalGzipBytes": 247
+        },
+        {
+          "module": "src/routes/visibility.tsx",
+          "additionalGzipBytes": 3478
+        },
+        {
+          "module": "src/routes/ward.tsx",
+          "additionalGzipBytes": 8724
+        },
+        {
+          "module": "src/routes/wards.tsx",
+          "additionalGzipBytes": 7659
+        },
+        {
+          "module": "src/routes/welcome.tsx",
+          "additionalGzipBytes": 5972
+        }
+      ]
+    },
+    "files": [
+      {
+        "path": ".vite/manifest.json",
+        "sha256": "005aaf08976ed5d5d6337f5f143b55d53ef8e582ca1eddac74b5922e5c5d975e",
+        "bytes": 20607
+      },
+      {
+        "path": "assets/activities-D8nL3Qx6.js",
+        "sha256": "4f7418d1b8bd417240e954f1de2311da14ceb0644a8fcc39565acd6f2840d81e",
+        "bytes": 2678
+      },
+      {
+        "path": "assets/activity-C6DU2jee.js",
+        "sha256": "39889efd56ce1063fc53a7fa51d2b24d7ee1fd6f2bc0fe608f2844db39b3eb73",
+        "bytes": 3752
+      },
+      {
+        "path": "assets/activity-agenda-Cq7EFRQP.js",
+        "sha256": "970d0576804ffb724ea55dbb8a47f492320c68c85aa133f8171ef41c3ae1b458",
+        "bytes": 3237
+      },
+      {
+        "path": "assets/activity-data-BEOgULK8.js",
+        "sha256": "3d01b9f826e4de8677b89899955914a74024272655174b0393c3be566eb20a16",
+        "bytes": 628
+      },
+      {
+        "path": "assets/activity-date-mark-BTqax7SQ.js",
+        "sha256": "f06d1e4dd7c60353a39a7c4b013e2a401ca8b38efc7e949c017fe475829e8291",
+        "bytes": 691
+      },
+      {
+        "path": "assets/activity-edit-D_WQ6BE6.js",
+        "sha256": "49495bfbe75ff6339fac5a59a83c74711de0bc1b77ea2d8c13721cfa22b2828f",
+        "bytes": 12399
+      },
+      {
+        "path": "assets/activity-types-Gw7eJqHJ.js",
+        "sha256": "7bd389462aa54fab72634fa04543b0547f11fd8081370ecbcebcaed31d940e41",
+        "bytes": 7703
+      },
+      {
+        "path": "assets/announcements-BCl__qzI.js",
+        "sha256": "15a4dc4be591d1b36675d2e32e65d0582e8a3133b44cafbd7e81c3653b8d52d4",
+        "bytes": 14087
+      },
+      {
+        "path": "assets/attendance-Jwdb5A8e.js",
+        "sha256": "1010bce12643aea3e2b4559ada4b18a5e4a2435491ad47320e5e55e351bd57e1",
+        "bytes": 11861
+      },
+      {
+        "path": "assets/attendance-presentation-BstiGpyX.js",
+        "sha256": "880a87512148b7794fcfea6f0e497a046704f50b9863cebdcaebcd3ee9984f56",
+        "bytes": 408
+      },
+      {
+        "path": "assets/auth-context-S6DtNmQy.js",
+        "sha256": "8c24a5f089f864b59d8f1154e25e86b738805d093c9d75c5161649c05650b5fe",
+        "bytes": 4890
+      },
+      {
+        "path": "assets/auth-page-BsyLas-o.js",
+        "sha256": "8ec7a32d5c3bdedf3d215432134df4095fb246a659565b83a6f6c8c2ae61b9d1",
+        "bytes": 1341
+      },
+      {
+        "path": "assets/billing-BkFX75rd.js",
+        "sha256": "d65f9d7ac663cc5729c333647322b510f7e1b9b5aa6103bccf4e990549459ad2",
+        "bytes": 16431
+      },
+      {
+        "path": "assets/birthdate-reviews-CsegI1tu.js",
+        "sha256": "58eab9851defa9fa2e7456f86d31a6f921c806a78e5adb1673ddaea12ff08028",
+        "bytes": 2048
+      },
+      {
+        "path": "assets/capability-data-BzjAdUbn.js",
+        "sha256": "11ca310a9d9dbbf74b833d38631eb66a7e04aca726a517c766d4debfd230c2f1",
+        "bytes": 231
+      },
+      {
+        "path": "assets/capability-mutations-DH3Aqd4Z.js",
+        "sha256": "ef54c06775f85eed41b22f1451ef74edf4de2960242870733d012d973a948d92",
+        "bytes": 887
+      },
+      {
+        "path": "assets/card-ClIEuLwc.js",
+        "sha256": "516b8eade9848813c2773e6d790415846906f879dccf764e9ed7066fb21a09d1",
+        "bytes": 532
+      },
+      {
+        "path": "assets/check-in-BjPJbN90.js",
+        "sha256": "eb9eb7350097fc7cadb1245273ab02b598eb0edf22e9469369e9451c58cb20d0",
+        "bytes": 5468
+      },
+      {
+        "path": "assets/empty-state-Cg8d-JBK.js",
+        "sha256": "7058625872bfdcec7d2c909920fa3c57359cec485bdd5a07863b55ec8244f8fb",
+        "bytes": 435
+      },
+      {
+        "path": "assets/field-BPUPt0b6.js",
+        "sha256": "318b8439cfd489556e1e5c0679f32608c53bf58d2cbcd82c86a14d65de9dfe52",
+        "bytes": 1175
+      },
+      {
+        "path": "assets/forgot-password-_TY-4oLn.js",
+        "sha256": "8df8026f40bd448ad77950b78ca80fd06c6bc758cc876b038204e6613d6131f7",
+        "bytes": 1568
+      },
+      {
+        "path": "assets/group-BH6lKQyf.js",
+        "sha256": "2752b44585510cd9cf85be1e81f93a13e244f59e5cf4af493703101de7547c59",
+        "bytes": 34357
+      },
+      {
+        "path": "assets/group-capacity-6hgl0NSu.js",
+        "sha256": "728493570759f9b66054acff53e79c2a84f138292eb243542259b68b0d1e821c",
+        "bytes": 418
+      },
+      {
+        "path": "assets/group-data-DUl8Krm-.js",
+        "sha256": "a363a706a468b1fd0293291d6f067a9ec086e79af7b689cc6dc0af30ac1205f1",
+        "bytes": 364
+      },
+      {
+        "path": "assets/group-form-BT1jhYyl.js",
+        "sha256": "0d8f3d50dc60681e91f9d14ac3f8ba549cf7a5ac9e5bacc3135691f7a5f51406",
+        "bytes": 6421
+      },
+      {
+        "path": "assets/group-new-avtFsO08.js",
+        "sha256": "0a64a9943b9c17b1f4f9dd5dcd9de5fd751e7aaa51836a960d431893b414fd59",
+        "bytes": 636
+      },
+      {
+        "path": "assets/group-settings-C8nKuI8d.js",
+        "sha256": "e543b48f8bf0488d31f9201b12840f170193213d2bdf9e51e6e741d34bbce0c6",
+        "bytes": 893
+      },
+      {
+        "path": "assets/groups-D8ZiDK-5.js",
+        "sha256": "7c97a1dfc3c8d25ab778f65517507498b71f350bd0fcb20c0b5f12ac11838fe9",
+        "bytes": 4004
+      },
+      {
+        "path": "assets/guardians-BwBYiT4U.js",
+        "sha256": "8df72068248717dec46e59bed18c2dd7aec16a43ea0cd9cc59259abaec385107",
+        "bytes": 7033
+      },
+      {
+        "path": "assets/history-D5xghAtg.js",
+        "sha256": "f7c6941de20257df27cc03c172206f482c971eda26ea23a978990f79ef66a93d",
+        "bytes": 4932
+      },
+      {
+        "path": "assets/history-groups-JU7jWIdP.js",
+        "sha256": "eed1c23a4532fc3dc94c537273d91955d62cca58b809b4bc7d897861df6d73d0",
+        "bytes": 960
+      },
+      {
+        "path": "assets/index-Ad-5XwIv.css",
+        "sha256": "1906273e0df0322e923ac459c111784451cb796289d799198b371a9acf59f7ab",
+        "bytes": 29268
+      },
+      {
+        "path": "assets/index-D8yKKoCz.js",
+        "sha256": "a88030216c2872d40a5d62ace34f81f53da6a2d6e067c4f79e69cfcc6473f950",
+        "bytes": 647673
+      },
+      {
+        "path": "assets/inline-confirmation-DjVF1czc.js",
+        "sha256": "db01106086e0458a0c5fb690105bba18cfcbce79bd0c17d92721d3ecc97b0139",
+        "bytes": 1278
+      },
+      {
+        "path": "assets/invitation-CmmYO3hV.js",
+        "sha256": "c6504c4c0afb350a67191702c716699c85a56f3c72501ef785cf8ea209fe0c60",
+        "bytes": 4090
+      },
+      {
+        "path": "assets/invitations-admin-BgtEIvKc.js",
+        "sha256": "fb1d40a4d134c32d61a1805a20db991d424da6f7e353d85b493652a7be98ca39",
+        "bytes": 7018
+      },
+      {
+        "path": "assets/join-Dev7AZd2.js",
+        "sha256": "75e4c278faecb055b77dd7d29fc4a6912e6e97396d15dbb58e24bf619e4b6f5c",
+        "bytes": 2922
+      },
+      {
+        "path": "assets/legal-Djmzf7uw.js",
+        "sha256": "0ce78a99ee0dc5771979a15ef28d24b871ce320993db5519f1caeacecb7609ba",
+        "bytes": 892
+      },
+      {
+        "path": "assets/login-CDUSS835.js",
+        "sha256": "88ed3595d7e61162c8d03bae881dc6772f8c15f9ab592da7680a0c7facece67f",
+        "bytes": 2353
+      },
+      {
+        "path": "assets/logout-D-aX4zJI.js",
+        "sha256": "4d92737738bf8d9369ea2b369b4fa3048775f421649647d15d8d8bf3117a66ef",
+        "bytes": 448
+      },
+      {
+        "path": "assets/member-mutations-C4OeiiGQ.js",
+        "sha256": "7038ffb56a29c1aaa87a550a18774931a73d8296f7a86f6a3366f145a54125ac",
+        "bytes": 3918
+      },
+      {
+        "path": "assets/member-new-C_ulNr41.js",
+        "sha256": "b4c59b71fc7ba154bc18382d74abd4e0c55c97b5b6207e9da97b93ab104ea25a",
+        "bytes": 6515
+      },
+      {
+        "path": "assets/members-DkNLtHCY.js",
+        "sha256": "50be04f916ff30ec028ace424bdd2179e8c59870a1c1e5ffe82ce2739465ced0",
+        "bytes": 15370
+      },
+      {
+        "path": "assets/members-consent-cifEfJyq.js",
+        "sha256": "5c8465be7e2f200f93ef804c50659b163535b623257eba80f73c9279c670cbe3",
+        "bytes": 8573
+      },
+      {
+        "path": "assets/members-pending-BAeNmi5h.js",
+        "sha256": "673544cdb7de3d17b2213d0c197fb5bdcdfdb7f5419bbe86edddfe1c05ce5706",
+        "bytes": 2675
+      },
+      {
+        "path": "assets/membership-review-Nt8ER7EK.js",
+        "sha256": "080f4562468359462cf5dbe5200765858871197d0cbd45e3c57fcfcaab478771",
+        "bytes": 4316
+      },
+      {
+        "path": "assets/mutations-B_XzMW08.js",
+        "sha256": "079bd066536f0975ff3b1a7300d37dbd6216d2b02d0fad274019544be0643645",
+        "bytes": 3817
+      },
+      {
+        "path": "assets/page-header-6Woqt_Oo.js",
+        "sha256": "3935973682b441a925c0b88f44e67ab2f1b05b463f774b9d6d0ba02e6e1e6801",
+        "bytes": 300
+      },
+      {
+        "path": "assets/pagination-BJRXAdYu.js",
+        "sha256": "b94c58ded026f7db9684376566dd542af44e3d3945dc6340dea2d4e46ff2c220",
+        "bytes": 723
+      },
+      {
+        "path": "assets/private-avatar-D-4z3cjp.js",
+        "sha256": "5244798d75c15b0610c5d22b46bb43696af44902e2f101c337b754df3e7c288f",
+        "bytes": 876
+      },
+      {
+        "path": "assets/profile-DTns1ywg.js",
+        "sha256": "02a2f32a302a95226c3901979900957cdf0ebfa7a3de44581029f55bbafc1c6a",
+        "bytes": 13922
+      },
+      {
+        "path": "assets/qr-CKvQlPqL.js",
+        "sha256": "c512678f8661ba2c51fdf4dad3eae071029bf4543966b26361ac26403f7967b8",
+        "bytes": 22729
+      },
+      {
+        "path": "assets/register-B04XVQDT.js",
+        "sha256": "d55171d06fbc4713effcef820ccb1d6dc64b99e9487d7c4196f76ba669ca47d6",
+        "bytes": 1680
+      },
+      {
+        "path": "assets/report-summary-DxV90aCQ.js",
+        "sha256": "95b6bf995a37d5abee2aebcf29b423fc8d6fe5879fead403b0bed7e9117e8956",
+        "bytes": 11454
+      },
+      {
+        "path": "assets/reports-DuA4hapV.js",
+        "sha256": "4124c2a2d33d2f3db829a0be45eeb75a609166460308dd58e3ef6bc3afa599b8",
+        "bytes": 12569
+      },
+      {
+        "path": "assets/reset-password-DkwObl4w.js",
+        "sha256": "57a50398a9df1493278414003ad362e919c047a57c4a1afc64b8c7d1a8f06ec4",
+        "bytes": 2594
+      },
+      {
+        "path": "assets/support-CpoTzpCM.js",
+        "sha256": "17f773cd8aae7619a0173ce4bd5003afb6bf70c38574e0501ea66bb1b8f5db32",
+        "bytes": 450
+      },
+      {
+        "path": "assets/terms-DQmFKn6k.js",
+        "sha256": "22a6d2e1207d8c918d530b90a115b05034a397c5a962d588b63bcb85849ee4a5",
+        "bytes": 1787
+      },
+      {
+        "path": "assets/unavailable-gAFECZgR.js",
+        "sha256": "6998adc30bcd68a419751032cc632836e3f4793dd599a30fed7d7261e18b200d",
+        "bytes": 323
+      },
+      {
+        "path": "assets/visibility-D2-knQcW.js",
+        "sha256": "0092a2a597f0d03be3679f2714895049636aec2b85aa196f3d4f675d314a8691",
+        "bytes": 3497
+      },
+      {
+        "path": "assets/ward-C4vt27Xc.js",
+        "sha256": "6a2892623566aeb41cab930c736bd5bd0f07efdc9b9f80b3f7eee09b27eb43d6",
+        "bytes": 4001
+      },
+      {
+        "path": "assets/ward-data-BgCTm3Ws.js",
+        "sha256": "8583cff5489c0c626849a78112278fc3697440667091ebcf6125eed53ca92f6b",
+        "bytes": 2439
+      },
+      {
+        "path": "assets/wards-BSwDtAfU.js",
+        "sha256": "f3d20a7cceb53c1306245f7dd633efcfa94242058ed8ef28ae8e98be141f1f71",
+        "bytes": 6195
+      },
+      {
+        "path": "assets/welcome-BZcu2CtC.js",
+        "sha256": "848de1b7553e3e6b9c43d7e4ec136579e778a4975a8d1c4a56717a6dd012d586",
+        "bytes": 2984
+      },
+      {
+        "path": "assets/zod-DCFtrZAB.js",
+        "sha256": "d6e73b6676874164df1a8cb2ee88dcc99666df96a53e8a3d0b015dd92cd6c271",
+        "bytes": 28808
+      },
+      {
+        "path": "browser-modules.json",
+        "sha256": "b4f669463fea5ddf10075a2689119c07dd2b78cbb27fac4d2a5ffe9b10a30018",
+        "bytes": 11444
+      },
+      {
+        "path": "index.html",
+        "sha256": "eecdd148301db12d05c0aeacfcfc722a108bb501f3ab866638da0e0020112234",
+        "bytes": 600
+      },
+      {
+        "path": "legal/2026-09-21/index.html",
+        "sha256": "9708561bf51496a1eb94b9c02c1c013fe26f2df8ae3dff2fdc98cc2785aa9c6a",
+        "bytes": 2914
+      }
+    ],
+    "artifactHash": "98886594a5354053959ed3410da3f44e729d8c90fc4b227f8e28ddf2ce1855c1"
+  },
+  "api": [
+    {
+      "path": "apps/api/dist/activities.d.ts",
+      "bytes": 4775,
+      "sha256": "c5e86cae6c20546370490995e36ca0b7c84990c49ea32c96f36d60a7312a98cf"
+    },
+    {
+      "path": "apps/api/dist/activities.js",
+      "bytes": 12487,
+      "sha256": "fc4bf77f9f9d6c3ffb4f989d0f5f443c42778b655d591e36b6076c5b74d1c907"
+    },
+    {
+      "path": "apps/api/dist/announcements.d.ts",
+      "bytes": 1428,
+      "sha256": "c811d5f608ab8d9b70af2443de9d7dc4c44e35a1136e2f8d212ceabf01e3df38"
+    },
+    {
+      "path": "apps/api/dist/announcements.js",
+      "bytes": 8259,
+      "sha256": "13ac57afb1bf87d3298bbc765d3e32f397da0887c667788c07eec5f75c6a8d10"
+    },
+    {
+      "path": "apps/api/dist/application.d.ts",
+      "bytes": 437,
+      "sha256": "6096d531fcb2701e21446bb3e2916694b83ba1ea9039604d5487eb946c436a2d"
+    },
+    {
+      "path": "apps/api/dist/application.js",
+      "bytes": 5248,
+      "sha256": "2d82f67d55ab44101680f85d5538867f915fcbbb1a6f603603b2aa6dbff425ba"
+    },
+    {
+      "path": "apps/api/dist/attendance.d.ts",
+      "bytes": 1256,
+      "sha256": "0fe65f96b0c24b6122051893f8358e549264c488dd60aec953d42a7b25285364"
+    },
+    {
+      "path": "apps/api/dist/attendance.js",
+      "bytes": 7382,
+      "sha256": "31ab90633f42e73555c8aabf6255e8b469d149c76d81a5de691eb06a52354873"
+    },
+    {
+      "path": "apps/api/dist/auth.d.ts",
+      "bytes": 920,
+      "sha256": "911fb28bef8cd88a91cc05ee5dff09b4e587afc7013d893b5342821d6df4a5e0"
+    },
+    {
+      "path": "apps/api/dist/auth.js",
+      "bytes": 4051,
+      "sha256": "e61f9ae97d6d409e7a0835eb3035a3aefaedd4a290437fa0e8b249de1e4a3cbf"
+    },
+    {
+      "path": "apps/api/dist/authorization.d.ts",
+      "bytes": 1347,
+      "sha256": "7fe8a49083c7249b9eee3e154234fd149ca4868efabd4aa1a9823d266561769f"
+    },
+    {
+      "path": "apps/api/dist/authorization.js",
+      "bytes": 1310,
+      "sha256": "2e43526f182b166898c8d9bda29f8031917ed189f3633fea9524407963891e48"
+    },
+    {
+      "path": "apps/api/dist/avatars.d.ts",
+      "bytes": 1329,
+      "sha256": "4ce01aa8cc3f28f421b248bbcc760ee2de3e9eed357dd1322518032515fc8280"
+    },
+    {
+      "path": "apps/api/dist/avatars.js",
+      "bytes": 7643,
+      "sha256": "15bc0ae1de72053693c172a105ab075b7c147827565a4833aecbe6ad65b267b6"
+    },
+    {
+      "path": "apps/api/dist/billing.d.ts",
+      "bytes": 2194,
+      "sha256": "15c8965cff182ce477d80ad960801500010e0506b141882bc8c0bcfad18e77fb"
+    },
+    {
+      "path": "apps/api/dist/billing.js",
+      "bytes": 10173,
+      "sha256": "23d847ab325136ec31dcd1fadfd44a263b26f99bc67568f4201222a0ffcb65fe"
+    },
+    {
+      "path": "apps/api/dist/config.d.ts",
+      "bytes": 5787,
+      "sha256": "f5b479a87811e63b0096cf846611f89608bd8a8070a96c2b7a48fe74213d5338"
+    },
+    {
+      "path": "apps/api/dist/config.js",
+      "bytes": 8173,
+      "sha256": "42f0f200f87e0e05d062b7d70e5a0817e7e1df99c8faac4865a195a8f2ea1c71"
+    },
+    {
+      "path": "apps/api/dist/dashboard.d.ts",
+      "bytes": 6575,
+      "sha256": "561ecf758cb527272b514c222dde37ce19c1ca802518f713ddd6a1d71384ff78"
+    },
+    {
+      "path": "apps/api/dist/dashboard.js",
+      "bytes": 3008,
+      "sha256": "335a19e07a51611ba83b8424eff9fa4f0f62352ffad7545dec886cfe04be6d1b"
+    },
+    {
+      "path": "apps/api/dist/database.d.ts",
+      "bytes": 865,
+      "sha256": "e45f3f86ec86ecd8156a8700a7352f6224c99705365feb9e08d818bec54bdd89"
+    },
+    {
+      "path": "apps/api/dist/database.js",
+      "bytes": 6214,
+      "sha256": "622eb1832e0a8401ad6e0de3d158a77a0062f2f43abaee7c87c253df3f04feb1"
+    },
+    {
+      "path": "apps/api/dist/domain-errors.d.ts",
+      "bytes": 449,
+      "sha256": "5a77c5084ae5ca6b57692ba8f6c52378d8a3a3aa656eadd621ec9898190f7a7f"
+    },
+    {
+      "path": "apps/api/dist/domain-errors.js",
+      "bytes": 3779,
+      "sha256": "226d860dba307666f9bfdab132ee8405d0631de163e5996ee87e1ac8d212984e"
+    },
+    {
+      "path": "apps/api/dist/email.d.ts",
+      "bytes": 498,
+      "sha256": "10a7a8d3c41128f49d18da1c5d57e0011a40de8b7e129883ce1cd0bb87425e87"
+    },
+    {
+      "path": "apps/api/dist/email.js",
+      "bytes": 2293,
+      "sha256": "b82c29c5386f463608f9d008acb189c2c29659322de80ddefe74fc10c5ed43a1"
+    },
+    {
+      "path": "apps/api/dist/errors.d.ts",
+      "bytes": 478,
+      "sha256": "74fe8fcd6734396eebf8b1520e98b6fd72823595960e238420a709e458cf6d3f"
+    },
+    {
+      "path": "apps/api/dist/errors.js",
+      "bytes": 3207,
+      "sha256": "d7708a18d79f264b7b53a6baa9eae40033228af2ecdae5c21302898f01ae7fb6"
+    },
+    {
+      "path": "apps/api/dist/groups-profile.d.ts",
+      "bytes": 4060,
+      "sha256": "7f0621ffbd27c04bca8b902629b283da50edd68484eb550cb054e39ea5c2975f"
+    },
+    {
+      "path": "apps/api/dist/groups-profile.js",
+      "bytes": 14738,
+      "sha256": "536b8fd6163de29fcb91e8013c54031abb5f9e79f268c4e77c205f3e625b7678"
+    },
+    {
+      "path": "apps/api/dist/health.d.ts",
+      "bytes": 253,
+      "sha256": "342b1f7256dd3e6c355497af04c7a9debcfa6712b497bf04fa576ac14d138720"
+    },
+    {
+      "path": "apps/api/dist/health.js",
+      "bytes": 2098,
+      "sha256": "4cb1436346a4964b22636f757eccb6e4b50c721b6db05523374524e6d73c4ac3"
+    },
+    {
+      "path": "apps/api/dist/identity.d.ts",
+      "bytes": 301,
+      "sha256": "2f07cd873256538a325dbf7061c2f1e5e0f8b5d45a36ddd0ea5b217e4fbb2bd4"
+    },
+    {
+      "path": "apps/api/dist/identity.js",
+      "bytes": 232,
+      "sha256": "eb95066afc9df38bf351e921a962bb105d2276e9552485c9cec391833f02b33f"
+    },
+    {
+      "path": "apps/api/dist/invitations.d.ts",
+      "bytes": 3011,
+      "sha256": "639a82c0b8cc8d32889dc8a153817ec836796da46fc6d284db72b0d0c30bf890"
+    },
+    {
+      "path": "apps/api/dist/invitations.js",
+      "bytes": 17062,
+      "sha256": "9a7e787398909bef54d725dd3c689061477a6335783f66ac2db30df9079b2862"
+    },
+    {
+      "path": "apps/api/dist/logger.d.ts",
+      "bytes": 1166,
+      "sha256": "dd716496d6c355b9bb6ef0f227f8e0a2f719db6a68ba55422c1c6e42d4998cd3"
+    },
+    {
+      "path": "apps/api/dist/logger.js",
+      "bytes": 656,
+      "sha256": "b80d45ee34bcd5255ab3a29e53db3eb4fefb63d77a25f7f3ced4a1becf3976ee"
+    },
+    {
+      "path": "apps/api/dist/main.d.ts",
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    {
+      "path": "apps/api/dist/main.js",
+      "bytes": 1402,
+      "sha256": "ccad0196add20eb730ef98c85c058a427a73c010f36831c9f5c92e8a26e807f2"
+    },
+    {
+      "path": "apps/api/dist/members-consents.d.ts",
+      "bytes": 4588,
+      "sha256": "309405ce465d34664850f17a9f0bdcc9f6b4305eccccb53f6aea1d8c4a80ad7f"
+    },
+    {
+      "path": "apps/api/dist/members-consents.js",
+      "bytes": 15992,
+      "sha256": "eaf0cb186296b7294ac64b4aa3c5b9f88d463f87b1f78ef4bf8dece91d7ade36"
+    },
+    {
+      "path": "apps/api/dist/native-auth.d.ts",
+      "bytes": 3275,
+      "sha256": "9e93c371710339c2618a98d3e078a1fb2cdbece54a5e9c7e1acb897e5e9cc92a"
+    },
+    {
+      "path": "apps/api/dist/native-auth.js",
+      "bytes": 15993,
+      "sha256": "74c99a29ef2014cd8522b2591e496aed4ebe29fd821243e2756b46b7f633b517"
+    },
+    {
+      "path": "apps/api/dist/passwords.d.ts",
+      "bytes": 426,
+      "sha256": "b5685e8a43990d4ee9f96955acea2e658d9f3eac059a39e11ec22ceb646e7d1b"
+    },
+    {
+      "path": "apps/api/dist/passwords.js",
+      "bytes": 3582,
+      "sha256": "a7f78b15ee1e1bfbd2eb86792802571ffeb6a8b3444886ecf8b9b0a9d4bc9308"
+    },
+    {
+      "path": "apps/api/dist/qr.d.ts",
+      "bytes": 1070,
+      "sha256": "f4475395fc4246670293245ee569c9237337c1cb0fd5a42070b3c6bad4299974"
+    },
+    {
+      "path": "apps/api/dist/qr.js",
+      "bytes": 4945,
+      "sha256": "fc48e48cec6ec123362debb6619d369b15e9d143be0ce418fdd246005564cd45"
+    },
+    {
+      "path": "apps/api/dist/reports.d.ts",
+      "bytes": 4912,
+      "sha256": "77a6ee798d5e949272a8400d709b16f6b49e7990598daf5c33a6bf2981f97e01"
+    },
+    {
+      "path": "apps/api/dist/reports.js",
+      "bytes": 6053,
+      "sha256": "b1f2fb93b3381a2b586650075653b428055e0e2fc2e9280b123d870f2e8403e0"
+    },
+    {
+      "path": "apps/api/dist/social-auth.d.ts",
+      "bytes": 2054,
+      "sha256": "aa254a78da53000ad6e1412e258f81a2549adc295e04d1f9e8587a0c4cfddc25"
+    },
+    {
+      "path": "apps/api/dist/social-auth.js",
+      "bytes": 10666,
+      "sha256": "27777fa7d0c22768734fdadd0a6cf3ce07b207b7f4960f0a8d3746b622a83bb4"
+    },
+    {
+      "path": "apps/api/dist/storage.d.ts",
+      "bytes": 918,
+      "sha256": "eb36ef099826320d776a60331941a0bf3e01cbb00b7b088fada38bd7f94db877"
+    },
+    {
+      "path": "apps/api/dist/storage.js",
+      "bytes": 7233,
+      "sha256": "37dfa70f3f46b56fb85870d6c1e960a6652b7e50732e0ca5d9b3dd9b75fe8c44"
+    },
+    {
+      "path": "apps/api/dist/web-auth.d.ts",
+      "bytes": 3892,
+      "sha256": "8d7c35b8e825bb2ea35bf737d09a930600c2e106ea5226ebbdf8895da975ddf9"
+    },
+    {
+      "path": "apps/api/dist/web-auth.js",
+      "bytes": 24253,
+      "sha256": "84c72f2ec9f7f7e117c33f31bab0bd7d7511c0f2b0ad90d9044ec57e0743a9c8"
+    },
+    {
+      "path": "apps/api/dist/worker-services.d.ts",
+      "bytes": 124,
+      "sha256": "4fb0a2a5ea5c706a2029f328da571a96c92c898d766e587b192532b56ccd7880"
+    },
+    {
+      "path": "apps/api/dist/worker-services.js",
+      "bytes": 105,
+      "sha256": "9f4543a0f83a91d1ae49b8338110997b4bdc163974e116e23e76cf1710d3447c"
+    }
+  ],
+  "worker": [
+    {
+      "path": "apps/worker/dist/announcements.js",
+      "bytes": 3026,
+      "sha256": "361557c27c12b9795d96577a28f180d288dc345bade825910ff826ace7adcf3e"
+    },
+    {
+      "path": "apps/worker/dist/application.js",
+      "bytes": 1538,
+      "sha256": "08a2b8faf5d989f68c3014142fd76fe43dbde1ff138a7124a3b1c10dd1f18ffa"
+    },
+    {
+      "path": "apps/worker/dist/config.js",
+      "bytes": 804,
+      "sha256": "9372a83b3e9335482ddb63ffffc96892072537bb75b40cd23f9530a381ead8b9"
+    },
+    {
+      "path": "apps/worker/dist/main.js",
+      "bytes": 1230,
+      "sha256": "0fb246170fcb5ead5ce8359bc8f4d7cfe5866d501b907e8505eb4bec2f226aeb"
+    },
+    {
+      "path": "apps/worker/dist/store.js",
+      "bytes": 3732,
+      "sha256": "d71b0523c0fbc2a6fbee3958799ce8020c9b574027e6de76c374cb4046ea8d25"
+    },
+    {
+      "path": "apps/worker/dist/worker.js",
+      "bytes": 4118,
+      "sha256": "b80550dafeb273a23f96c60a378015e543022c6cbec4c99751134adabf999db5"
+    }
+  ],
+  "operationalTools": [
+    {
+      "path": "deploy/development/local.mjs",
+      "sha256": "3acc9007e432f6d5558510de513dccc93838416fcf49b4651e4066e7c92068db"
+    },
+    {
+      "path": "deploy/development/backup.mjs",
+      "sha256": "a04a6b42e1cd201758f6448225935e6721a68884c91cbe60036ac684ff84758d"
+    },
+    {
+      "path": "deploy/development/load.mjs",
+      "sha256": "8d4fd6d517b413e3628f8adac78d8d2753781e6db358f6d1ce8d22a2f4936f2e"
+    },
+    {
+      "path": "deploy/development/verify-flows.mjs",
+      "sha256": "0b25be317b6643525d676f134337381bf037ccf47790a576b9c8427f72bc6506"
+    }
+  ],
+  "production": "NO-GO"
+}

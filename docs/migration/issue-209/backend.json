@@ -1,0 +1,88 @@
+{
+  "commit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "date": "2026-10-16T03:21:49.274Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "api-session-build",
+      "status": "PASS",
+      "seconds": 0.32
+    },
+    {
+      "check": "worker-build",
+      "status": "PASS",
+      "seconds": 0.22
+    },
+    {
+      "check": "web-static-auth-fixture-build",
+      "status": "PASS",
+      "seconds": 4.67
+    },
+    {
+      "check": "private-storage-fixture-build",
+      "status": "PASS",
+      "seconds": 1.4
+    },
+    {
+      "check": "independent-postgres-api-worker-types-backup-pitr",
+      "status": "PASS",
+      "seconds": 31.88
+    },
+    {
+      "check": "native-api-worker-all-integrations",
+      "status": "PASS",
+      "seconds": 62.18
+    },
+    {
+      "check": "static-social-auth-browser",
+      "status": "PASS",
+      "seconds": 4.96
+    },
+    {
+      "check": "portability-rehearsal",
+      "status": "PASS",
+      "seconds": 0.19
+    },
+    {
+      "check": "portability-no-omissions",
+      "status": "PASS"
+    },
+    {
+      "check": "portability-injected-failure",
+      "status": "FAIL",
+      "seconds": 1.96,
+      "expected": true
+    },
+    {
+      "check": "portability-cleanup-after-failure",
+      "status": "PASS"
+    },
+    {
+      "check": "pgtap-dashboard",
+      "status": "PASS",
+      "seconds": 2.14
+    },
+    {
+      "check": "pgtap-all-domain",
+      "status": "PASS",
+      "seconds": 7.17
+    },
+    {
+      "check": "sql-coverage-preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "product-integrations",
+      "status": "PASS",
+      "seconds": 43.58,
+      "tests": 84,
+      "omitted": 0
+    },
+    {
+      "check": "module-coverage-preserved",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-16T03:32:06.597Z",
+  "status": "PASS",
+  "environment": "dev209-local-persistent",
+  "schedulerAliveAtCheck": true,
+  "until": "2026-10-16T10:30:00.000Z",
+  "intervalSeconds": 900,
+  "firstScheduledBackup": "PASS",
+  "sustainedRpo": "PENDING"
+}

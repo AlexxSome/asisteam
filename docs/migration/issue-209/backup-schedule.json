@@ -1,0 +1,9 @@
+{
+  "environment": "dev209-local-persistent",
+  "startedAt": "2026-10-16T03:30:22.925Z",
+  "until": "2026-10-16T10:30:00.000Z",
+  "intervalSeconds": 900,
+  "retentionDays": 30,
+  "awakeOnly": true,
+  "sustainedRpo": "PENDING"
+}

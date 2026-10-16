@@ -1,0 +1,22 @@
+{
+  "commit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "sourceCommit": "4bcf32005b8cb2dae5e5ae3904b1b7c18f7d04ae",
+  "date": "2026-10-16T03:33:10.833Z",
+  "node": "v24.16.0",
+  "environment": "local-synthetic",
+  "checks": [
+    {
+      "check": "chromium-install",
+      "status": "PASS",
+      "seconds": 0.41
+    },
+    {
+      "check": "nest-domain-build",
+      "status": "FAIL",
+      "seconds": 1.48,
+      "errorCodes": [
+        "TS6053"
+      ]
+    }
+  ]
+}
